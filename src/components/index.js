@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Layout, Icon } from 'antd'
 import MenuContainer from './common/menu'
 import './index.css'
@@ -45,5 +46,5 @@ Index.defaultProps = {
   children: '',
 }
 Index.propTypes = {
-  children: React.PropTypes.node,
+  children: PropTypes.node,
 }
