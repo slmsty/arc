@@ -1,0 +1,18 @@
+:global(.clearfix:before),
+:global(.clearfix:after),
+:global(.wrap:before),
+:global(.wrap:after) {
+  content: " ";
+  display: table;
+}
+
+:global(.clearfix:after),
+:global(.wrap:after) {
+  clear: both;
+}
+
+:global(.wrap) {
+  width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+}

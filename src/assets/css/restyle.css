@@ -1,0 +1,40 @@
+html {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 1200px;
+  margin: 0;
+  font: 14px/1.5 "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #333;
+  background-color: #f6f6f6;
+}
+
+*,
+*::before,
+*::after {
+  -moz-box-sizing: inherit;
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+input[type="submit"], input[type="reset"], input[type="button"], button {
+  -webkit-appearance: none;
+}
+
+ul,p {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
