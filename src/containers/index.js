@@ -7,9 +7,11 @@ import NoMatch from '../components/noMatch/noMatch'
 import { getUserInfo } from '../actions/user'
 
 import HomeContainer from '../containers/home/home'
+import ProjectReceiptClaimContainer from '../containers/projectReceiptClaim/projectReceiptClaim'
 
 const mapStateToProps = state => ({
   user: state.user,
+  title: state.common.title,
 })
 
 const mapDispatchToProps = dispatch => (
@@ -21,7 +23,6 @@ const mapDispatchToProps = dispatch => (
 // eslint-disable-next-line react/prefer-stateless-function
 class IndexContainer extends React.Component {
   componentWillMount() {
-    //  eslint-disable-next-line
     // this.props.getUserInfo()
   }
 
@@ -34,10 +35,11 @@ class IndexContainer extends React.Component {
     return (
       <Router basename="/">
         <div style={{ height: '100%' }}>
-          <Index>
+          <Index {...this.props}>
             <Switch>
-              <Route exact path="/" Redirect="/home" />
+              <Route exact path="/" component={HomeContainer} />
               <Route exact path="/home" component={HomeContainer} />
+              <Route exact path="/projectReceiptClaim" component={ProjectReceiptClaimContainer} />
               <Route component={NoMatch} />
             </Switch>
           </Index>

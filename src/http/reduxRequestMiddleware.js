@@ -46,28 +46,26 @@ const middleware = (requestJson, catchError) => store => next => (action) => {
     errorType = 'HTTP_ERROR',
   ] = types
   next(actionWith({ type: requestType }))
-  return requestJson(url, options)
-      .then((response) => {
-        if (response.resultCode === '000000') {
-          return next(actionWith({
-            type: successType,
-            response,
-          }))
-        }
-        return next(actionWith({
-          response,
-          type: failureType,
-        }))
-      })
-      .catch((error) => {
-        next(actionWith({
-          error,
-          type: errorType,
-        }))
-        if (typeof catchError === 'function') {
-          catchError(error)
-        }
-      })
+  return requestJson(url, options).then((response) => {
+    if (response.resultCode === '000000') {
+      return next(actionWith({
+        type: successType,
+        response,
+      }))
+    }
+    return next(actionWith({
+      response,
+      type: failureType,
+    }))
+  }).catch((error) => {
+    next(actionWith({
+      error,
+      type: errorType,
+    }))
+    if (typeof catchError === 'function') {
+      catchError(error)
+    }
+  })
 }
 
 export default middleware

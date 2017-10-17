@@ -102,7 +102,8 @@ const invokeApi = ({
         const tokenRes = await fetch(`${prefixUrl}/auth/refreshtoken`, {
           headers: { 'Content-Type': 'application/json', refreshToken },
         })
-        //const tokenInfo = tokenRes.ok && tokenRes.headers.get('content-type') === 'application/json' && await tokenRes.json()
+        // eslint-disable-next-line max-len
+        // const tokenInfo = tokenRes.ok && tokenRes.headers.get('content-type') === 'application/json' && await tokenRes.json()
         const tokenInfo = await tokenRes.json()
         if (path('resultCode', tokenInfo) === '000000') {
           setToken(tokenInfo.tokenInfo)

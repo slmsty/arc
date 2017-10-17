@@ -1,7 +1,8 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Layout, Icon } from 'antd'
-import MenuContainer from './common/menu'
+import MenuComponent from './common/menu'
 import './index.css'
 
 const { Header, Sider, Content } = Layout
@@ -24,7 +25,7 @@ export default class Index extends React.Component {
           collapsed={this.state.collapsed}
         >
           <div className="logo" />
-          <MenuContainer />
+          <MenuComponent />
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
@@ -33,6 +34,7 @@ export default class Index extends React.Component {
               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
+            {this.props.title}
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
             { this.props.children }
@@ -44,7 +46,9 @@ export default class Index extends React.Component {
 }
 Index.defaultProps = {
   children: '',
+  title: '首页',
 }
 Index.propTypes = {
   children: PropTypes.node,
+  title: PropTypes.string,
 }

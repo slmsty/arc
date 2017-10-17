@@ -1,5 +1,6 @@
 import { httpApi } from '../http/reduxRequestMiddleware'
 
+// eslint-disable-next-line import/prefer-default-export
 export function getUserInfo() {
   return {
     [httpApi]: {

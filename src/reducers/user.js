@@ -7,7 +7,8 @@ const user = {
 }
 
 function getUserInfo(state, action) {
-  return {...state, ...action.response.result}
+  console.trace()
+  return { ...state, ...action.response.result }
 }
 
 export default caseReducer(user, {
