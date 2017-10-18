@@ -8,6 +8,7 @@ import { getUserInfo } from '../actions/user'
 
 import HomeContainer from '../containers/home/home'
 import ProjectReceiptClaimContainer from '../containers/projectReceiptClaim/projectReceiptClaim'
+import CBSTurnoverWholenessConfirm from '../containers/cbsTurnoverWholenessConfirm/cbsTurnoverWholenessConfirm'
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -40,6 +41,7 @@ class IndexContainer extends React.Component {
               <Route exact path="/" component={HomeContainer} />
               <Route exact path="/home" component={HomeContainer} />
               <Route exact path="/projectReceiptClaim" component={ProjectReceiptClaimContainer} />
+              <Route exact path="/cbsTurnoverWholenessConfirm" component={CBSTurnoverWholenessConfirm} />
               <Route component={NoMatch} />
             </Switch>
           </Index>
