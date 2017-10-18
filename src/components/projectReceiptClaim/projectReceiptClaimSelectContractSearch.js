@@ -150,7 +150,7 @@ class ProjectReceiptClaimSelectContract extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} style={{ textAlign: 'right' }}>
-              <Button type="primary" htmlType="query" onClick={this.handleQuery}><Icon type="search" />查询</Button>
+              <Button type="primary" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
         </Form>

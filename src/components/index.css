@@ -1,4 +1,5 @@
 .trigger {
+  float: left;
   font-size: 18px;
   line-height: 64px;
   padding: 0 16px;

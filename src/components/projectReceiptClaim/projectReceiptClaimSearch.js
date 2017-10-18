@@ -148,7 +148,7 @@ class ProjectReceiptClaimSearch extends React.Component {
               </FormItem>
             </Col>
             <Col span={16} style={{ textAlign: 'right' }}>
-              <Button type="primary" htmlType="query" onClick={this.handleQuery}><Icon type="search" />查询</Button>
+              <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
         </Form>

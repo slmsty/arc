@@ -135,7 +135,6 @@ export default class ProjectReceiptClaim extends React.Component {
     showClaimModal: false,
   }
   componentDidMount() {
-    this.props.setTitle('项目收款认领 Receipt Claim')
   }
   handleCloseClaimModal = (refresh) => {
     this.setState({

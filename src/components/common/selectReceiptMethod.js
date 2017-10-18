@@ -18,6 +18,16 @@ const columns = [{
   dataIndex: '2',
   key: '2',
   width: 100,
+}, {
+  title: '所属公司',
+  dataIndex: '3',
+  key: '3',
+  width: 100,
+}, {
+  title: '所属BG',
+  dataIndex: '4',
+  key: '4',
+  width: 100,
 },
 ]
 
