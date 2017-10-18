@@ -5,7 +5,6 @@ import CBSTurnoverWholenessConfirmSearchWithForm from './cbsTurnoverWholenessCon
 
 export default class CBSTurnoverWholenessConfirm extends React.Component {
   componentDidMount() {
-    this.props.setTitle('CBS流水完整性确认 CBS Turnover Wholeness Confirm')
   }
   render() {
     return (
@@ -15,5 +14,8 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
 }
 
 CBSTurnoverWholenessConfirm.propTypes = {
-  setTitle: PropTypes.func.isRequired,
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func.isRequired,
+    getFieldValue: PropTypes.func.isRequired,
+  }).isRequired,
 }
