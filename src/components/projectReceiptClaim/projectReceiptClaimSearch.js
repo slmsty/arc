@@ -5,10 +5,11 @@ import { Form, Row, Col, Button, Icon, Input, DatePicker, Select } from 'antd'
 import moment from 'moment'
 
 import SelectCustomerWithForm from '../common/selectCustomer'
+import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
+import MultipleDayPicker from '../common/multipleDayPicker'
 
-const { MonthPicker, RangePicker } = DatePicker
+const { RangePicker } = DatePicker
 const FormItem = Form.Item
-const Search = Input.Search
 const Option = Select.Option
 const dateFormat = 'YYYY-MM-DD'
 
@@ -41,7 +42,9 @@ class ProjectReceiptClaimSearch extends React.Component {
                   initialValue: [moment(), moment()],
                 })(
                   <RangePicker
+                    allowClear
                     format={dateFormat}
+                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
                   />,
                 )}
               </FormItem>
@@ -80,19 +83,8 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="收款方法">
-                {getFieldDecorator('method')(
-                  <Select
-                    mode="combobox"
-                    placeholder="请选择收款方法"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    showArrow={false}
-                    filterOption={false}
-                    onChange={this.handleChange}
-                  >
-                    <Option key="c1">1111</Option>
-                    <Option key="c2">222</Option>
-                  </Select>,
+                {getFieldDecorator('receiptMethod')(
+                  <SelectReceiptMethodWithForm />,
                 )}
               </FormItem>
             </Col>
@@ -117,7 +109,9 @@ class ProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="收款日期">
                 {getFieldDecorator('receives')(
-                  <Input placeholder="多收款日期使用英文逗号间隔" />,
+                  <Input
+                    placeholder="多收款日期使用英文逗号间隔"
+                  />,
                 )}
               </FormItem>
             </Col>
@@ -146,20 +140,15 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={7}>
+            <Col span={8} key={10}>
               <FormItem {...formItemLayout} label="收款编号">
                 {getFieldDecorator('code')(
                   <Input placeholder="请输入收款编号" />,
                 )}
               </FormItem>
             </Col>
-          </Row>
-          <Row>
-            <Col span={24} style={{ textAlign: 'right' }}>
-              <Button type="primary" htmlType="submit" onClick={this.handleQuery}>查询</Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                清除
-              </Button>
+            <Col span={16} style={{ textAlign: 'right' }}>
+              <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
         </Form>

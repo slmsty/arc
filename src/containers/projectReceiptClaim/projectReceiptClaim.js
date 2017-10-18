@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { setTitle } from '../../actions/common'
 import ProjectReceiptClaim from '../../components/projectReceiptClaim/projectReceiptClaim'
 
 const mapStateToProps = state => ({
@@ -10,7 +9,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    setTitle,
   }, dispatch)
 )
 
