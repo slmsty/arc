@@ -179,6 +179,3 @@ export default class ProjectReceiptClaim extends React.Component {
   }
 }
 
-ProjectReceiptClaim.propTypes = {
-  setTitle: PropTypes.func.isRequired,
-}

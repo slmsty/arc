@@ -40,7 +40,8 @@ class IndexContainer extends React.Component {
             <Switch>
               <Route exact path="/" component={HomeContainer} />
               <Route exact path="/home" component={HomeContainer} />
-              <Route exact path="/projectReceiptClaim" component={ProjectReceiptClaimContainer} />
+              <Route exact path="/receiptManagement" component={HomeContainer} />
+              <Route exact path="/receiptManagement/projectReceiptClaim" component={ProjectReceiptClaimContainer} />
               <Route exact path="/cbsTurnoverWholenessConfirm" component={CBSTurnoverWholenessConfirm} />
               <Route component={NoMatch} />
             </Switch>

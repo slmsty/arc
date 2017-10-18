@@ -9,8 +9,8 @@ import './index.css'
 const { Header, Sider, Content } = Layout
 
 const breadcrumbNameMap = {
-  '/projectReceiptClaim': '项目收款认领',
-  '/apps/1': 'Application1',
+  '/receiptManagement': '回款管理',
+  '/receiptManagement/projectReceiptClaim': '项目收款认领',
   '/apps/2': 'Application2',
   '/apps/1/detail': 'Detail',
   '/apps/2/detail': 'Detail',
@@ -19,7 +19,6 @@ const breadcrumbNameMap = {
 const BreadcrumbContainer = withRouter((props) => {
   const { location } = props
   const pathSnippets = location.pathname.split('/').filter(i => i)
-  console.log(pathSnippets)
   const extraBreadcrumbItems = pathSnippets.map((_, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
     return (
