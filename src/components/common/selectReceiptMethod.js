@@ -9,19 +9,19 @@ const FormItem = Form.Item
 const Search = Input.Search
 
 const columns = [{
-  title: '客户名称',
+  title: '收款方法',
   dataIndex: '1',
   key: '1',
   width: 100,
 }, {
-  title: '客户编号',
+  title: '银行账号',
   dataIndex: '2',
   key: '2',
   width: 100,
 },
 ]
 
-class SelectCustomer extends React.Component {
+class SelectReceiptMethod extends React.Component {
   state = {
     visible: false,
     customer: '',
@@ -59,18 +59,18 @@ class SelectCustomer extends React.Component {
       <div>
         <Search
           style={{ height: 30 }}
-          placeholder="客户名称"
+          placeholder="收款方法"
           value={this.state.customer}
           onChange={value => this.props.onChange(value)}
           onSearch={() => this.setState({ visible: true })}
         />
         <Modal
-          title="选择客户"
+          title="选择收款方法"
           visible={visible}
           onCancel={this.handleCancel}
           footer={[
             <Button key="submit" type="primary" onClick={this.handleOk}>
-              <Icon type="check" />选择客户
+              <Icon type="check" />选择收款方法
             </Button>,
           ]}
         >
@@ -79,7 +79,7 @@ class SelectCustomer extends React.Component {
           >
             <Row>
               <Col span={16} key={1}>
-                <FormItem {...formItemLayout} label="客户名称">
+                <FormItem {...formItemLayout} label="收款方法">
                   {getFieldDecorator('customerName')(
                     <Input
                       placeholder="请输入关键字"
@@ -107,7 +107,7 @@ class SelectCustomer extends React.Component {
   }
 }
 
-SelectCustomer.propTypes = {
+SelectReceiptMethod.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
@@ -115,6 +115,6 @@ SelectCustomer.propTypes = {
   onChange: PropTypes.func.isRequired,
 }
 
-const SelectCustomerWithForm = Form.create()(SelectCustomer)
+const SelectReceiptMethodWithForm = Form.create()(SelectReceiptMethod)
 
-export default SelectCustomerWithForm
+export default SelectReceiptMethodWithForm
