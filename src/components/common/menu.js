@@ -10,7 +10,7 @@ export default class MenuComponent extends React.Component {
     return (
       <Menu theme="dark" mode="inline">
         <SubMenu key="1" title={<span><Icon type="mail" /><span>回款管理</span></span>}>
-          <Menu.Item key="11"><Icon type="user" />CBS数据完整性确认</Menu.Item>
+          <Menu.Item key="11"><Link to="/cbsTurnoverWholenessConfirm"><Icon type="user" />CBS流水完整性确认</Link></Menu.Item>
           <Menu.Item key="12"><Icon type="user" />人工录入银行流水</Menu.Item>
           <Menu.Item key="13"><Link to="/projectReceiptClaim"><Icon type="user" />项目收款认领</Link></Menu.Item>
           <Menu.Item key="14"><Icon type="user" />非项目收款认领</Menu.Item>
