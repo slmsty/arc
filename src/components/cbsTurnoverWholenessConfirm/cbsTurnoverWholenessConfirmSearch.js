@@ -93,9 +93,6 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
           <Row>
             <Col span={24} style={{ textAlign: 'right' }}>
               <Button type="primary" htmlType="submit" onClick={this.handleQuery}>查询</Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                清除
-              </Button>
             </Col>
           </Row>
         </Form>
