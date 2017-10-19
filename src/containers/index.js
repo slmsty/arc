@@ -13,7 +13,6 @@ import ManualEntryBankTurnover from '../containers/manualEntryBankTurnover/manua
 
 const mapStateToProps = state => ({
   user: state.user,
-  title: state.common.title,
 })
 
 const mapDispatchToProps = dispatch => (
