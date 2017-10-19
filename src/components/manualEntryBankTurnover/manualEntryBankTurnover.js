@@ -1,19 +1,19 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import CBSTurnoverWholenessConfirmSearchWithForm from './cbsTurnoverWholenessConfirmSearch'
+import ManualEntryBankTurnoverSearchWithForm from './manualEntryBankTurnoverSearch'
 
-export default class CBSTurnoverWholenessConfirm extends React.Component {
+export default class ManualEntryBankTurnover extends React.Component {
   componentDidMount() {
   }
   render() {
     return (
-      <CBSTurnoverWholenessConfirmSearchWithForm />
+      <ManualEntryBankTurnoverSearchWithForm />
     )
   }
 }
 
-CBSTurnoverWholenessConfirm.propTypes = {
+ManualEntryBankTurnover.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
