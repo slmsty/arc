@@ -30,9 +30,9 @@ class IndexContainer extends React.Component {
   render() {
     //  eslint-disable-next-line
     const { accountId, accountName, ntAccount } = this.props.user
-    if (!accountId || !accountName || !ntAccount) {
-      return null
-    }
+    // if (!accountId || !accountName || !ntAccount) {
+    //   return null
+    // }
     return (
       <Router basename="/">
         <div style={{ height: '100%' }}>
