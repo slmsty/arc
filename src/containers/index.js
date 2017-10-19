@@ -8,6 +8,7 @@ import { getUserInfo } from '../actions/user'
 
 import HomeContainer from '../containers/home/home'
 import ProjectReceiptClaimContainer from '../containers/projectReceiptClaim/projectReceiptClaim'
+import NoProjectReceiptClaimContainer from '../containers/noProjectReceiptClaim/noProjectReceiptClaim'
 import CBSTurnoverWholenessConfirm from '../containers/cbsTurnoverWholenessConfirm/cbsTurnoverWholenessConfirm'
 import ManualEntryBankTurnover from '../containers/manualEntryBankTurnover/manualEntryBankTurnover'
 
@@ -26,7 +27,6 @@ class IndexContainer extends React.Component {
   componentWillMount() {
     // this.props.getUserInfo()
   }
-
   render() {
     //  eslint-disable-next-line
     const { accountId, accountName, ntAccount } = this.props.user
@@ -42,6 +42,7 @@ class IndexContainer extends React.Component {
               <Route exact path="/home" component={HomeContainer} />
               <Route exact path="/receiptManagement" component={HomeContainer} />
               <Route exact path="/receiptManagement/projectReceiptClaim" component={ProjectReceiptClaimContainer} />
+              <Route exact path="/receiptManagement/noProjectReceiptClaim" component={NoProjectReceiptClaimContainer} />
               <Route exact path="/cbsTurnoverWholenessConfirm" component={CBSTurnoverWholenessConfirm} />
               <Route exact path="/manualEntryBankTurnover" component={ManualEntryBankTurnover} />
               <Route component={NoMatch} />

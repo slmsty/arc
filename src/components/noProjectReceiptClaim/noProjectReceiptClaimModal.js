@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Card, Row, Col, Button, Input, Table, Icon } from 'antd'
-import ProjectReceiptClaimSelectContractWithForm from './projectReceiptClaimSelectContractSearch'
+import NoProjectReceiptClaimSelectOrderWithForm from './noProjectReceiptClaimSelectOrderSearch'
 
 const columns = [{
   title: '客户名称',
@@ -35,53 +35,28 @@ const columns = [{
   key: '5',
   width: 100,
 }, {
-  title: '项目编码',
+  title: '币种',
   dataIndex: '6',
   key: '6',
   width: 100,
 }, {
-  title: '合同编码',
+  title: '订单号',
   dataIndex: '7',
   key: '7',
-  width: 100,
-}, {
-  title: '合同名称',
-  dataIndex: '8',
-  key: '8',
-  width: 100,
-}, {
-  title: '项目阶段',
-  dataIndex: '9',
-  key: '9',
-  width: 100,
-}, {
-  title: '付款百分比',
-  dataIndex: '10',
-  key: '10',
-  width: 100,
-}, {
-  title: '发票号',
-  dataIndex: '11',
-  key: '11',
-  width: 100,
-}, {
-  title: 'SBU',
-  dataIndex: '12',
-  key: '12',
   width: 100,
 },
 ]
 
 export default class ClaimModal extends React.Component {
   state = {
-    showSelectContract: false,
+    showSelectOrder: false,
   }
   handleOk = () => {
     this.props.onClose(true)
   }
-  handleCloseSelectContract = (contracts) => {
+  handleCloseSelectOrder = (contracts) => {
     console.log(contracts)
-    this.setState({ showSelectContract: false })
+    this.setState({ showSelectOrder: false })
   }
   render() {
     const rowSelection = {
@@ -91,7 +66,7 @@ export default class ClaimModal extends React.Component {
       <div>
         <Modal
           width={1024}
-          title="项目认款"
+          title="非项目认款"
           visible={this.props.visible}
           onCancel={() => { this.props.onClose(false) }}
           footer={[
@@ -115,7 +90,7 @@ export default class ClaimModal extends React.Component {
             </Row>
           </Card>
           <br />
-          <Button key="add" type="primary" onClick={() => { this.setState({ showSelectContract: true }) }}><Icon type="plus-circle-o" />增加合同百分比</Button>&nbsp;&nbsp;
+          <Button key="add" type="primary" onClick={() => { this.setState({ showSelectOrder: true }) }}><Icon type="plus-circle-o" />增加订单</Button>&nbsp;&nbsp;
           <Button type="danger">删除</Button>
           <br />
           <br />
@@ -127,9 +102,9 @@ export default class ClaimModal extends React.Component {
             scroll={{ x: '150%', y: true }}
           />
         </Modal>
-        <ProjectReceiptClaimSelectContractWithForm
-          visible={this.state.showSelectContract}
-          onClose={this.handleCloseSelectContract}
+        <NoProjectReceiptClaimSelectOrderWithForm
+          visible={this.state.showSelectOrder}
+          onClose={this.handleCloseSelectOrder}
         />
       </div>
     )

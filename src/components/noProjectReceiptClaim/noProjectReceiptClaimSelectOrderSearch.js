@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal } from 'antd'
+import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal, Select } from 'antd'
 import SelectCustomerWithForm from '../common/selectCustomer'
 
 const columns = [{
@@ -10,46 +10,31 @@ const columns = [{
   key: '1',
   width: 100,
 }, {
-  title: '项目编码',
+  title: '订单号',
   dataIndex: '6',
   key: '6',
   width: 100,
 }, {
-  title: '合同编码',
+  title: '客户支付方式',
   dataIndex: '7',
   key: '7',
   width: 100,
 }, {
-  title: '合同名称',
+  title: '应收金额',
   dataIndex: '8',
   key: '8',
   width: 100,
 }, {
-  title: '项目阶段',
+  title: '应收余额',
   dataIndex: '9',
   key: '9',
-  width: 100,
-}, {
-  title: '付款百分比',
-  dataIndex: '10',
-  key: '10',
-  width: 100,
-}, {
-  title: '发票号',
-  dataIndex: '11',
-  key: '11',
-  width: 100,
-}, {
-  title: 'SBU',
-  dataIndex: '12',
-  key: '12',
   width: 100,
 },
 ]
 
 const FormItem = Form.Item
 
-class ProjectReceiptClaimSelectContract extends React.Component {
+class NoProjectReceiptClaimSelectOrder extends React.Component {
   componentDidMount() {
   }
   onSelectCustomer = (customer) => {
@@ -75,12 +60,12 @@ class ProjectReceiptClaimSelectContract extends React.Component {
       <Modal
         wrapClassName="vertical-center-modal"
         width={800}
-        title="查询合同百分比"
+        title="查询订单"
         visible={this.props.visible}
         onCancel={() => { this.props.onClose([]) }}
         footer={[
           <Button key="select" type="primary" onClick={this.handleSelectContract}>
-            <Icon type="check" />选择合同百分比
+            <Icon type="check" />选择订单
           </Button>,
         ]}
       >
@@ -89,13 +74,6 @@ class ProjectReceiptClaimSelectContract extends React.Component {
           onSubmit={this.handleSearch}
         >
           <Row>
-            <Col span={8} key={1}>
-              <FormItem {...formItemLayout} label="项目编码">
-                {getFieldDecorator('projectCode')(
-                  <Input placeholder="多项目编码使用英文逗号间隔" />,
-                )}
-              </FormItem>
-            </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户名称">
                 {getFieldDecorator('customer')(
@@ -104,32 +82,9 @@ class ProjectReceiptClaimSelectContract extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={3}>
-              <FormItem {...formItemLayout} label="SBU">
+              <FormItem {...formItemLayout} label="来源系统">
                 {getFieldDecorator('sbu')(
-                  <Input />,
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8} key={4}>
-              <FormItem {...formItemLayout} label="合同编码">
-                {getFieldDecorator('contractCode')(
-                  <Input placeholder="多合同编码使用英文逗号间隔" />,
-                )}
-              </FormItem>
-            </Col>
-            <Col span={8} key={5}>
-              <FormItem {...formItemLayout} label="发票号">
-                {getFieldDecorator('receiptCode')(
-                  <Input placeholder="多发票号使用英文逗号间隔" />,
-                )}
-              </FormItem>
-            </Col>
-            <Col span={8} key={6}>
-              <FormItem {...formItemLayout} label="部门">
-                {getFieldDecorator('dept')(
-                  <Input />,
+                  <Select />,
                 )}
               </FormItem>
             </Col>
@@ -167,7 +122,7 @@ class ProjectReceiptClaimSelectContract extends React.Component {
   }
 }
 
-ProjectReceiptClaimSelectContract.propTypes = {
+NoProjectReceiptClaimSelectOrder.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
@@ -176,8 +131,8 @@ ProjectReceiptClaimSelectContract.propTypes = {
   onClose: PropTypes.func.isRequired,
 }
 
-const ProjectReceiptClaimSelectContractWithForm = Form.create()(
-  ProjectReceiptClaimSelectContract,
+const NoProjectReceiptClaimSelectOrderWithForm = Form.create()(
+  NoProjectReceiptClaimSelectOrder,
 )
 
-export default ProjectReceiptClaimSelectContractWithForm
+export default NoProjectReceiptClaimSelectOrderWithForm

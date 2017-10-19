@@ -13,7 +13,7 @@ export default class MenuComponent extends React.Component {
           <Menu.Item key="11"><Link to="/cbsTurnoverWholenessConfirm"><Icon type="user" />CBS流水完整性确认</Link></Menu.Item>
           <Menu.Item key="12"><Link to="/manualEntryBankTurnover"><Icon type="user" />人工录入银行流水</Link></Menu.Item>
           <Menu.Item key="13"><Link to="/receiptManagement/projectReceiptClaim"><Icon type="user" />项目收款认领</Link></Menu.Item>
-          <Menu.Item key="14"><Icon type="user" />非项目收款认领</Menu.Item>
+          <Menu.Item key="14"><Link to="/receiptManagement/noProjectReceiptClaim"><Icon type="user" />非项目收款认领</Link></Menu.Item>
           <Menu.Item key="15"><Icon type="user" />收款认领复核</Menu.Item>
         </SubMenu>
         <Menu.Item key="2">

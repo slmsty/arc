@@ -11,6 +11,7 @@ const { Header, Sider, Content } = Layout
 const breadcrumbNameMap = {
   '/receiptManagement': '回款管理',
   '/receiptManagement/projectReceiptClaim': '项目收款认领',
+  '/receiptManagement/noProjectReceiptClaim': '非项目收款认领',
   '/apps/2': 'Application2',
   '/apps/1/detail': 'Detail',
   '/apps/2/detail': 'Detail',
