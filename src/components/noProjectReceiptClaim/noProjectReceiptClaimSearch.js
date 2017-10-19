@@ -125,8 +125,9 @@ class NoProjectReceiptClaimSearch extends React.Component {
                     filterOption={false}
                     onChange={this.handleChange}
                   >
-                    <Option key="111">1111</Option>
-                    <Option key="222">222</Option>
+                    <Option key="1">出纳已确认</Option>
+                    <Option key="2">复核退回</Option>
+                    <Option key="3">已传送AR</Option>
                   </Select>,
                 )}
               </FormItem>
