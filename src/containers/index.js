@@ -12,7 +12,6 @@ import CBSTurnoverWholenessConfirm from '../containers/cbsTurnoverWholenessConfi
 
 const mapStateToProps = state => ({
   user: state.user,
-  title: state.common.title,
 })
 
 const mapDispatchToProps = dispatch => (

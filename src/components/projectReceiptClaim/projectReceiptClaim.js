@@ -178,4 +178,3 @@ export default class ProjectReceiptClaim extends React.Component {
     )
   }
 }
-
