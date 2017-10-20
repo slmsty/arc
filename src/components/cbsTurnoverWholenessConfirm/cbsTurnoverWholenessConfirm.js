@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
-import { Row, Col, Table, Button } from 'antd'
+import { Modal, Row, Col, Table, Button, notification } from 'antd'
 import PropTypes from 'prop-types'
 import CBSTurnoverWholenessConfirmSearchWithForm from './cbsTurnoverWholenessConfirmSearch'
 
@@ -62,6 +62,13 @@ const formatMoney = function (number) {
 
 const data = []
 
+const openNotificationWithIcon = (msg) => {
+  notification.error({
+    message: '错误',
+    description: msg,
+  })
+}
+
 export default class CBSTurnoverWholenessConfirm extends React.Component {
   state = {
     selectedRowKeys: [],
@@ -76,6 +83,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     console.log(selectedRowKeys)
   }
   handleQuery = () => {
+    console.log(1)
     this.setState({ loading: true })
     // ajax request after empty completing
     setTimeout(() => {
@@ -98,8 +106,24 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
       })
     }, 1000)
   }
+  handleEdit = () => {
+    if (!this.state.selectedRowKeys.length) {
+      openNotificationWithIcon('请选择想要编辑的数据。')
+    } else if (this.state.selectedRowKeys.length > 1) {
+      openNotificationWithIcon('只可对一条数据进行编辑。')
+    } else {
+      console.log('弹出编辑界面，传递数据：[' + this.state.selectedRowKeys + ']')
+    }
+  }
+  handleExcept = () => {
+    if (!this.state.selectedRowKeys.length) {
+      openNotificationWithIcon('请选择想要排除的数据。')
+    } else {
+      console.log('调用排除接口，传递数据：[' + this.state.selectedRowKeys + ']，然后刷新列表')
+    }
+  }
   render() {
-    const { loading, selectedRowKeys } = this.state
+    const { loading, selectedRowKeys, summary } = this.state
     const rowSelection = {
       type: 'checkBox',
       selectedRowKeys,
@@ -107,13 +131,15 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     }
     return (
       <div>
-        <CBSTurnoverWholenessConfirmSearchWithForm />
+        <CBSTurnoverWholenessConfirmSearchWithForm
+          query={this.handleQuery}
+        />
         <br />
         <Row style={{ lineHeight: '28px' }}>
           <Col span={8}>
-            <Button type="default">编辑</Button>&nbsp;&nbsp;
+            <Button type="default" onClick={this.handleEdit}>编辑</Button>&nbsp;&nbsp;
             <Button type="default">人工录入</Button>&nbsp;&nbsp;
-            <Button type="default">排除</Button>&nbsp;&nbsp;
+            <Button type="default" onClick={this.handleExcept}>排除</Button>&nbsp;&nbsp;
             <Button type="primary">确认</Button>&nbsp;&nbsp;
           </Col>
           <Col span={16} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
