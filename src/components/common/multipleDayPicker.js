@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Icon, Input, DatePicker } from 'antd'
+import { Input, DatePicker } from 'antd'
 import moment from 'moment'
 
 const InputGroup = Input.Group
