@@ -32,7 +32,7 @@ class ManualEntryBankTurnoverSearch extends React.Component {
       <div>
         <Form
           className="ant-search-form"
-          onSubmit={this.handleSearch}
+          onSubmit={this.props.query}
         >
           <Row gutter={40}>
             <Col span={8} key={1}>
@@ -92,10 +92,7 @@ class ManualEntryBankTurnoverSearch extends React.Component {
           </Row>
           <Row>
             <Col span={24} style={{ textAlign: 'right' }}>
-              <Button type="primary" htmlType="submit" onClick={this.handleQuery}>查询</Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                清除
-              </Button>
+              <Button type="primary" htmlType="submit" onClick={() => this.props.query()}>查询</Button>
             </Col>
           </Row>
         </Form>
@@ -109,6 +106,7 @@ ManualEntryBankTurnoverSearch.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
+  query: PropTypes.func.isRequired,
 }
 
 const ManualEntryBankTurnoverSearchWithForm = Form.create()(ManualEntryBankTurnoverSearch)
