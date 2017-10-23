@@ -119,10 +119,8 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
   }
   handleSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys })
-    console.log(selectedRowKeys)
   }
   handleQuery = () => {
-    console.log(1)
     this.setState({ loading: true })
     // ajax request after empty completing
     setTimeout(() => {
@@ -163,6 +161,10 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
   handleEditCancel = () => {
     this.setState({ editVisible: false })
   }
+  handleConfirm = () => {
+    console.log('确认。。然后刷新数据。')
+    this.handleQuery()
+  }
   handleExcept = () => {
     if (!this.state.selectedRowKeys.length) {
       openNotificationWithIcon('请选择想要排除的数据。')
@@ -188,7 +190,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
             <Button type="default" onClick={this.handleEdit}>编辑</Button>&nbsp;&nbsp;
             <Button type="default">人工录入</Button>&nbsp;&nbsp;
             <Button type="default" onClick={this.handleExcept}>排除</Button>&nbsp;&nbsp;
-            <Button type="primary">确认</Button>&nbsp;&nbsp;
+            <Button type="primary" onClick={this.handleConfirm}>确认</Button>&nbsp;&nbsp;
           </Col>
           <Col span={16} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{this.state.summary}</span>
