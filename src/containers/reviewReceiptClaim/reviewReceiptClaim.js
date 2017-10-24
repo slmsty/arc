@@ -5,6 +5,7 @@ import ReviewReceiptClaim from '../../components/reviewReceiptClaim/reviewReceip
 
 const mapStateToProps = state => ({
   user: state.user,
+  reviewReceiptClaim: state.reviewReceiptClaim,
 })
 
 const mapDispatchToProps = dispatch => (
