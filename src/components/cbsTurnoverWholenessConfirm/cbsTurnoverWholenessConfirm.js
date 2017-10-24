@@ -3,22 +3,25 @@ import React from 'react'
 import { Modal, Row, Col, Table, Button, notification } from 'antd'
 import PropTypes from 'prop-types'
 import CBSTurnoverWholenessConfirmSearchWithForm from './cbsTurnoverWholenessConfirmSearch'
+import EditCBSTurnoverDataWithForm from './editCBSTurnoverData'
 
 const columns = [{
   title: '数据状态',
   dataIndex: 'dataStatus',
   key: 'dataStatus',
-  width: 100,
+  width: 80,
+  fixed: 'left',
 }, {
   title: '收款日期',
   dataIndex: 'receiptDate',
   key: 'receiptDate',
-  width: 100,
+  width: 80,
+  fixed: 'left',
 }, {
   title: '币种',
   dataIndex: 'currency',
   key: 'currency',
-  width: 100,
+  width: 45,
 }, {
   title: '收款金额',
   dataIndex: 'amount',
@@ -28,7 +31,7 @@ const columns = [{
   title: '客户名称',
   dataIndex: 'custName',
   key: 'custName',
-  width: 100,
+  width: 300,
 }, {
   title: '流水分类',
   dataIndex: 'turnoverType',
@@ -38,7 +41,42 @@ const columns = [{
   title: '备注',
   dataIndex: 'comment',
   key: 'comment',
+  width: 635,
+}, {
+  title: '客户付款方式',
+  dataIndex: 'custPayMethod',
+  key: 'custPayMethod',
   width: 100,
+}, {
+  title: '银行流水备注',
+  dataIndex: 'bankTurnoverComment',
+  key: 'bankTurnoverComment',
+  width: 100,
+}, {
+  title: '付款客户名称',
+  dataIndex: 'payCustName',
+  key: 'payCustName',
+  width: 300,
+}, {
+  title: '客户付款银行账号',
+  dataIndex: 'custPayBankAcct',
+  key: 'custPayBankAcct',
+  width: 120,
+}, {
+  title: '客户付款银行',
+  dataIndex: 'custPayBank',
+  key: 'custPayBank',
+  width: 300,
+}, {
+  title: '银行流水号',
+  dataIndex: 'bankTurnoverNo',
+  key: 'bankTurnoverNo',
+  width: 100,
+}, {
+  title: '公司',
+  dataIndex: 'company',
+  key: 'company',
+  width: 300,
 },
 ]
 
@@ -74,16 +112,15 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     selectedRowKeys: [],
     loading: false,
     summary: '',
+    editVisible: false,
   }
   componentDidMount() {
     this.handleQuery()
   }
   handleSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys })
-    console.log(selectedRowKeys)
   }
   handleQuery = () => {
-    console.log(1)
     this.setState({ loading: true })
     // ajax request after empty completing
     setTimeout(() => {
@@ -96,7 +133,8 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           amount: formatMoney(Math.ceil(Math.random() * 10000000) / 100),
           custName: ['北京市某某信息技术有限公司', '河北矿业', '中国电信', '中国移动北京分公司', '天津电话好多好多公司'][Math.ceil(Math.random() * 5) - 1],
           turnoverType: ['项目', '百一测评'][Math.ceil(Math.random() * 2) - 1],
-          comment: '',
+          comment: '壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零壹贰叁肆伍陆柒捌玖零',
+          custPayMethod: ['支付宝', '微信'][Math.ceil(Math.random() * 2) - 1],
         })
       }
       this.setState({
@@ -112,8 +150,20 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     } else if (this.state.selectedRowKeys.length > 1) {
       openNotificationWithIcon('只可对一条数据进行编辑。')
     } else {
-      console.log('弹出编辑界面，传递数据：[' + this.state.selectedRowKeys + ']')
+      this.setState({ editVisible: true })
+      // console.log('弹出编辑界面，传递数据：[' + this.state.selectedRowKeys + ']')
     }
+  }
+  handleEditConfirm = () => {
+    this.setState({ editVisible: false })
+    this.handleQuery()
+  }
+  handleEditCancel = () => {
+    this.setState({ editVisible: false })
+  }
+  handleConfirm = () => {
+    console.log('确认。。然后刷新数据。')
+    this.handleQuery()
   }
   handleExcept = () => {
     if (!this.state.selectedRowKeys.length) {
@@ -123,7 +173,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     }
   }
   render() {
-    const { loading, selectedRowKeys, summary } = this.state
+    const { loading, selectedRowKeys, summary, editVisible } = this.state
     const rowSelection = {
       type: 'checkBox',
       selectedRowKeys,
@@ -140,7 +190,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
             <Button type="default" onClick={this.handleEdit}>编辑</Button>&nbsp;&nbsp;
             <Button type="default">人工录入</Button>&nbsp;&nbsp;
             <Button type="default" onClick={this.handleExcept}>排除</Button>&nbsp;&nbsp;
-            <Button type="primary">确认</Button>&nbsp;&nbsp;
+            <Button type="primary" onClick={this.handleConfirm}>确认</Button>&nbsp;&nbsp;
           </Col>
           <Col span={16} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{this.state.summary}</span>
@@ -154,7 +204,12 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           bordered
           size="middle"
           pagination="true"
-          scroll={{ x: '100%', y: true }}
+          scroll={{ x: '2660px' }}
+        />
+        <EditCBSTurnoverDataWithForm
+          onConfirm={this.handleEditConfirm}
+          onCancel={this.handleEditCancel}
+          visible={this.state.editVisible}
         />
       </div>
     )

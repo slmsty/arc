@@ -7,6 +7,7 @@ import moment from 'moment'
 import SelectCustomerWithForm from '../common/selectCustomer'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
 import MultipleDayPicker from '../common/multipleDayPicker'
+import SelectInvokeApi from '../common/selectInvokeApi'
 
 const { RangePicker } = DatePicker
 const FormItem = Form.Item
@@ -38,7 +39,7 @@ class ProjectReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="收款日期">
-                {getFieldDecorator('receive', {
+                {getFieldDecorator('receiptDate', {
                   initialValue: [moment(), moment()],
                 })(
                   <RangePicker
@@ -51,24 +52,20 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户名称">
-                {getFieldDecorator('customer')(
+                {getFieldDecorator('custId')(
                   <SelectCustomerWithForm />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="收款来源">
-                {getFieldDecorator('from')(
-                  <Select
+                {getFieldDecorator('sourceType')(
+                  <SelectInvokeApi
+                    id="sourceType"
+                    api="aa"
                     placeholder="请选择收款来源"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
                     onChange={this.handleChange}
-                  >
-                    <Option key="c1">1111</Option>
-                    <Option key="c2">222</Option>
-                  </Select>,
+                  />,
                 )}
               </FormItem>
             </Col>
@@ -76,31 +73,27 @@ class ProjectReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="项目编码">
-                {getFieldDecorator('projectCode')(
+                {getFieldDecorator('projectIds')(
                   <Input placeholder="多项目编码使用英文逗号间隔" />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="收款方法">
-                {getFieldDecorator('receiptMethod')(
+                {getFieldDecorator('receiptMethodId')(
                   <SelectReceiptMethodWithForm />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="收款分类">
-                {getFieldDecorator('category')(
-                  <Select
+                {getFieldDecorator('custPayMethod')(
+                  <SelectInvokeApi
+                    id="custPayMethod"
+                    api="aa"
                     placeholder="请选择收款分类"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
                     onChange={this.handleChange}
-                  >
-                    <Option key="c1">1111</Option>
-                    <Option key="c2">222</Option>
-                  </Select>,
+                  />,
                 )}
               </FormItem>
             </Col>
@@ -108,7 +101,7 @@ class ProjectReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="收款日期">
-                {getFieldDecorator('receives')(
+                {getFieldDecorator('receiptDates')(
                   <Input
                     placeholder="多收款日期使用英文逗号间隔"
                   />,
@@ -117,7 +110,7 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="合同编码">
-                {getFieldDecorator('contractCode')(
+                {getFieldDecorator('contractIds')(
                   <Input placeholder="多合同编码使用英文逗号间隔" />,
                 )}
               </FormItem>
