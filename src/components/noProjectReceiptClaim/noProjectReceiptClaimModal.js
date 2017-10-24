@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Card, Row, Col, Button, Input, Table, Icon } from 'antd'
+import { Modal, Card, Row, Col, Button, Table, Icon } from 'antd'
 import NoProjectReceiptClaimSelectOrderWithForm from './noProjectReceiptClaimSelectOrderSearch'
 
 const columns = [{
