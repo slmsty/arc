@@ -3,6 +3,7 @@ import React from 'react'
 import { Table, Button, notification, Icon } from 'antd'
 import PropTypes from 'prop-types'
 import ManualEntryBankTurnoverSearchWithForm from './manualEntryBankTurnoverSearch'
+import EditManualEntryBankTurnoverDataWithForm from './editManualEntryBankTurnoverData'
 
 const formatDate = function (date) {
   const y = date.getFullYear()
@@ -36,6 +37,7 @@ export default class ManualEntryBankTurnover extends React.Component {
     selectedRowKeys: [],
     loading: false,
     editVisible: false,
+    editKey: null,
   }
   componentDidMount() {
     this.handleQuery()
@@ -46,7 +48,8 @@ export default class ManualEntryBankTurnover extends React.Component {
     console.log(selectedRowKeys)
   }
   handleEdit = (key) => {
-    console.log('edit:' + key)
+    this.state.editKey = key
+    this.setState({ editVisible: true })
   }
   handleDelete = (key) => {
     console.log('delete:' + key)
@@ -89,6 +92,13 @@ export default class ManualEntryBankTurnover extends React.Component {
     console.log('确认。。然后刷新数据。')
   }
   handleBatchImport = () => {
+  }
+  handleEditConfirm = () => {
+    this.setState({ editVisible: false })
+    this.handleQuery()
+  }
+  handleEditCancel = () => {
+    this.setState({ editVisible: false })
   }
   render() {
     const { loading, selectedRowKeys, editVisible } = this.state
@@ -191,6 +201,13 @@ export default class ManualEntryBankTurnover extends React.Component {
           size="middle"
           pagination="true"
           scroll={{ x: '1875px'}}
+        />
+        <EditManualEntryBankTurnoverDataWithForm
+          width="800"
+          onConfirm={this.handleEditConfirm}
+          onCancel={this.handleEditCancel}
+          editKey={this.state.editKey}
+          visible={this.state.editVisible}
         />
       </div>
     )
