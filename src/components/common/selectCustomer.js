@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Row, Col, Button, Input, Table, Icon } from 'antd'
+import { Modal, Form, Row, Col, Button, Input, Table, Icon, Pagination, notification } from 'antd'
 
 import requestJsonFetch from '../../http/requestJsonFecth'
 
@@ -24,7 +24,10 @@ const columns = [{
 class SelectCustomer extends React.Component {
   state = {
     visible: false,
-    customer: '',
+    pageNo: 1,
+    pageSize: 10,
+    count: 1,
+    customerList: [],
   }
   handleOk = () => {
     this.setState({
@@ -38,12 +41,27 @@ class SelectCustomer extends React.Component {
       visible: false,
     })
   }
+  handleChangePage = (page) => {
+    this.setState({
+      pageNo: page,
+    })
+    this.handleQuery()
+  }
   handleQuery = () => {
-    const customerName = this.props.form.getFieldValue('customerName')
-    requestJsonFetch('aaaa', customerName, this.handleCallback)
+    const keywords = this.props.form.getFieldValue('keywords')
+    const param = {
+      pageInfo: {
+        pageNo: this.state.pageNo,
+        pageSize: this.state.pageSize,
+      },
+      keywords,
+    }
+    requestJsonFetch('arc/common/customer_name/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
-    console.log(response)
+    if (response.resultCode === '000000') {
+      console.log(response)
+    }
   }
   render() {
     const { visible } = this.state
@@ -51,6 +69,11 @@ class SelectCustomer extends React.Component {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
     }
+    const pagination = (<Pagination
+      current={this.state.pageNo}
+      onChange={this.handleChangePage}
+      total={this.state.count}
+    />)
     const { getFieldDecorator } = this.props.form
     const rowSelection = {
       type: 'radio',
@@ -80,7 +103,7 @@ class SelectCustomer extends React.Component {
             <Row>
               <Col span={16} key={1}>
                 <FormItem {...formItemLayout} label="客户名称">
-                  {getFieldDecorator('customerName')(
+                  {getFieldDecorator('keywords')(
                     <Input
                       placeholder="请输入关键字"
                     />,
@@ -99,7 +122,7 @@ class SelectCustomer extends React.Component {
             rowSelection={rowSelection}
             bordered
             size="middle"
-            pagination="true"
+            pagination={pagination}
           />
         </Modal>
       </div>

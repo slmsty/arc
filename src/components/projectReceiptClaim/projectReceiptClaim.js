@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button } from 'antd'
-
+import { Table, Button, Pagination } from 'antd'
 import ProjectReceiptClaimSearchWithForm from './projectReceiptClaimSearch'
 import ClaimModal from './projectReceiptClaimModal'
 
@@ -134,7 +133,19 @@ export default class ProjectReceiptClaim extends React.Component {
   state = {
     showClaimModal: false,
   }
-  componentDidMount() {
+  queryParam = {
+    pageInfo: {
+      pageNo: 1,
+      pageSize: 10,
+    },
+    custId: '',
+    sourceType: '',
+    projectIds: '',
+    receiptMethodId: '',
+    receiptDates: '',
+    contractIds: '',
+    status: '',
+    receiptNo: '',
   }
   handleCloseClaimModal = (refresh) => {
     this.setState({
@@ -149,17 +160,33 @@ export default class ProjectReceiptClaim extends React.Component {
       showClaimModal: true,
     })
   }
-  handleQuery = (params) => {
-    this.props.history.push('112')
+  handleChangePage = (page) => {
+    this.queryParam.pageInfo.pageNo = page
+    this.handleQuery()
+  }
+  handleChangeParam = (param) => {
+    this.queryParam = { ...this.queryParam, ...param }
+    this.handleQuery()
+  }
+  handleQuery = () => {
+    // this.props.history.push('112')
+    console.log(this.queryParam)
+    this.props.getReceiptList(this.queryParam)
   }
   render() {
+    console.log(this.props)
     const rowSelection = {
       type: 'checkBox',
     }
+    const pagination = (<Pagination
+      current={this.props.projectReceiptClaim.pageNo}
+      onChange={this.handleChangePage}
+      total={this.props.projectReceiptClaim.count}
+    />)
     return (
       <div>
         <ProjectReceiptClaimSearchWithForm
-          onQuery={this.handleQuery}
+          onQuery={this.handleChangeParam}
         />
         <Button type="danger">拒绝</Button>&nbsp;&nbsp;
         <Button type="primary" onClick={this.handleOpenClaim}>认款</Button>&nbsp;&nbsp;
@@ -170,8 +197,9 @@ export default class ProjectReceiptClaim extends React.Component {
           columns={columns}
           bordered
           size="middle"
-          pagination="true"
-          scroll={{ x: '260%', y: true }}
+          pagination={pagination}
+          dataSource={this.props.projectReceiptClaim.result}
+          scroll={{ x: '260%' }}
         />
         <ClaimModal
           visible={this.state.showClaimModal}
@@ -183,7 +211,13 @@ export default class ProjectReceiptClaim extends React.Component {
 }
 
 ProjectReceiptClaim.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+  // history: PropTypes.shape({
+  //   push: PropTypes.func.isRequired,
+  // }).isRequired,
+  getReceiptList: PropTypes.func.isRequired,
+  projectReceiptClaim: PropTypes.shape({
+    pageNo: PropTypes.number.isRequired,
+    count: PropTypes.number.isRequired,
+    result: PropTypes.arrayOf.isRequired,
   }).isRequired,
 }
