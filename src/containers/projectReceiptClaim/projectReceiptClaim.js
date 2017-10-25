@@ -3,14 +3,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
+import { getReceiptList } from '../../actions/projectReceiptClaim'
 import ProjectReceiptClaim from '../../components/projectReceiptClaim/projectReceiptClaim'
 
 const mapStateToProps = state => ({
-  user: state.user,
+  projectReceiptClaim: state.projectReceiptClaim,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
+    getReceiptList,
   }, dispatch)
 )
 

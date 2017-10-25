@@ -12,7 +12,9 @@ export default class SelectInvokeApi extends React.Component {
     options: [],
   }
   componentDidMount() {
-    requestJsonFetch(this.props.api, {}, this.handleCallback)
+    if (this.props.api) {
+      requestJsonFetch(this.props.api, {}, this.handleCallback)
+    }
   }
   handleCallback = (response) => {
     console.log(response)

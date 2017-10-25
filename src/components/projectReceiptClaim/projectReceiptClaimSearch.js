@@ -16,17 +16,19 @@ const dateFormat = 'YYYY-MM-DD'
 
 class ProjectReceiptClaimSearch extends React.Component {
   componentDidMount() {
+    this.handleQuery()
   }
   onSelectCustomer = (customer) => {
     console.log(customer)
   }
   handleQuery = () => {
-    const customer = this.props.form.getFieldValue('customer')
-    this.props.onQuery()
+    const param = this.props.form.getFieldsValue()
+    param.receiptDateStart = param.receiptDate[0].format(dateFormat)
+    param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
+    this.props.onQuery(param)
   }
   handleChange = () => {
-    const customer = this.props.form.getFieldValue('customer')
-    console.log(customer)
+    console.log()
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -66,7 +68,7 @@ class ProjectReceiptClaimSearch extends React.Component {
                 {getFieldDecorator('sourceType')(
                   <SelectInvokeApi
                     id="sourceType"
-                    api="aa"
+                    api=""
                     placeholder="请选择收款来源"
                     onChange={this.handleChange}
                   />,
@@ -78,7 +80,12 @@ class ProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="项目编码">
                 {getFieldDecorator('projectIds')(
-                  <Input placeholder="多项目编码使用英文逗号间隔" />,
+                  <Select
+                    mode="tags"
+                    tokenSeparators={[',', '，']}
+                    placeholder="多项目编码使用英文逗号间隔"
+                    dropdownStyle={{ display: 'none' }}
+                  />,
                 )}
               </FormItem>
             </Col>
@@ -94,7 +101,7 @@ class ProjectReceiptClaimSearch extends React.Component {
                 {getFieldDecorator('custPayMethod')(
                   <SelectInvokeApi
                     id="custPayMethod"
-                    api="aa"
+                    api=""
                     placeholder="请选择收款分类"
                     onChange={this.handleChange}
                   />,
@@ -106,8 +113,11 @@ class ProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="收款日期">
                 {getFieldDecorator('receiptDates')(
-                  <Input
+                  <Select
+                    mode="tags"
+                    tokenSeparators={[',', '，']}
                     placeholder="多收款日期使用英文逗号间隔"
+                    dropdownStyle={{ display: 'none' }}
                   />,
                 )}
               </FormItem>
@@ -115,23 +125,24 @@ class ProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="合同编码">
                 {getFieldDecorator('contractIds')(
-                  <Input placeholder="多合同编码使用英文逗号间隔" />,
+                  <Select
+                    mode="tags"
+                    tokenSeparators={[',', '，']}
+                    placeholder="多合同编码使用英文逗号间隔"
+                    dropdownStyle={{ display: 'none' }}
+                  />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={9}>
               <FormItem {...formItemLayout} label="数据状态">
-                {getFieldDecorator('status')(
-                  <Select
-                    placeholder="请选择数据状态"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
-                    onChange={this.handleChange}
-                  >
-                    <Option key="1">出纳已确认</Option>
-                    <Option key="2">复核退回</Option>
-                    <Option key="3">已传送AR</Option>
+                {getFieldDecorator('status', {
+                  initialValue: '21',
+                })(
+                  <Select>
+                    <Option value="21">出纳已确认</Option>
+                    <Option value="40">复核退回</Option>
+                    <Option value="51">已传送AR</Option>
                   </Select>,
                 )}
               </FormItem>
@@ -158,7 +169,7 @@ class ProjectReceiptClaimSearch extends React.Component {
 ProjectReceiptClaimSearch.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
-    getFieldValue: PropTypes.func.isRequired,
+    getFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
   onQuery: PropTypes.func.isRequired,
 }

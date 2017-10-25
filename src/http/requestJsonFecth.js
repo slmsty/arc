@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 import requestJson from './requestJson'
 
 function requestJsonFetch(url, options, callback) {
@@ -5,7 +6,7 @@ function requestJsonFetch(url, options, callback) {
   httpRequestJson(url, options).then((response) => {
     callback(response)
   }).catch(() => {
-    callback({ resultCode: -1 })
+    // callback(this, { resultCode: -1, message: error })
   })
 }
 

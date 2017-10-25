@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -17,6 +18,7 @@ import BatchImport from '../containers/manualEntryBankTurnover/batchImport'
 
 const mapStateToProps = state => ({
   user: state.user,
+  notification: state.common.notification,
 })
 
 const mapDispatchToProps = dispatch => (
@@ -29,6 +31,11 @@ const mapDispatchToProps = dispatch => (
 class IndexContainer extends React.Component {
   componentWillMount() {
     // this.props.getUserInfo()
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.notification !== nextProps.notification) {
+      console.log(nextProps.notification)
+    }
   }
   render() {
     //  eslint-disable-next-line
