@@ -81,13 +81,12 @@ const openNotificationWithIcon = (msg) => {
 
 export default class BatchImport extends React.Component {
   state = {
-    successLoading: false,
-    failureLoading: false,
     fileList: [],
     batchNo: '',
   }
 
   handleDataChanged = (batchNo) => {
+    this.setState({ batchNo })
     this.state.batchNo = batchNo
     this.props.getImportResultData({
       pageInfo: {
@@ -135,27 +134,23 @@ export default class BatchImport extends React.Component {
     }
   }
 
-  successPagination = {
-    current: this.props.successResult.pageNo,
-    total: this.props.successResult.count,
-    onchange: this.handleSuccessTableChange,
-  }
-
-  failurePagination = {
-    current: this.props.failureResult.pageNo,
-    total: this.props.failureResult.count,
-    onChange: this.handleFailureTableChange,
-  }
-
   render() {
-    const {
-      successLoading, failureLoading, fileList, batchNo,
-    } = this.state
-
     const props = {
       action: 'v1.0.0/arc/receiptclaim/manual/import',
       onChange: this.handleChange,
       multiple: false,
+    }
+
+    const successPagination = {
+      current: this.props.successResult.pageNo,
+      total: this.props.successResult.count,
+      onChange: this.handleSuccessTableChange,
+    }
+
+    const failurePagination = {
+      current: this.props.failureResult.pageNo,
+      total: this.props.failureResult.count,
+      onChange: this.handleFailureTableChange,
     }
 
     return (
@@ -193,9 +188,8 @@ export default class BatchImport extends React.Component {
           dataSource={this.props.successResult.result}
           bordered
           size="middle"
-          pagination={this.successPagination}
+          pagination={successPagination}
           scroll={{ x: '1875px' }}
-          loading={this.state.loading}
         />
         <br />
         <div style={{ fontWeight: 'bold' }}>传送失败数据：&nbsp;&nbsp;<span style={{ color: '#f00' }}>{ this.props.failureResult.count }</span></div>
@@ -204,9 +198,8 @@ export default class BatchImport extends React.Component {
           dataSource={this.props.failureResult.result}
           bordered
           size="middle"
-          pagination={this.failurePagination}
+          pagination={failurePagination}
           scroll={{ x: '1875px' }}
-          loading={this.state.loading}
         />
       </div>
     )
