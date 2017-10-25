@@ -12,6 +12,7 @@ import NoProjectReceiptClaimContainer from '../containers/noProjectReceiptClaim/
 import CBSTurnoverWholenessConfirm from '../containers/cbsTurnoverWholenessConfirm/cbsTurnoverWholenessConfirm'
 import ManualEntryBankTurnover from '../containers/manualEntryBankTurnover/manualEntryBankTurnover'
 import ReviewReceiptClaimContainer from '../containers/reviewReceiptClaim/reviewReceiptClaim'
+import CustomerBankLinkContainer from '../containers/customerBankLink/customerBankLink'
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -45,6 +46,7 @@ class IndexContainer extends React.Component {
               <Route exact path="/receiptManagement/projectReceiptClaim" component={ProjectReceiptClaimContainer} />
               <Route exact path="/receiptManagement/noProjectReceiptClaim" component={NoProjectReceiptClaimContainer} />
               <Route exact path="/receiptManagement/reviewReceiptClaim" component={ReviewReceiptClaimContainer} />
+              <Route exact path="/receiptManagement/customerBankLink" component={CustomerBankLinkContainer} />
               <Route exact path="/cbsTurnoverWholenessConfirm" component={CBSTurnoverWholenessConfirm} />
               <Route exact path="/manualEntryBankTurnover" component={ManualEntryBankTurnover} />
               <Route component={NoMatch} />

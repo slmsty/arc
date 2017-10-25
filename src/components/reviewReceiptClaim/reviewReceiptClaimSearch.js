@@ -20,14 +20,29 @@ class ReviewReceiptClaimSearch extends React.Component {
     console.log(customer)
   }
   handleQuery = () => {
-    const FormData = this.props.form.getFieldsValue()
-    console.log(FormData)
+    // 验证是否通过
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return
+      }
+      // Should format date value before submit.
+      const values = {
+        ...fieldsValue,
+        startDate: fieldsValue['startDate'].format('YYYY-MM-DD'),
+        endDate: fieldsValue['endDate'].format('YYYY-MM-DD'),
+      }
+      console.log('Received values of form: ', values);
+    })
   }
+
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
+    }
+    const config = {
+      rules: [{ type: 'object', required: true, message: 'Please enter custOrderIds!' }],
     }
     return (
       <div>
@@ -38,14 +53,16 @@ class ReviewReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="收款日期从：">
-                {getFieldDecorator('receive')(
-                  <DatePicker />,
+                {getFieldDecorator('startDate', {
+                  initialValue: moment().subtract(1, 'days'),
+                })(
+                  <DatePicker format={dateFormat} />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户名称">
-                {getFieldDecorator('customer')(
+                {getFieldDecorator('custId')(
                   <SelectCustomerWithForm />,
                 )}
               </FormItem>
@@ -53,7 +70,7 @@ class ReviewReceiptClaimSearch extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="数据状态">
                 {getFieldDecorator('status', {
-                  initialValue: ['会计已认款'],
+                  initialValue: '会计已认款',
                 })(
                   <Select
                     placeholder="请选择数据状态"
@@ -74,27 +91,23 @@ class ReviewReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="收款日期至：">
-                {getFieldDecorator('receiveEnd', {
-                  initialValue: [moment(), moment()],
+                {getFieldDecorator('endDate', {
+                  initialValue: moment(),
                 })(
-                  <RangePicker
-                    allowClear
-                    format={dateFormat}
-                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
-                  />,
+                  <DatePicker format={dateFormat} />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="收款方法">
-                {getFieldDecorator('recevieMethod')(
+                {getFieldDecorator('receiptMethodId')(
                   <SelectReceiptMethodWithForm />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="订单号(多)">
-                {getFieldDecorator('orderNo')(
+                {getFieldDecorator('custOrderIds')(
                   <Input
                     placeholder="多订单号使用英文逗号间隔"
                   />,
@@ -106,7 +119,7 @@ class ReviewReceiptClaimSearch extends React.Component {
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="项目编码(多)">
                 {
-                  getFieldDecorator('projectNo')(
+                  getFieldDecorator('projectIds')(
                     <Input placeholder="多编码间使用英文逗号间隔" />,
                   )
                 }
@@ -115,7 +128,7 @@ class ReviewReceiptClaimSearch extends React.Component {
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="合同编码(多)">
                 {
-                  getFieldDecorator('contractNo')(
+                  getFieldDecorator('contractIds')(
                     <Input placeholder="多编码间使用英文逗号间隔" />,
                   )
                 }
@@ -123,7 +136,7 @@ class ReviewReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={9}>
               <FormItem {...formItemLayout} label="流水分类">
-                {getFieldDecorator('categoryType', {
+                {getFieldDecorator('claimType', {
                   initialValue: ['项目'],
                 })(
                   <Select>
