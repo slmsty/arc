@@ -63,7 +63,7 @@ class ReviewReceiptClaimSearch extends React.Component {
           </Row>
           <Row gutter={40}>
             <Col span={12} key={6}>
-              <FormItem {...formItemLayout} label="订单号(多)">
+              <FormItem {...formItemLayout} label="银行帐号">
                 {getFieldDecorator('custOrderIds')(
                   <Input
                     placeholder="请输入银行帐号"
