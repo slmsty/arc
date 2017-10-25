@@ -40,21 +40,20 @@ function loader() {
 
 
 function bootstrap() {
-  // if (window.location.hash && window.location.hash.indexOf('access_token=') > -1) {
-  //   window.sessionStorage.setItem('token', `bearer ${window.location.hash.split('access_token=')[1].split('&')[0]}`)
-  //   window.history.pushState(null, '', window.localStorage.getItem('oldUrl'))
-  //   loader()
-  // } else if (window.sessionStorage.getItem('token')) {
-  //   loader()
-  // } else {
-  //   window.localStorage.setItem('oldUrl', window.location.href)
-  //   if (!window.location.origin) {
-  //     window.location.origin = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`
-  //   }
-  //   // token不存在 去访问第三方授权网站 （注意：redirect_uri 需要和 后端设置的完全一样）
-  //   window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${window.location.origin}/`
-  // }
-  loader()
+  if (window.location.hash && window.location.hash.indexOf('access_token=') > -1) {
+    window.sessionStorage.setItem('token', `bearer ${window.location.hash.split('access_token=')[1].split('&')[0]}`)
+    window.history.pushState(null, '', window.localStorage.getItem('oldUrl'))
+    loader()
+  } else if (window.sessionStorage.getItem('token')) {
+    loader()
+  } else {
+    window.localStorage.setItem('oldUrl', window.location.href)
+    if (!window.location.origin) {
+      window.location.origin = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`
+    }
+    // token不存在 去访问第三方授权网站 （注意：redirect_uri 需要和 后端设置的完全一样）
+    window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${window.location.origin}/`
+  }
 }
 
 export default bootstrap()

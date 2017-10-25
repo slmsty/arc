@@ -149,7 +149,8 @@ export default class ProjectReceiptClaim extends React.Component {
       showClaimModal: true,
     })
   }
-  handleQuery = () => {
+  handleQuery = (params) => {
+    this.props.history.push('112')
   }
   render() {
     const rowSelection = {
@@ -157,7 +158,9 @@ export default class ProjectReceiptClaim extends React.Component {
     }
     return (
       <div>
-        <ProjectReceiptClaimSearchWithForm />
+        <ProjectReceiptClaimSearchWithForm
+          onQuery={this.handleQuery}
+        />
         <Button type="danger">拒绝</Button>&nbsp;&nbsp;
         <Button type="primary" onClick={this.handleOpenClaim}>认款</Button>&nbsp;&nbsp;
         <Button type="dashed">重新认款</Button>
@@ -177,4 +180,10 @@ export default class ProjectReceiptClaim extends React.Component {
       </div>
     )
   }
+}
+
+ProjectReceiptClaim.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 }
