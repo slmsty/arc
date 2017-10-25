@@ -1,5 +1,7 @@
+/* eslint-disable max-len */
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import ProjectReceiptClaim from '../../components/projectReceiptClaim/projectReceiptClaim'
 
@@ -19,5 +21,5 @@ class ProjectReceiptClaimContainer extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectReceiptClaimContainer)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectReceiptClaimContainer))
 

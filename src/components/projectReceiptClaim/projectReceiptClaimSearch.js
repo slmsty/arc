@@ -22,6 +22,10 @@ class ProjectReceiptClaimSearch extends React.Component {
   }
   handleQuery = () => {
     const customer = this.props.form.getFieldValue('customer')
+    this.props.onQuery()
+  }
+  handleChange = () => {
+    const customer = this.props.form.getFieldValue('customer')
     console.log(customer)
   }
   render() {
@@ -156,6 +160,7 @@ ProjectReceiptClaimSearch.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
+  onQuery: PropTypes.func.isRequired,
 }
 
 const ProjectReceiptClaimSearchWithForm = Form.create()(ProjectReceiptClaimSearch)
