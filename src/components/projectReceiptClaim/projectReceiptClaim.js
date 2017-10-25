@@ -132,6 +132,7 @@ const columns = [{
 export default class ProjectReceiptClaim extends React.Component {
   state = {
     showClaimModal: false,
+    selectedRowKeys: [],
   }
   queryParam = {
     pageInfo: {
@@ -170,19 +171,24 @@ export default class ProjectReceiptClaim extends React.Component {
   }
   handleQuery = () => {
     // this.props.history.push('112')
-    console.log(this.queryParam)
+    // console.log(this.queryParam)
     this.props.getReceiptList(this.queryParam)
   }
+  onSelectChange = (selectedRowKeys) => {
+    this.setState({ selectedRowKeys })
+  }
   render() {
-    console.log(this.props)
-    const rowSelection = {
-      type: 'checkBox',
-    }
     const pagination = (<Pagination
       current={this.props.projectReceiptClaim.pageNo}
       onChange={this.handleChangePage}
       total={this.props.projectReceiptClaim.count}
     />)
+    const { selectedRowKeys } = this.state
+    const rowSelection = {
+      type: 'checkBox',
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+    }
     return (
       <div>
         <ProjectReceiptClaimSearchWithForm

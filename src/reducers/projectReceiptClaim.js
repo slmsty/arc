@@ -7,7 +7,7 @@ const projectReceiptClaim = {
 }
 
 function getReceiptList(state, action) {
-  return { ...state, ...{ projectReceiptClaim: action.response.data } }
+  return { ...state, ...{ projectReceiptClaim: action.response.pageInfo } }
 }
 
 export default caseReducer(projectReceiptClaim, {
