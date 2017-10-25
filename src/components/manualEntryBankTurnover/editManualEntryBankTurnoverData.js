@@ -15,8 +15,8 @@ class EditManualEntryBankTurnoverData extends React.Component {
   }
   render() {
     const formItemLayout = {
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
+      labelCol: { span: 10 },
+      wrapperCol: { span: 14 },
     }
     const { getFieldDecorator } = this.props.form
     return (

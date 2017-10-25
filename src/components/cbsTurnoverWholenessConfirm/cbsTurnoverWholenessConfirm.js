@@ -108,6 +108,10 @@ const openNotificationWithIcon = (msg) => {
 }
 
 export default class CBSTurnoverWholenessConfirm extends React.Component {
+  constructor(props, context) {
+    super(props, context)
+    this.router = this.context.router
+  }
   state = {
     selectedRowKeys: [],
     loading: false,
@@ -188,7 +192,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
         <Row style={{ lineHeight: '28px' }}>
           <Col span={8}>
             <Button type="default" onClick={this.handleEdit}>编辑</Button>&nbsp;&nbsp;
-            <Button type="default">人工录入</Button>&nbsp;&nbsp;
+            <Button type="default" onClick={() => { this.router.push('/batchImport') }}>人工录入</Button>&nbsp;&nbsp;
             <Button type="default" onClick={this.handleExcept}>排除</Button>&nbsp;&nbsp;
             <Button type="primary" onClick={this.handleConfirm}>确认</Button>&nbsp;&nbsp;
           </Col>
@@ -217,4 +221,8 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
 }
 
 CBSTurnoverWholenessConfirm.propTypes = {
+}
+
+CBSTurnoverWholenessConfirm.contextTypes = {
+  router: Object,
 }

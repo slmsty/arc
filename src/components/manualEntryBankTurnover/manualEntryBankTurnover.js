@@ -33,6 +33,10 @@ const openNotificationWithIcon = (msg) => {
 }
 
 export default class ManualEntryBankTurnover extends React.Component {
+  constructor(props, context) {
+    super(props, context)
+    this.router = this.context.router
+  }
   state = {
     selectedRowKeys: [],
     loading: false,
@@ -86,12 +90,12 @@ export default class ManualEntryBankTurnover extends React.Component {
       openNotificationWithIcon('请选择想要排除的数据。')
     } else {
       console.log('调用排除接口，传递数据：[' + this.state.selectedRowKeys + ']，然后刷新列表')
+      this.handleQuery()
     }
   }
   handleConfirm = () => {
     console.log('确认。。然后刷新数据。')
-  }
-  handleBatchImport = () => {
+    this.handleQuery()
   }
   handleEditConfirm = () => {
     this.setState({ editVisible: false })
@@ -113,7 +117,7 @@ export default class ManualEntryBankTurnover extends React.Component {
         <ManualEntryBankTurnoverSearchWithForm
           query={this.handleQuery}
         />
-        <Button type="default" onClick={this.handleBatchImport}>批量导入</Button>&nbsp;&nbsp;
+        <Button type="default" onClick={() => { this.context.router.push('/batchImport') }}>批量导入</Button>&nbsp;&nbsp;
         <Button type="default" onClick={this.handleExcept}>排除</Button>&nbsp;&nbsp;
         <Button type="primary" onClick={this.handleConfirm}>确认</Button>
         <br /><br />
@@ -200,10 +204,10 @@ export default class ManualEntryBankTurnover extends React.Component {
           bordered
           size="middle"
           pagination="true"
-          scroll={{ x: '1875px'}}
+          scroll={{ x: '1875px' }}
         />
         <EditManualEntryBankTurnoverDataWithForm
-          width="800"
+          width={800}
           onConfirm={this.handleEditConfirm}
           onCancel={this.handleEditCancel}
           editKey={this.state.editKey}
@@ -215,5 +219,8 @@ export default class ManualEntryBankTurnover extends React.Component {
 }
 
 ManualEntryBankTurnover.propTypes = {
+}
 
+ManualEntryBankTurnover.contextTypes = {
+  router: React.PropTypes.object.isRequired,
 }
