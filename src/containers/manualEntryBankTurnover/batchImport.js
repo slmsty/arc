@@ -1,20 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { setTitle } from '../../actions/common'
 import BatchImport from '../../components/manualEntryBankTurnover/batchImport'
 import { getImportResultData } from '../../actions/batchImport'
 
 
 const mapStateToProps = state => ({
-  user: state.user,
-  successResult: state.successResult,
-  failureResult: state.failureResult,
+  successResult: state.batchImport.successResult,
+  failureResult: state.batchImport.failureResult,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    setTitle, getImportResultData,
+    getImportResultData,
   }, dispatch)
 )
 

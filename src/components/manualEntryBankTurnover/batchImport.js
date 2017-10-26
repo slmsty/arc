@@ -8,11 +8,13 @@ const successColumns = [{
   dataIndex: 'receiptDate',
   key: 'receiptDate',
   width: 90,
+  fixed: 'left',
 }, {
   title: '收款方法',
   dataIndex: 'receiptMethodName',
   key: 'receiptMethodName',
   width: 100,
+  fixed: 'left',
 }, {
   title: '银行流水号',
   dataIndex: 'bankTransactionNo',
@@ -133,14 +135,16 @@ export default class BatchImport extends React.Component {
       this.handleDataChanged(info.data)
     }
   }
+  handleDownloadErrorData = () => {
+    window.open(`${process.env.REACT_APP_GATEWAY}api/v1.0.0/arc/receiptclaim/manual/exportFailure/${this.state.batchNo}`, '_blank')
+  }
 
   render() {
     const props = {
-      action: 'v1.0.0/arc/receiptclaim/manual/import',
+      action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/manual/import`,
       onChange: this.handleChange,
       multiple: false,
     }
-
     const successPagination = {
       current: this.props.successResult.pageNo,
       total: this.props.successResult.count,
@@ -166,7 +170,7 @@ export default class BatchImport extends React.Component {
               <Col span={2}><span>文件位置：</span></Col>
               <Col span={8}><Input disabled value={this.state.fileList.length ? this.state.fileList[0].name : ''} /></Col>
               <Col span={14}>
-                <Upload {...props} fileList={this.state.fileList}>
+                <Upload {...props} fileList={this.state.fileList} headers={{ Authorization: sessionStorage.getItem('token') }}>
                   <Button type="primary">导入</Button>
                 </Upload>
               </Col>
@@ -182,7 +186,7 @@ export default class BatchImport extends React.Component {
           </Col>
         </Row>
         <br /><br />
-        <div style={{ fontWeight: 'bold' }}>传送失败数据：&nbsp;&nbsp;<span style={{ color: '#f00' }}>{ this.props.successResult.count }</span></div>
+        <div style={{ fontWeight: 'bold', padding: '5px 0' }}>传送失败数据：&nbsp;&nbsp;<span style={{ color: '#f00' }}>{ this.props.successResult.count }</span></div>
         <Table
           columns={successColumns}
           dataSource={this.props.successResult.result}
@@ -192,7 +196,10 @@ export default class BatchImport extends React.Component {
           scroll={{ x: '1875px' }}
         />
         <br />
-        <div style={{ fontWeight: 'bold' }}>传送失败数据：&nbsp;&nbsp;<span style={{ color: '#f00' }}>{ this.props.failureResult.count }</span></div>
+        <div style={{ fontWeight: 'bold', padding: '5px 0' }}>
+          传送失败数据：&nbsp;&nbsp;<span style={{ color: '#f00' }}>{ this.props.failureResult.count }</span>&nbsp;&nbsp;&nbsp;&nbsp;
+          <Button type="danger" onClick={this.handleDownloadErrorData()}>下载错误数据</Button>
+        </div>
         <Table
           columns={failureColumns}
           dataSource={this.props.failureResult.result}
@@ -208,12 +215,12 @@ export default class BatchImport extends React.Component {
 
 BatchImport.propTypes = {
   successResult: PropTypes.shape({
-    pageNo: PropTypes.string.isRequired,
+    pageNo: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,
     result: PropTypes.array.isRequired,
   }).isRequired,
   failureResult: PropTypes.shape({
-    pageNo: PropTypes.string.isRequired,
+    pageNo: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,
     result: PropTypes.array.isRequired,
   }).isRequired,
