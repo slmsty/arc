@@ -86,7 +86,6 @@ class ReviewReceiptClaimSearch extends React.Component {
 ReviewReceiptClaimSearch.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
-    getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
 }
 
