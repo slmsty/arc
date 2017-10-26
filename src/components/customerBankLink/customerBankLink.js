@@ -4,54 +4,115 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, Modal, Form, Row, Col } from 'antd'
+import { Table, Button, Modal, Form, Row, Col, Input, notification } from 'antd'
 import CustomerBankLinkWithForm from './customerBankLinkSearch'
 import EditBankLinkData from './editBankLinkData'
+import SelectCustomerWithForm from '../common/selectCustomer'
 
 
 const data = []
-export default class CustomerBankLink extends React.Component {
+const FormItem = Form.Item
+// 显示提示
+const showNotificationWithIcon = (msg) => {
+  notification.error({
+    message: '错误',
+    description: msg,
+  })
+}
+class CustomerBankLink extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       loading: false,
       delVisible: false,
       editVisible: false,
-      selectedRow: '',
+      selectedRow: [],
+      edittitle: '',
+      selectedRows: [],
+      delDataLength: '',
     }
-    this.handleDel = this.handleDel.bind(this)
   }
+
   componentDidMount() {
     this.testData()
   }
   handleQuery = (record) => {
   }
-  showEditModal = (e) => {
+  // 显示人工添加modal
+  showAutoAdd = () => {
     this.setState({
       editVisible: true,
+      edittitle: '人工添加客户银行关系数据',
     })
   }
-  handleEditOk = (e) => {
+  handleAutoAddOk = () => {
     this.setState({
       editVisible: false,
     })
+    const addData = this.props.form.getFieldsValue()
+    // 提交数据
+    console.log('add')
+    console.log(this.props.form.getFieldsValue())
+  }
+  // 显示编辑客户银行关系modal
+  showEditModal = (record, e) => {
+    this.setState({
+      editVisible: true,
+      edittitle: '编辑客户银行关系数据',
+    })
+    this.props.form.setFieldsValue(record)
+  }
+  // 提交编辑客户银行关系数据 关闭modal
+  handleEditOk = (record) => {
+    this.setState({
+      editVisible: false,
+    })
+    const newEditData = this.props.form.getFieldsValue()
+    console.log('edit')
+    console.log(newEditData)// 提交给后台接口
   }
   handleEditCancel = (e) => {
     this.setState({
       editVisible: false,
     })
   }
-  handleDel = (record) => {
-    console.log(record)
+  // 显示删除modal
+  showDelModal = (record) => {
     // 返回数据给后台
-    this.handleQuery(record)
     // 删除成功显示按钮
     this.setState({
       delVisible: true,
+      delDataLength: 0,
+    })
+  }
+  // 删除所选
+  delSelectData = () => {
+    if (this.state.selectedRows.length < 1) {
+      showNotificationWithIcon('必须选择至少一条数据')
+    } else {
+      let delSelectData = []
+      delSelectData = this.state.selectedRows
+      console.log('del')
+      console.log(delSelectData)
+      // 提交数据
+      this.setState({
+        delVisible: true,
+        delDataLength: delSelectData.length,
+      })
+    }
+  }
+  delOk = () => {
+    this.setState({
+      delVisible: false,
+    })
+    // 刷新数据
+  }
+  delCancel = () => {
+    this.setState({
+      delVisible: false,
     })
   }
   testData = () => {
-    this.setState({ loading: true })
     // ajax request after empty completing
     setTimeout(() => {
       for (let i = 0; i < 46; i++) {
@@ -60,7 +121,7 @@ export default class CustomerBankLink extends React.Component {
           bank: ['北京银行', '中国银行', '农业银行', '交通银行'][Math.ceil(Math.random() * 4) - 1],
           customer: ['北京市某某信息技术有限公司', '河北矿业', '中国电信', '中国移动北京分公司', '天津电话好多好多公司'][Math.ceil(Math.random() * 5) - 1],
           linkFrom: ['项目', '百一测评'][Math.ceil(Math.random() * 2) - 1],
-          bankAccount:Math.random() * 1000,
+          bankAccount: Math.random() * 1000,
           receiptMethod: ['test1', 'test2'][Math.ceil(Math.random() * 2) - 1],
         })
       }
@@ -70,6 +131,11 @@ export default class CustomerBankLink extends React.Component {
     }, 1000)
   }
   render() {
+    const formItemLayout = {
+      labelCol: { span: 7 },
+      wrapperCol: { span: 17 },
+    }
+    const { getFieldDecorator } = this.props.form
     const columns = [{
       title: '操作按钮',
       dataIndex: 'operateBtn',
@@ -77,8 +143,8 @@ export default class CustomerBankLink extends React.Component {
       width: 100,
       render: (text, record, index) => (
         <div>
-          <Button onClick={this.showEditModal}>编辑</Button>&nbsp;&nbsp;
-          <Button onClick={this.handleDel.bind(this, record)}>删除</Button>
+          <Button onClick={this.showEditModal.bind(this, record)}>编辑</Button>&nbsp;&nbsp;
+          <Button onClick={this.showDelModal.bind(this, record)}>删除</Button>
         </div>
       ),
     }, {
@@ -93,7 +159,7 @@ export default class CustomerBankLink extends React.Component {
       width: 100,
     }, {
       title: '银行帐号',
-      dataIndex: 'bankAccount',
+      dataIndex: 'custBankAccount',
       key: '4',
       width: 100,
     }, {
@@ -111,13 +177,17 @@ export default class CustomerBankLink extends React.Component {
     const rowSelection = {
       type: 'checkBox',
       onSelect: (record, selected, selectedRows) => {
+        this.setState({
+          selectedRows: selectedRows,
+        })
       },
     }
     return (<div>
       <CustomerBankLinkWithForm />
       <br />
-      <br />
-      <br />
+      <Button onClick={this.showAutoAdd}>人工添加</Button>&nbsp;&nbsp;
+      <Button onClick={this.delSelectData}>删除</Button>
+      <br /><br />
       <Table
         rowSelection={rowSelection}
         columns={columns}
@@ -125,14 +195,86 @@ export default class CustomerBankLink extends React.Component {
         size="middle"
         bordered
         pagination="true"
-        scroll={{ y: true }}
+        scroll={{y: true}}
       />
-      { /* 删除modal */ }
-      <EditBankLinkData
-        onConfirm={this.handleEditOk}
-        onCancel={this.handleEditCancel}
+      { /* 编辑客户银行关系modal */ }
+      {/*  */}
+      <Modal
+        title={this.state.edittitle}
         visible={this.state.editVisible}
-      />
+        onCancel={this.handleEditCancel}
+        onOk={this.state.edittitle === '编辑客户银行关系数据' ? this.handleEditOk : this.handleAutoAddOk}
+      >
+        <Form
+          className="ant-search-form"
+        >
+          <Row gutter={40}>
+            <Col span={12} key={1}>
+              <FormItem {...formItemLayout} label="客户名称">
+                {getFieldDecorator('customer')(<SelectCustomerWithForm />)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={12} key={2}>
+              <FormItem {...formItemLayout} label="银行名称">
+                {getFieldDecorator('bank')(
+                  <Input
+                    placeholder="请输入银行名称"
+                  />,
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12} key={3}>
+              <FormItem {...formItemLayout} label="银行帐号">
+                {getFieldDecorator('bankAccount')(
+                  <Input
+                    placeholder="请输入银行帐号"
+                  />,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={12} key={4}>
+              <FormItem {...formItemLayout} label="收款方法">
+                {getFieldDecorator('receiptMethod')(
+                  <Input
+                    placeholder="请输入收款方法"
+                  />,
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12} key={5}>
+              <FormItem {...formItemLayout} label="关系来源">
+                {getFieldDecorator('linkFrom')(
+                  <Input
+                    placeholder="请输入关系来源"
+                  />,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
+      </Modal>
+      { /* 删除数据modal */ }
+      <Modal
+        visible={this.state.delVisible}
+        onOk={this.delOk}
+        onCancel={this.delCancel}
+        title="删除数据"
+      >
+        {this.state.delDataLength === 0 ? '失效当前数据成功' : '成功失效' + this.state.delDataLength + '条数据'}
+      </Modal>
     </div>)
   }
 }
+CustomerBankLink.propTypes = {
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func.isRequired,
+    getFieldsValue: PropTypes.func.isRequired,
+    setFieldsValue: PropTypes.func.isRequired,
+  }).isRequired,
+}
+const CustomerBankLinks = Form.create()(CustomerBankLink)
+export default CustomerBankLinks

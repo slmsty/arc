@@ -1,9 +1,16 @@
 import caseReducer from './caseReducer'
 
 const resultData = {
-  pageNo: 1,
-  count: 0,
-  result: [],
+  successResult: {
+    pageNo: 1,
+    count: 0,
+    result: [],
+  },
+  failureResult: {
+    pageNo: 1,
+    count: 0,
+    result: [],
+  },
 }
 
 const getImportSuccessResultData = (state, action) => ({

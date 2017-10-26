@@ -15,24 +15,17 @@ const dateFormat = 'YYYY-MM-DD'
 
 class ReviewReceiptClaimSearch extends React.Component {
   componentDidMount() {
+    this.handleQuery()
   }
   onSelectCustomer = (customer) => {
     console.log(customer)
   }
   handleQuery = () => {
-    // 验证是否通过
-    this.props.form.validateFields((err, fieldsValue) => {
-      if (err) {
-        return
-      }
-      // Should format date value before submit.
-      const values = {
-        ...fieldsValue,
-        startDate: fieldsValue['startDate'].format('YYYY-MM-DD'),
-        endDate: fieldsValue['endDate'].format('YYYY-MM-DD'),
-      }
-      console.log('Received values of form: ', values);
-    })
+    const param = this.props.form.getFieldsValue()
+    param.startDate = param.startDate.format(dateFormat)
+    param.endDate = param.endDate.format(dateFormat)
+    console.log(param)
+    /* this.props.onQuery(param) */
   }
 
   render() {
@@ -159,8 +152,10 @@ class ReviewReceiptClaimSearch extends React.Component {
 ReviewReceiptClaimSearch.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
-    getFieldValue: PropTypes.func.isRequired,
+    getFieldsValue: PropTypes.func.isRequired,
+    setFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
+  // onQuery: PropTypes.func.isRequired,
 }
 
 const ReviewReceiptClaimSearchWithForm = Form.create()(ReviewReceiptClaimSearch)
