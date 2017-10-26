@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, Pagination } from 'antd'
+import { Table, Button, Pagination, message } from 'antd'
 import ProjectReceiptClaimSearchWithForm from './projectReceiptClaimSearch'
 import ClaimModal from './projectReceiptClaimModal'
 
@@ -133,6 +133,11 @@ export default class ProjectReceiptClaim extends React.Component {
   state = {
     showClaimModal: false,
     selectedRowKeys: [],
+    pageSize: 10,
+    status: '21',
+  }
+  onSelectChange = (selectedRowKeys) => {
+    this.setState({ selectedRowKeys })
   }
   queryParam = {
     pageInfo: {
@@ -145,8 +150,27 @@ export default class ProjectReceiptClaim extends React.Component {
     receiptMethodId: '',
     receiptDates: '',
     contractIds: '',
-    status: '',
+    status: this.state.status,
     receiptNo: '',
+  }
+  handleChangePage = (page) => {
+    this.queryParam.pageInfo.pageNo = page
+    this.handleQuery()
+  }
+  handleChangeSize = (current, size) => {
+    this.queryParam.pageInfo.pageNo = current
+    this.queryParam.pageInfo.pageSize = size
+    this.handleQuery()
+  }
+  handleChangeParam = (param) => {
+    this.setState({ selectedRowKeys: [], status: param.status })
+    this.queryParam = { ...this.queryParam, ...param }
+    this.handleQuery()
+  }
+  handleQuery = () => {
+    // this.props.history.push('112')
+    // console.log(this.queryParam)
+    this.props.getReceiptList(this.queryParam)
   }
   handleCloseClaimModal = (refresh) => {
     this.setState({
@@ -157,30 +181,32 @@ export default class ProjectReceiptClaim extends React.Component {
     }
   }
   handleOpenClaim = () => {
+    if (this.state.selectedRowKeys.length === 0) {
+      message.error('请选择要认款的收款流水')
+      return
+    }
+    if (this.state.selectedRowKeys.length > 1) {
+      message.error('一次只能对一条收款流水进行认款')
+      return
+    }
     this.setState({
       showClaimModal: true,
     })
   }
-  handleChangePage = (page) => {
-    this.queryParam.pageInfo.pageNo = page
-    this.handleQuery()
-  }
-  handleChangeParam = (param) => {
-    this.queryParam = { ...this.queryParam, ...param }
-    this.handleQuery()
-  }
-  handleQuery = () => {
-    // this.props.history.push('112')
-    // console.log(this.queryParam)
-    this.props.getReceiptList(this.queryParam)
-  }
-  onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys })
+  handleReject = () => {
+    if (this.state.selectedRowKeys.length === 0) {
+      message.error('请选择要拒绝的收款流水')
+      return
+    }
+    this.props.reject(this.state.selectedRowKeys)
   }
   render() {
     const pagination = (<Pagination
       current={this.props.projectReceiptClaim.pageNo}
       onChange={this.handleChangePage}
+      pageSize={this.state.pageSize}
+      showSizeChanger
+      onShowSizeChange={this.handleChangeSize}
       total={this.props.projectReceiptClaim.count}
     />)
     const { selectedRowKeys } = this.state
@@ -194,9 +220,8 @@ export default class ProjectReceiptClaim extends React.Component {
         <ProjectReceiptClaimSearchWithForm
           onQuery={this.handleChangeParam}
         />
-        <Button type="danger">拒绝</Button>&nbsp;&nbsp;
-        <Button type="primary" onClick={this.handleOpenClaim}>认款</Button>&nbsp;&nbsp;
-        <Button type="dashed">重新认款</Button>
+        <Button type="primary" onClick={this.handleOpenClaim}>{this.state.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
+        <Button type="danger" onClick={this.handleReject}>拒绝</Button>
         <br /><br />
         <Table
           rowSelection={rowSelection}
@@ -221,6 +246,7 @@ ProjectReceiptClaim.propTypes = {
   //   push: PropTypes.func.isRequired,
   // }).isRequired,
   getReceiptList: PropTypes.func.isRequired,
+  reject: PropTypes.func.isRequired,
   projectReceiptClaim: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,

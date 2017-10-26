@@ -6,7 +6,7 @@ import moment from 'moment'
 
 import SelectCustomerWithForm from '../common/selectCustomer'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
-import MultipleDayPicker from '../common/multipleDayPicker'
+import MultipleDayPicker from '../common/multipleDayInput'
 
 const { RangePicker } = DatePicker
 const FormItem = Form.Item

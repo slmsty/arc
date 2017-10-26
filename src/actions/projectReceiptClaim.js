@@ -13,3 +13,16 @@ export function getReceiptList(queryParam) {
     },
   }
 }
+
+export function reject(receiptClaimIds) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/reject',
+      options: {
+        method: 'POST',
+        body: receiptClaimIds,
+      },
+      types: ['PROJECT_RECEIPT_REJECT_SUCCESS'],
+    },
+  }
+}

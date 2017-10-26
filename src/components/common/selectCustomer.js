@@ -1,7 +1,7 @@
-/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable react/prefer-stateless-function,react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Row, Col, Button, Input, Table, Icon, Pagination, notification } from 'antd'
+import { Modal, Form, Row, Col, Button, Input, Table, Icon, Pagination } from 'antd'
 
 import requestJsonFetch from '../../http/requestJsonFecth'
 
@@ -50,13 +50,16 @@ class SelectCustomer extends React.Component {
   handleQuery = () => {
     const keywords = this.props.form.getFieldValue('keywords')
     const param = {
-      pageInfo: {
-        pageNo: this.state.pageNo,
-        pageSize: this.state.pageSize,
+      method: 'POST',
+      body: {
+        pageInfo: {
+          pageNo: this.state.pageNo,
+          pageSize: this.state.pageSize,
+        },
+        keywords,
       },
-      keywords,
     }
-    requestJsonFetch('arc/common/customer_name/list', param, this.handleCallback)
+    requestJsonFetch('/arc/common/customer_name/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
@@ -135,7 +138,6 @@ SelectCustomer.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
-  onChange: PropTypes.func.isRequired,
 }
 
 const SelectCustomerWithForm = Form.create()(SelectCustomer)

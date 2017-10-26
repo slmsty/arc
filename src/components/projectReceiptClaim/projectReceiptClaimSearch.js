@@ -6,7 +6,8 @@ import moment from 'moment'
 
 import SelectCustomerWithForm from '../common/selectCustomer'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
-import MultipleDayPicker from '../common/multipleDayPicker'
+import MultipleDayInput from '../common/multipleDayInput'
+import MultipleInput from '../common/multipleInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
 
 const { RangePicker } = DatePicker
@@ -25,6 +26,8 @@ class ProjectReceiptClaimSearch extends React.Component {
     const param = this.props.form.getFieldsValue()
     param.receiptDateStart = param.receiptDate[0].format(dateFormat)
     param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
+    delete param.receiptDate
+    console.log(param)
     this.props.onQuery(param)
   }
   handleChange = () => {
@@ -68,9 +71,9 @@ class ProjectReceiptClaimSearch extends React.Component {
                 {getFieldDecorator('sourceType')(
                   <SelectInvokeApi
                     id="sourceType"
-                    api=""
+                    apiUrl="/arc/sysparam/get/test"
+                    method="get"
                     placeholder="请选择收款来源"
-                    onChange={this.handleChange}
                   />,
                 )}
               </FormItem>
@@ -80,11 +83,8 @@ class ProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="项目编码">
                 {getFieldDecorator('projectIds')(
-                  <Select
-                    mode="tags"
-                    tokenSeparators={[',', '，']}
+                  <MultipleInput
                     placeholder="多项目编码使用英文逗号间隔"
-                    dropdownStyle={{ display: 'none' }}
                   />,
                 )}
               </FormItem>
@@ -101,9 +101,9 @@ class ProjectReceiptClaimSearch extends React.Component {
                 {getFieldDecorator('custPayMethod')(
                   <SelectInvokeApi
                     id="custPayMethod"
-                    api=""
+                    apiUrl="/arc/sysparam/get/test"
+                    method="get"
                     placeholder="请选择收款分类"
-                    onChange={this.handleChange}
                   />,
                 )}
               </FormItem>
@@ -113,23 +113,15 @@ class ProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="收款日期">
                 {getFieldDecorator('receiptDates')(
-                  <Select
-                    mode="tags"
-                    tokenSeparators={[',', '，']}
-                    placeholder="多收款日期使用英文逗号间隔"
-                    dropdownStyle={{ display: 'none' }}
-                  />,
+                  <MultipleDayInput />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="合同编码">
                 {getFieldDecorator('contractIds')(
-                  <Select
-                    mode="tags"
-                    tokenSeparators={[',', '，']}
+                  <MultipleInput
                     placeholder="多合同编码使用英文逗号间隔"
-                    dropdownStyle={{ display: 'none' }}
                   />,
                 )}
               </FormItem>

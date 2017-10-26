@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable react/prefer-stateless-function,react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Row, Col, Button, Input, Table, Icon } from 'antd'
@@ -122,7 +122,6 @@ SelectReceiptMethod.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
-  onChange: PropTypes.func.isRequired,
 }
 
 const SelectReceiptMethodWithForm = Form.create()(SelectReceiptMethod)

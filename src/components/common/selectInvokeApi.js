@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable react/prefer-stateless-function,react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Select } from 'antd'
@@ -13,7 +13,7 @@ export default class SelectInvokeApi extends React.Component {
   }
   componentDidMount() {
     if (this.props.api) {
-      requestJsonFetch(this.props.api, {}, this.handleCallback)
+      requestJsonFetch(this.props.apiUrl, { method: this.props.method }, this.handleCallback)
     }
   }
   handleCallback = (response) => {
@@ -38,6 +38,6 @@ export default class SelectInvokeApi extends React.Component {
 SelectInvokeApi.propTypes = {
   id: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
-  api: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  apiUrl: PropTypes.string.isRequired,
+  method: PropTypes.string.isRequired,
 }
