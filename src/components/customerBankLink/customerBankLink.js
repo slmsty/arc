@@ -28,7 +28,7 @@ class CustomerBankLink extends React.Component {
       editVisible: false,
       selectedRow: [],
       edittitle: '',
-      selectedRows: [],
+      selectedRowsData: [],
       delDataLength: '',
     }
   }
@@ -44,6 +44,7 @@ class CustomerBankLink extends React.Component {
       editVisible: true,
       edittitle: '人工添加客户银行关系数据',
     })
+    this.props.form.resetFields()
   }
   handleAutoAddOk = () => {
     this.setState({
@@ -87,11 +88,11 @@ class CustomerBankLink extends React.Component {
   }
   // 删除所选
   delSelectData = () => {
-    if (this.state.selectedRows.length < 1) {
+    if (this.state.selectedRowsData.length < 1) {
       showNotificationWithIcon('必须选择至少一条数据')
     } else {
       let delSelectData = []
-      delSelectData = this.state.selectedRows
+      delSelectData = this.state.selectedRowsData
       console.log('del')
       console.log(delSelectData)
       // 提交数据
@@ -177,8 +178,15 @@ class CustomerBankLink extends React.Component {
     const rowSelection = {
       type: 'checkBox',
       onSelect: (record, selected, selectedRows) => {
+        // console.log(selectedRows)
         this.setState({
-          selectedRows: selectedRows,
+          selectedRowsData: selectedRows,
+        })
+      },
+      onSelectAll: (selected, selectedRows) => {
+        this.setState({
+          selectedRowsData: selectedRows,
+          delDataLength: selectedRows.length,
         })
       },
     }
@@ -194,8 +202,17 @@ class CustomerBankLink extends React.Component {
         dataSource={data}
         size="middle"
         bordered
-        pagination="true"
-        scroll={{y: true}}
+        pagination={
+          {
+            onChange: (page, pageSize) => {
+              // console.log("current:" + page)
+              this.setState({
+                selectedRowsData: [],
+              })
+            },
+          }
+        }
+        scroll={{ y: true }}
       />
       { /* 编辑客户银行关系modal */ }
       {/*  */}
@@ -274,6 +291,7 @@ CustomerBankLink.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
     setFieldsValue: PropTypes.func.isRequired,
+    resetFields: PropTypes.func.isRequired,
   }).isRequired,
 }
 const CustomerBankLinks = Form.create()(CustomerBankLink)
