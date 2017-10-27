@@ -1,16 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import { setTitle } from '../../actions/common'
+import { getCBSTurnoverWholenessData } from '../../actions/cbsTurnoverWholenessConfirm'
 import CBSTurnoverWholenessConfirm from '../../components/cbsTurnoverWholenessConfirm/cbsTurnoverWholenessConfirm'
 
 const mapStateToProps = state => ({
-  user: state.user,
+  cbsTurnoverWholenessConfirm: state.cbsTurnoverWholenessConfirm,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    setTitle,
+    getCBSTurnoverWholenessData,
   }, dispatch)
 )
 
@@ -21,5 +22,5 @@ class CBSTurnoverWholenessConfirmContainer extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CBSTurnoverWholenessConfirmContainer)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CBSTurnoverWholenessConfirmContainer))
 
