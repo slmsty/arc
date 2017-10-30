@@ -2,13 +2,16 @@
 import React from 'react'
 import { Pagination, Row, Col, Table, Button, notification } from 'antd'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import CBSTurnoverWholenessConfirmSearchWithForm from './cbsTurnoverWholenessConfirmSearch'
 import EditCBSTurnoverDataWithForm from './editCBSTurnoverData'
 
+const dateFormat = 'YYYY-MM-DD'
+
 const columns = [{
   title: '数据状态',
-  dataIndex: 'status',
-  key: 'status',
+  dataIndex: 'statusDesc',
+  key: 'statusDesc',
   width: 80,
   fixed: 'left',
 }, {
@@ -17,6 +20,7 @@ const columns = [{
   key: 'receiptDate',
   width: 80,
   fixed: 'left',
+  render: (text, row, index) => moment(text).format(dateFormat),
 }, {
   title: '币种',
   dataIndex: 'currency',
@@ -27,6 +31,7 @@ const columns = [{
   dataIndex: 'receiptAmount',
   key: 'receiptAmount',
   width: 100,
+  render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
 }, {
   title: '客户名称',
   dataIndex: 'custName',
@@ -34,13 +39,13 @@ const columns = [{
   width: 300,
 }, {
   title: '流水分类',
-  dataIndex: 'claimType',
-  key: 'claimType',
-  width: 100,
+  dataIndex: 'claimTypeDesc',
+  key: 'claimTypeDesc',
+  width: 80,
 }, {
   title: '备注',
-  dataIndex: 'statusDesc',
-  key: 'statusDesc',
+  dataIndex: 'cashierApproveMessage',
+  key: 'cashierApproveMessage',
   width: 635,
 }, {
   title: '客户付款方式',
@@ -49,9 +54,9 @@ const columns = [{
   width: 100,
 }, {
   title: '银行流水备注',
-  dataIndex: 'bankTurnoverComment',
-  key: 'bankTurnoverComment',
-  width: 100,
+  dataIndex: 'bankTransactionPurpose',
+  key: 'bankTransactionPurpose',
+  width: 300,
 }, {
   title: '付款客户名称',
   dataIndex: 'payCustName',
@@ -59,23 +64,23 @@ const columns = [{
   width: 300,
 }, {
   title: '客户付款银行账号',
-  dataIndex: 'custBankAccount',
-  key: 'custBankAccount',
-  width: 120,
+  dataIndex: 'payBankAccount',
+  key: 'payBankAccount',
+  width: 150,
 }, {
   title: '客户付款银行',
-  dataIndex: 'custBankName',
-  key: 'custBankName',
+  dataIndex: 'payBankName',
+  key: 'payBankName',
   width: 300,
 }, {
   title: '银行流水号',
   dataIndex: 'bankTransactionNo',
   key: 'bankTransactionNo',
-  width: 100,
+  width: 200,
 }, {
   title: '公司',
-  dataIndex: 'company',
-  key: 'company',
+  dataIndex: 'companyName',
+  key: 'companyName',
   width: 300,
 },
 ]
@@ -91,6 +96,8 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
   state = {
     selectedRowKeys: [],
     editVisible: false,
+    editReceiptClaimId: -1,
+    exceptDisabled: false,
   }
   componentDidMount() {
     this.handleQuery()
@@ -112,7 +119,6 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
   }
   handleChangeParam = (param) => {
     this.queryParam = { ...this.queryParam, ...param }
-    console.log(this.queryParam)
     this.handleQuery()
   }
   handleQuery = () => {
@@ -125,20 +131,16 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     } else if (this.state.selectedRowKeys.length > 1) {
       openNotificationWithIcon('只可对一条数据进行编辑。')
     } else {
-      this.setState({ editVisible: true })
-      // console.log('弹出编辑界面，传递数据：[' + this.state.selectedRowKeys + ']')
+      this.setState({ editReceiptClaimId: this.state.selectedRowKeys[0], editVisible: true })
     }
   }
-  handleEditConfirm = () => {
+  handleEditConfirm = (confirmList) => {
+    this.props.editConfirm({ list: [confirmList] })
     this.setState({ editVisible: false })
     this.handleQuery()
   }
   handleEditCancel = () => {
     this.setState({ editVisible: false })
-  }
-  handleConfirm = () => {
-    console.log('确认。。然后刷新数据。')
-    this.handleQuery()
   }
   handleChangePage = (page) => {
     this.queryParam.pageInfo.pageNo = page
@@ -148,9 +150,12 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     if (!this.state.selectedRowKeys.length) {
       openNotificationWithIcon('请选择想要排除的数据。')
     } else {
-      console.log(`调用排除接口，传递数据：[${this.state.selectedRowKeys}]，然后刷新列表`)
+      this.props.editExcept(this.state.selectedRowKeys)
       this.handleQuery()
     }
+  }
+  handleChangeStatus = (status) => {
+    this.setState({ exceptDisabled: status === '11' })
   }
   render() {
     const { selectedRowKeys } = this.state
@@ -159,30 +164,26 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
       selectedRowKeys,
       onChange: this.handleSelectChange,
     }
-    const pagination = (<Pagination
-      current={this.props.getCBSTurnoverWholenessData.pageNo}
-      onChange={this.handleChangePage}
-      total={this.props.getCBSTurnoverWholenessData.count}
-    />)
-    const makeSummary = () => {
-      if (this.props.getCBSTurnoverWholenessData.amountSum && this.props.getCBSTurnoverWholenessData.amountSum) {
-        return this.props.getCBSTurnoverWholenessData.map(item => `${item.currency}：${item.totalAmount}`).join('  ')
-      } else {
-        return '0.00'
-      }
+    const pagination = {
+      current: this.props.cbsTurnoverWholenessList.pageInfo.pageNo || 1,
+      onChange: this.handleChangePage,
+      total: this.props.cbsTurnoverWholenessList.pageInfo.count,
     }
+    const makeSummary = () => (this.props.cbsTurnoverWholenessList.amountTotals.length ?
+      this.props.cbsTurnoverWholenessList.amountTotals.map(item => `${item.currency}：${item.totalAmount}`).join('  ') : '0.00'
+    )
     return (
       <div>
         <CBSTurnoverWholenessConfirmSearchWithForm
           query={this.handleChangeParam}
+          changeStatus={this.handleChangeStatus}
         />
         <br />
         <Row style={{ lineHeight: '28px' }}>
           <Col span={8}>
-            <Button type="default" onClick={this.handleEdit}>编辑</Button>&nbsp;&nbsp;
+            <Button type="primary" onClick={this.handleEdit}>编辑</Button>&nbsp;&nbsp;
             <Button type="default" onClick={() => { console.log('change router') }}>人工录入</Button>&nbsp;&nbsp;
-            <Button type="default" onClick={this.handleExcept}>排除</Button>&nbsp;&nbsp;
-            <Button type="primary" onClick={this.handleConfirm}>确认</Button>&nbsp;&nbsp;
+            <Button type="default" onClick={this.handleExcept} disabled={this.state.exceptDisabled}>排除</Button>&nbsp;&nbsp;
           </Col>
           <Col span={16} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary()}</span>
@@ -192,16 +193,18 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={this.props.cbsTurnoverWholenessConfirm.result}
+          dataSource={this.props.cbsTurnoverWholenessList.pageInfo.result}
           bordered
+          rowKey="receiptClaimId"
           size="middle"
           pagination={pagination}
-          scroll={{ x: '2660px' }}
+          scroll={{ x: '2970px' }}
         />
         <EditCBSTurnoverDataWithForm
           onConfirm={this.handleEditConfirm}
           onCancel={this.handleEditCancel}
           visible={this.state.editVisible}
+          receiptClaimId={this.state.editReceiptClaimId}
         />
       </div>
     )
@@ -210,11 +213,15 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
 
 CBSTurnoverWholenessConfirm.propTypes = {
   getCBSTurnoverWholenessData: PropTypes.func.isRequired,
-  cbsTurnoverWholenessConfirm: PropTypes.shape({
-    pageNo: PropTypes.number.isRequired,
-    count: PropTypes.number.isRequired,
-    result: PropTypes.array.isRequired,
-    amountSum: PropTypes.array.isRequired,
+  editConfirm: PropTypes.func.isRequired,
+  editExcept: PropTypes.func.isRequired,
+  cbsTurnoverWholenessList: PropTypes.shape({
+    pageInfo: PropTypes.shape({
+      pageNo: PropTypes.number.isRequired,
+      count: PropTypes.number.isRequired,
+      result: PropTypes.array.isRequired,
+    }).isRequired,
+    amountTotals: PropTypes.array.isRequired,
   }).isRequired,
 }
 

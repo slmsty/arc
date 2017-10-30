@@ -19,10 +19,13 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
   handleQuery = (e) => {
     e ? e.preventDefault() : null
     const param = this.props.form.getFieldsValue()
-    param.receiptDateStart = param.receiptDate[0].format(dateFormat)
-    param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
+    param.receiptDateStart = param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
+    param.receiptDateEnd = param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
     delete param.receiptDate
     this.props.query(param)
+  }
+  handleChange = (value) => {
+    this.props.changeStatus(value)
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -60,7 +63,7 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
                 {getFieldDecorator('status', {
                   initialValue: '10',
                 })(
-                  <Select>
+                  <Select onChange={this.handleChange}>
                     <Option value="10">新建</Option>
                     <Option value="20">出纳待确认</Option>
                     <Option value="11">无需认款</Option>
@@ -94,6 +97,7 @@ CBSTurnoverWholenessConfirmSearch.propTypes = {
     getFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
   query: PropTypes.func.isRequired,
+  changeStatus: PropTypes.func.isRequired,
 }
 
 const CBSTurnoverWholenessConfirmSearchWithForm = Form.create()(CBSTurnoverWholenessConfirmSearch)
