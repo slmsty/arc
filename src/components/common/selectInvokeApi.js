@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function,react/prop-types */
+/* eslint-disable react/prefer-stateless-function,react/prop-types,max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Select } from 'antd'
@@ -12,17 +12,19 @@ export default class SelectInvokeApi extends React.Component {
     options: [],
   }
   componentDidMount() {
-    if (this.props.api) {
-      requestJsonFetch(this.props.apiUrl, { method: this.props.method }, this.handleCallback)
+    if (this.props.typeCode && this.props.paramCode) {
+      requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
     }
   }
   handleCallback = (response) => {
-    console.log(response)
+    if (response.resultCode === '000000') {
+      this.setState({
+        options: response.data,
+      })
+    }
   }
   render() {
-    const optionDom = this.state.options ? this.state.options.map((option) => {
-      return <Option key={option.id}>{option.name}</Option>
-    }) : null
+    const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue}>{option.paramValueDesc}</Option>) : null
     return (
       <Select
         id={this.props.id}
@@ -38,6 +40,6 @@ export default class SelectInvokeApi extends React.Component {
 SelectInvokeApi.propTypes = {
   id: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
-  apiUrl: PropTypes.string.isRequired,
-  method: PropTypes.string.isRequired,
+  typeCode: PropTypes.string.isRequired,
+  paramCode: PropTypes.string.isRequired,
 }

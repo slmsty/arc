@@ -22,7 +22,33 @@ export function reject(receiptClaimIds) {
         method: 'POST',
         body: receiptClaimIds,
       },
-      types: ['PROJECT_RECEIPT_REJECT_SUCCESS'],
+      types: ['PROJECT_RECEIPT_CLAIM_REJECT_SUCCESS'],
     },
+  }
+}
+
+export function submitClaim(submitParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/project/submit',
+      options: {
+        method: 'POST',
+        body: submitParam,
+      },
+      types: ['PROJECT_RECEIPT_CLAIM_SUBMIT_SUCCESS'],
+    },
+  }
+}
+
+export function openClaim(receiptInfo) {
+  return {
+    type: 'OPEN_CLAIM',
+    receiptInfo,
+  }
+}
+
+export function closeClaim() {
+  return {
+    type: 'CLOSE_CLAIM',
   }
 }

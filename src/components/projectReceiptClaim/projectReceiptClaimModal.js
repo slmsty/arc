@@ -72,16 +72,16 @@ const columns = [{
 },
 ]
 
-export default class ClaimModal extends React.Component {
+export default class ProjectReceiptClaimModal extends React.Component {
   state = {
     showSelectContract: false,
+    contracts: [],
   }
-  handleOk = () => {
-    this.props.onClose(true)
+  handleSubmit = () => {
+    this.props.submitClaim()
   }
   handleCloseSelectContract = (contracts) => {
-    console.log(contracts)
-    this.setState({ showSelectContract: false })
+    this.setState({ showSelectContract: false, contracts: this.state.contracts.push(contracts) })
   }
   render() {
     const rowSelection = {
@@ -92,10 +92,10 @@ export default class ClaimModal extends React.Component {
         <Modal
           width={1024}
           title="项目认款"
-          visible={this.props.visible}
-          onCancel={() => { this.props.onClose(false) }}
+          visible={this.props.receiptInfo.receiptClaimId}
+          onCancel={() => { this.props.closeClaim(false) }}
           footer={[
-            <Button key="submit" type="primary" onClick={this.handleOk}>
+            <Button key="submit" type="primary" onClick={this.handleSubmit}>
               <Icon type="save" />保存
             </Button>,
           ]}
@@ -103,15 +103,15 @@ export default class ClaimModal extends React.Component {
           <Card>
             <Row>
               <Col style={{ textAlign: 'right' }} span={3} key={1}>收款金额：</Col>
-              <Col span={5} key={2}>收款金额</Col>
+              <Col span={5} key={2}>{this.props.receiptInfo.receiptAmount}</Col>
               <Col style={{ textAlign: 'right' }} span={3} key={3}>银行流水号：</Col>
-              <Col span={5} key={4}>收款金额</Col>
+              <Col span={5} key={4}>{this.props.receiptInfo.bankTransactionNo}</Col>
               <Col style={{ textAlign: 'right' }} span={3} key={5}>收款编号：</Col>
-              <Col span={5} key={6}>收款金额</Col>
+              <Col span={5} key={6}>{this.props.receiptInfo.receiptNo}</Col>
             </Row>
             <Row>
               <Col style={{ textAlign: 'right' }} span={3} key={1}>客户名称：</Col>
-              <Col span={5} key={2}>收款金额</Col>
+              <Col span={5} key={2}>{this.props.receiptInfo.payCustName}</Col>
             </Row>
           </Card>
           <br />
@@ -136,7 +136,14 @@ export default class ClaimModal extends React.Component {
   }
 }
 
-ClaimModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+ProjectReceiptClaimModal.propTypes = {
+  receiptInfo: PropTypes.shape({
+    receiptClaimId: PropTypes.string.isRequired,
+    receiptAmount: PropTypes.number.isRequired,
+    bankTransactionNo: PropTypes.string.isRequired,
+    receiptNo: PropTypes.string.isRequired,
+    payCustName: PropTypes.string.isRequired,
+  }).isRequired,
+  closeClaim: PropTypes.func.isRequired,
+  submitClaim: PropTypes.func.isRequired,
 }

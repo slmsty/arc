@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function,react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Row, Col, Button, Input, Table, Icon } from 'antd'
+import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd'
 
 import requestJsonFetch from '../../http/requestJsonFecth'
 
@@ -10,23 +10,19 @@ const Search = Input.Search
 
 const columns = [{
   title: '收款方法',
-  dataIndex: '1',
-  key: '1',
+  dataIndex: 'receiptMethodName',
   width: 100,
 }, {
   title: '银行账号',
-  dataIndex: '2',
-  key: '2',
+  dataIndex: 'receiptBankAccountNum',
   width: 100,
 }, {
   title: '所属公司',
-  dataIndex: '3',
-  key: '3',
+  dataIndex: 'companyName',
   width: 100,
 }, {
   title: '所属BG',
-  dataIndex: '4',
-  key: '4',
+  dataIndex: 'bgName',
   width: 100,
 },
 ]
@@ -34,26 +30,64 @@ const columns = [{
 class SelectReceiptMethod extends React.Component {
   state = {
     visible: false,
-    customer: '',
+    value: '',
+    pageNo: 1,
+    pageSize: 10,
+    total: 1,
+    methodList: [],
+    selectedRowKeys: [],
+    selectedRows: [],
+  }
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    this.setState({ selectedRowKeys, selectedRows })
   }
   handleOk = () => {
+    if (this.state.selectedRows.length === 0) {
+      message.error('请选择收款方法')
+      return
+    }
     this.setState({
-      customer: 'abcdefg',
+      value: this.state.selectedRows[0].receiptMethodName,
     })
-    this.props.onChange('abcdefg')
+    this.props.onChange(this.state.selectedRows[0].receiptMethodId)
     this.handleCancel()
   }
   handleCancel = () => {
     this.setState({
       visible: false,
+      selectedRowKeys: [],
+      selectedRows: [],
     })
   }
+  handleChangePage = (page) => {
+    this.handleQueryFetch(page)
+  }
   handleQuery = () => {
-    const customerName = this.props.form.getFieldValue('customerName')
-    requestJsonFetch('aaaa', customerName, this.handleCallback)
+    this.setState({ selectedRowKeys: [], selectedRows: [] })
+    this.handleQueryFetch(1)
+  }
+  handleQueryFetch= (pageNo) => {
+    const keywords = this.props.form.getFieldValue('keywords')
+    const param = {
+      method: 'POST',
+      body: {
+        pageInfo: {
+          pageNo: pageNo || 1,
+          pageSize: this.state.pageSize,
+        },
+        keywords,
+      },
+    }
+    requestJsonFetch('/arc/common/receipt_method/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
-    console.log(response)
+    if (response.resultCode === '000000') {
+      this.setState({
+        pageNo: response.pageInfo.pageNo,
+        total: response.pageInfo.pageCount,
+        methodList: response.pageInfo.result,
+      })
+    }
   }
   render() {
     const { visible } = this.state
@@ -62,20 +96,25 @@ class SelectReceiptMethod extends React.Component {
       wrapperCol: { span: 19 },
     }
     const { getFieldDecorator } = this.props.form
+    const { selectedRowKeys } = this.state
     const rowSelection = {
       type: 'radio',
+      hideDefaultSelections: true,
+      selectedRowKeys,
+      onChange: this.onSelectChange,
     }
     return (
       <div>
         <Search
+          disabled
           style={{ height: 30 }}
           placeholder="收款方法"
-          value={this.state.customer}
-          onChange={value => this.props.onChange(value)}
+          value={this.state.value}
           onSearch={() => this.setState({ visible: true })}
         />
         <Modal
           title="选择收款方法"
+          style={{ top: 20 }}
           visible={visible}
           onCancel={this.handleCancel}
           footer={[
@@ -90,7 +129,7 @@ class SelectReceiptMethod extends React.Component {
             <Row>
               <Col span={16} key={1}>
                 <FormItem {...formItemLayout} label="收款方法">
-                  {getFieldDecorator('customerName')(
+                  {getFieldDecorator('keywords')(
                     <Input
                       placeholder="请输入关键字"
                     />,
@@ -105,11 +144,18 @@ class SelectReceiptMethod extends React.Component {
           </Form>
 
           <Table
+            rowKey="receiptMethodId"
             columns={columns}
             rowSelection={rowSelection}
             bordered
             size="middle"
-            pagination="true"
+            dataSource={this.state.methodList}
+            pagination={{
+              current: this.state.pageNo,
+              onChange: this.handleChangePage,
+              total: this.state.total,
+              size: 'small',
+            }}
           />
         </Modal>
       </div>

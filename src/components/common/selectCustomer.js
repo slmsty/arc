@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function,react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Row, Col, Button, Input, Table, Icon, Pagination } from 'antd'
+import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd'
 
 import requestJsonFetch from '../../http/requestJsonFecth'
 
@@ -10,50 +10,61 @@ const Search = Input.Search
 
 const columns = [{
   title: '客户名称',
-  dataIndex: '1',
-  key: '1',
-  width: 100,
+  dataIndex: 'customerName',
+  width: 200,
 }, {
   title: '客户编号',
-  dataIndex: '2',
-  key: '2',
-  width: 100,
+  dataIndex: 'customerNumber',
+  width: 200,
 },
 ]
 
 class SelectCustomer extends React.Component {
   state = {
     visible: false,
+    value: '',
     pageNo: 1,
     pageSize: 10,
-    count: 1,
+    total: 1,
     customerList: [],
+    selectedRowKeys: [],
+    selectedRows: [],
+  }
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    this.setState({ selectedRowKeys, selectedRows })
   }
   handleOk = () => {
+    if (this.state.selectedRows.length === 0) {
+      message.error('请选择客户')
+      return
+    }
     this.setState({
-      customer: 'abcdefg',
+      value: this.state.selectedRows[0].customerName,
     })
-    this.props.onChange('abcdefg')
+    this.props.onChange(this.state.selectedRows[0].customerId)
     this.handleCancel()
   }
   handleCancel = () => {
     this.setState({
       visible: false,
+      selectedRowKeys: [],
+      selectedRows: [],
     })
   }
   handleChangePage = (page) => {
-    this.setState({
-      pageNo: page,
-    })
-    this.handleQuery()
+    this.handleQueryFetch(page)
   }
   handleQuery = () => {
+    this.setState({ selectedRowKeys: [], selectedRows: [] })
+    this.handleQueryFetch(1)
+  }
+  handleQueryFetch= (pageNo) => {
     const keywords = this.props.form.getFieldValue('keywords')
     const param = {
       method: 'POST',
       body: {
         pageInfo: {
-          pageNo: this.state.pageNo,
+          pageNo: pageNo || 1,
           pageSize: this.state.pageSize,
         },
         keywords,
@@ -63,7 +74,11 @@ class SelectCustomer extends React.Component {
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
-      console.log(response)
+      this.setState({
+        pageNo: response.pageInfo.pageNo,
+        total: response.pageInfo.pageCount,
+        customerList: response.pageInfo.result,
+      })
     }
   }
   render() {
@@ -72,26 +87,26 @@ class SelectCustomer extends React.Component {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
     }
-    const pagination = (<Pagination
-      current={this.state.pageNo}
-      onChange={this.handleChangePage}
-      total={this.state.count}
-    />)
     const { getFieldDecorator } = this.props.form
+    const { selectedRowKeys } = this.state
     const rowSelection = {
       type: 'radio',
+      hideDefaultSelections: true,
+      selectedRowKeys,
+      onChange: this.onSelectChange,
     }
     return (
       <div>
         <Search
+          disabled
           style={{ height: 30 }}
           placeholder="客户名称"
-          value={this.state.customer}
-          onChange={value => this.props.onChange(value)}
+          value={this.state.value}
           onSearch={() => this.setState({ visible: true })}
         />
         <Modal
           title="选择客户"
+          style={{ top: 20 }}
           visible={visible}
           onCancel={this.handleCancel}
           footer={[
@@ -121,11 +136,18 @@ class SelectCustomer extends React.Component {
           </Form>
 
           <Table
+            rowKey="customerId"
             columns={columns}
             rowSelection={rowSelection}
             bordered
             size="middle"
-            pagination={pagination}
+            dataSource={this.state.customerList}
+            pagination={{
+              current: this.state.pageNo,
+              onChange: this.handleChangePage,
+              total: this.state.total,
+              size: 'small',
+            }}
           />
         </Modal>
       </div>

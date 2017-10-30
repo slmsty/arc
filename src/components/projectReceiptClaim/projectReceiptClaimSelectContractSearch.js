@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal } from 'antd'
+import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal, Pagination } from 'antd'
 import SelectCustomerWithForm from '../common/selectCustomer'
+import requestJsonFetch from '../../http/requestJsonFecth'
+import MultipleInput from '../common/multipleInput'
 
 const columns = [{
   title: '客户名称',
@@ -48,19 +50,41 @@ const columns = [{
 ]
 
 const FormItem = Form.Item
+const InputGroup = Input.Group
 
 class ProjectReceiptClaimSelectContract extends React.Component {
+  state = {
+    pageNo: 1,
+    pageSize: 10,
+    count: 1,
+    result: [],
+  }
   componentDidMount() {
   }
-  onSelectCustomer = (customer) => {
-    console.log(customer)
+  handleChangePage = (page) => {
+    this.handleQuery(page, this.state.pageSize)
   }
-  handleQuery = () => {
-    const customer = this.props.form.getFieldValue('customer')
-    console.log(customer)
+  handleChangeSize = (current, size) => {
+    this.handleQuery(current, size)
   }
-  handleSelectContract = () => {
-    console.log('')
+  handleQuery = (pageNo, pageSize) => {
+    const queryParam = this.props.form.getFieldsValue()
+    const param = {
+      method: 'POST',
+      body: {
+        pageInfo: {
+          pageNo,
+          pageSize,
+        },
+        queryParam,
+      },
+    }
+    requestJsonFetch('/arc/common/customer_name/list', param, this.handleCallback)
+  }
+  handleCallback = (response) => {
+    if (response.resultCode === '000000') {
+      console.log(response)
+    }
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -71,6 +95,14 @@ class ProjectReceiptClaimSelectContract extends React.Component {
     const rowSelection = {
       type: 'checkBox',
     }
+    const pagination = (<Pagination
+      current={this.state.pageNo}
+      onChange={this.handleChangePage}
+      pageSize={this.state.pageSize}
+      showSizeChanger
+      onShowSizeChange={this.handleChangeSize}
+      total={this.state.count}
+    />)
     return (
       <Modal
         wrapClassName="vertical-center-modal"
@@ -92,7 +124,7 @@ class ProjectReceiptClaimSelectContract extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="项目编码">
                 {getFieldDecorator('projectCode')(
-                  <Input placeholder="多项目编码使用英文逗号间隔" />,
+                  <MultipleInput placeholder="多项目编码使用英文逗号间隔" />,
                 )}
               </FormItem>
             </Col>
@@ -115,14 +147,14 @@ class ProjectReceiptClaimSelectContract extends React.Component {
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="合同编码">
                 {getFieldDecorator('contractCode')(
-                  <Input placeholder="多合同编码使用英文逗号间隔" />,
+                  <MultipleInput placeholder="多合同编码使用英文逗号间隔" />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="发票号">
                 {getFieldDecorator('receiptCode')(
-                  <Input placeholder="多发票号使用英文逗号间隔" />,
+                  <MultipleInput placeholder="多发票号使用英文逗号间隔" />,
                 )}
               </FormItem>
             </Col>
@@ -136,20 +168,17 @@ class ProjectReceiptClaimSelectContract extends React.Component {
           </Row>
           <Row>
             <Col span={8} key={7}>
-              <FormItem {...formItemLayout} label="金额从">
+              <FormItem {...formItemLayout} label="金额范围">
                 {getFieldDecorator('start')(
-                  <InputNumber />,
+                  <InputGroup compact>
+                    <Input style={{ width: 100, textAlign: 'center' }} placeholder="Minimum" />
+                    <Input style={{ width: 24, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
+                    <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="Maximum" />
+                  </InputGroup>,
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={8}>
-              <FormItem {...formItemLayout} label="到">
-                {getFieldDecorator('end')(
-                  <InputNumber />,
-                )}
-              </FormItem>
-            </Col>
-            <Col span={8} style={{ textAlign: 'right' }}>
+            <Col span={16} style={{ textAlign: 'right' }}>
               <Button type="primary" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
@@ -160,7 +189,8 @@ class ProjectReceiptClaimSelectContract extends React.Component {
           bordered
           size="middle"
           pagination="true"
-          scroll={{ x: '150%', y: true }}
+          dataSource={this.state.result}
+          scroll={{ x: '150%' }}
         />
       </Modal>
     )
@@ -170,7 +200,7 @@ class ProjectReceiptClaimSelectContract extends React.Component {
 ProjectReceiptClaimSelectContract.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
-    getFieldValue: PropTypes.func.isRequired,
+    getFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,

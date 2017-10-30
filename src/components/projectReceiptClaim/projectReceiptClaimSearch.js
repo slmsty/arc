@@ -71,8 +71,8 @@ class ProjectReceiptClaimSearch extends React.Component {
                 {getFieldDecorator('sourceType')(
                   <SelectInvokeApi
                     id="sourceType"
-                    apiUrl="/arc/sysparam/get/test"
-                    method="get"
+                    typeCode="ARC_RECEIPT_CLAIM"
+                    paramCode="SOURCE_TYPE"
                     placeholder="请选择收款来源"
                   />,
                 )}
@@ -101,8 +101,8 @@ class ProjectReceiptClaimSearch extends React.Component {
                 {getFieldDecorator('custPayMethod')(
                   <SelectInvokeApi
                     id="custPayMethod"
-                    apiUrl="/arc/sysparam/get/test"
-                    method="get"
+                    typeCode="ARC_RECEIPT_CLAIM"
+                    paramCode="CLAIM_TYPE"
                     placeholder="请选择收款分类"
                   />,
                 )}
