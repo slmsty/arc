@@ -23,6 +23,8 @@ class CustomerBankLink extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      currentPage: 1,
+      currentpageSize: 10,
       loading: false,
       delVisible: false,
       editVisible: false,
@@ -160,7 +162,7 @@ class CustomerBankLink extends React.Component {
       width: 100,
     }, {
       title: '银行帐号',
-      dataIndex: 'custBankAccount',
+      dataIndex: 'bankAccount',
       key: '4',
       width: 100,
     }, {
@@ -177,18 +179,15 @@ class CustomerBankLink extends React.Component {
     ]
     const rowSelection = {
       type: 'checkBox',
-      onSelect: (record, selected, selectedRows) => {
+      onChange: (record, selectedRows) => {
         // console.log(selectedRows)
         this.setState({
           selectedRowsData: selectedRows,
         })
       },
-      onSelectAll: (selected, selectedRows) => {
-        this.setState({
-          selectedRowsData: selectedRows,
-          delDataLength: selectedRows.length,
-        })
-      },
+      getCheckboxProps: record => ({
+        // checked: record.key === 2,
+      }),
     }
     return (<div>
       <CustomerBankLinkWithForm />
@@ -202,11 +201,12 @@ class CustomerBankLink extends React.Component {
         dataSource={data}
         size="middle"
         bordered
+        className="mytable"
         pagination={
           {
             onChange: (page, pageSize) => {
-              // console.log("current:" + page)
               this.setState({
+                currentPage: page,
                 selectedRowsData: [],
               })
             },

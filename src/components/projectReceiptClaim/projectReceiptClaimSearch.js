@@ -19,19 +19,12 @@ class ProjectReceiptClaimSearch extends React.Component {
   componentDidMount() {
     this.handleQuery()
   }
-  onSelectCustomer = (customer) => {
-    console.log(customer)
-  }
   handleQuery = () => {
     const param = this.props.form.getFieldsValue()
     param.receiptDateStart = param.receiptDate[0].format(dateFormat)
     param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
     delete param.receiptDate
-    console.log(param)
     this.props.onQuery(param)
-  }
-  handleChange = () => {
-    console.log()
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -70,7 +63,6 @@ class ProjectReceiptClaimSearch extends React.Component {
               <FormItem {...formItemLayout} label="收款来源">
                 {getFieldDecorator('sourceType')(
                   <SelectInvokeApi
-                    id="sourceType"
                     typeCode="ARC_RECEIPT_CLAIM"
                     paramCode="SOURCE_TYPE"
                     placeholder="请选择收款来源"
@@ -100,7 +92,6 @@ class ProjectReceiptClaimSearch extends React.Component {
               <FormItem {...formItemLayout} label="收款分类">
                 {getFieldDecorator('custPayMethod')(
                   <SelectInvokeApi
-                    id="custPayMethod"
                     typeCode="ARC_RECEIPT_CLAIM"
                     paramCode="CLAIM_TYPE"
                     placeholder="请选择收款分类"
@@ -162,6 +153,7 @@ ProjectReceiptClaimSearch.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    resetFields: PropTypes.func.isRequired,
   }).isRequired,
   onQuery: PropTypes.func.isRequired,
 }

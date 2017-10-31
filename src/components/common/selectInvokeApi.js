@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function,react/prop-types,max-len */
+/* eslint-disable react/prefer-stateless-function,react/prop-types,max-len,react/require-default-props */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Select } from 'antd'
@@ -30,6 +30,7 @@ export default class SelectInvokeApi extends React.Component {
         id={this.props.id}
         placeholder={this.props.placeholder}
         onChange={value => this.props.onChange(value)}
+        value={this.props.value}
       >
         {optionDom}
       </Select>
@@ -38,8 +39,8 @@ export default class SelectInvokeApi extends React.Component {
 }
 
 SelectInvokeApi.propTypes = {
-  id: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   typeCode: PropTypes.string.isRequired,
   paramCode: PropTypes.string.isRequired,
+  value: PropTypes.string,
 }

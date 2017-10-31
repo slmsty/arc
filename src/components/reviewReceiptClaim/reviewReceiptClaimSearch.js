@@ -6,7 +6,8 @@ import moment from 'moment'
 
 import SelectCustomerWithForm from '../common/selectCustomer'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
-import MultipleDayPicker from '../common/multipleDayInput'
+import MultipleInput from '../common/multipleInput'
+import SelectInvokeApi from '../common/selectInvokeApi'
 
 const { RangePicker } = DatePicker
 const FormItem = Form.Item
@@ -24,8 +25,8 @@ class ReviewReceiptClaimSearch extends React.Component {
     const param = this.props.form.getFieldsValue()
     param.startDate = param.startDate.format(dateFormat)
     param.endDate = param.endDate.format(dateFormat)
-    console.log(param)
-    /* this.props.onQuery(param) */
+    // console.log(param)
+    this.props.onQuery(param)
   }
 
   render() {
@@ -63,7 +64,7 @@ class ReviewReceiptClaimSearch extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="数据状态">
                 {getFieldDecorator('status', {
-                  initialValue: '会计已认款',
+                  initialValue: '10',
                 })(
                   <Select
                     placeholder="请选择数据状态"
@@ -72,10 +73,11 @@ class ReviewReceiptClaimSearch extends React.Component {
                     filterOption={false}
                     onChange={this.handleChange}
                   >
-                    <Option value="会计已认款">会计已认款</Option>
-                    <Option value="等待传送AR">等待传送AR</Option>
-                    <Option value="已传送AR">已传送AR</Option>
-                    <Option value="传送失败">传送失败</Option>
+                    <Option value="10">新建</Option>
+                    <Option value="31">会计已认款</Option>
+                    <Option value="50">等待传送AR</Option>
+                    <Option value="51">已传送AR</Option>
+                    <Option value="52">传送失败</Option>
                   </Select>,
                 )}
               </FormItem>
@@ -113,7 +115,9 @@ class ReviewReceiptClaimSearch extends React.Component {
               <FormItem {...formItemLayout} label="项目编码(多)">
                 {
                   getFieldDecorator('projectIds')(
-                    <Input placeholder="多编码间使用英文逗号间隔" />,
+                    <MultipleInput
+                      placeholder="多项目编码使用英文逗号间隔"
+                    />,
                   )
                 }
               </FormItem>
@@ -122,7 +126,9 @@ class ReviewReceiptClaimSearch extends React.Component {
               <FormItem {...formItemLayout} label="合同编码(多)">
                 {
                   getFieldDecorator('contractIds')(
-                    <Input placeholder="多编码间使用英文逗号间隔" />,
+                    <MultipleInput
+                      placeholder="多合同编码使用英文逗号间隔"
+                    />,
                   )
                 }
               </FormItem>
@@ -130,12 +136,14 @@ class ReviewReceiptClaimSearch extends React.Component {
             <Col span={8} key={9}>
               <FormItem {...formItemLayout} label="流水分类">
                 {getFieldDecorator('claimType', {
-                  initialValue: ['项目'],
+                  initialValue: 'project',
                 })(
-                  <Select>
-                    <Option value="项目">项目</Option>
-                    <Option value="百一测评">百一测评</Option>
-                  </Select>,
+                  <SelectInvokeApi
+                    id="claimType"
+                    typeCode="ARC_RECEIPT_CLAIM"
+                    paramCode="CLAIM_TYPE"
+                    placeholder="请选择流水分类" // <Select><Option value="project">项目</Option><Option value="">百一测评</Option</Select>
+                  />,
                 )}
               </FormItem>
             </Col>
@@ -155,7 +163,7 @@ ReviewReceiptClaimSearch.propTypes = {
     getFieldsValue: PropTypes.func.isRequired,
     setFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
-  // onQuery: PropTypes.func.isRequired,
+  onQuery: PropTypes.func.isRequired,
 }
 
 const ReviewReceiptClaimSearchWithForm = Form.create()(ReviewReceiptClaimSearch)

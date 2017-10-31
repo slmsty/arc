@@ -9,54 +9,44 @@ import ReviewReceiptClaimSearchWithForm from './reviewReceiptClaimSearch'
 
 const columns = [{
   title: '数据状态',
-  dataIndex: 'status',
-  key: '1',
+  dataIndex: 'statusDesc',
   width: 100,
   fixed: 'left',
 }, {
   title: '收款日期',
-  dataIndex: '2',
-  key: '2',
-  width: 100,
+  dataIndex: 'receiptDate',
+  width: 150,
 }, {
   title: '收款分类',
-  dataIndex: '3',
-  key: '3',
+  dataIndex: 'claimType',
   width: 100,
 }, {
-  title: '业务实体',
-  dataIndex: '4',
-  key: '4',
+  title: '公司',
+  dataIndex: 'companyName',
   width: 100,
 }, {
   title: '客户名称',
-  dataIndex: '5',
-  key: '5',
+  dataIndex: 'custName',
   width: 100,
 }, {
   title: '认款金额',
-  dataIndex: '6',
-  key: '6',
+  dataIndex: 'claimAmount',
   width: 100,
 }, {
   title: '收款用途',
-  dataIndex: '7',
-  key: '7',
+  dataIndex: 'bankTransactionPurpose',
   width: 100,
 }, {
   title: '备注',
-  dataIndex: '8',
-  key: '8',
+  dataIndex: 'accountantApproveMessage',
   width: 100,
 }, {
   title: '币种',
-  dataIndex: '9',
-  key: '9',
+  dataIndex: 'currency',
   width: 100,
 }, {
   title: '收款金额',
-  dataIndex: '10',
-  key: '10',
+  dataIndex: 'receiptAmount',
   width: 100,
 }, {
   title: '订单号',
@@ -64,79 +54,75 @@ const columns = [{
   key: '11',
   width: 100,
 }, {
-  title: '项目编号',
-  dataIndex: '12',
-  key: '12',
+  title: '项目编码',
+  dataIndex: 'projectNo',
+  width: 100,
+}, {
+  title: '项目阶段',
+  dataIndex: 'paymentPhrases',
   width: 100,
 }, {
   title: '付款百分比',
-  dataIndex: '13',
-  key: '13',
+  dataIndex: 'paymentPercent',
   width: 100,
 }, {
   title: '合同编码',
-  dataIndex: '14',
-  key: '14',
+  dataIndex: 'contractNo',
   width: 100,
 }, {
   title: '合同名称',
-  dataIndex: '15',
-  key: '15',
+  dataIndex: 'contractName',
   width: 100,
 }, {
   title: '发票号',
-  dataIndex: '16',
-  key: '16',
+  dataIndex: 'invoiceNo',
   width: 100,
 }, {
   title: 'SBU',
-  dataIndex: '17',
-  key: '17',
+  dataIndex: 'sbuId',
   width: 100,
 }, {
   title: '部门',
-  dataIndex: '18',
-  key: '18',
+  dataIndex: 'deptId',
   width: 100,
 }, {
-  title: '收款注销标识',
+  title: '注销收款标识',
   dataIndex: '19',
   key: '19',
   width: 100,
 }, {
   title: '银行流水号',
-  dataIndex: '20',
-  key: '20',
+  dataIndex: 'bankTransactionNo',
   width: 100,
 }, {
   title: '付款客户名称',
-  dataIndex: '21',
-  key: '21',
+  dataIndex: 'payCustName',
   width: 100,
 }, {
   title: '客户付款银行',
-  dataIndex: '22',
-  key: '22',
+  dataIndex: 'payBankName',
   width: 100,
 }, {
   title: '客户付款银行账号',
-  dataIndex: '23',
-  key: '23',
+  dataIndex: 'payBankAccount',
   width: 100,
 }, {
   title: '收款编号',
-  dataIndex: '24',
-  key: '24',
+  dataIndex: 'receiptNo',
   width: 100,
 }, {
   title: '认款人',
-  dataIndex: '25',
-  key: '25',
+  dataIndex: 'accountantName',
   width: 100,
 }, {
   title: '复核人',
   dataIndex: '26',
   key: '26',
+  width: 100,
+}, {
+  title: '创建提示',
+  dataIndex: '27',
+  key: '27',
   width: 100,
 },
 ]
@@ -159,36 +145,74 @@ const formatMoney = function (number) {
 }
 
 export default class ReviewReceiptClaim extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      loading: false,
-      approve: false,
-      return: false,
-      transfer: false,
-      submitData: [],
-      returnData: [],
-      transferData: [],
-    }
+  state = {
+    loading: false,
+    approve: false,
+    return: false,
+    transfer: false,
+    selectedRowKeys: [],
+    selectedRows: [],
+    submitData: [],
+    returnData: [],
+    transferData: [],
   }
-
+  queryParam = {
+    pageInfo: {
+      pageNo: 1,
+      pageSize: 10,
+    },
+    startDate: '',
+    endDate: '',
+    custId: '',
+    receiptMethodId: '',
+    projectIds: '',
+    contractIds: '',
+    custOrderIds: '',
+    claimType: '',
+    status: '',
+  }
+  handleChangePage = (page) => {
+    this.queryParam.pageInfo.pageNo = page
+    this.handleQuery()
+  }
+  handleChangeSize = (current, size) => {
+    this.queryParam.pageInfo.pageNo = current
+    this.queryParam.pageInfo.pageSize = size
+    this.handleQuery()
+  }
+  handleChangeParam = (param) => {
+    this.queryParam = { ...this.queryParam, ...param }
+    this.handleQuery()
+  }
+  handleQuery = () => {
+    this.props.getReviewReceiptList(this.queryParam)
+  }
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    this.setState({ selectedRowKeys, selectedRows })
+  }
   componentDidMount() {
-    this.testData()
   }
   // approve submit
   approveClick = () => {
-    let submitDatas = this.state.submitData;
-    alert ("审批成功" + submitDatas.length + '条数据')
+    const submitDatas = this.state.selectedRows
+    const postData = {
+      action: [],
+    }
+    submitDatas.map((item, index) => {
+      postData.action[index] = { receiptClaimId: item.receiptClaimId }
+    })
+    this.props.approveSubmit(postData)
+    // alert ("审批成功" + submitDatas.length + '条数据')
   }
   // 认款退回
   returnClick = () => {
-    let returnDatas = this.state.returnData
-    alert ("认款退回成功" + returnDatas.length + "条数据，数据状态变为'复核退回'")
+    const returnDatas = this.state.returnData
+    // alert ("认款退回成功" + returnDatas.length + "条数据，数据状态变为'复核退回'")
   }
   // 传送AR
   transferClick = () => {
-    let transferDatas = this.state.transferData
-    alert ('认款退回成功' + transferDatas.length + "条数据，数据状态变为'已传送AR'")
+    const transferDatas = this.state.transferData
+    // alert ('认款退回成功' + transferDatas.length + "条数据，数据状态变为'已传送AR'")
   }
 
   testData = () => {
@@ -213,65 +237,58 @@ export default class ReviewReceiptClaim extends React.Component {
     }, 1000)
   }
   render() {
-    const rowSelection = {
-      type: 'checkBox',
-      onSelect: (record, selected, selectedRows) => {
-      },
-      onChange: (selectedRowKeys, selectedRows) => {
-        const aprove = []
-        for (let i = 0; i < selectedRows.length; i++) {
-          aprove[i] = selectedRows[i].status
-        }
-        if (aprove.indexOf('会计已认款') >= 0) {
-          this.setState({
-            approve: true,
-            submitData: selectedRows,
-          })
-        } else {
-          this.setState({
-            approve: false,
-            submitData: [],
-          })
-        }
-        if (aprove.indexOf('会计已认款') >= 0 || aprove.indexOf('等待传送AR') >= 0 || aprove.indexOf('传送失败') >= 0) {
-          this.setState({
-            return: true,
-            returnData: selectedRows,
-          })
-        } else {
-          this.setState({
-            return: false,
-            returnData: [],
-          })
-        }
-        if (aprove.indexOf('等待传送AR') >= 0 || aprove.indexOf('传送失败') >= 0) {
-          this.setState({
-            transfer: true,
-            transferData: selectedRows,
-          })
-        } else {
-          this.setState({
-            transfer: false,
-            transferData: [],
-          })
-        }
-      },
+    // console.log(this.props.reviewReceiptClaim)
+    const { selectedRowKeys } = this.state
+    const pagination = {
+      current: this.props.reviewReceiptClaim.getReviewReceiptList.pageNo,
+      total: this.props.reviewReceiptClaim.getReviewReceiptList.count,
+      pageSize: this.props.reviewReceiptClaim.getReviewReceiptList.pageSize,
+      onChange: this.handleChangePage,
+      showSizeChanger: true,
+      onShowSizeChange: this.handleChangeSize,
     }
+    const rowSelection = {
+      selectedRowKeys,
+      type: 'checkBox',
+      onChange: this.onSelectChange,
+    }
+    let approveDis = false
+    this.state.selectedRows.map((item, index) => {
+      if (item.status === '10') {
+        approveDis = true
+      }
+    })
     return (<div>
-      <ReviewReceiptClaimSearchWithForm />
-      <Button type="danger" disabled={!this.state.approve} onClick= { this.approveClick.bind(this)}>审批</Button>&nbsp;&nbsp;
-      <Button type="primary" disabled={!this.state.return} onClick= { this.returnClick.bind(this)}>认款退回</Button>&nbsp;&nbsp;
-      <Button type="dashed" disabled={!this.state.transfer} onClick= { this.transferClick.bind(this)}>传送AR</Button>
+      <ReviewReceiptClaimSearchWithForm onQuery={this.handleChangeParam} />
+      <Button type="danger" disabled={!approveDis} onClick={this.approveClick}>审批</Button>&nbsp;&nbsp;
+      <Button type="primary" disabled={!this.state.return} onClick={this.returnClick}>认款退回</Button>&nbsp;&nbsp;
+      <Button type="dashed" disabled={!this.state.transfer} onClick={this.transferClick}>传送AR</Button>
       <br /><br />
       <Table
+        rowKey="receiptClaimId"
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={data}
+        dataSource={this.props.reviewReceiptClaim.getReviewReceiptList.result}
         bordered
         size="middle"
-        pagination="true"
-        scroll={{ x: '260%', y: true }}
+        pagination={pagination}
+        scroll={{ x: '300%', y: true }}
       />
     </div>)
   }
 }
+ReviewReceiptClaim.propTypes = {
+  getReviewReceiptList: PropTypes.func.isRequired,
+  approveSubmit: PropTypes.func.isRequired,
+  // reject: PropTypes.func.isRequired,
+  reviewReceiptClaim: PropTypes.shape({
+    pageNo: PropTypes.number.isRequired,
+    count: PropTypes.number.isRequired,
+    result: PropTypes.arrayOf.isRequired,
+    pageSize: PropTypes.number.isRequired,
+    getReviewReceiptList: PropTypes.arrayOf.isRequired,
+    approveSubmitData: PropTypes.arrayOf.isRequired,
+    reviewReceiptClaim: PropTypes.arrayOf.isRequired,
+  }).isRequired,
+}
+

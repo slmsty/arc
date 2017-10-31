@@ -2,14 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import ReviewReceiptClaim from '../../components/reviewReceiptClaim/reviewReceiptClaim'
+import { getReviewReceiptList, approveSubmit } from '../../actions/reviewReceiptClaim'
 
 const mapStateToProps = state => ({
-  user: state.user,
   reviewReceiptClaim: state.reviewReceiptClaim,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
+    getReviewReceiptList,
+    approveSubmit,
   }, dispatch)
 )
 
