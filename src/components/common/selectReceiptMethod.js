@@ -30,7 +30,7 @@ const columns = [{
 class SelectReceiptMethod extends React.Component {
   state = {
     visible: false,
-    value: '',
+    methodName: '',
     pageNo: 1,
     pageSize: 10,
     total: 1,
@@ -47,7 +47,7 @@ class SelectReceiptMethod extends React.Component {
       return
     }
     this.setState({
-      value: this.state.selectedRows[0].receiptMethodName,
+      methodName: this.state.selectedRows[0].receiptMethodName,
     })
     this.props.onChange(this.state.selectedRows[0].receiptMethodId)
     this.handleCancel()
@@ -109,7 +109,7 @@ class SelectReceiptMethod extends React.Component {
           disabled
           style={{ height: 30 }}
           placeholder="收款方法"
-          value={this.state.value}
+          value={this.props.value ? this.state.methodName : ''}
           onSearch={() => this.setState({ visible: true })}
         />
         <Modal
@@ -168,6 +168,7 @@ SelectReceiptMethod.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
+  value: PropTypes.string,
 }
 
 const SelectReceiptMethodWithForm = Form.create()(SelectReceiptMethod)

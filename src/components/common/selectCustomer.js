@@ -22,7 +22,7 @@ const columns = [{
 class SelectCustomer extends React.Component {
   state = {
     visible: false,
-    value: '',
+    customerName: '',
     pageNo: 1,
     pageSize: 10,
     total: 1,
@@ -39,7 +39,7 @@ class SelectCustomer extends React.Component {
       return
     }
     this.setState({
-      value: this.state.selectedRows[0].customerName,
+      customerName: this.state.selectedRows[0].customerName,
     })
     this.props.onChange(this.state.selectedRows[0].customerId)
     this.handleCancel()
@@ -101,7 +101,7 @@ class SelectCustomer extends React.Component {
           disabled
           style={{ height: 30 }}
           placeholder="客户名称"
-          value={this.state.value}
+          value={this.props.value ? this.state.customerName : ''}
           onSearch={() => this.setState({ visible: true })}
         />
         <Modal
@@ -160,6 +160,7 @@ SelectCustomer.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
+  value: PropTypes.string,
 }
 
 const SelectCustomerWithForm = Form.create()(SelectCustomer)

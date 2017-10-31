@@ -92,7 +92,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         <Modal
           width={1024}
           title="项目认款"
-          visible={this.props.receiptInfo.receiptClaimId}
+          visible={!!this.props.receiptInfo.receiptClaimId}
           onCancel={() => { this.props.closeClaim(false) }}
           footer={[
             <Button key="submit" type="primary" onClick={this.handleSubmit}>
@@ -124,7 +124,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
             columns={columns}
             bordered
             size="middle"
-            scroll={{ x: '150%', y: true }}
+            scroll={{ x: '150%' }}
           />
         </Modal>
         <ProjectReceiptClaimSelectContractWithForm

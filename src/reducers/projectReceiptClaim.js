@@ -4,7 +4,7 @@ const projectReceiptClaim = {
   receiptClaimList: {
     pageNo: 1,
     pageSize: 10,
-    total: 0,
+    count: 0,
     result: [],
   },
   receiptClaimListRefresh: new Date().getTime(),
@@ -17,7 +17,7 @@ const projectReceiptClaim = {
   },
   receiptClaimContractList: {
     pageNo: 1,
-    total: 0,
+    count: 0,
     result: [],
   },
 }

@@ -113,7 +113,7 @@ const columns = [{
 },
 ]
 
-export default class ProjectReceiptClaim extends React.Component {
+export default class ContractList extends React.Component {
   state = {
     selectedRowKeys: [],
     selectedRows: [],
@@ -204,7 +204,7 @@ export default class ProjectReceiptClaim extends React.Component {
           scroll={{ x: '260%' }}
           pagination={{
             current: this.props.receiptClaimList.pageNo,
-            total: this.props.receiptClaimList.count,
+            total: this.props.receiptClaimList.total,
             pageSize: this.props.receiptClaimList.pageSize,
             onChange: this.handleChangePage,
             showSizeChanger: true,
@@ -217,7 +217,7 @@ export default class ProjectReceiptClaim extends React.Component {
   }
 }
 
-ProjectReceiptClaim.propTypes = {
+ContractList.propTypes = {
   // history: PropTypes.shape({
   //   push: PropTypes.func.isRequired,
   // }).isRequired,
@@ -226,7 +226,7 @@ ProjectReceiptClaim.propTypes = {
   openClaim: PropTypes.func.isRequired,
   receiptClaimList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
-    count: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     result: PropTypes.arrayOf.isRequired,
   }).isRequired,
