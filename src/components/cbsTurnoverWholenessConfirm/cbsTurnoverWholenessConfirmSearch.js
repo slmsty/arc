@@ -44,13 +44,11 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
               <FormItem {...formItemLayout} label="收款日期">
                 {getFieldDecorator('receiptDate', {
                   initialValue: [moment().subtract(1, 'month'), moment()],
-                })(
-                  <RangePicker
-                    allowClear
-                    format={dateFormat}
-                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
-                  />,
-                )}
+                })(<RangePicker
+                  allowClear
+                  format={dateFormat}
+                  ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                />)}
               </FormItem>
             </Col>
             <Col span={8} key={2}>
@@ -62,14 +60,12 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
               <FormItem {...formItemLayout} label="数据状态">
                 {getFieldDecorator('status', {
                   initialValue: '10',
-                })(
-                  <Select onChange={this.handleChange}>
-                    <Option value="10">新建</Option>
-                    <Option value="20">出纳待确认</Option>
-                    <Option value="11">无需认款</Option>
-                    <Option value="30">会计退回</Option>
-                  </Select>,
-                )}
+                })(<Select onChange={this.handleChange}>
+                  <Option value="10">新建</Option>
+                  <Option value="20">出纳待确认</Option>
+                  <Option value="11">无需认款</Option>
+                  <Option value="30">会计退回</Option>
+                 </Select>)}
               </FormItem>
             </Col>
           </Row>

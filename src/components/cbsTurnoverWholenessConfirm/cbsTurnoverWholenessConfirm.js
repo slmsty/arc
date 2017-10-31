@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
-import { Pagination, Row, Col, Table, Button, notification } from 'antd'
+import { Row, Col, Table, Button, message } from 'antd'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import CBSTurnoverWholenessConfirmSearchWithForm from './cbsTurnoverWholenessConfirmSearch'
@@ -85,13 +85,6 @@ const columns = [{
 },
 ]
 
-const openNotificationWithIcon = (msg) => {
-  notification.error({
-    message: '错误',
-    description: msg,
-  })
-}
-
 export default class CBSTurnoverWholenessConfirm extends React.Component {
   state = {
     selectedRowKeys: [],
@@ -101,6 +94,18 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
   }
   componentDidMount() {
     this.handleQuery()
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.cbsTurnoverEditConfirmResult !== nextProps.cbsTurnoverEditConfirmResult) {
+      message.info('保存成功。')
+      this.setState({ editVisible: false })
+      this.handleQuery(true)
+    }
+
+    if (this.props.cbsTurnoverEditExceptResult !== nextProps.cbsTurnoverEditExceptResult) {
+      message.info('数据状态变更为“出纳已确认”。')
+      this.handleQuery(true)
+    }
   }
   queryParam = {
     pageInfo: {
@@ -119,25 +124,29 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
   }
   handleChangeParam = (param) => {
     this.queryParam = { ...this.queryParam, ...param }
-    this.handleQuery()
+    this.handleQuery(true)
   }
-  handleQuery = () => {
+  handleQuery = (isReset) => {
+    if (isReset) {
+      this.queryParam.pageInfo = {
+        pageNo: 1,
+        pageSize: 10,
+      }
+    }
+    this.setState({ selectedRowKeys: [] })
     this.props.getCBSTurnoverWholenessData(this.queryParam)
-    // ajax request after empty completing
   }
   handleEdit = () => {
     if (!this.state.selectedRowKeys.length) {
-      openNotificationWithIcon('请选择想要编辑的数据。')
+      message.error('请选择想要编辑的数据。')
     } else if (this.state.selectedRowKeys.length > 1) {
-      openNotificationWithIcon('只可对一条数据进行编辑。')
+      message.error('只可对一条数据进行编辑。')
     } else {
       this.setState({ editReceiptClaimId: this.state.selectedRowKeys[0], editVisible: true })
     }
   }
   handleEditConfirm = (confirmList) => {
-    this.props.editConfirm({ list: [confirmList] })
-    this.setState({ editVisible: false })
-    this.handleQuery()
+    this.props.editConfirm({ list: confirmList })
   }
   handleEditCancel = () => {
     this.setState({ editVisible: false })
@@ -148,10 +157,9 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
   }
   handleExcept = () => {
     if (!this.state.selectedRowKeys.length) {
-      openNotificationWithIcon('请选择想要排除的数据。')
+      message.error('请选择想要排除的数据。')
     } else {
-      this.props.editExcept(this.state.selectedRowKeys)
-      this.handleQuery()
+      this.props.editExcept({ list: this.state.selectedRowKeys.map(item => ({ receiptClaimIds: item, remark: '' })) })
     }
   }
   handleChangeStatus = (status) => {
@@ -215,6 +223,8 @@ CBSTurnoverWholenessConfirm.propTypes = {
   getCBSTurnoverWholenessData: PropTypes.func.isRequired,
   editConfirm: PropTypes.func.isRequired,
   editExcept: PropTypes.func.isRequired,
+  cbsTurnoverEditConfirmResult: PropTypes.number.isRequired,
+  cbsTurnoverEditExceptResult: PropTypes.number.isRequired,
   cbsTurnoverWholenessList: PropTypes.shape({
     pageInfo: PropTypes.shape({
       pageNo: PropTypes.number.isRequired,

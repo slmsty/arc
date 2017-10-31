@@ -13,13 +13,16 @@ class EditCBSTurnoverData extends React.Component {
   constructor(props) {
     super(...props)
   }
-
   handleConfirm = () => {
     const param = this.props.form.getFieldsValue()
     param.receiptClaimId = this.props.receiptClaimId
-
-    console.log(param)
+    this.props.form.resetFields()
     this.props.onConfirm(param)
+  }
+
+  handleCancel = () => {
+    this.props.form.resetFields()
+    this.props.onCancel()
   }
 
   render() {
@@ -33,7 +36,7 @@ class EditCBSTurnoverData extends React.Component {
         <Modal
           title="CBS完整性编辑"
           visible={this.props.visible}
-          onCancel={this.props.onCancel}
+          onCancel={this.handleCancel}
           onOk={this.handleConfirm}
         >
           <Form
@@ -91,6 +94,7 @@ EditCBSTurnoverData.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    resetFields: PropTypes.func.isRequired,
   }).isRequired,
   receiptClaimId: PropTypes.number.isRequired,
   onConfirm: PropTypes.func.isRequired,

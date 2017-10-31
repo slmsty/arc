@@ -9,20 +9,20 @@ const cbsTurnoverWholenessData = {
     },
     amountTotals: [],
   },
-  cbsTurnoverEditConfirmResult: [],
-  cbsTurnoverEditExceptResult: [],
+  cbsTurnoverEditConfirmResult: new Date().getTime(),
+  cbsTurnoverEditExceptResult: new Date().getTime(),
 }
 
 function getCBSTurnoverWholenessData(state, action) {
   return { ...state, cbsTurnoverWholenessList: action.response }
 }
 
-function editConfirm(state, action) {
-  return { ...state, cbsTurnoverEditConfirmResult: action.response.list }
+function editConfirm(state) {
+  return { ...state, cbsTurnoverEditConfirmResult: new Date().getTime() }
 }
 
-function editExcept(state, action) {
-  return { ...state, cbsTurnoverEditExceptResult: action.response.data }
+function editExcept(state) {
+  return { ...state, cbsTurnoverEditExceptResult: new Date().getTime() }
 }
 
 export default caseReducer(cbsTurnoverWholenessData, {
