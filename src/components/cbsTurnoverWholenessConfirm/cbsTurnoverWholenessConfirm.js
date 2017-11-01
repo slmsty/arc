@@ -190,7 +190,6 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
         <Row style={{ lineHeight: '28px' }}>
           <Col span={8}>
             <Button type="primary" onClick={this.handleEdit}>编辑</Button>&nbsp;&nbsp;
-            <Button type="default" onClick={() => { console.log('change router') }}>人工录入</Button>&nbsp;&nbsp;
             <Button type="default" onClick={this.handleExcept} disabled={this.state.exceptDisabled}>排除</Button>&nbsp;&nbsp;
           </Col>
           <Col span={16} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>

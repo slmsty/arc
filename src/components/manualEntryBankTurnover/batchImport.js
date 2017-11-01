@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
-import { Input, Table, Button, notification, Row, Col, Upload } from 'antd'
+import { Input, Table, Button, notification, Row, Col, Upload, message } from 'antd'
 import PropTypes from 'prop-types'
 
 const successColumns = [{
@@ -74,13 +74,6 @@ const failureColumns = successColumns.concat([{
   width: 100,
 }])
 
-const openNotificationWithIcon = (msg) => {
-  notification.error({
-    message: '错误',
-    description: msg,
-  })
-}
-
 export default class BatchImport extends React.Component {
   state = {
     fileList: [],
@@ -89,14 +82,14 @@ export default class BatchImport extends React.Component {
 
   handleDataChanged = (batchNo) => {
     this.setState({ batchNo })
-    this.state.batchNo = batchNo
+    // this.state.batchNo = batchNo
     this.props.getImportResultData({
       pageInfo: {
         pageNo: 1,
         pageSize: 10,
       },
       batchNo,
-      status: 1,
+      status: 'success',
     })
 
     this.props.getImportResultData({
@@ -105,7 +98,7 @@ export default class BatchImport extends React.Component {
         pageSize: 10,
       },
       batchNo,
-      status: 0,
+      status: 'failure',
     })
   }
   handleSuccessTableChange = (pagination) => {
@@ -129,10 +122,14 @@ export default class BatchImport extends React.Component {
     })
   }
   handleChange = (info) => {
-    if (info.resultCode !== '000000') {
-      openNotificationWithIcon(info.resultMessage)
-    } else {
-      this.handleDataChanged(info.data)
+    if (info.file.status === 'done') {
+      if (info.file.response.resultCode !== '000000') {
+        message.error(info.file.response.resultMessage)
+      } else {
+        this.handleDataChanged(info.file.response.data)
+      }
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} 文件上传时发生系统错误。`)
     }
   }
   handleDownloadErrorData = () => {
@@ -144,6 +141,12 @@ export default class BatchImport extends React.Component {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/manual/import`,
       onChange: this.handleChange,
       multiple: false,
+      showUploadList: false,
+      beforeUpload: (file) => {
+        this.setState(({ fileList }) => ({
+          fileList: [...fileList, file],
+        }))
+      },
     }
     const successPagination = {
       current: this.props.successResult.pageNo,
@@ -159,26 +162,28 @@ export default class BatchImport extends React.Component {
 
     return (
       <div>
-        <Row gutter={40}>
+        <Row>
           <Col span={24}>
-            注：可通过“下载模板”获取Excel表格，星号“<span style={{ color: 'f00' }}>*</span>”表示必填的信息列。
+            注：可通过“下载模板”获取Excel表格，星号“<span style={{ color: '#f00' }}>*</span>”表示必填的信息列。
           </Col>
         </Row>
-        <Row>
-          <Col span={24} offset={2}>
-            <Row align="middle">
+        <br />
+        <Row gutter={10}>
+          <Col span={24} offset={1}>
+            <Row gutter={10}>
               <Col span={2}><span>文件位置：</span></Col>
               <Col span={8}><Input disabled value={this.state.fileList.length ? this.state.fileList[0].name : ''} /></Col>
               <Col span={14}>
-                <Upload {...props} fileList={this.state.fileList} headers={{ Authorization: sessionStorage.getItem('token') }}>
+                <Upload {...props} headers={{ Authorization: sessionStorage.getItem('token') }}>
                   <Button type="primary">导入</Button>
                 </Upload>
               </Col>
             </Row>
           </Col>
         </Row>
+        <br />
         <Row>
-          <Col span={24} offset={2}>
+          <Col span={24} offset={1}>
             <Row>
               <Col span={2}><span>模板下载：</span></Col>
               <Col span={22}><Button type="primary" icon="download" onClick={() => { window.open('about:blank', '_blank') }}>下载模板</Button></Col>
@@ -186,7 +191,7 @@ export default class BatchImport extends React.Component {
           </Col>
         </Row>
         <br /><br />
-        <div style={{ fontWeight: 'bold', padding: '5px 0' }}>传送失败数据：&nbsp;&nbsp;<span style={{ color: '#f00' }}>{ this.props.successResult.count }</span></div>
+        <div style={{ fontWeight: 'bold', padding: '5px 0' }}>传送成功数据：&nbsp;&nbsp;<span style={{ color: '#f00' }}>{ this.props.successResult.count }</span></div>
         <Table
           columns={successColumns}
           dataSource={this.props.successResult.result}
@@ -194,11 +199,12 @@ export default class BatchImport extends React.Component {
           size="middle"
           pagination={successPagination}
           scroll={{ x: '1875px' }}
+          rowKey="index"
         />
         <br />
         <div style={{ fontWeight: 'bold', padding: '5px 0' }}>
           传送失败数据：&nbsp;&nbsp;<span style={{ color: '#f00' }}>{ this.props.failureResult.count }</span>&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button type="danger" onClick={this.handleDownloadErrorData()}>下载错误数据</Button>
+          <Button type="danger" disabled={this.props.failureResult.count === 0} onClick={this.handleDownloadErrorData}>下载错误数据</Button>
         </div>
         <Table
           columns={failureColumns}
@@ -207,6 +213,7 @@ export default class BatchImport extends React.Component {
           size="middle"
           pagination={failurePagination}
           scroll={{ x: '1875px' }}
+          rowKey="index"
         />
       </div>
     )
