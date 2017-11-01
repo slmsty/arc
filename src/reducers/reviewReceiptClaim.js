@@ -7,7 +7,7 @@ const reviewReceiptClaim = {
     result: [],
   },
   approveSubmitData: {
-    message: [],
+    resultMessage: '',
   },
 }
 
@@ -17,8 +17,7 @@ function getReviewReceiptList(state, action) {
 }
 function approveSubmit(state, action) {
   // console.log('action', action)
-  const x = { ...state, approveSubmitData: action.response.resultMessage }
-  // console.log(x)
+  const x = { ...state, approveSubmitData: action.response }
   return x
 }
 

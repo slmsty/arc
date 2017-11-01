@@ -201,8 +201,12 @@ export default class ReviewReceiptClaim extends React.Component {
     submitDatas.map((item, index) => {
       postData.action[index] = { receiptClaimId: item.receiptClaimId }
     })
-    this.props.approveSubmit(postData)
-    // alert ("审批成功" + submitDatas.length + '条数据')
+    this.props.approveSubmit(postData).then((res) => {
+      console.log(res)
+      if (res && res.response && res.response.resultCode === '000000') {
+        alert('审批成功')
+      }
+    })
   }
   // 认款退回
   returnClick = () => {
@@ -237,7 +241,7 @@ export default class ReviewReceiptClaim extends React.Component {
     }, 1000)
   }
   render() {
-    // console.log(this.props.reviewReceiptClaim)
+    // console.log(this.props.reviewReceiptClaim.approveSubmitData.resultMessage)
     const { selectedRowKeys } = this.state
     const pagination = {
       current: this.props.reviewReceiptClaim.getReviewReceiptList.pageNo,
