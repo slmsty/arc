@@ -5,9 +5,12 @@ import batchImport from './batchImport'
 import projectReceiptClaim from './projectReceiptClaim'
 import noProjectReceiptClaim from './noProjectReceiptClaim'
 import reviewReceiptClaim from './reviewReceiptClaim'
+import arcCustBankLink from './arcCustBank'
 import cbsTurnoverWholenessConfirm from './cbsTurnoverWholenessConfirm'
 import manualEntryBankTurnover from './manualEntryBankTurnover'
 import contractChange from './contractChange'
+import billedARApprove from './billedAR/approve'
+import billedARComfirm from './billedAR/confirm'
 
 export default combineReducers({
   common,
@@ -15,8 +18,11 @@ export default combineReducers({
   projectReceiptClaim,
   noProjectReceiptClaim,
   reviewReceiptClaim,
+  arcCustBankLink,
   cbsTurnoverWholenessConfirm,
   manualEntryBankTurnover,
   contractChange,
+  billedARApprove,
+  billedARComfirm,
   routing: routerReducer, // 整合路由
 })
