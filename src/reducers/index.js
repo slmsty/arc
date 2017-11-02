@@ -7,6 +7,8 @@ import noProjectReceiptClaim from './noProjectReceiptClaim'
 import reviewReceiptClaim from './reviewReceiptClaim'
 import cbsTurnoverWholenessConfirm from './cbsTurnoverWholenessConfirm'
 import contractChange from './contractChange'
+import billedARApprove from './billedAR/approve'
+import billedARComfirm from './billedAR/confirm'
 
 export default combineReducers({
   common,
@@ -16,5 +18,7 @@ export default combineReducers({
   reviewReceiptClaim,
   cbsTurnoverWholenessConfirm,
   contractChange,
+  billedARApprove,
+  billedARComfirm,
   routing: routerReducer, // 整合路由
 })

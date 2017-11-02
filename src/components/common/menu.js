@@ -23,10 +23,8 @@ export default class MenuComponent extends React.Component {
           <Menu.Item key="16"><Link to="/receiptManagement/customerBankLink"><i className="iconfont icon-shoukuanrenlingfuhe" />&nbsp;客户银行帐号关系</Link></Menu.Item>
         </SubMenu>
         <SubMenu key="2" title={<span><i className="iconfont icon-BilledAR" />{this.props.collapsed ? '' : ' Billed AR管理'}</span>}>
-          <Menu.Item key="21">
-            <i className="iconfont icon-BilledAR" />&nbsp;
-            <span>Billed AR管理</span>
-          </Menu.Item>
+          <Menu.Item key="21"><Link to="/billedAR/approve"><i className="iconfont icon-BilledAR" />&nbsp;Billed AR审定</Link></Menu.Item>
+          <Menu.Item key="22"><Link to="/billedAR/confirm"><i className="iconfont icon-BilledAR" />&nbsp;Billed AR确认</Link></Menu.Item>
         </SubMenu>
         <SubMenu key="3" title={<span><i className="iconfont icon-shijikaipiaoguanli" />{this.props.collapsed ? '' : ' 实际开票管理'}</span>}>
           <Menu.Item key="31">
