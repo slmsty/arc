@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { withRouter } from 'react-router-dom'
 import { setTitle } from '../../actions/common'
 import ManualEntryBankTurnover from '../../components/manualEntryBankTurnover/manualEntryBankTurnover'
 
@@ -21,5 +22,5 @@ class ManualEntryBankTurnoverContainer extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManualEntryBankTurnoverContainer)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ManualEntryBankTurnoverContainer))
 

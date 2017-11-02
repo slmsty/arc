@@ -17,7 +17,7 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
     this.handleQuery()
   }
   handleQuery = (e) => {
-    e ? e.preventDefault() : null
+    if (e) e.preventDefault()
     const param = this.props.form.getFieldsValue()
     param.receiptDateStart = param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
     param.receiptDateEnd = param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''

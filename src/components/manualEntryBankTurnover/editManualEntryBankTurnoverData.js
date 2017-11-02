@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Row, Col, DatePicker, Input, Radio, Select, Table, Icon } from 'antd'
+import { Modal, Form, Row, Col, DatePicker, Input, Radio, Select } from 'antd'
 
 import SelectCustomerWithForm from '../common/selectCustomer'
 
