@@ -82,7 +82,6 @@ export default class BatchImport extends React.Component {
 
   handleDataChanged = (batchNo) => {
     this.setState({ batchNo })
-    // this.state.batchNo = batchNo
     this.props.getImportResultData({
       pageInfo: {
         pageNo: 1,

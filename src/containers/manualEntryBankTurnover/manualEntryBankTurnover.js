@@ -1,15 +1,25 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { withRouter } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { getManualEntryBankTurnoverList, confirmManualEntryBankTurnover, deleteManualEntryBankTurnover, confirmBatchManualEntryBankTurnover, deleteBatchManualEntryBankTurnover } from '../../actions/manualEntryBankTurnover'
 import ManualEntryBankTurnover from '../../components/manualEntryBankTurnover/manualEntryBankTurnover'
 
 const mapStateToProps = state => ({
-  user: state.user,
+  manualEntryBankTurnoverList: state.manualEntryBankTurnover.manualEntryBankTurnoverList,
+  manualEntryBankTurnoverConfirmResult: state.manualEntryBankTurnover.manualEntryBankTurnoverConfirmResult,
+  manualEntryBankTurnoverDeleteResult: state.manualEntryBankTurnover.manualEntryBankTurnoverDeleteResult,
+  manualEntryBankTurnoverBatchConfirmResult: state.manualEntryBankTurnover.manualEntryBankTurnoverBatchConfirmResult,
+  manualEntryBankTurnoverBatchDeleteResult: state.manualEntryBankTurnover.manualEntryBankTurnoverBatchConfirmResult,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
+    getManualEntryBankTurnoverList,
+    confirmManualEntryBankTurnover,
+    deleteManualEntryBankTurnover,
+    confirmBatchManualEntryBankTurnover,
+    deleteBatchManualEntryBankTurnover,
   }, dispatch)
 )
 

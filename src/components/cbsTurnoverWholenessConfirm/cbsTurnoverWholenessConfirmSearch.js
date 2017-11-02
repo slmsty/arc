@@ -75,9 +75,7 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
                 {getFieldDecorator('receiptMethodId')(<SelectReceiptMethodWithForm />)}
               </FormItem>
             </Col>
-          </Row>
-          <Row>
-            <Col span={24} style={{ textAlign: 'right' }}>
+            <Col span={8} offset={8} style={{ textAlign: 'right' }}>
               <Button type="primary" htmlType="submit">查询</Button>
             </Col>
           </Row>

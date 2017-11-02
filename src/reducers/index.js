@@ -6,6 +6,7 @@ import projectReceiptClaim from './projectReceiptClaim'
 import noProjectReceiptClaim from './noProjectReceiptClaim'
 import reviewReceiptClaim from './reviewReceiptClaim'
 import cbsTurnoverWholenessConfirm from './cbsTurnoverWholenessConfirm'
+import manualEntryBankTurnover from './manualEntryBankTurnover'
 import contractChange from './contractChange'
 
 export default combineReducers({
@@ -15,6 +16,7 @@ export default combineReducers({
   noProjectReceiptClaim,
   reviewReceiptClaim,
   cbsTurnoverWholenessConfirm,
+  manualEntryBankTurnover,
   contractChange,
   routing: routerReducer, // 整合路由
 })

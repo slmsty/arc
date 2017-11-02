@@ -26,7 +26,7 @@ function editExcept(state) {
 }
 
 export default caseReducer(cbsTurnoverWholenessData, {
-  GET_CBS_TURNOVER_WHOLENESS_CONFIRM_DATA__SUCCESS: getCBSTurnoverWholenessData,
+  GET_CBS_TURNOVER_WHOLENESS_CONFIRM_DATA_SUCCESS: getCBSTurnoverWholenessData,
   CONFIRM_CBS_TURNOVER_EDIT_SUCCESS: editConfirm,
   EXCEPT_CBS_TURNOVER_EDIT_SUCCESS: editExcept,
 })

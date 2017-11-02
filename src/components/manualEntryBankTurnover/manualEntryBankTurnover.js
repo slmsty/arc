@@ -2,48 +2,107 @@
 import React from 'react'
 import { Table, Button, message, Icon } from 'antd'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import ManualEntryBankTurnoverSearchWithForm from './manualEntryBankTurnoverSearch'
 import EditManualEntryBankTurnoverDataWithForm from './editManualEntryBankTurnoverData'
+
+const dateFormat = 'YYYY-MM-DD'
 
 export default class ManualEntryBankTurnover extends React.Component {
   state = {
     selectedRowKeys: [],
     editVisible: false,
-    editKey: null,
+    editKey: -1,
   }
   componentDidMount() {
     this.handleQuery()
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.manualEntryBankTurnoverConfirmResult !== nextProps.manualEntryBankTurnoverConfirmResult) {
+      message.info('保存成功。')
+      this.setState({ editVisible: false })
+      this.handleQuery(true)
+    }
 
+    if (this.props.manualEntryBankTurnoverDeleteResult !== nextProps.manualEntryBankTurnoverDeleteResult) {
+      message.info('数据已经删除成功！')
+      this.handleQuery(true)
+    }
+
+    if (this.props.manualEntryBankTurnoverBatchConfirmResult !== nextProps.manualEntryBankTurnoverBatchConfirmResult) {
+      message.info('确认成功XX条数据。')
+      this.handleQuery(true)
+    }
+
+    if (this.props.manualEntryBankTurnoverBatchDeleteResult !== nextProps.manualEntryBankTurnoverBatchDeleteResult) {
+      message.info('成功删除XX数据。')
+      this.handleQuery(true)
+    }
+  }
+  queryParam = {
+    pageInfo: {
+      pageNo: 1,
+      pageSize: 10,
+    },
+    receiptDateStart: '',
+    receiptDateEnd: '',
+    custId: '',
+    receiptMethodId: '10',
+    sourceType: 'MANUAL',
+    status: '',
+  }
   handleSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys })
+  }
+  handleChangeParam = (param) => {
+    this.queryParam = { ...this.queryParam, ...param }
+    this.handleQuery(true)
+  }
+  handleQuery = (isReset) => {
+    if (isReset) {
+      this.queryParam.pageInfo = {
+        pageNo: 1,
+        pageSize: 10,
+      }
+    }
+    this.setState({ selectedRowKeys: [] })
+    this.props.getManualEntryBankTurnoverList(this.queryParam)
   }
   handleEdit = (key) => {
     this.setState({ editKey: key, editVisible: true })
   }
   handleDelete = (key) => {
-    console.log('delete:' + key)
+    const param = {
+      receiptAction: {
+        receiptClaimId: key,
+        remark: '',
+      },
+    }
+    this.props.deleteManualEntryBankTurnover(param)
   }
-  handleQuery = () => {
-  }
-  handleExcept = () => {
+  handleBatchDelete = () => {
     if (!this.state.selectedRowKeys.length) {
-      message.error('请选择想要排除的数据。')
+      message.error('请选择想要批量删除的数据。')
     } else {
-      console.log('调用排除接口，传递数据：[' + this.state.selectedRowKeys + ']，然后刷新列表')
-      this.handleQuery()
+      this.props.deleteBatchManualEntryBankTurnover({ receiptActions: this.state.selectedRowKeys.map(item => ({ receiptClaimId: item, remark: '' })) })
     }
   }
-  handleConfirm = () => {
-    console.log('确认。。然后刷新数据。')
-    this.handleQuery()
+  handleBatchConfirm = () => {
+    if (!this.state.selectedRowKeys.length) {
+      message.error('请选择想要批量确认的数据。')
+    } else {
+      this.props.confirmBatchManualEntryBankTurnover({ receiptActions: this.state.selectedRowKeys.map(item => ({ receiptClaimId: item, remark: '' })) })
+    }
   }
-  handleEditConfirm = () => {
-    this.setState({ editVisible: false })
-    this.handleQuery()
+  handleEditConfirm = (confirmList) => {
+    this.props.confirmManualEntryBankTurnover({ manualReceiptConfirmInfo: confirmList })
   }
   handleEditCancel = () => {
     this.setState({ editVisible: false })
+  }
+  handleChangePage = (page) => {
+    this.queryParam.pageInfo.pageNo = page
+    this.handleQuery()
   }
   render() {
     const { selectedRowKeys } = this.state
@@ -52,22 +111,26 @@ export default class ManualEntryBankTurnover extends React.Component {
       selectedRowKeys,
       onChange: this.handleSelectChange,
     }
-
+    const pagination = {
+      current: this.props.manualEntryBankTurnoverList.pageInfo.pageNo || 1,
+      onChange: this.handleChangePage,
+      total: this.props.manualEntryBankTurnoverList.pageInfo.count,
+    }
     return (
       <div>
         <ManualEntryBankTurnoverSearchWithForm
-          query={this.handleQuery}
+          query={this.handleChangeParam}
         />
         <Button type="default" onClick={() => { this.props.history.push('/batchImport') }}>批量导入</Button>&nbsp;&nbsp;
-        <Button type="default" onClick={this.handleExcept}>排除</Button>&nbsp;&nbsp;
-        <Button type="primary" onClick={this.handleConfirm}>确认</Button>
+        <Button type="default" onClick={this.handleBatchDelete}>删除</Button>&nbsp;&nbsp;
+        <Button type="primary" onClick={this.handleBatchConfirm}>确认</Button>
         <br /><br />
         <Table
           rowSelection={rowSelection}
           columns={[{
             title: '数据状态',
-            dataIndex: 'dataStatus',
-            key: 'dataStatus',
+            dataIndex: 'statusDesc',
+            key: 'statusDesc',
             width: 80,
             fixed: 'left',
           }, {
@@ -75,15 +138,16 @@ export default class ManualEntryBankTurnover extends React.Component {
             dataIndex: 'receiptDate',
             key: 'receiptDate',
             width: 90,
+            render: (text, row, index) => moment(text).format(dateFormat),
           }, {
-            title: '收款方式',
-            dataIndex: 'receiptMethod',
-            key: 'receiptMethod',
+            title: '收款方法',
+            dataIndex: 'receiptMethodName',
+            key: 'receiptMethodName',
             width: 100,
           }, {
             title: '银行流水号',
-            dataIndex: 'bankTurnoverAcct',
-            key: 'bankTurnoverAcct',
+            dataIndex: 'bankTransactionNo',
+            key: 'bankTransactionNo',
             width: 150,
           }, {
             title: '客户付款方式',
@@ -97,13 +161,13 @@ export default class ManualEntryBankTurnover extends React.Component {
             width: 300,
           }, {
             title: '客户付款银行',
-            dataIndex: 'custPayBank',
-            key: 'custPayBank',
+            dataIndex: 'payBankName',
+            key: 'payBankName',
             width: 300,
           }, {
             title: '客户付款银行账号',
-            dataIndex: 'custPayBankAcct',
-            key: 'custPayBankAcct',
+            dataIndex: 'payBankAccount',
+            key: 'payBankAccount',
             width: 150,
           }, {
             title: '币种',
@@ -112,9 +176,10 @@ export default class ManualEntryBankTurnover extends React.Component {
             width: 45,
           }, {
             title: '金额',
-            dataIndex: 'amount',
-            key: 'amount',
+            dataIndex: 'receiptAmount',
+            key: 'receiptAmount',
             width: 100,
+            render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
           }, {
             title: '客户名称',
             dataIndex: 'custName',
@@ -122,8 +187,13 @@ export default class ManualEntryBankTurnover extends React.Component {
             width: 300,
           }, {
             title: '流水分类',
-            dataIndex: 'turnoverType',
-            key: 'turnoverType',
+            dataIndex: 'claimTypeDesc',
+            key: 'claimTypeDesc',
+            width: 100,
+          }, {
+            title: '备注',
+            dataIndex: 'cashierApproveMessage',
+            key: 'cashierApproveMessage',
             width: 100,
           }, {
             title: '操作',
@@ -132,27 +202,25 @@ export default class ManualEntryBankTurnover extends React.Component {
             width: 60,
             textAlign: 'center',
             fixed: 'right',
-            render: (text, record) => {
-              return (
-                <div style={{ fontWeight: 'bold' }}>
-                  <Icon type="edit" onClick={() => this.handleEdit(record.key)} />&nbsp;&nbsp;&nbsp;&nbsp;
-                  <Icon type="delete" onClick={() => this.handleDelete(record.key)} />
-                </div>
-              )
-            },
+            render: (text, record) => (
+              <div style={{ fontWeight: 'bold' }}>
+                <Icon type="edit" onClick={() => this.handleEdit(record.receiptClaimId)} />&nbsp;&nbsp;&nbsp;&nbsp;
+                <Icon type="delete" onClick={() => this.handleDelete(record.receiptClaimId)} />
+              </div>
+              ),
           }]}
-          dataSource={[]}
+          dataSource={this.props.manualEntryBankTurnoverList.pageInfo.result}
           bordered
+          rowKey="receiptClaimId"
           size="middle"
-          pagination="true"
+          pagination={pagination}
           scroll={{ x: '1875px' }}
         />
         <EditManualEntryBankTurnoverDataWithForm
-          width={800}
           onConfirm={this.handleEditConfirm}
           onCancel={this.handleEditCancel}
-          editKey={this.state.editKey}
           visible={this.state.editVisible}
+          editKey={this.state.editKey}
         />
       </div>
     )
@@ -160,4 +228,20 @@ export default class ManualEntryBankTurnover extends React.Component {
 }
 
 ManualEntryBankTurnover.propTypes = {
+  getManualEntryBankTurnoverList: PropTypes.func.isRequired,
+  confirmManualEntryBankTurnover: PropTypes.func.isRequired,
+  deleteManualEntryBankTurnover: PropTypes.func.isRequired,
+  confirmBatchManualEntryBankTurnover: PropTypes.func.isRequired,
+  deleteBatchManualEntryBankTurnover: PropTypes.func.isRequired,
+  manualEntryBankTurnoverList: PropTypes.shape({
+    pageInfo: PropTypes.shape({
+      pageNo: PropTypes.number.isRequired,
+      count: PropTypes.number.isRequired,
+      result: PropTypes.array.isRequired,
+    }).isRequired,
+  }).isRequired,
+  manualEntryBankTurnoverConfirmResult: PropTypes.number.isRequired,
+  manualEntryBankTurnoverDeleteResult: PropTypes.number.isRequired,
+  manualEntryBankTurnoverBatchConfirmResult: PropTypes.number.isRequired,
+  manualEntryBankTurnoverBatchDeleteResult: PropTypes.number.isRequired,
 }

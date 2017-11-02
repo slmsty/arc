@@ -9,7 +9,7 @@ export function getCBSTurnoverWholenessData(queryParam) {
         method: 'POST',
         body: queryParam,
       },
-      types: ['GET_CBS_TURNOVER_WHOLENESS_CONFIRM_DATA__SUCCESS'],
+      types: ['GET_CBS_TURNOVER_WHOLENESS_CONFIRM_DATA_SUCCESS'],
     },
   }
 }
