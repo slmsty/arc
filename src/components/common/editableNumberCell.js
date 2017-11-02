@@ -3,38 +3,39 @@ import PropTypes from 'prop-types'
 import { InputNumber } from 'antd'
 
 export default class EditableNumberCell extends React.Component {
-  handleChange(e) {
-    const value = e.target.value
-    this.props.onChange(value)
+  state = {
   }
   render() {
     const { value, editable } = this.props
+    if (editable) {
+      return (
+        <InputNumber
+          value={value}
+          min={this.props.min}
+          max={this.props.max}
+          precision={2}
+          onChange={v => this.props.onChange(v)}
+        />
+      )
+    }
     return (
-      <div>
-        {
-          editable ?
-            <div>
-              <InputNumber
-                value={value}
-                onChange={e => this.handleChange(e)}
-              />
-            </div>
-            :
-            <div className="editable-row-text">
-              {value.toString() || ''}
-            </div>
-        }
+      <div className="editable-row-text">
+        {value.toString() || 0}
       </div>
     )
   }
 }
 
 EditableNumberCell.defaultProps = {
-  value: '',
+  value: 0,
+  min: -Infinity,
+  max: Infinity,
 }
 
 EditableNumberCell.propTypes = {
   value: PropTypes.number,
+  min: PropTypes.number,
+  max: PropTypes.number,
   editable: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
 }

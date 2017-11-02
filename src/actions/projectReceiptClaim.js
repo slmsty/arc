@@ -20,7 +20,9 @@ export function reject(receiptClaimIds) {
       url: '/arc/receiptclaim/reject',
       options: {
         method: 'POST',
-        body: receiptClaimIds,
+        body: {
+          receiptClaimIds,
+        },
       },
       types: ['PROJECT_RECEIPT_CLAIM_REJECT_SUCCESS'],
     },
@@ -36,6 +38,19 @@ export function submitClaim(submitParam) {
         body: submitParam,
       },
       types: ['PROJECT_RECEIPT_CLAIM_SUBMIT_SUCCESS'],
+    },
+  }
+}
+
+export function getPhase(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/phase/search',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_PROJECT_RECEIPT_FUND_LIST_SUCCESS'],
     },
   }
 }

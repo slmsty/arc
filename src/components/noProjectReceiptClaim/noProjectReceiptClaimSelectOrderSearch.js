@@ -37,15 +37,10 @@ const FormItem = Form.Item
 class NoProjectReceiptClaimSelectOrder extends React.Component {
   componentDidMount() {
   }
-  onSelectCustomer = (customer) => {
-    console.log(customer)
-  }
   handleQuery = () => {
-    const customer = this.props.form.getFieldValue('customer')
-    console.log(customer)
   }
   handleSelectContract = () => {
-    console.log('')
+
   }
   render() {
     const { getFieldDecorator } = this.props.form

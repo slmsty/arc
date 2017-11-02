@@ -3,18 +3,19 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import { closeClaim, submitClaim } from '../../actions/projectReceiptClaim'
+import { closeClaim, submitClaim, getPhase } from '../../actions/projectReceiptClaim'
 import ProjectReceiptClaimModal from '../../components/projectReceiptClaim/projectReceiptClaimModal'
 
 const mapStateToProps = state => ({
   receiptInfo: state.projectReceiptClaim.receiptInfo,
-  receiptClaimContractList: state.projectReceiptClaim.receiptClaimContractList,
+  receiptClaimFundList: state.projectReceiptClaim.receiptClaimFundList,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     closeClaim,
     submitClaim,
+    getPhase,
   }, dispatch)
 )
 

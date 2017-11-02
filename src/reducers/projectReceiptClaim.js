@@ -15,7 +15,7 @@ const projectReceiptClaim = {
     receiptNo: '',
     payCustName: '',
   },
-  receiptClaimContractList: {
+  receiptClaimFundList: {
     pageNo: 1,
     count: 0,
     result: [],
@@ -26,8 +26,8 @@ function getReceiptList(state, action) {
   return { ...state, receiptClaimList: action.response.pageInfo }
 }
 
-function getContractList(state, action) {
-  return { ...state, receiptClaimContractList: action.response.pageInfo }
+function getPhaseList(state, action) {
+  return { ...state, receiptClaimFundList: action.response.pageInfo }
 }
 
 function openClaim(state, action) {
@@ -48,7 +48,7 @@ function closeClaim(state) {
 
 export default caseReducer(projectReceiptClaim, {
   GET_PROJECT_RECEIPT_LIST_SUCCESS: getReceiptList,
-  GET_PROJECT_RECEIPT_CONTRACT_LIST_SUCCESS: getContractList,
+  GET_PROJECT_RECEIPT_FUND_LIST_SUCCESS: getPhaseList,
   PROJECT_RECEIPT_CLAIM_SUBMIT_SUCCESS: submitSuccess,
   PROJECT_RECEIPT_CLAIM_REJECT_SUCCESS: rejectSuccess,
   OPEN_CLAIM: openClaim,

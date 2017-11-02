@@ -1,6 +1,6 @@
-/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/forbid-prop-types,global-require */
 import React from 'react'
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { Layout, Icon, Breadcrumb } from 'antd'
 import MenuComponent from './common/menu'
@@ -56,6 +56,7 @@ export default class Index extends React.Component {
     })
   }
   render() {
+    const logo = this.state.collapsed ? require('../assets/images/logomini.png') : require('../assets/images/logo.png')
     return (
       <Layout style={{ height: '100%' }}>
         <Sider
@@ -63,8 +64,12 @@ export default class Index extends React.Component {
           collapsible
           collapsed={this.state.collapsed}
         >
-          <div className="logo" />
-          <MenuComponent />
+          <div className={`logo ${this.state.collapsed ? 'logo-mini' : ''}`}>
+            <img src={logo} alt="" />
+          </div>
+          <MenuComponent
+            collapsed={this.state.collapsed}
+          />
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
