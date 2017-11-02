@@ -14,6 +14,12 @@ export default class ProjectReceiptClaim extends React.Component {
     selectedRows: [],
     status: '21',
   }
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin24-padding24-查询条件div224-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 24 - 24 - 224 - 56 - 160
+    this.setState({ tableHeight })
+  }
   componentWillReceiveProps(nextProps) {
     if (this.props.receiptClaimListRefresh !== nextProps.receiptClaimListRefresh) {
       this.handleQuery()
@@ -210,7 +216,7 @@ export default class ProjectReceiptClaim extends React.Component {
           bordered
           size="middle"
           dataSource={this.props.receiptClaimList.result}
-          scroll={{ x: '260%' }}
+          scroll={{ x: '260%', y: this.state.tableHeight }}
           pagination={{
             current: this.props.receiptClaimList.pageNo,
             total: this.props.receiptClaimList.count,

@@ -13,6 +13,12 @@ export default class ContractList extends React.Component {
     selectedRows: [],
     status: '21',
   }
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin24-padding24-查询条件div56-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 24 - 24 - 56 - 56 - 160
+    this.setState({ tableHeight })
+  }
   componentWillReceiveProps(nextProps) {
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -174,7 +180,7 @@ export default class ContractList extends React.Component {
           bordered
           size="middle"
           dataSource={this.props.contractChangeList.result}
-          scroll={{ x: '260%' }}
+          scroll={{ x: '260%', y: this.state.tableHeight }}
           pagination={{
             current: this.props.contractChangeList.pageNo,
             total: this.props.contractChangeList.count,
