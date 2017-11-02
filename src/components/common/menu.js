@@ -17,6 +17,7 @@ export default class MenuComponent extends React.Component {
           <Menu.Item key="11"><Link to="/cbsTurnoverWholenessConfirm"><i className="iconfont icon-CBS" />&nbsp;CBS流水完整性确认</Link></Menu.Item>
           <Menu.Item key="12"><Link to="/manualEntryBankTurnover"><i className="iconfont icon-rengongluru" />&nbsp;人工录入银行流水</Link></Menu.Item>
           <Menu.Item key="13"><Link to="/receiptManagement/projectReceiptClaim"><i className="iconfont icon-xiangmushoukuan" />&nbsp;项目收款认领</Link></Menu.Item>
+          <Menu.Item key="17"><Link to="/receiptManagement/contractChange"><i className="iconfont icon-xiangmushoukuan" />&nbsp;合同变更明细</Link></Menu.Item>
           <Menu.Item key="14"><Link to="/receiptManagement/noProjectReceiptClaim"><i className="iconfont icon-feixiangmushoukuan" />&nbsp;非项目收款认领</Link></Menu.Item>
           <Menu.Item key="15"><Link to="/receiptManagement/reviewReceiptClaim"><i className="iconfont icon-shoukuanrenlingfuhe" />&nbsp;收款认领复核</Link></Menu.Item>
           <Menu.Item key="16"><Link to="/receiptManagement/customerBankLink"><i className="iconfont icon-shoukuanrenlingfuhe" />&nbsp;客户银行帐号关系</Link></Menu.Item>

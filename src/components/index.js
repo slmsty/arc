@@ -14,6 +14,7 @@ const breadcrumbNameMap = {
   '/receiptManagement/noProjectReceiptClaim': '非项目收款认领',
   '/receiptManagement/reviewReceiptClaim': '收款认领复核',
   '/receiptManagement/customerBankLink': '客户银行帐号关系',
+  '/receiptManagement/contractChange': '合同变更明细',
   '/apps/2': 'Application2',
   '/apps/1/detail': 'Detail',
   '/apps/2/detail': 'Detail',

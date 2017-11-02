@@ -6,7 +6,6 @@ import SelectCustomerWithForm from '../common/selectCustomer'
 import MultipleInput from '../common/multipleInput'
 
 const FormItem = Form.Item
-const InputGroup = Input.Group
 
 class ProjectReceiptClaimSelectFund extends React.Component {
   state = {
@@ -54,6 +53,10 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   }, {
     title: '应收金额',
     dataIndex: 'arAmount',
+    width: 100,
+  }, {
+    title: '应收余额',
+    dataIndex: 'arAmount1',
     width: 100,
   },
   ]
@@ -202,7 +205,7 @@ ProjectReceiptClaimSelectFund.propTypes = {
   }).isRequired,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  getPhase: PropTypes.func.isRequired,
+  tPhase: PropTypes.func.isRequired,
 }
 
 const ProjectReceiptClaimSelectFundWithForm = Form.create()(

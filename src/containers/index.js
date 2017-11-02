@@ -15,6 +15,7 @@ import ManualEntryBankTurnover from '../containers/manualEntryBankTurnover/manua
 import ReviewReceiptClaimContainer from '../containers/reviewReceiptClaim/reviewReceiptClaim'
 import CustomerBankLinkContainer from '../containers/customerBankLink/customerBankLink'
 import BatchImport from '../containers/manualEntryBankTurnover/batchImport'
+import ContractChangeContainer from '../containers/contractChange/contractChange'
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -55,6 +56,7 @@ class IndexContainer extends React.Component {
               <Route exact path="/receiptManagement/noProjectReceiptClaim" component={NoProjectReceiptClaimContainer} />
               <Route exact path="/receiptManagement/reviewReceiptClaim" component={ReviewReceiptClaimContainer} />
               <Route exact path="/receiptManagement/customerBankLink" component={CustomerBankLinkContainer} />
+              <Route exact path="/receiptManagement/contractChange" component={ContractChangeContainer} />
               <Route exact path="/cbsTurnoverWholenessConfirm" component={CBSTurnoverWholenessConfirm} />
               <Route exact path="/manualEntryBankTurnover" component={ManualEntryBankTurnover} />
               <Route exact path="/batchImport" component={BatchImport} />

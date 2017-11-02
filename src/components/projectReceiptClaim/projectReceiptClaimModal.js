@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function,max-len */
+/* eslint-disable react/prefer-stateless-function,max-len,react/no-unused-prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Card, Row, Col, Button, Table, Icon, message } from 'antd'
