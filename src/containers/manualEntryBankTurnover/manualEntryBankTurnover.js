@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withRouter } from 'react-router-dom'
-import { setTitle } from '../../actions/common'
 import ManualEntryBankTurnover from '../../components/manualEntryBankTurnover/manualEntryBankTurnover'
 
 const mapStateToProps = state => ({
@@ -11,7 +10,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    setTitle,
   }, dispatch)
 )
 

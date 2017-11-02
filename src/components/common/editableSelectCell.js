@@ -12,10 +12,6 @@ export default class EditableSelectCell extends React.Component {
     })
     return value
   }
-  handleChange(e) {
-    const value = e.target.value
-    this.props.onChange(value)
-  }
   renderOptions = () => {
     const optionDoms = this.props.options.map((option) => {
       const optionDom = (<Select.Option value={option.id}>{option.name}</Select.Option>)
@@ -31,10 +27,11 @@ export default class EditableSelectCell extends React.Component {
           editable ?
             <div>
               <Select
+                style={{ width: 100 }}
                 value={value}
-                onChange={e => this.handleChange(e)}
+                onChange={v => this.props.onChange(v)}
               >
-                {this.renderOptions}
+                {this.renderOptions()}
               </Select>
             </div>
             :

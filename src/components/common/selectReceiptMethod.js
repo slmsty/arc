@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function,react/prop-types */
+/* eslint-disable react/prefer-stateless-function,react/prop-types,react/require-default-props */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd'
@@ -7,25 +7,6 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 
 const FormItem = Form.Item
 const Search = Input.Search
-
-const columns = [{
-  title: '收款方法',
-  dataIndex: 'receiptMethodName',
-  width: 100,
-}, {
-  title: '银行账号',
-  dataIndex: 'receiptBankAccountNum',
-  width: 100,
-}, {
-  title: '所属公司',
-  dataIndex: 'companyName',
-  width: 100,
-}, {
-  title: '所属BG',
-  dataIndex: 'bgName',
-  width: 100,
-},
-]
 
 class SelectReceiptMethod extends React.Component {
   state = {
@@ -41,6 +22,24 @@ class SelectReceiptMethod extends React.Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
+  columns = [{
+    title: '收款方法',
+    dataIndex: 'receiptMethodName',
+    width: 100,
+  }, {
+    title: '银行账号',
+    dataIndex: 'receiptBankAccountNum',
+    width: 100,
+  }, {
+    title: '所属公司',
+    dataIndex: 'companyName',
+    width: 100,
+  }, {
+    title: '所属BG',
+    dataIndex: 'bgName',
+    width: 100,
+  },
+  ]
   handleOk = () => {
     if (this.state.selectedRows.length === 0) {
       message.error('请选择收款方法')
@@ -106,11 +105,11 @@ class SelectReceiptMethod extends React.Component {
     return (
       <div>
         <Search
-          disabled
           style={{ height: 30 }}
           placeholder="收款方法"
           value={this.props.value ? this.state.methodName : ''}
           onSearch={() => this.setState({ visible: true })}
+          onClick={() => this.setState({ visible: true })}
         />
         <Modal
           title="选择收款方法"
@@ -145,7 +144,7 @@ class SelectReceiptMethod extends React.Component {
 
           <Table
             rowKey="receiptMethodId"
-            columns={columns}
+            columns={this.columns}
             rowSelection={rowSelection}
             bordered
             size="middle"

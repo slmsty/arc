@@ -6,6 +6,7 @@ import moment from 'moment'
 
 import SelectCustomerWithForm from '../common/selectCustomer'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
+import SelectReceiptCompanyWithForm from '../common/selectReceiptCompany'
 import MultipleDayInput from '../common/multipleDayInput'
 import MultipleInput from '../common/multipleInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
@@ -42,7 +43,7 @@ class ProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="收款日期">
                 {getFieldDecorator('receiptDate', {
-                  initialValue: [moment(), moment()],
+                  initialValue: [moment('2017-08-01'), moment()],
                 })(
                   <RangePicker
                     allowClear
@@ -139,7 +140,15 @@ class ProjectReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={16} style={{ textAlign: 'right' }}>
+
+            <Col span={8} key={2}>
+              <FormItem {...formItemLayout} label="认款公司">
+                {getFieldDecorator('receiptCompanyId')(
+                  <SelectReceiptCompanyWithForm />,
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>

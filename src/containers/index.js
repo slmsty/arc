@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Index from '../components/index'
 import NoMatch from '../components/noMatch/noMatch'
-import { getUserInfo } from '../actions/user'
+import { getUserInfo } from '../actions/common'
 
 import HomeContainer from '../containers/home/home'
 import ProjectReceiptClaimContainer from '../containers/projectReceiptClaim/projectReceiptClaim'
@@ -15,9 +15,10 @@ import ManualEntryBankTurnover from '../containers/manualEntryBankTurnover/manua
 import ReviewReceiptClaimContainer from '../containers/reviewReceiptClaim/reviewReceiptClaim'
 import CustomerBankLinkContainer from '../containers/customerBankLink/customerBankLink'
 import BatchImport from '../containers/manualEntryBankTurnover/batchImport'
+import ContractChangeContainer from '../containers/contractChange/contractChange'
 
 const mapStateToProps = state => ({
-  user: state.user,
+  user: state.common.user,
   notification: state.common.notification,
 })
 
@@ -30,7 +31,7 @@ const mapDispatchToProps = dispatch => (
 // eslint-disable-next-line react/prefer-stateless-function
 class IndexContainer extends React.Component {
   componentWillMount() {
-    // this.props.getUserInfo()
+    this.props.getUserInfo()
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.notification !== nextProps.notification) {
@@ -39,10 +40,10 @@ class IndexContainer extends React.Component {
   }
   render() {
     //  eslint-disable-next-line
-    const { accountId, accountName, ntAccount } = this.props.user
-    // if (!accountId || !accountName || !ntAccount) {
-    //   return null
-    // }
+    const { accountId } = this.props.user
+    if (!accountId) {
+      return null
+    }
     return (
       <Router basename="/">
         <div style={{ height: '100%' }}>
@@ -55,6 +56,7 @@ class IndexContainer extends React.Component {
               <Route exact path="/receiptManagement/noProjectReceiptClaim" component={NoProjectReceiptClaimContainer} />
               <Route exact path="/receiptManagement/reviewReceiptClaim" component={ReviewReceiptClaimContainer} />
               <Route exact path="/receiptManagement/customerBankLink" component={CustomerBankLinkContainer} />
+              <Route exact path="/receiptManagement/contractChange" component={ContractChangeContainer} />
               <Route exact path="/cbsTurnoverWholenessConfirm" component={CBSTurnoverWholenessConfirm} />
               <Route exact path="/manualEntryBankTurnover" component={ManualEntryBankTurnover} />
               <Route exact path="/batchImport" component={BatchImport} />

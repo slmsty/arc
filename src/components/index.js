@@ -1,6 +1,6 @@
-/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/forbid-prop-types,global-require */
 import React from 'react'
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { Layout, Icon, Breadcrumb } from 'antd'
 import MenuComponent from './common/menu'
@@ -14,6 +14,7 @@ const breadcrumbNameMap = {
   '/receiptManagement/noProjectReceiptClaim': '非项目收款认领',
   '/receiptManagement/reviewReceiptClaim': '收款认领复核',
   '/receiptManagement/customerBankLink': '客户银行帐号关系',
+  '/receiptManagement/contractChange': '合同变更明细',
   '/apps/2': 'Application2',
   '/apps/1/detail': 'Detail',
   '/apps/2/detail': 'Detail',
@@ -56,6 +57,8 @@ export default class Index extends React.Component {
     })
   }
   render() {
+    const logo = this.state.collapsed ? require('../assets/images/logomini.png') : require('../assets/images/logo.png')
+    const { staffName, orgName, headIcon } = this.props.user
     return (
       <Layout style={{ height: '100%' }}>
         <Sider
@@ -63,8 +66,12 @@ export default class Index extends React.Component {
           collapsible
           collapsed={this.state.collapsed}
         >
-          <div className="logo" />
-          <MenuComponent />
+          <div className={`logo ${this.state.collapsed ? 'logo-mini' : ''}`}>
+            <img src={logo} alt="" />
+          </div>
+          <MenuComponent
+            collapsed={this.state.collapsed}
+          />
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
@@ -74,8 +81,9 @@ export default class Index extends React.Component {
               onClick={this.toggle}
             />
             <BreadcrumbContainer />
-            <div style={{ float: 'right', paddingRight: 16 }}>
-              张三
+            <div className="user">
+              <img src={headIcon} alt="" />
+              <p>欢迎您，<span>{staffName}</span><span>{orgName}</span></p>
             </div>
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
@@ -91,4 +99,9 @@ Index.defaultProps = {
 }
 Index.propTypes = {
   children: PropTypes.node,
+  user: PropTypes.shape({
+    staffName: PropTypes.string.isRequired,
+    orgName: PropTypes.string.isRequired,
+    headIcon: PropTypes.string.isRequired,
+  }).isRequired,
 }

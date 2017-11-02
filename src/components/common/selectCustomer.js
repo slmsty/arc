@@ -8,17 +8,6 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 const FormItem = Form.Item
 const Search = Input.Search
 
-const columns = [{
-  title: '客户名称',
-  dataIndex: 'customerName',
-  width: 200,
-}, {
-  title: '客户编号',
-  dataIndex: 'customerNumber',
-  width: 200,
-},
-]
-
 class SelectCustomer extends React.Component {
   state = {
     visible: false,
@@ -33,6 +22,16 @@ class SelectCustomer extends React.Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
+  columns = [{
+    title: '客户名称',
+    dataIndex: 'customerName',
+    width: 200,
+  }, {
+    title: '客户编号',
+    dataIndex: 'customerNumber',
+    width: 200,
+  },
+  ]
   handleOk = () => {
     if (this.state.selectedRows.length === 0) {
       message.error('请选择客户')
@@ -98,11 +97,11 @@ class SelectCustomer extends React.Component {
     return (
       <div>
         <Search
-          disabled
           style={{ height: 30 }}
           placeholder="客户名称"
           value={this.props.value ? this.state.customerName : ''}
           onSearch={() => this.setState({ visible: true })}
+          onClick={() => this.setState({ visible: true })}
         />
         <Modal
           title="选择客户"
@@ -137,7 +136,7 @@ class SelectCustomer extends React.Component {
 
           <Table
             rowKey="customerId"
-            columns={columns}
+            columns={this.columns}
             rowSelection={rowSelection}
             bordered
             size="middle"

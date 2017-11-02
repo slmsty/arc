@@ -6,7 +6,10 @@ import moment from 'moment'
 
 import SelectCustomerWithForm from '../common/selectCustomer'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
-import SelectReceiptCompany from '../common/selectReceiptCompany'
+import SelectReceiptCompanyWithForm from '../common/selectReceiptCompany'
+import MultipleDayInput from '../common/multipleDayInput'
+import MultipleInput from '../common/multipleInput'
+import SelectInvokeApi from '../common/selectInvokeApi'
 
 const { RangePicker } = DatePicker
 const FormItem = Form.Item
@@ -15,13 +18,14 @@ const dateFormat = 'YYYY-MM-DD'
 
 class NoProjectReceiptClaimSearch extends React.Component {
   componentDidMount() {
-  }
-  onSelectCustomer = (customer) => {
-    console.log(customer)
+    this.handleQuery()
   }
   handleQuery = () => {
-    const customer = this.props.form.getFieldValue('customer')
-    console.log(customer)
+    const param = this.props.form.getFieldsValue()
+    param.receiptDateStart = param.receiptDate[0].format(dateFormat)
+    param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
+    delete param.receiptDate
+    this.props.onQuery(param)
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -38,8 +42,8 @@ class NoProjectReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="收款日期">
-                {getFieldDecorator('receive', {
-                  initialValue: [moment(), moment()],
+                {getFieldDecorator('receiptDate', {
+                  initialValue: [moment('2017-08-01'), moment()],
                 })(
                   <RangePicker
                     allowClear
@@ -51,24 +55,19 @@ class NoProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户名称">
-                {getFieldDecorator('customer')(
+                {getFieldDecorator('custId')(
                   <SelectCustomerWithForm />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="收款来源">
-                {getFieldDecorator('from')(
-                  <Select
+                {getFieldDecorator('sourceType')(
+                  <SelectInvokeApi
+                    typeCode="ARC_RECEIPT_CLAIM"
+                    paramCode="SOURCE_TYPE"
                     placeholder="请选择收款来源"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
-                    onChange={this.handleChange}
-                  >
-                    <Option key="c1">1111</Option>
-                    <Option key="c2">222</Option>
-                  </Select>,
+                  />,
                 )}
               </FormItem>
             </Col>
@@ -76,31 +75,28 @@ class NoProjectReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="项目编码">
-                {getFieldDecorator('projectCode')(
-                  <Input placeholder="多项目编码使用英文逗号间隔" />,
+                {getFieldDecorator('projectIds')(
+                  <MultipleInput
+                    placeholder="多项目编码使用英文逗号间隔"
+                  />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="收款方法">
-                {getFieldDecorator('receiptMethod')(
+                {getFieldDecorator('receiptMethodId')(
                   <SelectReceiptMethodWithForm />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="收款分类">
-                {getFieldDecorator('category')(
-                  <Select
+                {getFieldDecorator('custPayMethod')(
+                  <SelectInvokeApi
+                    typeCode="ARC_RECEIPT_CLAIM"
+                    paramCode="CLAIM_TYPE"
                     placeholder="请选择收款分类"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
-                    onChange={this.handleChange}
-                  >
-                    <Option key="c1">1111</Option>
-                    <Option key="c2">222</Option>
-                  </Select>,
+                  />,
                 )}
               </FormItem>
             </Col>
@@ -108,31 +104,25 @@ class NoProjectReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="收款日期">
-                {getFieldDecorator('receives')(
-                  <Input
-                    placeholder="多收款日期使用英文逗号间隔"
-                  />,
+                {getFieldDecorator('receiptDates')(
+                  <MultipleDayInput />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={9}>
               <FormItem {...formItemLayout} label="数据状态">
-                {getFieldDecorator('status')(
-                  <Select
-                    placeholder="请选择数据状态"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
-                    onChange={this.handleChange}
-                  >
-                    <Option key="1">出纳已确认</Option>
-                    <Option key="2">复核退回</Option>
-                    <Option key="3">已传送AR</Option>
+                {getFieldDecorator('status', {
+                  initialValue: '21',
+                })(
+                  <Select>
+                    <Option value="21">出纳已确认</Option>
+                    <Option value="40">复核退回</Option>
+                    <Option value="51">已传送AR</Option>
                   </Select>,
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={8}>
+            <Col span={8} key={10}>
               <FormItem {...formItemLayout} label="收款编号">
                 {getFieldDecorator('code')(
                   <Input placeholder="请输入收款编号" />,
@@ -141,10 +131,10 @@ class NoProjectReceiptClaimSearch extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={10}>
+            <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="认款公司">
-                {getFieldDecorator('companyName')(
-                  <SelectReceiptCompany />,
+                {getFieldDecorator('receiptCompanyId')(
+                  <SelectReceiptCompanyWithForm />,
                 )}
               </FormItem>
             </Col>
@@ -161,8 +151,10 @@ class NoProjectReceiptClaimSearch extends React.Component {
 NoProjectReceiptClaimSearch.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
-    getFieldValue: PropTypes.func.isRequired,
+    getFieldsValue: PropTypes.func.isRequired,
+    resetFields: PropTypes.func.isRequired,
   }).isRequired,
+  onQuery: PropTypes.func.isRequired,
 }
 
 const NoProjectReceiptClaimSearchWithForm = Form.create()(NoProjectReceiptClaimSearch)
