@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button } from 'antd'
+import { Table, Button, message } from 'antd'
 import ReviewReceiptClaimSearchWithForm from './reviewReceiptClaimSearch'
 
 const columns = [{
@@ -192,31 +192,66 @@ export default class ReviewReceiptClaim extends React.Component {
   }
   componentDidMount() {
   }
-  // approve submit
+  // 审批提交
   approveClick = () => {
     const submitDatas = this.state.selectedRows
+    const receiptClaimIds = {
+      action: [],
+    }
+    submitDatas.map((item, index) => {
+      receiptClaimIds.action[index] = { receiptClaimId: item.receiptClaimId }
+    })
+    this.props.approveSubmit(receiptClaimIds).then((res) => {
+      // console.log(res)
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.success("审批成功" + this.state.selectedRows.length + '条数据')
+      } else {
+        message.error('审批失败')
+      }
+    })
+    this.handleQuery()
+  }
+  // 认款退回
+  returnClick = () => {
+    const submitDatas = this.state.selectedRows
+    // console.log(submitDatas)
     const postData = {
       action: [],
     }
     submitDatas.map((item, index) => {
       postData.action[index] = { receiptClaimId: item.receiptClaimId }
     })
-    this.props.approveSubmit(postData).then((res) => {
-      console.log(res)
+    this.props.returnReceiptClaim(postData).then((res) => {
+      // console.log(res)
       if (res && res.response && res.response.resultCode === '000000') {
-        alert('审批成功')
+        message.success('认款退回成功' + this.state.selectedRows.length + '条数据')
+      } else {
+        message.error('认款退回失败')
       }
     })
-  }
-  // 认款退回
-  returnClick = () => {
-    const returnDatas = this.state.returnData
-    // alert ("认款退回成功" + returnDatas.length + "条数据，数据状态变为'复核退回'")
+    this.handleQuery()
   }
   // 传送AR
   transferClick = () => {
     const transferDatas = this.state.transferData
-    // alert ('认款退回成功' + transferDatas.length + "条数据，数据状态变为'已传送AR'")
+    const submitDatas = this.state.selectedRows
+    // console.log(submitDatas)
+    const postData = {
+      receiptClaimIds: [],
+    }
+    submitDatas.map((item, index) => {
+      postData.receiptClaimIds[index] = item.receiptClaimId
+    })
+    console.log(postData)
+    this.props.transferReceiptClaim(postData).then((res) => {
+      // console.log(res)
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.success('传送AR成功' + this.state.selectedRows.length + '条数据')
+      } else {
+        message.error('传送AR失败')
+      }
+    })
+    this.handleQuery()
   }
 
   testData = () => {
@@ -241,7 +276,6 @@ export default class ReviewReceiptClaim extends React.Component {
     }, 1000)
   }
   render() {
-    // console.log(this.props.reviewReceiptClaim.approveSubmitData.resultMessage)
     const { selectedRowKeys } = this.state
     const pagination = {
       current: this.props.reviewReceiptClaim.getReviewReceiptList.pageNo,
@@ -257,16 +291,24 @@ export default class ReviewReceiptClaim extends React.Component {
       onChange: this.onSelectChange,
     }
     let approveDis = false
+    let returnDis = false
+    let transferDis = false
     this.state.selectedRows.map((item, index) => {
-      if (item.status === '10') {
+      if (item.status === '31') {
         approveDis = true
+      }
+      if (item.status === '31' || item.status === '50' || item.status === '52') {
+        returnDis = true
+      }
+      if (item.status === '10' || item.status === '52') {
+        transferDis = true
       }
     })
     return (<div>
       <ReviewReceiptClaimSearchWithForm onQuery={this.handleChangeParam} />
       <Button type="danger" disabled={!approveDis} onClick={this.approveClick}>审批</Button>&nbsp;&nbsp;
-      <Button type="primary" disabled={!this.state.return} onClick={this.returnClick}>认款退回</Button>&nbsp;&nbsp;
-      <Button type="dashed" disabled={!this.state.transfer} onClick={this.transferClick}>传送AR</Button>
+      <Button type="primary" disabled={!returnDis} onClick={this.returnClick}>认款退回</Button>&nbsp;&nbsp;
+      <Button type="dashed" disabled={!transferDis} onClick={this.transferClick}>传送AR</Button>
       <br /><br />
       <Table
         rowKey="receiptClaimId"
@@ -284,12 +326,10 @@ export default class ReviewReceiptClaim extends React.Component {
 ReviewReceiptClaim.propTypes = {
   getReviewReceiptList: PropTypes.func.isRequired,
   approveSubmit: PropTypes.func.isRequired,
+  returnReceiptClaim: PropTypes.func.isRequired,
+  transferReceiptClaim: PropTypes.func.isRequired,
   // reject: PropTypes.func.isRequired,
   reviewReceiptClaim: PropTypes.shape({
-    pageNo: PropTypes.number.isRequired,
-    count: PropTypes.number.isRequired,
-    result: PropTypes.arrayOf.isRequired,
-    pageSize: PropTypes.number.isRequired,
     getReviewReceiptList: PropTypes.arrayOf.isRequired,
     approveSubmitData: PropTypes.arrayOf.isRequired,
     reviewReceiptClaim: PropTypes.arrayOf.isRequired,
