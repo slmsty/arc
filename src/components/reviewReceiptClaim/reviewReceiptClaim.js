@@ -126,24 +126,6 @@ const columns = [{
   width: 100,
 },
 ]
-const data = []
-const formatDate = function (date) {
-  const y = date.getFullYear()
-  let m = date.getMonth() + 1
-  m = m < 10 ? `0${m}` : m
-  let d = date.getDate()
-  d = d < 10 ? (`0${d}`) : d
-  return `${y}-${m}-${d}`
-}
-const formatMoney = function (number) {
-  const negative = number < 0 ? '-' : ''
-  const num = Math.abs(+number || 0).toFixed(2)
-  const i = `${parseInt(num, 10)}`
-  let j = i.length
-  j = j > 3 ? j % 3 : 0
-  return `${negative + (j ? `${i.substr(0, j)},` : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1,')}.${Math.abs(num - i).toFixed(2).slice(2)}`
-}
-
 export default class ReviewReceiptClaim extends React.Component {
   state = {
     loading: false,
@@ -155,6 +137,11 @@ export default class ReviewReceiptClaim extends React.Component {
     submitData: [],
     returnData: [],
     transferData: [],
+  }
+  componentWillReceiveProps(nextProps) {
+  }
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    this.setState({ selectedRowKeys, selectedRows })
   }
   queryParam = {
     pageInfo: {
@@ -171,26 +158,21 @@ export default class ReviewReceiptClaim extends React.Component {
     claimType: '',
     status: '',
   }
-  handleChangePage = (page) => {
-    this.queryParam.pageInfo.pageNo = page
-    this.handleQuery()
+  handleQuery = () => {
+    this.props.getReviewReceiptList(this.queryParam)
   }
   handleChangeSize = (current, size) => {
     this.queryParam.pageInfo.pageNo = current
     this.queryParam.pageInfo.pageSize = size
     this.handleQuery()
   }
+  handleChangePage = (page) => {
+    this.queryParam.pageInfo.pageNo = page
+    this.handleQuery()
+  }
   handleChangeParam = (param) => {
     this.queryParam = { ...this.queryParam, ...param }
     this.handleQuery()
-  }
-  handleQuery = () => {
-    this.props.getReviewReceiptList(this.queryParam)
-  }
-  onSelectChange = (selectedRowKeys, selectedRows) => {
-    this.setState({ selectedRowKeys, selectedRows })
-  }
-  componentDidMount() {
   }
   // 审批提交
   approveClick = () => {
@@ -252,28 +234,6 @@ export default class ReviewReceiptClaim extends React.Component {
       }
     })
     this.handleQuery()
-  }
-
-  testData = () => {
-    this.setState({ loading: true })
-    // ajax request after empty completing
-    setTimeout(() => {
-      for (let i = 0; i < 46; i++) {
-        data.push({
-          key: i,
-          status: ['会计已认款', '等待传送AR', '已传送AR', '传送失败'][Math.ceil(Math.random() * 4) - 1],
-          2: formatDate(new Date(new Date().valueOf() - Math.ceil(Math.random() * 2592000000))),
-          9: ['CNY', 'USD', 'JPY', 'EUR', 'GBP'][Math.ceil(Math.random() * 5) - 1],
-          6: formatMoney(Math.ceil(Math.random() * 10000000) / 100),
-          5: ['北京市某某信息技术有限公司', '河北矿业', '中国电信', '中国移动北京分公司', '天津电话好多好多公司'][Math.ceil(Math.random() * 5) - 1],
-          3: ['项目', '百一测评'][Math.ceil(Math.random() * 2) - 1],
-          20:Math.random() * 1000,
-        })
-      }
-      this.setState({
-        loading: false,
-      })
-    }, 1000)
   }
   render() {
     const { selectedRowKeys } = this.state

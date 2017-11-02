@@ -2,14 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import CustomerBankLink from '../../components/customerBankLink/customerBankLink'
+import { getArcCustBankList, addArcCustBankData, deleteArcCustBankDatas, deleteArcCustBankData } from '../../actions/arcCustBank'
 
 const mapStateToProps = state => ({
-  user: state.user,
-  reviewReceiptClaim: state.reviewReceiptClaim,
+  arcCustBankLink: state.arcCustBankLink,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
+    getArcCustBankList,
+    addArcCustBankData,
+    deleteArcCustBankDatas,
+    deleteArcCustBankData,
   }, dispatch)
 )
 

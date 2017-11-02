@@ -5,6 +5,7 @@ import batchImport from './batchImport'
 import projectReceiptClaim from './projectReceiptClaim'
 import noProjectReceiptClaim from './noProjectReceiptClaim'
 import reviewReceiptClaim from './reviewReceiptClaim'
+import arcCustBankLink from './arcCustBank'
 import cbsTurnoverWholenessConfirm from './cbsTurnoverWholenessConfirm'
 import contractChange from './contractChange'
 import billedARApprove from './billedAR/approve'
@@ -16,6 +17,7 @@ export default combineReducers({
   projectReceiptClaim,
   noProjectReceiptClaim,
   reviewReceiptClaim,
+  arcCustBankLink,
   cbsTurnoverWholenessConfirm,
   contractChange,
   billedARApprove,

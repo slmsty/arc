@@ -21,13 +21,10 @@ class ReviewReceiptClaimSearch extends React.Component {
   }
   handleQuery = () => {
     // 验证是否通过
-    this.props.form.validateFields((err, fieldsValue) => {
-      if (err) {
-        return
-      }
-      // Should format date value before submit.
-      console.log('Received values of form: ', fieldsValue)
-    })
+    const param = this.props.form.getFieldsValue()
+    console.log(param)
+    // console.log(this.props.onQuery())
+    this.props.onQuery(param)
   }
 
   render() {
@@ -48,26 +45,37 @@ class ReviewReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={12} key={1}>
               <FormItem {...formItemLayout} label="客户名称">
-                {getFieldDecorator('custId')(
+                {getFieldDecorator('erpCustId')(
                   <SelectCustomerWithForm />,
                 )}
               </FormItem>
             </Col>
             <Col span={12} key={2}>
-              <FormItem {...formItemLayout} label="收款方法">
-                {getFieldDecorator('receiptMethodId')(
-                  <SelectReceiptMethodWithForm />,
+              <FormItem {...formItemLayout} label="银行帐号">
+                {getFieldDecorator('payBankAccount')(
+                  <Input
+                    placeholder="请输入银行帐号"
+                  />,
                 )}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={40}>
             <Col span={12} key={6}>
-              <FormItem {...formItemLayout} label="银行帐号">
-                {getFieldDecorator('custOrderIds')(
-                  <Input
-                    placeholder="请输入银行帐号"
-                  />,
+              <FormItem {...formItemLayout} label="数据状态">
+                {getFieldDecorator('status', {
+                  initialValue: '1',
+                })(
+                  <Select
+                    placeholder="请选择数据状态"
+                    notFoundContent=""
+                    defaultActiveFirstOption={false}
+                    filterOption={false}
+                    onChange={this.handleChange}
+                  >
+                    <Option value="1">有效</Option>
+                    <Option value="0">无效</Option>
+                  </Select>,
                 )}
               </FormItem>
             </Col>
@@ -86,7 +94,9 @@ class ReviewReceiptClaimSearch extends React.Component {
 ReviewReceiptClaimSearch.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
+    getFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
+  onQuery: PropTypes.func.isRequired,
 }
 
 const ReviewReceiptClaimSearchWithForm = Form.create()(ReviewReceiptClaimSearch)
