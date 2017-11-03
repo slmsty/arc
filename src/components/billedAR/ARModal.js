@@ -36,7 +36,7 @@ class ARModal extends Component{
         onCancel={this.onCancel}
         onOk={this.onOk}>
           <Form>
-            <FormItem label="Billed AR日期*">
+            <FormItem label="Billed AR日期">
               {
                 getFieldDecorator('key6', {
                   initialValue: key6 ? moment(key6) : null,
@@ -48,7 +48,7 @@ class ARModal extends Component{
                 )
               }
             </FormItem>
-            <FormItem label="GL日期*">
+            <FormItem label="GL日期">
               {
                 getFieldDecorator('key7', {
                   initialValue: key7 ? moment(key7) : null,
