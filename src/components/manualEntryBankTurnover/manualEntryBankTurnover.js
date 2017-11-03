@@ -48,7 +48,7 @@ export default class ManualEntryBankTurnover extends React.Component {
     receiptDateEnd: '',
     custId: '',
     receiptMethodId: '10',
-    sourceType: 'MANUAL',
+    sourceType: 'manual',
     status: '',
   }
   handleSelectChange = (selectedRowKeys) => {
@@ -121,7 +121,7 @@ export default class ManualEntryBankTurnover extends React.Component {
         <ManualEntryBankTurnoverSearchWithForm
           query={this.handleChangeParam}
         />
-        <Button type="default" onClick={() => { this.props.history.push('/batchImport') }}>批量导入</Button>&nbsp;&nbsp;
+        <Button type="default" onClick={() => { this.props.history.push('/receiptManagement/manualEntryBankTurnover/batchImport') }}>批量导入</Button>&nbsp;&nbsp;
         <Button type="default" onClick={this.handleBatchDelete}>删除</Button>&nbsp;&nbsp;
         <Button type="primary" onClick={this.handleBatchConfirm}>确认</Button>
         <br /><br />
