@@ -18,13 +18,17 @@ export default class SelectInvokeApi extends React.Component {
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
+      const options = response.data
+      if (this.props.hasEmpty) {
+        options.unshift({ paramValue: '', paramValueDesc: '请选择' })
+      }
       this.setState({
-        options: response.data,
+        options,
       })
     }
   }
   render() {
-    const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue}>{option.paramValueDesc}</Option>) : null
+    const optionDom = this.state.options ? this.state.options.map(option => <Option value={option.paramValue}>{option.paramValueDesc}</Option>) : null
     return (
       <Select
         id={this.props.id}
@@ -43,4 +47,5 @@ SelectInvokeApi.propTypes = {
   typeCode: PropTypes.string.isRequired,
   paramCode: PropTypes.string.isRequired,
   value: PropTypes.string,
+  hasEmpty: PropTypes.bool,
 }
