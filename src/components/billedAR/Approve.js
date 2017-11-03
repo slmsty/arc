@@ -60,7 +60,7 @@ class Approve extends Component{
         key: 'key4'
       },
       {
-        title: 'Billed AR金额*',
+        title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
         key: 'key5'
       },
       {
