@@ -1,19 +1,49 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Input, Button, Select, Table} from 'antd';
+import {Form, Row, Col, DatePicker, Input, Button, Select, Table, message} from 'antd';
 import SelectCustomer from '../common/selectCustomer'
 import SelectContractCompany from '../common/SelectContractCompany'
+import ARModal from './ARModal'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
-const Search = Input.Search;
 const Option = Select.Option;
 
 class Confirm extends Component{
   state = {
+    visible: false,
+    editObj: {},
+    selectedRowKeys: [],
     pageInfo: {
       pageNo: 1,
       pageSize: 10,
       count: 1300,
       result: [
+        {
+          key: 0,
+          key1: 'test',
+          key2: 'test',
+          key3: 'test',
+          key4: 'test',
+          key5: 'test',
+          key6: '',
+          key7: '',
+          key8: 'test',
+          key9: 'test',
+          key10: 'test',
+          key11: 'test',
+          key12: 'test',
+          key13: 'test',
+          key14: 'test',
+          key15: 'test',
+          key16: 'test',
+          key17: 'test',
+          key18: 'test',
+          key19: 'test',
+          key20: 'test',
+          key21: 'test',
+          key22: 'test',
+          key23: 'test',
+          key24: 'test',
+        },
         {
           key: 1,
           key1: 'test',
@@ -21,8 +51,8 @@ class Confirm extends Component{
           key3: 'test',
           key4: 'test',
           key5: 'test',
-          key6: 'test',
-          key7: 'test',
+          key6: '',
+          key7: '',
           key8: 'test',
           key9: 'test',
           key10: 'test',
@@ -154,11 +184,57 @@ class Confirm extends Component{
     }))
   }
 
+  SelectChange = (selectedRowKeys)=>{
+    this.setState({selectedRowKeys})
+  }
+
   doSearch = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       console.log(values);
     });
+  }
+
+  doEdit = ()=>{
+    if(this.state.selectedRowKeys.length === 0){
+      message.warning('请选择编辑项')
+    }else if(this.state.selectedRowKeys.length > 1){
+      message.warning('只能编辑一项')
+    }else{
+      this.setState({
+        visible: true,
+        editObj: {...this.state.pageInfo.result[this.state.selectedRowKeys[0]]},
+      })
+    }
+  }
+
+  Cancel = ()=>{
+    this.setState({
+      visible: false,
+      editObj: {},
+    })
+  }
+
+  OK = ({key6, key7, key8})=>{
+    this.setState({
+      visible: false,
+      editObj: {},
+      pageInfo: {
+        ...this.state.pageInfo,
+        result: this.state.pageInfo.result.map((o, i)=>{
+          if(i === this.state.selectedRowKeys[0]){
+            return {
+              ...o,
+              key6,
+              key7,
+              key8
+            }
+          }else{
+            return o;
+          }
+        })
+      }
+    })
   }
 
   render(){
@@ -253,7 +329,7 @@ class Confirm extends Component{
         <br/>
         <Row>
           <Col span={24}>
-            <Button style={{marginRight: '20px'}}>编辑</Button>
+            <Button onClick={this.doEdit} style={{marginRight: '20px'}}>编辑</Button>
             <Button style={{marginRight: '20px'}}>拒绝</Button>
             <Button style={{marginRight: '20px'}}>审批</Button>
             <Button>传送PA</Button>
@@ -261,7 +337,7 @@ class Confirm extends Component{
         </Row>
         <br/>
         <Table 
-          rowSelection={{onChange: ()=>{}}}
+          rowSelection={{onChange: this.SelectChange}}
           columns={columns} 
           dataSource={pageInfo.result}
           pagination={{
@@ -271,7 +347,15 @@ class Confirm extends Component{
             onChange: ()=>{},
             total: pageInfo.count
           }}
-          scroll={{ x: 2942}}></Table>
+          scroll={{ x: 2942}} />
+        <ARModal 
+          visible={this.state.visible}
+          onCancel={this.Cancel}
+          onOk={this.OK}
+          key6={this.state.editObj.key6}
+          key7={this.state.editObj.key7}
+          key8={this.state.editObj.key8}
+           />
       </div>
     )
   }

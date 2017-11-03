@@ -65,6 +65,7 @@ class SelectContractCompany extends Component{
         result: []
       }
     })
+    this.props.form.resetFields();
   }
 
   Cancel = ()=>{
@@ -79,6 +80,7 @@ class SelectContractCompany extends Component{
         result: []
       }
     })
+    this.props.form.resetFields();
   }
 
   doSearch = (e)=>{
