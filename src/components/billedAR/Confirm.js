@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import {Form, Row, Col, DatePicker, Input, Button, Select, Table} from 'antd';
+import SelectCustomer from '../common/selectCustomer'
+import SelectContractCompany from '../common/SelectContractCompany'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const Search = Input.Search;
@@ -178,7 +180,7 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="客户名称" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('customerName')(<Search placeholder="客户名称"/>)
+                  getFieldDecorator('customerId')(<SelectCustomer/>)
                 }
               </FormItem>
             </Col>
@@ -201,7 +203,7 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="签约公司" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('company')(<Search placeholder="签约公司"/>)
+                  getFieldDecorator('companyId')(<SelectContractCompany />)
                 }
               </FormItem>
             </Col>
@@ -217,7 +219,7 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="付款条件" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('pay')(
+                  getFieldDecorator('pay', {initialValue: '1'})(
                     <Select>
                       <Option value="1">按时间</Option>
                       <Option value="2">按进度</Option>
@@ -229,7 +231,7 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="数据状态" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('status')(
+                  getFieldDecorator('status', {initialValue: '1'})(
                     <Select>
                       <Option value="1">待应收会计确认</Option>
                       <Option value="2">无需确认</Option>
