@@ -6,7 +6,6 @@ import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd
 import requestJsonFetch from '../../http/requestJsonFecth'
 
 const FormItem = Form.Item
-const Search = Input.Search
 
 class SelectReceiptMethod extends React.Component {
   state = {
@@ -88,6 +87,9 @@ class SelectReceiptMethod extends React.Component {
       })
     }
   }
+  handleEmitEmpty = () => {
+    this.props.onChange('')
+  }
   render() {
     const { visible } = this.state
     const formItemLayout = {
@@ -102,13 +104,14 @@ class SelectReceiptMethod extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
+    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
-        <Search
+        <Input
           style={{ height: 30 }}
           placeholder="收款方法"
           value={this.props.value ? this.state.methodName : ''}
-          onSearch={() => this.setState({ visible: true })}
+          suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
         <Modal

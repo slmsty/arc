@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
 import './Approve.css'
 import {Form, Row, Col, DatePicker, Input, Button, Table} from 'antd';
+import SelectCustomer from '../common/selectCustomer'
+import SelectContractCompany from '../common/SelectContractCompany'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
-const Search = Input.Search;
 
 class Approve extends Component{
   state = {
@@ -60,7 +61,7 @@ class Approve extends Component{
         key: 'key4'
       },
       {
-        title: 'Billed AR金额*',
+        title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
         key: 'key5'
       },
       {
@@ -158,7 +159,7 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="客户名称" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('customerName')(<Search placeholder="客户名称"/>)
+                  getFieldDecorator('customerId')(<SelectCustomer/>)
                 }
               </FormItem>
             </Col>
@@ -181,7 +182,7 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="签约公司" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('company')(<Search placeholder="签约公司"/>)
+                  getFieldDecorator('companyId')(<SelectContractCompany />)
                 }
               </FormItem>
             </Col>

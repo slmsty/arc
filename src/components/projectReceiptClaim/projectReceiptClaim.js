@@ -12,7 +12,6 @@ export default class ProjectReceiptClaim extends React.Component {
   state = {
     selectedRowKeys: [],
     selectedRows: [],
-    status: '21',
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -144,7 +143,7 @@ export default class ProjectReceiptClaim extends React.Component {
     receiptMethodId: '',
     receiptDates: '',
     contractIds: '',
-    status: this.state.status,
+    status: '21',
     receiptNo: '',
   }
   handleChangePage = (page) => {
@@ -206,7 +205,7 @@ export default class ProjectReceiptClaim extends React.Component {
         <ProjectReceiptClaimSearchWithForm
           onQuery={this.handleChangeParam}
         />
-        <Button type="primary" onClick={this.handleOpenClaim}>{this.state.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
+        <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
         <Button type="danger" onClick={this.handleReject}>拒绝</Button>
         <br /><br />
         <Table

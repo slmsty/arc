@@ -205,7 +205,7 @@ ProjectReceiptClaimSelectFund.propTypes = {
   }).isRequired,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  tPhase: PropTypes.func.isRequired,
+  getPhase: PropTypes.func.isRequired,
 }
 
 const ProjectReceiptClaimSelectFundWithForm = Form.create()(
