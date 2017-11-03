@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function,react/prop-types */
+/* eslint-disable react/prefer-stateless-function,react/prop-types,max-len,react/require-default-props */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd'
@@ -6,12 +6,10 @@ import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd
 import requestJsonFetch from '../../http/requestJsonFecth'
 
 const FormItem = Form.Item
-const Search = Input.Search
 
 class SelectCustomer extends React.Component {
   state = {
     visible: false,
-    customerName: '',
     pageNo: 1,
     pageSize: 10,
     total: 1,
@@ -37,10 +35,7 @@ class SelectCustomer extends React.Component {
       message.error('请选择客户')
       return
     }
-    this.setState({
-      customerName: this.state.selectedRows[0].customerName,
-    })
-    this.props.onChange(this.state.selectedRows[0].customerId)
+    this.props.onChange([this.state.selectedRows[0].customerId, this.state.selectedRows[0].customerName])
     this.handleCancel()
   }
   handleCancel = () => {
@@ -80,6 +75,9 @@ class SelectCustomer extends React.Component {
       })
     }
   }
+  handleEmitEmpty = () => {
+    this.props.onChange(['', ''])
+  }
   render() {
     const { visible } = this.state
     const formItemLayout = {
@@ -94,13 +92,13 @@ class SelectCustomer extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
+    const suffix = this.props.value && this.props.value[1] ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : null
     return (
       <div>
-        <Search
-          style={{ height: 30 }}
+        <Input
           placeholder="客户名称"
-          value={this.props.value ? this.state.customerName : ''}
-          onSearch={() => this.setState({ visible: true })}
+          value={this.props.value ? this.props.value[1] : ''}
+          suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
         <Modal
@@ -159,7 +157,7 @@ SelectCustomer.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
-  value: PropTypes.string,
+  value: PropTypes.arrayOf(PropTypes.string),
 }
 
 const SelectCustomerWithForm = Form.create()(SelectCustomer)
