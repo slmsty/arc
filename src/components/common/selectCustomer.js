@@ -92,10 +92,11 @@ class SelectCustomer extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = this.props.value && this.props.value[1] ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : null
+    const suffix = this.props.value && this.props.value[1] ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
+          style={{ height: 30 }}
           placeholder="客户名称"
           value={this.props.value ? this.props.value[1] : ''}
           suffix={suffix}

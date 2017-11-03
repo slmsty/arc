@@ -103,7 +103,7 @@ class SelectReceiptCompany extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : null
+    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
