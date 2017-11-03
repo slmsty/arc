@@ -17,6 +17,9 @@ class EditManualEntryBankTurnoverData extends React.Component {
   handleConfirm = () => {
     const param = this.props.form.getFieldsValue()
     param.receiptClaimId = this.props.editKey
+    param.erpCustId = param.customer.length ? param.customer[0] : null
+    param.erpCustName = param.customer.length ? param.customer[1] : ''
+    delete param.customer
     this.props.form.resetFields()
     this.props.onConfirm(param)
   }
@@ -46,7 +49,7 @@ class EditManualEntryBankTurnoverData extends React.Component {
             <Row gutter={10}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="客户名称">
-                  {getFieldDecorator('custId')(<SelectCustomerWithForm />)}
+                  {getFieldDecorator('customer')(<SelectCustomerWithForm />)}
                 </FormItem>
               </Col>
             </Row>
@@ -128,7 +131,7 @@ class EditManualEntryBankTurnoverData extends React.Component {
             <Row>
               <Col span={24} key={12}>
                 <FormItem label="备注" labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
-                  {getFieldDecorator('statusRemark')(<TextArea
+                  {getFieldDecorator('remark')(<TextArea
                     placeholder="请输入备注"
                     autosize={{ minRows: 3, maxRows: 3 }}
                   />)}
