@@ -59,9 +59,9 @@ class IndexContainer extends React.Component {
               <Route exact path="/receiptManagement/reviewReceiptClaim" component={ReviewReceiptClaimContainer} />
               <Route exact path="/receiptManagement/customerBankLink" component={CustomerBankLinkContainer} />
               <Route exact path="/receiptManagement/contractChange" component={ContractChangeContainer} />
-              <Route exact path="/cbsTurnoverWholenessConfirm" component={CBSTurnoverWholenessConfirm} />
-              <Route exact path="/manualEntryBankTurnover" component={ManualEntryBankTurnover} />
-              <Route exact path="/batchImport" component={BatchImport} />
+              <Route exact path="/receiptManagement/cbsTurnoverWholenessConfirm" component={CBSTurnoverWholenessConfirm} />
+              <Route exact path="/receiptManagement/manualEntryBankTurnover" component={ManualEntryBankTurnover} />
+              <Route exact path="/receiptManagement/manualEntryBankTurnover/batchImport" component={BatchImport} />
               <Route exact path="/billedAR/approve" component={BilledARApprove} />
               <Route exact path="/billedAR/confirm" component={BilledARConfirm} />
               <Route component={NoMatch} />

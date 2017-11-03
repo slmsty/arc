@@ -116,7 +116,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     receiptDateEnd: '',
     custId: '',
     receiptMethodId: '10',
-    sourceType: 'CBS',
+    sourceType: 'cbs',
     status: '',
   }
   handleSelectChange = (selectedRowKeys) => {
