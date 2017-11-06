@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, Modal, Form, Row, Col, Input, notification, message } from 'antd'
+import { Table, Button, Modal, Form, Row, Col, Input, notification, message, Spin } from 'antd'
 import CustomerBankLinkWithForm from './customerBankLinkSearch'
 import EditBankLinkData from './editBankLinkData'
 import SelectCustomerWithForm from '../common/selectCustomer'
@@ -39,7 +39,7 @@ class CustomerBankLink extends React.Component {
   }
 
   componentDidMount() {
-    this.testDatas()
+    // this.testDatas()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -55,8 +55,22 @@ class CustomerBankLink extends React.Component {
     status: '',
   }
   handleQuery = () => {
+    this.setState({
+      loading: true,
+    })
     this.setState({ selectedRowKeys: [], selectedRows: [] })
-    this.props.getArcCustBankList(this.queryParam)
+    this.props.getArcCustBankList(this.queryParam).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          loading: false,
+        })
+      } else {
+        message.error('加载数据失败')
+        this.setState({
+          loading: false,
+        })
+      }
+    })
   }
   // 查询接口
   handleChangeParam = (param) => {
@@ -87,14 +101,15 @@ class CustomerBankLink extends React.Component {
       editVisible: false,
     })
     const addData = this.props.form.getFieldsValue() // 获取modal数据
+    const custId = this.props.form.getFieldValue('erpCustId')
     // 处理数据
-    const customerId = addData.erpCustId.customerId
-    const customerName = addData.erpCustId.customerName
-    delete addData.erpCustId
-    addData.erpCustId = customerId
-    addData.erpCustName = customerName
-    const postData = {}
-    postData.arcBankCust = addData
+    if (custId) {
+      addData.erpCustId = custId[0]
+      addData.erpCustName = custId[1]
+    }
+    const postAddData = {}
+    postAddData.arcBankCust = addData
+    console.log(postAddData)
     // 提交数据
     const testData = {
       arcBankCust: {
@@ -106,16 +121,17 @@ class CustomerBankLink extends React.Component {
         receiptClaimId: '7641',
       },
     }
-    this.props.addArcCustBankData(postData).then((res) => {
+    this.props.addArcCustBankData(postAddData).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('添加数据成功')
       } else {
         message.error('添加数据失败')
       }
     })
+    this.handleQuery()
   }
   // 显示编辑客户银行关系modal
-  showEditModal = (record, e) => {
+  showEditModal = (record) => {
     this.setState({
       editVisible: true,
       edittitle: '编辑客户银行关系数据',
@@ -129,8 +145,15 @@ class CustomerBankLink extends React.Component {
       editVisible: false,
     })
     const newEditData = this.props.form.getFieldsValue()
+    const custId = this.props.form.getFieldValue('erpCustId')
+    // 处理数据
+    if (custId) {
+      newEditData.erpCustId = custId[0]
+      newEditData.erpCustName = custId[1]
+    }
     const postEditData = {}
     postEditData.arcBankCust = newEditData
+    console.log('post', postEditData)
     // 提交给后台接口
     this.props.addArcCustBankData(postEditData).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
@@ -139,6 +162,7 @@ class CustomerBankLink extends React.Component {
         message.error('添加数据失败')
       }
     })
+    this.handleQuery()
   }
   handleEditCancel = (e) => {
     this.setState({
@@ -168,43 +192,44 @@ class CustomerBankLink extends React.Component {
   // 删除单条
   delOneData = () => {
     const delDatas = this.state.selectedRows
-    // const bankCustId = delDatas.bankCustId
-    const bankCustId = {
-      bankCustId: '1234',
-    }
-    console.log(this.props.deleteArcCustBankData)
-    this.props.deleteArcCustBankData(bankCustId).then((res) => {
-      console.log(res)
+    // console.log(delDatas)
+    this.props.deleteArcCustBankData(delDatas.bankCustId).then((res) => {
+      // console.log(res)
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('删除数据成功')
       } else {
         message.error('删除数据失败')
       }
     })
+    this.handleQuery()
   }
   delOk = () => {
     this.setState({
       delVisible: false,
     })
-    if (this.state.selectedRows.length > 1) {
+    const delLength = this.state.selectedRows.length
+    if (delLength >= 1) {
+      // console.log(delLength)
       const delSelectData = {}
       const bankCustIds = []
-      for (let i = 0; i < this.state.selectedRows.length; i++) {
-        bankCustIds[i] = this.state.selectedRows.key
-      }
+      this.state.selectedRows.forEach((item, index) => {
+        bankCustIds[index] = item.bankCustId
+      })
       delSelectData.bankCustIds = bankCustIds
+      // console.log('deletes', delSelectData)
       this.props.deleteArcCustBankDatas(delSelectData).then((res) => {
         console.log(res)
         if (res && res.response && res.response.resultCode === '000000') {
-          const delLength = this.state.selectedRows.length
           message.success('成功失效' + delLength + '条数据')
         } else {
           message.error('删除数据失败')
         }
       })
+      this.handleQuery()
     } else {
       this.delOneData()
     }
+
     // 刷新数据
   }
   delCancel = () => {
@@ -263,14 +288,13 @@ class CustomerBankLink extends React.Component {
       key: '4',
       width: 100,
     }, {
-      title: '收款方法',
-      dataIndex: 'receiptClaimId',
-      key: '5',
-      width: 100,
-    }, {
       title: '关系来源',
       dataIndex: 'sourceType',
       key: '6',
+      width: 100,
+    }, {
+      title: '数据状态',
+      dataIndex: 'status',
       width: 100,
     },
     ]
@@ -281,10 +305,23 @@ class CustomerBankLink extends React.Component {
       onChange: this.onSelectChange,
     }
     const pagination = {
+      current: this.props.arcCustBankLink.getBankLinkList.pageNo,
+      total: this.props.arcCustBankLink.getBankLinkList.count,
+      pageSize: this.props.arcCustBankLink.getBankLinkList.pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
     }
+    // 转换数据
+    const tableData = this.props.arcCustBankLink.getBankLinkList.result
+    tableData.forEach((item, index) => {
+      if (item.status === '1') {
+        item.status = '有效'
+      }
+      if (item.status === '0') {
+        item.status = '无效'
+      }
+    })
     return (<div>
       <CustomerBankLinkWithForm
         onQuery={this.handleChangeParam}
@@ -294,12 +331,13 @@ class CustomerBankLink extends React.Component {
       <Button onClick={this.delSelectData}>删除</Button>
       <br /><br />
       <Table
+        rowKey="bankCustId"
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={data}
+        dataSource={tableData}
         size="middle"
+        loading={this.state.loading}
         bordered
-        className="mytable"
         pagination={pagination}
         scroll={{ y: true }}
       />
@@ -317,11 +355,11 @@ class CustomerBankLink extends React.Component {
           <Row gutter={40}>
             <Col span={12} key={1}>
               <FormItem {...formItemLayout} label="客户名称">
-                {getFieldDecorator('erpCustId')(<SelectCustomerWithFormForBankLink />)}
+                {getFieldDecorator('erpCustId', {
+                  value: ['111', 'adsfd'],
+                })(<SelectCustomerWithForm />)}
               </FormItem>
             </Col>
-          </Row>
-          <Row gutter={40}>
             <Col span={12} key={2}>
               <FormItem {...formItemLayout} label="银行名称">
                 {getFieldDecorator('custBankName')(
@@ -331,22 +369,15 @@ class CustomerBankLink extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={12} key={3}>
-              <FormItem {...formItemLayout} label="银行帐号">
-                {getFieldDecorator('custBankAccount')(
-                  <Input
-                    placeholder="请输入银行帐号"
-                  />,
-                )}
-              </FormItem>
-            </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={12} key={4}>
-              <FormItem {...formItemLayout} label="收款方法">
-                {getFieldDecorator('receiptClaimId')(
+            <Col span={12} key={3}>
+              <FormItem {...formItemLayout} label="银行帐号">
+                {getFieldDecorator('custBankAccount', {
+                  rules: [{ pattern: /^[+]{0,1}(\d+)$/, message: '请输入正确银行帐号' }],
+                })(
                   <Input
-                    placeholder="请输入收款方法"
+                    placeholder="请输入银行帐号"
                   />,
                 )}
               </FormItem>
@@ -361,6 +392,11 @@ class CustomerBankLink extends React.Component {
               </FormItem>
             </Col>
           </Row>
+          {getFieldDecorator('bankCustId')(
+            <Input
+              type="hidden"
+            />,
+          )}
         </Form>
       </Modal>
       { /* 删除数据modal */ }
@@ -383,8 +419,13 @@ CustomerBankLink.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    getFieldValue: PropTypes.func.isRequired,
     setFieldsValue: PropTypes.func.isRequired,
     resetFields: PropTypes.func.isRequired,
+  }).isRequired,
+  arcCustBankLink: PropTypes.shape({
+    getBankLinkList: PropTypes.arrayOf.isRequired,
+    result: PropTypes.arrayOf.isRequired,
   }).isRequired,
 }
 const CustomerBankLinks = Form.create()(CustomerBankLink)
