@@ -22,7 +22,7 @@ class ManualEntryBankTurnoverSearch extends React.Component {
     param.receiptDateStart = param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
     param.receiptDateEnd = param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
     delete param.receiptDate
-    param.custId = param.customer.length ? param.customer[0] : null
+    param.custId = param.customer && param.customer.length ? param.customer[0] : null
     delete param.customer
     this.props.query(param)
   }

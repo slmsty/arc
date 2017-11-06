@@ -79,7 +79,6 @@ export default class BatchImport extends React.Component {
     fileList: [],
     batchNo: '',
   }
-
   handleDataChanged = (batchNo) => {
     this.setState({ batchNo })
     this.props.getImportResultData({
@@ -136,6 +135,8 @@ export default class BatchImport extends React.Component {
   }
 
   render() {
+    this.props.failureResult.result = []
+    this.props.successResult.result = []
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/manual/import`,
       onChange: this.handleChange,
