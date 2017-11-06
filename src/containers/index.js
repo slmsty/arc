@@ -18,6 +18,8 @@ import BatchImport from '../containers/manualEntryBankTurnover/batchImport'
 import ContractChangeContainer from '../containers/contractChange/contractChange'
 import BilledARApprove from './billedAR/Approve'
 import BilledARConfirm from './billedAR/Confirm'
+import BadDebtsApply from './badDebts/Apply'
+import BadDebtsStatus from './badDebts/Status'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -64,6 +66,8 @@ class IndexContainer extends React.Component {
               <Route exact path="/receiptManagement/manualEntryBankTurnover/batchImport" component={BatchImport} />
               <Route exact path="/billedAR/approve" component={BilledARApprove} />
               <Route exact path="/billedAR/confirm" component={BilledARConfirm} />
+              <Route exact path="/badDebts/apply" component={BadDebtsApply} />
+              <Route exact path="/badDebts/status" component={BadDebtsStatus} />
               <Route component={NoMatch} />
             </Switch>
           </Index>
