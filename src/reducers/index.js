@@ -11,6 +11,8 @@ import manualEntryBankTurnover from './manualEntryBankTurnover'
 import contractChange from './contractChange'
 import billedARApprove from './billedAR/approve'
 import billedARComfirm from './billedAR/confirm'
+import badDebtsApply from './badDebts/apply'
+import badDebtsStatus from './badDebts/status'
 
 export default combineReducers({
   common,
@@ -24,5 +26,7 @@ export default combineReducers({
   contractChange,
   billedARApprove,
   billedARComfirm,
+  badDebtsApply,
+  badDebtsStatus,
   routing: routerReducer, // 整合路由
 })
