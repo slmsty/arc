@@ -22,6 +22,7 @@ class ReviewReceiptClaimSearch extends React.Component {
     console.log(customer)
   }
   handleQuery = () => {
+    // 验证通过后查询
     const param = this.props.form.getFieldsValue()
     const custArray = this.props.form.getFieldValue('custId')
     if (custArray) {

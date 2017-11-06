@@ -159,9 +159,23 @@ export default class ReviewReceiptClaim extends React.Component {
     status: '',
   }
   handleQuery = () => {
+    this.setState({
+      loading: true,
+    })
     this.setState({ selectedRowKeys: [], selectedRows: [] })
     // console.log('query', this.queryParam)
-    this.props.getReviewReceiptList(this.queryParam)
+    this.props.getReviewReceiptList(this.queryParam).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          loading: false,
+        })
+      } else {
+        message.error('加载数据失败')
+        this.setState({
+          loading: false,
+        })
+      }
+    })
   }
   handleChangeSize = (current, size) => {
     this.queryParam.pageInfo.pageNo = current

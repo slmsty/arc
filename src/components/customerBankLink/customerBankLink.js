@@ -55,8 +55,22 @@ class CustomerBankLink extends React.Component {
     status: '',
   }
   handleQuery = () => {
+    this.setState({
+      loading: true,
+    })
     this.setState({ selectedRowKeys: [], selectedRows: [] })
-    this.props.getArcCustBankList(this.queryParam)
+    this.props.getArcCustBankList(this.queryParam).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          loading: false,
+        })
+      } else {
+        message.error('加载数据失败')
+        this.setState({
+          loading: false,
+        })
+      }
+    })
   }
   // 查询接口
   handleChangeParam = (param) => {
@@ -89,12 +103,13 @@ class CustomerBankLink extends React.Component {
     const addData = this.props.form.getFieldsValue() // 获取modal数据
     const custId = this.props.form.getFieldValue('erpCustId')
     // 处理数据
-    delete addData.erpCustId
-    addData.erpCustId = custId[0]
-    addData.erpCustName = custId[1]
+    if (custId) {
+      addData.erpCustId = custId[0]
+      addData.erpCustName = custId[1]
+    }
     const postAddData = {}
     postAddData.arcBankCust = addData
-    // console.log(postAddData)
+    console.log(postAddData)
     // 提交数据
     const testData = {
       arcBankCust: {
@@ -122,7 +137,6 @@ class CustomerBankLink extends React.Component {
       edittitle: '编辑客户银行关系数据',
     })
     // 赋值给modal
-    console.log(record)
     this.props.form.setFieldsValue(record)
   }
   // 提交编辑客户银行关系数据 关闭modal
@@ -131,10 +145,15 @@ class CustomerBankLink extends React.Component {
       editVisible: false,
     })
     const newEditData = this.props.form.getFieldsValue()
-    // console.log('get', newEditData)
+    const custId = this.props.form.getFieldValue('erpCustId')
+    // 处理数据
+    if (custId) {
+      newEditData.erpCustId = custId[0]
+      newEditData.erpCustName = custId[1]
+    }
     const postEditData = {}
     postEditData.arcBankCust = newEditData
-    // console.log('post', postEditData)
+    console.log('post', postEditData)
     // 提交给后台接口
     this.props.addArcCustBankData(postEditData).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
@@ -182,6 +201,7 @@ class CustomerBankLink extends React.Component {
         message.error('删除数据失败')
       }
     })
+    this.handleQuery()
   }
   delOk = () => {
     this.setState({
@@ -192,7 +212,7 @@ class CustomerBankLink extends React.Component {
       // console.log(delLength)
       const delSelectData = {}
       const bankCustIds = []
-      this.state.selectedRows.map((item, index) => {
+      this.state.selectedRows.forEach((item, index) => {
         bankCustIds[index] = item.bankCustId
       })
       delSelectData.bankCustIds = bankCustIds
@@ -205,10 +225,11 @@ class CustomerBankLink extends React.Component {
           message.error('删除数据失败')
         }
       })
+      this.handleQuery()
     } else {
       this.delOneData()
     }
-    this.handleQuery()
+
     // 刷新数据
   }
   delCancel = () => {
@@ -293,7 +314,7 @@ class CustomerBankLink extends React.Component {
     }
     // 转换数据
     const tableData = this.props.arcCustBankLink.getBankLinkList.result
-    tableData.map((item, index) => {
+    tableData.forEach((item, index) => {
       if (item.status === '1') {
         item.status = '有效'
       }
@@ -313,10 +334,10 @@ class CustomerBankLink extends React.Component {
         rowKey="bankCustId"
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={this.props.arcCustBankLink.getBankLinkList.result}
+        dataSource={tableData}
         size="middle"
+        loading={this.state.loading}
         bordered
-        className="mytable"
         pagination={pagination}
         scroll={{ y: true }}
       />
@@ -335,7 +356,7 @@ class CustomerBankLink extends React.Component {
             <Col span={12} key={1}>
               <FormItem {...formItemLayout} label="客户名称">
                 {getFieldDecorator('erpCustId', {
-                  initialValue: ['111', 'adsfd'],
+                  value: ['111', 'adsfd'],
                 })(<SelectCustomerWithForm />)}
               </FormItem>
             </Col>
