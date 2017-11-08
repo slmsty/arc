@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
-import { Input, Table, Button, notification, Row, Col, Upload, message } from 'antd'
+import { Input, Table, Button, Row, Col, Upload, message } from 'antd'
 import PropTypes from 'prop-types'
 
 const successColumns = [{
@@ -79,6 +78,9 @@ export default class BatchImport extends React.Component {
     fileList: [],
     batchNo: '',
   }
+  componentWillMount() {
+    this.props.initData()
+  }
   handleDataChanged = (batchNo) => {
     this.setState({ batchNo })
     this.props.getImportResultData({
@@ -135,8 +137,6 @@ export default class BatchImport extends React.Component {
   }
 
   render() {
-    this.props.failureResult.result = []
-    this.props.successResult.result = []
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/manual/import`,
       onChange: this.handleChange,
@@ -232,4 +232,5 @@ BatchImport.propTypes = {
     result: PropTypes.array.isRequired,
   }).isRequired,
   getImportResultData: PropTypes.func.isRequired,
+  initData: PropTypes.func.isRequired,
 }
