@@ -16,6 +16,8 @@ class EditCBSTurnoverData extends React.Component {
   handleConfirm = () => {
     const param = this.props.form.getFieldsValue()
     param.receiptClaimId = this.props.receiptClaimId
+    param.custId = param.customer.length ? param.customer[0] : null
+    delete param.customer
     this.props.form.resetFields()
     this.props.onConfirm(param)
   }
@@ -45,7 +47,7 @@ class EditCBSTurnoverData extends React.Component {
             <Row>
               <Col span={24} key={1}>
                 <FormItem {...formItemLayout} label="客户名称">
-                  {getFieldDecorator('custId')(<SelectCustomerWithForm />)}
+                  {getFieldDecorator('customer')(<SelectCustomerWithForm />)}
                 </FormItem>
               </Col>
             </Row>

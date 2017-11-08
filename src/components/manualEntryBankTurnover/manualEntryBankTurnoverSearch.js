@@ -22,6 +22,8 @@ class ManualEntryBankTurnoverSearch extends React.Component {
     param.receiptDateStart = param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
     param.receiptDateEnd = param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
     delete param.receiptDate
+    param.custId = param.customer && param.customer.length ? param.customer[0] : null
+    delete param.customer
     this.props.query(param)
   }
   render() {
@@ -50,7 +52,7 @@ class ManualEntryBankTurnoverSearch extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户名称">
-                {getFieldDecorator('custId')(<SelectCustomerWithForm />)}
+                {getFieldDecorator('customer')(<SelectCustomerWithForm />)}
               </FormItem>
             </Col>
             <Col span={8} key={3}>

@@ -25,9 +25,7 @@ class ARModal extends Component{
 
   render(){
     const {getFieldDecorator} = this.props.form;
-    const {visible, onCancel, key6, key7, key8} = this.props;
-
-    console.log(key6, key7, key8)
+    const {visible, key6, key7, key8} = this.props;
 
     return (
       <Modal

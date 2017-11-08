@@ -28,10 +28,9 @@ export function addArcCustBankData(queryParam) {
 export function deleteArcCustBankData(queryParam) {
   return {
     [httpApi]: {
-      url: '/arc/receiptclaim/arcCustBank/singleDelete',
+      url: `/arc/receiptclaim/arcCustBank/singleDelete/${queryParam}`,
       options: {
-        method: 'get',
-        body: queryParam,
+        method: 'GET',
       },
       types: ['DELETE_ARC_CUSTBANK_DATA_SUCCESS'],
     },

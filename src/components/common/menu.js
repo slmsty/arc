@@ -26,16 +26,14 @@ export default class MenuComponent extends React.Component {
           <Menu.Item key="21"><Link to="/billedAR/approve"><i className="iconfont icon-BilledAR" />&nbsp;Billed AR审定</Link></Menu.Item>
           <Menu.Item key="22"><Link to="/billedAR/confirm"><i className="iconfont icon-BilledAR" />&nbsp;Billed AR确认</Link></Menu.Item>
         </SubMenu>
-        <SubMenu key="3" title={<span><i className="iconfont icon-shijikaipiaoguanli" />{this.props.collapsed ? '' : ' 实际开票管理'}</span>}>
-          <Menu.Item key="31">
+        <SubMenu key="3" title={<span><i className="iconfont icon-huaizhangguanli" />{this.props.collapsed ? '' : ' 坏账管理'}</span>}>
+          <Menu.Item key="31"><Link to="/badDebts/apply"><i className="iconfont icon-BilledAR" />&nbsp;坏账划销申请</Link></Menu.Item>
+          <Menu.Item key="32"><Link to="/badDebts/status"><i className="iconfont icon-BilledAR" />&nbsp;坏账管理状态</Link></Menu.Item>
+        </SubMenu>
+        <SubMenu key="4" title={<span><i className="iconfont icon-shijikaipiaoguanli" />{this.props.collapsed ? '' : ' 实际开票管理'}</span>}>
+          <Menu.Item key="41">
             <i className="iconfont icon-shijikaipiaoguanli" />&nbsp;
             <span>实际开票管理</span>
-          </Menu.Item>
-        </SubMenu>
-        <SubMenu key="4" title={<span><i className="iconfont icon-huaizhangguanli" />{this.props.collapsed ? '' : ' 坏账管理'}</span>}>
-          <Menu.Item key="41">
-            <i className="iconfont icon-huaizhangguanli" />&nbsp;
-            <span>坏账管理</span>
           </Menu.Item>
         </SubMenu>
       </Menu>

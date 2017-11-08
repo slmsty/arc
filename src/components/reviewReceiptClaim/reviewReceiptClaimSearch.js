@@ -22,7 +22,12 @@ class ReviewReceiptClaimSearch extends React.Component {
     console.log(customer)
   }
   handleQuery = () => {
+    // 验证通过后查询
     const param = this.props.form.getFieldsValue()
+    const custArray = this.props.form.getFieldValue('custId')
+    if (custArray) {
+      param.custId = custArray[0]
+    }
     param.startDate = param.startDate.format(dateFormat)
     param.endDate = param.endDate.format(dateFormat)
     // console.log(param)
@@ -64,7 +69,7 @@ class ReviewReceiptClaimSearch extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="数据状态">
                 {getFieldDecorator('status', {
-                  initialValue: '10',
+                  initialValue: '31',
                 })(
                   <Select
                     placeholder="请选择数据状态"
@@ -73,7 +78,7 @@ class ReviewReceiptClaimSearch extends React.Component {
                     filterOption={false}
                     onChange={this.handleChange}
                   >
-                    <Option value="10">新建</Option>
+                    {/* <Option value="10">新建</Option> */}
                     <Option value="31">会计已认款</Option>
                     <Option value="50">等待传送AR</Option>
                     <Option value="51">已传送AR</Option>
@@ -103,7 +108,7 @@ class ReviewReceiptClaimSearch extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="订单号(多)">
                 {getFieldDecorator('custOrderIds')(
-                  <Input
+                  <MultipleInput
                     placeholder="多订单号使用英文逗号间隔"
                   />,
                 )}
@@ -161,6 +166,7 @@ ReviewReceiptClaimSearch.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    getFieldValue: PropTypes.func.isRequired,
     setFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
   onQuery: PropTypes.func.isRequired,

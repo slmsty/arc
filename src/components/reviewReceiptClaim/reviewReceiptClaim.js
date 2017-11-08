@@ -34,7 +34,7 @@ const columns = [{
   width: 100,
 }, {
   title: '收款用途',
-  dataIndex: 'bankTransactionPurpose',
+  dataIndex: 'receiptUse',
   width: 100,
 }, {
   title: '备注',
@@ -50,7 +50,7 @@ const columns = [{
   width: 100,
 }, {
   title: '订单号',
-  dataIndex: '11',
+  dataIndex: 'custOrderId',
   key: '11',
   width: 100,
 }, {
@@ -87,7 +87,7 @@ const columns = [{
   width: 100,
 }, {
   title: '注销收款标识',
-  dataIndex: '19',
+  dataIndex: 'receiptWriteOffSign',
   key: '19',
   width: 100,
 }, {
@@ -112,7 +112,7 @@ const columns = [{
   width: 100,
 }, {
   title: '认款人',
-  dataIndex: 'accountantName',
+  dataIndex: 'accountantId',
   width: 100,
 }, {
   title: '复核人',
@@ -121,7 +121,7 @@ const columns = [{
   width: 100,
 }, {
   title: '创建提示',
-  dataIndex: '27',
+  dataIndex: 'accountantApproveMessage',
   key: '27',
   width: 100,
 },
@@ -159,7 +159,23 @@ export default class ReviewReceiptClaim extends React.Component {
     status: '',
   }
   handleQuery = () => {
-    this.props.getReviewReceiptList(this.queryParam)
+    this.setState({
+      loading: true,
+    })
+    this.setState({ selectedRowKeys: [], selectedRows: [] })
+    // console.log('query', this.queryParam)
+    this.props.getReviewReceiptList(this.queryParam).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          loading: false,
+        })
+      } else {
+        message.error('加载数据失败')
+        this.setState({
+          loading: false,
+        })
+      }
+    })
   }
   handleChangeSize = (current, size) => {
     this.queryParam.pageInfo.pageNo = current
@@ -180,13 +196,14 @@ export default class ReviewReceiptClaim extends React.Component {
     const receiptClaimIds = {
       action: [],
     }
+    const submitDatasLength = submitDatas.length
     submitDatas.map((item, index) => {
       receiptClaimIds.action[index] = { receiptClaimId: item.receiptClaimId }
     })
     this.props.approveSubmit(receiptClaimIds).then((res) => {
       // console.log(res)
       if (res && res.response && res.response.resultCode === '000000') {
-        message.success("审批成功" + this.state.selectedRows.length + '条数据')
+        message.success("审批成功" + submitDatasLength + '条数据')
       } else {
         message.error('审批失败')
       }
@@ -196,6 +213,7 @@ export default class ReviewReceiptClaim extends React.Component {
   // 认款退回
   returnClick = () => {
     const submitDatas = this.state.selectedRows
+    const submitDatasLength = submitDatas.length
     // console.log(submitDatas)
     const postData = {
       action: [],
@@ -206,7 +224,7 @@ export default class ReviewReceiptClaim extends React.Component {
     this.props.returnReceiptClaim(postData).then((res) => {
       // console.log(res)
       if (res && res.response && res.response.resultCode === '000000') {
-        message.success('认款退回成功' + this.state.selectedRows.length + '条数据')
+        message.success('认款退回成功' + submitDatasLength + '条数据')
       } else {
         message.error('认款退回失败')
       }
@@ -215,7 +233,6 @@ export default class ReviewReceiptClaim extends React.Component {
   }
   // 传送AR
   transferClick = () => {
-    const transferDatas = this.state.transferData
     const submitDatas = this.state.selectedRows
     // console.log(submitDatas)
     const postData = {
@@ -260,6 +277,7 @@ export default class ReviewReceiptClaim extends React.Component {
       if (item.status === '31' || item.status === '50' || item.status === '52') {
         returnDis = true
       }
+      // item.status === '50'
       if (item.status === '10' || item.status === '52') {
         transferDis = true
       }

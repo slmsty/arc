@@ -22,7 +22,11 @@ class ReviewReceiptClaimSearch extends React.Component {
   handleQuery = () => {
     // 验证是否通过
     const param = this.props.form.getFieldsValue()
-    console.log(param)
+    const custArrayData = this.props.form.getFieldValue('erpCustId')
+    if (custArrayData) {
+      param.erpCustId = custArrayData[0]
+    }
+    // console.log(param)
     // console.log(this.props.onQuery())
     this.props.onQuery(param)
   }
@@ -52,7 +56,9 @@ class ReviewReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={12} key={2}>
               <FormItem {...formItemLayout} label="银行帐号">
-                {getFieldDecorator('payBankAccount')(
+                {getFieldDecorator('payBankAccount', {
+                  rules: [{ pattern: /^[+]{0,1}(\d+)$/, message: '请输入正确银行帐号' }],
+                })(
                   <Input
                     placeholder="请输入银行帐号"
                   />,
@@ -95,6 +101,7 @@ ReviewReceiptClaimSearch.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
   onQuery: PropTypes.func.isRequired,
 }
