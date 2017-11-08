@@ -8,6 +8,7 @@
     "eslint": "^4.3.0",
     "history": "^4.7.2",
     "lodash": "^4.17.4",
+    "jquery": "^1.8.0",
     "moment": "2.18.1",
     "normalize.css": "^7.0.0",
     "prop-types": "^15.5.10",
