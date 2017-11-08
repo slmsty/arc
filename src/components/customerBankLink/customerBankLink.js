@@ -37,9 +37,7 @@ class CustomerBankLink extends React.Component {
       selectedRowKeys: [],
     }
   }
-
   componentDidMount() {
-    // this.testDatas()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -218,7 +216,7 @@ class CustomerBankLink extends React.Component {
       delSelectData.bankCustIds = bankCustIds
       // console.log('deletes', delSelectData)
       this.props.deleteArcCustBankDatas(delSelectData).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res && res.response && res.response.resultCode === '000000') {
           message.success('成功失效' + delLength + '条数据')
         } else {
@@ -264,8 +262,7 @@ class CustomerBankLink extends React.Component {
     const columns = [{
       title: '操作按钮',
       dataIndex: 'operateBtn',
-      key: '1',
-      width: 100,
+      className: 'mycolumn',
       render: (text, record, index) => (
         <div>
           <Button onClick={this.showEditModal.bind(this, record)}>编辑</Button>&nbsp;
@@ -275,27 +272,23 @@ class CustomerBankLink extends React.Component {
     }, {
       title: '客户名称',
       dataIndex: 'erpCustName',
-      key: '2',
-      width: 100,
+      className: 'mycolumn',
     }, {
       title: '银行名称',
       dataIndex: 'custBankName',
-      key: '3',
-      width: 100,
+      className: 'mycolumn',
     }, {
       title: '银行帐号',
       dataIndex: 'custBankAccount',
-      key: '4',
-      width: 100,
+      className: 'mycolumn',
     }, {
       title: '关系来源',
       dataIndex: 'sourceType',
-      key: '6',
-      width: 100,
+      className: 'mycolumn',
     }, {
       title: '数据状态',
       dataIndex: 'status',
-      width: 100,
+      className: 'mycolumn',
     },
     ]
     const { selectedRowKeys } = this.state
