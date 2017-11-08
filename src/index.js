@@ -48,11 +48,15 @@ function bootstrap() {
     loader()
   } else {
     window.localStorage.setItem('oldUrl', window.location.href)
+    if (process.env.REDIRECT_URI) {
+      window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${process.env.REDIRECT_URI}`
+      return
+    }
     if (!window.location.origin) {
       window.location.origin = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`
     }
+    window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${window.location.origin}/`
     // token不存在 去访问第三方授权网站 （注意：redirect_uri 需要和 后端设置的完全一样）
-    window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${process.env.REDIRECT_URL ? process.env.REDIRECT_URL : window.location.origin}/`
   }
 }
 
