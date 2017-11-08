@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import BatchImport from '../../components/manualEntryBankTurnover/batchImport'
-import { getImportResultData } from '../../actions/batchImport'
+import { getImportResultData, initData } from '../../actions/batchImport'
 
 
 const mapStateToProps = state => ({
@@ -13,6 +13,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     getImportResultData,
+    initData,
   }, dispatch)
 )
 

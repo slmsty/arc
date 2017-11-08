@@ -13,3 +13,19 @@ export function getImportResultData(params) {
     },
   }
 }
+
+export function initData() {
+  return {
+    successResult: {
+      pageNo: 1,
+      count: 0,
+      result: [],
+    },
+    failureResult: {
+      pageNo: 1,
+      count: 0,
+      result: [],
+    },
+    type: 'INIT_IMPORT_DATA_SUCCESS',
+  }
+}
