@@ -24,12 +24,10 @@ class ReviewReceiptClaimSearch extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
-    const custArray = this.props.form.getFieldValue('custId')
-    if (custArray) {
-      param.custId = custArray[0]
-    }
-    param.startDate = param.startDate.format(dateFormat)
-    param.endDate = param.endDate.format(dateFormat)
+    param.custId = param.custId && param.custId.length ? param.custId[0] : null
+    param.startDate = param.receiptDate && param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
+    param.endDate = param.receiptDate && param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
+    delete param.receiptDate
     // console.log(param)
     this.props.onQuery(param)
   }
@@ -51,12 +49,14 @@ class ReviewReceiptClaimSearch extends React.Component {
         >
           <Row gutter={40}>
             <Col span={8} key={1}>
-              <FormItem {...formItemLayout} label="收款日期从：">
-                {getFieldDecorator('startDate', {
-                  initialValue: moment().subtract(1, 'days'),
-                })(
-                  <DatePicker format={dateFormat} />,
-                )}
+              <FormItem {...formItemLayout} label="收款日期">
+                {getFieldDecorator('receiptDate', {
+                  initialValue: [moment().subtract(1, 'month'), moment()],
+                })(<RangePicker
+                  allowClear
+                  format={dateFormat}
+                  ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                />)}
               </FormItem>
             </Col>
             <Col span={8} key={2}>
@@ -89,15 +89,6 @@ class ReviewReceiptClaimSearch extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={4}>
-              <FormItem {...formItemLayout} label="收款日期至：">
-                {getFieldDecorator('endDate', {
-                  initialValue: moment(),
-                })(
-                  <DatePicker format={dateFormat} />,
-                )}
-              </FormItem>
-            </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="收款方法">
                 {getFieldDecorator('receiptMethodId')(
@@ -114,8 +105,6 @@ class ReviewReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-          </Row>
-          <Row gutter={40}>
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="项目编码(多)">
                 {
@@ -127,6 +116,8 @@ class ReviewReceiptClaimSearch extends React.Component {
                 }
               </FormItem>
             </Col>
+          </Row>
+          <Row gutter={40}>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="合同编码(多)">
                 {

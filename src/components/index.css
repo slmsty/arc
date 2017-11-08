@@ -70,4 +70,11 @@
 .user span {
   margin: 0 4px;
 }
-
+.mycolumn{
+  text-align: center !important;
+  width: 100px !important;
+}
+.my-review-column{
+  text-align: center !important;
+  width: 100px;
+}

@@ -10,7 +10,7 @@ import ReviewReceiptClaimSearchWithForm from './reviewReceiptClaimSearch'
 const columns = [{
   title: '数据状态',
   dataIndex: 'statusDesc',
-  width: 100,
+  width: 80,
   fixed: 'left',
 }, {
   title: '收款日期',
@@ -278,7 +278,7 @@ export default class ReviewReceiptClaim extends React.Component {
         returnDis = true
       }
       // item.status === '50'
-      if (item.status === '10' || item.status === '52') {
+      if (item.status === '50' || item.status === '52') {
         transferDis = true
       }
     })
