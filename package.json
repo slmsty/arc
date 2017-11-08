@@ -1,5 +1,5 @@
 {
-  "name": "rc-web",
+  "name": "ai-rc-web",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
@@ -8,12 +8,14 @@
     "eslint": "^4.3.0",
     "history": "^4.7.2",
     "lodash": "^4.17.4",
+    "jquery": "^1.8.0",
     "moment": "2.18.1",
     "normalize.css": "^7.0.0",
     "prop-types": "^15.5.10",
     "rc-notification": "^2.0.6",
     "react": "^15.6.1",
     "react-addons-shallow-compare": "^15.6.0",
+    "react-app-rewire-less": "^2.0.7",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
@@ -30,10 +32,10 @@
     "react-scripts": "^1.0.11"
   },
   "scripts": {
-    "start": "cross-env PORT=8080 REACT_APP_DEV=1 REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xdev.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xdev.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=arc-web react-app-rewired start",
-    "build-dev": "cross-env REACT_APP_DEV=1 REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xdev.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xdev.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=arc-web react-app-rewired build",
-    "build-test": "cross-env REACT_APP_DEV=1 REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xtest.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xdev.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=arc-web react-app-rewired build",
-    "build-production": "cross-env REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://karagw.asiainfo.com/api/ REACT_APP_OAUTH2_SERVER=https://xdev.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=arc-web react-app-rewired build",
+    "start": "cross-env PORT=8080 NODE_ENV=develop_local REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xdev.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xdev.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=ai-arc-web react-app-rewired start",
+    "build-dev": "cross-env NODE_ENV=develop_server REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xdev.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xdev.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=ai-arc-web react-app-rewired build",
+    "build-test": "cross-env NODE_ENV=production REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xtest.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xdev.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=ai-arc-web react-app-rewired build",
+    "build": "cross-env NODE_ENV=production REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://karagw.asiainfo.com/api/ REACT_APP_OAUTH2_SERVER=https://xdev.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=ai-arc-web react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject"
   }

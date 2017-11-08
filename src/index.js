@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react'
 import { render } from 'react-dom'
 import { createStore, applyMiddleware, compose } from 'redux'
