@@ -29,13 +29,17 @@ export default class ManualEntryBankTurnover extends React.Component {
       this.handleQuery(true)
     }
 
-    if (this.props.manualEntryBankTurnoverBatchConfirmResult !== nextProps.manualEntryBankTurnoverBatchConfirmResult) {
-      message.info('确认成功XX条数据。')
+    if (this.props.manualEntryBankTurnoverBatchConfirmResult.time !== nextProps.manualEntryBankTurnoverBatchConfirmResult.time) {
+      const result = nextProps.manualEntryBankTurnoverBatchConfirmResult
+      let msg = result.data.successNum ? `确认成功${result.data.successNum}条数据` : ''
+      msg = msg.length ? `${msg}，` : ''
+      msg = result.data.failureNum ? `${msg}确认失败${result.data.failureNum}条数据` : msg
+      message.info(msg)
       this.handleQuery(true)
     }
 
     if (this.props.manualEntryBankTurnoverBatchDeleteResult !== nextProps.manualEntryBankTurnoverBatchDeleteResult) {
-      message.info('成功删除XX数据。')
+      message.info(`成功删除${this.state.selectedRowKeys.length}条数据。`)
       this.handleQuery(true)
     }
   }
@@ -242,6 +246,12 @@ ManualEntryBankTurnover.propTypes = {
   }).isRequired,
   manualEntryBankTurnoverConfirmResult: PropTypes.number.isRequired,
   manualEntryBankTurnoverDeleteResult: PropTypes.number.isRequired,
-  manualEntryBankTurnoverBatchConfirmResult: PropTypes.number.isRequired,
+  manualEntryBankTurnoverBatchConfirmResult: PropTypes.shape({
+    data: PropTypes.shape({
+      successNum: PropTypes.number.isRequired,
+      failureNum: PropTypes.number.isRequired,
+    }).isRequired,
+    time: PropTypes.number.isRequired,
+  }).isRequired,
   manualEntryBankTurnoverBatchDeleteResult: PropTypes.number.isRequired,
 }

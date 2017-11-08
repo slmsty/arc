@@ -10,7 +10,13 @@ const manualEntryBankTurnoverData = {
   },
   manualEntryBankTurnoverConfirmResult: new Date().getTime(),
   manualEntryBankTurnoverDeleteResult: new Date().getTime(),
-  manualEntryBankTurnoverBatchConfirmResult: new Date().getTime(),
+  manualEntryBankTurnoverBatchConfirmResult: {
+    data: {
+      failureNum: 0,
+      successNum: 0,
+    },
+    time: new Date().getTime(),
+  },
   manualEntryBankTurnoverBatchDeleteResult: new Date().getTime(),
 }
 
@@ -26,8 +32,14 @@ function editDelete(state) {
   return { ...state, manualEntryBankTurnoverDeleteResult: new Date().getTime() }
 }
 
-function editBatchConfirm(state) {
-  return { ...state, manualEntryBankTurnoverBatchConfirmResult: new Date().getTime() }
+function editBatchConfirm(state, action) {
+  return {
+    ...state,
+    manualEntryBankTurnoverBatchConfirmResult: {
+      data: action.response.data,
+      time: new Date().getTime(),
+    },
+  }
 }
 
 function editBatchDelete(state) {

@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
   manualEntryBankTurnoverConfirmResult: state.manualEntryBankTurnover.manualEntryBankTurnoverConfirmResult,
   manualEntryBankTurnoverDeleteResult: state.manualEntryBankTurnover.manualEntryBankTurnoverDeleteResult,
   manualEntryBankTurnoverBatchConfirmResult: state.manualEntryBankTurnover.manualEntryBankTurnoverBatchConfirmResult,
-  manualEntryBankTurnoverBatchDeleteResult: state.manualEntryBankTurnover.manualEntryBankTurnoverBatchConfirmResult,
+  manualEntryBankTurnoverBatchDeleteResult: state.manualEntryBankTurnover.manualEntryBankTurnoverBatchDeleteResult,
 })
 
 const mapDispatchToProps = dispatch => (
