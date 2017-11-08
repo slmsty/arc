@@ -14,11 +14,11 @@ const resultData = {
 }
 
 const getImportSuccessResultData = (state, action) => ({
-  ...state, ...{ successResult: action.response.data },
+  ...state, successResult: action.response.data,
 })
 
 const getImportFailureResultData = (state, action) => ({
-  ...state, ...{ failureResult: action.response.data },
+  ...state, failureResult: action.response.data,
 })
 
 export default caseReducer(resultData, {

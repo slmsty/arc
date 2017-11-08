@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Row, Col, Input } from 'antd'
+import { Modal, Form, Row, Col, Input, message } from 'antd'
 
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectCustomerWithForm from '../common/selectCustomer'
@@ -15,6 +15,17 @@ class EditCBSTurnoverData extends React.Component {
   }
   handleConfirm = () => {
     const param = this.props.form.getFieldsValue()
+
+    if (!param.claimType) {
+      message.error('请选择流水分类。')
+      return
+    }
+
+    if (!param.custPayMethod) {
+      message.error('请选择客户付款方式。')
+      return
+    }
+
     param.receiptClaimId = this.props.receiptClaimId
     param.custId = param.customer.length ? param.customer[0] : null
     delete param.customer

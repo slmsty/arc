@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Row, Col, DatePicker, Input } from 'antd'
+import { Modal, Form, Row, Col, DatePicker, Input, message } from 'antd'
 
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
@@ -16,6 +16,42 @@ class EditManualEntryBankTurnoverData extends React.Component {
   }
   handleConfirm = () => {
     const param = this.props.form.getFieldsValue()
+
+    if (!param.receiptDate) {
+      message.error('请选择收款日期。')
+      return
+    }
+
+    if (!param.receiptMethodId) {
+      message.error('请选择收款方法。')
+      return
+    }
+
+    if (!param.bankTransactionNo) {
+      message.error('请输入银行流水号。')
+      return
+    }
+
+    if (!param.custPayMethod) {
+      message.error('请选择客户付款方式。')
+      return
+    }
+
+    if (!param.currency) {
+      message.error('请选择币种。')
+      return
+    }
+
+    if (!param.amount) {
+      message.error('请输入金额。')
+      return
+    }
+
+    if (!param.claimType) {
+      message.error('请选择流水分类。')
+      return
+    }
+
     param.receiptClaimId = this.props.editKey
     param.erpCustId = param.customer.length ? param.customer[0] : null
     param.erpCustName = param.customer.length ? param.customer[1] : ''
