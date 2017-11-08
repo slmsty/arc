@@ -8,26 +8,23 @@ import './index.css'
 
 const { Header, Sider, Content } = Layout
 
-const breadcrumbNameMap = {
-  '/receiptManagement': '回款管理',
-  '/receiptManagement/projectReceiptClaim': '项目收款认领',
-  '/receiptManagement/noProjectReceiptClaim': '非项目收款认领',
-  '/receiptManagement/reviewReceiptClaim': '收款认领复核',
-  '/receiptManagement/customerBankLink': '客户银行帐号关系',
-  '/receiptManagement/contractChange': '合同变更明细',
-  '/receiptManagement/cbsTurnoverWholenessConfirm': 'CBS流水完整性确认',
-  '/receiptManagement/manualEntryBankTurnover': '人工录入银行流水',
-  '/receiptManagement/manualEntryBankTurnover/batchImport': '批量导入',
-  '/billedAR': 'Billed AR管理',
-  '/billedAR/approve': 'Billed AR审定',
-  '/billedAR/confirm': 'Billed AR确认',
-  '/badDebts': '坏账管理',
-  '/badDebts/apply': '坏账划销申请',
-  '/badDebts/status': '坏账管理状态',
-  '/apps/2': 'Application2',
-  '/apps/1/detail': 'Detail',
-  '/apps/2/detail': 'Detail',
-}
+const breadcrumbNameMap = {}
+
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/receiptManagement`] = '回款管理'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/receiptManagement/projectReceiptClaim`] = '项目收款认领'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/receiptManagement/noProjectReceiptClaim`] = '非项目收款认领'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/receiptManagement/reviewReceiptClaim`] = '收款认领复核'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/receiptManagement/customerBankLink`] = '客户银行帐号关系'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/receiptManagement/contractChange`] = '合同变更明细'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/receiptManagement/cbsTurnoverWholenessConfirm`] = 'CBS流水完整性确认'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/receiptManagement/manualEntryBankTurnover`] = '人工录入银行流水'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/receiptManagement/manualEntryBankTurnover/batchImport`] = '批量导入'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/billedAR`] = 'Billed AR管理'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/billedAR/approve`] = 'Billed AR审定'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/billedAR/confirm`] = 'Billed AR确认'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/badDebts`] = '坏账管理'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/badDebts/apply`] = '坏账划销申请'
+breadcrumbNameMap[`${process.env.REACT_APP_ROOT_PATH}/badDebts/status`] = '坏账管理状态'
 
 const BreadcrumbContainer = withRouter((props) => {
   const { location } = props
