@@ -52,7 +52,7 @@ function bootstrap() {
       window.location.origin = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`
     }
     // token不存在 去访问第三方授权网站 （注意：redirect_uri 需要和 后端设置的完全一样）
-    window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${window.location.origin}/${process.env.REACT_APP_ROOT_PATH}`
+    window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${window.location.origin}/${process.env.PUBLIC_URL}`
   }
 }
 
