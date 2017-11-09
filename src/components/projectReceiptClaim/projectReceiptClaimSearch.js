@@ -25,8 +25,9 @@ class ProjectReceiptClaimSearch extends React.Component {
     param.receiptDateStart = param.receiptDate[0].format(dateFormat)
     param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
     delete param.receiptDate
-    console.log(param)
-    param.custId = param.custId[0]
+    if (param.custId) {
+      param.custId = param.custId[0]
+    }
     this.props.onQuery(param)
   }
   render() {
