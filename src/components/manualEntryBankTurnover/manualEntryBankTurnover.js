@@ -74,6 +74,7 @@ export default class ManualEntryBankTurnover extends React.Component {
     this.props.getManualEntryBankTurnoverList(this.queryParam)
   }
   handleEdit = (key) => {
+    this.props.initEditData(key)
     this.setState({ editKey: key, editVisible: true })
   }
   handleDelete = (key) => {
@@ -237,6 +238,7 @@ export default class ManualEntryBankTurnover extends React.Component {
           onCancel={this.handleEditCancel}
           visible={this.state.editVisible}
           editKey={this.state.editKey}
+          initData={this.props.initSingleReceiptResult}
         />
       </div>
     )
@@ -266,4 +268,6 @@ ManualEntryBankTurnover.propTypes = {
     time: PropTypes.number.isRequired,
   }).isRequired,
   manualEntryBankTurnoverBatchDeleteResult: PropTypes.number.isRequired,
+  initEditData: PropTypes.func.isRequired,
+  initSingleReceiptResult: PropTypes.shape().isRequired,
 }

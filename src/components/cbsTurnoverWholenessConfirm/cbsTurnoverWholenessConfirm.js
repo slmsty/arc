@@ -142,6 +142,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     } else if (this.state.selectedRowKeys.length > 1) {
       message.error('只可对一条数据进行编辑。')
     } else {
+      this.props.initEditData(this.state.selectedRowKeys[0])
       this.setState({ editReceiptClaimId: this.state.selectedRowKeys[0], editVisible: true })
     }
   }
@@ -212,6 +213,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           onCancel={this.handleEditCancel}
           visible={this.state.editVisible}
           receiptClaimId={this.state.editReceiptClaimId}
+          initData={this.props.initSingleReceiptResult}
         />
       </div>
     )
@@ -232,5 +234,7 @@ CBSTurnoverWholenessConfirm.propTypes = {
     }).isRequired,
     amountTotals: PropTypes.array.isRequired,
   }).isRequired,
+  initEditData: PropTypes.func.isRequired,
+  initSingleReceiptResult: PropTypes.shape().isRequired,
 }
 

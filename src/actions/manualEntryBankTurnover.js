@@ -69,3 +69,16 @@ export function deleteBatchManualEntryBankTurnover(deleteList) {
     },
   }
 }
+
+export function initEditData(receiptClaimId) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/item/info',
+      options: {
+        method: 'POST',
+        body: { ids: [receiptClaimId] },
+      },
+      types: ['GET_SINGLE_MANUAL_RECEIPT_CLAIM_INFO_SUCCESS'],
+    },
+  }
+}

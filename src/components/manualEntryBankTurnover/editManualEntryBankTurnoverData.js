@@ -2,6 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Row, Col, DatePicker, Input, message } from 'antd'
+import moment from 'moment'
 
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
@@ -75,6 +76,7 @@ class EditManualEntryBankTurnoverData extends React.Component {
       <div>
         <Modal
           title="人工录入收款编辑"
+          width={600}
           visible={this.props.visible}
           onCancel={this.handleCancel}
           onOk={this.handleConfirm}
@@ -85,14 +87,18 @@ class EditManualEntryBankTurnoverData extends React.Component {
             <Row gutter={10}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="客户名称">
-                  {getFieldDecorator('customer')(<SelectCustomerWithForm />)}
+                  {getFieldDecorator('customer', {
+                    initialValue: [this.props.initData.custId || '', this.props.initData.custName],
+                  })(<SelectCustomerWithForm />)}
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={10}>
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="收款日期">
-                  {getFieldDecorator('receiptDate')(<DatePicker />)}
+                  {getFieldDecorator('receiptDate', {
+                    initialValue: moment(this.props.initData.receiptDate),
+                  })(<DatePicker />)}
                 </FormItem>
               </Col>
               <Col span={12} key={3}>
@@ -104,13 +110,16 @@ class EditManualEntryBankTurnoverData extends React.Component {
             <Row gutter={10}>
               <Col span={12} key={4}>
                 <FormItem {...formItemLayout} label="银行流水号">
-                  {getFieldDecorator('bankTransactionNo')(<Input placeholder="请输入银行流水号" />)}
+                  {getFieldDecorator('bankTransactionNo', {
+                    initialValue: this.props.initData.bankTransactionNo,
+                  })(<Input placeholder="请输入银行流水号" />)}
                 </FormItem>
               </Col>
               <Col span={12} key={5}>
                 <FormItem {...formItemLayout} label="客户付款方式">
-                  {getFieldDecorator('custPayMethod')(<SelectInvokeApi
-                    id="sourceType"
+                  {getFieldDecorator('custPayMethod', {
+                    initialValue: this.props.initData.custPayMethod,
+                  })(<SelectInvokeApi
                     typeCode="ARC_RECEIPT_CLAIM"
                     paramCode="CUST_PAY_METHOD"
                     placeholder="请选择客户付款方式"
@@ -121,8 +130,9 @@ class EditManualEntryBankTurnoverData extends React.Component {
             <Row gutter={10}>
               <Col span={12} key={6}>
                 <FormItem {...formItemLayout} label="币种">
-                  {getFieldDecorator('currency')(<SelectInvokeApi
-                    id="sourceType"
+                  {getFieldDecorator('currency', {
+                    initialValue: this.props.initData.receiptCurrency,
+                  })(<SelectInvokeApi
                     typeCode="COMMON"
                     paramCode="CURRENCY"
                     placeholder="请选择币种"
@@ -131,15 +141,18 @@ class EditManualEntryBankTurnoverData extends React.Component {
               </Col>
               <Col span={12} key={7}>
                 <FormItem {...formItemLayout} label="金额">
-                  {getFieldDecorator('amount')(<Input placeholder="请输入金额" />)}
+                  {getFieldDecorator('amount', {
+                    initialValue: this.props.initData.receiptAmount,
+                  })(<Input placeholder="请输入金额" />)}
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={10}>
               <Col span={12} key={8}>
                 <FormItem {...formItemLayout} label="流水分类">
-                  {getFieldDecorator('claimType')(<SelectInvokeApi
-                    id="sourceType"
+                  {getFieldDecorator('claimType', {
+                    initialValue: this.props.initData.claimType,
+                  })(<SelectInvokeApi
                     typeCode="ARC_RECEIPT_CLAIM"
                     paramCode="CLAIM_TYPE"
                     placeholder="请选择流水分类"
@@ -148,19 +161,25 @@ class EditManualEntryBankTurnoverData extends React.Component {
               </Col>
               <Col span={12} key={9}>
                 <FormItem {...formItemLayout} label="付款客户名称">
-                  {getFieldDecorator('payCustName')(<Input placeholder="请输入付款客户名称" />)}
+                  {getFieldDecorator('payCustName', {
+                    initialValue: this.props.initData.payCustName,
+                  })(<Input placeholder="请输入付款客户名称" />)}
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={10}>
               <Col span={12} key={10}>
                 <FormItem {...formItemLayout} label="客户付款银行">
-                  {getFieldDecorator('payBankName')(<Input placeholder="请输入客户付款银行" />)}
+                  {getFieldDecorator('payBankName', {
+                    initialValue: this.props.initData.payBankName,
+                  })(<Input placeholder="请输入客户付款银行" />)}
                 </FormItem>
               </Col>
               <Col span={12} key={11}>
                 <FormItem {...formItemLayout} label="客户付款银行账号">
-                  {getFieldDecorator('payBankAccount')(<Input placeholder="请输入客户付款银行账号" />)}
+                  {getFieldDecorator('payBankAccount', {
+                    initialValue: this.props.initData.payBankAccount,
+                  })(<Input placeholder="请输入客户付款银行账号" />)}
                 </FormItem>
               </Col>
             </Row>
@@ -191,6 +210,7 @@ EditManualEntryBankTurnoverData.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
+  initData: PropTypes.shape().isRequired,
 }
 
 const EditManualEntryBankTurnoverDataWithForm = Form.create()(EditManualEntryBankTurnoverData)

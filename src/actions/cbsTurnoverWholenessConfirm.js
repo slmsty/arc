@@ -41,3 +41,16 @@ export function editExcept(exceptList) {
     },
   }
 }
+
+export function initEditData(receiptClaimId) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/item/info',
+      options: {
+        method: 'POST',
+        body: {ids: [receiptClaimId]},
+      },
+      types: ['GET_SINGLE_CBS_RECEIPT_CLAIM_INFO_SUCCESS'],
+    },
+  }
+}
