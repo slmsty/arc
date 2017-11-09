@@ -49,7 +49,7 @@ class IndexContainer extends React.Component {
       return null
     }
     return (
-      <Router basename="/">
+      <Router basename={process.env.PUBLIC_URL}>
         <div style={{ height: '100%' }}>
           <Index {...this.props}>
             <Switch>

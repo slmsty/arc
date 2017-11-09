@@ -7,122 +7,89 @@ const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 
 class Approve extends Component{
-  state = {
-    pageInfo: {
-      pageNo: 1,
-      pageSize: 10,
-      count: 1300,
-      result: [
-        {
-          key: 1,
-          key1: 'test',
-          key2: 'test',
-          key3: 'test',
-          key4: 'test',
-          key5: 'test',
-          key6: 'test',
-          key7: 'test',
-          key8: 'test',
-          key9: 'test',
-          key10: 'test',
-          key11: 'test',
-          key12: 'test',
-          key13: 'test',
-          key14: 'test',
-          key15: 'test',
-          key16: 'test',
-          key17: 'test',
-          key18: 'test',
-          key19: 'test',
-          key20: 'test',
-        }
-      ]
-    }
-  }
-
   constructor(props){
     super(props);
     const columns = [
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'key1'
+        key: 'statusShow'
       },
       {
         title: '付款条件',
-        key: 'key2'
+        key: 'paymentTerm'
       },
       {
         title: '付款金额',
-        key: 'key3'
+        key: 'paymentAmount'
       },
       {
         title: '考核含税金额',
-        key: 'key4'
+        key: 'assessTaxIncludedAmount'
       },
       {
         title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'key5'
+        key: 'billedArAmount'
       },
       {
         title: '款项ID',
-        key: 'key6'
+        key: 'fundId'
       },
       {
         title: '合同币种',
-        key: 'key7'
+        key: 'contractCurrency'
       },
       {
         title: '合同金额',
-        key: 'key8'
+        key: 'contractAmount'
       },
       {
         title: '项目编码',
-        key: 'key9'
+        key: 'projectNo'
       },
       {
         title: '项目名称',
-        key: 'key10'
+        key: 'projectName'
       },
       {
         title: '签约公司',
-        key: 'key11'
+        key: 'companyName'
       },
       {
         title: '合同编码',
-        key: 'key12'
+        key: 'contractNo'
       },
       {
         title: '合同名称',
-        key: 'key13'
+        key: 'contractName'
       },
       {
         title: '客户名称',
-        key: 'key14'
+        key: 'custName'
       },
       {
         title: '付款阶段(里程碑)',
-        key: 'key15'
+        key: 'paymentPhrases'
       },
       {
         title: '付款条款',
-        key: 'key16'
+        key: 'paymentName'
       },
       {
         title: '应收日期',
-        key: 'key17'
+        key: 'arDate'
       },
       {
         title: '报告日期',
-        key: 'key18'
+        key: 'reportDate'
       },
       {
         title: '付款百分比',
-        key: 'key19'
+        key: 'paymentPercent'
       },
       {
         title: '提示',
-        key: 'key20'
+        key: 'reminder'
       },
     ];
     this.columns = columns.map(o=>({
@@ -136,14 +103,14 @@ class Approve extends Component{
   doSearch = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log(values);
+      this.props.Search(values)
     });
   }
 
   render(){
     const { getFieldDecorator } = this.props.form;
     const columns = this.columns;
-    const pageInfo = this.state.pageInfo;
+    const {pageNo, pageSize, count, result} = this.props;
 
     return (
       <div className="billedARApprove">
@@ -152,21 +119,21 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="GL日期" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('GLStartEnd')(<RangePicker/>)
+                  getFieldDecorator('glDate')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="客户名称" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('customerId')(<SelectCustomer/>)
+                  getFieldDecorator('custId')(<SelectCustomer/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="项目编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('projectCode')(<Input placeholder="多项目编码使用英文逗号分隔"/>)
+                  getFieldDecorator('projectNos')(<Input placeholder="多项目编码使用英文逗号分隔"/>)
                 }
               </FormItem>
             </Col>
@@ -175,7 +142,7 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="GL日期(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('GLDate')(<DatePicker />)
+                  getFieldDecorator('glDates')(<DatePicker />)
                 }
               </FormItem>
             </Col>
@@ -189,7 +156,7 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="合同编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
                 {
-                  getFieldDecorator('contactCode')(<Input placeholder="多合同编码使用英文逗号分隔"/>)
+                  getFieldDecorator('contractNos')(<Input placeholder="多合同编码使用英文逗号分隔"/>)
                 }
               </FormItem>
             </Col>
@@ -211,13 +178,13 @@ class Approve extends Component{
         <Table 
           rowSelection={{onChange: ()=>{}}}
           columns={columns} 
-          dataSource={pageInfo.result}
+          dataSource={result}
           pagination={{
             showSizeChanger: true,
             onShowSizeChange: ()=>{},
             showTotal: t=>`共${t}条`,
             onChange: ()=>{},
-            total: pageInfo.count
+            total: count
           }}
           scroll={{ x: 2462}}></Table>
       </div>

@@ -56,7 +56,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     width: 100,
   }, {
     title: '应收余额',
-    dataIndex: 'arAmount1',
+    dataIndex: 'receivableBalance',
     width: 100,
   },
   ]
