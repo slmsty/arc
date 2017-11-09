@@ -1,7 +1,8 @@
-const Init = ()=>({
-  type: 'BILLEDARAPPROVE_INIT'
+const Search = (formData)=>({
+  type: 'BILLEDARAPPROVE_SEARCH',
+  payload: {formData}
 })
 
 export {
-  Init
+  Search
 }
