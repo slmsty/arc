@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
-import { Table, Button, message, Icon } from 'antd'
+import { Table, Button, message, Icon, Popconfirm, Modal } from 'antd'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import ManualEntryBankTurnoverSearchWithForm from './manualEntryBankTurnoverSearch'
 import EditManualEntryBankTurnoverDataWithForm from './editManualEntryBankTurnoverData'
 
 const dateFormat = 'YYYY-MM-DD'
+const confirm = Modal.confirm
 
 export default class ManualEntryBankTurnover extends React.Component {
   state = {
@@ -88,7 +89,16 @@ export default class ManualEntryBankTurnover extends React.Component {
     if (!this.state.selectedRowKeys.length) {
       message.error('请选择想要批量删除的数据。')
     } else {
-      this.props.deleteBatchManualEntryBankTurnover({ receiptActions: this.state.selectedRowKeys.map(item => ({ receiptClaimId: item, remark: '' })) })
+      confirm({
+        title: '您确定要删除选中的记录吗？',
+        content: '',
+        okText: '是',
+        okType: 'danger',
+        cancelText: '否',
+        onOk: () => {
+          this.props.deleteBatchManualEntryBankTurnover({ receiptActions: this.state.selectedRowKeys.map(item => ({ receiptClaimId: item, remark: '' })) })
+        },
+      })
     }
   }
   handleBatchConfirm = () => {
@@ -209,7 +219,9 @@ export default class ManualEntryBankTurnover extends React.Component {
             render: (text, record) => (
               <div style={{ fontWeight: 'bold' }}>
                 <Icon type="edit" onClick={() => this.handleEdit(record.receiptClaimId)} />&nbsp;&nbsp;&nbsp;&nbsp;
-                <Icon type="delete" onClick={() => this.handleDelete(record.receiptClaimId)} />
+                <Popconfirm title="您确定要删除这条记录吗？" onConfirm={() => this.handleDelete(record.receiptClaimId)} okText="是" cancelText="否">
+                  <Icon type="delete" />
+                </Popconfirm>
               </div>
               ),
           }]}
