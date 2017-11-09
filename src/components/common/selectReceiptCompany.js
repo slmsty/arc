@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function,react/prop-types,react/require-default-props */
+/* eslint-disable react/prefer-stateless-function,react/prop-types,react/require-default-props,max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd'
@@ -10,13 +10,17 @@ const FormItem = Form.Item
 class SelectReceiptCompany extends React.Component {
   state = {
     visible: false,
-    companyName: '',
     pageNo: 1,
     pageSize: 10,
     total: 1,
     companyList: [],
     selectedRowKeys: [],
     selectedRows: [],
+  }
+  componentWillMount() {
+    if (this.props.initialValue) {
+      this.props.onChange(this.props.initialValue)
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -43,10 +47,7 @@ class SelectReceiptCompany extends React.Component {
       message.error('请选择认款公司')
       return
     }
-    this.setState({
-      methodName: this.state.selectedRows[0].receiptMethodName,
-    })
-    this.props.onChange(this.state.selectedRows[0].receiptMethodId)
+    this.props.onChange([this.state.selectedRows[0].receiptCompanyId, this.state.selectedRows[0].customerName])
     this.handleCancel()
   }
   handleCancel = () => {
@@ -103,13 +104,14 @@ class SelectReceiptCompany extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const value = (this.props.value && this.props.value[0] !== undefined) ? this.props.value : this.props.initialValue
+    const suffix = value && value[0] !== undefined ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
           style={{ height: 30 }}
           placeholder="认款公司"
-          value={this.props.value ? this.state.companyName : ''}
+          value={value && value[0] !== undefined ? value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
@@ -145,7 +147,7 @@ class SelectReceiptCompany extends React.Component {
           </Form>
 
           <Table
-            rowKey="receiptMethodId"
+            rowKey="receiptCompanyId"
             columns={this.columns}
             rowSelection={rowSelection}
             bordered
@@ -169,7 +171,8 @@ SelectReceiptCompany.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
-  value: PropTypes.string,
+  value: PropTypes.arrayOf(PropTypes.string),
+  initialValue: PropTypes.arrayOf(PropTypes.string),
 }
 
 const SelectReceiptCompanyWithForm = Form.create()(SelectReceiptCompany)

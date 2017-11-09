@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Select } from 'antd'
@@ -14,7 +15,7 @@ export default class EditableSelectCell extends React.Component {
   }
   renderOptions = () => {
     const optionDoms = this.props.options.map((option) => {
-      const optionDom = (<Select.Option value={option.id}>{option.name}</Select.Option>)
+      const optionDom = (<Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>)
       return optionDom
     })
     return optionDoms

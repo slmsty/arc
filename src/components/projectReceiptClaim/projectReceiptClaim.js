@@ -11,7 +11,6 @@ const dateFormat = 'YYYY-MM-DD'
 export default class ProjectReceiptClaim extends React.Component {
   state = {
     selectedRowKeys: [],
-    selectedRows: [],
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -24,8 +23,8 @@ export default class ProjectReceiptClaim extends React.Component {
       this.handleQuery()
     }
   }
-  onSelectChange = (selectedRowKeys, selectedRows) => {
-    this.setState({ selectedRowKeys, selectedRows })
+  onSelectChange = (selectedRowKeys) => {
+    this.setState({ selectedRowKeys })
   }
   columns = [{
     title: '数据状态',
@@ -162,20 +161,20 @@ export default class ProjectReceiptClaim extends React.Component {
   handleQuery = () => {
     // this.props.history.push('112')
     // console.log(this.queryParam)
-    this.setState({ selectedRowKeys: [], selectedRows: [] })
+    this.setState({ selectedRowKeys: [] })
     this.props.getReceiptList(this.queryParam)
   }
 
   handleOpenClaim = () => {
-    if (this.state.selectedRows.length === 0) {
+    if (this.state.selectedRowKeys.length === 0) {
       message.error('请选择要认款的收款流水')
       return
     }
-    if (this.state.selectedRows.length > 1) {
+    if (this.state.selectedRowKeys.length > 1) {
       message.error('一次只能对一条收款流水进行认款')
       return
     }
-    this.props.openClaim(this.state.selectedRows[0])
+    this.props.getReceiptInfo(this.state.selectedRowKeys[0])
   }
   handleReject = () => {
     if (this.state.selectedRowKeys.length === 0) {
@@ -237,7 +236,7 @@ ProjectReceiptClaim.propTypes = {
   // }).isRequired,
   getReceiptList: PropTypes.func.isRequired,
   reject: PropTypes.func.isRequired,
-  openClaim: PropTypes.func.isRequired,
+  getReceiptInfo: PropTypes.func.isRequired,
   receiptClaimList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,

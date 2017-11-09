@@ -3,6 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { message } from 'antd'
 import Index from '../components/index'
 import NoMatch from '../components/noMatch/noMatch'
 import { getUserInfo } from '../actions/common'
@@ -23,7 +24,7 @@ import BadDebtsStatus from './badDebts/Status'
 
 const mapStateToProps = state => ({
   user: state.common.user,
-  notification: state.common.notification,
+  error: state.common.error,
 })
 
 const mapDispatchToProps = dispatch => (
@@ -38,8 +39,8 @@ class IndexContainer extends React.Component {
     this.props.getUserInfo()
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.notification !== nextProps.notification) {
-      console.log(nextProps.notification)
+    if (this.props.error !== nextProps.error) {
+      message.error(nextProps.error.message)
     }
   }
   render() {

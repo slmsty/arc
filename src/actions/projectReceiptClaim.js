@@ -14,6 +14,21 @@ export function getReceiptList(queryParam) {
   }
 }
 
+export function getReceiptInfo(receiptClaimId) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/item/info',
+      options: {
+        method: 'POST',
+        body: {
+          ids: [receiptClaimId],
+        },
+      },
+      types: ['GET_PROJECT_RECEIPT_INFO_SUCCESS'],
+    },
+  }
+}
+
 export function reject(receiptClaimIds) {
   return {
     [httpApi]: {
@@ -52,13 +67,6 @@ export function getPhase(queryParam) {
       },
       types: ['GET_PROJECT_RECEIPT_FUND_LIST_SUCCESS'],
     },
-  }
-}
-
-export function openClaim(receiptInfo) {
-  return {
-    type: 'OPEN_PROJECT_CLAIM',
-    receiptInfo,
   }
 }
 

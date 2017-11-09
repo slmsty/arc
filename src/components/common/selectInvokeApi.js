@@ -28,13 +28,13 @@ export default class SelectInvokeApi extends React.Component {
     }
   }
   render() {
-    const optionDom = this.state.options ? this.state.options.map(option => <Option value={option.paramValue}>{option.paramValueDesc}</Option>) : null
+    const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
     return (
       <Select
         id={this.props.id}
         placeholder={this.props.placeholder}
         onChange={value => this.props.onChange(value)}
-        value={this.props.value}
+        value={this.props.value !== undefined ? this.props.value : this.props.initialValue}
       >
         {optionDom}
       </Select>
@@ -47,5 +47,6 @@ SelectInvokeApi.propTypes = {
   typeCode: PropTypes.string.isRequired,
   paramCode: PropTypes.string.isRequired,
   value: PropTypes.string,
+  initialValue: PropTypes.string,
   hasEmpty: PropTypes.bool,
 }

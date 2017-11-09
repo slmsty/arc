@@ -14,11 +14,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     funds: [],
   }
   componentWillMount() {
-    if (this.props.receiptInfo.paymentNameId) {
-      const funds = []
-      funds.push(this.props.receiptInfo)
-      this.setState({ funds })
-    }
+    this.setState({ funds: [] })
   }
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys })
@@ -38,7 +34,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         editable={editable}
         value={text}
         min={0}
-        max={record.receivableBalance < this.props.receiptInfo.receiptAmount ? record.receivableBalance : this.props.receiptInfo.receiptAmount}
+        max={this.props.receiptInfo.receiptAmount}
         onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
       />)
     },
@@ -56,6 +52,20 @@ export default class ProjectReceiptClaimModal extends React.Component {
       />)
     },
   }, {
+    title: '认款合同币种金额',
+    dataIndex: 'claimContractAmount',
+    width: 100,
+    render: (text, record, index) => {
+      const editable = true
+      return (<EditableNumberCell
+        editable={editable}
+        value={text}
+        min={0}
+        max={record.receivableBalance}
+        onChange={value => this.handleClaimFundChange(index, value, 'claimContractAmount')}
+      />)
+    },
+  }, {
     title: '备注',
     dataIndex: 'accountantApproveMessage',
     width: 200,
@@ -69,7 +79,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     },
   }, {
     title: '应收余额',
-    dataIndex: 'receivableBalance',
+    dataIndex: 'fundReceivableBalance',
     width: 100,
   }, {
     title: '应收金额',
@@ -108,13 +118,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
   handleClaimFundChange = (index, value, key) => {
     if (index >= 0 && index < this.state.funds.length) {
       const funds = this.state.funds
-      if (key === 'claimAmount') {
-        funds[index].claimAmount = value
-      } else if (key === 'receiptUse') {
-        funds[index].receiptUse = value
-      } else if (key === 'accountantApproveMessage') {
-        funds[index].accountantApproveMessage = value
-      }
+      funds[index][key] = value
       this.setState({ funds })
       this.edited = true
     }
@@ -125,8 +129,13 @@ export default class ProjectReceiptClaimModal extends React.Component {
       if (this.state.funds[i].claimAmount === 0) {
         message.error(`第${i + 1}条认款金额没有填写`)
         return
-      } else if (!this.state.funds[i].receiptUse) {
+      }
+      if (!this.state.funds[i].receiptUse) {
         message.error(`第${i + 1}条收款用途没有选择`)
+        return
+      }
+      if (this.state.funds[i].claimContractAmount === 0) {
+        message.error(`第${i + 1}条认款合同币种金额没有填写`)
         return
       }
       totalClaimAmount += this.state.funds[i].claimAmount
@@ -135,7 +144,18 @@ export default class ProjectReceiptClaimModal extends React.Component {
       message.error('认款金额合计与收款金额不相等，不能进行认款')
       return
     }
-    this.props.submitClaim(this.props.receiptInfo.receiptClaimId, this.state.funds)
+    const claimItems = this.state.funds.map(fund => ({
+      fundId: fund.fundId,
+      contractItemId: fund.contractItemId,
+      claimAmount: fund.claimAmount,
+      receiptUse: fund.receiptUse,
+      claimContractAmount: fund.claimContractAmount,
+      remark: fund.accountantApproveMessage,
+    }))
+    this.props.submitClaim({
+      receiptClaimId: this.props.receiptInfo.receiptClaimId,
+      claimItems,
+    })
   }
   handleCloseSelectFunds = (addFunds) => {
     if (addFunds && addFunds.length > 0) {
@@ -151,6 +171,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         if (!isExist) {
           const fund = addFund
           fund.receiptAmount = addFund.arAmount
+          fund.fundReceivableBalance = addFund.receivableBalance
           funds.push(fund)
         }
       })
@@ -251,11 +272,11 @@ export default class ProjectReceiptClaimModal extends React.Component {
 
 ProjectReceiptClaimModal.propTypes = {
   receiptInfo: PropTypes.shape({
-    receiptClaimId: PropTypes.string.isRequired,
-    receiptAmount: PropTypes.number.isRequired,
-    bankTransactionNo: PropTypes.string.isRequired,
-    receiptNo: PropTypes.string.isRequired,
-    payCustName: PropTypes.string.isRequired,
+    receiptClaimId: PropTypes.number,
+    receiptAmount: PropTypes.number,
+    bankTransactionNo: PropTypes.string,
+    receiptNo: PropTypes.string,
+    payCustName: PropTypes.string,
     paymentNameId: PropTypes.string,
   }).isRequired,
   receiptClaimFundList: PropTypes.shape({

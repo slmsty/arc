@@ -9,11 +9,6 @@ const projectReceiptClaim = {
   },
   receiptClaimListRefresh: new Date().getTime(),
   receiptInfo: {
-    receiptClaimId: '',
-    receiptAmount: 0,
-    bankTransactionNo: '',
-    receiptNo: '',
-    payCustName: '',
   },
   receiptClaimFundList: {
     pageNo: 1,
@@ -30,8 +25,8 @@ function getPhaseList(state, action) {
   return { ...state, receiptClaimFundList: action.response.pageInfo }
 }
 
-function openClaim(state, action) {
-  return { ...state, receiptInfo: action.receiptInfo }
+function getReceiptInfo(state, action) {
+  return { ...state, receiptInfo: action.response.data[0] }
 }
 
 function rejectSuccess(state) {
@@ -49,8 +44,8 @@ function closeClaim(state) {
 export default caseReducer(projectReceiptClaim, {
   GET_PROJECT_RECEIPT_LIST_SUCCESS: getReceiptList,
   GET_PROJECT_RECEIPT_FUND_LIST_SUCCESS: getPhaseList,
+  GET_PROJECT_RECEIPT_INFO_SUCCESS: getReceiptInfo,
   PROJECT_RECEIPT_CLAIM_SUBMIT_SUCCESS: submitSuccess,
   PROJECT_RECEIPT_CLAIM_REJECT_SUCCESS: rejectSuccess,
-  OPEN_PROJECT_CLAIM: openClaim,
   CLOSE_PROJECT_CLAIM: closeClaim,
 })

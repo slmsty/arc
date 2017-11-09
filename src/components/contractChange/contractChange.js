@@ -10,8 +10,6 @@ const dateFormat = 'YYYY-MM-DD'
 export default class ContractList extends React.Component {
   state = {
     selectedRowKeys: [],
-    selectedRows: [],
-    status: '21',
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -30,62 +28,23 @@ export default class ContractList extends React.Component {
       pageSize: 10,
     },
     custId: '',
-    sourceType: '',
-    projectIds: '',
-    receiptMethodId: '',
-    receiptDates: '',
-    contractIds: '',
-    status: this.state.status,
-    receiptNo: '',
+    startDate: '',
+    endDate: '',
   }
   columns = [{
-    title: '数据状态',
-    dataIndex: 'statusDesc',
-    width: 100,
-    fixed: 'left',
-  }, {
-    title: '收款日期',
-    dataIndex: 'receiptDate',
-    width: 100,
-    render: text => moment(text).format(dateFormat),
-  }, {
-    title: '收款来源',
-    dataIndex: 'sourceType',
-    width: 100,
-  }, {
-    title: '收款分类',
-    dataIndex: 'claimType',
+    title: '收款编号',
+    dataIndex: 'receiptNoInfos.receiptNo',
     width: 100,
   }, {
     title: '客户名称',
     dataIndex: 'custName',
     width: 300,
   }, {
-    title: '认款金额',
-    dataIndex: 'claimAmount',
-    width: 100,
-  }, {
-    title: '收款用途',
-    dataIndex: 'receiptUse',
-    width: 100,
-  }, {
-    title: '备注',
-    dataIndex: 'accountantApproveMessage',
-    width: 100,
-  }, {
-    title: '币种',
-    dataIndex: 'currency',
-    width: 100,
-  }, {
-    title: '收款金额',
-    dataIndex: 'receiptAmount',
-    width: 100,
-  }, {
     title: '项目编码',
     dataIndex: 'projectNo',
     width: 100,
   }, {
-    title: '项目阶段',
+    title: '付款阶段',
     dataIndex: 'paymentPhrases',
     width: 100,
   }, {
@@ -97,10 +56,6 @@ export default class ContractList extends React.Component {
     dataIndex: 'contractNo',
     width: 100,
   }, {
-    title: '发票号',
-    dataIndex: 'invoiceNo',
-    width: 100,
-  }, {
     title: 'SBU',
     dataIndex: 'sbuId',
     width: 100,
@@ -109,37 +64,12 @@ export default class ContractList extends React.Component {
     dataIndex: 'deptId',
     width: 100,
   }, {
-    title: '公司',
-    dataIndex: 'companyName',
+    title: '应收金额',
+    dataIndex: 'arAmount',
     width: 100,
   }, {
-    title: '收款日期',
-    dataIndex: 'glDate',
-    width: 100,
-    render: text => moment(text).format(dateFormat),
-  }, {
-    title: '银行流水号',
-    dataIndex: 'bankTransactionNo',
-    width: 200,
-  }, {
-    title: '付款客户名称',
-    dataIndex: 'payCustName',
-    width: 100,
-  }, {
-    title: '客户付款银行',
-    dataIndex: 'payBankName',
-    width: 100,
-  }, {
-    title: '客户付款银行账号',
-    dataIndex: 'payBankAccount',
-    width: 150,
-  }, {
-    title: '收款编号',
-    dataIndex: 'receiptNo',
-    width: 100,
-  }, {
-    title: '认款人',
-    dataIndex: 'accountantName',
+    title: '应收余额',
+    dataIndex: 'receivableBalance',
     width: 100,
   },
   ]
@@ -157,7 +87,7 @@ export default class ContractList extends React.Component {
     this.handleQuery()
   }
   handleQuery = () => {
-    this.setState({ selectedRowKeys: [], selectedRows: [] })
+    this.setState({ selectedRowKeys: [] })
     this.props.getContractChangeList(this.queryParam)
   }
   render() {
@@ -174,7 +104,7 @@ export default class ContractList extends React.Component {
         />
         <br /><br />
         <Table
-          rowKey="receiptClaimId"
+          rowKey="contractItemId"
           rowSelection={rowSelection}
           columns={this.columns}
           bordered

@@ -16,9 +16,12 @@ class ContractChangeSerch extends React.Component {
   }
   handleQuery = () => {
     const param = this.props.form.getFieldsValue()
-    param.contractChangeDateStart = param.contractChangeDate[0].format(dateFormat)
-    param.contractChangeDateEnd = param.contractChangeDate[1].format(dateFormat)
+    param.startDate = param.contractChangeDate[0].format(dateFormat)
+    param.endData = param.contractChangeDate[1].format(dateFormat)
     delete param.contractChangeDate
+    if (param.custId) {
+      param.custId = param.custId[0]
+    }
     this.props.onQuery(param)
   }
   render() {
