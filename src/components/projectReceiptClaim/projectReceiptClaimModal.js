@@ -13,6 +13,13 @@ export default class ProjectReceiptClaimModal extends React.Component {
     selectedRowKeys: [],
     funds: [],
   }
+  componentWillMount() {
+    if (this.props.receiptInfo.paymentNameId) {
+      const funds = []
+      funds.push(this.props.receiptInfo)
+      this.setState({ funds })
+    }
+  }
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys })
   }
@@ -31,7 +38,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         editable={editable}
         value={text}
         min={0}
-        max={record.receiptAmountDD < this.props.receiptInfo.receiptAmount ? record.receiptAmountDD : this.props.receiptInfo.receiptAmount}
+        max={record.receivableBalance < this.props.receiptInfo.receiptAmount ? record.receivableBalance : this.props.receiptInfo.receiptAmount}
         onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
       />)
     },
@@ -62,7 +69,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     },
   }, {
     title: '应收余额',
-    dataIndex: 'receiptAmountDD',
+    dataIndex: 'receivableBalance',
     width: 100,
   }, {
     title: '应收金额',
@@ -142,7 +149,9 @@ export default class ProjectReceiptClaimModal extends React.Component {
           }
         }
         if (!isExist) {
-          funds.push(addFund)
+          const fund = addFund
+          fund.receiptAmount = addFund.arAmount
+          funds.push(fund)
         }
       })
       this.setState({ funds })
@@ -176,6 +185,8 @@ export default class ProjectReceiptClaimModal extends React.Component {
           that.props.closeClaim()
         },
       })
+    } else {
+      this.props.closeClaim()
     }
   }
   render() {
@@ -245,6 +256,7 @@ ProjectReceiptClaimModal.propTypes = {
     bankTransactionNo: PropTypes.string.isRequired,
     receiptNo: PropTypes.string.isRequired,
     payCustName: PropTypes.string.isRequired,
+    paymentNameId: PropTypes.string,
   }).isRequired,
   receiptClaimFundList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
