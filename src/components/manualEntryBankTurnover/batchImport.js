@@ -133,7 +133,7 @@ export default class BatchImport extends React.Component {
     }
   }
   handleDownloadErrorData = () => {
-    window.open(`${process.env.REACT_APP_GATEWAY}../s3/file/v1/bfa219086df7408ebcdb556c7fec12f1/knowledge/FFE75B01A6FC4ED6BC510B297AA99D68.xlsx`, '_blank')
+    window.open(`${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/manual/exportFailure/${this.state.batchNo}`, '_blank')
   }
 
   render() {
