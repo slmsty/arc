@@ -35,9 +35,14 @@ class CustomerBankLink extends React.Component {
       delDataLength: '',
       selectedRows: [],
       selectedRowKeys: [],
+      tableHeight: '',
     }
   }
-  componentDidMount() {
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin24-padding24-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 24 - 24 - 168 - 28 - 24 - 160
+    this.setState({ tableHeight })
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -235,24 +240,6 @@ class CustomerBankLink extends React.Component {
       delVisible: false,
     })
   }
-  testDatas = () => {
-    // ajax request after empty completing
-    setTimeout(() => {
-      for (let i = 0; i < 46; i++) {
-        data.push({
-          key: i,
-          custBankName: ['北京银行', '中国银行', '农业银行', '交通银行'][Math.ceil(Math.random() * 4) - 1],
-          erpCustName: ['北京市某某信息技术有限公司', '河北矿业', '中国电信', '中国移动北京分公司', '天津电话好多好多公司'][Math.ceil(Math.random() * 5) - 1],
-          sourceType: ['项目', '百一测评'][Math.ceil(Math.random() * 2) - 1],
-          custBankAccount: Math.random() * 1000,
-          receiptClaimId: ['test1', 'test2'][Math.ceil(Math.random() * 2) - 1],
-        })
-      }
-      this.setState({
-        loading: false,
-      })
-    }, 1000)
-  }
   render() {
     const formItemLayout = {
       labelCol: { span: 7 },
@@ -263,6 +250,7 @@ class CustomerBankLink extends React.Component {
       title: '操作按钮',
       dataIndex: 'operateBtn',
       className: 'mycolumn',
+      width: 150,
       render: (text, record, index) => (
         <div>
           <Button onClick={this.showEditModal.bind(this, record)}>编辑</Button>&nbsp;
@@ -273,14 +261,17 @@ class CustomerBankLink extends React.Component {
       title: '客户名称',
       dataIndex: 'erpCustName',
       className: 'mycolumn',
+      width: 300,
     }, {
       title: '银行名称',
       dataIndex: 'custBankName',
       className: 'mycolumn',
+      width: 300,
     }, {
       title: '银行帐号',
       dataIndex: 'custBankAccount',
       className: 'mycolumn',
+      width: 300,
     }, {
       title: '关系来源',
       dataIndex: 'sourceType',
@@ -332,7 +323,7 @@ class CustomerBankLink extends React.Component {
         loading={this.state.loading}
         bordered
         pagination={pagination}
-        scroll={{ y: true }}
+        scroll={{ y: this.state.tableHeight }}
       />
       { /* 编辑客户银行关系modal */ }
       {/*  */}
