@@ -1,16 +1,11 @@
 import caseReducer from './caseReducer'
 
 const contractChange = {
-  contractChangeList: {
-    pageNo: 1,
-    pageSize: 10,
-    count: 0,
-    result: [],
-  },
+  contractChangeList: [],
 }
 
 function getContractChange(state, action) {
-  return { ...state, contractChangeList: action.response.pageInfo }
+  return { ...state, contractChangeList: action.response.result }
 }
 
 export default caseReducer(contractChange, {
