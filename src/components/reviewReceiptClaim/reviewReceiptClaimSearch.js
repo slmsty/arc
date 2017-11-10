@@ -69,7 +69,7 @@ class ReviewReceiptClaimSearch extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="数据状态">
                 {getFieldDecorator('status', {
-                  initialValue: '31',
+                  initialValue: '10',
                 })(
                   <Select
                     placeholder="请选择数据状态"
@@ -78,7 +78,7 @@ class ReviewReceiptClaimSearch extends React.Component {
                     filterOption={false}
                     onChange={this.handleChange}
                   >
-                    {/* <Option value="10">新建</Option> */}
+                    <Option value="10">新建</Option>
                     <Option value="31">会计已认款</Option>
                     <Option value="50">等待传送AR</Option>
                     <Option value="51">已传送AR</Option>
@@ -143,7 +143,7 @@ class ReviewReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={24} style={{ textAlign: 'right' }}>
+            <Col span={8} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
