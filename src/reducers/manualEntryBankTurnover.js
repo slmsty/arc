@@ -18,6 +18,7 @@ const manualEntryBankTurnoverData = {
     time: new Date().getTime(),
   },
   manualEntryBankTurnoverBatchDeleteResult: new Date().getTime(),
+  initSingleReceiptResult: {},
 }
 
 function getManualEntryBankTurnoverData(state, action) {
@@ -30,6 +31,10 @@ function editConfirm(state) {
 
 function editDelete(state) {
   return { ...state, manualEntryBankTurnoverDeleteResult: new Date().getTime() }
+}
+
+function initEditData(state, action) {
+  return { ...state, initSingleReceiptResult: action.response.data.length ? action.response.data[0] : {} }
 }
 
 function editBatchConfirm(state, action) {
@@ -52,4 +57,5 @@ export default caseReducer(manualEntryBankTurnoverData, {
   DELETE_MANUAL_ENTRY_BANK_TURNOVER_EDIT_SUCCESS: editDelete,
   CONFIRM_BATCH_MANUAL_ENTRY_BANK_TURNOVER_EDIT_SUCCESS: editBatchConfirm,
   DELETE_BATCH_MANUAL_ENTRY_BANK_TURNOVER_EDIT_SUCCESS: editBatchDelete,
+  GET_SINGLE_MANUAL_RECEIPT_CLAIM_INFO_SUCCESS: initEditData,
 })

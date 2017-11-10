@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import { getManualEntryBankTurnoverList, confirmManualEntryBankTurnover, deleteManualEntryBankTurnover, confirmBatchManualEntryBankTurnover, deleteBatchManualEntryBankTurnover } from '../../actions/manualEntryBankTurnover'
+import { getManualEntryBankTurnoverList, confirmManualEntryBankTurnover, deleteManualEntryBankTurnover, confirmBatchManualEntryBankTurnover, deleteBatchManualEntryBankTurnover, initEditData } from '../../actions/manualEntryBankTurnover'
 import ManualEntryBankTurnover from '../../components/manualEntryBankTurnover/manualEntryBankTurnover'
 
 const mapStateToProps = state => ({
@@ -11,6 +11,7 @@ const mapStateToProps = state => ({
   manualEntryBankTurnoverDeleteResult: state.manualEntryBankTurnover.manualEntryBankTurnoverDeleteResult,
   manualEntryBankTurnoverBatchConfirmResult: state.manualEntryBankTurnover.manualEntryBankTurnoverBatchConfirmResult,
   manualEntryBankTurnoverBatchDeleteResult: state.manualEntryBankTurnover.manualEntryBankTurnoverBatchDeleteResult,
+  initSingleReceiptResult: state.manualEntryBankTurnover.initSingleReceiptResult,
 })
 
 const mapDispatchToProps = dispatch => (
@@ -20,6 +21,7 @@ const mapDispatchToProps = dispatch => (
     deleteManualEntryBankTurnover,
     confirmBatchManualEntryBankTurnover,
     deleteBatchManualEntryBankTurnover,
+    initEditData,
   }, dispatch)
 )
 

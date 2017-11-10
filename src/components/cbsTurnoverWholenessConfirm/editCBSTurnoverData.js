@@ -58,14 +58,18 @@ class EditCBSTurnoverData extends React.Component {
             <Row>
               <Col span={24} key={1}>
                 <FormItem {...formItemLayout} label="客户名称">
-                  {getFieldDecorator('customer')(<SelectCustomerWithForm />)}
+                  {getFieldDecorator('customer', {
+                    initialValue: [this.props.initData.custId || '', this.props.initData.custName],
+                  })(<SelectCustomerWithForm />)}
                 </FormItem>
               </Col>
             </Row>
             <Row>
               <Col span={24} key={2}>
                 <FormItem {...formItemLayout} label="流水分类">
-                  {getFieldDecorator('claimType')(<SelectInvokeApi
+                  {getFieldDecorator('claimType', {
+                    initialValue: this.props.initData.claimType,
+                  })(<SelectInvokeApi
                     id="sourceType"
                     typeCode="ARC_RECEIPT_CLAIM"
                     paramCode="CLAIM_TYPE"
@@ -77,7 +81,9 @@ class EditCBSTurnoverData extends React.Component {
             <Row>
               <Col span={24} key={3}>
                 <FormItem {...formItemLayout} label="客户付款方式">
-                  {getFieldDecorator('custPayMethod')(<SelectInvokeApi
+                  {getFieldDecorator('custPayMethod', {
+                    initialValue: this.props.initData.custPayMethod,
+                  })(<SelectInvokeApi
                     id="sourceType"
                     typeCode="ARC_RECEIPT_CLAIM"
                     paramCode="CUST_PAY_METHOD"
@@ -113,6 +119,7 @@ EditCBSTurnoverData.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
+  initData: PropTypes.shape().isRequired,
 }
 
 const EditCBSTurnoverDataWithForm = Form.create()(EditCBSTurnoverData)
