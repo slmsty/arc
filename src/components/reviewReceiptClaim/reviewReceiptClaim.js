@@ -4,9 +4,17 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, message } from 'antd'
+import { Table, Button, message, Modal, Form, Row, Col, DatePicker } from 'antd'
 import ReviewReceiptClaimSearchWithForm from './reviewReceiptClaimSearch'
+import GlDateModal from './glDateModal'
+import moment from 'moment'
 
+const FormItem = Form.Item
+const dateFormat = 'YYYY-MM-DD'
+const formItemLayout = {
+  labelCol: { span: 7 },
+  wrapperCol: { span: 17 },
+}
 const columns = [{
   title: '数据状态',
   dataIndex: 'statusDesc',
@@ -23,11 +31,11 @@ const columns = [{
 }, {
   title: '公司',
   dataIndex: 'companyName',
-  width: 100,
+  width: 150,
 }, {
   title: '客户名称',
   dataIndex: 'custName',
-  width: 100,
+  width: 300,
 }, {
   title: '认款金额',
   dataIndex: 'claimAmount',
@@ -93,23 +101,23 @@ const columns = [{
 }, {
   title: '银行流水号',
   dataIndex: 'bankTransactionNo',
-  width: 100,
+  width: 200,
 }, {
   title: '付款客户名称',
   dataIndex: 'payCustName',
-  width: 100,
+  width: 400,
 }, {
   title: '客户付款银行',
   dataIndex: 'payBankName',
-  width: 100,
+  width: 300,
 }, {
   title: '客户付款银行账号',
   dataIndex: 'payBankAccount',
-  width: 100,
+  width: 200,
 }, {
   title: '收款编号',
   dataIndex: 'receiptNo',
-  width: 100,
+  width: 200,
 }, {
   title: '认款人',
   dataIndex: 'accountantId',
@@ -132,16 +140,34 @@ export default class ReviewReceiptClaim extends React.Component {
     approve: false,
     return: false,
     transfer: false,
+    glDateModal: false,
     selectedRowKeys: [],
     selectedRows: [],
     submitData: [],
     returnData: [],
     transferData: [],
+    tableHeight: '',
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin24-padding24-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 24 - 24 - 168 - 28 - 24 - 160
+    this.setState({ tableHeight })
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
+  }
+  selectCancel = () => {
+    this.setState({
+      glDateModal: false,
+      glDateData: '',
+    })
+  }
+  selectOk = (value) => {
+    this.setState({
+      glDateModal: false,
+    })
+    this.transferClick(value)
   }
   queryParam = {
     pageInfo: {
@@ -231,26 +257,43 @@ export default class ReviewReceiptClaim extends React.Component {
     })
     this.handleQuery()
   }
+  // 显示gl日期
+  showGlDate = () => {
+    this.setState({
+      glDateModal: true,
+    })
+  }
   // 传送AR
-  transferClick = () => {
-    const submitDatas = this.state.selectedRows
-    // console.log(submitDatas)
-    const postData = {
-      receiptClaimIds: [],
-    }
-    submitDatas.map((item, index) => {
-      postData.receiptClaimIds[index] = item.receiptClaimId
-    })
-    console.log(postData)
-    this.props.transferReceiptClaim(postData).then((res) => {
-      // console.log(res)
-      if (res && res.response && res.response.resultCode === '000000') {
-        message.success('传送AR成功' + this.state.selectedRows.length + '条数据')
-      } else {
-        message.error('传送AR失败')
+  transferClick = (value) => {
+    const glDateData = value
+    if (glDateData === '') {
+      message.error('请选择gl日期')
+    } else {
+      const submitDatas = this.state.selectedRows
+      const transferDataLength = submitDatas.length
+      // console.log(submitDatas)
+      const postData = {
+        receiptClaimIds: [],
+        glDate: '',
       }
-    })
-    this.handleQuery()
+      postData.glDate = glDateData
+      submitDatas.map((item, index) => {
+        postData.receiptClaimIds[index] = item.receiptClaimId
+      })
+      console.log(postData)
+      this.props.transferReceiptClaim(postData).then((res) => {
+        // console.log(res)
+        if (res && res.response && res.response.resultCode === '000000') {
+          message.success('传送AR成功' + transferDataLength + '条数据')
+        } else {
+          message.error('传送AR失败')
+        }
+      })
+      this.handleQuery()
+    }
+  }
+  handleChange = (value) => {
+    console.log(value)
   }
   render() {
     const { selectedRowKeys } = this.state
@@ -286,7 +329,7 @@ export default class ReviewReceiptClaim extends React.Component {
       <ReviewReceiptClaimSearchWithForm onQuery={this.handleChangeParam} />
       <Button type="danger" disabled={!approveDis} onClick={this.approveClick}>审批</Button>&nbsp;&nbsp;
       <Button type="primary" disabled={!returnDis} onClick={this.returnClick}>认款退回</Button>&nbsp;&nbsp;
-      <Button type="dashed" disabled={!transferDis} onClick={this.transferClick}>传送AR</Button>
+      <Button type="dashed" disabled={!transferDis} onClick={this.showGlDate}>传送AR</Button>
       <br /><br />
       <Table
         rowKey="receiptClaimId"
@@ -296,7 +339,14 @@ export default class ReviewReceiptClaim extends React.Component {
         bordered
         size="middle"
         pagination={pagination}
-        scroll={{ x: '300%', y: true }}
+        scroll={{ x: '400%', y: this.state.tableHeight }}
+      />
+      {/* 弹出传送ARglDatemodal */}
+      <GlDateModal
+        glDateModal={this.state.glDateModal}
+        selectOk={this.selectOk}
+        selectCancel={this.selectCancel}
+        onChange={this.handleChange}
       />
     </div>)
   }

@@ -143,7 +143,7 @@ class ReviewReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={24} style={{ textAlign: 'right' }}>
+            <Col span={8} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
