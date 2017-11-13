@@ -37,7 +37,7 @@ class ContractChangeSerch extends React.Component {
           onSubmit={this.handleSearch}
         >
           <Row gutter={40}>
-            <Col span={8} key={1}>
+            <Col span={9} key={1}>
               <FormItem {...formItemLayout} label="合同变更日期">
                 {getFieldDecorator('contractChangeDate', {
                   initialValue: [moment('2017-08-01'), moment()],
@@ -57,7 +57,7 @@ class ContractChangeSerch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} style={{ textAlign: 'right' }}>
+            <Col span={7} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
