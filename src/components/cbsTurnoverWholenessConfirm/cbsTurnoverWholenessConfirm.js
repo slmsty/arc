@@ -23,8 +23,8 @@ const columns = [{
   render: (text, row, index) => moment(text).format(dateFormat),
 }, {
   title: '币种',
-  dataIndex: 'currency',
-  key: 'currency',
+  dataIndex: 'receiptCurrency',
+  key: 'receiptCurrency',
   width: 45,
 }, {
   title: '收款金额',
@@ -160,7 +160,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     if (!this.state.selectedRowKeys.length) {
       message.error('请选择想要排除的数据。')
     } else {
-      this.props.editExcept({ list: this.state.selectedRowKeys.map(item => ({ receiptClaimIds: item, remark: '' })) })
+      this.props.editExcept({ list: this.state.selectedRowKeys.map(item => ({ receiptClaimId: item, remark: '' })) })
     }
   }
   handleChangeStatus = (status) => {

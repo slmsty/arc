@@ -28,6 +28,7 @@ class EditCBSTurnoverData extends React.Component {
 
     param.receiptClaimId = this.props.receiptClaimId
     param.custId = param.customer.length ? param.customer[0] : null
+    param.custName = param.customer.length ? param.customer[1] : null
     delete param.customer
     this.props.form.resetFields()
     this.props.onConfirm(param)
