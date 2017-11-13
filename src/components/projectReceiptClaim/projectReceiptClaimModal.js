@@ -25,7 +25,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
   columns = [{
     title: '客户名称',
     dataIndex: 'custName',
-    width: 100,
+    width: 200,
   }, {
     title: '认款金额',
     dataIndex: 'claimAmount',
@@ -56,7 +56,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
   }, {
     title: '认款合同币种金额',
     dataIndex: 'claimContractAmount',
-    width: 100,
+    width: 150,
     render: (text, record, index) => {
       const editable = true
       return (<EditableNumberCell
@@ -90,15 +90,15 @@ export default class ProjectReceiptClaimModal extends React.Component {
   }, {
     title: '项目编码',
     dataIndex: 'projectNo',
-    width: 100,
+    width: 200,
   }, {
     title: '合同编码',
     dataIndex: 'contractNo',
-    width: 100,
+    width: 200,
   }, {
     title: '合同名称',
     dataIndex: 'contractName',
-    width: 100,
+    width: 300,
   }, {
     title: '项目阶段',
     dataIndex: 'paymentPhrases',
@@ -266,7 +266,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
             size="middle"
             dataSource={this.state.funds}
             pagination={false}
-            scroll={{ x: '150%' }}
+            scroll={{ x: 2200 }}
           />
         </Modal>
         <ProjectReceiptClaimSelectFundWithForm

@@ -14,8 +14,8 @@ export default class ProjectReceiptClaim extends React.Component {
   }
   componentWillMount() {
     const screenHeight = window.screen.height
-    // 屏幕高-header高64-margin24-padding24-查询条件div224-按钮56-翻页160
-    const tableHeight = screenHeight - 64 - 24 - 24 - 224 - 56 - 160
+    // 屏幕高-header高64-margin8-padding12-查询条件div224-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 8 - 12 - 168 - 56 - 160
     this.setState({ tableHeight })
   }
   componentWillReceiveProps(nextProps) {
@@ -47,7 +47,7 @@ export default class ProjectReceiptClaim extends React.Component {
   }, {
     title: '客户名称',
     dataIndex: 'custName',
-    width: 300,
+    width: 200,
   }, {
     title: '认款金额',
     dataIndex: 'claimAmount',
@@ -112,15 +112,15 @@ export default class ProjectReceiptClaim extends React.Component {
   }, {
     title: '付款客户名称',
     dataIndex: 'payCustName',
-    width: 100,
+    width: 200,
   }, {
     title: '客户付款银行',
     dataIndex: 'payBankName',
-    width: 100,
+    width: 200,
   }, {
     title: '客户付款银行账号',
     dataIndex: 'payBankAccount',
-    width: 150,
+    width: 200,
   }, {
     title: '收款编号',
     dataIndex: 'receiptNo',
@@ -215,7 +215,7 @@ export default class ProjectReceiptClaim extends React.Component {
           bordered
           size="middle"
           dataSource={this.props.receiptClaimList.result}
-          scroll={{ x: '260%', y: this.state.tableHeight }}
+          scroll={{ x: 3000, y: this.state.tableHeight }}
           pagination={{
             current: this.props.receiptClaimList.pageNo,
             total: this.props.receiptClaimList.count,

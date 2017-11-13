@@ -9,7 +9,7 @@ const FormItem = Form.Item
 
 class ProjectReceiptClaimSelectFund extends React.Component {
   state = {
-    pageSize: 10,
+    pageSize: 5,
     selectedRowKeys: [],
     selectedRows: [],
   }
@@ -33,7 +33,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   }, {
     title: '合同名称',
     dataIndex: 'contractName',
-    width: 100,
+    width: 200,
   }, {
     title: '项目阶段',
     dataIndex: 'paymentPhrases',
@@ -187,14 +187,14 @@ class ProjectReceiptClaimSelectFund extends React.Component {
           columns={this.columns}
           bordered
           size="middle"
+          dataSource={this.props.receiptClaimFundList.result}
+          scroll={{ x: '1200' }}
           pagination={{
             current: this.props.receiptClaimFundList.pageNo,
             total: this.props.receiptClaimFundList.count,
             pageSize: this.state.pageSize,
             onChange: this.handleChangePage,
           }}
-          dataSource={this.props.receiptClaimFundList.result}
-          scroll={{ x: '150%' }}
         />
       </Modal>
     )

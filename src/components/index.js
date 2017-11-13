@@ -11,7 +11,7 @@ const { Header, Sider, Content } = Layout
 const breadcrumbNameMap = {
   '/receiptManagement': '回款管理',
   '/receiptManagement/projectReceiptClaim': '项目收款认领',
-  '/receiptManagement/noProjectReceiptClaim': '非项目收款认领',
+  '/receiptManagement/noProjectReceiptClaim': '订单收款认领',
   '/receiptManagement/reviewReceiptClaim': '收款认领复核',
   '/receiptManagement/customerBankLink': '客户银行帐号关系',
   '/receiptManagement/contractChange': '合同变更明细',
@@ -92,7 +92,7 @@ export default class Index extends React.Component {
               <p>欢迎您，<span>{staffName}</span><span>{orgName}</span></p>
             </div>
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+          <Content style={{ margin: '8px 8px', padding: 12, background: '#fff', minHeight: 280 }}>
             { this.props.children }
           </Content>
         </Layout>

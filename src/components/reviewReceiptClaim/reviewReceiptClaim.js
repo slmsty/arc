@@ -150,8 +150,8 @@ export default class ReviewReceiptClaim extends React.Component {
   }
   componentWillMount() {
     const screenHeight = window.screen.height
-    // 屏幕高-header高64-margin24-padding24-查询条件div168-按钮56-翻页160
-    const tableHeight = screenHeight - 64 - 24 - 24 - 168 - 28 - 24 - 160
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 28 - 24 - 160
     this.setState({ tableHeight })
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
