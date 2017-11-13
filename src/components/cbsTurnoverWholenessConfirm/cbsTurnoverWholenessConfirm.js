@@ -23,8 +23,8 @@ const columns = [{
   render: (text, row, index) => moment(text).format(dateFormat),
 }, {
   title: '币种',
-  dataIndex: 'currency',
-  key: 'currency',
+  dataIndex: 'receiptCurrency',
+  key: 'receiptCurrency',
   width: 45,
 }, {
   title: '收款金额',

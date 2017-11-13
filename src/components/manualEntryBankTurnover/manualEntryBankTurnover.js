@@ -186,8 +186,8 @@ export default class ManualEntryBankTurnover extends React.Component {
             width: 150,
           }, {
             title: '币种',
-            dataIndex: 'currency',
-            key: 'currency',
+            dataIndex: 'receiptCurrency',
+            key: 'receiptCurrency',
             width: 45,
           }, {
             title: '金额',
