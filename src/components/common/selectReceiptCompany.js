@@ -109,7 +109,6 @@ class SelectReceiptCompany extends React.Component {
     return (
       <div>
         <Input
-          style={{ height: 30 }}
           placeholder="认款公司"
           value={value && value[0] !== undefined ? value[1] : ''}
           suffix={suffix}
