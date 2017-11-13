@@ -188,7 +188,8 @@ export default class ProjectReceiptClaim extends React.Component {
       okText: '是',
       cancelText: '否',
       onOk() {
-        that.props.reject(that.state.selectedRowKeys)
+        const rejectParam = that.state.selectedRowKeys.map(receiptClaimId => ({ receiptClaimId, remark: '' }))
+        that.props.reject(rejectParam)
       },
     })
   }

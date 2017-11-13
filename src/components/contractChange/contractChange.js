@@ -2,10 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Table, Button, Pagination, message } from 'antd'
-import moment from 'moment'
 import ContractChangeSearchWithForm from './contractChangeSearch'
-
-const dateFormat = 'YYYY-MM-DD'
 
 export default class ContractList extends React.Component {
   componentWillMount() {

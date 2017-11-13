@@ -13,6 +13,11 @@ export default class ProjectReceiptClaimModal extends React.Component {
     selectedRowKeys: [],
     funds: [],
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.receiptInfo !== nextProps.receiptInfo) {
+      this.setState({ funds: [] })
+    }
+  }
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys })
   }
@@ -110,6 +115,14 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: 'SBU',
     dataIndex: 'sbuId',
     width: 100,
+  }, {
+    title: '部门',
+    dataIndex: 'deptName',
+    width: 100,
+  }, {
+    title: '项目经理',
+    dataIndex: 'manager',
+    width: 100,
   },
   ]
   handleClaimFundChange = (index, value, key) => {
@@ -153,7 +166,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
       receiptClaimId: this.props.receiptInfo.receiptClaimId,
       claimItems,
     })
-    this.setState({ funds: [] })
   }
   handleCloseSelectFunds = (addFunds) => {
     if (addFunds && addFunds.length > 0) {
@@ -201,12 +213,10 @@ export default class ProjectReceiptClaimModal extends React.Component {
         okType: 'danger',
         cancelText: '否',
         onOk() {
-          that.setState({ funds: [] })
           that.props.closeClaim()
         },
       })
     } else {
-      this.setState({ showSelectFund: false })
       this.props.closeClaim()
     }
   }

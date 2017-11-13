@@ -29,14 +29,14 @@ export function getReceiptInfo(receiptClaimId) {
   }
 }
 
-export function reject(receiptClaimIds) {
+export function reject(receiptActions) {
   return {
     [httpApi]: {
       url: '/arc/receiptclaim/reject',
       options: {
         method: 'POST',
         body: {
-          receiptClaimIds,
+          receiptActions,
         },
       },
       types: ['PROJECT_RECEIPT_CLAIM_REJECT_SUCCESS'],

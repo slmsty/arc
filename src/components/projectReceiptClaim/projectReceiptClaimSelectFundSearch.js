@@ -51,6 +51,14 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     dataIndex: 'sbuId',
     width: 100,
   }, {
+    title: '部门',
+    dataIndex: 'deptName',
+    width: 100,
+  }, {
+    title: '项目经理',
+    dataIndex: 'manager',
+    width: 100,
+  }, {
     title: '应收金额',
     dataIndex: 'arAmount',
     width: 100,
