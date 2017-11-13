@@ -160,7 +160,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     if (!this.state.selectedRowKeys.length) {
       message.error('请选择想要排除的数据。')
     } else {
-      this.props.editExcept({ list: this.state.selectedRowKeys.map(item => ({ receiptClaimIds: item, remark: '' })) })
+      this.props.editExcept({ list: this.state.selectedRowKeys.map(item => ({ receiptClaimId: item, remark: '' })) })
     }
   }
   handleChangeStatus = (status) => {
