@@ -270,6 +270,7 @@ export default class ReviewReceiptClaim extends React.Component {
       message.error('请选择gl日期')
     } else {
       const submitDatas = this.state.selectedRows
+      const transferDataLength = submitDatas.length
       // console.log(submitDatas)
       const postData = {
         receiptClaimIds: [],
@@ -283,7 +284,7 @@ export default class ReviewReceiptClaim extends React.Component {
       this.props.transferReceiptClaim(postData).then((res) => {
         // console.log(res)
         if (res && res.response && res.response.resultCode === '000000') {
-          message.success('传送AR成功' + this.state.selectedRows.length + '条数据')
+          message.success('传送AR成功' + transferDataLength + '条数据')
         } else {
           message.error('传送AR失败')
         }
@@ -320,7 +321,7 @@ export default class ReviewReceiptClaim extends React.Component {
         returnDis = true
       }
       // item.status === '50'
-      if (item.status === '10' || item.status === '52') {
+      if (item.status === '50' || item.status === '52') {
         transferDis = true
       }
     })

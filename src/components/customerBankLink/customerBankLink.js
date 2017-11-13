@@ -249,8 +249,7 @@ class CustomerBankLink extends React.Component {
     const columns = [{
       title: '操作按钮',
       dataIndex: 'operateBtn',
-      className: 'mycolumn',
-      width: 150,
+      width: '130px',
       render: (text, record, index) => (
         <div>
           <Button onClick={this.showEditModal.bind(this, record)}>编辑</Button>&nbsp;
@@ -260,26 +259,23 @@ class CustomerBankLink extends React.Component {
     }, {
       title: '客户名称',
       dataIndex: 'erpCustName',
-      className: 'mycolumn',
-      width: 300,
+      width: '200px',
     }, {
       title: '银行名称',
       dataIndex: 'custBankName',
-      className: 'mycolumn',
-      width: 300,
+      width: '200px',
     }, {
       title: '银行帐号',
       dataIndex: 'custBankAccount',
-      className: 'mycolumn',
-      width: 300,
+      width: '200px',
     }, {
       title: '关系来源',
       dataIndex: 'sourceType',
-      className: 'mycolumn',
+      width: '100px',
     }, {
       title: '数据状态',
       dataIndex: 'status',
-      className: 'mycolumn',
+      width: '100px',
     },
     ]
     const { selectedRowKeys } = this.state
@@ -323,7 +319,7 @@ class CustomerBankLink extends React.Component {
         loading={this.state.loading}
         bordered
         pagination={pagination}
-        scroll={{ y: this.state.tableHeight }}
+        scroll={{ x: '120%', y: this.state.tableHeight }}
       />
       { /* 编辑客户银行关系modal */ }
       {/*  */}
