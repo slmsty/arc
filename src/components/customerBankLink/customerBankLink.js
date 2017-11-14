@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, Modal, Form, Row, Col, Input, notification, message, Spin } from 'antd'
+import { Table, Button, Modal, Form, Row, Col, Input, notification, message, Spin, Select } from 'antd'
 import CustomerBankLinkWithForm from './customerBankLinkSearch'
 import EditBankLinkData from './editBankLinkData'
 import SelectCustomerWithForm from '../common/selectCustomer'
@@ -13,6 +13,7 @@ import SelectCustomerWithFormForBankLink from '../common/selectCustomerForBankLi
 
 const data = []
 const FormItem = Form.Item
+const Option = Select.Option
 // 显示提示
 const showNotificationWithIcon = (msg) => {
   notification.error({
@@ -376,6 +377,26 @@ class CustomerBankLink extends React.Component {
                   <Input
                     placeholder="请输入关系来源"
                   />,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={12} key={3}>
+              <FormItem {...formItemLayout} label="数据状态">
+                {getFieldDecorator('status', {
+                  initialValue: '1',
+                })(
+                  <Select
+                    placeholder="请选择数据状态"
+                    notFoundContent=""
+                    defaultActiveFirstOption={false}
+                    filterOption={false}
+                    onChange={this.handleChange}
+                  >
+                    <Option value="1">有效</Option>
+                    <Option value="0">无效</Option>
+                  </Select>,
                 )}
               </FormItem>
             </Col>
