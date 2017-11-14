@@ -6,6 +6,9 @@ const reviewReceiptClaim = {
     count: 0,
     result: [],
   },
+  receiptClaimListRefresh: new Date().getTime(),
+  receiptInfo: {
+  },
   approveSubmitData: {
   },
 }
@@ -16,18 +19,21 @@ function getReviewReceiptList(state, action) {
 }
 function approveSubmit(state) {
   // console.log('action', action)
-  const x = { ...state, approveSubmitData: {} }
-  return x
+  // const x = { ...state, approveSubmitData: {} }
+  // return x
+  return { ...state, receiptClaimListRefresh: new Date().getTime() }
 }
-function returnReceiptClaim(state, action) {
+function returnReceiptClaim(state) {
   // console.log('action', action)
-  const x = { ...state, ...action.response.pageInfo }
-  return x
+  // const x = { ...state, ...action.response.pageInfo }
+  // return x
+  return { ...state, receiptClaimListRefresh: new Date().getTime() }
 }
-function transferReceiptClaim(state, action) {
+function transferReceiptClaim(state) {
   // console.log('action', action)
-  const x = { ...state, ...action.response.pageInfo }
-  return x
+  // const x = { ...state, ...action.response.pageInfo }
+  // return x
+  return { ...state, receiptClaimListRefresh: new Date().getTime() }
 }
 
 export default caseReducer(reviewReceiptClaim, {

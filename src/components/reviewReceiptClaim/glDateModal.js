@@ -12,7 +12,6 @@ const formItemLayout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 17 },
 }
-
 class DateModalCom extends React.Component {
   // const param = this.props.form.getFieldsValue()
   handleQuery = () => {

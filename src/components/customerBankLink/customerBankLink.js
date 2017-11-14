@@ -45,6 +45,11 @@ class CustomerBankLink extends React.Component {
     const tableHeight = screenHeight - 64 - 24 - 24 - 168 - 28 - 24 - 160
     this.setState({ tableHeight })
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.arcCustBankLink.receiptClaimListRefresh !== nextProps.arcCustBankLink.receiptClaimListRefresh) {
+      this.handleQuery()
+    }
+  }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
@@ -113,7 +118,7 @@ class CustomerBankLink extends React.Component {
     }
     const postAddData = {}
     postAddData.arcBankCust = addData
-    console.log(postAddData)
+    // console.log(postAddData)
     // 提交数据
     const testData = {
       arcBankCust: {
@@ -169,7 +174,7 @@ class CustomerBankLink extends React.Component {
         message.error('添加数据失败')
       }
     })
-    this.handleQuery()
+    // this.handleQuery()
   }
   handleEditCancel = (e) => {
     this.setState({
@@ -208,7 +213,7 @@ class CustomerBankLink extends React.Component {
         message.error('删除数据失败')
       }
     })
-    this.handleQuery()
+    // this.handleQuery()
   }
   delOk = () => {
     this.setState({
@@ -232,7 +237,7 @@ class CustomerBankLink extends React.Component {
           message.error('删除数据失败')
         }
       })
-      this.handleQuery()
+      // this.handleQuery()
     } else {
       this.delOneData()
     }
@@ -435,6 +440,7 @@ CustomerBankLink.propTypes = {
   arcCustBankLink: PropTypes.shape({
     getBankLinkList: PropTypes.arrayOf.isRequired,
     result: PropTypes.arrayOf.isRequired,
+    receiptClaimListRefresh: PropTypes.number.isRequired,
   }).isRequired,
 }
 const CustomerBankLinks = Form.create()(CustomerBankLink)
