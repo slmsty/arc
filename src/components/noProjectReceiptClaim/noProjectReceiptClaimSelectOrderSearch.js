@@ -136,7 +136,7 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
             onChange: this.handleChangePage,
           }}
           dataSource={this.props.receiptClaimOrderList.result}
-          scroll={{ x: '150%' }}
+          scroll={{ x: '1200', y: '400' }}
         />
       </Modal>
     )

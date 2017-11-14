@@ -16,8 +16,8 @@ export default class NoProjectReceiptClaim extends React.Component {
   }
   componentWillMount() {
     const screenHeight = window.screen.height
-    // 屏幕高-header高64-margin24-padding24-查询条件div224-按钮56-翻页160
-    const tableHeight = screenHeight - 64 - 24 - 24 - 224 - 56 - 160
+    // 屏幕高-header高64-margin8-padding12-查询条件div224-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 8 - 12 - 168 - 56 - 160
     this.setState({ tableHeight })
   }
   componentWillReceiveProps(nextProps) {

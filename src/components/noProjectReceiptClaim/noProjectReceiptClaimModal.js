@@ -168,7 +168,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
       <div>
         <Modal
           width={1024}
-          title="非项目认款"
+          title="订单认款"
           visible={!!this.props.receiptInfo.receiptClaimId}
           onCancel={this.handleCloseClaim}
           footer={[

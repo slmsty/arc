@@ -102,7 +102,6 @@ class SelectCustomer extends React.Component {
     return (
       <div>
         <Input
-          style={{ height: 30 }}
           placeholder="客户名称"
           value={value && value[0] !== undefined ? value[1] : ''}
           suffix={suffix}

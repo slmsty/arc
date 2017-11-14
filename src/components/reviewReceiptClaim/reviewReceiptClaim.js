@@ -76,11 +76,11 @@ const columns = [{
 }, {
   title: '合同编码',
   dataIndex: 'contractNo',
-  width: 100,
+  width: 400,
 }, {
   title: '合同名称',
   dataIndex: 'contractName',
-  width: 100,
+  width: 500,
 }, {
   title: '发票号',
   dataIndex: 'invoiceNo',
@@ -121,17 +121,17 @@ const columns = [{
 }, {
   title: '认款人',
   dataIndex: 'accountantId',
-  width: 100,
+  width: 150,
 }, {
   title: '复核人',
   dataIndex: '26',
   key: '26',
-  width: 100,
+  width: 150,
 }, {
   title: '创建提示',
   dataIndex: 'accountantApproveMessage',
   key: '27',
-  width: 100,
+  width: 150,
 },
 ]
 export default class ReviewReceiptClaim extends React.Component {
@@ -150,8 +150,8 @@ export default class ReviewReceiptClaim extends React.Component {
   }
   componentWillMount() {
     const screenHeight = window.screen.height
-    // 屏幕高-header高64-margin24-padding24-查询条件div168-按钮56-翻页160
-    const tableHeight = screenHeight - 64 - 24 - 24 - 168 - 28 - 24 - 160
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 28 - 24 - 160
     this.setState({ tableHeight })
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -220,11 +220,11 @@ export default class ReviewReceiptClaim extends React.Component {
   approveClick = () => {
     const submitDatas = this.state.selectedRows
     const receiptClaimIds = {
-      action: [],
+      actions: [],
     }
     const submitDatasLength = submitDatas.length
     submitDatas.map((item, index) => {
-      receiptClaimIds.action[index] = { receiptClaimId: item.receiptClaimId }
+      receiptClaimIds.actions[index] = { receiptClaimId: item.receiptClaimId }
     })
     this.props.approveSubmit(receiptClaimIds).then((res) => {
       // console.log(res)
@@ -242,10 +242,10 @@ export default class ReviewReceiptClaim extends React.Component {
     const submitDatasLength = submitDatas.length
     // console.log(submitDatas)
     const postData = {
-      action: [],
+      actions: [],
     }
     submitDatas.map((item, index) => {
-      postData.action[index] = { receiptClaimId: item.receiptClaimId }
+      postData.actions[index] = { receiptClaimId: item.receiptClaimId }
     })
     this.props.returnReceiptClaim(postData).then((res) => {
       // console.log(res)
@@ -339,7 +339,7 @@ export default class ReviewReceiptClaim extends React.Component {
         bordered
         size="middle"
         pagination={pagination}
-        scroll={{ x: '400%', y: this.state.tableHeight }}
+        scroll={{ x: '480%', y: this.state.tableHeight }}
       />
       {/* 弹出传送ARglDatemodal */}
       <GlDateModal

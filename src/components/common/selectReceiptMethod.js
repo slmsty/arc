@@ -110,7 +110,6 @@ class SelectReceiptMethod extends React.Component {
     return (
       <div>
         <Input
-          style={{ height: 30 }}
           placeholder="收款方法"
           value={value && value[0] !== undefined ? value[1] : ''}
           suffix={suffix}
