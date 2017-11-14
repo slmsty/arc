@@ -76,7 +76,7 @@ class SelectReceiptCompany extends React.Component {
         keywords,
       },
     }
-    requestJsonFetch('/arc/common/receipt_method/list', param, this.handleCallback)
+    requestJsonFetch('/arc/common/arc_company/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
@@ -118,6 +118,7 @@ class SelectReceiptCompany extends React.Component {
           title="选择认款公司"
           style={{ top: 20 }}
           visible={visible}
+          wrapClassName="vertical-center-modal"
           onCancel={this.handleCancel}
           footer={[
             <Button key="submit" type="primary" onClick={this.handleOk}>

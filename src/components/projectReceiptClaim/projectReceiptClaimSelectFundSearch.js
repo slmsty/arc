@@ -75,7 +75,12 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     this.handleSelect(1, this.state.pageSize)
   }
   handleSelect = (pageNo, pageSize) => {
-    const param = { ...this.props.form.getFieldsValue(),
+    const queryParam = this.props.form.getFieldsValue()
+    if (queryParam.cust) {
+      queryParam.custId = queryParam.cust[0]
+      delete queryParam.cust
+    }
+    const param = { ...queryParam,
       pageInfo: {
         pageNo,
         pageSize,
@@ -125,7 +130,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户">
-                {getFieldDecorator('custId')(
+                {getFieldDecorator('cust')(
                   <SelectCustomerWithForm />,
                 )}
               </FormItem>
@@ -188,7 +193,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
           bordered
           size="middle"
           dataSource={this.props.receiptClaimFundList.result}
-          scroll={{ x: '1200' }}
+          scroll={{ x: '100%' }}
           pagination={{
             current: this.props.receiptClaimFundList.pageNo,
             total: this.props.receiptClaimFundList.count,

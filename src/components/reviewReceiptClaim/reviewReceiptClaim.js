@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { Table, Button, message, Modal, Form, Row, Col, DatePicker } from 'antd'
 import ReviewReceiptClaimSearchWithForm from './reviewReceiptClaimSearch'
 import GlDateModal from './glDateModal'
-import moment from 'moment'
+import ShowTransferNotice from './showTransferNotice'
 
 const FormItem = Form.Item
 const dateFormat = 'YYYY-MM-DD'
@@ -147,12 +147,20 @@ export default class ReviewReceiptClaim extends React.Component {
     returnData: [],
     transferData: [],
     tableHeight: '',
+    transferNotice: false,
+    transfNoticeData: {},
+    transfNoticeSuccessLenght: '',
   }
   componentWillMount() {
     const screenHeight = window.screen.height
     // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
     const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 28 - 24 - 160
     this.setState({ tableHeight })
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.reviewReceiptClaim.receiptClaimListRefresh !== nextProps.reviewReceiptClaim.receiptClaimListRefresh) {
+      this.handleQuery()
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -234,7 +242,7 @@ export default class ReviewReceiptClaim extends React.Component {
         message.error('审批失败')
       }
     })
-    this.handleQuery()
+    // this.handleQuery()
   }
   // 认款退回
   returnClick = () => {
@@ -255,7 +263,7 @@ export default class ReviewReceiptClaim extends React.Component {
         message.error('认款退回失败')
       }
     })
-    this.handleQuery()
+    // this.handleQuery()
   }
   // 显示gl日期
   showGlDate = () => {
@@ -280,20 +288,30 @@ export default class ReviewReceiptClaim extends React.Component {
       submitDatas.map((item, index) => {
         postData.receiptClaimIds[index] = item.receiptClaimId
       })
-      console.log(postData)
+      // console.log(postData)
       this.props.transferReceiptClaim(postData).then((res) => {
         // console.log(res)
         if (res && res.response && res.response.resultCode === '000000') {
-          message.success('传送AR成功' + transferDataLength + '条数据')
+          console.log(res.response.data)
+          console.log('length', res.response.data.successIds.length)
+          this.setState({
+            transferNotice: true,
+            transfNoticeData: res.response.data,
+            transfNoticeSuccessLenght: res.response.data.successIds.length,
+          })
+          // message.success('传送AR成功' + transferDataLength + '条数据')
         } else {
           message.error('传送AR失败')
         }
       })
-      this.handleQuery()
+      // this.handleQuery()
     }
   }
-  handleChange = (value) => {
-    console.log(value)
+  // 隐藏传送AR接口返回信息
+  showTranNotice = () => {
+    this.setState({
+      transferNotice: false,
+    })
   }
   render() {
     const { selectedRowKeys } = this.state
@@ -348,6 +366,12 @@ export default class ReviewReceiptClaim extends React.Component {
         selectCancel={this.selectCancel}
         onChange={this.handleChange}
       />
+      <ShowTransferNotice
+        showtrNotice={this.state.transferNotice}
+        showTranNotice={this.showTranNotice}
+        transfNoticeData={this.state.transfNoticeData}
+        transferNoticeSuccess={this.state.transfNoticeSuccessLenght}
+      />
     </div>)
   }
 }
@@ -361,6 +385,7 @@ ReviewReceiptClaim.propTypes = {
     getReviewReceiptList: PropTypes.arrayOf.isRequired,
     approveSubmitData: PropTypes.arrayOf.isRequired,
     reviewReceiptClaim: PropTypes.arrayOf.isRequired,
+    receiptClaimListRefresh: PropTypes.number.isRequired,
   }).isRequired,
 }
 

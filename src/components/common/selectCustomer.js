@@ -11,7 +11,7 @@ class SelectCustomer extends React.Component {
   state = {
     visible: false,
     pageNo: 1,
-    pageSize: 10,
+    pageSize: 8,
     total: 1,
     customerList: [],
     selectedRowKeys: [],
@@ -97,13 +97,13 @@ class SelectCustomer extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const value = (this.props.value && this.props.value[0] !== undefined) ? this.props.value : this.props.initialValue
-    const suffix = value && value[0] !== undefined ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const value = (this.props.value && this.props.value[1] !== undefined) ? this.props.value : this.props.initialValue
+    const suffix = value && value[1] !== undefined ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
           placeholder="客户名称"
-          value={value && value[0] !== undefined ? value[1] : ''}
+          value={value && value[1] !== undefined ? value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
@@ -111,6 +111,7 @@ class SelectCustomer extends React.Component {
           title="选择客户"
           style={{ top: 20 }}
           visible={visible}
+          wrapClassName="vertical-center-modal"
           onCancel={this.handleCancel}
           footer={[
             <Button key="submit" type="primary" onClick={this.handleOk}>
@@ -124,9 +125,11 @@ class SelectCustomer extends React.Component {
             <Row>
               <Col span={16} key={1}>
                 <FormItem {...formItemLayout} label="客户名称">
-                  {getFieldDecorator('keywords')(
+                  {getFieldDecorator('keywords', {
+                    initialValue: this.props.defaultQueryParam,
+                  })(
                     <Input
-                      placeholder="请输入关键字"
+                      placeholder="请输入客户关键字"
                     />,
                   )}
                 </FormItem>
@@ -165,6 +168,7 @@ SelectCustomer.propTypes = {
   }).isRequired,
   value: PropTypes.arrayOf(PropTypes.string),
   initialValue: PropTypes.arrayOf(PropTypes.string),
+  defaultQueryParam: PropTypes.string,
 }
 
 const SelectCustomerWithForm = Form.create()(SelectCustomer)
