@@ -33,6 +33,21 @@ const columns = [{
   width: 100,
   render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
 }, {
+  title: '付款客户名称',
+  dataIndex: 'payCustName',
+  key: 'payCustName',
+  width: 300,
+}, {
+  title: '银行流水备注',
+  dataIndex: 'bankTransactionPurpose',
+  key: 'bankTransactionPurpose',
+  width: 300,
+}, {
+  title: '公司',
+  dataIndex: 'companyName',
+  key: 'companyName',
+  width: 300,
+}, {
   title: '客户名称',
   dataIndex: 'custName',
   key: 'custName',
@@ -53,16 +68,6 @@ const columns = [{
   key: 'custPayMethod',
   width: 100,
 }, {
-  title: '银行流水备注',
-  dataIndex: 'bankTransactionPurpose',
-  key: 'bankTransactionPurpose',
-  width: 300,
-}, {
-  title: '付款客户名称',
-  dataIndex: 'payCustName',
-  key: 'payCustName',
-  width: 300,
-}, {
   title: '客户付款银行账号',
   dataIndex: 'payBankAccount',
   key: 'payBankAccount',
@@ -77,11 +82,6 @@ const columns = [{
   dataIndex: 'bankTransactionNo',
   key: 'bankTransactionNo',
   width: 200,
-}, {
-  title: '公司',
-  dataIndex: 'companyName',
-  key: 'companyName',
-  width: 300,
 },
 ]
 
