@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, Modal, Form, Row, Col, Input, notification, message, Spin } from 'antd'
+import { Table, Button, Modal, Form, Row, Col, Input, notification, message, Spin, Select } from 'antd'
 import CustomerBankLinkWithForm from './customerBankLinkSearch'
 import EditBankLinkData from './editBankLinkData'
 import SelectCustomerWithForm from '../common/selectCustomer'
@@ -13,6 +13,7 @@ import SelectCustomerWithFormForBankLink from '../common/selectCustomerForBankLi
 
 const data = []
 const FormItem = Form.Item
+const Option = Select.Option
 // 显示提示
 const showNotificationWithIcon = (msg) => {
   notification.error({
@@ -55,7 +56,7 @@ class CustomerBankLink extends React.Component {
     erpCustId: '',
     receiptMethodId: '',
     payBankAccount: '',
-    status: '',
+    status: '1',
   }
   handleQuery = () => {
     this.setState({
@@ -139,8 +140,11 @@ class CustomerBankLink extends React.Component {
       editVisible: true,
       edittitle: '编辑客户银行关系数据',
     })
+    record.erpCustId = [record.erpCustId, record.erpCustName]
     // 赋值给modal
-    this.props.form.setFieldsValue(record)
+    const { custBankName, erpCustId, custBankAccount, sourceType } = record
+    const x = { custBankName, erpCustId, custBankAccount, sourceType }
+    this.props.form.setFieldsValue(x)
   }
   // 提交编辑客户银行关系数据 关闭modal
   handleEditOk = (record) => {
@@ -156,7 +160,7 @@ class CustomerBankLink extends React.Component {
     }
     const postEditData = {}
     postEditData.arcBankCust = newEditData
-    console.log('post', postEditData)
+    // console.log('post', postEditData)
     // 提交给后台接口
     this.props.addArcCustBankData(postEditData).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
@@ -336,13 +340,15 @@ class CustomerBankLink extends React.Component {
             <Col span={12} key={1}>
               <FormItem {...formItemLayout} label="客户名称">
                 {getFieldDecorator('erpCustId', {
-                  value: ['111', 'adsfd'],
+                  initialValue: [],
                 })(<SelectCustomerWithForm />)}
               </FormItem>
             </Col>
             <Col span={12} key={2}>
               <FormItem {...formItemLayout} label="银行名称">
-                {getFieldDecorator('custBankName')(
+                {getFieldDecorator('custBankName', {
+                  initialValue: '',
+                })(
                   <Input
                     placeholder="请输入银行名称"
                   />,
@@ -355,6 +361,7 @@ class CustomerBankLink extends React.Component {
               <FormItem {...formItemLayout} label="银行帐号">
                 {getFieldDecorator('custBankAccount', {
                   rules: [{ pattern: /^[+]{0,1}(\d+)$/, message: '请输入正确银行帐号' }],
+                  initialValue: '',
                 })(
                   <Input
                     placeholder="请输入银行帐号"
@@ -364,10 +371,32 @@ class CustomerBankLink extends React.Component {
             </Col>
             <Col span={12} key={5}>
               <FormItem {...formItemLayout} label="关系来源">
-                {getFieldDecorator('sourceType')(
+                {getFieldDecorator('sourceType', {
+                  initialValue: '',
+                })(
                   <Input
                     placeholder="请输入关系来源"
                   />,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={12} key={3}>
+              <FormItem {...formItemLayout} label="数据状态">
+                {getFieldDecorator('status', {
+                  initialValue: '1',
+                })(
+                  <Select
+                    placeholder="请选择数据状态"
+                    notFoundContent=""
+                    defaultActiveFirstOption={false}
+                    filterOption={false}
+                    onChange={this.handleChange}
+                  >
+                    <Option value="1">有效</Option>
+                    <Option value="0">无效</Option>
+                  </Select>,
                 )}
               </FormItem>
             </Col>

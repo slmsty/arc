@@ -220,11 +220,11 @@ export default class ReviewReceiptClaim extends React.Component {
   approveClick = () => {
     const submitDatas = this.state.selectedRows
     const receiptClaimIds = {
-      action: [],
+      actions: [],
     }
     const submitDatasLength = submitDatas.length
     submitDatas.map((item, index) => {
-      receiptClaimIds.action[index] = { receiptClaimId: item.receiptClaimId }
+      receiptClaimIds.actions[index] = { receiptClaimId: item.receiptClaimId }
     })
     this.props.approveSubmit(receiptClaimIds).then((res) => {
       // console.log(res)
@@ -242,10 +242,10 @@ export default class ReviewReceiptClaim extends React.Component {
     const submitDatasLength = submitDatas.length
     // console.log(submitDatas)
     const postData = {
-      action: [],
+      actions: [],
     }
     submitDatas.map((item, index) => {
-      postData.action[index] = { receiptClaimId: item.receiptClaimId }
+      postData.actions[index] = { receiptClaimId: item.receiptClaimId }
     })
     this.props.returnReceiptClaim(postData).then((res) => {
       // console.log(res)
