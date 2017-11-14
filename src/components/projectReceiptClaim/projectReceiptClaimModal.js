@@ -6,6 +6,7 @@ import ProjectReceiptClaimSelectFundWithForm from './projectReceiptClaimSelectFu
 import EditableNumberCell from '../common/editableNumberCell'
 import EditableTextCell from '../common/editableTextCell'
 import EditableSelectCell from '../common/editableSelectCell'
+import SelectCustomer from '../common/selectCustomer'
 
 export default class ProjectReceiptClaimModal extends React.Component {
   state = {
@@ -24,35 +25,34 @@ export default class ProjectReceiptClaimModal extends React.Component {
   edited = false
   columns = [{
     title: '客户名称',
-    dataIndex: 'custName',
+    dataIndex: 'cust',
     width: 200,
+    render: (text, record, index) => (<SelectCustomer
+      defaultQueryParam={record.custName}
+      initialValue={[record.custId, record.custName]}
+      onChange={value => this.handleClaimFundChange(index, value, 'cust')}
+    />),
   }, {
     title: '认款金额',
     dataIndex: 'claimAmount',
     width: 100,
-    render: (text, record, index) => {
-      const editable = true
-      return (<EditableNumberCell
-        editable={editable}
-        value={text}
-        min={0}
-        max={this.props.receiptInfo.receiptAmount}
-        onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
-      />)
-    },
+    render: (text, record, index) => (<EditableNumberCell
+      editable
+      value={text}
+      min={0}
+      max={this.props.receiptInfo.receiptAmount}
+      onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
+    />),
   }, {
     title: '收款用途',
     dataIndex: 'receiptUse',
     width: 100,
-    render: (text, record, index) => {
-      const editable = true
-      return (<EditableSelectCell
-        editable={editable}
-        value={text}
-        options={[{ id: 'On account', name: 'On account' }, { id: 'Deposit', name: 'Deposit' }]}
-        onChange={value => this.handleClaimFundChange(index, value, 'receiptUse')}
-      />)
-    },
+    render: (text, record, index) => (<EditableSelectCell
+      editable
+      value={text}
+      options={[{ id: 'On account', name: 'On account' }, { id: 'Deposit', name: 'Deposit' }]}
+      onChange={value => this.handleClaimFundChange(index, value, 'receiptUse')}
+    />),
   }, {
     title: '认款合同币种金额',
     dataIndex: 'claimContractAmount',
@@ -128,7 +128,12 @@ export default class ProjectReceiptClaimModal extends React.Component {
   handleClaimFundChange = (index, value, key) => {
     if (index >= 0 && index < this.state.funds.length) {
       const funds = this.state.funds
-      funds[index][key] = value
+      if (key === 'cust') {
+        funds[index].custId = value[0]
+        funds[index].custName = value[1]
+      } else {
+        funds[index][key] = value
+      }
       this.setState({ funds })
       this.edited = true
     }
@@ -182,6 +187,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
           const fund = addFund
           fund.receiptAmount = addFund.arAmount
           fund.fundReceivableBalance = addFund.receivableBalance
+          fund.custId = ''
           funds.push(fund)
         }
       })
@@ -229,6 +235,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     return (
       <div>
         <Modal
+          wrapClassName="vertical-center-modal"
           width={1024}
           title="项目认款"
           visible={!!this.props.receiptInfo.receiptClaimId}
@@ -266,7 +273,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
             size="middle"
             dataSource={this.state.funds}
             pagination={false}
-            scroll={{ x: 2200 }}
+            scroll={{ x: 2500 }}
           />
         </Modal>
         <ProjectReceiptClaimSelectFundWithForm

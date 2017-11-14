@@ -119,6 +119,7 @@ class SelectReceiptMethod extends React.Component {
           title="选择收款方法"
           style={{ top: 20 }}
           visible={visible}
+          wrapClassName="vertical-center-modal"
           onCancel={this.handleCancel}
           footer={[
             <Button key="submit" type="primary" onClick={this.handleOk}>
