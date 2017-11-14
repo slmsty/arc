@@ -76,7 +76,7 @@ class SelectReceiptCompany extends React.Component {
         keywords,
       },
     }
-    requestJsonFetch('/arc/common/receipt_method/list', param, this.handleCallback)
+    requestJsonFetch('/arc/common/arc_company/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
