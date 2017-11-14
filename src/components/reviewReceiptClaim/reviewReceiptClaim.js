@@ -76,11 +76,11 @@ const columns = [{
 }, {
   title: '合同编码',
   dataIndex: 'contractNo',
-  width: 100,
+  width: 400,
 }, {
   title: '合同名称',
   dataIndex: 'contractName',
-  width: 100,
+  width: 500,
 }, {
   title: '发票号',
   dataIndex: 'invoiceNo',
@@ -121,17 +121,17 @@ const columns = [{
 }, {
   title: '认款人',
   dataIndex: 'accountantId',
-  width: 100,
+  width: 150,
 }, {
   title: '复核人',
   dataIndex: '26',
   key: '26',
-  width: 100,
+  width: 150,
 }, {
   title: '创建提示',
   dataIndex: 'accountantApproveMessage',
   key: '27',
-  width: 100,
+  width: 150,
 },
 ]
 export default class ReviewReceiptClaim extends React.Component {
@@ -339,7 +339,7 @@ export default class ReviewReceiptClaim extends React.Component {
         bordered
         size="middle"
         pagination={pagination}
-        scroll={{ x: '400%', y: this.state.tableHeight }}
+        scroll={{ x: '480%', y: this.state.tableHeight }}
       />
       {/* 弹出传送ARglDatemodal */}
       <GlDateModal
