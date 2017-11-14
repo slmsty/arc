@@ -97,7 +97,6 @@ class SelectCustomer extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    console.log(this.props.defaultQueryParam)
     const value = (this.props.value && this.props.value[1] !== undefined) ? this.props.value : this.props.initialValue
     const suffix = value && value[1] !== undefined ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (

@@ -166,6 +166,8 @@ export default class ProjectReceiptClaimModal extends React.Component {
       receiptUse: fund.receiptUse,
       claimContractAmount: fund.claimContractAmount,
       remark: fund.accountantApproveMessage,
+      custId: fund.custId,
+      custName: fund.custName,
     }))
     this.props.submitClaim({
       receiptClaimId: this.props.receiptInfo.receiptClaimId,
