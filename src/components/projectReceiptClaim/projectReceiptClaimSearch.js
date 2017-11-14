@@ -94,15 +94,10 @@ class ProjectReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={6}>
-              <FormItem {...formItemLayout} label="收款分类">
-                {getFieldDecorator('custPayMethod')(
-                  <SelectInvokeApi
-                    typeCode="ARC_RECEIPT_CLAIM"
-                    paramCode="CLAIM_TYPE"
-                    placeholder="请选择收款分类"
-                    hasEmpty
-                  />,
+            <Col span={8} key={10}>
+              <FormItem {...formItemLayout} label="收款编号">
+                {getFieldDecorator('code')(
+                  <Input placeholder="请输入收款编号" />,
                 )}
               </FormItem>
             </Col>
@@ -139,14 +134,6 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={10}>
-              <FormItem {...formItemLayout} label="收款编号">
-                {getFieldDecorator('code')(
-                  <Input placeholder="请输入收款编号" />,
-                )}
-              </FormItem>
-            </Col>
-
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="认款公司">
                 {getFieldDecorator('receiptCompanyId')(
@@ -154,7 +141,7 @@ class ProjectReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} style={{ textAlign: 'right' }}>
+            <Col span={16} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
