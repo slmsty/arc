@@ -103,7 +103,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     }
 
     if (this.props.cbsTurnoverEditExceptResult !== nextProps.cbsTurnoverEditExceptResult) {
-      message.info('数据状态变更为“出纳已确认”。')
+      message.info('数据状态变更为“无需认款”。')
       this.handleQuery(true)
     }
   }
