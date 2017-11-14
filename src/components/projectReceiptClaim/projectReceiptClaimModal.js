@@ -250,7 +250,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
             </Row>
             <Row>
               <Col style={{ textAlign: 'right' }} span={3} key={1}>客户名称：</Col>
-              <Col span={5} key={2}>{this.props.receiptInfo.payCustName}</Col>
+              <Col span={5} key={2}>{this.props.receiptInfo.custName}</Col>
             </Row>
           </Card>
           <br />
@@ -286,7 +286,7 @@ ProjectReceiptClaimModal.propTypes = {
     receiptAmount: PropTypes.number,
     bankTransactionNo: PropTypes.string,
     receiptNo: PropTypes.string,
-    payCustName: PropTypes.string,
+    custName: PropTypes.string,
     paymentNameId: PropTypes.string,
   }).isRequired,
   receiptClaimFundList: PropTypes.shape({
