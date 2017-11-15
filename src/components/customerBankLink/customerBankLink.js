@@ -388,7 +388,7 @@ class CustomerBankLink extends React.Component {
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={40}>
+          {/* <Row gutter={40}>
             <Col span={12} key={3}>
               <FormItem {...formItemLayout} label="数据状态">
                 {getFieldDecorator('status', {
@@ -407,7 +407,7 @@ class CustomerBankLink extends React.Component {
                 )}
               </FormItem>
             </Col>
-          </Row>
+          </Row> */}
           {getFieldDecorator('bankCustId')(
             <Input
               type="hidden"
