@@ -111,7 +111,7 @@ class SelectReceiptMethod extends React.Component {
       <div>
         <Input
           placeholder="收款方法"
-          value={value && value[0] !== undefined ? value[1] : ''}
+          defaultValue={value && value[0] !== undefined ? value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />

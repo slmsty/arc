@@ -34,7 +34,7 @@ export default class SelectInvokeApi extends React.Component {
         id={this.props.id}
         placeholder={this.props.placeholder}
         onChange={value => this.props.onChange(value)}
-        value={this.props.value !== undefined ? this.props.value : this.props.initialValue}
+        defaultValue={this.props.value !== undefined ? this.props.value : this.props.initialValue}
       >
         {optionDom}
       </Select>
