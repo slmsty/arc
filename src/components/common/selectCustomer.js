@@ -22,6 +22,11 @@ class SelectCustomer extends React.Component {
       this.props.onChange(this.props.initialValue)
     }
   }
+  componentDidMount() {
+    if (this.props.defaultQueryParam) {
+      this.handleQuery()
+    }
+  }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
@@ -103,7 +108,7 @@ class SelectCustomer extends React.Component {
       <div>
         <Input
           placeholder="客户名称"
-          value={value && value[1] !== undefined ? value[1] : ''}
+          defaultValue={value && value[1] !== undefined ? value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
