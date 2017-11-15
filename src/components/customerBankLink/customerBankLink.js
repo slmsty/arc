@@ -256,35 +256,37 @@ class CustomerBankLink extends React.Component {
     }
     const { getFieldDecorator } = this.props.form
     const columns = [{
-      title: '操作按钮',
+      title: '客户名称',
+      dataIndex: 'erpCustName',
+      width: 300,
+    }, {
+      title: '银行名称',
+      dataIndex: 'custBankName',
+      width: 300,
+    }, {
+      title: '银行帐号',
+      dataIndex: 'custBankAccount',
+      width: 200,
+    }, {
+      title: '关系来源',
+      dataIndex: 'sourceType',
+      width: 100,
+    }, {
+      title: '数据状态',
+      dataIndex: 'status',
+      width: 100,
+    }, {
+      title: '操作',
       dataIndex: 'operateBtn',
+      textAlign: 'center',
       width: 60,
+      fixed: 'right',
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
           <Icon type="edit" onClick={this.showEditModal.bind(this, record)} />&nbsp;&nbsp;&nbsp;&nbsp;
           <Icon type="delete" onClick={this.showDelModal.bind(this, record)} />
         </div>
       ),
-    }, {
-      title: '客户名称',
-      dataIndex: 'erpCustName',
-      width: '200px',
-    }, {
-      title: '银行名称',
-      dataIndex: 'custBankName',
-      width: '200px',
-    }, {
-      title: '银行帐号',
-      dataIndex: 'custBankAccount',
-      width: '200px',
-    }, {
-      title: '关系来源',
-      dataIndex: 'sourceType',
-      width: '100px',
-    }, {
-      title: '数据状态',
-      dataIndex: 'status',
-      width: '100px',
     },
     ]
     const { selectedRowKeys } = this.state

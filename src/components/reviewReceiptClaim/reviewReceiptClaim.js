@@ -18,7 +18,7 @@ const formItemLayout = {
 const columns = [{
   title: '数据状态',
   dataIndex: 'statusDesc',
-  width: 80,
+  width: 100,
   fixed: 'left',
 }, {
   title: '收款日期',
@@ -129,9 +129,9 @@ const columns = [{
   width: 150,
 }, {
   title: '创建提示',
-  dataIndex: 'accountantApproveMessage',
+  dataIndex: 'statusRemark',
   key: '27',
-  width: 150,
+  width: 400,
 },
 ]
 export default class ReviewReceiptClaim extends React.Component {
@@ -149,7 +149,8 @@ export default class ReviewReceiptClaim extends React.Component {
     tableHeight: '',
     transferNotice: false,
     transfNoticeData: {},
-    transfNoticeSuccessLenght: '',
+    transfNoticeSuccessLength: '',
+    transfNoticeFailureLength: '',
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -273,6 +274,9 @@ export default class ReviewReceiptClaim extends React.Component {
   }
   // 传送AR
   transferClick = (value) => {
+    this.setState({
+      loading: true,
+    })
     const glDateData = value
     if (glDateData === '') {
       message.error('请选择gl日期')
@@ -292,16 +296,19 @@ export default class ReviewReceiptClaim extends React.Component {
       this.props.transferReceiptClaim(postData).then((res) => {
         // console.log(res)
         if (res && res.response && res.response.resultCode === '000000') {
-          console.log(res.response.data)
-          console.log('length', res.response.data.successIds.length)
           this.setState({
             transferNotice: true,
             transfNoticeData: res.response.data,
-            transfNoticeSuccessLenght: res.response.data.successIds.length,
+            transfNoticeSuccessLength: res.response.data.successIds.length,
+            transfNoticeFailureLength: res.response.data.failures.length,
+            loading: false,
           })
           // message.success('传送AR成功' + transferDataLength + '条数据')
         } else {
           message.error('传送AR失败')
+          this.setState({
+            loading: false,
+          })
         }
       })
       // this.handleQuery()
@@ -358,6 +365,7 @@ export default class ReviewReceiptClaim extends React.Component {
         size="middle"
         pagination={pagination}
         scroll={{ x: '480%', y: this.state.tableHeight }}
+        loading={this.state.loading}
       />
       {/* 弹出传送ARglDatemodal */}
       <GlDateModal
@@ -370,7 +378,8 @@ export default class ReviewReceiptClaim extends React.Component {
         showtrNotice={this.state.transferNotice}
         showTranNotice={this.showTranNotice}
         transfNoticeData={this.state.transfNoticeData}
-        transferNoticeSuccess={this.state.transfNoticeSuccessLenght}
+        transferNoticeSuccessLength={this.state.transfNoticeSuccessLength}
+        transfNoticeFailureLength={this.state.transfNoticeFailureLength}
       />
     </div>)
   }
