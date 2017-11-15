@@ -9,6 +9,7 @@ import NoProjectReceiptClaimModal from '../../components/noProjectReceiptClaim/n
 const mapStateToProps = state => ({
   receiptInfo: state.noProjectReceiptClaim.receiptInfo,
   receiptClaimOrderList: state.noProjectReceiptClaim.receiptClaimOrderList,
+  getOrderCompleted: state.noProjectReceiptClaim.getOrderCompleted,
 })
 
 const mapDispatchToProps = dispatch => (

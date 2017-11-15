@@ -91,8 +91,8 @@ class ProjectReceiptClaimSelectFund extends React.Component {
         pageSize,
       },
     }
-    this.setState({ loading: true })
     this.props.getPhase(param)
+    this.setState({ loading: true })
   }
   handleSelectFunds = () => {
     this.props.onClose(this.state.selectedRows)

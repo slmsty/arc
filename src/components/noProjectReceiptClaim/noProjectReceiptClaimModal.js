@@ -207,6 +207,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
           visible={this.state.showSelectFund}
           onClose={this.handleCloseSelectFunds}
           getOrder={this.props.getOrder}
+          getOrderCompleted={this.props.getOrderCompleted}
         />
       </div>
     )
@@ -229,4 +230,5 @@ ProjectReceiptClaimModal.propTypes = {
   closeClaim: PropTypes.func.isRequired,
   submitClaim: PropTypes.func.isRequired,
   getOrder: PropTypes.func.isRequired,
+  getOrderCompleted: PropTypes.number.isRequired,
 }

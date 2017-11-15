@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import caseReducer from './caseReducer'
 
 const projectReceiptClaim = {
@@ -20,6 +21,7 @@ const projectReceiptClaim = {
     count: 0,
     result: [],
   },
+  getOrderCompleted: new Date().getTime(),
 }
 
 function getReceiptList(state, action) {
@@ -27,7 +29,7 @@ function getReceiptList(state, action) {
 }
 
 function getOrderList(state, action) {
-  return { ...state, receiptClaimOrderList: action.response.pageInfo }
+  return { ...state, receiptClaimOrderList: action.response.pageInfo, getOrderCompleted: new Date().getTime() }
 }
 
 function openClaim(state, action) {

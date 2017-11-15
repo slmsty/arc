@@ -12,8 +12,13 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
     pageSize: 10,
     selectedRowKeys: [],
     selectedRows: [],
+    loading: false,
+    firstLoad: true,
   }
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.getOrderCompleted !== nextProps.getOrderCompleted) {
+      this.setState({ loading: false, firstLoad: false })
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -54,6 +59,7 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
       },
     }
     this.props.getOrder(param)
+    this.setState({ loading: true })
   }
   handleSelectFunds = () => {
     this.props.onClose(this.state.selectedRows)
@@ -129,6 +135,10 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
           columns={this.columns}
           bordered
           size="middle"
+          loading={this.state.loading}
+          locale={{
+            emptyText: this.state.firstLoad ? '' : '没有符合条件的订单',
+          }}
           pagination={{
             current: this.props.receiptClaimOrderList.pageNo,
             total: this.props.receiptClaimOrderList.count,
@@ -156,6 +166,7 @@ NoProjectReceiptClaimSelectOrder.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   getOrder: PropTypes.func.isRequired,
+  getOrderCompleted: PropTypes.number.isRequired,
 }
 
 const NoProjectReceiptClaimSelectOrderWithForm = Form.create()(
