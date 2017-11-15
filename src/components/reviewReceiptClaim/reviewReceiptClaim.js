@@ -384,6 +384,7 @@ export default class ReviewReceiptClaim extends React.Component {
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
+
     }
     const rowSelection = {
       selectedRowKeys,
