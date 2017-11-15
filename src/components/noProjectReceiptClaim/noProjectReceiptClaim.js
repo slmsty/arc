@@ -172,13 +172,14 @@ export default class NoProjectReceiptClaim extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
+    const rejectBtn = this.queryParam.status === '21' || this.queryParam.status === '40' ? <Button type="danger" onClick={this.handleReject}>拒绝</Button> : null
     return (
       <div>
         <NoProjectReceiptClaimSearchWithForm
           onQuery={this.handleChangeParam}
         />
         <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
-        <Button type="danger" onClick={this.handleReject}>拒绝</Button>
+        {rejectBtn}
         <br /><br />
         <Table
           rowKey="receiptClaimId"
