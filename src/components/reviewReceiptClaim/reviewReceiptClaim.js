@@ -18,7 +18,7 @@ const formItemLayout = {
 const columns = [{
   title: '数据状态',
   dataIndex: 'statusName',
-  width: 100,
+  width: 80,
   fixed: 'left',
 }, {
   title: '收款来源',
