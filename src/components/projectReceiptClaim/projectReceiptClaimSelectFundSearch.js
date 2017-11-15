@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars,react/prefer-stateless-function */
+/* eslint-disable no-unused-vars,react/prefer-stateless-function,max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal, Pagination } from 'antd'
@@ -12,8 +12,13 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     pageSize: 5,
     selectedRowKeys: [],
     selectedRows: [],
+    loading: false,
+    firstLoad: true,
   }
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.getPhaseCompleted !== nextProps.getPhaseCompleted) {
+      this.setState({ loading: false, firstLoad: false })
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -86,6 +91,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
         pageSize,
       },
     }
+    this.setState({ loading: true })
     this.props.getPhase(param)
   }
   handleSelectFunds = () => {
@@ -101,6 +107,9 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     const rowSelection = {
       type: 'checkBox',
       selectedRowKeys: this.state.selectedRowKeys,
+      getCheckboxProps: record => ({
+        disabled: record.receivableBalance <= 0,
+      }),
       onChange: this.onSelectChange,
     }
     return (
@@ -192,6 +201,10 @@ class ProjectReceiptClaimSelectFund extends React.Component {
           columns={this.columns}
           bordered
           size="middle"
+          loading={this.state.loading}
+          locale={{
+            emptyText: this.state.firstLoad ? '' : '没有符合条件的合同百分比',
+          }}
           dataSource={this.props.receiptClaimFundList.result}
           scroll={{ x: '100%' }}
           pagination={{
@@ -216,6 +229,7 @@ ProjectReceiptClaimSelectFund.propTypes = {
     count: PropTypes.number.isRequired,
     result: PropTypes.arrayOf.isRequired,
   }).isRequired,
+  getPhaseCompleted: PropTypes.number.isRequired,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   getPhase: PropTypes.func.isRequired,

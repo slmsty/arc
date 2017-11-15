@@ -16,6 +16,8 @@ class SelectReceiptCompany extends React.Component {
     companyList: [],
     selectedRowKeys: [],
     selectedRows: [],
+    loading: false,
+    firstLoad: true,
   }
   componentWillMount() {
     if (this.props.initialValue) {
@@ -76,6 +78,7 @@ class SelectReceiptCompany extends React.Component {
         keywords,
       },
     }
+    this.setState({ loading: true })
     requestJsonFetch('/arc/common/arc_company/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
@@ -84,8 +87,10 @@ class SelectReceiptCompany extends React.Component {
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.pageCount,
         companyList: response.pageInfo.result,
+        firstLoad: false,
       })
     }
+    this.setState({ loading: false })
   }
   handleEmitEmpty = () => {
     this.props.onChange('')
@@ -152,6 +157,10 @@ class SelectReceiptCompany extends React.Component {
             rowSelection={rowSelection}
             bordered
             size="middle"
+            loading={this.state.loading}
+            locale={{
+              emptyText: this.state.firstLoad ? '' : '没有符合条件的认款公司',
+            }}
             dataSource={this.state.companyList}
             pagination={{
               current: this.state.pageNo,

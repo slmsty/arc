@@ -212,7 +212,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     this.edited = true
   }
   handleCloseClaim = () => {
-    if (this.edited) {
+    if (this.edited && this.state.funds.length > 0) {
       const that = this
       Modal.confirm({
         title: '操作确认',
@@ -259,7 +259,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
           </Card>
           <br />
           <Button key="add" type="primary" onClick={() => { this.setState({ showSelectFund: true }) }}><Icon type="plus-circle-o" />增加合同百分比</Button>&nbsp;&nbsp;
-          <Button type="danger" onClick={this.handleDeleteFund}>删除</Button>
           <br />
           <br />
           <Table
@@ -267,6 +266,9 @@ export default class ProjectReceiptClaimModal extends React.Component {
             columns={this.columns}
             bordered
             size="middle"
+            locale={{
+              emptyText: '请增加合同百分比',
+            }}
             dataSource={this.state.funds}
             pagination={false}
             scroll={{ x: 2500 }}
@@ -274,6 +276,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         </Modal>
         <ProjectReceiptClaimSelectFundWithForm
           receiptClaimFundList={this.props.receiptClaimFundList}
+          getPhaseCompleted={this.props.getPhaseCompleted}
           visible={this.state.showSelectFund}
           onClose={this.handleCloseSelectFunds}
           getPhase={this.props.getPhase}
@@ -300,4 +303,5 @@ ProjectReceiptClaimModal.propTypes = {
   closeClaim: PropTypes.func.isRequired,
   submitClaim: PropTypes.func.isRequired,
   getPhase: PropTypes.func.isRequired,
+  getPhaseCompleted: PropTypes.number.isRequired,
 }

@@ -16,6 +16,8 @@ class SelectCustomer extends React.Component {
     customerList: [],
     selectedRowKeys: [],
     selectedRows: [],
+    loading: false,
+    firstLoad: true,
   }
   componentWillMount() {
     if (this.props.initialValue) {
@@ -74,6 +76,7 @@ class SelectCustomer extends React.Component {
         keywords,
       },
     }
+    this.setState({ loading: true })
     requestJsonFetch('/arc/common/customer_name/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
@@ -82,8 +85,10 @@ class SelectCustomer extends React.Component {
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.pageCount,
         customerList: response.pageInfo.result,
+        firstLoad: false,
       })
     }
+    this.setState({ loading: false })
   }
   handleEmitEmpty = () => {
     this.props.onChange(['', ''])
@@ -153,6 +158,10 @@ class SelectCustomer extends React.Component {
             bordered
             size="middle"
             dataSource={this.state.customerList}
+            loading={this.state.loading}
+            locale={{
+              emptyText: this.state.firstLoad ? '' : '没有符合条件的客户',
+            }}
             pagination={{
               current: this.state.pageNo,
               onChange: this.handleChangePage,

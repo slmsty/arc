@@ -9,6 +9,7 @@ import ProjectReceiptClaimModal from '../../components/projectReceiptClaim/proje
 const mapStateToProps = state => ({
   receiptInfo: state.projectReceiptClaim.receiptInfo,
   receiptClaimFundList: state.projectReceiptClaim.receiptClaimFundList,
+  getPhaseCompleted: state.projectReceiptClaim.getPhaseCompleted,
 })
 
 const mapDispatchToProps = dispatch => (

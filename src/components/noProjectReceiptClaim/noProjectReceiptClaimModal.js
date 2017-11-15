@@ -186,7 +186,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
           </Card>
           <br />
           <Button key="add" type="primary" onClick={() => { this.setState({ showSelectFund: true }) }}><Icon type="plus-circle-o" />增加客户订单</Button>&nbsp;&nbsp;
-          <Button type="danger" onClick={this.handleDeleteFund}>删除</Button>
           <br />
           <br />
           <Table
@@ -194,6 +193,9 @@ export default class ProjectReceiptClaimModal extends React.Component {
             rowSelection={rowSelection}
             columns={this.columns}
             bordered
+            locale={{
+              emptyText: '请增加订单',
+            }}
             size="middle"
             dataSource={this.state.funds}
             pagination={false}

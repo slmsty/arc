@@ -16,6 +16,8 @@ class SelectReceiptMethod extends React.Component {
     methodList: [],
     selectedRowKeys: [],
     selectedRows: [],
+    loading: false,
+    firstLoad: true,
   }
   componentWillMount() {
     if (this.props.initialValue) {
@@ -77,6 +79,7 @@ class SelectReceiptMethod extends React.Component {
         keywords,
       },
     }
+    this.setState({ loading: true })
     requestJsonFetch('/arc/common/receipt_method/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
@@ -85,8 +88,10 @@ class SelectReceiptMethod extends React.Component {
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.pageCount,
         methodList: response.pageInfo.result,
+        firstLoad: false,
       })
     }
+    this.setState({ loading: false })
   }
   handleEmitEmpty = () => {
     this.props.onChange('')
@@ -153,6 +158,10 @@ class SelectReceiptMethod extends React.Component {
             rowSelection={rowSelection}
             bordered
             size="middle"
+            loading={this.state.loading}
+            locale={{
+              emptyText: this.state.firstLoad ? '' : '没有符合条件的收款方法',
+            }}
             dataSource={this.state.methodList}
             pagination={{
               current: this.state.pageNo,
