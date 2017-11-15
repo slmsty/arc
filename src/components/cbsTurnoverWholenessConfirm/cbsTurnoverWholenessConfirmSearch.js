@@ -9,7 +9,7 @@ import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
 
 const { RangePicker } = DatePicker
 const FormItem = Form.Item
-const Option = Select.Option
+const { Option } = Select
 const dateFormat = 'YYYY-MM-DD'
 
 class CBSTurnoverWholenessConfirmSearch extends React.Component {
