@@ -64,8 +64,8 @@ const columns = [{
   width: 635,
 }, {
   title: '客户付款方式',
-  dataIndex: 'custPayMethod',
-  key: 'custPayMethod',
+  dataIndex: 'custPayMethodName',
+  key: 'custPayMethodName',
   width: 100,
 }, {
   title: '客户付款银行账号',
