@@ -11,7 +11,7 @@ const dateFormat = 'YYYY-MM-DD'
 const columns = [{
   title: '数据状态',
   dataIndex: 'statusName',
-  key: 'statusName',
+  key: 'statusDesc',
   width: 80,
   fixed: 'left',
 }, {
@@ -74,7 +74,17 @@ const columns = [{
   key: 'custName',
   width: 300,
 }, {
-  title: '付款方式',
+  title: '流水分类',
+  dataIndex: 'claimTypeName',
+  key: 'claimTypeName',
+  width: 80,
+}, {
+  title: '备注',
+  dataIndex: 'cashierApproveMessage',
+  key: 'cashierApproveMessage',
+  width: 635,
+}, {
+  title: '客户付款方式',
   dataIndex: 'custPayMethodName',
   key: 'custPayMethodName',
   width: 100,
