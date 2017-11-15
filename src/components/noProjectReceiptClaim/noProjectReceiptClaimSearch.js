@@ -107,6 +107,13 @@ class NoProjectReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
+            <Col span={8} key={2}>
+              <FormItem {...formItemLayout} label="认款公司">
+                {getFieldDecorator('receiptCompanyId')(
+                  <SelectReceiptCompanyWithForm />,
+                )}
+              </FormItem>
+            </Col>
             <Col span={8} key={9}>
               <FormItem {...formItemLayout} label="数据状态">
                 {getFieldDecorator('status', {
@@ -117,13 +124,6 @@ class NoProjectReceiptClaimSearch extends React.Component {
                     <Option value="40">复核退回</Option>
                     <Option value="51">已传送AR</Option>
                   </Select>,
-                )}
-              </FormItem>
-            </Col>
-            <Col span={8} key={2}>
-              <FormItem {...formItemLayout} label="认款公司">
-                {getFieldDecorator('receiptCompanyId')(
-                  <SelectReceiptCompanyWithForm />,
                 )}
               </FormItem>
             </Col>

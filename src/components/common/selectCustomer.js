@@ -108,7 +108,7 @@ class SelectCustomer extends React.Component {
       <div>
         <Input
           placeholder="客户名称"
-          defaultValue={value && value[1] !== undefined ? value[1] : ''}
+          value={value && value[1] !== undefined ? value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />

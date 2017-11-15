@@ -110,7 +110,7 @@ class SelectReceiptCompany extends React.Component {
       <div>
         <Input
           placeholder="认款公司"
-          defaultValue={value && value[0] !== undefined ? value[1] : ''}
+          value={value && value[0] !== undefined ? value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
