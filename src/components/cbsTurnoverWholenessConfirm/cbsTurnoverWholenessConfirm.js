@@ -11,7 +11,7 @@ const dateFormat = 'YYYY-MM-DD'
 const columns = [{
   title: '数据状态',
   dataIndex: 'statusName',
-  key: 'statusDesc',
+  key: 'statusName',
   width: 80,
   fixed: 'left',
 }, {
