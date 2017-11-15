@@ -28,7 +28,7 @@ export default class ProjectReceiptClaim extends React.Component {
   }
   columns = [{
     title: '数据状态',
-    dataIndex: 'statusDesc',
+    dataIndex: 'statusName',
     width: 100,
     fixed: 'left',
   }, {
