@@ -10,7 +10,7 @@ const dateFormat = 'YYYY-MM-DD'
 
 const columns = [{
   title: '数据状态',
-  dataIndex: 'statusDesc',
+  dataIndex: 'statusName',
   key: 'statusDesc',
   width: 80,
   fixed: 'left',
@@ -54,8 +54,8 @@ const columns = [{
   width: 300,
 }, {
   title: '流水分类',
-  dataIndex: 'claimTypeDesc',
-  key: 'claimTypeDesc',
+  dataIndex: 'claimTypeName',
+  key: 'claimTypeName',
   width: 80,
 }, {
   title: '备注',

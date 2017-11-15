@@ -17,7 +17,7 @@ const formItemLayout = {
 }
 const columns = [{
   title: '数据状态',
-  dataIndex: 'statusDesc',
+  dataIndex: 'statusName',
   width: 80,
   fixed: 'left',
 }, {
@@ -26,7 +26,7 @@ const columns = [{
   width: 150,
 }, {
   title: '收款分类',
-  dataIndex: 'claimType',
+  dataIndex: 'claimTypeName',
   width: 100,
 }, {
   title: '公司',

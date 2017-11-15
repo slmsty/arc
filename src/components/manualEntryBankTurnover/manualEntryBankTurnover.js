@@ -144,8 +144,8 @@ export default class ManualEntryBankTurnover extends React.Component {
           rowSelection={rowSelection}
           columns={[{
             title: '数据状态',
-            dataIndex: 'statusDesc',
-            key: 'statusDesc',
+            dataIndex: 'statusName',
+            key: 'statusName',
             width: 80,
             fixed: 'left',
           }, {
@@ -202,8 +202,8 @@ export default class ManualEntryBankTurnover extends React.Component {
             width: 300,
           }, {
             title: '流水分类',
-            dataIndex: 'claimTypeDesc',
-            key: 'claimTypeDesc',
+            dataIndex: 'claimTypeName',
+            key: 'claimTypeName',
             width: 100,
           }, {
             title: '备注',

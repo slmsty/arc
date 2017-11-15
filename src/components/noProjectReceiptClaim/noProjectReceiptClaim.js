@@ -30,7 +30,7 @@ export default class NoProjectReceiptClaim extends React.Component {
   }
   columns = [{
     title: '数据状态',
-    dataIndex: 'statusDesc',
+    dataIndex: 'statusName',
     width: 100,
     fixed: 'left',
   }, {
@@ -44,7 +44,7 @@ export default class NoProjectReceiptClaim extends React.Component {
     width: 100,
   }, {
     title: '收款分类',
-    dataIndex: 'claimType',
+    dataIndex: 'claimTypeName',
     width: 100,
   }, {
     title: '公司',
