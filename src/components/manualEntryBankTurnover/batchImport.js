@@ -56,8 +56,8 @@ const successColumns = [{
   width: 300,
 }, {
   title: '流水分类',
-  dataIndex: 'claimType',
-  key: 'claimType',
+  dataIndex: 'claimTypeName',
+  key: 'claimTypeName',
   width: 100,
 }, {
   title: '备注',

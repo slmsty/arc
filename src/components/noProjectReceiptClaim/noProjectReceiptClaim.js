@@ -30,7 +30,7 @@ export default class NoProjectReceiptClaim extends React.Component {
   }
   columns = [{
     title: '数据状态',
-    dataIndex: 'statusDesc',
+    dataIndex: 'statusName',
     width: 100,
     fixed: 'left',
   }, {
@@ -44,7 +44,7 @@ export default class NoProjectReceiptClaim extends React.Component {
     width: 100,
   }, {
     title: '收款分类',
-    dataIndex: 'claimType',
+    dataIndex: 'claimTypeName',
     width: 100,
   }, {
     title: '公司',
@@ -172,13 +172,14 @@ export default class NoProjectReceiptClaim extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
+    const rejectBtn = this.queryParam.status === '21' || this.queryParam.status === '40' ? <Button type="danger" onClick={this.handleReject}>拒绝</Button> : null
     return (
       <div>
         <NoProjectReceiptClaimSearchWithForm
           onQuery={this.handleChangeParam}
         />
         <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
-        <Button type="danger" onClick={this.handleReject}>拒绝</Button>
+        {rejectBtn}
         <br /><br />
         <Table
           rowKey="receiptClaimId"

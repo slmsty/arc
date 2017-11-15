@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function,max-len,react/no-unused-prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Card, Row, Col, Button, Table, Icon, message } from 'antd'
+import { Modal, Card, Row, Col, Button, Table, Icon, message, Popconfirm } from 'antd'
 import ProjectReceiptClaimSelectFundWithForm from './projectReceiptClaimSelectFundSearch'
 import EditableNumberCell from '../common/editableNumberCell'
 import EditableTextCell from '../common/editableTextCell'
@@ -11,16 +11,12 @@ import SelectCustomer from '../common/selectCustomer'
 export default class ProjectReceiptClaimModal extends React.Component {
   state = {
     showSelectFund: false,
-    selectedRowKeys: [],
     funds: [],
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.receiptInfo !== nextProps.receiptInfo) {
       this.setState({ funds: [] })
     }
-  }
-  onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys })
   }
   edited = false
   columns = [{
@@ -123,6 +119,17 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '项目经理',
     dataIndex: 'manager',
     width: 100,
+  }, {
+    title: '操作',
+    dataIndex: 'operate',
+    width: 50,
+    align: 'center',
+    fixed: 'right',
+    render: (text, record, index) => (
+      <Popconfirm title="您确定要取消认款到这条合同吗？" onConfirm={() => this.handleDeleteFund(index)} okText="是" cancelText="否">
+        <Icon type="delete" />
+      </Popconfirm>
+    ),
   },
   ]
   handleClaimFundChange = (index, value, key) => {
@@ -198,17 +205,10 @@ export default class ProjectReceiptClaimModal extends React.Component {
     this.edited = true
     this.setState({ showSelectFund: false })
   }
-  handleDeleteFund = () => {
+  handleDeleteFund = (fundIdx) => {
     const funds = this.state.funds
-    this.state.selectedRowKeys.forEach((deleteFundId) => {
-      for (let i = 0; i < funds.length; i += 1) {
-        if (funds[i].fundId === deleteFundId) {
-          funds.splice(i, 1)
-          break
-        }
-      }
-    })
-    this.setState({ selectedRowKeys: [], funds })
+    funds.splice(fundIdx, 1)
+    this.setState({ funds })
     this.edited = true
   }
   handleCloseClaim = () => {
@@ -229,11 +229,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
     }
   }
   render() {
-    const rowSelection = {
-      type: 'checkBox',
-      selectedRowKeys: this.state.selectedRowKeys,
-      onChange: this.onSelectChange,
-    }
     return (
       <div>
         <Modal
@@ -269,7 +264,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
           <br />
           <Table
             rowKey="fundId"
-            rowSelection={rowSelection}
             columns={this.columns}
             bordered
             size="middle"
