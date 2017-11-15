@@ -22,6 +22,11 @@ class SelectCustomer extends React.Component {
       this.props.onChange(this.props.initialValue)
     }
   }
+  componentDidMount() {
+    if (this.props.defaultQueryParam) {
+      this.handleQuery()
+    }
+  }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }

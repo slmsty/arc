@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, Modal, Form, Row, Col, Input, notification, message, Spin, Select } from 'antd'
+import { Table, Button, Modal, Form, Row, Col, Input, notification, message, Spin, Select, Icon } from 'antd'
 import CustomerBankLinkWithForm from './customerBankLinkSearch'
 import EditBankLinkData from './editBankLinkData'
 import SelectCustomerWithForm from '../common/selectCustomer'
@@ -258,11 +258,11 @@ class CustomerBankLink extends React.Component {
     const columns = [{
       title: '操作按钮',
       dataIndex: 'operateBtn',
-      width: '130px',
+      width: 60,
       render: (text, record, index) => (
-        <div>
-          <Button onClick={this.showEditModal.bind(this, record)}>编辑</Button>&nbsp;
-          <Button onClick={this.showDelModal.bind(this, record)}>删除</Button>
+        <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
+          <Icon type="edit" onClick={this.showEditModal.bind(this, record)} />&nbsp;&nbsp;&nbsp;&nbsp;
+          <Icon type="delete" onClick={this.showDelModal.bind(this, record)} />
         </div>
       ),
     }, {

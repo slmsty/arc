@@ -110,12 +110,10 @@ class ProjectReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={8}>
-              <FormItem {...formItemLayout} label="合同编码">
-                {getFieldDecorator('contractIds')(
-                  <MultipleInput
-                    placeholder="多合同编码使用英文逗号间隔"
-                  />,
+            <Col span={8} key={2}>
+              <FormItem {...formItemLayout} label="认款公司">
+                {getFieldDecorator('receiptCompanyId')(
+                  <SelectReceiptCompanyWithForm />,
                 )}
               </FormItem>
             </Col>
@@ -134,10 +132,12 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={2}>
-              <FormItem {...formItemLayout} label="认款公司">
-                {getFieldDecorator('receiptCompanyId')(
-                  <SelectReceiptCompanyWithForm />,
+            <Col span={8} key={8}>
+              <FormItem {...formItemLayout} label="合同编码">
+                {getFieldDecorator('contractIds')(
+                  <MultipleInput
+                    placeholder="多合同编码使用英文逗号间隔"
+                  />,
                 )}
               </FormItem>
             </Col>
