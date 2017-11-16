@@ -45,7 +45,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     width: 100,
     render: (text, record, index) => (<EditableSelectCell
       editable
-      value={text ? text : 'On account'}
+      value={text}
       options={[{ id: 'On account', name: 'On account' }, { id: 'Deposit', name: 'Deposit' }]}
       onChange={value => this.handleClaimFundChange(index, value, 'receiptUse')}
     />),
@@ -198,6 +198,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
           fund.receiptAmount = addFund.arAmount
           fund.fundReceivableBalance = addFund.receivableBalance
           fund.claimContractAmount = addFund.receivableBalance
+          fund.receiptUse = 'On account'
           fund.custId = ''
           funds.push(fund)
         }

@@ -60,6 +60,7 @@ export default class ProjectReceiptClaim extends React.Component {
     title: '备注',
     dataIndex: 'accountantApproveMessage',
     width: 100,
+    render: (text, record, index) => text || record.cashierApproveMessage,
   }, {
     title: '币种',
     dataIndex: 'currency',
