@@ -32,14 +32,42 @@ export default class ProjectReceiptClaim extends React.Component {
     width: 100,
     fixed: 'left',
   }, {
+    title: '收款来源',
+    dataIndex: 'sourceType',
+    width: 100,
+  }, {
+    title: '公司',
+    dataIndex: 'companyName',
+    width: 100,
+  }, {
     title: '收款日期',
     dataIndex: 'receiptDate',
     width: 100,
     render: text => moment(text).format(dateFormat),
   }, {
-    title: '收款来源',
-    dataIndex: 'sourceType',
+    title: '币种',
+    dataIndex: 'currency',
     width: 100,
+  }, {
+    title: '收款金额',
+    dataIndex: 'receiptAmount',
+    width: 100,
+  }, {
+    title: '银行流水号',
+    dataIndex: 'bankTransactionNo',
+    width: 200,
+  }, {
+    title: '付款客户名称',
+    dataIndex: 'payCustName',
+    width: 200,
+  }, {
+    title: '客户付款银行',
+    dataIndex: 'payBankName',
+    width: 200,
+  }, {
+    title: '客户付款银行账号',
+    dataIndex: 'payBankAccount',
+    width: 200,
   }, {
     title: '收款分类',
     dataIndex: 'claimType',
@@ -62,19 +90,11 @@ export default class ProjectReceiptClaim extends React.Component {
     width: 100,
     render: (text, record, index) => text || record.cashierApproveMessage,
   }, {
-    title: '币种',
-    dataIndex: 'currency',
-    width: 100,
-  }, {
-    title: '收款金额',
-    dataIndex: 'receiptAmount',
-    width: 100,
-  }, {
     title: '项目编码',
     dataIndex: 'projectNo',
     width: 100,
   }, {
-    title: '项目阶段',
+    title: '付款条款',
     dataIndex: 'paymentPhrases',
     width: 100,
   }, {
@@ -97,31 +117,11 @@ export default class ProjectReceiptClaim extends React.Component {
     title: '部门',
     dataIndex: 'deptId',
     width: 100,
-  }, {
-    title: '公司',
-    dataIndex: 'companyName',
-    width: 100,
   // }, {
   //   title: 'GL日期',
   //   dataIndex: 'glDate',
   //   width: 100,
   //   render: text => moment(text).format(dateFormat),
-  }, {
-    title: '银行流水号',
-    dataIndex: 'bankTransactionNo',
-    width: 200,
-  }, {
-    title: '付款客户名称',
-    dataIndex: 'payCustName',
-    width: 200,
-  }, {
-    title: '客户付款银行',
-    dataIndex: 'payBankName',
-    width: 200,
-  }, {
-    title: '客户付款银行账号',
-    dataIndex: 'payBankAccount',
-    width: 200,
   }, {
     title: '收款编号',
     dataIndex: 'receiptNo',
