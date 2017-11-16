@@ -82,7 +82,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   handleSelect = (pageNo, pageSize) => {
     const queryParam = this.props.form.getFieldsValue()
     if (queryParam.cust) {
-      queryParam.custId = queryParam.cust[0]
+      queryParam.custName = queryParam.cust[1]
       delete queryParam.cust
     }
     const param = { ...queryParam,
