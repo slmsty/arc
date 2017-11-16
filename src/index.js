@@ -69,13 +69,14 @@ export const permission = {
           component: 'ReviewReceiptClaimContainer',
         },
         {
+          key: '16',
           path: '/receiptManagement/customerBankLink',
           name: '客户银行帐号关系',
           icon: 'icon-shoukuanrenlingfuhe',
           component: 'CustomerBankLinkContainer',
         },
         {
-          key: '16',
+          key: '17',
           path: '/receiptManagement/contractChange',
           name: '合同变更明细',
           icon: 'icon-xiangmushoukuan',

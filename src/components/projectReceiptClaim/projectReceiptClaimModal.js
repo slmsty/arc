@@ -45,7 +45,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     width: 100,
     render: (text, record, index) => (<EditableSelectCell
       editable
-      value={text ? text : 'On account'}
+      value={text}
       options={[{ id: 'On account', name: 'On account' }, { id: 'Deposit', name: 'Deposit' }]}
       onChange={value => this.handleClaimFundChange(index, value, 'receiptUse')}
     />),
@@ -84,9 +84,21 @@ export default class ProjectReceiptClaimModal extends React.Component {
     dataIndex: 'receiptAmount',
     width: 100,
   }, {
+    title: '合同币种',
+    dataIndex: 'contractCurrency',
+    width: 100,
+  }, {
     title: '项目编码',
     dataIndex: 'projectNo',
     width: 200,
+  }, {
+    title: '付款阶段',
+    dataIndex: 'paymentPhrases',
+    width: 100,
+  }, {
+    title: '付款百分比',
+    dataIndex: 'paymentPercent',
+    width: 100,
   }, {
     title: '合同编码',
     dataIndex: 'contractNo',
@@ -95,18 +107,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '合同名称',
     dataIndex: 'contractName',
     width: 300,
-  }, {
-    title: '项目阶段',
-    dataIndex: 'paymentPhrases',
-    width: 100,
-  }, {
-    title: '付款百分比',
-    dataIndex: 'paymentPercent',
-    width: 100,
-  }, {
-    title: '发票号',
-    dataIndex: 'invoiceNo',
-    width: 100,
   }, {
     title: 'SBU',
     dataIndex: 'sbuId',
@@ -118,6 +118,10 @@ export default class ProjectReceiptClaimModal extends React.Component {
   }, {
     title: '项目经理',
     dataIndex: 'manager',
+    width: 100,
+  }, {
+    title: '发票号',
+    dataIndex: 'invoiceNo',
     width: 100,
   }, {
     title: '操作',
@@ -198,6 +202,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
           fund.receiptAmount = addFund.arAmount
           fund.fundReceivableBalance = addFund.receivableBalance
           fund.claimContractAmount = addFund.receivableBalance
+          fund.receiptUse = 'On account'
           fund.custId = ''
           funds.push(fund)
         }

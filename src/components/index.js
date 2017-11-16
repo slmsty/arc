@@ -21,7 +21,6 @@ const getBreadcrumbName = (menu, url) => {
       }
     })
   }
-  console.log(name)
   return name
 }
 

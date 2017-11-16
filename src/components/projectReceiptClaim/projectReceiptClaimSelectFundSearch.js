@@ -24,12 +24,32 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     this.setState({ selectedRowKeys, selectedRows })
   }
   columns = [{
-    title: '客户名称',
-    dataIndex: 'custName',
-    width: 100,
-  }, {
     title: '项目编码',
     dataIndex: 'projectNo',
+    width: 100,
+  }, {
+    title: '付款条款',
+    dataIndex: 'paymentPhrases',
+    width: 100,
+  }, {
+    title: '付款百分比',
+    dataIndex: 'paymentPercent',
+    width: 100,
+  }, {
+    title: '合同币种',
+    dataIndex: 'contractCurrency',
+    width: 100,
+  }, {
+    title: '应收金额',
+    dataIndex: 'arAmount',
+    width: 100,
+  }, {
+    title: '应收余额',
+    dataIndex: 'receivableBalance',
+    width: 100,
+  }, {
+    title: '客户名称',
+    dataIndex: 'custName',
     width: 100,
   }, {
     title: '合同编码',
@@ -39,18 +59,6 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     title: '合同名称',
     dataIndex: 'contractName',
     width: 200,
-  }, {
-    title: '项目阶段',
-    dataIndex: 'paymentPhrases',
-    width: 100,
-  }, {
-    title: '付款百分比',
-    dataIndex: 'paymentPercent',
-    width: 100,
-  }, {
-    title: '发票号',
-    dataIndex: 'invoiceNo',
-    width: 100,
   }, {
     title: 'SBU',
     dataIndex: 'sbuId',
@@ -64,12 +72,8 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     dataIndex: 'manager',
     width: 100,
   }, {
-    title: '应收金额',
-    dataIndex: 'arAmount',
-    width: 100,
-  }, {
-    title: '应收余额',
-    dataIndex: 'receivableBalance',
+    title: '发票号',
+    dataIndex: 'invoiceNo',
     width: 100,
   },
   ]
