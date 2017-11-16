@@ -100,11 +100,11 @@ export default class ProjectReceiptClaim extends React.Component {
     title: '公司',
     dataIndex: 'companyName',
     width: 100,
-  }, {
-    title: 'GL日期',
-    dataIndex: 'glDate',
-    width: 100,
-    render: text => moment(text).format(dateFormat),
+  // }, {
+  //   title: 'GL日期',
+  //   dataIndex: 'glDate',
+  //   width: 100,
+  //   render: text => moment(text).format(dateFormat),
   }, {
     title: '银行流水号',
     dataIndex: 'bankTransactionNo',
