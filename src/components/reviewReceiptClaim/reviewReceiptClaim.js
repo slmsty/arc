@@ -21,14 +21,6 @@ const columns = [{
   width: 80,
   fixed: 'left',
 }, {
-  title: '收款日期',
-  dataIndex: 'receiptDate',
-  width: 150,
-}, {
-  title: '收款分类',
-  dataIndex: 'claimTypeName',
-  width: 100,
-}, {
   title: '收款来源',
   dataIndex: 'sourceTypeName',
   width: 100,
@@ -37,9 +29,33 @@ const columns = [{
   dataIndex: 'companyName',
   width: 150,
 }, {
+  title: '收款日期',
+  dataIndex: 'receiptDate',
+  width: 150,
+}, {
+  title: '币种',
+  dataIndex: 'currency',
+  width: 100,
+}, {
+  title: '收款金额',
+  dataIndex: 'receiptAmount',
+  width: 100,
+}, {
+  title: '银行流水号',
+  dataIndex: 'bankTransactionNo',
+  width: 200,
+}, {
+  title: '付款客户名称',
+  dataIndex: 'payCustName',
+  width: 200,
+}, {
+  title: '客户付款银行账号',
+  dataIndex: 'payBankAccount',
+  width: 200,
+}, {
   title: '客户名称',
   dataIndex: 'custName',
-  width: 300,
+  width: 200,
 }, {
   title: '认款金额',
   dataIndex: 'claimAmount',
@@ -53,25 +69,12 @@ const columns = [{
   dataIndex: 'accountantApproveMessage',
   width: 100,
 }, {
-  title: '币种',
-  dataIndex: 'currency',
-  width: 100,
-}, {
-  title: '收款金额',
-  dataIndex: 'receiptAmount',
-  width: 100,
-}, {
-  title: '订单号',
-  dataIndex: 'custOrderId',
-  key: '11',
-  width: 100,
-}, {
   title: '项目编码',
   dataIndex: 'projectNo',
   width: 100,
 }, {
-  title: '项目阶段',
-  dataIndex: 'paymentPhrases',
+  title: '付款条款',
+  dataIndex: 'paymentName',
   width: 100,
 }, {
   title: '付款百分比',
@@ -80,11 +83,7 @@ const columns = [{
 }, {
   title: '合同编码',
   dataIndex: 'contractNo',
-  width: 400,
-}, {
-  title: '合同名称',
-  dataIndex: 'contractName',
-  width: 500,
+  width: 200,
 }, {
   title: '发票号',
   dataIndex: 'invoiceNo',
@@ -97,47 +96,49 @@ const columns = [{
   title: '部门',
   dataIndex: 'deptId',
   width: 100,
-}, {
-  title: '注销收款标识',
-  dataIndex: 'receiptWriteOffSign',
-  key: '19',
-  width: 100,
-}, {
-  title: '银行流水号',
-  dataIndex: 'bankTransactionNo',
-  width: 200,
-}, {
-  title: '付款客户名称',
-  dataIndex: 'payCustName',
-  width: 400,
-}, {
-  title: '客户付款银行',
-  dataIndex: 'payBankName',
-  width: 300,
-}, {
-  title: '客户付款银行账号',
-  dataIndex: 'payBankAccount',
-  width: 200,
-}, {
-  title: '收款编号',
-  dataIndex: 'receiptNo',
-  width: 200,
-}, {
-  title: '认款人',
-  dataIndex: 'accountantId',
-  width: 150,
-}, {
-  title: '复核人',
-  dataIndex: '26',
-  key: '26',
-  width: 150,
-}, {
-  title: '创建提示',
-  dataIndex: 'statusRemark',
-  key: '27',
-  width: 400,
 },
 ]
+/*  {
+ title: '收款编号',
+ dataIndex: 'receiptNo',
+ width: 200,
+ }, {
+ title: '认款人',
+ dataIndex: 'accountantId',
+ width: 150,
+ },{
+  title: '订单号',
+    dataIndex: 'custOrderId',
+  key: '11',
+  width: 100,
+}, {
+  title: '项目阶段',
+    dataIndex: 'paymentPhrases',
+    width: 100,
+}, {
+  title: '合同名称',
+    dataIndex: 'contractName',
+    width: 500,
+}, {
+  title: '注销收款标识',
+    dataIndex: 'receiptWriteOffSign',
+    key: '19',
+    width: 100,
+}, {
+  title: '客户付款银行',
+    dataIndex: 'payBankName',
+    width: 300,
+}, {
+  title: '复核人',
+    dataIndex: '26',
+    key: '26',
+    width: 150,
+}, {
+  title: '创建提示',
+    dataIndex: 'statusRemark',
+    key: '27',
+    width: 400,
+}, */
 export default class ReviewReceiptClaim extends React.Component {
   state = {
     loading: false,
@@ -368,7 +369,7 @@ export default class ReviewReceiptClaim extends React.Component {
         bordered
         size="middle"
         pagination={pagination}
-        scroll={{ x: '480%', y: this.state.tableHeight }}
+        scroll={{ x: '260%', y: this.state.tableHeight }}
         loading={this.state.loading}
       />
       {/* 弹出传送ARglDatemodal */}

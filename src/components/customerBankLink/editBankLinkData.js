@@ -53,7 +53,7 @@ class EditBankLinkData extends React.Component {
     }
     const { getFieldDecorator } = this.props.form
     const modalData = this.props.editModalData
-    console.log('modal data', modalData)
+    // console.log('modal data', modalData)
     return (
       <div>
         <Modal
