@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Input, Button, DatePicker, Select } from 'antd'
+import { Form, Row, Col, Input, Button, DatePicker, Select, message } from 'antd'
 import moment from 'moment'
 
 import SelectInvokeApi from '../common/selectInvokeApi'
@@ -20,6 +20,12 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
   handleQuery = (e) => {
     if (e) e.preventDefault()
     const param = this.props.form.getFieldsValue()
+
+    if (param.receiptAmountFrom && param.receiptAmountTo && param.receiptAmountFrom > param.receiptAmountTo) {
+      message.error('最小金额不能大于最大金额，请修改。')
+      return
+    }
+
     param.receiptDateStart = param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
     param.receiptDateEnd = param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
     delete param.receiptDate
