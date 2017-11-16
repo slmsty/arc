@@ -15,9 +15,22 @@ const cbsTurnoverWholenessData = {
 }
 
 function getCBSTurnoverWholenessData(state, action) {
-  return { ...state, cbsTurnoverWholenessList: action.response }
-}
 
+  return {
+    ...state,
+    cbsTurnoverWholenessList: {
+      ...action.response,
+      pageInfo: {
+        ...action.response.pageInfo,
+        result: action.response.pageInfo.result.map(data => ({
+          ...data,
+          receiptAmount: data.transactionType === 'RECEIPT' ? data.receiptAmount : '',
+          payAmount: data.transactionType === 'REFUND' ? data.receiptAmount : '',
+        })),
+      },
+    },
+  }
+}
 function editConfirm(state) {
   return { ...state, cbsTurnoverEditConfirmResult: new Date().getTime() }
 }
