@@ -108,7 +108,7 @@ class SelectCustomer extends React.Component {
       onChange: this.onSelectChange,
     }
     const value = (this.props.value && this.props.value[1] !== undefined) ? this.props.value : this.props.initialValue
-    const suffix = value && value[1] !== undefined ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input

@@ -140,7 +140,10 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户">
                 {getFieldDecorator('cust')(
-                  <SelectCustomerWithForm />,
+                  <SelectCustomerWithForm
+                    defaultQueryParam={this.props.receiptInfo.custName}
+                    initialValue={[this.props.receiptInfo.custId, this.props.receiptInfo.custName]}
+                  />,
                 )}
               </FormItem>
             </Col>
@@ -228,6 +231,10 @@ ProjectReceiptClaimSelectFund.propTypes = {
     pageNo: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,
     result: PropTypes.arrayOf.isRequired,
+  }).isRequired,
+  receiptInfo: PropTypes.shape({
+    custId: PropTypes.string,
+    custName: PropTypes.string,
   }).isRequired,
   getPhaseCompleted: PropTypes.number.isRequired,
   visible: PropTypes.bool.isRequired,
