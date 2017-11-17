@@ -9,19 +9,19 @@ import './index.css'
 
 const { Header, Sider, Content } = Layout
 
-const getBreadcrumbName = (menu, url) => {
-  if (menu.path === url) {
-    return menu.name
-  }
-  let name = ''
-  if (menu.menu) {
-    menu.menu.forEach((childMenu) => {
-      if (!name) {
-        name = getBreadcrumbName(childMenu, url)
+const getBreadcrumbName = (menus, url) => {
+  let menuName = ''
+  if (menus && menus.length > 0) {
+    menus.forEach((menu) => {
+      if (menu.path === url) {
+        menuName = menu.name
+      }
+      if (!menuName) {
+        menuName = getBreadcrumbName(menu.child, url)
       }
     })
   }
-  return name
+  return menuName
 }
 
 const BreadcrumbContainer = withRouter((props) => {
@@ -32,7 +32,7 @@ const BreadcrumbContainer = withRouter((props) => {
     return (
       <Breadcrumb.Item key={url}>
         <Link to={url}>
-          {getBreadcrumbName(permission, url)}
+          {getBreadcrumbName(permission.menu, url)}
         </Link>
       </Breadcrumb.Item>
     )

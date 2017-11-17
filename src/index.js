@@ -24,7 +24,7 @@ export const permission = {
       name: '回款管理',
       icon: 'icon-huikuanguanli',
       component: 'HomeContainer',
-      menu: [
+      child: [
         {
           key: '11',
           path: '/receiptManagement/cbsTurnoverWholenessConfirm',
@@ -38,7 +38,7 @@ export const permission = {
           name: '人工录入银行流水',
           icon: 'icon-rengongluru',
           component: 'ManualEntryBankTurnover',
-          menu: [
+          child: [
             {
               key: '121',
               path: '/receiptManagement/manualEntryBankTurnover/batchImport',
@@ -90,7 +90,7 @@ export const permission = {
       name: 'Billed AR管理',
       icon: 'icon-BilledAR',
       component: 'HomeContainer',
-      menu: [
+      child: [
         {
           key: '21',
           path: '/billedAR/approve',
@@ -113,7 +113,7 @@ export const permission = {
       name: '坏账管理',
       icon: 'icon-huaizhangguanli',
       component: 'HomeContainer',
-      menu: [
+      child: [
         {
           key: '31',
           path: '/badDebts/apply',

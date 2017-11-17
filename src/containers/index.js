@@ -86,15 +86,13 @@ class IndexContainer extends React.Component {
       return BadDebtsStatus
     }
   }
-  getMenuRoutes = (menu) => {
-    if (menu) {
+  getMenuRoutes = (menus) => {
+    if (menus && menus.length > 0) {
       let menuRoutes = []
-      if (menu.menu) {
-        menu.menu.forEach((childMenu) => {
-          menuRoutes = menuRoutes.concat(this.getMenuRoutes(childMenu))
-        })
-      }
-      menuRoutes.push(<Route key={menu.key} exact path={menu.path} component={this.getMenuComponent(menu.component)} />)
+      menus.forEach((menu) => {
+        menuRoutes.push(<Route key={menu.key} exact path={menu.path} component={this.getMenuComponent(menu.component)} />)
+        menuRoutes = menuRoutes.concat(this.getMenuRoutes(menu.child))
+      })
       return menuRoutes
     }
     return null
@@ -105,7 +103,7 @@ class IndexContainer extends React.Component {
     if (!accountId) {
       return null
     }
-    const menuRoutes = this.getMenuRoutes(permission)
+    const menuRoutes = this.getMenuRoutes(permission.menu)
     return (
       <Router basename={process.env.PUBLIC_URL}>
         <div style={{ height: '100%' }}>
