@@ -29,6 +29,19 @@ export function reject(receiptClaimIds) {
   }
 }
 
+export function changeClaimType(changeParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/changeClaimType',
+      options: {
+        method: 'POST',
+        body: changeParam,
+      },
+      types: ['NO_PROJECT_RECEIPT_CLAIM_CHANGE_SUCCESS'],
+    },
+  }
+}
+
 export function submitClaim(submitParam) {
   return {
     [httpApi]: {

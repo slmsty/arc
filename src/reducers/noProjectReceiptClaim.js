@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import caseReducer from './caseReducer'
 
-const projectReceiptClaim = {
+const noProjectReceiptClaim = {
   receiptClaimList: {
     pageNo: 1,
     pageSize: 10,
@@ -40,6 +40,10 @@ function rejectSuccess(state) {
   return { ...state, receiptClaimListRefresh: new Date().getTime() }
 }
 
+function changeSuccess(state) {
+  return { ...state, receiptClaimListRefresh: new Date().getTime() }
+}
+
 function submitSuccess(state) {
   return { ...state, receiptInfo: {}, receiptClaimListRefresh: new Date().getTime() }
 }
@@ -48,11 +52,12 @@ function closeClaim(state) {
   return { ...state, receiptInfo: {} }
 }
 
-export default caseReducer(projectReceiptClaim, {
+export default caseReducer(noProjectReceiptClaim, {
   GET_NO_PROJECT_RECEIPT_LIST_SUCCESS: getReceiptList,
   GET_NO_PROJECT_RECEIPT_ORDER_LIST_SUCCESS: getOrderList,
   NO_PROJECT_RECEIPT_CLAIM_SUBMIT_SUCCESS: submitSuccess,
   NO_PROJECT_RECEIPT_CLAIM_REJECT_SUCCESS: rejectSuccess,
+  NO_PROJECT_RECEIPT_CLAIM_CHANGE_SUCCESS: changeSuccess,
   OPEN_NO_PROJECT_CLAIM: openClaim,
   CLOSE_NO_PROJECT_CLAIM: closeClaim,
 })

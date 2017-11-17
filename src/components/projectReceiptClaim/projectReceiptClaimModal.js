@@ -36,7 +36,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
       editable
       value={text}
       min={0}
-      max={this.props.receiptInfo.receiptAmount}
+      max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount > record.receivableBalance ? record.receivableBalance : this.props.receiptInfo.receiptAmount}
       onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
     />),
   }, {
@@ -54,12 +54,12 @@ export default class ProjectReceiptClaimModal extends React.Component {
     dataIndex: 'claimContractAmount',
     width: 150,
     render: (text, record, index) => {
-      const editable = true
+      const editable = this.props.receiptInfo.receiptCurrency !== record.contractCurrency
       return (<EditableNumberCell
         editable={editable}
         value={text}
         min={0}
-        max={record.receivableBalance}
+        max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount < record.receivableBalance ? this.props.receiptInfo.receiptAmount : record.receivableBalance}
         onChange={value => this.handleClaimFundChange(index, value, 'claimContractAmount')}
       />)
     },
@@ -144,6 +144,9 @@ export default class ProjectReceiptClaimModal extends React.Component {
         funds[index].custName = value[1]
       } else {
         funds[index][key] = value
+        if (key === 'claimAmount' && this.props.receiptInfo.receiptCurrency === funds[index].contractCurrency) {
+          funds[index].claimContractAmount = value
+        }
       }
       this.setState({ funds })
       this.edited = true
@@ -198,10 +201,15 @@ export default class ProjectReceiptClaimModal extends React.Component {
         }
         if (!isExist) {
           const fund = addFund
-          fund.claimAmount = this.props.receiptInfo.receiptAmount
+          if (this.props.receiptInfo.receiptCurrency === addFund.contractCurrency) {
+            fund.claimAmount = this.props.receiptInfo.receiptAmount < addFund.receivableBalance ? this.props.receiptInfo.receiptAmount : addFund.receivableBalance
+            fund.claimContractAmount = fund.claimAmount
+          } else {
+            fund.claimAmount = this.props.receiptInfo.receiptAmount
+            fund.claimContractAmount = addFund.receivableBalance
+          }
           fund.receiptAmount = addFund.arAmount
           fund.fundReceivableBalance = addFund.receivableBalance
-          fund.claimContractAmount = addFund.receivableBalance
           fund.receiptUse = 'On account'
           fund.custId = ''
           funds.push(fund)
@@ -302,6 +310,7 @@ ProjectReceiptClaimModal.propTypes = {
     receiptNo: PropTypes.string,
     custName: PropTypes.string,
     paymentNameId: PropTypes.string,
+    receiptCurrency: PropTypes.string,
   }).isRequired,
   receiptClaimFundList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,

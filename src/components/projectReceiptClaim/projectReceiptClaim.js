@@ -33,7 +33,7 @@ export default class ProjectReceiptClaim extends React.Component {
     fixed: 'left',
   }, {
     title: '收款来源',
-    dataIndex: 'sourceType',
+    dataIndex: 'sourceTypeName',
     width: 100,
   }, {
     title: '公司',
@@ -70,7 +70,7 @@ export default class ProjectReceiptClaim extends React.Component {
     width: 200,
   }, {
     title: '收款分类',
-    dataIndex: 'claimType',
+    dataIndex: 'claimTypeName',
     width: 100,
   }, {
     title: '客户名称',
@@ -165,7 +165,6 @@ export default class ProjectReceiptClaim extends React.Component {
     this.setState({ selectedRowKeys: [] })
     this.props.getReceiptList(this.queryParam)
   }
-
   handleOpenClaim = () => {
     if (this.state.selectedRowKeys.length === 0) {
       message.error('请选择要认款的收款流水')
@@ -176,6 +175,26 @@ export default class ProjectReceiptClaim extends React.Component {
       return
     }
     this.props.getReceiptInfo(this.state.selectedRowKeys[0])
+  }
+  handleChangeClaimType = () => {
+    if (this.state.selectedRowKeys.length === 0) {
+      message.error('请选择要认款到订单的收款流水')
+      return
+    }
+    const that = this
+    Modal.confirm({
+      title: '操作确认',
+      content: `您确认要将所选择的${that.state.selectedRowKeys.length}条流水数据认款到订单吗`,
+      okText: '是',
+      cancelText: '否',
+      onOk() {
+        const changeParam = {
+          receiptClaimIds: that.state.selectedRowKey,
+          claimType: 'order',
+        }
+        that.props.changeClaimType(changeParam)
+      },
+    })
   }
   handleReject = () => {
     if (this.state.selectedRowKeys.length === 0) {
@@ -208,6 +227,7 @@ export default class ProjectReceiptClaim extends React.Component {
           onQuery={this.handleChangeParam}
         />
         <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
+        <Button type="primary" onClick={this.handleChangeClaimType}>认款到订单</Button>&nbsp;&nbsp;
         {rejectBtn}
         <br /><br />
         <Table
@@ -239,6 +259,7 @@ ProjectReceiptClaim.propTypes = {
   // }).isRequired,
   getReceiptList: PropTypes.func.isRequired,
   reject: PropTypes.func.isRequired,
+  changeClaimType: PropTypes.func.isRequired,
   getReceiptInfo: PropTypes.func.isRequired,
   receiptClaimList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
