@@ -54,6 +54,10 @@ export default class ProjectReceiptClaim extends React.Component {
     width: 100,
     render: (text, record, index) => (record.transactionType !== 'RECEIPT' ? -text : text),
   }, {
+    title: '收款分类',
+    dataIndex: 'claimTypeName',
+    width: 100,
+  }, {
     title: '银行流水号',
     dataIndex: 'bankTransactionNo',
     width: 200,
@@ -69,10 +73,6 @@ export default class ProjectReceiptClaim extends React.Component {
     title: '客户付款银行账号',
     dataIndex: 'payBankAccount',
     width: 200,
-  }, {
-    title: '收款分类',
-    dataIndex: 'claimTypeName',
-    width: 100,
   }, {
     title: '客户名称',
     dataIndex: 'custName',
