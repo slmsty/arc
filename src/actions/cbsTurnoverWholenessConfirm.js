@@ -54,3 +54,16 @@ export function initEditData(receiptClaimId) {
     },
   }
 }
+
+export function batchConfirm(confirmList) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/cashier/batchConfirm/cbs',
+      options: {
+        method: 'POST',
+        body: confirmList,
+      },
+      types: ['BATCH_CONFIRM_CBS_TURNOVER_EDIT_SUCCESS'],
+    },
+  }
+}

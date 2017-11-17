@@ -12,10 +12,10 @@ const cbsTurnoverWholenessData = {
   cbsTurnoverEditConfirmResult: new Date().getTime(),
   cbsTurnoverEditExceptResult: new Date().getTime(),
   initSingleReceiptResult: {},
+  batchConfirmResult: new Date().getTime(),
 }
 
 function getCBSTurnoverWholenessData(state, action) {
-
   return {
     ...state,
     cbsTurnoverWholenessList: {
@@ -39,6 +39,10 @@ function editExcept(state) {
   return { ...state, cbsTurnoverEditExceptResult: new Date().getTime() }
 }
 
+function batchConfirm(state) {
+  return { ...state, batchConfirmResult: new Date().getTime() }
+}
+
 function initEditData(state, action) {
   return { ...state, initSingleReceiptResult: action.response.data.length ? action.response.data[0] : {} }
 }
@@ -48,4 +52,5 @@ export default caseReducer(cbsTurnoverWholenessData, {
   CONFIRM_CBS_TURNOVER_EDIT_SUCCESS: editConfirm,
   EXCEPT_CBS_TURNOVER_EDIT_SUCCESS: editExcept,
   GET_SINGLE_CBS_RECEIPT_CLAIM_INFO_SUCCESS: initEditData,
+  BATCH_CONFIRM_CBS_TURNOVER_EDIT_SUCCESS: batchConfirm,
 })

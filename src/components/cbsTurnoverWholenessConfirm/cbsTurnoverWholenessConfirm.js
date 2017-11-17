@@ -94,7 +94,7 @@ const columns = [{
   key: 'bankTransactionPurpose',
   width: 300,
 }, {
-  title: '流水分类',
+  title: '收款分类',
   dataIndex: 'claimTypeName',
   key: 'claimTypeName',
   width: 80,
@@ -125,6 +125,11 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
 
     if (this.props.cbsTurnoverEditExceptResult !== nextProps.cbsTurnoverEditExceptResult) {
       message.info('数据状态变更为“无需认款”。')
+      this.handleQuery(true)
+    }
+
+    if (this.props.batchConfirmResult !== nextProps.batchConfirmResult) {
+      message.info(`${this.state.selectedRowKeys.length}条已确认成功。`)
       this.handleQuery(true)
     }
   }
@@ -184,6 +189,13 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
       this.props.editExcept({ list: this.state.selectedRowKeys.map(item => ({ receiptClaimId: item, remark: '' })) })
     }
   }
+  handleBatchConfirm = () => {
+    if (!this.state.selectedRowKeys.length) {
+      message.error('请选择需要批量确认的数据。')
+    } else {
+      this.props.batchConfirm({ receiptClaimIds: this.state.selectedRowKeys })
+    }
+  }
   handleChangeStatus = (status) => {
     this.setState({ exceptDisabled: status === '11' })
   }
@@ -213,6 +225,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           <Col span={8}>
             <Button type="primary" onClick={this.handleEdit}>编辑</Button>&nbsp;&nbsp;
             <Button type="default" onClick={this.handleExcept} disabled={this.state.exceptDisabled}>排除</Button>&nbsp;&nbsp;
+            <Button type="default" onClick={this.handleBatchConfirm}>确认</Button>&nbsp;&nbsp;
           </Col>
           <Col span={16} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary()}</span>
@@ -247,6 +260,7 @@ CBSTurnoverWholenessConfirm.propTypes = {
   editExcept: PropTypes.func.isRequired,
   cbsTurnoverEditConfirmResult: PropTypes.number.isRequired,
   cbsTurnoverEditExceptResult: PropTypes.number.isRequired,
+  batchConfirmResult: PropTypes.number.isRequired,
   cbsTurnoverWholenessList: PropTypes.shape({
     pageInfo: PropTypes.shape({
       pageNo: PropTypes.number.isRequired,
@@ -256,6 +270,7 @@ CBSTurnoverWholenessConfirm.propTypes = {
     amountTotals: PropTypes.array.isRequired,
   }).isRequired,
   initEditData: PropTypes.func.isRequired,
+  batchConfirm: PropTypes.func.isRequired,
   initSingleReceiptResult: PropTypes.shape().isRequired,
 }
 

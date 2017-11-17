@@ -66,20 +66,6 @@ class EditCBSTurnoverData extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col span={24} key={2}>
-                <FormItem {...formItemLayout} label="流水分类">
-                  {getFieldDecorator('claimType', {
-                    initialValue: this.props.initData.claimType,
-                  })(<SelectInvokeApi
-                    id="sourceType"
-                    typeCode="ARC_RECEIPT_CLAIM"
-                    paramCode="CLAIM_TYPE"
-                    placeholder="请选择流水分类"
-                  />)}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
               <Col span={24} key={3}>
                 <FormItem {...formItemLayout} label="客户付款方式">
                   {getFieldDecorator('custPayMethod', {

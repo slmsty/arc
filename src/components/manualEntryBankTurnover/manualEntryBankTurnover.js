@@ -201,7 +201,7 @@ export default class ManualEntryBankTurnover extends React.Component {
             key: 'custName',
             width: 300,
           }, {
-            title: '流水分类',
+            title: '收款分类',
             dataIndex: 'claimTypeName',
             key: 'claimTypeName',
             width: 100,
