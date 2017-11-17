@@ -27,41 +27,47 @@ const columns = [{
   key: 'receiptCurrency',
   width: 45,
 }, {
+  title: '银行交易类型',
+  dataIndex: 'transactionTypeName',
+  key: 'transactionTypeName',
+  width: 100,
+}, {
   title: '收款金额',
   dataIndex: 'receiptAmount',
   key: 'receiptAmount',
   width: 100,
   render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
 }, {
-  title: '付款客户名称',
-  dataIndex: 'payCustName',
-  key: 'payCustName',
-  width: 300,
+  title: '退款金额',
+  dataIndex: 'payAmount',
+  key: 'payAmount',
+  width: 100,
+  render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
 }, {
-  title: '银行流水备注',
-  dataIndex: 'bankTransactionPurpose',
-  key: 'bankTransactionPurpose',
-  width: 300,
+  title: '收款银行',
+  dataIndex: 'receiptBankAccountName',
+  key: 'receiptBankAccountName',
+  width: 150,
+}, {
+  title: '收款银行账号',
+  dataIndex: 'receiptBankAccount',
+  key: 'receiptBankAccount',
+  width: 150,
 }, {
   title: '公司',
   dataIndex: 'companyName',
   key: 'companyName',
   width: 300,
 }, {
+  title: '付款客户名称',
+  dataIndex: 'payCustName',
+  key: 'payCustName',
+  width: 300,
+}, {
   title: '客户名称',
   dataIndex: 'custName',
   key: 'custName',
   width: 300,
-}, {
-  title: '流水分类',
-  dataIndex: 'claimTypeName',
-  key: 'claimTypeName',
-  width: 80,
-}, {
-  title: '备注',
-  dataIndex: 'cashierApproveMessage',
-  key: 'cashierApproveMessage',
-  width: 635,
 }, {
   title: '客户付款方式',
   dataIndex: 'custPayMethodName',
@@ -82,6 +88,21 @@ const columns = [{
   dataIndex: 'bankTransactionNo',
   key: 'bankTransactionNo',
   width: 200,
+}, {
+  title: '银行流水备注',
+  dataIndex: 'bankTransactionPurpose',
+  key: 'bankTransactionPurpose',
+  width: 300,
+}, {
+  title: '流水分类',
+  dataIndex: 'claimTypeName',
+  key: 'claimTypeName',
+  width: 80,
+}, {
+  title: '备注',
+  dataIndex: 'cashierApproveMessage',
+  key: 'cashierApproveMessage',
+  width: 635,
 },
 ]
 
@@ -206,7 +227,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           rowKey="receiptClaimId"
           size="middle"
           pagination={pagination}
-          scroll={{ x: '2970px' }}
+          scroll={{ x: '3320px' }}
         />
         <EditCBSTurnoverDataWithForm
           onConfirm={this.handleEditConfirm}

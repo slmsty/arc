@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Button, DatePicker, Select } from 'antd'
+import { Form, Row, Col, Input, Button, DatePicker, Select, message } from 'antd'
 import moment from 'moment'
 
+import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectCustomerWithForm from '../common/selectCustomer'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
 
@@ -19,6 +20,12 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
   handleQuery = (e) => {
     if (e) e.preventDefault()
     const param = this.props.form.getFieldsValue()
+
+    if (param.receiptAmountFrom && param.receiptAmountTo && param.receiptAmountFrom > param.receiptAmountTo) {
+      message.error('最小金额不能大于最大金额，请修改。')
+      return
+    }
+
     param.receiptDateStart = param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
     param.receiptDateEnd = param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
     delete param.receiptDate
@@ -75,6 +82,40 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="收款方法">
                 {getFieldDecorator('receiptMethodId')(<SelectReceiptMethodWithForm />)}
+              </FormItem>
+            </Col>
+            <Col span={8} key={6}>
+              <FormItem {...formItemLayout} label="银行交易类型">
+                {getFieldDecorator('transactionType', {
+                  initialValue: 'RECEIPT',
+                })(<SelectInvokeApi
+                  id="sourceType"
+                  typeCode="ARC_RECEIPT_CLAIM"
+                  paramCode="TRANSACTION_TYPE"
+                  placeholder="请选择银行交易类型"
+                />)}
+              </FormItem>
+            </Col>
+            <Col span={8} key={7}>
+              <Row>
+                <Col span={13}>
+                  <FormItem {...formItemLayout} label="金额" labelCol={{ span: 9 }} wrapperCol={{ span: 15 }}>
+                    {getFieldDecorator('receiptAmountFrom')(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={2}><div style={{ textAlign: 'center' }}>～</div></Col>
+                <Col span={9}>
+                  <FormItem {...formItemLayout} wrapperCol={{ span: 24 }}>
+                    {getFieldDecorator('receiptAmountTo')(<Input />)}
+                  </FormItem>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="公司">
+                {getFieldDecorator('companyName')(<Input />)}
               </FormItem>
             </Col>
             <Col span={8} offset={8} style={{ textAlign: 'right' }}>
