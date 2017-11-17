@@ -29,7 +29,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     width: 100,
   }, {
     title: '付款条款',
-    dataIndex: 'paymentPhrases',
+    dataIndex: 'paymentName',
     width: 100,
   }, {
     title: '付款百分比',

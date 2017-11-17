@@ -92,8 +92,8 @@ export default class ProjectReceiptClaimModal extends React.Component {
     dataIndex: 'projectNo',
     width: 200,
   }, {
-    title: '付款阶段',
-    dataIndex: 'paymentPhrases',
+    title: '付款条款',
+    dataIndex: 'paymentName',
     width: 100,
   }, {
     title: '付款百分比',
