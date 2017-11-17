@@ -18,11 +18,15 @@ const formItemLayout = {
 const columns = [{
   title: '数据状态',
   dataIndex: 'statusName',
-  width: 80,
+  width: 100,
   fixed: 'left',
 }, {
   title: '收款来源',
   dataIndex: 'sourceTypeName',
+  width: 100,
+}, {
+  title: '收款分类',
+  dataIndex: 'claimType',
   width: 100,
 }, {
   title: '公司',
@@ -37,6 +41,10 @@ const columns = [{
   dataIndex: 'receiptCurrency',
   width: 100,
 }, {
+  title: '收款编号',
+  dataIndex: 'receiptNo',
+  width: 200,
+}, {
   title: '收款金额',
   dataIndex: 'receiptAmount',
   width: 100,
@@ -47,6 +55,10 @@ const columns = [{
 }, {
   title: '付款客户名称',
   dataIndex: 'payCustName',
+  width: 200,
+}, {
+  title: '客户付款银行',
+  dataIndex: 'payBankName',
   width: 200,
 }, {
   title: '客户付款银行账号',
@@ -69,12 +81,21 @@ const columns = [{
   dataIndex: 'accountantApproveMessage',
   width: 100,
 }, {
+  title: '订单号',
+  dataIndex: 'custOrderId',
+  key: '11',
+  width: 100,
+}, {
   title: '项目编码',
   dataIndex: 'projectNo',
   width: 100,
 }, {
   title: '付款条款',
   dataIndex: 'paymentName',
+  width: 100,
+}, {
+  title: '付款阶段',
+  dataIndex: 'paymentName3',
   width: 100,
 }, {
   title: '付款百分比',
@@ -84,6 +105,10 @@ const columns = [{
   title: '合同编码',
   dataIndex: 'contractNo',
   width: 200,
+}, {
+  title: '合同名称',
+  dataIndex: 'contractName',
+  width: 300,
 }, {
   title: '发票号',
   dataIndex: 'invoiceNo',
@@ -96,6 +121,21 @@ const columns = [{
   title: '部门',
   dataIndex: 'deptId',
   width: 100,
+}, {
+  title: '注销收款标识',
+  dataIndex: 'receiptWriteOffSign',
+  key: '19',
+  width: 100,
+}, {
+  title: '认款人',
+  dataIndex: 'accountantName',
+  key: '263',
+  width: 150,
+}, {
+  title: '复核人',
+  dataIndex: 'reviewAccountName',
+  key: '26',
+  width: 150,
 },
 ]
 /*  {
@@ -369,7 +409,7 @@ export default class ReviewReceiptClaim extends React.Component {
         bordered
         size="middle"
         pagination={pagination}
-        scroll={{ x: '260%', y: this.state.tableHeight }}
+        scroll={{ x: '400%', y: this.state.tableHeight }}
         loading={this.state.loading}
       />
       {/* 弹出传送ARglDatemodal */}
