@@ -35,6 +35,10 @@ function rejectSuccess(state) {
   return { ...state, receiptClaimListRefresh: new Date().getTime() }
 }
 
+function changeSuccess(state) {
+  return { ...state, receiptClaimListRefresh: new Date().getTime() }
+}
+
 function submitSuccess(state) {
   return { ...state, receiptInfo: {}, receiptClaimListRefresh: new Date().getTime() }
 }
@@ -49,5 +53,6 @@ export default caseReducer(projectReceiptClaim, {
   GET_PROJECT_RECEIPT_INFO_SUCCESS: getReceiptInfo,
   PROJECT_RECEIPT_CLAIM_SUBMIT_SUCCESS: submitSuccess,
   PROJECT_RECEIPT_CLAIM_REJECT_SUCCESS: rejectSuccess,
+  PROJECT_RECEIPT_CLAIM_CHANGE_SUCCESS: changeSuccess,
   CLOSE_PROJECT_CLAIM: closeClaim,
 })

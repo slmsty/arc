@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function,react/prop-types,max-len,react/require-default-props */
+/* eslint-disable react/prefer-stateless-function,react/prop-types,max-len,react/require-default-props,no-nested-ternary */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Select } from 'antd'
@@ -20,11 +20,18 @@ export default class SelectInvokeApi extends React.Component {
     if (response.resultCode === '000000') {
       const options = response.data
       if (this.props.hasEmpty) {
-        options.unshift({ paramValue: '', paramValueDesc: '请选择' })
+        options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
       }
       this.setState({
         options,
       })
+    }
+  }
+  handleChange = (value) => {
+    if (value === 'all') {
+      this.props.onChange('')
+    } else {
+      this.props.onChange(value)
     }
   }
   render() {
@@ -33,8 +40,8 @@ export default class SelectInvokeApi extends React.Component {
       <Select
         id={this.props.id}
         placeholder={this.props.placeholder}
-        onChange={value => this.props.onChange(value)}
-        value={this.props.value !== undefined ? this.props.value : this.props.initialValue}
+        onChange={this.handleChange}
+        value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : 'all')}
       >
         {optionDom}
       </Select>

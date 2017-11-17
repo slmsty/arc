@@ -131,7 +131,7 @@ class ReviewReceiptClaimSearch extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={9}>
-              <FormItem {...formItemLayout} label="流水分类">
+              <FormItem {...formItemLayout} label="收款分类">
                 {getFieldDecorator('claimType', {
                   initialValue: 'project',
                 })(
@@ -139,7 +139,7 @@ class ReviewReceiptClaimSearch extends React.Component {
                     id="claimType"
                     typeCode="ARC_RECEIPT_CLAIM"
                     paramCode="CLAIM_TYPE"
-                    placeholder="请选择流水分类" // <Select><Option value="project">项目</Option><Option value="">百一测评</Option</Select>
+                    placeholder="请选择收款分类" // <Select><Option value="project">项目</Option><Option value="">百一测评</Option</Select>
                   />,
                 )}
               </FormItem>

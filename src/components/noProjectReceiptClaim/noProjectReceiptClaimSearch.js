@@ -62,13 +62,12 @@ class NoProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="收款来源">
-                {getFieldDecorator('sourceType', {
-                  initialValue: 'cbs',
-                })(
+                {getFieldDecorator('sourceType')(
                   <SelectInvokeApi
                     typeCode="ARC_RECEIPT_CLAIM"
                     paramCode="SOURCE_TYPE"
                     placeholder="请选择收款来源"
+                    hasEmpty
                   />,
                 )}
               </FormItem>

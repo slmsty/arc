@@ -40,7 +40,7 @@ export default class NoProjectReceiptClaim extends React.Component {
     render: text => moment(text).format(dateFormat),
   }, {
     title: '收款来源',
-    dataIndex: 'sourceType',
+    dataIndex: 'sourceTypeName',
     width: 100,
   }, {
     title: '收款分类',
@@ -75,6 +75,7 @@ export default class NoProjectReceiptClaim extends React.Component {
     title: '收款金额',
     dataIndex: 'receiptAmount',
     width: 100,
+    render: (text, record, index) => (record.transactionType !== 'RECEIPT' ? -text : text),
   }, {
     title: '订单号',
     dataIndex: 'projectNo',
@@ -150,6 +151,26 @@ export default class NoProjectReceiptClaim extends React.Component {
     }
     this.props.openClaim(this.state.selectedRows[0])
   }
+  handleChangeClaimType = () => {
+    if (this.state.selectedRowKeys.length === 0) {
+      message.error('请选择要认款到项目的收款流水')
+      return
+    }
+    const that = this
+    Modal.confirm({
+      title: '操作确认',
+      content: `您确认要将所选择的${that.state.selectedRowKeys.length}条流水数据认款到项目吗`,
+      okText: '是',
+      cancelText: '否',
+      onOk() {
+        const changeParam = {
+          receiptClaimIds: that.state.selectedRowKey,
+          claimType: 'project',
+        }
+        that.props.changeClaimType(changeParam)
+      },
+    })
+  }
   handleReject = () => {
     if (this.state.selectedRowKeys.length === 0) {
       message.error('请选择要拒绝的收款流水')
@@ -180,6 +201,7 @@ export default class NoProjectReceiptClaim extends React.Component {
           onQuery={this.handleChangeParam}
         />
         <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
+        <Button type="primary" onClick={this.handleChangeClaimType}>认款到项目</Button>&nbsp;&nbsp;
         {rejectBtn}
         <br /><br />
         <Table
@@ -211,6 +233,7 @@ NoProjectReceiptClaim.propTypes = {
   // }).isRequired,
   getReceiptList: PropTypes.func.isRequired,
   reject: PropTypes.func.isRequired,
+  changeClaimType: PropTypes.func.isRequired,
   openClaim: PropTypes.func.isRequired,
   receiptClaimList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
