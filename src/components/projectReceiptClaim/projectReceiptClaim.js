@@ -46,7 +46,7 @@ export default class ProjectReceiptClaim extends React.Component {
     render: text => moment(text).format(dateFormat),
   }, {
     title: '币种',
-    dataIndex: 'currency',
+    dataIndex: 'receiptCurrency',
     width: 100,
   }, {
     title: '收款金额',

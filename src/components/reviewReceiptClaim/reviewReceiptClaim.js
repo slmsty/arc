@@ -34,7 +34,7 @@ const columns = [{
   width: 150,
 }, {
   title: '币种',
-  dataIndex: 'currency',
+  dataIndex: 'receiptCurrency',
   width: 100,
 }, {
   title: '收款金额',

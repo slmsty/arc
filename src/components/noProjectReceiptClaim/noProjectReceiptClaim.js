@@ -69,7 +69,7 @@ export default class NoProjectReceiptClaim extends React.Component {
     render: (text, record, index) => text || record.cashierApproveMessage,
   }, {
     title: '币种',
-    dataIndex: 'currency',
+    dataIndex: 'receiptCurrency',
     width: 100,
   }, {
     title: '收款金额',
