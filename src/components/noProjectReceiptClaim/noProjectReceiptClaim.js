@@ -43,7 +43,7 @@ export default class NoProjectReceiptClaim extends React.Component {
     dataIndex: 'sourceTypeName',
     width: 100,
   }, {
-    title: '收款分类',
+    title: '流水分类',
     dataIndex: 'claimTypeName',
     width: 100,
   }, {
