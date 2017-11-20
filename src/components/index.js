@@ -4,7 +4,6 @@ import { withRouter, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { Layout, Icon, Breadcrumb } from 'antd'
 import MenuComponent from './common/menu'
-import { permission } from '../index'
 import './index.css'
 
 const { Header, Sider, Content } = Layout
@@ -25,7 +24,7 @@ const getBreadcrumbName = (menus, url) => {
 }
 
 const BreadcrumbContainer = withRouter((props) => {
-  const { location } = props
+  const { location, permission } = props
   const pathSnippets = location.pathname.split('/').filter(i => i)
   const extraBreadcrumbItems = pathSnippets.map((_, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
@@ -75,6 +74,7 @@ export default class Index extends React.Component {
           </div>
           <MenuComponent
             collapsed={this.state.collapsed}
+            menu={this.props.permission.menu}
           />
         </Sider>
         <Layout>
@@ -84,7 +84,9 @@ export default class Index extends React.Component {
               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
-            <BreadcrumbContainer />
+            <BreadcrumbContainer
+              permission={this.props.permission}
+            />
             <div className="user">
               <img src={headIcon} alt="" />
               <p>欢迎您，<span>{staffName}</span><span>{orgName}</span></p>
@@ -107,5 +109,8 @@ Index.propTypes = {
     staffName: PropTypes.string.isRequired,
     orgName: PropTypes.string.isRequired,
     headIcon: PropTypes.string.isRequired,
+  }).isRequired,
+  permission: PropTypes.shape({
+    menu: PropTypes.arrayOf(PropTypes.shape()),
   }).isRequired,
 }
