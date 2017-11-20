@@ -32,36 +32,41 @@ const columns = [{
   key: 'transactionTypeName',
   width: 100,
 }, {
-  title: '收款金额',
+  title: '收入',
   dataIndex: 'receiptAmount',
   key: 'receiptAmount',
   width: 100,
   render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
 }, {
-  title: '退款金额',
+  title: '支出',
   dataIndex: 'payAmount',
   key: 'payAmount',
   width: 100,
   render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
 }, {
-  title: '收款银行',
+  title: '公司',
+  dataIndex: 'companyName',
+  key: 'companyName',
+  width: 80,
+}, {
+  title: '银行类型',
   dataIndex: 'receiptBankAccountName',
   key: 'receiptBankAccountName',
   width: 150,
 }, {
-  title: '收款银行账号',
+  title: '银行账号',
   dataIndex: 'receiptBankAccount',
   key: 'receiptBankAccount',
   width: 150,
 }, {
-  title: '公司',
-  dataIndex: 'companyName',
-  key: 'companyName',
-  width: 300,
-}, {
-  title: '付款客户名称',
+  title: '对方户名',
   dataIndex: 'payCustName',
   key: 'payCustName',
+  width: 300,
+}, {
+  title: '银行流水备注',
+  dataIndex: 'bankTransactionPurpose',
+  key: 'bankTransactionPurpose',
   width: 300,
 }, {
   title: '客户名称',
@@ -69,17 +74,17 @@ const columns = [{
   key: 'custName',
   width: 300,
 }, {
-  title: '客户付款方式',
+  title: '付款方式',
   dataIndex: 'custPayMethodName',
   key: 'custPayMethodName',
   width: 100,
 }, {
-  title: '客户付款银行账号',
+  title: '对方银行帐号',
   dataIndex: 'payBankAccount',
   key: 'payBankAccount',
   width: 150,
 }, {
-  title: '客户付款银行',
+  title: '对方银行类型',
   dataIndex: 'payBankName',
   key: 'payBankName',
   width: 300,
@@ -89,12 +94,7 @@ const columns = [{
   key: 'bankTransactionNo',
   width: 200,
 }, {
-  title: '银行流水备注',
-  dataIndex: 'bankTransactionPurpose',
-  key: 'bankTransactionPurpose',
-  width: 300,
-}, {
-  title: '收款分类',
+  title: '流水分类',
   dataIndex: 'claimTypeName',
   key: 'claimTypeName',
   width: 80,
@@ -240,7 +240,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           rowKey="receiptClaimId"
           size="middle"
           pagination={pagination}
-          scroll={{ x: '3320px' }}
+          scroll={{ x: '3250px' }}
         />
         <EditCBSTurnoverDataWithForm
           onConfirm={this.handleEditConfirm}

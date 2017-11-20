@@ -149,7 +149,7 @@ class EditManualEntryBankTurnoverData extends React.Component {
             </Row>
             <Row gutter={10}>
               <Col span={12} key={8}>
-                <FormItem {...formItemLayout} label="收款分类">
+                <FormItem {...formItemLayout} label="流水分类">
                   {getFieldDecorator('claimType', {
                     initialValue: this.props.initData.claimType,
                   })(<SelectInvokeApi
