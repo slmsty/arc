@@ -161,8 +161,6 @@ export default class ProjectReceiptClaim extends React.Component {
     this.handleQuery()
   }
   handleQuery = () => {
-    // this.props.history.push('112')
-    // console.log(this.queryParam)
     this.setState({ selectedRowKeys: [] })
     this.props.getReceiptList(this.queryParam)
   }
@@ -228,7 +226,7 @@ export default class ProjectReceiptClaim extends React.Component {
           onQuery={this.handleChangeParam}
         />
         <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
-        <Button type="primary" onClick={this.handleChangeClaimType}>认款到订单</Button>&nbsp;&nbsp;
+        <Button type="primary" onClick={this.handleChangeClaimType}>订单认款</Button>&nbsp;&nbsp;
         {rejectBtn}
         <br /><br />
         <Table

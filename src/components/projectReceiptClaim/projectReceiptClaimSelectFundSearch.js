@@ -145,8 +145,8 @@ class ProjectReceiptClaimSelectFund extends React.Component {
               <FormItem {...formItemLayout} label="客户">
                 {getFieldDecorator('cust')(
                   <SelectCustomerWithForm
-                    defaultQueryParam={this.props.receiptInfo.custName}
-                    initialValue={[this.props.receiptInfo.custId, this.props.receiptInfo.custName]}
+                    defaultQueryParam={this.props.receiptInfo.payCustName}
+                    initialValue={[this.props.receiptInfo.payCustId, this.props.receiptInfo.payCustName]}
                   />,
                 )}
               </FormItem>
@@ -237,8 +237,8 @@ ProjectReceiptClaimSelectFund.propTypes = {
     result: PropTypes.arrayOf.isRequired,
   }).isRequired,
   receiptInfo: PropTypes.shape({
-    custId: PropTypes.string,
-    custName: PropTypes.string,
+    payCustId: PropTypes.string,
+    payCustName: PropTypes.string,
   }).isRequired,
   getPhaseCompleted: PropTypes.number.isRequired,
   visible: PropTypes.bool.isRequired,

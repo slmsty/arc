@@ -22,11 +22,22 @@ class ProjectReceiptClaimSearch extends React.Component {
   }
   handleQuery = () => {
     const param = this.props.form.getFieldsValue()
-    param.receiptDateStart = param.receiptDate[0].format(dateFormat)
-    param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
-    delete param.receiptDate
-    if (param.custId) {
-      param.custId = param.custId[0]
+    if (param.receiptDate) {
+      param.receiptDateStart = param.receiptDate[0].format(dateFormat)
+      param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
+      delete param.receiptDate
+    }
+    if (param.cust) {
+      param.custId = param.cust[0]
+      delete param.cust
+    }
+    if (param.receiptCompany) {
+      param.receiptCompanyName = param.receiptCompany[1]
+      delete param.receiptCompany
+    }
+    if (param.receiptMethod) {
+      param.receiptMethodId = param.cust[0]
+      delete param.receiptMethod
     }
     this.props.onQuery(param)
   }
@@ -58,7 +69,7 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户名称">
-                {getFieldDecorator('custId')(
+                {getFieldDecorator('cust')(
                   <SelectCustomerWithForm />,
                 )}
               </FormItem>
@@ -88,14 +99,14 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="收款方法">
-                {getFieldDecorator('receiptMethodId')(
+                {getFieldDecorator('receiptMethod')(
                   <SelectReceiptMethodWithForm />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={10}>
               <FormItem {...formItemLayout} label="收款编号">
-                {getFieldDecorator('code')(
+                {getFieldDecorator('receiptNo')(
                   <Input placeholder="请输入收款编号" />,
                 )}
               </FormItem>
@@ -111,7 +122,7 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="认款公司">
-                {getFieldDecorator('receiptCompanyId')(
+                {getFieldDecorator('receiptCompany')(
                   <SelectReceiptCompanyWithForm />,
                 )}
               </FormItem>

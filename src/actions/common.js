@@ -10,3 +10,13 @@ export function getUserInfo() {
     },
   }
 }
+
+export function getPermission() {
+  return {
+    [httpApi]: {
+      url: '/arc/common/getFuncCode',
+      types: ['GET_PERMISSION_SUCCESS'],
+      options: {},
+    },
+  }
+}

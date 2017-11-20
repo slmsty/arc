@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars,react/prefer-stateless-function,react/no-unused-prop-types */
+/* eslint-disable no-unused-vars,react/prefer-stateless-function,react/no-unused-prop-types,max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Table, Button, message, Modal } from 'antd'
@@ -201,7 +201,7 @@ export default class NoProjectReceiptClaim extends React.Component {
           onQuery={this.handleChangeParam}
         />
         <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
-        <Button type="primary" onClick={this.handleChangeClaimType}>认款到项目</Button>&nbsp;&nbsp;
+        {/* <Button type="primary" onClick={this.handleChangeClaimType}>认款到项目</Button>&nbsp;&nbsp; */}
         {rejectBtn}
         <br /><br />
         <Table

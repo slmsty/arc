@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { message } from 'antd'
 import Index from '../components/index'
 import NoMatch from '../components/noMatch/noMatch'
-import { getUserInfo } from '../actions/common'
+import { getUserInfo, getPermission } from '../actions/common'
 
 import HomeContainer from '../containers/home/home'
 import ProjectReceiptClaimContainer from '../containers/projectReceiptClaim/projectReceiptClaim'
@@ -21,16 +21,17 @@ import BilledARApprove from './billedAR/Approve'
 import BilledARConfirm from './billedAR/Confirm'
 import BadDebtsApply from './badDebts/Apply'
 import BadDebtsStatus from './badDebts/Status'
-import { permission } from '../index'
 
 const mapStateToProps = state => ({
   user: state.common.user,
+  permission: state.common.permission,
   error: state.common.error,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     getUserInfo,
+    getPermission,
   }, dispatch)
 )
 
@@ -39,6 +40,7 @@ const mapDispatchToProps = dispatch => (
 class IndexContainer extends React.Component {
   componentWillMount() {
     this.props.getUserInfo()
+    this.props.getPermission()
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.error !== nextProps.error) {
@@ -103,7 +105,7 @@ class IndexContainer extends React.Component {
     if (!accountId) {
       return null
     }
-    const menuRoutes = this.getMenuRoutes(permission.menu)
+    const menuRoutes = this.getMenuRoutes(this.props.permission.menu)
     return (
       <Router basename={process.env.PUBLIC_URL}>
         <div style={{ height: '100%' }}>

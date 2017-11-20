@@ -137,6 +137,11 @@ const columns = [{
   dataIndex: 'reviewAccountName',
   key: '26',
   width: 150,
+}, {
+  title: '创建提示',
+  dataIndex: 'statusRemark',
+  key: '27',
+  width: 400,
 },
 ]
 /*  {
@@ -410,7 +415,7 @@ export default class ReviewReceiptClaim extends React.Component {
         bordered
         size="middle"
         pagination={pagination}
-        scroll={{ x: '400%', y: this.state.tableHeight }}
+        scroll={{ x: '430%', y: this.state.tableHeight }}
         loading={this.state.loading}
       />
       {/* 弹出传送ARglDatemodal */}
