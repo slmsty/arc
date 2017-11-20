@@ -112,6 +112,13 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     editVisible: false,
     editReceiptClaimId: -1,
     exceptDisabled: false,
+    tableHeight: '',
+  }
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 8 - 12 - 119 - 18 - 28.5 - 18 - 53 - 56
+    this.setState({ tableHeight })
   }
   componentDidMount() {
     this.handleQuery()
@@ -240,7 +247,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           rowKey="receiptClaimId"
           size="middle"
           pagination={pagination}
-          scroll={{ x: '3250px' }}
+          scroll={{ x: '3250px', y: this.state.tableHeight }}
         />
         <EditCBSTurnoverDataWithForm
           onConfirm={this.handleEditConfirm}

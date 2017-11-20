@@ -77,9 +77,18 @@ export default class BatchImport extends React.Component {
   state = {
     fileList: [],
     batchNo: '',
+    successTableHeight: '',
+    failureTableHeight: '',
   }
   componentWillMount() {
     this.props.initData()
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const successTableHeight = (screenHeight - 230) / 2 - 133
+    this.setState({ successTableHeight })
+
+    const failureTableHeight = successTableHeight - 10
+    this.setState({ failureTableHeight })
   }
   handleDataChanged = (batchNo) => {
     this.setState({ batchNo })
@@ -198,7 +207,7 @@ export default class BatchImport extends React.Component {
           bordered
           size="middle"
           pagination={successPagination}
-          scroll={{ x: '1875px' }}
+          scroll={{ x: '1835px', y: this.state.successTableHeight }}
           rowKey="index"
         />
         <br />
@@ -212,7 +221,7 @@ export default class BatchImport extends React.Component {
           bordered
           size="middle"
           pagination={failurePagination}
-          scroll={{ x: '1875px' }}
+          scroll={{ x: '1935px', y: this.state.failureTableHeight }}
           rowKey="index"
         />
       </div>

@@ -14,10 +14,18 @@ export default class ManualEntryBankTurnover extends React.Component {
     selectedRowKeys: [],
     editVisible: false,
     editKey: -1,
+    tableHeight: '',
+  }
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 8 - 12 - 81 - 28 - 18 - 21 - 32
+    this.setState({ tableHeight })
   }
   componentDidMount() {
     this.handleQuery()
   }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.manualEntryBankTurnoverConfirmResult !== nextProps.manualEntryBankTurnoverConfirmResult) {
       message.info('保存成功。')
@@ -231,7 +239,7 @@ export default class ManualEntryBankTurnover extends React.Component {
           rowKey="receiptClaimId"
           size="middle"
           pagination={pagination}
-          scroll={{ x: '1875px' }}
+          scroll={{ x: '1875px', y: this.state.tableHeight }}
         />
         <EditManualEntryBankTurnoverDataWithForm
           onConfirm={this.handleEditConfirm}
