@@ -29,18 +29,7 @@ class SelectReceiptCompany extends React.Component {
   }
   columns = [{
     title: '公司名称',
-    dataIndex: '1',
-    key: '1',
-    width: 100,
-  }, {
-    title: '公司编号',
-    dataIndex: '2',
-    key: '2',
-    width: 100,
-  }, {
-    title: '所属BG',
-    dataIndex: '3',
-    key: '3',
+    dataIndex: 'companyName',
     width: 100,
   },
   ]
@@ -49,7 +38,7 @@ class SelectReceiptCompany extends React.Component {
       message.error('请选择认款公司')
       return
     }
-    this.props.onChange([this.state.selectedRows[0].receiptCompanyId, this.state.selectedRows[0].customerName])
+    this.props.onChange([this.state.selectedRows[0].companyId, this.state.selectedRows[0].companyName])
     this.handleCancel()
   }
   handleCancel = () => {
@@ -152,7 +141,7 @@ class SelectReceiptCompany extends React.Component {
           </Form>
 
           <Table
-            rowKey="receiptCompanyId"
+            rowKey="companyId"
             columns={this.columns}
             rowSelection={rowSelection}
             bordered

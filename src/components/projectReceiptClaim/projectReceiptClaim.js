@@ -161,8 +161,6 @@ export default class ProjectReceiptClaim extends React.Component {
     this.handleQuery()
   }
   handleQuery = () => {
-    // this.props.history.push('112')
-    // console.log(this.queryParam)
     this.setState({ selectedRowKeys: [] })
     this.props.getReceiptList(this.queryParam)
   }
