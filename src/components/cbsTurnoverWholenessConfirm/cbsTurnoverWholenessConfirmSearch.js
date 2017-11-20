@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Input, Button, DatePicker, Select, message } from 'antd'
+import { Form, Row, Col, Input, Button, DatePicker, Select, message, InputNumber } from 'antd'
 import moment from 'moment'
 
 import SelectInvokeApi from '../common/selectInvokeApi'
@@ -12,6 +12,7 @@ const { RangePicker } = DatePicker
 const FormItem = Form.Item
 const { Option } = Select
 const dateFormat = 'YYYY-MM-DD'
+const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
 
 class CBSTurnoverWholenessConfirmSearch extends React.Component {
   componentDidMount() {
@@ -21,7 +22,17 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
     if (e) e.preventDefault()
     const param = this.props.form.getFieldsValue()
 
-    if (param.receiptAmountFrom && param.receiptAmountTo && param.receiptAmountFrom > param.receiptAmountTo) {
+    if (param.receiptAmountFrom && (isNaN(param.receiptAmountFrom) || !reg.test(param.receiptAmountFrom))) {
+      message.error('最小金额不能输入非数值内容。')
+      return
+    }
+
+    if (param.receiptAmountTo && (isNaN(param.receiptAmountTo) || !reg.test(param.receiptAmountTo))) {
+      message.error('最小金额不能输入非数值内容。')
+      return
+    }
+
+    if (param.receiptAmountFrom && param.receiptAmountTo && parseFloat(param.receiptAmountFrom, 10) > parseFloat(param.receiptAmountTo, 10)) {
       message.error('最小金额不能大于最大金额，请修改。')
       return
     }
@@ -39,8 +50,8 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
+      labelCol: { span: 6 },
+      wrapperCol: { span: 18 },
     }
     return (
       <div>
@@ -98,13 +109,13 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
             </Col>
             <Col span={8} key={7}>
               <Row>
-                <Col span={13}>
-                  <FormItem {...formItemLayout} label="金额" labelCol={{ span: 9 }} wrapperCol={{ span: 15 }}>
+                <Col span={14}>
+                  <FormItem {...formItemLayout} label="金额" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
                     {getFieldDecorator('receiptAmountFrom')(<Input />)}
                   </FormItem>
                 </Col>
                 <Col span={2}><div style={{ textAlign: 'center' }}>～</div></Col>
-                <Col span={9}>
+                <Col span={8}>
                   <FormItem {...formItemLayout} wrapperCol={{ span: 24 }}>
                     {getFieldDecorator('receiptAmountTo')(<Input />)}
                   </FormItem>
@@ -118,7 +129,12 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
                 {getFieldDecorator('companyName')(<Input />)}
               </FormItem>
             </Col>
-            <Col span={8} offset={8} style={{ textAlign: 'right' }}>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="收款银行">
+                {getFieldDecorator('receiptBankAccountName')(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={8} style={{ textAlign: 'right' }}>
               <Button type="primary" htmlType="submit">查询</Button>
             </Col>
           </Row>
