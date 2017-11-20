@@ -228,7 +228,7 @@ export default class ProjectReceiptClaim extends React.Component {
           onQuery={this.handleChangeParam}
         />
         <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
-        <Button type="primary" onClick={this.handleChangeClaimType}>认款到订单</Button>&nbsp;&nbsp;
+        <Button type="primary" onClick={this.handleChangeClaimType}>订单认款</Button>&nbsp;&nbsp;
         {rejectBtn}
         <br /><br />
         <Table
