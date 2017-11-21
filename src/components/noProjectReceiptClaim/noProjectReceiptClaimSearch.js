@@ -31,10 +31,6 @@ class NoProjectReceiptClaimSearch extends React.Component {
       param.custId = param.cust[0]
       delete param.cust
     }
-    if (param.receiptCompany) {
-      param.receiptCompanyName = param.receiptCompany[1]
-      delete param.receiptCompany
-    }
     if (param.receiptMethod) {
       param.receiptMethodId = param.cust[0]
       delete param.receiptMethod
@@ -122,7 +118,7 @@ class NoProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="公司">
-                {getFieldDecorator('receiptCompanyName')(
+                {getFieldDecorator('companyName')(
                   <Input placeholder="请输入公司关键字" />,
                 )}
               </FormItem>
