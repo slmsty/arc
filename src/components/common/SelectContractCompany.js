@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
-import {Input, Modal, Button, Form, Table, message} from 'antd';
-const Search = Input.Search;
+import {Input, Modal, Button, Form, Table, Icon, message} from 'antd';
 const FormItem = Form.Item;
 
 class SelectContractCompany extends Component{
@@ -28,6 +27,8 @@ class SelectContractCompany extends Component{
 
     this.state = {
       name: '',
+      loading: false,
+      ready: false,
       visible: false,
       selectedRowKeys: [],
       selectedRows: [],
@@ -46,6 +47,12 @@ class SelectContractCompany extends Component{
     })
   }
 
+  clearName = ()=>{
+    this.setState({
+      name: ''
+    })
+  }
+
   OK = ()=>{
     if (this.state.selectedRows.length === 0) {
       message.error('请选择认款公司')
@@ -56,6 +63,8 @@ class SelectContractCompany extends Component{
     this.setState({
       name,
       visible: false,
+      loading: false,
+      ready: false,
       selectedRowKeys:[],
       selectedRows: [],
       pageInfo: {
@@ -70,7 +79,10 @@ class SelectContractCompany extends Component{
 
   Cancel = ()=>{
     this.setState({
+      name: '',
       visible: false,
+      loading: false,
+      ready: false,
       selectedRowKeys:[],
       selectedRows: [],
       pageInfo: {
@@ -86,28 +98,35 @@ class SelectContractCompany extends Component{
   doSearch = (e)=>{
     e.preventDefault()
     this.setState({
-      selectedRowKeys:[],
-      selectedRows: [],
-      pageInfo: {
-        pageNo: 1,
-        pageSize: 5,
-        count: 100,
-        result: [
-          {
-            key:1,
-            name:'公司一号',
-            code:'1',
-            bg:'1',
-          },
-          {
-            key:2,
-            name:'公司二号',
-            code:'2',
-            bg:'2',
-          },
-        ]
-      }
+      loading: true
     })
+    setTimeout(()=>{
+      this.setState({
+        ready: true,
+        loading: false,
+        selectedRowKeys:[],
+        selectedRows: [],
+        pageInfo: {
+          pageNo: 1,
+          pageSize: 5,
+          count: 100,
+          result: [
+            {
+              key:1,
+              name:'公司一号',
+              code:'1',
+              bg:'1',
+            },
+            {
+              key:2,
+              name:'公司二号',
+              code:'2',
+              bg:'2',
+            },
+          ]
+        }
+      })
+    }, 500);
   }
 
   onSelectChange = (selectedRowKeys, selectedRows)=>{
@@ -118,13 +137,14 @@ class SelectContractCompany extends Component{
     const {getFieldDecorator} = this.props.form;
     const columns = this.columns;
     const pageInfo = this.state.pageInfo;
+    const suffix = this.state.name ? <Icon type="close-circle" onClick={this.clearName} /> : <Icon type="search" onClick={this.openModel} />;
 
     return (
       <div className="SelectContractCompany">
-        <Search 
+        <Input 
           placeholder="签约公司" 
           value={this.state.name}
-          onSearch={this.openModel}
+          suffix={suffix}
           onClick={this.openModel}/>
         <Modal
           title="认款公司查询"
@@ -149,6 +169,9 @@ class SelectContractCompany extends Component{
               type:'radio', 
               selectedRowKeys: this.state.selectedRowKeys,
               onChange: this.onSelectChange}}
+            bordered
+            loading={this.state.loading}
+            locale={{emptyText: this.state.ready ? '没有符合条件的认款公司' : ''}}
             columns={columns} 
             dataSource={pageInfo.result}
             pagination={{

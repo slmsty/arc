@@ -19,6 +19,9 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     if (this.props.getPhaseCompleted !== nextProps.getPhaseCompleted) {
       this.setState({ loading: false, firstLoad: false })
     }
+    if (this.props.visible !== nextProps.visible) {
+      this.props.form.resetFields()
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -26,17 +29,13 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   columns = [{
     title: '项目编码',
     dataIndex: 'projectNo',
-    width: 100,
+    width: 20,
     fixed: 'left',
   }, {
     title: '付款条款',
     dataIndex: 'paymentName',
-    width: 100,
+    width: 20,
     fixed: 'left',
-  }, {
-    title: '1111',
-    dataIndex: '1111',
-    width: 100,
   }, {
     title: '付款百分比',
     dataIndex: 'paymentPercent',
@@ -106,7 +105,8 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   }
   handleSelectFunds = () => {
     this.props.onClose(this.state.selectedRows)
-    this.setState({ selectedRowKeys: [], selectedRows: [] })
+    this.props.onClose(this.state.selectedRows)
+    this.props.form.resetFields()
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -128,7 +128,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
         width={800}
         title="查询合同百分比"
         visible={this.props.visible}
-        onCancel={() => { this.props.onClose([]) }}
+        onCancel={() => this.props.onClose([])}
         footer={[
           <Button key="select" type="primary" onClick={this.handleSelectFunds}>
             <Icon type="check" />选择合同百分比
@@ -149,10 +149,11 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户">
-                {getFieldDecorator('cust')(
+                {getFieldDecorator('cust',{
+                  initialValue: [this.props.receiptInfo.payCustId, this.props.receiptInfo.payCustName],
+                })(
                   <SelectCustomerWithForm
                     defaultQueryParam={this.props.receiptInfo.payCustName}
-                    initialValue={[this.props.receiptInfo.payCustId, this.props.receiptInfo.payCustName]}
                   />,
                 )}
               </FormItem>
@@ -240,6 +241,7 @@ ProjectReceiptClaimSelectFund.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    resetFields: PropTypes.func.isRequired,
   }).isRequired,
   receiptClaimFundList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,

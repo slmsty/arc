@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {Form, Row, Col, DatePicker, Input, Button, Select, Table, message} from 'antd';
 import SelectCustomer from '../common/selectCustomer'
 import SelectContractCompany from '../common/SelectContractCompany'
+import MultipleInput from '../common/multipleInput'
+import MultipleDayInput from '../common/multipleDayInput'
 import ARModal from './ARModal'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
@@ -242,58 +244,71 @@ class Confirm extends Component{
     const columns = this.columns;
     const pageInfo = this.state.pageInfo;
 
+    const layout = {
+      labelCol: {
+        span: 8
+      },
+      wrapperCol: {
+        span: 16
+      }
+    }
+
     return (
       <div className="billedARConfirm">
         <Form onSubmit={this.doSearch}>
-          <Row gutter={40}>
+          <Row>
             <Col span={8}>
-              <FormItem label="Billed AR日期" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="Billed AR日期" {...layout}>
                 {
                   getFieldDecorator('BilledARStartEnd')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="客户名称" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="客户名称" {...layout}>
                 {
                   getFieldDecorator('customerId')(<SelectCustomer/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="项目编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="项目编码(多)" {...layout}>
                 {
-                  getFieldDecorator('projectCode')(<Input placeholder="多项目编码使用英文逗号分隔"/>)
+                  getFieldDecorator('projectCode')(
+                    <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
+                  )
                 }
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={40}>
+          <Row>
             <Col span={8}>
-              <FormItem label="GL日期(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="GL日期(多)" {...layout}>
                 {
-                  getFieldDecorator('GLDate')(<DatePicker />)
+                  getFieldDecorator('GLDate')(<MultipleDayInput />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="签约公司" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="签约公司" {...layout}>
                 {
                   getFieldDecorator('companyId')(<SelectContractCompany />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="合同编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="合同编码(多)" {...layout}>
                 {
-                  getFieldDecorator('contactCode')(<Input placeholder="多合同编码使用英文逗号分隔"/>)
+                  getFieldDecorator('contactCode')(
+                    <MultipleInput placeholder="多合同编码使用英文逗号间隔" />
+                  )
                 }
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={40}>
+          <Row>
             <Col span={8}>
-              <FormItem label="付款条件" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="付款条件" {...layout}>
                 {
                   getFieldDecorator('pay', {initialValue: '1'})(
                     <Select>
@@ -305,7 +320,7 @@ class Confirm extends Component{
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="数据状态" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="数据状态" {...layout}>
                 {
                   getFieldDecorator('status', {initialValue: '1'})(
                     <Select>
@@ -337,6 +352,7 @@ class Confirm extends Component{
         </Row>
         <br/>
         <Table 
+          bordered
           rowSelection={{onChange: this.SelectChange}}
           columns={columns} 
           dataSource={pageInfo.result}
