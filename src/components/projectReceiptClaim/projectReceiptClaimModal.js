@@ -178,7 +178,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
       return
     }
     const self = this
-    const claimItemsConfirm = this.state.funds.map(fund => (<p>条款【{fund.paymentName}】认款后余额为{fund.fundReceivableBalance - fund.claimContractAmount}</p>))
+    const claimItemsConfirm = this.state.funds.map(fund => (<p>条款【{fund.paymentName}】认款后应收余额为{fund.fundReceivableBalance - fund.claimContractAmount}</p>))
     Modal.confirm({
       title: '确认认款',
       content: claimItemsConfirm,
