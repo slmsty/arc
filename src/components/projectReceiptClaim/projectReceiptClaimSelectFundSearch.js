@@ -195,7 +195,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
                 {getFieldDecorator('amountMin', {
                   initialValue: this.props.receiptInfo.receiptAmount,
                 })(
-                  <InputNumber />,
+                  <Input />,
                 )}
               </FormItem>
             </Col>
@@ -204,7 +204,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
                 {getFieldDecorator('amountMax', {
                   initialValue: this.props.receiptInfo.receiptAmount,
                 })(
-                  <InputNumber />,
+                  <Input />,
                 )}
               </FormItem>
             </Col>
