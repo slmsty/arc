@@ -61,6 +61,7 @@ class EditBankLinkData extends React.Component {
           visible={this.props.visible}
           onCancel={this.props.onCancel}
           onOk={this.handleSubmit}
+          width="700px"
         >
           <Form
             className="ant-search-form"
