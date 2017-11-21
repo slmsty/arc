@@ -324,7 +324,7 @@ class CustomerBankLink extends React.Component {
         loading={this.state.loading}
         bordered
         pagination={pagination}
-        scroll={{ x: '120%', y: this.state.tableHeight }}
+        scroll={{ x: '1600px', y: this.state.tableHeight }}
       />
       { /* 编辑客户银行关系modal */ }
       {this.state.editVisible ? <EditBankLinkData

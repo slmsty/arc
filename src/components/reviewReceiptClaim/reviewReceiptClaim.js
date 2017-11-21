@@ -415,7 +415,7 @@ export default class ReviewReceiptClaim extends React.Component {
         bordered
         size="middle"
         pagination={pagination}
-        scroll={{ x: '430%', y: this.state.tableHeight }}
+        scroll={{ x: '4400px', y: this.state.tableHeight }}
         loading={this.state.loading}
       />
       {/* 弹出传送ARglDatemodal */}
