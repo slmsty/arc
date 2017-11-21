@@ -56,8 +56,8 @@ const successColumns = [{
   width: 300,
 }, {
   title: '流水分类',
-  dataIndex: 'claimTypeName',
-  key: 'claimTypeName',
+  dataIndex: 'claimType',
+  key: 'claimType',
   width: 100,
 }, {
   title: '备注',
@@ -207,7 +207,7 @@ export default class BatchImport extends React.Component {
           bordered
           size="middle"
           pagination={successPagination}
-          scroll={{ x: '1835px', y: this.state.successTableHeight }}
+          scroll={{ x: '1870px', y: this.state.successTableHeight }}
           rowKey="index"
         />
         <br />
@@ -221,7 +221,7 @@ export default class BatchImport extends React.Component {
           bordered
           size="middle"
           pagination={failurePagination}
-          scroll={{ x: '1935px', y: this.state.failureTableHeight }}
+          scroll={{ x: '1970px', y: this.state.failureTableHeight }}
           rowKey="index"
         />
       </div>
