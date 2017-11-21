@@ -25,8 +25,8 @@ class ReviewReceiptClaimSearch extends React.Component {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
     param.custId = param.custId && param.custId.length ? param.custId[0] : null
-    param.startDate = param.receiptDate && param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
-    param.endDate = param.receiptDate && param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
+    param.receiptDateStart = param.receiptDate && param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
+    param.receiptDateEnd = param.receiptDate && param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
     delete param.receiptDate
     // console.log(param)
     this.props.onQuery(param)

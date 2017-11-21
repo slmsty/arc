@@ -164,8 +164,8 @@ export default class ManualEntryBankTurnover extends React.Component {
             render: (text, row, index) => moment(text).format(dateFormat),
           }, {
             title: '收款方法',
-            dataIndex: 'receiptMethodName',
-            key: 'receiptMethodName',
+            dataIndex: 'erpReceiptMethodName',
+            key: 'erpReceiptMethodName',
             width: 100,
           }, {
             title: '银行流水号',
