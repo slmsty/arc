@@ -40,6 +40,10 @@ export default class ProjectReceiptClaim extends React.Component {
     dataIndex: 'companyName',
     width: 100,
   }, {
+    title: '付款方式',
+    dataIndex: 'custPayMethodName',
+    width: 100,
+  }, {
     title: '收款日期',
     dataIndex: 'receiptDate',
     width: 100,

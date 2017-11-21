@@ -27,9 +27,15 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     title: '项目编码',
     dataIndex: 'projectNo',
     width: 100,
+    fixed: 'left',
   }, {
     title: '付款条款',
     dataIndex: 'paymentName',
+    width: 100,
+    fixed: 'left',
+  }, {
+    title: '1111',
+    dataIndex: '1111',
     width: 100,
   }, {
     title: '付款百分比',
@@ -185,14 +191,18 @@ class ProjectReceiptClaimSelectFund extends React.Component {
           <Row>
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="金额从">
-                {getFieldDecorator('amountMin')(
+                {getFieldDecorator('amountMin', {
+                  initialValue: this.props.receiptInfo.receiptAmount,
+                })(
                   <InputNumber />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="金额到">
-                {getFieldDecorator('amountMax')(
+                {getFieldDecorator('amountMax', {
+                  initialValue: this.props.receiptInfo.receiptAmount,
+                })(
                   <InputNumber />,
                 )}
               </FormItem>
@@ -239,6 +249,7 @@ ProjectReceiptClaimSelectFund.propTypes = {
   receiptInfo: PropTypes.shape({
     payCustId: PropTypes.string,
     payCustName: PropTypes.string,
+    receiptAmount: PropTypes.number,
   }).isRequired,
   getPhaseCompleted: PropTypes.number.isRequired,
   visible: PropTypes.bool.isRequired,

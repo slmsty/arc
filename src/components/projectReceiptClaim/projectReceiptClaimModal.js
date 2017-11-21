@@ -173,19 +173,30 @@ export default class ProjectReceiptClaimModal extends React.Component {
       message.error('认款金额合计与收款金额不相等，不能进行认款')
       return
     }
-    const claimItems = this.state.funds.map(fund => ({
-      fundId: fund.fundId,
-      contractItemId: fund.contractItemId,
-      claimAmount: fund.claimAmount,
-      receiptUse: fund.receiptUse,
-      claimContractAmount: fund.claimContractAmount,
-      remark: fund.accountantApproveMessage,
-      custId: fund.custId,
-      custName: fund.custName,
-    }))
-    this.props.submitClaim({
-      receiptClaimId: this.props.receiptInfo.receiptClaimId,
-      claimItems,
+    const self = this
+    const claimItemsConfirm = this.state.funds.map(fund => (<p>条款【{fund.paymentName + (fund.claimContractAmount === fund.fundReceivableBalance ? '】全部认款' : '】认款后应收余额不为0')}</p>))
+    Modal.confirm({
+      title: '确认认款',
+      content: claimItemsConfirm,
+      okText: '是',
+      okType: 'danger',
+      cancelText: '否',
+      onOk() {
+        const claimItems = self.state.funds.map(fund => ({
+          fundId: fund.fundId,
+          contractItemId: fund.contractItemId,
+          claimAmount: fund.claimAmount,
+          receiptUse: fund.receiptUse,
+          claimContractAmount: fund.claimContractAmount,
+          remark: fund.accountantApproveMessage,
+          custId: fund.custId,
+          custName: fund.custName,
+        }))
+        self.props.submitClaim({
+          receiptClaimId: self.props.receiptInfo.receiptClaimId,
+          claimItems,
+        })
+      },
     })
   }
   handleCloseSelectFunds = (addFunds) => {
