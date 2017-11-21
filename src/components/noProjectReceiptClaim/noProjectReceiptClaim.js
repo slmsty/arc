@@ -169,7 +169,7 @@ export default class NoProjectReceiptClaim extends React.Component {
       cancelText: '否',
       onOk() {
         const changeParam = {
-          receiptClaimIds: that.state.selectedRowKey,
+          receiptClaimIds: that.state.selectedRowKeys,
           claimType: 'project',
         }
         that.props.changeClaimType(changeParam)

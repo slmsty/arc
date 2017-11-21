@@ -193,7 +193,7 @@ export default class ProjectReceiptClaim extends React.Component {
       cancelText: '否',
       onOk() {
         const changeParam = {
-          receiptClaimIds: that.state.selectedRowKey,
+          receiptClaimIds: that.state.selectedRowKeys,
           claimType: 'order',
         }
         that.props.changeClaimType(changeParam)
