@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import './Apply.css'
 import {Form, Row, Col, DatePicker, Input, Button, Select, Table} from 'antd';
 import SelectCustomer from '../common/selectCustomer'
+import MultipleInput from '../common/multipleInput'
+import MultipleDayInput from '../common/multipleDayInput'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
@@ -150,42 +152,53 @@ class Apply extends Component{
     const columns = this.columns;
     const pageInfo = this.state.pageInfo;
 
+    const layout = {
+      labelCol: {
+        span: 8
+      },
+      wrapperCol: {
+        span: 16
+      }
+    }
+
     return (
       <div className="badDebtsApply">
         <Form onSubmit={this.doSearch}>
-          <Row gutter={40}>
+          <Row>
             <Col span={8}>
-              <FormItem label="签约日期" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="签约日期" {...layout}>
                 {
                   getFieldDecorator('signStartEnd')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="客户名称" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="客户名称" {...layout}>
                 {
                   getFieldDecorator('customerId')(<SelectCustomer/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="项目编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="项目编码(多)" {...layout}>
                 {
-                  getFieldDecorator('projectCode')(<Input placeholder="多编码间用英文逗号间隔"/>)
+                  getFieldDecorator('projectCode')(
+                    <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
+                  )
                 }
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={40}>
+          <Row>
             <Col span={8}>
-              <FormItem label="签约日期(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="签约日期(多)" {...layout}>
                 {
-                  getFieldDecorator('signDate')(<DatePicker />)
+                  getFieldDecorator('signDate')(<MultipleDayInput />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="数据状态" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="数据状态" {...layout}>
                 {
                   getFieldDecorator('status', {initialValue: ''})(
                     <Select>
@@ -198,16 +211,18 @@ class Apply extends Component{
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="合同编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="合同编码(多)" {...layout}>
                 {
-                  getFieldDecorator('contactCode')(<Input placeholder="多编码间用英文逗号间隔"/>)
+                  getFieldDecorator('contactCode')(
+                    <MultipleInput placeholder="多合同编码使用英文逗号间隔" />
+                  )
                 }
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={40}>
+          <Row>
             <Col span={8}>
-              <FormItem label="付款阶段(里程碑)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="付款阶段(里程碑)" {...layout}>
                 {
                   getFieldDecorator('stage')(<Input />)
                 }
@@ -228,6 +243,7 @@ class Apply extends Component{
         </Row>
         <br/>
         <Table 
+          bordered
           rowSelection={{onChange: ()=>{}}}
           columns={columns} 
           dataSource={pageInfo.result}
