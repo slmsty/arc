@@ -92,15 +92,15 @@ export default class NoProjectReceiptClaim extends React.Component {
   }, {
     title: '付款客户名称',
     dataIndex: 'payCustName',
-    width: 100,
+    width: 200,
   }, {
     title: '客户付款银行',
     dataIndex: 'payBankName',
-    width: 100,
+    width: 200,
   }, {
     title: '客户付款银行账号',
     dataIndex: 'payBankAccount',
-    width: 150,
+    width: 200,
   }, {
     title: '收款编号',
     dataIndex: 'receiptNo',
@@ -216,7 +216,7 @@ export default class NoProjectReceiptClaim extends React.Component {
           bordered
           size="middle"
           dataSource={this.props.receiptClaimList.result}
-          scroll={{ x: '260%', y: this.state.tableHeight }}
+          scroll={{ x: 2600, y: this.state.tableHeight }}
           pagination={{
             current: this.props.receiptClaimList.pageNo,
             total: this.props.receiptClaimList.count,
