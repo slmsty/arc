@@ -3,6 +3,8 @@ import './Approve.css'
 import {Form, Row, Col, DatePicker, Input, Button, Table} from 'antd';
 import SelectCustomer from '../common/selectCustomer'
 import SelectContractCompany from '../common/SelectContractCompany'
+import MultipleInput from '../common/multipleInput'
+import MultipleDayInput from '../common/multipleDayInput'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 
@@ -112,51 +114,64 @@ class Approve extends Component{
     const columns = this.columns;
     const {pageNo, pageSize, count, result} = this.props;
 
+    const layout = {
+      labelCol: {
+        span: 8
+      },
+      wrapperCol: {
+        span: 16
+      }
+    }
+
     return (
       <div className="billedARApprove">
         <Form onSubmit={this.doSearch}>
-          <Row gutter={40}>
+          <Row>
             <Col span={8}>
-              <FormItem label="GL日期" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="GL日期" {...layout}>
                 {
                   getFieldDecorator('glDate')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="客户名称" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="客户名称" {...layout}>
                 {
                   getFieldDecorator('custId')(<SelectCustomer/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="项目编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="项目编码(多)" {...layout}>
                 {
-                  getFieldDecorator('projectNos')(<Input placeholder="多项目编码使用英文逗号分隔"/>)
+                  getFieldDecorator('projectNos')(
+                    <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
+                  )
                 }
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={40}>
+          <Row>
             <Col span={8}>
-              <FormItem label="GL日期(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="GL日期(多)" {...layout}>
                 {
-                  getFieldDecorator('glDates')(<DatePicker />)
+                  getFieldDecorator('glDates')(<MultipleDayInput />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="签约公司" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="签约公司" {...layout}>
                 {
                   getFieldDecorator('companyId')(<SelectContractCompany />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="合同编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="合同编码(多)" {...layout}>
                 {
-                  getFieldDecorator('contractNos')(<Input placeholder="多合同编码使用英文逗号分隔"/>)
+                  getFieldDecorator('contractNos')(
+                    <MultipleInput placeholder="多合同编码使用英文逗号间隔" />
+                  )
                 }
               </FormItem>
             </Col>
@@ -176,6 +191,7 @@ class Approve extends Component{
         </Row>
         <br/>
         <Table 
+          bordered
           rowSelection={{onChange: ()=>{}}}
           columns={columns} 
           dataSource={result}
