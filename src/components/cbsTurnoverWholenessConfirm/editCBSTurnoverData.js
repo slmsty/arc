@@ -16,11 +16,6 @@ class EditCBSTurnoverData extends React.Component {
   handleConfirm = () => {
     const param = this.props.form.getFieldsValue()
 
-    if (!param.claimType) {
-      message.error('请选择流水分类。')
-      return
-    }
-
     if (!param.custPayMethod) {
       message.error('请选择客户付款方式。')
       return
