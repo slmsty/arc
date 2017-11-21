@@ -173,22 +173,22 @@ export default class ManualEntryBankTurnover extends React.Component {
             key: 'bankTransactionNo',
             width: 150,
           }, {
-            title: '客户付款方式',
+            title: '付款方式',
             dataIndex: 'custPayMethodName',
             key: 'custPayMethodName',
             width: 100,
           }, {
-            title: '付款客户名称',
+            title: '对方户名',
             dataIndex: 'payCustName',
             key: 'payCustName',
             width: 300,
           }, {
-            title: '客户付款银行',
+            title: '对方银行类型',
             dataIndex: 'payBankName',
             key: 'payBankName',
             width: 300,
           }, {
-            title: '客户付款银行账号',
+            title: '对方银行账号',
             dataIndex: 'payBankAccount',
             key: 'payBankAccount',
             width: 150,
