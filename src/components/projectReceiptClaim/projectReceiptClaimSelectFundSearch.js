@@ -34,10 +34,6 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     width: 100,
     fixed: 'left',
   }, {
-    title: '1111',
-    dataIndex: '1111',
-    width: 100,
-  }, {
     title: '付款百分比',
     dataIndex: 'paymentPercent',
     width: 100,
@@ -106,7 +102,11 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   }
   handleSelectFunds = () => {
     this.props.onClose(this.state.selectedRows)
-    this.setState({ selectedRowKeys: [], selectedRows: [] })
+    this.handleCloseSelectFunds()
+  }
+  handleCloseSelectFunds = () => {
+    this.props.onClose(this.state.selectedRows)
+    this.props.form.resetFields()
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -128,7 +128,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
         width={800}
         title="查询合同百分比"
         visible={this.props.visible}
-        onCancel={() => { this.props.onClose([]) }}
+        onCancel={this.handleCloseSelectFunds}
         footer={[
           <Button key="select" type="primary" onClick={this.handleSelectFunds}>
             <Icon type="check" />选择合同百分比
@@ -240,6 +240,7 @@ ProjectReceiptClaimSelectFund.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    resetFields: PropTypes.func.isRequired,
   }).isRequired,
   receiptClaimFundList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
