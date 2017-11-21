@@ -107,13 +107,12 @@ class SelectCustomer extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const value = (this.props.value && this.props.value[1] !== undefined) ? this.props.value : this.props.initialValue
-    const suffix = (value && value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
           placeholder="客户名称"
-          value={value && value[1] !== undefined ? value[1] : ''}
+          value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
@@ -181,7 +180,6 @@ SelectCustomer.propTypes = {
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
   value: PropTypes.arrayOf(PropTypes.string),
-  initialValue: PropTypes.arrayOf(PropTypes.string),
   defaultQueryParam: PropTypes.string,
 }
 
