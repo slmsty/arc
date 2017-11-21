@@ -122,7 +122,7 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="公司">
-                {getFieldDecorator('receiptCompany')(
+                {getFieldDecorator('receiptCompanyName')(
                   <Input placeholder="请输入公司关键字" />,
                 )}
               </FormItem>

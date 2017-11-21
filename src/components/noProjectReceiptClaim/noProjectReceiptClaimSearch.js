@@ -121,9 +121,9 @@ class NoProjectReceiptClaimSearch extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={2}>
-              <FormItem {...formItemLayout} label="认款公司">
-                {getFieldDecorator('receiptCompany')(
-                  <SelectReceiptCompanyWithForm />,
+              <FormItem {...formItemLayout} label="公司">
+                {getFieldDecorator('receiptCompanyName')(
+                  <Input placeholder="请输入公司关键字" />,
                 )}
               </FormItem>
             </Col>
