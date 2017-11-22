@@ -19,8 +19,11 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     if (this.props.getPhaseCompleted !== nextProps.getPhaseCompleted) {
       this.setState({ loading: false, firstLoad: false })
     }
-    if (this.props.visible !== nextProps.visible) {
+    console.log(this.props.visible)
+    console.log(nextProps.visible)
+    if (this.props.visible !== nextProps.visible && nextProps.visible) {
       this.props.form.resetFields()
+      this.handleQuery()
     }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -161,7 +164,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="SBU">
                 {getFieldDecorator('sbu')(
-                  <Input />,
+                  <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -184,7 +187,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="部门">
                 {getFieldDecorator('dept')(
-                  <Input />,
+                  <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -195,7 +198,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
                 {getFieldDecorator('amountMin', {
                   initialValue: this.props.receiptInfo.receiptAmount,
                 })(
-                  <Input />,
+                  <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -204,7 +207,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
                 {getFieldDecorator('amountMax', {
                   initialValue: this.props.receiptInfo.receiptAmount,
                 })(
-                  <Input />,
+                  <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>

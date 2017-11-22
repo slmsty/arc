@@ -97,14 +97,14 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="金额从">
                 {getFieldDecorator('amountMin')(
-                  <InputNumber />,
+                  <InputNumber onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="金额到">
                 {getFieldDecorator('amountMax')(
-                  <InputNumber />,
+                  <InputNumber onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -120,7 +120,7 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="来源系统">
                 {getFieldDecorator('dept')(
-                  <Input />,
+                  <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>

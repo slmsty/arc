@@ -25,7 +25,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     width: 200,
     render: (text, record, index) => (<SelectCustomer
       defaultQueryParam={record.custName}
-      initialValue={[record.custId, record.custName]}
+      value={[record.custId, record.custName]}
       onChange={value => this.handleClaimFundChange(index, value, 'cust')}
     />),
   }, {

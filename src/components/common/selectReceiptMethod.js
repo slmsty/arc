@@ -140,6 +140,7 @@ class SelectReceiptMethod extends React.Component {
                 <FormItem {...formItemLayout} label="收款方法">
                   {getFieldDecorator('keywords')(
                     <Input
+                      onPressEnter={this.handleQuery}
                       placeholder="请输入关键字"
                     />,
                   )}

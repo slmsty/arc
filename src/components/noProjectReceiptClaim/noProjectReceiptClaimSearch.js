@@ -103,7 +103,7 @@ class NoProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={10}>
               <FormItem {...formItemLayout} label="收款编号">
                 {getFieldDecorator('receiptNo')(
-                  <Input placeholder="请输入收款编号" />,
+                  <Input onPressEnter={this.handleQuery} placeholder="请输入收款编号" />,
                 )}
               </FormItem>
             </Col>
@@ -119,7 +119,7 @@ class NoProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="公司">
                 {getFieldDecorator('companyName')(
-                  <Input placeholder="请输入公司关键字" />,
+                  <Input onPressEnter={this.handleQuery} placeholder="请输入公司关键字" />,
                 )}
               </FormItem>
             </Col>

@@ -128,6 +128,7 @@ class SelectReceiptCompany extends React.Component {
                 <FormItem {...formItemLayout} label="认款公司">
                   {getFieldDecorator('keywords')(
                     <Input
+                      onPressEnter={this.handleQuery}
                       placeholder="请输入关键字"
                     />,
                   )}

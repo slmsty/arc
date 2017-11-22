@@ -138,6 +138,7 @@ class SelectCustomer extends React.Component {
                     initialValue: this.props.defaultQueryParam,
                   })(
                     <Input
+                      onPressEnter={this.handleQuery}
                       placeholder="请输入客户关键字"
                     />,
                   )}
