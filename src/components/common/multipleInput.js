@@ -32,9 +32,9 @@ export default class MultipleInput extends React.Component {
         tokenSeparators={[',', '，']}
         placeholder={this.props.placeholder}
         dropdownStyle={{ display: 'none' }}
-        onChange={value => this.handleChange(value)}
-        onSearch={value => this.handleSearch(value)}
-        onBlur={() => this.handleBlur()}
+        onChange={this.handleChange}
+        onSearch={this.handleSearch}
+        onBlur={this.handleBlur}
       />
     )
   }

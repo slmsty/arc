@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal, Pagination } from 'antd'
 import SelectCustomerWithForm from '../common/selectCustomer'
 import MultipleInput from '../common/multipleInput'
+import ClearInput from '../common/clearInput'
 
 const FormItem = Form.Item
 
@@ -152,7 +153,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户">
-                {getFieldDecorator('cust',{
+                {getFieldDecorator('cust', {
                   initialValue: [this.props.receiptInfo.payCustId, this.props.receiptInfo.payCustName],
                 })(
                   <SelectCustomerWithForm
@@ -198,7 +199,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
                 {getFieldDecorator('amountMin', {
                   initialValue: this.props.receiptInfo.receiptAmount,
                 })(
-                  <Input onPressEnter={this.handleQuery} />,
+                  <ClearInput onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -207,7 +208,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
                 {getFieldDecorator('amountMax', {
                   initialValue: this.props.receiptInfo.receiptAmount,
                 })(
-                  <Input onPressEnter={this.handleQuery} />,
+                  <ClearInput onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
