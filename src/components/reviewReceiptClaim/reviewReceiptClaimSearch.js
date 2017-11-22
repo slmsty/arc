@@ -120,14 +120,19 @@ class ReviewReceiptClaimSearch extends React.Component {
           </Row>
           <Row gutter={40}>
             <Col span={8} key={8}>
-              <FormItem {...formItemLayout} label="合同编码(多)">
+              <FormItem {...formItemLayout} label="项目编码(多)">
                 {
-                  getFieldDecorator('contractIds')(
+                  getFieldDecorator('projectIds')(
                     <MultipleInput
-                      placeholder="多合同编码使用英文逗号间隔"
+                      placeholder="多项目编码使用英文逗号间隔"
                     />,
                   )
                 }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="公司">
+                {getFieldDecorator('companyName')(<Input />)}
               </FormItem>
             </Col>
             <Col span={8} key={9}>
@@ -144,7 +149,20 @@ class ReviewReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} style={{ textAlign: 'right' }}>
+            <Col span={8} key={8}>
+              <FormItem {...formItemLayout} label="合同编码(多)">
+                {
+                  getFieldDecorator('contractIds')(
+                    <MultipleInput
+                      placeholder="多合同编码使用英文逗号间隔"
+                    />,
+                  )
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
