@@ -119,17 +119,6 @@ class ReviewReceiptClaimSearch extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={8}>
-              <FormItem {...formItemLayout} label="项目编码(多)">
-                {
-                  getFieldDecorator('projectIds')(
-                    <MultipleInput
-                      placeholder="多项目编码使用英文逗号间隔"
-                    />,
-                  )
-                }
-              </FormItem>
-            </Col>
             <Col span={8}>
               <FormItem {...formItemLayout} label="公司">
                 {getFieldDecorator('companyName')(<Input />)}
