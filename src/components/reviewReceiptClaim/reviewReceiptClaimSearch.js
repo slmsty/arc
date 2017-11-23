@@ -124,7 +124,7 @@ class ReviewReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8}>
               <FormItem {...formItemLayout} label="公司">
-                {getFieldDecorator('companyName')(<Input />)}
+                {getFieldDecorator('companyName')(<Input onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
             <Col span={8} key={9}>
