@@ -61,6 +61,7 @@ class ReviewReceiptClaimSearch extends React.Component {
                 })(
                   <Input
                     placeholder="请输入银行帐号"
+                    onPressEnter={this.handleQuery}
                   />,
                 )}
               </FormItem>

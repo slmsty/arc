@@ -27,7 +27,10 @@ class ReviewReceiptClaimSearch extends React.Component {
     param.custId = param.custId && param.custId.length ? param.custId[0] : null
     param.receiptDateStart = param.receiptDate && param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
     param.receiptDateEnd = param.receiptDate && param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
+    param.statusDateStart = param.statusDate && param.statusDate.length ? param.statusDate[0].format(dateFormat) : ''
+    param.statusDateEnd = param.statusDate && param.statusDate.length ? param.statusDate[1].format(dateFormat) : ''
     delete param.receiptDate
+    delete param.statusDate
     // console.log(param)
     this.props.onQuery(param)
   }
@@ -121,7 +124,7 @@ class ReviewReceiptClaimSearch extends React.Component {
           <Row gutter={40}>
             <Col span={8}>
               <FormItem {...formItemLayout} label="公司">
-                {getFieldDecorator('companyName')(<Input />)}
+                {getFieldDecorator('companyName')(<Input onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
             <Col span={8} key={9}>
@@ -150,8 +153,20 @@ class ReviewReceiptClaimSearch extends React.Component {
               </FormItem>
             </Col>
           </Row>
-          <Row>
-            <Col span={24} style={{ textAlign: 'right' }}>
+          <Row gutter={40}>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="操作日期">
+                {getFieldDecorator('statusDate', {
+                  // initialValue: [moment().subtract(1, 'month'), moment()],
+                  initialValue: [moment('2017-08-01'), moment()],
+                })(<RangePicker
+                  allowClear
+                  format={dateFormat}
+                  ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                />)}
+              </FormItem>
+            </Col>
+            <Col span={16} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
