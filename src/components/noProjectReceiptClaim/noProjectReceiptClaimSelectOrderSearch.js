@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal } from 'antd'
 import SelectCustomerWithForm from '../common/selectCustomer'
-import MultipleInput from '../common/multipleInput'
+import ClearInput from '../common/clearInput'
 
 const FormItem = Form.Item
 
@@ -19,6 +19,10 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
     if (this.props.getOrderCompleted !== nextProps.getOrderCompleted) {
       this.setState({ loading: false, firstLoad: false })
     }
+    if (this.props.visible !== nextProps.visible && nextProps.visible) {
+      this.props.form.resetFields()
+      this.handleQuery()
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -26,11 +30,11 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
   columns = [{
     title: '客户名称',
     dataIndex: 'custName',
-    width: 100,
+    width: 200,
   }, {
     title: '订单号',
     dataIndex: 'projectNo',
-    width: 100,
+    width: 150,
   }, {
     title: '支付方式',
     dataIndex: 'contractNo',
@@ -91,20 +95,19 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
       >
         <Form
           className="ant-search-form"
-          onSubmit={this.handleSearch}
         >
           <Row>
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="金额从">
                 {getFieldDecorator('amountMin')(
-                  <InputNumber onPressEnter={this.handleQuery} />,
+                  <ClearInput onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="金额到">
                 {getFieldDecorator('amountMax')(
-                  <InputNumber onPressEnter={this.handleQuery} />,
+                  <ClearInput onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -118,8 +121,8 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
           </Row>
           <Row>
             <Col span={8} key={6}>
-              <FormItem {...formItemLayout} label="来源系统">
-                {getFieldDecorator('dept')(
+              <FormItem {...formItemLayout} label="订单号">
+                {getFieldDecorator('projectNo')(
                   <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
@@ -146,7 +149,7 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
             onChange: this.handleChangePage,
           }}
           dataSource={this.props.receiptClaimOrderList.result}
-          scroll={{ x: '1200', y: '400' }}
+          scroll={{ y: '400' }}
         />
       </Modal>
     )
@@ -157,6 +160,7 @@ NoProjectReceiptClaimSelectOrder.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    resetFields: PropTypes.func.isRequired,
   }).isRequired,
   receiptClaimOrderList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
@@ -174,3 +178,4 @@ const NoProjectReceiptClaimSelectOrderWithForm = Form.create()(
 )
 
 export default NoProjectReceiptClaimSelectOrderWithForm
+

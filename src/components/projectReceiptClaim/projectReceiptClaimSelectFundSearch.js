@@ -20,8 +20,6 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     if (this.props.getPhaseCompleted !== nextProps.getPhaseCompleted) {
       this.setState({ loading: false, firstLoad: false })
     }
-    console.log(this.props.visible)
-    console.log(nextProps.visible)
     if (this.props.visible !== nextProps.visible && nextProps.visible) {
       this.props.form.resetFields()
       this.handleQuery()

@@ -107,15 +107,17 @@ export default class ProjectReceiptClaimModal extends React.Component {
     if (addFunds && addFunds.length > 0) {
       const funds = this.state.funds
       addFunds.forEach((addFund) => {
+        const fund = addFund
         let isExist = false
         for (let i = 0; i < funds.length; i += 1) {
-          if (funds[i].fundId === addFund.fundId) {
+          if (funds[i].fundId === fund.fundId) {
             isExist = true
             break
           }
         }
         if (!isExist) {
-          funds.push(addFund)
+          fund.receiptUse = 'On account'
+          funds.push(fund)
         }
       })
       this.setState({ funds })
