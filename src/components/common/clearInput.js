@@ -17,6 +17,7 @@ export default class ClearInput extends React.Component {
         value={this.props.value}
         suffix={suffix}
         onChange={this.handleChange}
+        onPressEnter={this.props.onPressEnter}
       />
     )
   }
