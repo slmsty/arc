@@ -24,11 +24,8 @@ function loader() {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
     // eslint-disable-next-line no-underscore-dangle
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose
-
   const enhancer = composeEnhancers(applyMiddleware(...middleware))
-
   const store = createStore(reducers, enhancer)
-
   render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
@@ -38,7 +35,6 @@ function loader() {
     document.getElementById('root'),
   )
 }
-
 
 function bootstrap() {
   if (window.location.hash && window.location.hash.indexOf('access_token=') > -1) {
