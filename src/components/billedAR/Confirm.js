@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {Form, Row, Col, DatePicker, Input, Button, Select, Table, message} from 'antd';
 import SelectCustomer from '../common/selectCustomer'
-import SelectContractCompany from '../common/SelectContractCompany'
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import ARModal from './ARModal'
@@ -292,7 +291,7 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="签约公司" {...layout}>
                 {
-                  getFieldDecorator('companyId')(<SelectContractCompany />)
+                  getFieldDecorator('companyId')(<Input placeholder="签约公司" />)
                 }
               </FormItem>
             </Col>
