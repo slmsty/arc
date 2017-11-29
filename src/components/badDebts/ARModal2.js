@@ -13,7 +13,7 @@ class ARModal extends Component{
 
   postEdit = (body, callback)=>{
     requestJsonFetch(
-      '/arc/billedar/confirm/edit',
+      '/XXXXXXX',
       {
         method: 'POST',
         body
@@ -27,12 +27,12 @@ class ARModal extends Component{
       if(err) return
 
       let body = {
-        billedArId: this.props.o.billedArId,
-        billedArDate: values.billedArDate.format('YYYY-MM-DD'),
-        glDate: values.glDate.format('YYYY-MM-DD'),
-        reportDate: values.reportDate.format('YYYY-MM-DD'),
-        assessTaxIncludedAmount: values.assessTaxIncludedAmount,
-        arAccountantApproveMessage: values.arAccountantApproveMessage
+        badDebtId: this.props.o.badDebtId,
+        badDebtReturnAmount: values.badDebtReturnAmount,
+        badDebtAmount: values.badDebtAmount,
+        badDebtReturnAmount: values.badDebtReturnAmount,
+        erpGlDate: values.erpGlDate.format('YYYY-MM-DD'),
+        remark: values.remark
       }
 
       this.postEdit(body, response=>{
@@ -57,52 +57,50 @@ class ARModal extends Component{
         onCancel={this.onCancel}
         onOk={this.onOk}>
           <Form>
-            <FormItem label="Billed AR日期">
+            <FormItem label="已划销退回金额">
               {
-                getFieldDecorator('billedArDate', {
-                  initialValue: o.billedArDate ? moment(o.billedArDate) : null,
+                getFieldDecorator('badDebtReturnAmount', {
+                  initialValue: o.badDebtReturnAmount
+                })(
+                  <Input />
+                )
+              }
+            </FormItem>
+            <FormItem label="划销金额">
+              {
+                getFieldDecorator('badDebtAmount', {
+                  initialValue: o.badDebtAmount
+                })(
+                  <Input />
+                )
+              }
+            </FormItem>
+            <FormItem label="划销退回金额">
+              {
+                getFieldDecorator('badDebtReturnAmount', {
+                  initialValue: o.badDebtReturnAmount,
                   rules: [
-                    {required: true, message: '必须选择Billed AR日期'}
+                    {required: true, message: '必须输入划销退回金额'}
                   ]
                 })(
-                  <DatePicker />
+                  <Input />
                 )
               }
             </FormItem>
             <FormItem label="GL日期">
               {
-                getFieldDecorator('glDate', {
-                  initialValue: o.glDate ? moment(o.glDate) : null,
+                getFieldDecorator('erpGlDate', {
+                  initialValue: o.erpGlDate ? moment(o.erpGlDate) : null,
                   rules: [
                     {required: true, message: '必须选择GL日期'}
-                  ]
-                })(
+                  ]})(
                   <DatePicker />
-                )
-              }
-            </FormItem>
-            <FormItem label="报告日期">
-              {
-                getFieldDecorator('reportDate', {
-                  initialValue: o.reportDate ? moment(o.reportDate) : null,
-                  rules: [
-                    {required: true, message: '必须选择报告日期'}
-                  ]
-                })(
-                  <DatePicker />
-                )
-              }
-            </FormItem>
-            <FormItem label="考核含税金额">
-              {
-                getFieldDecorator('assessTaxIncludedAmount', {initialValue: o.assessTaxIncludedAmount})(
-                  <Input placeholder="考核含税金额" />
                 )
               }
             </FormItem>
             <FormItem label="备注">
               {
-                getFieldDecorator('arAccountantApproveMessage', {initialValue: o.arAccountantApproveMessage})(
+                getFieldDecorator('remark', {initialValue: o.remark})(
                   <TextArea rows={4} />
                 )
               }

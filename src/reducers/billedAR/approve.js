@@ -19,7 +19,10 @@ export default ({
       pageNo = pageInfo.pageNo;
       pageSize = pageInfo.pageSize;
       count = pageInfo.count;
-      result = pageInfo.result;
+      result = pageInfo.result.map(o=>({
+        ...o,
+        companyShow: `${o.companyId}_${o.companyName}`
+      }));
       title = '';
       break;
     case 'BILLEDARAPPROVE_REJECT_SUCCESS':
