@@ -8,6 +8,7 @@ const projectReceiptClaim = {
     count: 0,
     result: [],
   },
+  amountTotals: [],
   receiptClaimListRefresh: new Date().getTime(),
   receiptInfo: {
   },

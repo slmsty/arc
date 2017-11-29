@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, message, Modal } from 'antd'
+import { Table, Button, message, Modal, Row, Col } from 'antd'
 import moment from 'moment'
 import ProjectReceiptClaimSearchWithForm from './projectReceiptClaimSearch'
 import ProjectReceiptClaimModal from '../../containers/projectReceiptClaim/projectReceiptClaimModal'
@@ -225,15 +225,23 @@ export default class ProjectReceiptClaim extends React.Component {
       onChange: this.onSelectChange,
     }
     const rejectBtn = this.queryParam.status === '21' || this.queryParam.status === '40' ? <Button type="danger" onClick={this.handleReject}>拒绝</Button> : null
+    const makeSummary = () => (this.props.amountTotals && this.props.amountTotals.length ? this.props.amountTotals.map(item => `${item.currency}：${item.totalAmount}`).join('  ') : '0.00')
     return (
       <div>
         <ProjectReceiptClaimSearchWithForm
           onQuery={this.handleChangeParam}
         />
-        <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
-        <Button type="primary" onClick={this.handleChangeClaimType}>订单认款</Button>&nbsp;&nbsp;
-        {rejectBtn}
-        <br /><br />
+        <Row style={{ lineHeight: '28px' }}>
+          <Col span={12}>
+            <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
+            <Button type="primary" onClick={this.handleChangeClaimType}>订单认款</Button>&nbsp;&nbsp;
+            {rejectBtn}
+          </Col>
+          <Col span={12} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
+            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary()}</span>
+          </Col>
+        </Row>
+        <br />
         <Table
           rowKey="receiptClaimId"
           rowSelection={rowSelection}
@@ -265,6 +273,7 @@ ProjectReceiptClaim.propTypes = {
   reject: PropTypes.func.isRequired,
   changeClaimType: PropTypes.func.isRequired,
   getReceiptInfo: PropTypes.func.isRequired,
+  amountTotals: PropTypes.arrayOf(PropTypes.shape),
   receiptClaimList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,

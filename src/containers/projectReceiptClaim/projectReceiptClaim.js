@@ -9,6 +9,7 @@ import ProjectReceiptClaim from '../../components/projectReceiptClaim/projectRec
 const mapStateToProps = state => ({
   receiptClaimList: state.projectReceiptClaim.receiptClaimList,
   receiptClaimListRefresh: state.projectReceiptClaim.receiptClaimListRefresh,
+  amountTotals: state.projectReceiptClaim.amountTotals,
 })
 
 const mapDispatchToProps = dispatch => (
