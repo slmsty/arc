@@ -1,21 +1,27 @@
 import React, {Component} from 'react'
 import './Approve.css'
-import {Form, Row, Col, DatePicker, Input, Button, Table} from 'antd';
+import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
+import moment from 'moment'
 import SelectCustomer from '../common/selectCustomer'
-import SelectContractCompany from '../common/SelectContractCompany'
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 
 class Approve extends Component{
+  state = {
+    selectedRowKeys: [],
+    rejectDis: true,
+    confirmDis: true
+  }
+
   constructor(props){
     super(props);
     const columns = [
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'statusShow'
+        key: 'statusName'
       },
       {
         title: '付款条件',
@@ -48,10 +54,6 @@ class Approve extends Component{
       {
         title: '项目编码',
         key: 'projectNo'
-      },
-      {
-        title: '项目名称',
-        key: 'projectName'
       },
       {
         title: '签约公司',
@@ -105,14 +107,80 @@ class Approve extends Component{
   doSearch = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      this.props.Search(values)
+      this.props.Search({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
     });
+  }
+
+  pageSizeChange = (current, size)=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: size
+        },
+        ...values
+      })
+    });
+  }
+
+  pageNoChange = (page, pageSize)=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: page,
+          pageSize: pageSize
+        },
+        ...values
+      })
+    });
+  }
+
+  rowSelectionChange = (selectedRowKeys, selectedRows)=>{
+    this.setState({
+      selectedRowKeys: selectedRowKeys,
+      rejectDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='10'||o.status==='20'||o.status==='30')),
+      confirmDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='10'))
+    })
+  }
+
+  reject = ()=>{
+    this.setState({
+      selectedRowKeys: [],
+      rejectDis: true,
+      confirmDis: true
+    })
+    this.props.Reject(this.state.selectedRowKeys)
+  }
+
+  confirm = ()=>{
+    this.setState({
+      selectedRowKeys: [],
+      rejectDis: true,
+      confirmDis: true
+    })
+    this.props.Confirm(this.state.selectedRowKeys)
+  }
+
+  shouldComponentUpdate({title}, nextState){
+    if(title){
+      Modal.info({title})
+      this.props.ResetTitle()
+      return false;
+    }else{
+      return true;
+    }
   }
 
   render(){
     const { getFieldDecorator } = this.props.form;
     const columns = this.columns;
-    const {pageNo, pageSize, count, result} = this.props;
+    const {pageNo, pageSize, count, result, loading} = this.props;
 
     const layout = {
       labelCol: {
@@ -130,14 +198,16 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="GL日期" {...layout}>
                 {
-                  getFieldDecorator('glDate')(<RangePicker/>)
+                  getFieldDecorator('glDate', {
+                    initialValue: [moment().add(-2, 'days'), moment().add(-2, 'days')]
+                  })(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="客户名称" {...layout}>
                 {
-                  getFieldDecorator('custId')(<SelectCustomer/>)
+                  getFieldDecorator('custInfo')(<SelectCustomer/>)
                 }
               </FormItem>
             </Col>
@@ -162,7 +232,7 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="签约公司" {...layout}>
                 {
-                  getFieldDecorator('companyId')(<SelectContractCompany />)
+                  getFieldDecorator('companyName')(<Input placeholder="签约公司" />)
                 }
               </FormItem>
             </Col>
@@ -185,24 +255,32 @@ class Approve extends Component{
         <br/>
         <Row>
           <Col span={24}>
-            <Button style={{marginRight: '20px'}}>拒绝</Button>
-            <Button type="primary">确认</Button>
+            <Button onClick={this.reject} style={{marginRight: '20px'}} disabled={this.state.rejectDis}>拒绝</Button>
+            <Button onClick={this.confirm} type="primary" disabled={this.state.confirmDis}>确认</Button>
           </Col>
         </Row>
         <br/>
         <Table 
+          rowKey="contractItemId"
           bordered
-          rowSelection={{onChange: ()=>{}}}
+          loading={loading}
+          rowSelection={{
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: this.rowSelectionChange
+          }}
           columns={columns} 
           dataSource={result}
           pagination={{
+            pageSizeOptions: ['5', '10', '20', '30'],
             showSizeChanger: true,
-            onShowSizeChange: ()=>{},
+            onShowSizeChange: this.pageSizeChange,
             showTotal: t=>`共${t}条`,
-            onChange: ()=>{},
+            onChange: this.pageNoChange,
+            current: pageNo,
+            pageSize: pageSize,
             total: count
           }}
-          scroll={{ x: 2462}}></Table>
+          scroll={{ x: 2342}}></Table>
       </div>
     )
   }
