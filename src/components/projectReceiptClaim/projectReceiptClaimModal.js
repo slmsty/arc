@@ -173,8 +173,10 @@ export default class ProjectReceiptClaimModal extends React.Component {
       }
       totalClaimAmount += this.state.funds[i].claimAmount
     }
-    if (totalClaimAmount.toFixed(2) !== this.props.receiptInfo.receiptAmount.toFixed(2)) {
-      message.error('认款金额合计与收款金额不相等，不能进行认款')
+    totalClaimAmount = this.props.receiptInfo.receiptAmount - totalClaimAmount
+    totalClaimAmount = totalClaimAmount.toFixed(2)
+    if (totalClaimAmount < 0 || totalClaimAmount > 3) {
+      message.error('认款金额合计与收款金额不相符，不能进行认款')
       return
     }
     const self = this
@@ -231,9 +233,38 @@ export default class ProjectReceiptClaimModal extends React.Component {
         }
       })
       this.setState({ funds })
+      this.edited = true
     }
-    this.edited = true
     this.setState({ showSelectFund: false })
+  }
+  handleAddVirtualContract = () => {
+    const funds = this.state.funds
+    let isExist = false
+    for (let i = 0; i < funds.length; i += 1) {
+      if (funds[i].fundId === '-1') {
+        isExist = true
+        break
+      }
+    }
+    if (!isExist) {
+      const fund = {}
+      fund.fundId = '-1'
+      fund.claimAmount = this.props.receiptInfo.receiptAmount
+      fund.claimContractAmount = this.props.receiptInfo.receiptAmount
+      fund.receiptAmount = this.props.receiptInfo.receiptAmount
+      fund.fundReceivableBalance = this.props.receiptInfo.receiptAmount
+      fund.receiptUse = 'On account'
+      fund.custId = this.props.receiptInfo.payCustId
+      fund.custName = this.props.receiptInfo.payCustName
+      fund.projectNo = 'ARC001'
+      fund.paymentName = 'ARC001'
+      fund.paymentPercent = '0'
+      fund.contractNo = 'ARC001'
+      fund.contractName = 'ARC001'
+      funds.push(fund)
+      this.setState({ funds })
+      this.edited = true
+    }
   }
   handleDeleteFund = (fundIdx) => {
     const funds = this.state.funds
@@ -289,6 +320,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
           </Card>
           <br />
           <Button key="add" type="primary" onClick={() => { this.setState({ showSelectFund: true }) }}><Icon type="plus-circle-o" />增加合同百分比</Button>&nbsp;&nbsp;
+          <Button key="addVirtualContract" type="primary" onClick={this.handleAddVirtualContract}><Icon type="plus-circle-o" />增加虚拟合同</Button>&nbsp;&nbsp;
           <br />
           <br />
           <Table
@@ -323,6 +355,7 @@ ProjectReceiptClaimModal.propTypes = {
     receiptAmount: PropTypes.number,
     bankTransactionNo: PropTypes.string,
     receiptNo: PropTypes.string,
+    payCustId: PropTypes.string,
     payCustName: PropTypes.string,
     paymentNameId: PropTypes.string,
     receiptCurrency: PropTypes.string,

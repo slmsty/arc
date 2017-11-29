@@ -140,7 +140,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
   }
   handleCloseClaim = () => {
     if (this.edited) {
-      const that = this
+      const self = this
       Modal.confirm({
         title: '操作确认',
         content: '您已修改了认款数据，是否确认放弃修改',
@@ -148,9 +148,11 @@ export default class ProjectReceiptClaimModal extends React.Component {
         okType: 'danger',
         cancelText: '否',
         onOk() {
-          that.props.closeClaim()
+          self.props.closeClaim()
         },
       })
+    } else {
+      this.props.closeClaim()
     }
   }
   render() {

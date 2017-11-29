@@ -21,7 +21,7 @@ const projectReceiptClaim = {
 }
 
 function getReceiptList(state, action) {
-  return { ...state, receiptClaimList: action.response.pageInfo }
+  return { ...state, receiptClaimList: action.response.pageInfo, amountTotals: action.response.amountTotals }
 }
 
 function getPhaseList(state, action) {

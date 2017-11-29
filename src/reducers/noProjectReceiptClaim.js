@@ -26,7 +26,7 @@ const noProjectReceiptClaim = {
 }
 
 function getReceiptList(state, action) {
-  return { ...state, receiptClaimList: action.response.pageInfo }
+  return { ...state, receiptClaimList: action.response.pageInfo, amountTotals: action.response.amountTotals }
 }
 
 function getOrderList(state, action) {
