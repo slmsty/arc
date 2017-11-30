@@ -34,6 +34,11 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     width: 20,
     fixed: 'left',
   }, {
+    title: '节点',
+    dataIndex: 'projectNode',
+    width: 20,
+    fixed: 'left',
+  }, {
     title: '付款条款',
     dataIndex: 'paymentName',
     width: 20,
@@ -53,6 +58,10 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   }, {
     title: '应收余额',
     dataIndex: 'receivableBalance',
+    width: 100,
+  }, {
+    title: '应收日期',
+    dataIndex: 'arDate',
     width: 100,
   }, {
     title: '客户名称',

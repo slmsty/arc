@@ -53,16 +53,13 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '认款合同币种金额',
     dataIndex: 'claimContractAmount',
     width: 150,
-    render: (text, record, index) => {
-      const editable = this.props.receiptInfo.receiptCurrency !== record.contractCurrency
-      return (<EditableNumberCell
-        editable={editable}
-        value={text}
-        min={0}
-        max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount < record.receivableBalance ? this.props.receiptInfo.receiptAmount : record.receivableBalance}
-        onChange={value => this.handleClaimFundChange(index, value, 'claimContractAmount')}
-      />)
-    },
+    render: (text, record, index) => (<EditableNumberCell
+      editable
+      value={text}
+      min={0}
+      max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount < record.receivableBalance ? this.props.receiptInfo.receiptAmount : record.receivableBalance}
+      onChange={value => this.handleClaimFundChange(index, value, 'claimContractAmount')}
+    />),
   }, {
     title: '备注',
     dataIndex: 'accountantApproveMessage',
