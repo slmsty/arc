@@ -135,9 +135,9 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     const amountTotals = {}
     this.state.selectedRows.forEach((fund) => {
       if (amountTotals[fund.contractCurrency]) {
-        amountTotals[fund.contractCurrency] += fund.receivableBalance
+        amountTotals[fund.contractCurrency] += fund.arAmount
       } else {
-        amountTotals[fund.contractCurrency] = fund.receivableBalance
+        amountTotals[fund.contractCurrency] = fund.arAmount
       }
     })
     const makeSummary = Object.keys(amountTotals).map(contractCurrency => `${contractCurrency}:${amountTotals[contractCurrency]}  `)
@@ -151,7 +151,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
         footer={[
           <Row style={{ lineHeight: '28px' }}>
             <Col span={19} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
-              <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
+              <span>应收金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
             </Col>
             <Col span={5}>
               <Button key="select" type="primary" onClick={this.handleSelectFunds}>
