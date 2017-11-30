@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import './Approve.css'
 import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
 import moment from 'moment'
 import SelectCustomer from '../common/selectCustomer'
@@ -57,7 +56,7 @@ class Approve extends Component{
       },
       {
         title: '签约公司',
-        key: 'companyName'
+        key: 'companyShow'
       },
       {
         title: '合同编码',
@@ -98,7 +97,6 @@ class Approve extends Component{
     ];
     this.columns = columns.map(o=>({
       ...o,
-      className:'tHeader',
       dataIndex: o.key,
       width: 120,
     }))
@@ -150,21 +148,21 @@ class Approve extends Component{
   }
 
   reject = ()=>{
+    this.props.Reject(this.state.selectedRowKeys)
     this.setState({
       selectedRowKeys: [],
       rejectDis: true,
       confirmDis: true
     })
-    this.props.Reject(this.state.selectedRowKeys)
   }
 
   confirm = ()=>{
+    this.props.Confirm(this.state.selectedRowKeys)
     this.setState({
       selectedRowKeys: [],
       rejectDis: true,
       confirmDis: true
     })
-    this.props.Confirm(this.state.selectedRowKeys)
   }
 
   shouldComponentUpdate({title}, nextState){

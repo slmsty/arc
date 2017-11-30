@@ -1,125 +1,24 @@
 import React, {Component} from 'react'
-import './Status.css'
-import {Form, Row, Col, DatePicker, Input, Button, Select, Table, Modal, message} from 'antd';
+import {Form, Row, Col, DatePicker, Button, Table, Modal} from 'antd';
+import moment from 'moment'
 import SelectCustomer from '../common/selectCustomer'
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
+import SelectInvokeApi from '../common/selectInvokeApi'
+import ARModal from './ARModal'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
-const Option = Select.Option;
 
 class Status extends Component{
   state = {
+    returnDis: true,
+    erpDis: true,
     visible: false,
-    selectedRowKeys: [],
-    pageInfo: {
-      pageNo: 1,
-      pageSize: 10,
-      count: 1300,
-      result: [
-        {
-          key: 0,
-          key1: 'test',
-          key2: 'test',
-          key3: 'test',
-          key4: 'test',
-          key5: 'test',
-          key6: 'test',
-          key7: 'test',
-          key8: 'test',
-          key9: 'test',
-          key10: 'test',
-          key11: 'test',
-          key12: 'test',
-          key13: 'test',
-          key14: 'test',
-          key15: 'test',
-          key16: 'test',
-          key17: 'test',
-          key18: 'test',
-          key19: 'test',
-          key20: 'test',
-          key21: 'test',
-        },
-        {
-          key: 1,
-          key1: 'test',
-          key2: 'test',
-          key3: 'test',
-          key4: 'test',
-          key5: 'test',
-          key6: 'test',
-          key7: 'test',
-          key8: 'test',
-          key9: 'test',
-          key10: 'test',
-          key11: 'test',
-          key12: 'test',
-          key13: 'test',
-          key14: 'test',
-          key15: 'test',
-          key16: 'test',
-          key17: 'test',
-          key18: 'test',
-          key19: 'test',
-          key20: 'test',
-          key21: 'test',
-        }
-      ]
-    },
-    returnPageInfo: {
-      pageNo: 1,
-      pageSize: 10,
-      count: 1300,
-      result: [
-        {
-          key: 0,
-          key1: 'test',
-          key2: 'test',
-          key3: 'test',
-          key4: 'test',
-          key5: 'test',
-          key6: 'test',
-          key7: 'test',
-          key8: 'test',
-          key9: 'test',
-          key10: 'test',
-          key11: 'test',
-          key12: 'test',
-          key13: 'test',
-          key14: 'test',
-          key15: 'test',
-          key16: 'test',
-          key17: 'test',
-          key18: 'test',
-          key19: 'test',
-          key20: 'test',
-        },
-        {
-          key: 1,
-          key1: 'test',
-          key2: 'test',
-          key3: 'test',
-          key4: 'test',
-          key5: 'test',
-          key6: 'test',
-          key7: 'test',
-          key8: 'test',
-          key9: 'test',
-          key10: 'test',
-          key11: 'test',
-          key12: 'test',
-          key13: 'test',
-          key14: 'test',
-          key15: 'test',
-          key16: 'test',
-          key17: 'test',
-          key18: 'test',
-          key19: 'test',
-          key20: 'test',
-        }
-      ]
-    },
+    result: [],
+    editDis: true,
+    erp2Dis: true,
+    selectedRowKeys2: [],
+    isEdit: false,
   }
 
   constructor(props){
@@ -128,220 +27,298 @@ class Status extends Component{
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'key1'
+        key: 'status'
       },
       {
         title: 'GL已提坏账金额',
-        key: 'key2'
+        key: 'badDebtProvisionAmount'
       },
       {
         title: 'Billed AR余额',
-        key: 'key3'
+        key: 'billedArBalance'
       },
       {
         title: <span>划销金额<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'key4'
+        key: 'badDebtAmount'
+      },
+      {
+        title: <span>申请日期<em style={{color:'#FF0000'}}>*</em></span>,
+        key: 'applicationDate'
+      },
+      {
+        title: '备注',
+        key: 'remark'
       },
       {
         title: '已划销金额',
-        key: 'key5'
+        key: 'badDebtDeductedAmount'
       },
       {
         title: '已划销退回金额',
-        key: 'key6'
+        key: 'badDebtReturnAmount'
       },
       {
         title: '项目编码',
-        key: 'key7'
+        key: 'projectNo'
       },
       {
         title: '项目名称',
-        key: 'key8'
+        key: 'projectName'
       },
       {
         title: '签约公司',
-        key: 'key9'
-      },
-      {
-        title: '签约日期',
-        key: 'key10'
-      },
-      {
-        title: '合同编码',
-        key: 'key11'
+        key: 'companyName'
       },
       {
         title: '客户名称',
-        key: 'key12'
+        key: 'custName'
       },
       {
         title: '币种',
-        key: 'key13'
+        key: 'contractCurrency'
       },
       {
         title: '部门',
-        key: 'key14'
+        key: 'deptName'
       },
       {
         title: 'SBU',
-        key: 'key15'
-      },
-      {
-        title: '应收/报告日期',
-        key: 'key16'
+        key: 'sbuName'
       },
       {
         title: '合同金额',
-        key: 'key17'
+        key: 'contractAmount'
       },
       {
         title: 'Billed AR日期',
-        key: 'key18'
+        key: 'billedArDate'
       },
       {
         title: 'GL日期',
-        key: 'key19'
+        key: 'erpGlDate'
       },
       {
         title: 'Billed AR金额',
-        key: 'key20'
+        key: 'billedArAmount'
       },
       {
         title: '回款金额',
-        key: 'key21'
+        key: 'claimAmount'
       },
     ];
     this.columns = columns.map(o=>({
       ...o,
-      className:'tHeader',
       dataIndex: o.key,
       width: 140,
     }))
-    const returnColumns = [
+    const columns2 = [
       {
         title: 'GL已提坏账金额',
-        key: 'key1'
+        key: 'badDebtProvisionAmount'
       },
       {
         title: 'Billed AR余额',
-        key: 'key2'
+        key: 'billedArBalance'
       },
       {
         title: '坏账划销金额',
-        key: 'key3'
+        key: 'badDebtAmount'
       },
       {
         title: '已划销退回金额',
-        key: 'key4'
+        key: 'badDebtReturnAmount'
       },
       {
         title: <span>划销退回金额<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'key5'
+        key: 'badDebtReturnAmount'
+      },
+      {
+        title: <span>GL日期<em style={{color:'#FF0000'}}>*</em></span>,
+        key: 'erpGlDate'
+      },
+      {
+        title: '备注',
+        key: 'remark'
       },
       {
         title: 'Billed AR金额',
-        key: 'key6'
+        key: 'billedArAmount'
       },
       {
         title: '回款金额',
-        key: 'key7'
+        key: 'claimAmount'
       },
       {
         title: '项目编码',
-        key: 'key8'
+        key: 'projectNo'
       },
       {
         title: '项目名称',
-        key: 'key9'
+        key: 'projectName'
       },
       {
         title: '签约公司',
-        key: 'key10'
-      },
-      {
-        title: '签约日期',
-        key: 'key11'
-      },
-      {
-        title: '合同编码',
-        key: 'key12'
+        key: 'companyName'
       },
       {
         title: '客户名称',
-        key: 'key13'
+        key: 'custName'
       },
       {
         title: '币种',
-        key: 'key14'
+        key: 'contractCurrency'
       },
       {
         title: '部门',
-        key: 'key15'
+        key: 'deptName'
       },
       {
         title: 'SBU',
-        key: 'key16'
-      },
-      {
-        title: '应收/报告日期',
-        key: 'key17'
+        key: 'sbuName'
       },
       {
         title: '合同金额',
-        key: 'key18'
+        key: 'contractAmount'
       },
       {
         title: 'Billed AR日期',
-        key: 'key19'
-      },
-      {
-        title: 'GL日期',
-        key: 'key20'
+        key: 'billedArDate'
       },
     ];
-    this.returnColumns = returnColumns.map(o=>({
+    this.columns2 = columns2.map(o=>({
       ...o,
-      className:'tHeader',
       dataIndex: o.key,
       width: 140,
     }))
-  }
-
-  SelectChange = (selectedRowKeys)=>{
-    this.setState({selectedRowKeys})
   }
 
   doSearch = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log(values);
+      this.props.Search({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
     });
   }
 
-  doReturn = ()=>{
-    if(this.state.selectedRowKeys.length === 0){
-      message.warning('请选择退回项')
-    }else if(this.state.selectedRowKeys.length > 1){
-      message.warning('只能退回一项')
+  pageSizeChange = (current, size)=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: size
+        },
+        ...values
+      })
+    });
+  }
+
+  pageNoChange = (page, pageSize)=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: page,
+          pageSize: pageSize
+        },
+        ...values
+      })
+    });
+  }
+
+  rowSelectionChange = (selectedRowKeys, selectedRows)=>{
+    this.setState({
+      selectedRowKeys: selectedRowKeys,
+      returnDis: !(selectedRows.length>0),
+      erpDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='10'||o.status==='20'))
+    })
+  }
+
+  rowSelectionChange2 = (selectedRowKeys, selectedRows)=>{
+    this.setState({
+      selectedRowKeys2: selectedRowKeys,
+      editDis: selectedRows.length!==1,
+      erp2Dis: !(selectedRows.length>0)
+    })
+  }
+
+  bdReturn = ()=>{
+    this.setState({
+      visible: true,
+      result: this.props.result.filter(o=>this.state.selectedRowKeys.includes(o.badDebtId))
+    })
+  }
+
+  close = ()=>{
+    this.setState({
+      visible: false
+    })
+    this.doSearch();
+  }
+
+  sendErp = ()=>{
+    this.props.SendErp(this.state.selectedRowKeys)
+    this.setState({
+      selectedRowKeys: [],
+      returnDis: true,
+      erpDis: true
+    })
+  }
+
+  sendErp2 = ()=>{
+    this.props.SendErp2(this.state.selectedRowKeys2)
+    this.setState({
+      selectedRowKeys2: [],
+      editDis: true,
+      erp2Dis: true
+    })
+  }
+
+  doEdit = ()=>{
+    this.setState({
+      isEdit: true,
+      o: this.state.result.find(o=>o.badDebtId===this.state.selectedRowKeys2[0])
+    })
+  }
+
+  editCancel = ()=>{
+    this.setState({isEdit: false})
+  }
+
+  editDone = (values)=>{
+    this.setState({
+      isEdit: false,
+      result: this.state.result.map(o=>{
+        if(o.badDebtId === this.state.o.badDebtId){
+          return {
+            ...this.state.o,
+            ...values
+          }
+        }else{
+          return o;
+        }
+      })
+    })
+  }
+
+  shouldComponentUpdate({title}, nextState){
+    if(title){
+      Modal.info({title})
+      this.props.ResetTitle()
+      return false;
     }else{
-      this.setState({visible: true})
+      return true;
     }
-  }
-
-  Cancel = ()=>{
-    this.setState({visible: false})
-  }
-
-  Ok = ()=>{
-    this.setState({visible: false})
   }
 
   render(){
     const { getFieldDecorator } = this.props.form;
     const columns = this.columns;
-    const returnColumns = this.returnColumns;
-    const pageInfo = this.state.pageInfo;
-    const returnPageInfo = this.state.returnPageInfo;
+    const columns2 = this.columns2;
+    const {pageNo, pageSize, count, result, loading} = this.props;
 
     const layout = {
       labelCol: {
@@ -357,23 +334,25 @@ class Status extends Component{
         <Form onSubmit={this.doSearch}>
           <Row>
             <Col span={8}>
-              <FormItem label="签约日期" {...layout}>
+              <FormItem label="申请日期" {...layout}>
                 {
-                  getFieldDecorator('signStartEnd')(<RangePicker/>)
+                  getFieldDecorator('applicationDate', {
+                    initialValue: [moment().add(-2, 'days'), moment().add(-2, 'days')]
+                  })(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="客户名称" {...layout}>
                 {
-                  getFieldDecorator('customerId')(<SelectCustomer/>)
+                  getFieldDecorator('custInfo')(<SelectCustomer/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="项目编码(多)" {...layout}>
                 {
-                  getFieldDecorator('projectCode')(
+                  getFieldDecorator('projectNos')(
                     <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
                   )
                 }
@@ -382,31 +361,27 @@ class Status extends Component{
           </Row>
           <Row>
             <Col span={8}>
-              <FormItem label="签约日期(多)" {...layout}>
+              <FormItem label="申请日期(多)" {...layout}>
                 {
-                  getFieldDecorator('signDate')(<MultipleDayInput />)
+                  getFieldDecorator('applicationDates')(<MultipleDayInput />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="数据状态" {...layout}>
                 {
-                  getFieldDecorator('status', {initialValue: '1'})(
-                    <Select>
-                      <Option value="1">审核中</Option>
-                      <Option value="2">已审核</Option>
-                      <Option value="3">已划销</Option>
-                      <Option value="4">已划销退回</Option>
-                      <Option value="5">错误</Option>
-                    </Select>
-                  )
+                  getFieldDecorator('status', {initialValue: '12'})(<SelectInvokeApi
+                    typeCode="BAD_DEBT"
+                    paramCode="STATUS"
+                    placeholder="数据状态"
+                  />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="合同编码(多)" {...layout}>
                 {
-                  getFieldDecorator('contactCode')(
+                  getFieldDecorator('contractNos')(
                     <MultipleInput placeholder="多合同编码使用英文逗号间隔" />
                   )
                 }
@@ -415,9 +390,26 @@ class Status extends Component{
           </Row>
           <Row>
             <Col span={8}>
-              <FormItem label="付款阶段(里程碑)" {...layout}>
+              <FormItem label="SBU" {...layout}>
                 {
-                  getFieldDecorator('stage')(<Input />)
+                  getFieldDecorator('sbuNo', {initialValue: '109'})(<SelectInvokeApi
+                    typeCode="BAD_DEBT"
+                    paramCode="SBU"
+                    placeholder="SBU"
+                    hasEmpty
+                  />)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="部门" {...layout}>
+                {
+                  getFieldDecorator('orgNo', {initialValue: '18517'})(<SelectInvokeApi
+                    typeCode="BAD_DEBT"
+                    paramCode="ORG"
+                    placeholder="部门"
+                    hasEmpty
+                  />)
                 }
               </FormItem>
             </Col>
@@ -431,40 +423,64 @@ class Status extends Component{
         <br/>
         <Row>
           <Col span={24}>
-            <Button onClick={this.doReturn} style={{marginRight: '20px'}}>划销退回</Button>
-            <Button onClick={()=>{}}>传送ERP</Button>
+            <Button onClick={this.bdReturn} style={{marginRight: '20px'}} disabled={this.state.returnDis}>划销退回</Button>
+            <Button onClick={this.sendErp} type="primary" disabled={this.state.erpDis}>传送ERP</Button>
           </Col>
         </Row>
         <br/>
         <Table 
+          rowKey="badDebtId"
           bordered
-          rowSelection={{onChange: this.SelectChange}}
-          columns={columns} 
-          dataSource={pageInfo.result}
-          pagination={{
-            showSizeChanger: true,
-            onShowSizeChange: ()=>{},
-            showTotal: t=>`共${t}条`,
-            onChange: ()=>{},
-            total: pageInfo.count
+          loading={loading}
+          rowSelection={{
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: this.rowSelectionChange
           }}
-          scroll={{ x: 3002}} />
-        <Modal
-          title="划销退回"
+          columns={columns} 
+          dataSource={result}
+          pagination={{
+            pageSizeOptions: ['5', '10', '20', '30'],
+            showSizeChanger: true,
+            onShowSizeChange: this.pageSizeChange,
+            showTotal: t=>`共${t}条`,
+            onChange: this.pageNoChange,
+            current: pageNo,
+            pageSize: pageSize,
+            total: count
+          }}
+          scroll={{ x: 2862}}></Table>
+        <Modal 
+          width={1080}
+          title="划销退回" 
           visible={this.state.visible}
-          onCancel={this.Cancel}
-          onOk={this.Ok}>
+          onCancel={this.close}
+          footer={[
+            <Button onClick={this.close}>关闭</Button>
+          ]}>
+          <Row>
+            <Col span={24}>
+              <Button onClick={this.doEdit} style={{marginRight: '20px'}} disabled={this.state.editDis}>编辑</Button>
+              <Button onClick={this.sendErp2} type="primary" disabled={this.state.erp2Dis}>传送ERP</Button>
+            </Col>
+          </Row>
+          <br/>
           <Table 
-            rowSelection={{onChange: ()=>{}}}
-            columns={returnColumns} 
-            dataSource={returnPageInfo.result}
-            pagination={{
-              simple: true,
-              pageSize: returnPageInfo.pageSize,
-              onChange: ()=>{},
+            rowKey="badDebtId"
+            bordered
+            rowSelection={{
+              selectedRowKeys: this.state.selectedRowKeys2,
+              onChange: this.rowSelectionChange2
             }}
-            scroll={{ x: 2862}} />
+            columns={columns2} 
+            dataSource={this.state.result}
+            scroll={{ x: 2582}}></Table>
         </Modal>
+        <ARModal 
+          visible={this.state.isEdit}
+          onCancel={this.editCancel}
+          onOk={this.editDone}
+          o={this.state.o}
+         />
       </div>
     )
   }

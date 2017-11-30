@@ -1,79 +1,22 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Input, Button, Select, Table, message} from 'antd';
+import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
 import SelectCustomer from '../common/selectCustomer'
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
+import SelectInvokeApi from '../common/selectInvokeApi'
 import ARModal from './ARModal'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
-const Option = Select.Option;
 
 class Confirm extends Component{
   state = {
     visible: false,
-    editObj: {},
+    o: {},
     selectedRowKeys: [],
-    pageInfo: {
-      pageNo: 1,
-      pageSize: 10,
-      count: 1300,
-      result: [
-        {
-          key: 0,
-          key1: 'test',
-          key2: 'test',
-          key3: 'test',
-          key4: 'test',
-          key5: 'test',
-          key6: '',
-          key7: '',
-          key8: 'test',
-          key9: 'test',
-          key10: 'test',
-          key11: 'test',
-          key12: 'test',
-          key13: 'test',
-          key14: 'test',
-          key15: 'test',
-          key16: 'test',
-          key17: 'test',
-          key18: 'test',
-          key19: 'test',
-          key20: 'test',
-          key21: 'test',
-          key22: 'test',
-          key23: 'test',
-          key24: 'test',
-        },
-        {
-          key: 1,
-          key1: 'test',
-          key2: 'test',
-          key3: 'test',
-          key4: 'test',
-          key5: 'test',
-          key6: '',
-          key7: '',
-          key8: 'test',
-          key9: 'test',
-          key10: 'test',
-          key11: 'test',
-          key12: 'test',
-          key13: 'test',
-          key14: 'test',
-          key15: 'test',
-          key16: 'test',
-          key17: 'test',
-          key18: 'test',
-          key19: 'test',
-          key20: 'test',
-          key21: 'test',
-          key22: 'test',
-          key23: 'test',
-          key24: 'test',
-        }
-      ]
-    }
+    editDis: true,
+    rejectDis: true,
+    approvalDis: true,
+    sendDis: true
   }
 
   constructor(props){
@@ -82,166 +25,219 @@ class Confirm extends Component{
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'key1'
+        key: 'statusName'
       },
       {
         title: '付款条件',
-        key: 'key2'
+        key: 'paymentTerm'
       },
       {
         title: '付款金额',
-        key: 'key3'
+        key: 'paymentAmount'
       },
       {
         title: '考核含税金额',
-        key: 'key4'
+        key: 'assessTaxIncludedAmount'
       },
       {
         title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'key5'
+        key: 'billedArAmount'
       },
       {
         title: <span>Billed AR日期<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'key6'
+        key: 'billedArDate'
       },
       {
         title: <span>GL日期<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'key7'
+        key: 'glDate'
       },
       {
         title: '备注',
-        key: 'key8'
+        key: 'arAccountantApproveMessage'
       },
       {
         title: '款项ID',
-        key: 'key9'
+        key: 'fundId'
       },
       {
         title: '合同币种',
-        key: 'key10'
+        key: 'contractCurrency'
       },
       {
         title: '合同金额',
-        key: 'key11'
+        key: 'contractAmount'
       },
       {
         title: '项目编码',
-        key: 'key12'
-      },
-      {
-        title: '项目名称',
-        key: 'key13'
+        key: 'projectNo'
       },
       {
         title: '签约公司',
-        key: 'key14'
+        key: 'companyShow'
       },
       {
         title: '合同编码',
-        key: 'key15'
+        key: 'contractNo'
       },
       {
         title: '合同名称',
-        key: 'key16'
+        key: 'contractName'
       },
       {
         title: '客户名称',
-        key: 'key17'
+        key: 'custName'
       },
       {
         title: '付款阶段(里程碑)',
-        key: 'key18'
+        key: 'paymentPhrases'
       },
       {
         title: '付款条款',
-        key: 'key19'
+        key: 'paymentName'
       },
       {
         title: '应收日期',
-        key: 'key20'
+        key: 'arDate'
       },
       {
         title: '报告日期',
-        key: 'key21'
+        key: 'reportDate'
       },
       {
         title: '付款百分比',
-        key: 'key22'
+        key: 'paymentPercent'
       },
       {
         title: '收入额',
-        key: 'key23'
+        key: 'revenueAmount'
       },
       {
         title: '提示',
-        key: 'key24'
+        key: 'reminder'
       },
     ];
     this.columns = columns.map(o=>({
       ...o,
-      className:'tHeader',
       dataIndex: o.key,
       width: 120,
     }))
   }
 
-  SelectChange = (selectedRowKeys)=>{
-    this.setState({selectedRowKeys})
-  }
-
   doSearch = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log(values);
+      this.props.Search({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
     });
   }
 
-  doEdit = ()=>{
-    if(this.state.selectedRowKeys.length === 0){
-      message.warning('请选择编辑项')
-    }else if(this.state.selectedRowKeys.length > 1){
-      message.warning('只能编辑一项')
-    }else{
-      this.setState({
-        visible: true,
-        editObj: {...this.state.pageInfo.result[this.state.selectedRowKeys[0]]},
+  pageSizeChange = (current, size)=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: size
+        },
+        ...values
       })
-    }
+    });
+  }
+
+  pageNoChange = (page, pageSize)=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: page,
+          pageSize: pageSize
+        },
+        ...values
+      })
+    });
+  }
+
+  rowSelectionChange = (selectedRowKeys, selectedRows)=>{
+    this.setState({
+      selectedRowKeys: selectedRowKeys,
+      editDis: !(selectedRows.length===1 && selectedRows.every(o=>o.status==='10'||o.status==='20'||o.status==='21'||o.status==='30'||o.status==='32')),
+      rejectDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='20'||o.status==='30')),
+      approvalDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='20')),
+      sendDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='30' || o.status==='32')),
+    })
+  }
+
+  doEdit = ()=>{
+    this.setState({
+      visible: true,
+      o: this.props.result.find(o=>o.billedArId===this.state.selectedRowKeys[0])
+    })
   }
 
   Cancel = ()=>{
+    this.setState({visible: false})
+  }
+
+  OK = (values)=>{
+    this.props.editBilledAr({
+      ...this.state.o,
+      ...values,
+      status: '20',
+      statusName: '待应收会计确认',
+    })
+    this.setState({visible: false})
+  }
+
+  reject = ()=>{
+    this.props.Reject(this.state.selectedRowKeys)
     this.setState({
-      visible: false,
-      editObj: {},
+      selectedRowKeys: [],
+      editDis: true,
+      rejectDis: true,
+      approvalDis: true,
+      sendDis: true
     })
   }
 
-  OK = ({key6, key7, key8})=>{
+  approval = ()=>{
+    this.props.Approval(this.state.selectedRowKeys)
     this.setState({
-      visible: false,
-      editObj: {},
-      pageInfo: {
-        ...this.state.pageInfo,
-        result: this.state.pageInfo.result.map((o, i)=>{
-          if(i === this.state.selectedRowKeys[0]){
-            return {
-              ...o,
-              key6,
-              key7,
-              key8
-            }
-          }else{
-            return o;
-          }
-        })
-      }
+      selectedRowKeys: [],
+      editDis: true,
+      rejectDis: true,
+      approvalDis: true,
+      sendDis: true
     })
+  }
+
+  send = ()=>{
+    this.props.Send(this.state.selectedRowKeys)
+    this.setState({
+      selectedRowKeys: [],
+      editDis: true,
+      rejectDis: true,
+      approvalDis: true,
+      sendDis: true
+    })
+  }
+
+  shouldComponentUpdate({title}, nextState){
+    if(title){
+      Modal.info({title})
+      this.props.ResetTitle()
+      return false;
+    }else{
+      return true;
+    }
   }
 
   render(){
     const { getFieldDecorator } = this.props.form;
     const columns = this.columns;
-    const pageInfo = this.state.pageInfo;
+    const {pageNo, pageSize, count, result, loading} = this.props;
 
     const layout = {
       labelCol: {
@@ -259,21 +255,21 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="Billed AR日期" {...layout}>
                 {
-                  getFieldDecorator('BilledARStartEnd')(<RangePicker/>)
+                  getFieldDecorator('billedArDate')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="客户名称" {...layout}>
                 {
-                  getFieldDecorator('customerId')(<SelectCustomer/>)
+                  getFieldDecorator('custInfo')(<SelectCustomer/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="项目编码(多)" {...layout}>
                 {
-                  getFieldDecorator('projectCode')(
+                  getFieldDecorator('projectNos')(
                     <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
                   )
                 }
@@ -284,21 +280,21 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="GL日期(多)" {...layout}>
                 {
-                  getFieldDecorator('GLDate')(<MultipleDayInput />)
+                  getFieldDecorator('glDates')(<MultipleDayInput />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="签约公司" {...layout}>
                 {
-                  getFieldDecorator('companyId')(<Input placeholder="签约公司" />)
+                  getFieldDecorator('companyName')(<Input placeholder="签约公司" />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="合同编码(多)" {...layout}>
                 {
-                  getFieldDecorator('contactCode')(
+                  getFieldDecorator('contractNos')(
                     <MultipleInput placeholder="多合同编码使用英文逗号间隔" />
                   )
                 }
@@ -309,27 +305,24 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="付款条件" {...layout}>
                 {
-                  getFieldDecorator('pay', {initialValue: '1'})(
-                    <Select>
-                      <Option value="1">按时间</Option>
-                      <Option value="2">按进度</Option>
-                    </Select>
-                  )
+                  getFieldDecorator('paymentTerm', {initialValue: ''})(<SelectInvokeApi
+                    typeCode="BILLED_AR"
+                    paramCode="PAYMENT_TERM"
+                    placeholder="付款条件"
+                    hasEmpty
+                  />)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="数据状态" {...layout}>
                 {
-                  getFieldDecorator('status', {initialValue: '1'})(
-                    <Select>
-                      <Option value="1">待应收会计确认</Option>
-                      <Option value="2">无需确认</Option>
-                      <Option value="3">待传送PA</Option>
-                      <Option value="4">已传送PA</Option>
-                      <Option value="5">错误</Option>
-                    </Select>
-                  )
+                  getFieldDecorator('status', {initialValue: '20'})(<SelectInvokeApi
+                    typeCode="BILLED_AR"
+                    paramCode="STATUS"
+                    placeholder="数据状态"
+                    hasEmpty
+                  />)
                 }
               </FormItem>
             </Col>
@@ -343,33 +336,39 @@ class Confirm extends Component{
         <br/>
         <Row>
           <Col span={24}>
-            <Button onClick={this.doEdit} style={{marginRight: '20px'}}>编辑</Button>
-            <Button style={{marginRight: '20px'}}>拒绝</Button>
-            <Button style={{marginRight: '20px'}}>审批</Button>
-            <Button>传送PA</Button>
+            <Button onClick={this.doEdit} style={{marginRight: '20px'}} disabled={this.state.editDis}>编辑</Button>
+            <Button onClick={this.reject} style={{marginRight: '20px'}} disabled={this.state.rejectDis}>拒绝</Button>
+            <Button onClick={this.approval} style={{marginRight: '20px'}} disabled={this.state.approvalDis}>审批</Button>
+            <Button onClick={this.send} disabled={this.state.sendDis}>传送PA</Button>
           </Col>
         </Row>
         <br/>
         <Table 
+          rowKey="billedArId"
           bordered
-          rowSelection={{onChange: this.SelectChange}}
-          columns={columns} 
-          dataSource={pageInfo.result}
-          pagination={{
-            showSizeChanger: true,
-            onShowSizeChange: ()=>{},
-            showTotal: t=>`共${t}条`,
-            onChange: ()=>{},
-            total: pageInfo.count
+          loading={loading}
+          rowSelection={{
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: this.rowSelectionChange
           }}
-          scroll={{ x: 2942}} />
-        <ARModal 
-          visible={this.state.visible}
-          onCancel={this.Cancel}
-          onOk={this.OK}
-          key6={this.state.editObj.key6}
-          key7={this.state.editObj.key7}
-          key8={this.state.editObj.key8}
+          columns={columns} 
+          dataSource={result}
+          pagination={{
+            pageSizeOptions: ['5', '10', '20', '30'],
+            showSizeChanger: true,
+            onShowSizeChange: this.pageSizeChange,
+            showTotal: t=>`共${t}条`,
+            onChange: this.pageNoChange,
+            current: pageNo,
+            pageSize: pageSize,
+            total: count
+          }}
+          scroll={{ x: 2822}} />
+          <ARModal 
+            visible={this.state.visible}
+            onCancel={this.Cancel}
+            onOk={this.OK}
+            o={this.state.o}
            />
       </div>
     )
