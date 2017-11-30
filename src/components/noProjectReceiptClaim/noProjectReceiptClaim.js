@@ -200,7 +200,7 @@ export default class NoProjectReceiptClaim extends React.Component {
       onChange: this.onSelectChange,
     }
     const rejectBtn = this.queryParam.status === '21' || this.queryParam.status === '40' ? <Button type="danger" onClick={this.handleReject}>拒绝</Button> : null
-    const makeSummary = () => (this.props.amountTotals && this.props.amountTotals.length ? this.props.amountTotals.map(item => `${item.currency}：${item.totalAmount}`).join('  ') : '0.00')
+    const makeSummary = this.props.amountTotals && this.props.amountTotals.length ? this.props.amountTotals.map(item => `${item.currency}：${item.totalAmount}`).join('  ') : '0.00'
     return (
       <div>
         <NoProjectReceiptClaimSearchWithForm
@@ -212,7 +212,7 @@ export default class NoProjectReceiptClaim extends React.Component {
             {rejectBtn}
           </Col>
           <Col span={12} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
-            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary()}</span>
+            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
           </Col>
         </Row>
         <br />

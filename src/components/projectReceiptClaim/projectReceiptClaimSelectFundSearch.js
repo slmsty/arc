@@ -107,7 +107,6 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   }
   handleSelectFunds = () => {
     this.props.onClose(this.state.selectedRows)
-    this.props.onClose(this.state.selectedRows)
     this.props.form.resetFields()
   }
   render() {
@@ -124,6 +123,15 @@ class ProjectReceiptClaimSelectFund extends React.Component {
       }),
       onChange: this.onSelectChange,
     }
+    const amountTotals = {}
+    this.state.selectedRows.forEach((fund) => {
+      if (amountTotals[fund.contractCurrency]) {
+        amountTotals[fund.contractCurrency] += fund.receivableBalance
+      } else {
+        amountTotals[fund.contractCurrency] = fund.receivableBalance
+      }
+    })
+    const makeSummary = Object.keys(amountTotals).map(contractCurrency => `${contractCurrency}:${amountTotals[contractCurrency]}  `)
     return (
       <Modal
         wrapClassName="vertical-center-modal"
@@ -132,9 +140,16 @@ class ProjectReceiptClaimSelectFund extends React.Component {
         visible={this.props.visible}
         onCancel={() => this.props.onClose([])}
         footer={[
-          <Button key="select" type="primary" onClick={this.handleSelectFunds}>
-            <Icon type="check" />选择合同百分比
-          </Button>,
+          <Row style={{ lineHeight: '28px' }}>
+            <Col span={19} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
+              <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
+            </Col>
+            <Col span={5}>
+              <Button key="select" type="primary" onClick={this.handleSelectFunds}>
+                <Icon type="check" />选择合同百分比
+              </Button>,
+            </Col>
+          </Row>,
         ]}
       >
         <Form
