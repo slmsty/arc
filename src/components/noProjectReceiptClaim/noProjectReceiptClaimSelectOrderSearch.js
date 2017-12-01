@@ -43,10 +43,12 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
     title: '应收金额',
     dataIndex: 'arAmount',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '应收余额',
     dataIndex: 'arAmount1',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   },
   ]
   handleChangePage = (page) => {

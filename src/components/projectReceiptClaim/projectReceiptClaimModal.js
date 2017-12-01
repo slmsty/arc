@@ -76,6 +76,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '应收余额*',
     dataIndex: 'fundReceivableBalance',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: 'AR应收日期',
     dataIndex: 'arDate',
@@ -84,6 +85,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '应收金额',
     dataIndex: 'receiptAmount',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '合同币种',
     dataIndex: 'contractCurrency',
@@ -177,7 +179,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
       return
     }
     const self = this
-    const claimItemsConfirm = this.state.funds.map(fund => (<p>条款【{fund.paymentName}】认款后应收余额为{fund.fundReceivableBalance - fund.claimContractAmount}</p>))
+    const claimItemsConfirm = this.state.funds.map(fund => (<p>条款【{fund.paymentName}】认款后应收余额为{(fund.fundReceivableBalance - fund.claimContractAmount).toFixed(2)}</p>))
     Modal.confirm({
       title: '确认认款',
       content: claimItemsConfirm,

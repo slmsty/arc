@@ -55,10 +55,12 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     title: '应收金额',
     dataIndex: 'arAmount',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '应收余额',
     dataIndex: 'receivableBalance',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '应收日期',
     dataIndex: 'arDate',
@@ -140,7 +142,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
         amountTotals[fund.contractCurrency] = fund.arAmount
       }
     })
-    const makeSummary = Object.keys(amountTotals).map(contractCurrency => `${contractCurrency}:${amountTotals[contractCurrency]}  `)
+    const makeSummary = Object.keys(amountTotals).map(contractCurrency => `${contractCurrency}:${amountTotals[contractCurrency].toFixed(2)}  `)
     return (
       <Modal
         wrapClassName="vertical-center-modal"

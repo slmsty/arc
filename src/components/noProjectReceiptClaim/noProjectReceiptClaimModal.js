@@ -57,10 +57,12 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '应收余额',
     dataIndex: 'receiptAmountDD',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '应收金额',
     dataIndex: 'receiptAmount',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '币种',
     dataIndex: 'invoiceNo',
