@@ -24,13 +24,13 @@ export default ({
       break;
     case 'BADDEBTSTATUS_SENDERP_SUCCESS':
       result = result.map(o=>{
-        if(action.response.successList.includes(o.badDebtId)){
+        if(action.response.data.successIds.includes(o.badDebtId)){
           return {
             ...o,
             status: '20',
             statusName: '已划销'
           }
-        }else if(action.response.failList.includes(o.badDebtId)){
+        }else if(action.response.data.failures.map(o=>o.badDebtId).includes(o.badDebtId)){
           return {
             ...o,
             status: '22',
@@ -41,17 +41,17 @@ export default ({
         }
       })
 
-      title = `传送成功${action.response.successList.length}条数据，传送失败${action.response.failList.length}条数据`
+      title = `传送成功${action.response.data.successIds.length}条数据，传送失败${action.response.data.failures.length}条数据`
       break;
     case 'BADDEBTSTATUS_SENDERP2_SUCCESS':
       result = result.map(o=>{
-        if(action.response.successList.includes(o.badDebtId)){
+        if(action.response.data.successIds.includes(o.badDebtId)){
           return {
             ...o,
             status: '21',
             statusName: '已划销退回'
           }
-        }else if(action.response.failList.includes(o.badDebtId)){
+        }else if(action.response.data.failures.map(o=>o.badDebtId).includes(o.badDebtId)){
           return {
             ...o,
             status: '22',
@@ -62,7 +62,7 @@ export default ({
         }
       })
 
-      title = `传送成功${action.response.successList.length}条数据，传送失败${action.response.failList.length}条数据`
+      title = `传送成功${action.response.data.successIds.length}条数据，传送失败${action.response.data.failures.length}条数据`
       break;
     case 'BADDEBTSTATUS_RESET_TITLE':
       title = ''
@@ -76,5 +76,6 @@ export default ({
     count,
     result,
     loading,
+    title
   }
 }

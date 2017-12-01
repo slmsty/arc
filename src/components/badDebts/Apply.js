@@ -3,10 +3,12 @@ import {Form, Row, Col, DatePicker, Button, Table, Modal, message} from 'antd';
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
 import SelectCustomer from '../common/selectCustomer'
+import SelectSbu from '../common/SelectSbu'
+import SelectDept from '../common/SelectDept'
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import ARModal from './ARModal'
+import BDModal from './BDModal'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 
@@ -16,11 +18,11 @@ class Apply extends Component{
     selectedRowKeys: [],
     selectedRows: [],
     selectedRowKeys2: [],
+    selectedRows2: [],
     result: [],
     editDis: true,
     applyDis: true,
     isEdit: false,
-    isReady: false,
     o: {},
   }
 
@@ -38,10 +40,6 @@ class Apply extends Component{
       {
         title: '签约公司',
         key: 'companyName'
-      },
-      {
-        title: '签约日期',
-        key: 'contractDate'
       },
       {
         title: '合同编码',
@@ -64,7 +62,11 @@ class Apply extends Component{
         key: 'paymentTerm'
       },
       {
-        title: '应收/报告日期',
+        title: '应收日期',
+        key: 'arDate'
+      },
+      {
+        title: '报告日期',
         key: 'reportingDate'
       },
       {
@@ -93,7 +95,7 @@ class Apply extends Component{
       },
       {
         title: '回款金额',
-        key: 'claimAmount'
+        key: 'receiptAmount'
       },
       {
         title: 'GL已提坏账金额',
@@ -113,7 +115,7 @@ class Apply extends Component{
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'status'
+        key: 'statusName'
       },
       {
         title: 'GL已提坏账准备金额',
@@ -133,7 +135,7 @@ class Apply extends Component{
       },
       {
         title: '备注',
-        key: 'remark'
+        key: 'applicantRemark'
       },
       {
         title: '币种',
@@ -145,7 +147,7 @@ class Apply extends Component{
       },
       {
         title: '应收日期',
-        key: 'reportingDate'
+        key: 'arDate'
       },
       {
         title: 'Billed AR日期',
@@ -157,7 +159,7 @@ class Apply extends Component{
       },
       {
         title: '回款金额',
-        key: 'claimAmount'
+        key: 'receiptAmount'
       },
       {
         title: '项目编码',
@@ -211,7 +213,12 @@ class Apply extends Component{
       this.setState({
         visible: true,
         selectedRowKeys: [],
-        selectedRows: []
+        selectedRows: [],
+        selectedRowKeys2: [],
+        selectedRows2: [],
+        result: [],
+        editDis: true,
+        applyDis: true,
       })
     });
   }
@@ -254,7 +261,8 @@ class Apply extends Component{
   rowSelectionChange2 = (selectedRowKeys, selectedRows)=>{
     this.setState({
       selectedRowKeys2: selectedRowKeys,
-      editDis: selectedRows.length!==1,
+      selectedRows2: selectedRows,
+      editDis: !(selectedRows.length===1 && selectedRows.every(o=>o.status==='10'||o.status==='13'||o.status===''||o.status===undefined)),
       applyDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='10'))
     })
   }
@@ -289,24 +297,20 @@ class Apply extends Component{
   }
 
   doEdit = ()=>{
-    let obj = this.state.result.find(o=>o.contractItemId===this.state.selectedRowKeys2[0]);
-    this.setState({
-      isEdit: true,
-      isReady: false,
-      o: obj
-    })
+    let obj = this.state.selectedRows2[0]
+    if(!obj.billedArAmount) return
 
     let body = {
-      badDebtId: obj.badDebtId,
       companyId: obj.companyId,
       projectNo: obj.projectNo,
       sbuNo: obj.sbuNo,
       deptNo: obj.deptNo,
+      contractCurrency: obj.contractCurrency,
     }
     this.getAmount(body, response=>{
-      this.setState({isReady: true})
       if(response.resultCode === '000000'){
         this.setState({
+          isEdit: true,
           o: {
             ...obj,
             badDebtProvisionAmount: response.data.badDebtProvisionAmount,
@@ -327,10 +331,16 @@ class Apply extends Component{
   editDone = (values)=>{
     this.setState({
       isEdit: false,
+      selectedRowKeys2: [],
+      selectedRows2: [],
+      editDis: true,
+      applyDis: true,
       result: this.state.result.map(o=>{
         if(o.contractItemId === this.state.o.contractItemId){
           return {
             ...this.state.o,
+            status: '10',
+            statusName: '新建',
             ...values
           }
         }else{
@@ -340,23 +350,47 @@ class Apply extends Component{
     })
   }
 
-  apply = ()=>{
-    this.props.Apply(this.state.selectedRowKeys2)
-    this.setState({
-      selectedRowKeys2: [],
-      editDis: true,
-      applyDis: true,
-    })
+  postApply = (badDebtIds, callback)=>{
+    requestJsonFetch(
+      '/arc/badDebt/apply',
+      {
+        method: 'POST',
+        body: {badDebtIds}
+      },
+      callback
+    )
   }
 
-  shouldComponentUpdate({title}, nextState){
-    if(title){
-      Modal.info({title})
-      this.props.ResetTitle()
-      return false;
-    }else{
-      return true;
-    }
+  apply = ()=>{
+    let badDebtIds = this.state.selectedRows2.map(o=>o.badDebtId)
+    this.postApply(badDebtIds, response=>{
+      if(response.resultCode === '000000'){
+        let result = this.state.result
+        result = result.map(o=>{
+          if(badDebtIds.includes(o.badDebtId)){
+            return {
+              ...o,
+              status: '11',
+              statusName: '审核中'
+            }
+          }else{
+            return o
+          }
+        })
+
+        Modal.success({title: '申请成功'})
+
+        this.setState({
+          selectedRowKeys2: [],
+          selectedRows2: [],
+          editDis: true,
+          applyDis: true,
+          result
+        })
+      }else{
+        message.error(response.resultMessage);
+      }
+    })
   }
 
   render(){
@@ -420,9 +454,10 @@ class Apply extends Component{
               <FormItem label="数据状态" {...layout}>
                 {
                   getFieldDecorator('status', {initialValue: '10'})(<SelectInvokeApi
-                    typeCode="BAD_DEBT"
+                    typeCode="BAD_DEBT_APPLY"
                     paramCode="STATUS"
                     placeholder="数据状态"
+                    hasEmpty
                   />)
                 }
               </FormItem>
@@ -441,32 +476,22 @@ class Apply extends Component{
             <Col span={8}>
               <FormItem label="SBU" {...layout}>
                 {
-                  getFieldDecorator('sbuNo', {
-                    initialValue: '109',
+                  getFieldDecorator('sbuInfo', {
                     rules: [
                       {required: true, message: '必须选择SBU'}
                     ]
-                  })(<SelectInvokeApi
-                    typeCode="BAD_DEBT"
-                    paramCode="SBU"
-                    placeholder="SBU"
-                  />)
+                  })(<SelectSbu/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="部门" {...layout}>
                 {
-                  getFieldDecorator('orgNo', {
-                    initialValue: '18517',
+                  getFieldDecorator('orgInfo', {
                     rules: [
                       {required: true, message: '必须选择部门'}
                     ]
-                  })(<SelectInvokeApi
-                    typeCode="BAD_DEBT"
-                    paramCode="ORG"
-                    placeholder="部门"
-                  />)
+                  })(<SelectDept/>)
                 }
               </FormItem>
             </Col>
@@ -495,12 +520,11 @@ class Apply extends Component{
           columns={columns2} 
           dataSource={this.state.result}
           scroll={{ x: 2722}}></Table>
-        <ARModal 
+        <BDModal 
           visible={this.state.isEdit}
           onCancel={this.editCancel}
           onOk={this.editDone}
           o={this.state.o}
-          isReady={this.state.isReady}
          />
         <Modal 
           width={1080}

@@ -1,8 +1,8 @@
 import { httpApi } from '../../http/reduxRequestMiddleware'
 
-const Search = ({pageInfo, applicationDate, applicationDates, custInfo, projectNos, contractNos, status, sbuNo, orgNo})=>({
+const Search = ({pageInfo, applicationDate, applicationDates, custInfo, projectNos, contractNos, status, sbuInfo, orgInfo})=>({
   [httpApi]: {
-    url: '/XXXXXX',
+    url: '/arc/badDebt/searchBadDebts',
     types: [
       'BADDEBTSTATUS_SEARCH_SUCCESS',
       'BADDEBTSTATUS_HTTP_REQUEST',
@@ -24,31 +24,31 @@ const Search = ({pageInfo, applicationDate, applicationDates, custInfo, projectN
         projectNos: projectNos,
         contractNos: contractNos,
         status,
-        sbuNo,
-        orgNo,
+        sbuNo: sbuInfo && sbuInfo[0],
+        orgName: orgInfo && orgInfo[1]
       }
     },
   },
 })
 
-const sendErp = (ids)=>({
+const SendErp = (badDebtIds, glDate)=>({
   [httpApi]: {
-    url: '/XXXXXXX',
+    url: '/arc/badDebt/sendERP',
     types: ['BADDEBTSTATUS_SENDERP_SUCCESS'],
     options: {
       method: 'POST',
-      body: {ids}
+      body: {badDebtIds, glDate}
     },
   },
 })
 
-const sendErp2 = (ids)=>({
+const SendErp2 = (badDebtIds)=>({
   [httpApi]: {
-    url: '/XXXXXXX',
+    url: '/arc/badDebt/sendERPBack',
     types: ['BADDEBTSTATUS_SENDERP2_SUCCESS'],
     options: {
       method: 'POST',
-      body: {ids}
+      body: {badDebtIds}
     },
   },
 })
@@ -59,7 +59,7 @@ const ResetTitle = ()=>({
 
 export {
   Search,
-  sendErp,
-  sendErp2,
+  SendErp,
+  SendErp2,
   ResetTitle,
 }

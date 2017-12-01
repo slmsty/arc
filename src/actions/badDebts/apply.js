@@ -1,6 +1,6 @@
 import { httpApi } from '../../http/reduxRequestMiddleware'
 
-const Search = ({pageInfo, glDate, glDates, custInfo, projectNos, contractNos, status, sbuNo, orgNo})=>({
+const Search = ({pageInfo, glDate, glDates, custInfo, projectNos, contractNos, status, sbuInfo, orgInfo})=>({
   [httpApi]: {
     url: '/arc/badDebt/apply/search',
     types: [
@@ -21,33 +21,16 @@ const Search = ({pageInfo, glDate, glDates, custInfo, projectNos, contractNos, s
         glDateEnd: glDate && glDate[1] && glDate[1].format('YYYY-MM-DD'),
         glDates: glDates && glDates.map(o=>o.format('YYYY-MM-DD')),
         custName: custInfo && custInfo[1],
-        projectNos: projectNos && projectNos.join(','),
+        projectNos: projectNos,
         contractNos: contractNos,
         status,
-        sbuNo,
-        orgNo,
+        sbuNo: sbuInfo && sbuInfo[0],
+        orgName: orgInfo && orgInfo[1]
       }
     },
   },
 })
 
-const Apply = (ids)=>({
-  [httpApi]: {
-    url: '/arc/badDebt/apply',
-    types: ['BADDEBTSAPPLY_APPLY_SUCCESS'],
-    options: {
-      method: 'POST',
-      body: {ids}
-    },
-  },
-})
-
-const ResetTitle = ()=>({
-  type: 'BADDEBTSAPPLY_RESET_TITLE'
-})
-
 export {
-  Search,
-  Apply,
-  ResetTitle,
+  Search
 }
