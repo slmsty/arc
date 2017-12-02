@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
-import SelectCustomer from '../common/selectCustomer'
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
@@ -12,7 +11,8 @@ class Confirm extends Component{
   state = {
     visible: false,
     o: {},
-    selectedRowKeys: [],
+    rowKeys: [],
+    rows: [],
     editDis: true,
     rejectDis: true,
     approvalDis: true,
@@ -126,6 +126,14 @@ class Confirm extends Component{
   doSearch = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      this.setState({
+        rowKeys: [],
+        rows: [],
+        editDis: true,
+        rejectDis: true,
+        approvalDis: true,
+        sendDis: true
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -133,11 +141,19 @@ class Confirm extends Component{
         },
         ...values
       })
-    });
+    })
   }
 
   pageSizeChange = (current, size)=>{
     this.props.form.validateFields((err, values) => {
+      this.setState({
+        rowKeys: [],
+        rows: [],
+        editDis: true,
+        rejectDis: true,
+        approvalDis: true,
+        sendDis: true
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -145,7 +161,7 @@ class Confirm extends Component{
         },
         ...values
       })
-    });
+    })
   }
 
   pageNoChange = (page, pageSize)=>{
@@ -161,19 +177,30 @@ class Confirm extends Component{
   }
 
   rowSelectionChange = (selectedRowKeys, selectedRows)=>{
+    let rowKeys = this.state.rowKeys
+    let rows = this.state.rows
+    selectedRowKeys.forEach(key=>{
+      if(!rowKeys.includes(key)){
+        rows.push(selectedRows.find(o=>o.billedArId===key))
+      }
+    })
+    rows = rows.filter(o=>selectedRowKeys.includes(o.billedArId))
+    rowKeys = selectedRowKeys
+
     this.setState({
-      selectedRowKeys: selectedRowKeys,
-      editDis: !(selectedRows.length===1 && selectedRows.every(o=>o.status==='10'||o.status==='20'||o.status==='21'||o.status==='30'||o.status==='32')),
-      rejectDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='20'||o.status==='30')),
-      approvalDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='20')),
-      sendDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='30' || o.status==='32')),
+      rowKeys: rowKeys,
+      rows: rows,
+      editDis: !(rows.length===1 && rows.every(o=>o.status==='10'||o.status==='20'||o.status==='21'||o.status==='30'||o.status==='32')),
+      rejectDis: !(rows.length>0 && rows.every(o=>o.status==='20'||o.status==='30')),
+      approvalDis: !(rows.length>0 && rows.every(o=>o.status==='20')),
+      sendDis: !(rows.length>0 && rows.every(o=>o.status==='30' || o.status==='32')),
     })
   }
 
   doEdit = ()=>{
     this.setState({
       visible: true,
-      o: this.props.result.find(o=>o.billedArId===this.state.selectedRowKeys[0])
+      o: this.state.rows[0]
     })
   }
 
@@ -188,13 +215,22 @@ class Confirm extends Component{
       status: '20',
       statusName: '待应收会计确认',
     })
-    this.setState({visible: false})
+    this.setState({
+      visible: false,
+      rowKeys: [],
+      rows: [],
+      editDis: true,
+      rejectDis: true,
+      approvalDis: true,
+      sendDis: true
+    })
   }
 
   reject = ()=>{
-    this.props.Reject(this.state.selectedRowKeys)
+    this.props.Reject(this.state.rowKeys)
     this.setState({
-      selectedRowKeys: [],
+      rowKeys: [],
+      rows: [],
       editDis: true,
       rejectDis: true,
       approvalDis: true,
@@ -203,9 +239,10 @@ class Confirm extends Component{
   }
 
   approval = ()=>{
-    this.props.Approval(this.state.selectedRowKeys)
+    this.props.Approval(this.state.rowKeys)
     this.setState({
-      selectedRowKeys: [],
+      rowKeys: [],
+      rows: [],
       editDis: true,
       rejectDis: true,
       approvalDis: true,
@@ -214,9 +251,10 @@ class Confirm extends Component{
   }
 
   send = ()=>{
-    this.props.Send(this.state.selectedRowKeys)
+    this.props.Send(this.state.rowKeys)
     this.setState({
-      selectedRowKeys: [],
+      rowKeys: [],
+      rows: [],
       editDis: true,
       rejectDis: true,
       approvalDis: true,
@@ -262,7 +300,7 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="客户名称" {...layout}>
                 {
-                  getFieldDecorator('custInfo')(<SelectCustomer/>)
+                  getFieldDecorator('custName')(<Input placeholder="客户名称"/>)
                 }
               </FormItem>
             </Col>
@@ -344,11 +382,12 @@ class Confirm extends Component{
         </Row>
         <br/>
         <Table 
+          style={{backgroundColor: '#FFFFFF'}}
           rowKey="billedArId"
           bordered
           loading={loading}
           rowSelection={{
-            selectedRowKeys: this.state.selectedRowKeys,
+            selectedRowKeys: this.state.rowKeys,
             onChange: this.rowSelectionChange
           }}
           columns={columns} 

@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
-import moment from 'moment'
-import SelectCustomer from '../common/selectCustomer'
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 const FormItem = Form.Item;
@@ -9,7 +7,8 @@ const RangePicker = DatePicker.RangePicker;
 
 class Approve extends Component{
   state = {
-    selectedRowKeys: [],
+    rowKeys: [],
+    rows: [],
     rejectDis: true,
     confirmDis: true
   }
@@ -105,6 +104,12 @@ class Approve extends Component{
   doSearch = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      this.setState({
+        rowKeys: [],
+        rows: [],
+        rejectDis: true,
+        confirmDis: true
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -117,6 +122,12 @@ class Approve extends Component{
 
   pageSizeChange = (current, size)=>{
     this.props.form.validateFields((err, values) => {
+      this.setState({
+        rowKeys: [],
+        rows: [],
+        rejectDis: true,
+        confirmDis: true
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -140,26 +151,39 @@ class Approve extends Component{
   }
 
   rowSelectionChange = (selectedRowKeys, selectedRows)=>{
+    let rowKeys = this.state.rowKeys
+    let rows = this.state.rows
+    selectedRowKeys.forEach(key=>{
+      if(!rowKeys.includes(key)){
+        rows.push(selectedRows.find(o=>o.contractItemId===key))
+      }
+    })
+    rows = rows.filter(o=>selectedRowKeys.includes(o.contractItemId))
+    rowKeys = selectedRowKeys
+
     this.setState({
-      selectedRowKeys: selectedRowKeys,
-      rejectDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='10'||o.status==='20'||o.status==='30')),
-      confirmDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='10'))
+      rowKeys: rowKeys,
+      rows: rows,
+      rejectDis: !(rows.length>0 && rows.every(o=>o.status==='10'||o.status==='20'||o.status==='30')),
+      confirmDis: !(rows.length>0 && rows.every(o=>o.status==='10'))
     })
   }
 
   reject = ()=>{
-    this.props.Reject(this.state.selectedRowKeys)
+    this.props.Reject(this.state.rowKeys)
     this.setState({
-      selectedRowKeys: [],
+      rowKeys: [],
+      rows: [],
       rejectDis: true,
       confirmDis: true
     })
   }
 
   confirm = ()=>{
-    this.props.Confirm(this.state.selectedRowKeys)
+    this.props.Confirm(this.state.rowKeys)
     this.setState({
-      selectedRowKeys: [],
+      rowKeys: [],
+      rows: [],
       rejectDis: true,
       confirmDis: true
     })
@@ -196,16 +220,14 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="GL日期" {...layout}>
                 {
-                  getFieldDecorator('glDate', {
-                    initialValue: [moment().add(-2, 'days'), moment().add(-2, 'days')]
-                  })(<RangePicker/>)
+                  getFieldDecorator('glDate')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="客户名称" {...layout}>
                 {
-                  getFieldDecorator('custInfo')(<SelectCustomer/>)
+                  getFieldDecorator('custName')(<Input placeholder="客户名称"/>)
                 }
               </FormItem>
             </Col>
@@ -259,11 +281,12 @@ class Approve extends Component{
         </Row>
         <br/>
         <Table 
+          style={{backgroundColor: '#FFFFFF'}}
           rowKey="contractItemId"
           bordered
           loading={loading}
           rowSelection={{
-            selectedRowKeys: this.state.selectedRowKeys,
+            selectedRowKeys: this.state.rowKeys,
             onChange: this.rowSelectionChange
           }}
           columns={columns} 

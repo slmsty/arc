@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Button, Table, Modal} from 'antd';
-import moment from 'moment'
-import SelectCustomer from '../common/selectCustomer'
+import {Form, Row, Col, DatePicker, Button, Input, Table, Modal, Spin} from 'antd';
 import SelectSbu from '../common/SelectSbu'
 import SelectDept from '../common/SelectDept'
 import MultipleInput from '../common/multipleInput'
@@ -14,13 +12,16 @@ const RangePicker = DatePicker.RangePicker;
 
 class Status extends Component{
   state = {
+    rowKeys: [],
+    rows: [],
     returnDis: true,
     erpDis: true,
     visible: false,
     result: [],
+    rowKeys2: [],
+    rows2: [],
     editDis: true,
     erp2Dis: true,
-    selectedRowKeys2: [],
     isEdit: false,
     isGLEdit: false,
     o: {}
@@ -202,6 +203,12 @@ class Status extends Component{
       e.preventDefault();
     }
     this.props.form.validateFields((err, values) => {
+      this.setState({
+        rowKeys: [],
+        rows: [],
+        returnDis: true,
+        erpDis: true,
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -214,6 +221,12 @@ class Status extends Component{
 
   pageSizeChange = (current, size)=>{
     this.props.form.validateFields((err, values) => {
+      this.setState({
+        rowKeys: [],
+        rows: [],
+        returnDis: true,
+        erpDis: true,
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -237,25 +250,51 @@ class Status extends Component{
   }
 
   rowSelectionChange = (selectedRowKeys, selectedRows)=>{
+    let rowKeys = this.state.rowKeys
+    let rows = this.state.rows
+    selectedRowKeys.forEach(key=>{
+      if(!rowKeys.includes(key)){
+        rows.push(selectedRows.find(o=>o.badDebtId===key))
+      }
+    })
+    rows = rows.filter(o=>selectedRowKeys.includes(o.badDebtId))
+    rowKeys = selectedRowKeys
+
     this.setState({
-      selectedRowKeys: selectedRowKeys,
-      returnDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='20')),
-      erpDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='12'||o.status==='22'))
+      rowKeys: rowKeys,
+      rows: rows,
+      returnDis: !(rows.length>0 && rows.every(o=>o.status==='20')),
+      erpDis: !(rows.length>0 && rows.every(o=>o.status==='12'||o.status==='22'))
     })
   }
 
   rowSelectionChange2 = (selectedRowKeys, selectedRows)=>{
+    let rowKeys2 = this.state.rowKeys2
+    let rows2 = this.state.rows2
+    selectedRowKeys.forEach(key=>{
+      if(!rowKeys2.includes(key)){
+        rows2.push(selectedRows.find(o=>o.badDebtId===key))
+      }
+    })
+    rows2 = rows2.filter(o=>selectedRowKeys.includes(o.badDebtId))
+    rowKeys2 = selectedRowKeys
+
     this.setState({
-      selectedRowKeys2: selectedRowKeys,
-      editDis: selectedRows.length!==1,
-      erp2Dis: !(selectedRows.length>0)
+      rowKeys2: rowKeys2,
+      rows2: rows2,
+      editDis: rows2.length!==1,
+      erp2Dis: !(rows2.length>0)
     })
   }
 
   bdReturn = ()=>{
     this.setState({
       visible: true,
-      result: this.props.result.filter(o=>this.state.selectedRowKeys.includes(o.badDebtId))
+      result: this.state.rows,
+      rowKeys2: [],
+      rows2: [],
+      editDis: true,
+      erp2Dis: true,
     })
   }
 
@@ -263,7 +302,7 @@ class Status extends Component{
     this.setState({
       visible: false
     })
-    this.doSearch();
+    this.props.UpdateResult(this.state.result)
   }
 
   sendErp = ()=>{
@@ -275,20 +314,21 @@ class Status extends Component{
   }
 
   postGLEdit = glDate=>{
-    this.props.SendErp(this.state.selectedRowKeys, glDate)
-
+    this.props.SendErp(this.state.rowKeys, glDate)
     this.setState({
       isGLEdit: false,
-      selectedRowKeys: [],
+      rowKeys: [],
+      rows: [],
       returnDis: true,
       erpDis: true
     })
   }
 
   sendErp2 = ()=>{
-    this.props.SendErp2(this.state.selectedRowKeys2)
+    this.props.SendErp2(this.state.rowKeys2)
     this.setState({
-      selectedRowKeys2: [],
+      rowKeys2: [],
+      rows2: [],
       editDis: true,
       erp2Dis: true
     })
@@ -297,7 +337,7 @@ class Status extends Component{
   doEdit = ()=>{
     this.setState({
       isEdit: true,
-      o: this.state.result.find(o=>o.badDebtId===this.state.selectedRowKeys2[0])
+      o: this.state.rows2[0]
     })
   }
 
@@ -308,6 +348,10 @@ class Status extends Component{
   editDone = (values)=>{
     this.setState({
       isEdit: false,
+      rowKeys2: [],
+      rows2: [],
+      editDis: true,
+      erp2Dis: true,
       result: this.state.result.map(o=>{
         if(o.badDebtId === this.state.o.badDebtId){
           return {
@@ -348,21 +392,20 @@ class Status extends Component{
 
     return (
       <div className="badDebtsStatus">
+        {loading ? <Spin size="large" style={{position:'absolute',left:'50%', top:'50%', zIndex:1000}} /> : null}
         <Form onSubmit={this.doSearch}>
           <Row>
             <Col span={8}>
               <FormItem label="申请日期" {...layout}>
                 {
-                  getFieldDecorator('applicationDate', {
-                    initialValue: [moment().add(-2, 'days'), moment().add(-2, 'days')]
-                  })(<RangePicker/>)
+                  getFieldDecorator('applicationDate')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="客户名称" {...layout}>
                 {
-                  getFieldDecorator('custInfo')(<SelectCustomer/>)
+                  getFieldDecorator('custName')(<Input placeholder="客户名称"/>)
                 }
               </FormItem>
             </Col>
@@ -387,10 +430,11 @@ class Status extends Component{
             <Col span={8}>
               <FormItem label="数据状态" {...layout}>
                 {
-                  getFieldDecorator('status', {initialValue: '12'})(<SelectInvokeApi
+                  getFieldDecorator('status')(<SelectInvokeApi
                     typeCode="BAD_DEBT_STATUS"
                     paramCode="STATUS"
                     placeholder="数据状态"
+                    hasEmpty
                   />)
                 }
               </FormItem>
@@ -436,11 +480,11 @@ class Status extends Component{
         </Row>
         <br/>
         <Table 
+          style={{backgroundColor: '#FFFFFF'}}
           rowKey="badDebtId"
           bordered
-          loading={loading}
           rowSelection={{
-            selectedRowKeys: this.state.selectedRowKeys,
+            selectedRowKeys: this.state.rowKeys,
             onChange: this.rowSelectionChange
           }}
           columns={columns} 
@@ -477,12 +521,14 @@ class Status extends Component{
           </Row>
           <br/>
           <Table 
+            style={{backgroundColor: '#FFFFFF'}}
             rowKey="badDebtId"
             bordered
             rowSelection={{
-              selectedRowKeys: this.state.selectedRowKeys2,
+              selectedRowKeys: this.state.rowKeys2,
               onChange: this.rowSelectionChange2
             }}
+            pagination={false}
             columns={columns2} 
             dataSource={this.state.result}
             scroll={{ x: 2582}}></Table>

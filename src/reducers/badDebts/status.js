@@ -22,6 +22,13 @@ export default ({
       result = pageInfo.result;
       title = '';
       break;
+    case 'BADDEBTSTATUS_UPDATE_RESULT_SUCCESS':
+      result = result.map(o=>{
+        let obj = action.payload.find(oo=>oo.badDebtId===o.badDebtId);
+        return obj ? obj: o
+      })
+      title = '';
+      break;
     case 'BADDEBTSTATUS_SENDERP_SUCCESS':
       result = result.map(o=>{
         if(action.response.data.successIds.includes(o.badDebtId)){

@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Button, Table, Modal, message} from 'antd';
+import {Form, Row, Col, DatePicker, Button, Input, Table, Modal, message} from 'antd';
 import requestJsonFetch from '../../http/requestJsonFecth'
-import moment from 'moment'
-import SelectCustomer from '../common/selectCustomer'
 import SelectSbu from '../common/SelectSbu'
 import SelectDept from '../common/SelectDept'
 import MultipleInput from '../common/multipleInput'
@@ -15,10 +13,10 @@ const RangePicker = DatePicker.RangePicker;
 class Apply extends Component{
   state = {
     visible: false,
-    selectedRowKeys: [],
-    selectedRows: [],
-    selectedRowKeys2: [],
-    selectedRows2: [],
+    rowKeys: [],
+    rows: [],
+    rowKeys2: [],
+    rows2: [],
     result: [],
     editDis: true,
     applyDis: true,
@@ -200,8 +198,11 @@ class Apply extends Component{
   doSearch = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if(err) return
-
+      this.setState({
+        visible: true,
+        rowKeys: [],
+        rows: [],
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -209,24 +210,16 @@ class Apply extends Component{
         },
         ...values
       })
-
-      this.setState({
-        visible: true,
-        selectedRowKeys: [],
-        selectedRows: [],
-        selectedRowKeys2: [],
-        selectedRows2: [],
-        result: [],
-        editDis: true,
-        applyDis: true,
-      })
     });
   }
 
   pageSizeChange = (current, size)=>{
     this.props.form.validateFields((err, values) => {
-      if(err) return
-
+      this.setState({
+        visible: true,
+        rowKeys: [],
+        rows: [],
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -239,8 +232,6 @@ class Apply extends Component{
 
   pageNoChange = (page, pageSize)=>{
     this.props.form.validateFields((err, values) => {
-      if(err) return
-
       this.props.Search({
         pageInfo: {
           pageNo: page,
@@ -252,18 +243,35 @@ class Apply extends Component{
   }
 
   rowSelectionChange = (selectedRowKeys, selectedRows)=>{
-    this.setState({
-      selectedRowKeys: selectedRowKeys,
-      selectedRows: selectedRows,
+    let rowKeys = this.state.rowKeys
+    let rows = this.state.rows
+    selectedRowKeys.forEach(key=>{
+      if(!rowKeys.includes(key)){
+        rows.push(selectedRows.find(o=>o.contractItemId===key))
+      }
     })
+    rows = rows.filter(o=>selectedRowKeys.includes(o.contractItemId))
+    rowKeys = selectedRowKeys
+
+    this.setState({rowKeys, rows})
   }
 
   rowSelectionChange2 = (selectedRowKeys, selectedRows)=>{
+    let rowKeys2 = this.state.rowKeys2
+    let rows2 = this.state.rows2
+    selectedRowKeys.forEach(key=>{
+      if(!rowKeys2.includes(key)){
+        rows2.push(selectedRows.find(o=>o.contractItemId===key))
+      }
+    })
+    rows2 = rows2.filter(o=>selectedRowKeys.includes(o.contractItemId))
+    rowKeys2 = selectedRowKeys
+
     this.setState({
-      selectedRowKeys2: selectedRowKeys,
-      selectedRows2: selectedRows,
-      editDis: !(selectedRows.length===1 && selectedRows.every(o=>o.status==='10'||o.status==='13'||o.status===''||o.status===undefined)),
-      applyDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='10'))
+      rowKeys2: rowKeys2,
+      rows2: rows2,
+      editDis: !(rows2.length===1 && rows2.every(o=>o.status==='10'||o.status==='13'||o.status===''||o.status===undefined)),
+      applyDis: !(rows2.length>0 && rows2.every(o=>o.status==='10'))
     })
   }
 
@@ -273,7 +281,7 @@ class Apply extends Component{
 
   onOk = ()=>{
     let result = this.state.result
-    this.state.selectedRows.forEach(o=>{
+    this.state.rows.forEach(o=>{
       if(!result.some(oo=>oo.contractItemId===o.contractItemId)){
         result.push(o)
       }
@@ -297,7 +305,7 @@ class Apply extends Component{
   }
 
   doEdit = ()=>{
-    let obj = this.state.selectedRows2[0]
+    let obj = this.state.rows2[0]
     if(!obj.billedArAmount) return
 
     let body = {
@@ -331,8 +339,8 @@ class Apply extends Component{
   editDone = (values)=>{
     this.setState({
       isEdit: false,
-      selectedRowKeys2: [],
-      selectedRows2: [],
+      rowKeys2: [],
+      rows2: [],
       editDis: true,
       applyDis: true,
       result: this.state.result.map(o=>{
@@ -362,7 +370,7 @@ class Apply extends Component{
   }
 
   apply = ()=>{
-    let badDebtIds = this.state.selectedRows2.map(o=>o.badDebtId)
+    let badDebtIds = this.state.rows2.map(o=>o.badDebtId)
     this.postApply(badDebtIds, response=>{
       if(response.resultCode === '000000'){
         let result = this.state.result
@@ -381,8 +389,8 @@ class Apply extends Component{
         Modal.success({title: '申请成功'})
 
         this.setState({
-          selectedRowKeys2: [],
-          selectedRows2: [],
+          rowKeys2: [],
+          rows2: [],
           editDis: true,
           applyDis: true,
           result
@@ -415,27 +423,21 @@ class Apply extends Component{
             <Col span={8}>
               <FormItem label="GL日期" {...layout}>
                 {
-                  getFieldDecorator('glDate', {
-                    initialValue: [moment().add(-2, 'days'), moment().add(-2, 'days')]
-                  })(<RangePicker/>)
+                  getFieldDecorator('glDate')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="客户名称" {...layout}>
                 {
-                  getFieldDecorator('custInfo')(<SelectCustomer/>)
+                  getFieldDecorator('custName')(<Input placeholder="客户名称"/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="项目编码(多)" {...layout}>
                 {
-                  getFieldDecorator('projectNos', {
-                    rules: [
-                      {required: true, message: '必须选择项目编码'}
-                    ]
-                  })(
+                  getFieldDecorator('projectNos')(
                     <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
                   )
                 }
@@ -453,7 +455,7 @@ class Apply extends Component{
             <Col span={8}>
               <FormItem label="数据状态" {...layout}>
                 {
-                  getFieldDecorator('status', {initialValue: '10'})(<SelectInvokeApi
+                  getFieldDecorator('status')(<SelectInvokeApi
                     typeCode="BAD_DEBT_APPLY"
                     paramCode="STATUS"
                     placeholder="数据状态"
@@ -476,22 +478,14 @@ class Apply extends Component{
             <Col span={8}>
               <FormItem label="SBU" {...layout}>
                 {
-                  getFieldDecorator('sbuInfo', {
-                    rules: [
-                      {required: true, message: '必须选择SBU'}
-                    ]
-                  })(<SelectSbu/>)
+                  getFieldDecorator('sbuInfo')(<SelectSbu/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="部门" {...layout}>
                 {
-                  getFieldDecorator('orgInfo', {
-                    rules: [
-                      {required: true, message: '必须选择部门'}
-                    ]
-                  })(<SelectDept/>)
+                  getFieldDecorator('orgInfo')(<SelectDept/>)
                 }
               </FormItem>
             </Col>
@@ -511,12 +505,14 @@ class Apply extends Component{
         </Row>
         <br/>
         <Table 
+          style={{backgroundColor: '#FFFFFF'}}
           rowKey="contractItemId"
           bordered
           rowSelection={{
-            selectedRowKeys: this.state.selectedRowKeys2,
+            selectedRowKeys: this.state.rowKeys2,
             onChange: this.rowSelectionChange2
           }}
+          pagination={false}
           columns={columns2} 
           dataSource={this.state.result}
           scroll={{ x: 2722}}></Table>
@@ -533,11 +529,12 @@ class Apply extends Component{
           onCancel={this.onCancel}
           onOk={this.onOk}>
           <Table 
+            style={{backgroundColor: '#FFFFFF'}}
             rowKey="contractItemId"
             bordered
             loading={loading}
             rowSelection={{
-              selectedRowKeys: this.state.selectedRowKeys,
+              selectedRowKeys: this.state.rowKeys,
               onChange: this.rowSelectionChange
             }}
             columns={columns} 
