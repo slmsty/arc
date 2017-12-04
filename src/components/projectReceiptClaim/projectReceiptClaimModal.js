@@ -188,7 +188,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
       cancelText: '否',
       onOk() {
         const claimItems = self.state.funds.map(fund => ({
-          fundId: fund.fundId,
           contractItemId: fund.contractItemId,
           claimAmount: fund.claimAmount,
           receiptUse: fund.receiptUse,
@@ -240,23 +239,24 @@ export default class ProjectReceiptClaimModal extends React.Component {
     const funds = this.state.funds
     let isExist = false
     for (let i = 0; i < funds.length; i += 1) {
-      if (funds[i].fundId === '-1') {
+      if (funds[i].fundId === 'ARC001') {
         isExist = true
         break
       }
     }
     if (!isExist) {
       const fund = {}
-      fund.fundId = '-1'
+      fund.fundId = 'ARC001'
       fund.claimAmount = this.props.receiptInfo.receiptAmount
       fund.claimContractAmount = this.props.receiptInfo.receiptAmount
       fund.receiptAmount = this.props.receiptInfo.receiptAmount
       fund.fundReceivableBalance = this.props.receiptInfo.receiptAmount
-      fund.receiptUse = 'On account'
+      fund.receiptUse = '虚拟项目合同'
       fund.custId = this.props.receiptInfo.payCustId
       fund.custName = this.props.receiptInfo.payCustName
       fund.projectNo = 'ARC001'
       fund.paymentName = 'ARC001'
+      fund.contractItemId = 'ARC001'
       fund.paymentPercent = '0'
       fund.contractNo = 'ARC001'
       fund.contractName = 'ARC001'
