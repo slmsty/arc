@@ -1,8 +1,8 @@
 import { httpApi } from '../../http/reduxRequestMiddleware'
 
-const Search = ({pageInfo, applicationDate, applicationDates, custInfo, projectNos, contractNos, status, sbuNo, orgNo})=>({
+const Search = ({pageInfo, applicationDate, applicationDates, custName, projectNos, contractNos, status, sbuInfo, orgInfo})=>({
   [httpApi]: {
-    url: '/XXXXXX',
+    url: '/arc/badDebt/searchBadDebts',
     types: [
       'BADDEBTSTATUS_SEARCH_SUCCESS',
       'BADDEBTSTATUS_HTTP_REQUEST',
@@ -19,36 +19,53 @@ const Search = ({pageInfo, applicationDate, applicationDates, custInfo, projectN
         },
         applicationDateStart: applicationDate && applicationDate[0] && applicationDate[0].format('YYYY-MM-DD'),
         applicationDateEnd: applicationDate && applicationDate[1] && applicationDate[1].format('YYYY-MM-DD'),
-        applicationDates: applicationDates && applicationDates.map(o=>o.format('YYYY-MM-DD')),
-        custName: custInfo && custInfo[1],
+        applicationDates: applicationDates,
+        custName: custName,
         projectNos: projectNos,
         contractNos: contractNos,
-        status,
-        sbuNo,
-        orgNo,
+        status: status || '',
+        sbuNo: sbuInfo && sbuInfo[0],
+        orgName: orgInfo && orgInfo[1]
       }
     },
   },
 })
 
-const sendErp = (ids)=>({
+const UpdateResult = (payload=[])=>({
+  type: 'BADDEBTSTATUS_UPDATE_RESULT_SUCCESS',
+  payload
+})
+
+const SendErp = (badDebtIds, glDate)=>({
   [httpApi]: {
-    url: '/XXXXXXX',
-    types: ['BADDEBTSTATUS_SENDERP_SUCCESS'],
+    url: '/arc/badDebt/sendERP',
+    types: [
+      'BADDEBTSTATUS_SENDERP_SUCCESS',
+      'BADDEBTSTATUS_HTTP_REQUEST',
+      'HTTP_FAILURE',
+      'BADDEBTSTATUS_HTTP_ERROR',
+      'BADDEBTSTATUS_HTTP_REQUEST_COMPLETED'
+    ],
     options: {
       method: 'POST',
-      body: {ids}
+      body: {badDebtIds, glDate}
     },
   },
 })
 
-const sendErp2 = (ids)=>({
+const SendErp2 = (badDebtIds)=>({
   [httpApi]: {
-    url: '/XXXXXXX',
-    types: ['BADDEBTSTATUS_SENDERP2_SUCCESS'],
+    url: '/arc/badDebt/sendERPBack',
+    types: [
+      'BADDEBTSTATUS_SENDERP2_SUCCESS',
+      'BADDEBTSTATUS_HTTP_REQUEST',
+      'HTTP_FAILURE',
+      'BADDEBTSTATUS_HTTP_ERROR',
+      'BADDEBTSTATUS_HTTP_REQUEST_COMPLETED'
+    ],
     options: {
       method: 'POST',
-      body: {ids}
+      body: {badDebtIds}
     },
   },
 })
@@ -59,7 +76,8 @@ const ResetTitle = ()=>({
 
 export {
   Search,
-  sendErp,
-  sendErp2,
+  UpdateResult,
+  SendErp,
+  SendErp2,
   ResetTitle,
 }

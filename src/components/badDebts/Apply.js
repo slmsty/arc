@@ -1,26 +1,26 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Button, Table, Modal, message} from 'antd';
+import {Form, Row, Col, DatePicker, Button, Input, Table, Modal, message} from 'antd';
 import requestJsonFetch from '../../http/requestJsonFecth'
-import moment from 'moment'
-import SelectCustomer from '../common/selectCustomer'
+import SelectSbu from '../common/SelectSbu'
+import SelectDept from '../common/SelectDept'
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import ARModal from './ARModal'
+import BDModal from './BDModal'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 
 class Apply extends Component{
   state = {
     visible: false,
-    selectedRowKeys: [],
-    selectedRows: [],
-    selectedRowKeys2: [],
+    rowKeys: [],
+    rows: [],
+    rowKeys2: [],
+    rows2: [],
     result: [],
     editDis: true,
     applyDis: true,
     isEdit: false,
-    isReady: false,
     o: {},
   }
 
@@ -38,10 +38,6 @@ class Apply extends Component{
       {
         title: '签约公司',
         key: 'companyName'
-      },
-      {
-        title: '签约日期',
-        key: 'contractDate'
       },
       {
         title: '合同编码',
@@ -64,7 +60,11 @@ class Apply extends Component{
         key: 'paymentTerm'
       },
       {
-        title: '应收/报告日期',
+        title: '应收日期',
+        key: 'arDate'
+      },
+      {
+        title: '报告日期',
         key: 'reportingDate'
       },
       {
@@ -93,7 +93,7 @@ class Apply extends Component{
       },
       {
         title: '回款金额',
-        key: 'claimAmount'
+        key: 'receiptAmount'
       },
       {
         title: 'GL已提坏账金额',
@@ -113,7 +113,7 @@ class Apply extends Component{
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'status'
+        key: 'statusName'
       },
       {
         title: 'GL已提坏账准备金额',
@@ -133,7 +133,7 @@ class Apply extends Component{
       },
       {
         title: '备注',
-        key: 'remark'
+        key: 'applicantRemark'
       },
       {
         title: '币种',
@@ -145,7 +145,7 @@ class Apply extends Component{
       },
       {
         title: '应收日期',
-        key: 'reportingDate'
+        key: 'arDate'
       },
       {
         title: 'Billed AR日期',
@@ -157,7 +157,7 @@ class Apply extends Component{
       },
       {
         title: '回款金额',
-        key: 'claimAmount'
+        key: 'receiptAmount'
       },
       {
         title: '项目编码',
@@ -198,8 +198,11 @@ class Apply extends Component{
   doSearch = (e)=>{
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if(err) return
-
+      this.setState({
+        visible: true,
+        rowKeys: [],
+        rows: [],
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -207,19 +210,16 @@ class Apply extends Component{
         },
         ...values
       })
-
-      this.setState({
-        visible: true,
-        selectedRowKeys: [],
-        selectedRows: []
-      })
     });
   }
 
   pageSizeChange = (current, size)=>{
     this.props.form.validateFields((err, values) => {
-      if(err) return
-
+      this.setState({
+        visible: true,
+        rowKeys: [],
+        rows: [],
+      })
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -232,8 +232,6 @@ class Apply extends Component{
 
   pageNoChange = (page, pageSize)=>{
     this.props.form.validateFields((err, values) => {
-      if(err) return
-
       this.props.Search({
         pageInfo: {
           pageNo: page,
@@ -245,17 +243,35 @@ class Apply extends Component{
   }
 
   rowSelectionChange = (selectedRowKeys, selectedRows)=>{
-    this.setState({
-      selectedRowKeys: selectedRowKeys,
-      selectedRows: selectedRows,
+    let rowKeys = this.state.rowKeys
+    let rows = this.state.rows
+    selectedRowKeys.forEach(key=>{
+      if(!rowKeys.includes(key)){
+        rows.push(selectedRows.find(o=>o.contractItemId===key))
+      }
     })
+    rows = rows.filter(o=>selectedRowKeys.includes(o.contractItemId))
+    rowKeys = selectedRowKeys
+
+    this.setState({rowKeys, rows})
   }
 
   rowSelectionChange2 = (selectedRowKeys, selectedRows)=>{
+    let rowKeys2 = this.state.rowKeys2
+    let rows2 = this.state.rows2
+    selectedRowKeys.forEach(key=>{
+      if(!rowKeys2.includes(key)){
+        rows2.push(selectedRows.find(o=>o.contractItemId===key))
+      }
+    })
+    rows2 = rows2.filter(o=>selectedRowKeys.includes(o.contractItemId))
+    rowKeys2 = selectedRowKeys
+
     this.setState({
-      selectedRowKeys2: selectedRowKeys,
-      editDis: selectedRows.length!==1,
-      applyDis: !(selectedRows.length>0 && selectedRows.every(o=>o.status==='10'))
+      rowKeys2: rowKeys2,
+      rows2: rows2,
+      editDis: !(rows2.length===1 && rows2.every(o=>o.status==='10'||o.status==='13'||o.status===''||o.status===undefined)),
+      applyDis: !(rows2.length>0 && rows2.every(o=>o.status==='10'))
     })
   }
 
@@ -265,7 +281,7 @@ class Apply extends Component{
 
   onOk = ()=>{
     let result = this.state.result
-    this.state.selectedRows.forEach(o=>{
+    this.state.rows.forEach(o=>{
       if(!result.some(oo=>oo.contractItemId===o.contractItemId)){
         result.push(o)
       }
@@ -289,24 +305,20 @@ class Apply extends Component{
   }
 
   doEdit = ()=>{
-    let obj = this.state.result.find(o=>o.contractItemId===this.state.selectedRowKeys2[0]);
-    this.setState({
-      isEdit: true,
-      isReady: false,
-      o: obj
-    })
+    let obj = this.state.rows2[0]
+    if(!obj.billedArAmount) return
 
     let body = {
-      badDebtId: obj.badDebtId,
       companyId: obj.companyId,
       projectNo: obj.projectNo,
       sbuNo: obj.sbuNo,
       deptNo: obj.deptNo,
+      contractCurrency: obj.contractCurrency,
     }
     this.getAmount(body, response=>{
-      this.setState({isReady: true})
       if(response.resultCode === '000000'){
         this.setState({
+          isEdit: true,
           o: {
             ...obj,
             badDebtProvisionAmount: response.data.badDebtProvisionAmount,
@@ -327,10 +339,16 @@ class Apply extends Component{
   editDone = (values)=>{
     this.setState({
       isEdit: false,
+      rowKeys2: [],
+      rows2: [],
+      editDis: true,
+      applyDis: true,
       result: this.state.result.map(o=>{
         if(o.contractItemId === this.state.o.contractItemId){
           return {
             ...this.state.o,
+            status: '10',
+            statusName: '新建',
             ...values
           }
         }else{
@@ -340,23 +358,47 @@ class Apply extends Component{
     })
   }
 
-  apply = ()=>{
-    this.props.Apply(this.state.selectedRowKeys2)
-    this.setState({
-      selectedRowKeys2: [],
-      editDis: true,
-      applyDis: true,
-    })
+  postApply = (badDebtIds, callback)=>{
+    requestJsonFetch(
+      '/arc/badDebt/apply',
+      {
+        method: 'POST',
+        body: {badDebtIds}
+      },
+      callback
+    )
   }
 
-  shouldComponentUpdate({title}, nextState){
-    if(title){
-      Modal.info({title})
-      this.props.ResetTitle()
-      return false;
-    }else{
-      return true;
-    }
+  apply = ()=>{
+    let badDebtIds = this.state.rows2.map(o=>o.badDebtId)
+    this.postApply(badDebtIds, response=>{
+      if(response.resultCode === '000000'){
+        let result = this.state.result
+        result = result.map(o=>{
+          if(badDebtIds.includes(o.badDebtId)){
+            return {
+              ...o,
+              status: '11',
+              statusName: '审核中'
+            }
+          }else{
+            return o
+          }
+        })
+
+        Modal.success({title: '申请成功'})
+
+        this.setState({
+          rowKeys2: [],
+          rows2: [],
+          editDis: true,
+          applyDis: true,
+          result
+        })
+      }else{
+        message.error(response.resultMessage);
+      }
+    })
   }
 
   render(){
@@ -381,27 +423,21 @@ class Apply extends Component{
             <Col span={8}>
               <FormItem label="GL日期" {...layout}>
                 {
-                  getFieldDecorator('glDate', {
-                    initialValue: [moment().add(-2, 'days'), moment().add(-2, 'days')]
-                  })(<RangePicker/>)
+                  getFieldDecorator('glDate')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="客户名称" {...layout}>
                 {
-                  getFieldDecorator('custInfo')(<SelectCustomer/>)
+                  getFieldDecorator('custName')(<Input placeholder="客户名称"/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="项目编码(多)" {...layout}>
                 {
-                  getFieldDecorator('projectNos', {
-                    rules: [
-                      {required: true, message: '必须选择项目编码'}
-                    ]
-                  })(
+                  getFieldDecorator('projectNos')(
                     <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
                   )
                 }
@@ -419,10 +455,11 @@ class Apply extends Component{
             <Col span={8}>
               <FormItem label="数据状态" {...layout}>
                 {
-                  getFieldDecorator('status', {initialValue: '10'})(<SelectInvokeApi
-                    typeCode="BAD_DEBT"
+                  getFieldDecorator('status')(<SelectInvokeApi
+                    typeCode="BAD_DEBT_APPLY"
                     paramCode="STATUS"
                     placeholder="数据状态"
+                    hasEmpty
                   />)
                 }
               </FormItem>
@@ -441,32 +478,14 @@ class Apply extends Component{
             <Col span={8}>
               <FormItem label="SBU" {...layout}>
                 {
-                  getFieldDecorator('sbuNo', {
-                    initialValue: '109',
-                    rules: [
-                      {required: true, message: '必须选择SBU'}
-                    ]
-                  })(<SelectInvokeApi
-                    typeCode="BAD_DEBT"
-                    paramCode="SBU"
-                    placeholder="SBU"
-                  />)
+                  getFieldDecorator('sbuInfo')(<SelectSbu/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem label="部门" {...layout}>
                 {
-                  getFieldDecorator('orgNo', {
-                    initialValue: '18517',
-                    rules: [
-                      {required: true, message: '必须选择部门'}
-                    ]
-                  })(<SelectInvokeApi
-                    typeCode="BAD_DEBT"
-                    paramCode="ORG"
-                    placeholder="部门"
-                  />)
+                  getFieldDecorator('orgInfo')(<SelectDept/>)
                 }
               </FormItem>
             </Col>
@@ -486,21 +505,22 @@ class Apply extends Component{
         </Row>
         <br/>
         <Table 
+          style={{backgroundColor: '#FFFFFF'}}
           rowKey="contractItemId"
           bordered
           rowSelection={{
-            selectedRowKeys: this.state.selectedRowKeys2,
+            selectedRowKeys: this.state.rowKeys2,
             onChange: this.rowSelectionChange2
           }}
+          pagination={false}
           columns={columns2} 
           dataSource={this.state.result}
           scroll={{ x: 2722}}></Table>
-        <ARModal 
+        <BDModal 
           visible={this.state.isEdit}
           onCancel={this.editCancel}
           onOk={this.editDone}
           o={this.state.o}
-          isReady={this.state.isReady}
          />
         <Modal 
           width={1080}
@@ -509,11 +529,12 @@ class Apply extends Component{
           onCancel={this.onCancel}
           onOk={this.onOk}>
           <Table 
+            style={{backgroundColor: '#FFFFFF'}}
             rowKey="contractItemId"
             bordered
             loading={loading}
             rowSelection={{
-              selectedRowKeys: this.state.selectedRowKeys,
+              selectedRowKeys: this.state.rowKeys,
               onChange: this.rowSelectionChange
             }}
             columns={columns} 

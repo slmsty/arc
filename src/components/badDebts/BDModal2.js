@@ -5,7 +5,7 @@ import {Form, DatePicker, Input, Modal, message} from 'antd';
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 
-class ARModal extends Component{
+class BDModal2 extends Component{
   onCancel = ()=>{
     this.props.onCancel();
     this.props.form.resetFields();
@@ -13,7 +13,7 @@ class ARModal extends Component{
 
   postEdit = (body, callback)=>{
     requestJsonFetch(
-      '/XXXXXXX',
+      '/arc/badDebt/back',
       {
         method: 'POST',
         body
@@ -27,23 +27,31 @@ class ARModal extends Component{
       if(err) return
 
       let body = {
-        badDebtId: this.props.o.badDebtId,
-        badDebtReturnAmount: values.badDebtReturnAmount,
-        badDebtAmount: values.badDebtAmount,
-        badDebtReturnAmount: values.badDebtReturnAmount,
-        erpGlDate: values.erpGlDate.format('YYYY-MM-DD'),
-        remark: values.remark
+        badDebtBack: {
+          badDebtId: this.props.o.badDebtId,
+          badDebtBackAmount: values.badDebtBackAmount,
+          glDate: values.glDate.format('YYYY-MM-DD'),
+          badDebtBackRemark: values.badDebtBackRemark
+        }
       }
 
       this.postEdit(body, response=>{
         if(response.resultCode === '000000'){
-          this.props.onOk(body);
+          this.props.onOk(body.badDebtBack);
           this.props.form.resetFields();
         }else{
           message.error(response.resultMessage);
         }
       })
     });
+  }
+
+  RAValidator = (rule, value, callback)=>{
+    let msg = undefined;
+    if(value > this.props.form.getFieldValue('badDebtAmount')-this.props.form.getFieldValue('badDebtReturnAmount')){
+      msg = '划销退回金额必须小于等于（划销金额-已划销退回金额）'
+    }
+    callback(msg)
   }
 
   render(){
@@ -62,7 +70,7 @@ class ARModal extends Component{
                 getFieldDecorator('badDebtReturnAmount', {
                   initialValue: o.badDebtReturnAmount
                 })(
-                  <Input />
+                  <Input disabled />
                 )
               }
             </FormItem>
@@ -71,16 +79,17 @@ class ARModal extends Component{
                 getFieldDecorator('badDebtAmount', {
                   initialValue: o.badDebtAmount
                 })(
-                  <Input />
+                  <Input disabled />
                 )
               }
             </FormItem>
             <FormItem label="划销退回金额">
               {
-                getFieldDecorator('badDebtReturnAmount', {
-                  initialValue: o.badDebtReturnAmount,
+                getFieldDecorator('badDebtBackAmount', {
+                  initialValue: o.badDebtBackAmount,
                   rules: [
-                    {required: true, message: '必须输入划销退回金额'}
+                    {required: true, message: '必须输入划销退回金额'},
+                    {validator: this.RAValidator}
                   ]
                 })(
                   <Input />
@@ -89,8 +98,8 @@ class ARModal extends Component{
             </FormItem>
             <FormItem label="GL日期">
               {
-                getFieldDecorator('erpGlDate', {
-                  initialValue: o.erpGlDate ? moment(o.erpGlDate) : null,
+                getFieldDecorator('glDate', {
+                  initialValue: o.glDate ? moment(o.glDate) : null,
                   rules: [
                     {required: true, message: '必须选择GL日期'}
                   ]})(
@@ -100,7 +109,7 @@ class ARModal extends Component{
             </FormItem>
             <FormItem label="备注">
               {
-                getFieldDecorator('remark', {initialValue: o.remark})(
+                getFieldDecorator('badDebtBackRemark', {initialValue: o.badDebtBackRemark})(
                   <TextArea rows={4} />
                 )
               }
@@ -111,4 +120,4 @@ class ARModal extends Component{
   }
 }
 
-export default Form.create()(ARModal)
+export default Form.create()(BDModal2)

@@ -1,6 +1,6 @@
 import { httpApi } from '../../http/reduxRequestMiddleware'
 
-const Search = ({pageInfo, glDate, glDates, custInfo, projectNos, contractNos, companyName})=>({
+const Search = ({pageInfo, glDate, glDates, custName, projectNos, contractNos, companyName})=>({
   [httpApi]: {
     url: '/arc/billedar/judgement/search',
     types: [
@@ -19,8 +19,8 @@ const Search = ({pageInfo, glDate, glDates, custInfo, projectNos, contractNos, c
         },
         glDateStart: glDate && glDate[0] && glDate[0].format('YYYY-MM-DD'),
         glDateEnd: glDate && glDate[1] && glDate[1].format('YYYY-MM-DD'),
-        glDates: glDates && glDates.map(o=>o.format('YYYY-MM-DD')),
-        custName: custInfo && custInfo[1],
+        glDates: glDates,
+        custName: custName,
         projectNos: projectNos,
         contractNos: contractNos,
         companyName
