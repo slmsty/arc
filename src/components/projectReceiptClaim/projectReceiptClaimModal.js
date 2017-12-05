@@ -251,7 +251,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
       fund.claimContractAmount = this.props.receiptInfo.receiptAmount
       fund.receiptAmount = this.props.receiptInfo.receiptAmount
       fund.fundReceivableBalance = this.props.receiptInfo.receiptAmount
-      fund.receiptUse = '虚拟项目合同'
+      fund.receiptUse = 'On account'
       fund.custId = this.props.receiptInfo.payCustId
       fund.custName = this.props.receiptInfo.payCustName
       fund.projectNo = 'ARC001'
