@@ -128,17 +128,17 @@ const common = {
       },
       {
         key: '4',
-        path: '/billManage',
-        name: '实际开票管理',
+        path: '/applyManage',
+        name: '我的审批',
         icon: 'icon-shijikaipiaoguanli',
         component: 'HomeContainer',
         child: [
           {
             key: '41',
-            path: '/billManage/contractDet',
-            name: '合同拆分',
+            path: '/applyManage/applyList',
+            name: '审批列表',
             icon: 'icon-BilledAR',
-            component: 'contractDetContainer',
+            component: 'applyListContainer',
           },
         ],
       },

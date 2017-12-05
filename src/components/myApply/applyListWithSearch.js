@@ -3,14 +3,19 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd'
+import { Form, Row, Col, Button, Input, Icon, Radio } from 'antd'
+
 const FormItem = Form.Item
+const RadioButton = Radio.Button
+const RadioGroup = Radio.Group
+
 class ApplySearchCon extends React.Component {
+  state = {
+  }
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
-    console.log(param)
-   // this.props.onQuery(param)
+    this.props.onQuery(param)
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -38,13 +43,15 @@ class ApplySearchCon extends React.Component {
           <Row gutter={40}>
             <Col span={10} key={3}>
               <FormItem {...formItemLayout} label="申请时间">
-                {getFieldDecorator('applayTime')(
-                  <div style={{ width: '330px' }}>
-                    <Button value="1" type="primary">全部</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button value="2">近一周</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button value="3">近一个月</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button value="4">近一年</Button>
-                  </div>
+                {getFieldDecorator('applayTime', {
+                  initialValue: '0',
+                })(
+                  <RadioGroup size="large" style={{ width: '330px' }}>
+                    <RadioButton value="0" style={{ borderRadius: '4px' }}>全部</RadioButton>
+                    <RadioButton value="1" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一周</RadioButton>
+                    <RadioButton value="2" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一个月</RadioButton>
+                    <RadioButton value="3" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一年</RadioButton>
+                  </RadioGroup>
                 )}
               </FormItem>
             </Col>
@@ -52,13 +59,15 @@ class ApplySearchCon extends React.Component {
           <Row gutter={40}>
             <Col span={10} key={4}>
               <FormItem {...formItemLayout} label="申请状态">
-                {getFieldDecorator('applayStatus')(
-                  <div style={{ width: '330px' }}>
-                    <Button type="primary">全部</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button>审批中</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button>审批完成</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button>驳回</Button>
-                  </div>
+                {getFieldDecorator('applayStatus', {
+                  initialValue: '0',
+                })(
+                  <RadioGroup size="large" style={{ width: '330px' }}>
+                    <RadioButton value="0" style={{ borderRadius: '4px' }}>全部</RadioButton>
+                    <RadioButton value="1" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批中</RadioButton>
+                    <RadioButton value="2" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批完成</RadioButton>
+                    <RadioButton value="3" style={{ marginLeft: '10px', borderRadius: '4px' }}>驳回</RadioButton>
+                  </RadioGroup>
                 )}
               </FormItem>
             </Col>
@@ -75,8 +84,6 @@ ApplySearchCon.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
-    getFieldValue: PropTypes.func.isRequired,
-    setFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
   onQuery: PropTypes.func.isRequired,
 }
