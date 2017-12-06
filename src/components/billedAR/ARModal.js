@@ -30,9 +30,13 @@ class ARModal extends Component{
         billedArId: this.props.o.billedArId,
         billedArDate: values.billedArDate.format('YYYY-MM-DD'),
         glDate: values.glDate.format('YYYY-MM-DD'),
-        reportDate: values.reportDate.format('YYYY-MM-DD'),
-        assessTaxIncludedAmount: values.assessTaxIncludedAmount,
         arAccountantApproveMessage: values.arAccountantApproveMessage
+      }
+
+      const isShow = !((this.props.o.paymentTerm==='按进度'&&this.props.o.paymentName==='预付款')||(this.props.o.paymentTerm==='按时间'&&this.props.o.paymentName!=='结算单'));
+      if(isShow){
+        body.reportDate = values.reportDate.format('YYYY-MM-DD');
+        body.assessTaxIncludedAmount = values.assessTaxIncludedAmount;
       }
 
       this.postEdit(body, response=>{
@@ -49,6 +53,8 @@ class ARModal extends Component{
   render(){
     const {getFieldDecorator} = this.props.form;
     const {visible, o} = this.props;
+
+    const isShow = !((o.paymentTerm==='按进度'&&o.paymentName==='预付款')||(o.paymentTerm==='按时间'&&o.paymentName!=='结算单'));
 
     return (
       <Modal
@@ -81,25 +87,42 @@ class ARModal extends Component{
                 )
               }
             </FormItem>
-            <FormItem label="报告日期">
-              {
-                getFieldDecorator('reportDate', {
-                  initialValue: o.reportDate ? moment(o.reportDate) : null,
-                  rules: [
-                    {required: true, message: '必须选择报告日期'}
-                  ]
-                })(
-                  <DatePicker />
-                )
-              }
-            </FormItem>
-            <FormItem label="考核含税金额">
-              {
-                getFieldDecorator('assessTaxIncludedAmount', {initialValue: o.assessTaxIncludedAmount})(
-                  <Input placeholder="考核含税金额" />
-                )
-              }
-            </FormItem>
+            {
+              isShow
+              ?
+              <FormItem label="报告日期">
+                {
+                  getFieldDecorator('reportDate', {
+                    initialValue: o.reportDate ? moment(o.reportDate) : null,
+                    rules: [
+                      {required: true, message: '必须选择报告日期'}
+                    ]
+                  })(
+                    <DatePicker />
+                  )
+                }
+              </FormItem>
+              :
+              null
+            }
+            {
+              isShow
+              ?
+              <FormItem label="考核含税金额">
+                {
+                  getFieldDecorator('assessTaxIncludedAmount', {
+                    initialValue: o.assessTaxIncludedAmount,
+                    rules: [
+                      {required: true, message: '必须输入考核含税金额'}
+                    ]
+                  })(
+                    <Input placeholder="考核含税金额" />
+                  )
+                }
+              </FormItem>
+              :
+              null
+            }
             <FormItem label="备注">
               {
                 getFieldDecorator('arAccountantApproveMessage', {initialValue: o.arAccountantApproveMessage})(

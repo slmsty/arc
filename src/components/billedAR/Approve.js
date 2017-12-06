@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
+import SelectInvokeApi from '../common/selectInvokeApi'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 
@@ -262,6 +263,20 @@ class Approve extends Component{
                   getFieldDecorator('contractNos')(
                     <MultipleInput placeholder="多合同编码使用英文逗号间隔" />
                   )
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <FormItem label="付款条件" {...layout}>
+                {
+                  getFieldDecorator('paymentTerm', {initialValue: ''})(<SelectInvokeApi
+                    typeCode="BILLED_AR"
+                    paramCode="PAYMENT_TERM"
+                    placeholder="付款条件"
+                    hasEmpty
+                  />)
                 }
               </FormItem>
             </Col>
