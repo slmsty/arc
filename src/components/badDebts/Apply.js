@@ -29,10 +29,12 @@ class Apply extends Component{
     const columns = [
       {
         title: '项目编码',
+        fixed: 'left',
         key: 'projectNo'
       },
       {
         title: '项目名称',
+        fixed: 'left',
         key: 'projectName'
       },
       {
