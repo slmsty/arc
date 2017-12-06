@@ -208,13 +208,17 @@ class Confirm extends Component{
     this.setState({visible: false})
   }
 
-  OK = (values)=>{
-    this.props.editBilledAr({
-      ...this.state.o,
-      ...values,
-      status: '20',
-      statusName: '待应收会计确认',
+  OK = ()=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: this.props.pageNo,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
     })
+
     this.setState({
       visible: false,
       rowKeys: [],
