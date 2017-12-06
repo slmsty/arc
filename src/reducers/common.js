@@ -128,14 +128,30 @@ const common = {
       },
       {
         key: '4',
-        path: '/applyManage',
-        name: '我的审批',
+        path: '/ContractSplit',
+        name: '实际开票管理',
         icon: 'icon-shijikaipiaoguanli',
         component: 'HomeContainer',
         child: [
           {
             key: '41',
-            path: '/applyManage/applyList',
+            path: '/ContractSplit/ContractSplit',
+            name: '合同拆分',
+            icon: 'icon-BilledAR',
+            component: 'ContractSplit',
+          },
+        ],
+      },
+      {
+        key: '5',
+        path: '/myApply',
+        name: '我的审批',
+        icon: 'icon-shijikaipiaoguanli',
+        component: 'HomeContainer',
+        child: [
+          {
+            key: '51',
+            path: '/myApply/applyList',
             name: '审批列表',
             icon: 'icon-BilledAR',
             component: 'applyListContainer',

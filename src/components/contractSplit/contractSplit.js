@@ -4,8 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, Table, message } from 'antd'
-import ApplySearchConWithForm from './applyListWithSearch'
-import ApplyInfoModal from './applyInfo'
+import ContractSplitWithFrom from './contractSplitWithFrom'
 
 const data = []
 for (let i = 0; i < 4; i++) {
@@ -18,9 +17,7 @@ for (let i = 0; i < 4; i++) {
 }
 export default class ApplySearchCon extends React.Component {
   state = {
-    infoVisitable: false,
     loading: false,
-    applyData: '',
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.myApply.myapplyListRefresh !== nextProps.myApply.myapplyListRefresh) {
@@ -41,13 +38,13 @@ export default class ApplySearchCon extends React.Component {
     this.setState({
       loading: true,
     })
-    console.log(this.queryParam)
-    message.success('测试成功')
-    return
     this.props.getMyApplyList(this.queryParam).then((res) => {
       this.setState({
         loading: false,
       })
+      console.log(this.queryParam)
+      message.success('测试成功')
+      return
       if (res && res.response && res.response.resultCode === '000000') {
         console.log('数据查询成功')
       } else {
@@ -72,39 +69,17 @@ export default class ApplySearchCon extends React.Component {
    function approveClick
    */
   approveClick = (_record) => {
-    this.setState({
-      infoVisitable: true,
-      applyData: _record,
-    })
-  }
-  applyComfirm = (param) => {
-    this.props.approveSubmit(param).then((res) => {
+    message.success('测试成功')
+    return
+    this.props.approveSubmit(_record).then((res) => {
       this.setState({
         loading: false,
-        infoVisitable: false,
-        applyData: '',
       })
-      message.success('测试审批成功')
-      return
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('审批成功')
       } else {
         message.error('加载数据失败')
       }
-    })
-  }
-  applyReject = () => {
-    this.setState({
-      infoVisitable: false,
-      applyData: '',
-    })
-    message.success('测试驳回成功')
-    return
-  }
-  closeModalClaim = () => {
-    this.setState({
-      infoVisitable: false,
-      applyData: '',
     })
   }
   render() {
@@ -176,17 +151,10 @@ export default class ApplySearchCon extends React.Component {
     }
     return (
       <div>
-        <ApplySearchConWithForm onQuery={this.handleChangeParam} />
-        <ApplyInfoModal
-          infoVisitable={this.state.infoVisitable}
-          closeClaim={this.closeModalClaim}
-          applyComfirm={this.applyComfirm}
-          applyReject={this.applyReject}
-          applyData={this.state.applyData}
-        />
+        <ContractSplitWithFrom onQuery={this.handleChangeParam} />
         <br /><br />
         <Table
-          rowKey="id"
+          rowKey="receiptClaimId"
           pagination={pagination}
           bordered
           columns={columns}
