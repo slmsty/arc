@@ -50,6 +50,16 @@ class ARModal extends Component{
     });
   }
 
+  myValidator = (msg)=>{
+    return (rule, value, callback)=>{
+      if(!value){
+        callback(msg)
+      }else{
+        callback()
+      }
+    }
+  }
+
   render(){
     const {getFieldDecorator} = this.props.form;
     const {visible, o} = this.props;
@@ -95,7 +105,7 @@ class ARModal extends Component{
                   getFieldDecorator('reportDate', {
                     initialValue: o.reportDate ? moment(o.reportDate) : null,
                     rules: [
-                      {required: true, message: '必须选择报告日期'}
+                      {validator: myValidator('必须选择报告日期')}
                     ]
                   })(
                     <DatePicker />
@@ -113,7 +123,7 @@ class ARModal extends Component{
                   getFieldDecorator('assessTaxIncludedAmount', {
                     initialValue: o.assessTaxIncludedAmount,
                     rules: [
-                      {required: true, message: '必须输入考核含税金额'}
+                      {validator: myValidator('必须输入考核含税金额')}
                     ]
                   })(
                     <Input placeholder="考核含税金额" />
