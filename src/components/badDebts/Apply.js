@@ -308,7 +308,10 @@ class Apply extends Component{
 
   doEdit = ()=>{
     let obj = this.state.rows2[0]
-    if(!obj.billedArAmount) return
+    if(!obj.billedArAmount){
+      message.warning('Billed AR金额为空，不允许编辑')
+      return
+    }
 
     let body = {
       companyId: obj.companyId,
