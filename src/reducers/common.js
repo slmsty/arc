@@ -158,6 +158,22 @@ const common = {
           },
         ],
       },
+      {
+        key: '6',
+        path: '/statementSearch',
+        name: '报表查询',
+        icon: 'icon-shijikaipiaoguanli',
+        component: 'HomeContainer',
+        child: [
+          {
+            key: '61',
+            path: '/statementSearch/statementList',
+            name: '报表',
+            icon: 'icon-BilledAR',
+            component: 'statementSearch',
+          },
+        ],
+      },
     ],
   } : {},
 }

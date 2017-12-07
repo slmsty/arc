@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Card, Row, Col, Button, Table, Icon, message, Popconfirm,Input } from 'antd'
+import { Modal, Row, Col, Button, Input, Divider } from 'antd'
 
 const { TextArea } = Input
 export default class ApplyInfoModal extends React.Component {
@@ -47,12 +47,12 @@ export default class ApplyInfoModal extends React.Component {
             <Col span={5} key={8}>zhangxin19@asiainfo.com</Col>
           </Row>
           <br />
-          <hr />
+          <hr style={{ borderTop: '1px solid #d9d9d9' }} />
           <br />
           <h2>坏账划销申请</h2>
           <br />
           <br />
-          <hr />
+          <hr style={{ borderTop: '1px solid #d9d9d9' }} />
           <br />
           <h2>审批意见</h2>
           <br />
