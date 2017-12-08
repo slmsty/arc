@@ -101,7 +101,7 @@ class Confirm extends Component{
       },
       {
         title: '报告日期',
-        key: 'reportingdate'
+        key: 'reportDate'
       },
       {
         title: '付款百分比',
