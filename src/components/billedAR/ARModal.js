@@ -33,7 +33,7 @@ class ARModal extends Component{
         arAccountantApproveMessage: values.arAccountantApproveMessage
       }
 
-      const isShow = !((this.props.o.paymentTerm==='按进度'&&this.props.o.paymentName==='预付款')||(this.props.o.paymentTerm==='按时间'&&this.props.o.paymentName!=='结算单'));
+      const isShow = !((this.props.o.paymentTerm==='按进度'&&this.props.o.paymentName==='预付款')||(this.props.o.paymentTerm==='按时间'&&this.props.o.paymentName!=='结算款'));
       if(isShow){
         body.reportDate = values.reportDate.format('YYYY-MM-DD');
         body.assessTaxIncludedAmount = values.assessTaxIncludedAmount;
@@ -64,7 +64,7 @@ class ARModal extends Component{
     const {getFieldDecorator} = this.props.form;
     const {visible, o} = this.props;
 
-    const isShow = !((o.paymentTerm==='按进度'&&o.paymentName==='预付款')||(o.paymentTerm==='按时间'&&o.paymentName!=='结算单'));
+    const isShow = !((o.paymentTerm==='按进度'&&o.paymentName==='预付款')||(o.paymentTerm==='按时间'&&o.paymentName!=='结算款'));
 
     return (
       <Modal
