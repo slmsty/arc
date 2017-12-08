@@ -58,17 +58,6 @@ const Approval = (billedArIds)=>({
   },
 })
 
-const Send = (billedArIds)=>({
-  [httpApi]: {
-    url: '/arc/billedar/confirm/pushPa',
-    types: ['BILLEDARCONFIRM_SEND_SUCCESS'],
-    options: {
-      method: 'POST',
-      body: {billedArIds}
-    },
-  },
-})
-
 const ResetTitle = ()=>({
   type: 'BILLEDARCONFIRM_RESET_TITLE'
 })
@@ -78,6 +67,5 @@ export {
   editBilledAr,
   Reject,
   Approval,
-  Send,
   ResetTitle,
 }
