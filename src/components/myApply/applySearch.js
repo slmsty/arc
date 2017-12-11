@@ -7,14 +7,6 @@ import { Button, Table, message } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
 import ApplyInfoModal from './applyInfo'
 
-const data = []
-for (let i = 0; i < 4; i++) {
-  data.push({
-    Num: i,
-    applyNo: i + 1,
-    applyStatus: '审批中'
-  })
-}
 export default class ApplySearchCon extends React.Component {
   state = {
     infoVisitable: false,
@@ -125,39 +117,39 @@ export default class ApplySearchCon extends React.Component {
       fixed: 'left',
     }, {
       title: '申请单编号',
-      dataIndex: 'applyNo',
+      dataIndex: 'businessKey',
       width: 200,
     }, {
       title: '审批状态',
-      dataIndex: 'applyStatus',
+      dataIndex: 'statusName',
       width: 100,
     }, {
       title: '申请单类型',
-      dataIndex: 'applyType',
+      dataIndex: 'modelName',
       width: 100,
     }, {
       title: '申请信息',
-      dataIndex: 'applyNews',
+      dataIndex: 'applyInfo',
       width: 250,
     }, {
       title: '审批结果',
-      dataIndex: 'applyResult',
+      dataIndex: 'approveType',
       width: 150,
     }, {
       title: '审批意见',
-      dataIndex: 'applyOpinion',
+      dataIndex: 'approveRemark',
       width: 300,
     }, {
       title: '申请人',
-      dataIndex: 'applyPeo',
+      dataIndex: 'applyPersonName',
       width: 100,
     }, {
       title: '申请时间',
-      dataIndex: 'applyTime',
+      dataIndex: 'applyDate',
       width: 150,
     }, {
       title: '审批时间',
-      dataIndex: 'approveTime',
+      dataIndex: 'approveDate',
       width: 150,
     }, {
       title: '操作',
@@ -166,18 +158,15 @@ export default class ApplySearchCon extends React.Component {
       fixed: 'right',
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
-          <Button onClick={this.approveClick.bind(this, record)}>审批</Button>
+          <Button onClick={() => this.approveClick(record)}>审批</Button>
         </div>
       ),
     },
     ]
     const pagination = {
-      current: 1,
-      total: 10,
-      pageSize: 10,
-      // current: this.props.myApply.getMyApplyList.pageNo,
-      // total: this.props.myApply.getMyApplyList.count,
-      // pageSize: this.props.myApply.getMyApplyList.pageSize,
+      current: this.props.myApply.getMyApplyList.pageNo,
+      total: this.props.myApply.getMyApplyList.count,
+      pageSize: this.props.myApply.getMyApplyList.pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
@@ -203,8 +192,7 @@ export default class ApplySearchCon extends React.Component {
           size="middle"
           scroll={{ x: '1630px' }}
           loading={this.state.loading}
-          dataSource={data}
-          // dataSource={this.props.myApply.getMyApplyList.result}
+          dataSource={this.props.myApply.getMyApplyList.result}
         />
       </div>
     )

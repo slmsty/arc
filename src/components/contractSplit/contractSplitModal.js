@@ -10,6 +10,12 @@ const FormItem = Form.Item
 const { TextArea } = Input
 const Option = Select.Option
 const tableData = []
+
+const EditableCell = ({ value, onChange }) => (
+  <div>
+    <Input style={{ margin: '-5px 0' }} value={value} onChange={e => onChange(e.target.value)} />
+  </div>
+)
 for (let i = 0; i < 4; i++) {
   tableData.push({
     contractType: `类型${i}`,
@@ -21,8 +27,17 @@ class ContractSplitModal extends  React.Component{
   state = {
     dataSource: tableData,
   }
+  renderColumns = (text, record, column) => {
+    return (
+      <Input style={{ margin: '-5px 0' }} value={text} onChange={e => this.handleChange(e.target.value, record)}/>
+    )
+  }
+  handleChange = (value, record, column) => {
+    console.log(record)
+    const newData = [...this.state.dataSource]
+  }
   closeClaim = () => {
-    this.props.closeModal();
+    this.props.closeModal()
   }
   handleAdd = () => {
     const newData = {
@@ -42,6 +57,10 @@ class ContractSplitModal extends  React.Component{
       dataSource: newData,
     })
   }
+  handleOk = () => {
+    const param = this.props.form.getFieldsValue()
+    console.log('param', param)
+  }
   render() {
     const { getFieldDecorator } = this.props.form
     const columns = [{
@@ -50,18 +69,17 @@ class ContractSplitModal extends  React.Component{
       width: 150,
       textAlign: 'center',
       fixed: 'left',
-      render: (text, record, index) => {
-        return (
-          <div>
-            <Button onClick={this.handleAdd}>＋</Button>&nbsp;&nbsp;
-            <Button onClick={this.handleMinus.bind(this, index)}>－</Button>
-          </div>
-        )
-      }
+      render: (text, record, index) => (
+        <div>
+          <Button onClick={this.handleAdd}>＋</Button>&nbsp;&nbsp;
+          <Button onClick={() => this.handleMinus(index)}>－</Button>
+        </div>
+      ),
     }, {
       title: <span>合同类型<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractType',
       width: 100,
+      render: (text, record) => this.renderColumns(text, record, 'contractType'),
     }, {
       title: <span>产品线<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'projectLine',
