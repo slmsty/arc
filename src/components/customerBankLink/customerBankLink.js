@@ -1,5 +1,5 @@
 /**
- * Created by liangshuang on 17/10/20. 
+ * Created by liangshuang on 17/10/20.
  */
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
@@ -277,8 +277,8 @@ class CustomerBankLink extends React.Component {
       fixed: 'right',
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
-          <Icon type="edit" onClick={this.showEditModal.bind(this, record)} />&nbsp;&nbsp;&nbsp;&nbsp;
-          <Icon type="delete" onClick={this.showDelModal.bind(this, record)} />
+          <Icon type="edit" onClick={() => this.showEditModal(record)} />&nbsp;&nbsp;&nbsp;&nbsp;
+          <Icon type="delete" onClick={() => this.showDelModal(record)} />
         </div>
       ),
     },
@@ -333,6 +333,7 @@ class CustomerBankLink extends React.Component {
         onCancel={this.handleEditCancel}
         queryParams={this.submitAddData}
         editModalData={this.state.editModalData}
+        onOk={this.state.edittitle === '编辑客户银行关系数据' ? this.handleEditOk : this.handleAutoAddOk}
       /> : null}
       { /* 删除数据modal */ }
       <Modal
