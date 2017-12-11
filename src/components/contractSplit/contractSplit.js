@@ -13,7 +13,7 @@ for (let i = 0; i < 4; i++) {
     splitStatus: '已拆分',
     contractInnerNo: i + 1,
     projectId: `1000${i}`,
-    contractName: '合同名称',
+    contractName: '合同名称test',
   })
 }
 export default class ApplySearchCon extends React.Component {
