@@ -22,7 +22,7 @@ class ContractSplitModal extends  React.Component{
     dataSource: tableData,
   }
   closeClaim = () => {
-    this.props.closeModal()
+    this.props.closeModal();
   }
   handleAdd = () => {
     const newData = {
