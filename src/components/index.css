@@ -78,3 +78,37 @@
   text-align: center !important;
   width: 100px;
 }
+.contractRowBorder{
+  border:1px solid #d9d9d9;
+}
+.text-css{
+  text-align: right;
+  line-height: 30px;
+}
+.contractRowBorderLeft{
+  border-left:1px solid #d9d9d9;
+}
+.contractRowBorderRight{
+  border-right:1px solid #d9d9d9;
+}
+.contractRowBorderTop{
+  border-top:1px solid #d9d9d9;
+}
+.contractRowBorderBottom{
+  border-bottom:1px solid #d9d9d9;
+}
+
+
+.contractRowBorderNo{
+  border:none !important;
+}
+.contractRowBorderNo:focus{
+  border:none !important;
+}
+.contractRowBorderLeft>.ant-form-item{
+  margin-bottom: 0px;
+}
+.contractRowBorderNo>.ant-select-selection--single,.contractRowBorderLeft input {
+  height: 30px !important;
+  border: none;
+}

@@ -31,26 +31,26 @@ class ApplySearchCon extends React.Component {
           <Row gutter={40}>
             <Col span={10} key={1}>
               <FormItem {...formItemLayout} label="申请单号">
-                {getFieldDecorator('applayNum')(<Input onPressEnter={this.handleQuery} />)}
+                {getFieldDecorator('businessKey')(<Input onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
             <Col span={10} key={2}>
               <FormItem {...formItemLayout} label="申请人">
-                {getFieldDecorator('applayCount')(<Input placeholder="姓名／工号／NT" onPressEnter={this.handleQuery} />)}
+                {getFieldDecorator('applyPersonKeyword')(<Input placeholder="姓名／工号／NT" onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={40}>
             <Col span={10} key={3}>
               <FormItem {...formItemLayout} label="申请时间">
-                {getFieldDecorator('applayTime', {
-                  initialValue: '0',
+                {getFieldDecorator('applyDate', {
+                  initialValue: 'ALL',
                 })(
                   <RadioGroup size="large" style={{ width: '330px' }}>
-                    <RadioButton value="0" style={{ borderRadius: '4px' }}>全部</RadioButton>
-                    <RadioButton value="1" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一周</RadioButton>
-                    <RadioButton value="2" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一个月</RadioButton>
-                    <RadioButton value="3" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一年</RadioButton>
+                    <RadioButton value="ALL" style={{ borderRadius: '4px' }}>全部</RadioButton>
+                    <RadioButton value="WEEK" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一周</RadioButton>
+                    <RadioButton value="MONTH" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一个月</RadioButton>
+                    <RadioButton value="YEAR" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一年</RadioButton>
                   </RadioGroup>
                 )}
               </FormItem>
@@ -59,14 +59,14 @@ class ApplySearchCon extends React.Component {
           <Row gutter={40}>
             <Col span={10} key={4}>
               <FormItem {...formItemLayout} label="申请状态">
-                {getFieldDecorator('applayStatus', {
-                  initialValue: '0',
+                {getFieldDecorator('status', {
+                  initialValue: 'ALL',
                 })(
                   <RadioGroup size="large" style={{ width: '330px' }}>
-                    <RadioButton value="0" style={{ borderRadius: '4px' }}>全部</RadioButton>
-                    <RadioButton value="1" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批中</RadioButton>
-                    <RadioButton value="2" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批完成</RadioButton>
-                    <RadioButton value="3" style={{ marginLeft: '10px', borderRadius: '4px' }}>驳回</RadioButton>
+                    <RadioButton value="ALL" style={{ borderRadius: '4px' }}>全部</RadioButton>
+                    <RadioButton value="A" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批中</RadioButton>
+                    <RadioButton value="F" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批完成</RadioButton>
+                    <RadioButton value="R" style={{ marginLeft: '10px', borderRadius: '4px' }}>驳回</RadioButton>
                   </RadioGroup>
                 )}
               </FormItem>

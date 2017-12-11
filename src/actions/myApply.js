@@ -4,7 +4,7 @@ import { httpApi } from '../http/reduxRequestMiddleware'
 export function getMyApplyList(queryParam) {
   return {
     [httpApi]: {
-      url: '/arc/receiptclaim/review/search',
+      url: '/arc/workFlow/myTask',
       options: {
         method: 'POST',
         body: queryParam,
@@ -17,7 +17,7 @@ export function getMyApplyList(queryParam) {
 export function approveSubmit(queryParam) {
   return {
     [httpApi]: {
-      url: '/arc/receiptclaim/review/approve',
+      url: '／arc/workFlow/approve/agree',
       options: {
         method: 'POST',
         body: queryParam,
@@ -26,4 +26,15 @@ export function approveSubmit(queryParam) {
     },
   }
 }
-
+export function approveReject(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/workFlow/approve/reject',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['APPROVE_REJECT_MYAPPLY_SUCCESS'],
+    },
+  }
+}

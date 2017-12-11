@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
 import MultipleInput from '../common/multipleInput'
+import SelectSbu from '../common/SelectSbu'
 
 const FormItem = Form.Item
 const { RangePicker } = DatePicker
@@ -58,9 +59,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="Sales签约BU">
                 {
-                  getFieldDecorator('SalesBUId')(
-                    <Input />,
-                  )
+                  getFieldDecorator('SalessbuInfo')(<SelectSbu/>)
                 }
               </FormItem>
             </Col>
@@ -129,9 +128,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8} key={9}>
               <FormItem {...formItemLayout} label="立项BU">
                 {
-                  getFieldDecorator('BUId')(
-                    <Input />,
-                  )
+                  getFieldDecorator('lisbuInfo')(<SelectSbu/>)
                 }
               </FormItem>
             </Col>

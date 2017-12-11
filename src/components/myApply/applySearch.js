@@ -10,10 +10,9 @@ import ApplyInfoModal from './applyInfo'
 const data = []
 for (let i = 0; i < 4; i++) {
   data.push({
-    splitStatus: '已拆分合同',
-    contractInnerNo: i + 1,
-    projectId: i + 1,
-    contractName: '合同名称',
+    Num: i,
+    applyNo: i + 1,
+    applyStatus: '审批中'
   })
 }
 export default class ApplySearchCon extends React.Component {
@@ -32,24 +31,21 @@ export default class ApplySearchCon extends React.Component {
       pageNo: 1,
       pageSize: 10,
     },
-    applayNum: '',
-    applayCount: '',
-    applayTime: '',
-    applayStatus: '',
+    businessKey: '',
+    applyPersonKeyword: '',
+    applyDate: '',
+    status: '',
   }
   handleQuery = () => {
     this.setState({
       loading: true,
     })
-    console.log(this.queryParam)
-    message.success('测试成功')
-    return
     this.props.getMyApplyList(this.queryParam).then((res) => {
       this.setState({
         loading: false,
       })
       if (res && res.response && res.response.resultCode === '000000') {
-        console.log('数据查询成功')
+        console.log(res)
       } else {
         message.error('加载数据失败')
       }
@@ -77,6 +73,10 @@ export default class ApplySearchCon extends React.Component {
       applyData: _record,
     })
   }
+  /*
+   function applyComfirm
+   审批同意
+   */
   applyComfirm = (param) => {
     this.props.approveSubmit(param).then((res) => {
       this.setState({
@@ -93,6 +93,10 @@ export default class ApplySearchCon extends React.Component {
       }
     })
   }
+  /*
+   function applyReject
+   审批驳回
+   */
   applyReject = () => {
     this.setState({
       infoVisitable: false,
@@ -101,6 +105,10 @@ export default class ApplySearchCon extends React.Component {
     message.success('测试驳回成功')
     return
   }
+  /*
+   function closeModalClaim
+   关闭详情modal
+   */
   closeModalClaim = () => {
     this.setState({
       infoVisitable: false,
@@ -108,61 +116,59 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   render() {
+
     const columns = [{
-      title: '拆分状态',
-      dataIndex: 'splitStatus',
-      width: 150,
+      title: '序号',
+      dataIndex: 'Num',
+      width: 50,
       textAlign: 'center',
       fixed: 'left',
     }, {
-      title: '合同内部编码',
-      dataIndex: 'contractInnerNo',
+      title: '申请单编号',
+      dataIndex: 'applyNo',
       width: 200,
     }, {
-      title: '项目编码',
-      dataIndex: 'projectId',
-      width: 150,
-    }, {
-      title: '合同名称',
-      dataIndex: 'contractName',
-      width: 200,
-    }, {
-      title: '合同编码',
-      dataIndex: 'contractNo',
-      width: 150,
-    }, {
-      title: '合同金额',
-      dataIndex: 'contractMoney',
-      width: 150,
-      render: (text, record, index) => (text ? text.toFixed(2) : text),
-    }, {
-      title: '签约日期',
-      dataIndex: 'signDate',
-      width: 150,
-    }, {
-      title: 'Sale签约BU',
-      dataIndex: 'SaleBU',
+      title: '审批状态',
+      dataIndex: 'applyStatus',
       width: 100,
     }, {
-      title: '立项BU',
-      dataIndex: 'projectBU',
-      width: 150,
-    }, {
-      title: '销售人员',
-      dataIndex: 'salePeo',
-      width: 150,
-    }, {
-      title: '合同生效日',
-      dataIndex: 'contractDate',
-      width: 150,
-    }, {
-      title: '合同种类',
-      dataIndex: 'contractType',
+      title: '申请单类型',
+      dataIndex: 'applyType',
       width: 100,
     }, {
-      title: '币种',
-      dataIndex: 'currentMoney',
+      title: '申请信息',
+      dataIndex: 'applyNews',
+      width: 250,
+    }, {
+      title: '审批结果',
+      dataIndex: 'applyResult',
+      width: 150,
+    }, {
+      title: '审批意见',
+      dataIndex: 'applyOpinion',
+      width: 300,
+    }, {
+      title: '申请人',
+      dataIndex: 'applyPeo',
       width: 100,
+    }, {
+      title: '申请时间',
+      dataIndex: 'applyTime',
+      width: 150,
+    }, {
+      title: '审批时间',
+      dataIndex: 'approveTime',
+      width: 150,
+    }, {
+      title: '操作',
+      dataIndex: 'opration',
+      width: 80,
+      fixed: 'right',
+      render: (text, record, index) => (
+        <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
+          <Button onClick={this.approveClick.bind(this, record)}>审批</Button>
+        </div>
+      ),
     },
     ]
     const pagination = {
@@ -178,11 +184,6 @@ export default class ApplySearchCon extends React.Component {
 
     }
     const { selectedRowKeys } = this.state
-    const rowSelection = {
-      selectedRowKeys,
-      type: 'checkBox',
-      // onChange: this.onSelectChange,
-    }
     return (
       <div>
         <ApplySearchConWithForm onQuery={this.handleChangeParam} />
@@ -196,12 +197,11 @@ export default class ApplySearchCon extends React.Component {
         <br /><br />
         <Table
           rowKey="id"
-          rowSelection={rowSelection}
           pagination={pagination}
           bordered
           columns={columns}
           size="middle"
-          scroll={{ x: '1900px' }}
+          scroll={{ x: '1630px' }}
           loading={this.state.loading}
           dataSource={data}
           // dataSource={this.props.myApply.getMyApplyList.result}
@@ -213,6 +213,7 @@ export default class ApplySearchCon extends React.Component {
 ApplySearchCon.propTypes = {
   getMyApplyList: PropTypes.func.isRequired,
   approveSubmit: PropTypes.func.isRequired,
+  approveReject: PropTypes.func.isRequired,
   myApply: PropTypes.shape({
     myapplyListRefresh: PropTypes.number.isRequired,
   }).isRequired,

@@ -18,8 +18,12 @@ function approveSubmit(state) {
   // return x
   return { ...state, myapplyListRefresh: new Date().getTime() }
 }
+function approveReject(state) {
+  return { ...state, myapplyListRefresh: new Date().getTime() }
+}
 
 export default caseReducer(reviewReceiptClaim, {
   GET_MYAPPLY_LIST_SUCCESS: getMyApplyList,
   APPROVE_MYAPPLY_SUCCESS: approveSubmit,
+  APPROVE_REJECT_MYAPPLY_SUCCESS: approveReject,
 })
