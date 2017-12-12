@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
+import {Form, Row, Col, DatePicker, Input, Button, Table, Modal, message} from 'antd';
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
+import requestJsonFetch from '../../http/requestJsonFecth'
 import ARModal from './ARModal'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
@@ -16,7 +17,11 @@ class Confirm extends Component{
     editDis: true,
     rejectDis: true,
     approvalDis: true,
-    sendDis: true
+    sendDis: true,
+    isSend: false,
+    failures: [],
+    sLength: 0,
+    fLength: 0,
   }
 
   constructor(props){
@@ -101,7 +106,7 @@ class Confirm extends Component{
       },
       {
         title: '报告日期',
-        key: 'reportingdate'
+        key: 'reportDate'
       },
       {
         title: '付款百分比',
@@ -121,6 +126,16 @@ class Confirm extends Component{
       dataIndex: o.key,
       width: 120,
     }))
+    this.columns2 = [
+      {
+        title: 'id',
+        dataIndex: 'id',
+        width: 150,
+      }, {
+        title: '详细信息',
+        dataIndex: 'remark',
+      }
+    ]
   }
 
   doSearch = (e)=>{
@@ -208,13 +223,17 @@ class Confirm extends Component{
     this.setState({visible: false})
   }
 
-  OK = (values)=>{
-    this.props.editBilledAr({
-      ...this.state.o,
-      ...values,
-      status: '20',
-      statusName: '待应收会计确认',
+  OK = ()=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: this.props.pageNo,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
     })
+
     this.setState({
       visible: false,
       rowKeys: [],
@@ -250,8 +269,37 @@ class Confirm extends Component{
     })
   }
 
+  postSend = (body, callback)=>{
+    requestJsonFetch(
+      '/arc/billedar/confirm/pushPa',
+      {
+        method: 'POST',
+        body
+      },
+      callback
+    )
+  }
+
   send = ()=>{
-    this.props.Send(this.state.rowKeys)
+    this.postSend({
+      billedArIds: this.state.rowKeys
+    }, response=>{
+      if(response.resultCode === '000000'){
+        let result = response.successFailureResult;
+        if(!result.failures && result.failures.length<=0){
+          this.closeSend();
+        }else{
+          this.setState({
+            isSend: true,
+            sLength: result.successIds.length,
+            fLength: result.failures.length,
+            failures: result.failures
+          })
+        }
+      }else{
+        message.error(response.resultMessage);
+      }
+    })
     this.setState({
       rowKeys: [],
       rows: [],
@@ -260,6 +308,19 @@ class Confirm extends Component{
       approvalDis: true,
       sendDis: true
     })
+  }
+
+  closeSend = ()=>{
+    this.setState({isSend: false})
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: this.props.pageNo,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
+    });
   }
 
   shouldComponentUpdate({title}, nextState){
@@ -409,6 +470,27 @@ class Confirm extends Component{
             onOk={this.OK}
             o={this.state.o}
            />
+          <Modal
+            visible={this.state.isSend}
+            onOk={this.closeSend}
+            onCancel={this.closeSend}
+            title=""
+            footer={[
+              <Button key="cofirm" type="primary" onClick={this.closeSend}>
+                确定
+              </Button>,
+            ]}>
+            <p>成功传送AR：<b style={{color: '#FF0000'}}>{this.state.sLength}</b> 条</p>
+            <p>传送AR失败：<b style={{color: '#FF0000'}}>{this.state.fLength}</b> 条</p>
+            <br/>
+            <Table 
+              rowKey="id"
+              bordered
+              size="middle"
+              columns={this.columns2} 
+              dataSource={this.state.failures}
+              pagination={false}/>
+          </Modal>
       </div>
     )
   }
