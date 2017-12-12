@@ -7,13 +7,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SelectSbu from '../common/SelectSbu'
-import ContractType from '../common/contractType'
 import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select } from 'antd'
 
 const FormItem = Form.Item
 const { TextArea } = Input
 const Option = Select.Option
 const tableData = []
+
+const EditableCell = ({ value, onChange }) => (
+  <div>
+    {/* <Input style={{ margin: '-5px 0' }} value={value} onChange={e => onChange(e.target.value)} /> */}
+    <SelectSbu />
+  </div>
+)
 for (let i = 0; i < 4; i++) {
   tableData.push({
     contractType: `类型${i}`,
@@ -25,15 +31,11 @@ class ContractSplitModal extends  React.Component{
   state = {
     dataSource: tableData,
   }
-  handleChange = (data) => {
+  handleChange(value, index, columns) {
     const newData = [...this.state.dataSource]
-    console.log('newData', newData)
-    const indexData = data.sbuNo && data.sbuName ? [data.sbuNo, data.sbuName] : []
-    newData[data.indexs][data.columns] = indexData
-    console.log(data)
-    this.setState({
-      dataSource: newData,
-    })
+    newData[index][columns]=value
+    console.log(newData[index][columns])
+    this.setState({ dataSource: newData })
   }
   closeClaim = () => {
     this.props.closeModal()
@@ -63,7 +65,10 @@ class ContractSplitModal extends  React.Component{
   }
   renderColumns(text, index, column) {
     return (
-      <ContractType onChange={this.handleChange} value={this.state.dataSource[index][column]}  indexs={index} columns={column} />
+      <EditableCell
+        value={text}
+        onChange={value => this.handleChange(value, index, column)}
+      />
     )
   }
   render() {
@@ -374,7 +379,7 @@ class ContractSplitModal extends  React.Component{
                 <Col span={4} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('lixiangsbuInfo')(<SelectSbu />)
+                      getFieldDecorator('lixiangsbuInfo')(<SelectSbu/>)
                     }
                   </FormItem>
                 </Col>
