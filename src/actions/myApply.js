@@ -17,7 +17,7 @@ export function getMyApplyList(queryParam) {
 export function approveSubmit(queryParam) {
   return {
     [httpApi]: {
-      url: '／arc/workFlow/approve/agree',
+      url: '/arc/workFlow/approveAgree',
       options: {
         method: 'POST',
         body: queryParam,
@@ -29,7 +29,7 @@ export function approveSubmit(queryParam) {
 export function approveReject(queryParam) {
   return {
     [httpApi]: {
-      url: '/arc/workFlow/approve/reject',
+      url: '/arc/workFlow/rejectToApply',
       options: {
         method: 'POST',
         body: queryParam,

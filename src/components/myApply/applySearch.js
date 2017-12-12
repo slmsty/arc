@@ -37,7 +37,6 @@ export default class ApplySearchCon extends React.Component {
         loading: false,
       })
       if (res && res.response && res.response.resultCode === '000000') {
-        console.log(res)
       } else {
         message.error('加载数据失败')
       }
@@ -76,12 +75,10 @@ export default class ApplySearchCon extends React.Component {
         infoVisitable: false,
         applyData: '',
       })
-      message.success('测试审批成功')
-      return
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('审批成功')
       } else {
-        message.error('加载数据失败')
+        message.error(res.response.resultMessage)
       }
     })
   }
@@ -89,13 +86,19 @@ export default class ApplySearchCon extends React.Component {
    function applyReject
    审批驳回
    */
-  applyReject = () => {
-    this.setState({
-      infoVisitable: false,
-      applyData: '',
+  applyReject = (param) => {
+    this.props.approveReject(param).then((res) => {
+      this.setState({
+        loading: false,
+        infoVisitable: false,
+        applyData: '',
+      })
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.success('驳回成功')
+      } else {
+        message.error(res.response.resultMessage)
+      }
     })
-    message.success('测试驳回成功')
-    return
   }
   /*
    function closeModalClaim
