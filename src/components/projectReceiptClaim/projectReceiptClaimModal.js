@@ -23,11 +23,13 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '客户名称',
     dataIndex: 'cust',
     width: 200,
-    render: (text, record, index) => (<SelectCustomer
-      defaultQueryParam={record.custName}
-      value={[record.custId, record.custName]}
-      onChange={value => this.handleClaimFundChange(index, value, 'cust')}
-    />),
+    render: (text, record, index) => (
+      record.fundId === 'ARC001' ? <SelectCustomer
+        defaultQueryParam={record.custName}
+        value={[record.custId, record.custName]}
+        onChange={value => this.handleClaimFundChange(index, value, 'cust')}
+      /> : text
+    ),
   }, {
     title: '认款金额',
     dataIndex: 'claimAmount',
@@ -226,7 +228,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
           fund.receiptAmount = addFund.arAmount
           fund.fundReceivableBalance = addFund.receivableBalance
           fund.receiptUse = 'On account'
-          fund.custId = ''
           funds.push(fund)
         }
       })

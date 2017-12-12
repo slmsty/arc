@@ -232,6 +232,7 @@ export default class NoProjectReceiptClaim extends React.Component {
             current: this.props.receiptClaimList.pageNo,
             total: this.props.receiptClaimList.count,
             pageSize: this.props.receiptClaimList.pageSize,
+            showTotal: (total, range) => `共 ${total} 条记录 当前显示 ${range[0]}-${range[1]}`,
             onChange: this.handleChangePage,
             showSizeChanger: true,
             onShowSizeChange: this.handleChangeSize,

@@ -257,6 +257,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             current: this.props.receiptClaimFundList.pageNo,
             total: this.props.receiptClaimFundList.count,
             pageSize: this.state.pageSize,
+            showTotal: (total, range) => `共 ${total} 条记录 当前显示 ${range[0]}-${range[1]}`,
             onChange: this.handleChangePage,
           }}
         />
