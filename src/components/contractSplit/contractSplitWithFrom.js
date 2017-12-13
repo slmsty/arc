@@ -24,8 +24,8 @@ class ContractSplitCon extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 18 },
+      labelCol: { span: 7 },
+      wrapperCol: { span: 17 },
     }
     return (
       <div>
@@ -95,7 +95,6 @@ class ContractSplitCon extends React.Component {
                     filterOption={false}
                     onChange={this.handleChange}
                   >
-                    {/* <Option value="10">新建</Option> */}
                     <Option value="31">未拆分合同</Option>
                     <Option value="50">已拆分合同</Option>
                     <Option value="51">全部合同</Option>

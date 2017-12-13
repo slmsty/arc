@@ -149,47 +149,6 @@ const columns = [{
   width: 400,
 },
 ]
-/*  {
- title: '收款编号',
- dataIndex: 'receiptNo',
- width: 200,
- }, {
- title: '认款人',
- dataIndex: 'accountantId',
- width: 150,
- },{
- title: '订单号',
- dataIndex: 'custOrderId',
- key: '11',
- width: 100,
- }, {
- title: '项目阶段',
- dataIndex: 'paymentPhrases',
- width: 100,
- }, {
- title: '合同名称',
- dataIndex: 'contractName',
- width: 500,
- }, {
- title: '注销收款标识',
- dataIndex: 'receiptWriteOffSign',
- key: '19',
- width: 100,
- }, {
- title: '客户付款银行',
- dataIndex: 'payBankName',
- width: 300,
- }, {
- title: '复核人',
- dataIndex: '26',
- key: '26',
- width: 150,
- }, {
- title: '创建提示',
- dataIndex: 'statusRemark',
- key: '27',
- width: 400,
- }, */
 export default class ReviewReceiptClaim extends React.Component {
   state = {
     loading: false,
