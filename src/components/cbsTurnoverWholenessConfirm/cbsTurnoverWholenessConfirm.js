@@ -135,9 +135,6 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     const tableHeight = screenHeight - 64 - 8 - 12 - 119 - 18 - 28.5 - 18 - 53 - 56
     this.setState({ tableHeight })
   }
-  // componentDidMount() {
-  //   this.handleQuery()
-  // }
   componentWillReceiveProps(nextProps) {
     if (this.props.cbsTurnoverEditConfirmResult !== nextProps.cbsTurnoverEditConfirmResult) {
       message.info('保存成功。')
