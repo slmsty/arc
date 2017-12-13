@@ -21,6 +21,9 @@ import BilledARApprove from './billedAR/Approve'
 import BilledARConfirm from './billedAR/Confirm'
 import BadDebtsApply from './badDebts/Apply'
 import BadDebtsStatus from './badDebts/Status'
+import ApplyListContainer from './myApply/applyList'
+import ContractSplit from './contractSplit/contractSplit'
+import StatementSearch from './statementSearch/statementList'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -86,6 +89,15 @@ class IndexContainer extends React.Component {
     }
     if (component === 'BadDebtsStatus') {
       return BadDebtsStatus
+    }
+    if (component === 'applyListContainer') {
+      return ApplyListContainer
+    }
+    if (component === 'ContractSplit') {
+      return ContractSplit
+    }
+    if (component === 'statementSearch') {
+      return StatementSearch
     }
   }
   getMenuRoutes = (menus) => {

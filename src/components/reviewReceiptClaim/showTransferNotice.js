@@ -10,7 +10,7 @@ class SelectCustomer extends React.Component {
     width: 150,
   }, {
     title: '详细信息',
-    dataIndex: 'remark',
+    dataIndex: 'statusRemark',
   },
   ]
   render() {

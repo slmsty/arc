@@ -18,7 +18,7 @@ const formItemLayout = {
 const columns = [{
   title: '数据状态',
   dataIndex: 'statusName',
-  width: 100,
+  width: 80,
   fixed: 'left',
 }, {
   title: '收款来源',
@@ -26,7 +26,11 @@ const columns = [{
   width: 100,
 }, {
   title: '收款分类',
-  dataIndex: 'claimType',
+  dataIndex: 'claimTypeName',
+  width: 100,
+}, {
+  title: '收款来源',
+  dataIndex: 'sourceTypeName',
   width: 100,
 }, {
   title: '公司',
@@ -48,7 +52,7 @@ const columns = [{
   title: '收款金额',
   dataIndex: 'receiptAmount',
   width: 100,
-  render: (text, record, index) => (record.transactionType !== 'RECEIPT' ? -text : text),
+  render: (text, record, index) => (record.transactionType !== 'RECEIPT' ? (-text ? -text.toFixed(2) : -text) : (text ? text.toFixed(2) : text)),
 }, {
   title: '银行流水号',
   dataIndex: 'bankTransactionNo',
@@ -73,6 +77,7 @@ const columns = [{
   title: '认款金额',
   dataIndex: 'claimAmount',
   width: 100,
+  render: (text, record, index) => (text ? text.toFixed(2) : text),
 }, {
   title: '收款用途',
   dataIndex: 'receiptUse',
@@ -144,47 +149,6 @@ const columns = [{
   width: 400,
 },
 ]
-/*  {
- title: '收款编号',
- dataIndex: 'receiptNo',
- width: 200,
- }, {
- title: '认款人',
- dataIndex: 'accountantId',
- width: 150,
- },{
-  title: '订单号',
-    dataIndex: 'custOrderId',
-  key: '11',
-  width: 100,
-}, {
-  title: '项目阶段',
-    dataIndex: 'paymentPhrases',
-    width: 100,
-}, {
-  title: '合同名称',
-    dataIndex: 'contractName',
-    width: 500,
-}, {
-  title: '注销收款标识',
-    dataIndex: 'receiptWriteOffSign',
-    key: '19',
-    width: 100,
-}, {
-  title: '客户付款银行',
-    dataIndex: 'payBankName',
-    width: 300,
-}, {
-  title: '复核人',
-    dataIndex: '26',
-    key: '26',
-    width: 150,
-}, {
-  title: '创建提示',
-    dataIndex: 'statusRemark',
-    key: '27',
-    width: 400,
-}, */
 export default class ReviewReceiptClaim extends React.Component {
   state = {
     loading: false,
@@ -448,4 +412,3 @@ ReviewReceiptClaim.propTypes = {
     receiptClaimListRefresh: PropTypes.number.isRequired,
   }).isRequired,
 }
-

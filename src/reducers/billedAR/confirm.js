@@ -64,27 +64,6 @@ export default ({
 
       title = `成功审批${action.response.successList.length}条数据，失败${action.response.failList.length}条数据`
       break;
-    case 'BILLEDARCONFIRM_SEND_SUCCESS':
-      result = result.map(o=>{
-        if(action.response.successList.includes(o.billedArId)){
-          return {
-            ...o,
-            status: '31',
-            statusName: '已传送PA'
-          }
-        }else if(action.response.failList.includes(o.billedArId)){
-          return {
-            ...o,
-            status: '32',
-            statusName: '传送PA失败'
-          }
-        }else{
-          return o;
-        }
-      })
-
-      title = `传送成功${action.response.successList.length}条数据，传送失败${action.response.failList.length}条数据`
-      break;
     case 'BILLEDARCONFIRM_RESET_TITLE':
       title = ""
       break;

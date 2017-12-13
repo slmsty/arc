@@ -24,7 +24,78 @@ class ARModal extends Component{
 
   onOk = ()=>{
     this.props.form.validateFields((err, values) => {
-      if(err) return
+      const isShow = !((this.props.o.paymentTerm==='按进度'&&this.props.o.paymentName==='预付款')||(this.props.o.paymentTerm==='按时间'&&this.props.o.paymentName!=='结算款'));
+
+      let isError = false
+      if(!values.billedArDate){
+        isError = true
+        this.props.form.setFields({
+          billedArDate: {
+            value: values.billedArDate,
+            errors: [new Error('必须选择Billed AR日期')]
+          }
+        })
+      }else{
+        this.props.form.setFields({
+          billedArDate: {
+            value: values.billedArDate,
+            errors: null
+          }
+        })
+      }
+      if(!values.glDate){
+        isError = true
+        this.props.form.setFields({
+          glDate: {
+            value: values.glDate,
+            errors: [new Error('必须选择GL日期')]
+          }
+        })
+      }else{
+        this.props.form.setFields({
+          glDate: {
+            value: values.glDate,
+            errors: null
+          }
+        })
+      }
+
+      if(isShow){
+        if(!values.reportDate){
+          isError = true
+          this.props.form.setFields({
+            reportDate: {
+              value: values.reportDate,
+              errors: [new Error('必须选择报告日期')]
+            }
+          })
+        }else{
+          this.props.form.setFields({
+            reportDate: {
+              value: values.reportDate,
+              errors: null
+            }
+          })
+        }
+        if(!values.assessTaxIncludedAmount){
+          isError = true
+          this.props.form.setFields({
+            assessTaxIncludedAmount: {
+              value: values.assessTaxIncludedAmount,
+              errors: [new Error('必须输入考核含税金额')]
+            }
+          })
+        }else{
+          this.props.form.setFields({
+            assessTaxIncludedAmount: {
+              value: values.assessTaxIncludedAmount,
+              errors: null
+            }
+          })
+        }
+      }
+
+      if(isError) return
 
       let body = {
         billedArId: this.props.o.billedArId,
@@ -33,7 +104,6 @@ class ARModal extends Component{
         arAccountantApproveMessage: values.arAccountantApproveMessage
       }
 
-      const isShow = !((this.props.o.paymentTerm==='按进度'&&this.props.o.paymentName==='预付款')||(this.props.o.paymentTerm==='按时间'&&this.props.o.paymentName!=='结算单'));
       if(isShow){
         body.reportDate = values.reportDate.format('YYYY-MM-DD');
         body.assessTaxIncludedAmount = values.assessTaxIncludedAmount;
@@ -54,7 +124,7 @@ class ARModal extends Component{
     const {getFieldDecorator} = this.props.form;
     const {visible, o} = this.props;
 
-    const isShow = !((o.paymentTerm==='按进度'&&o.paymentName==='预付款')||(o.paymentTerm==='按时间'&&o.paymentName!=='结算单'));
+    const isShow = !((o.paymentTerm==='按进度'&&o.paymentName==='预付款')||(o.paymentTerm==='按时间'&&o.paymentName!=='结算款'));
 
     return (
       <Modal
@@ -66,10 +136,7 @@ class ARModal extends Component{
             <FormItem label="Billed AR日期">
               {
                 getFieldDecorator('billedArDate', {
-                  initialValue: o.billedArDate ? moment(o.billedArDate) : null,
-                  rules: [
-                    {required: true, message: '必须选择Billed AR日期'}
-                  ]
+                  initialValue: o.billedArDate ? moment(o.billedArDate) : null
                 })(
                   <DatePicker />
                 )
@@ -78,10 +145,7 @@ class ARModal extends Component{
             <FormItem label="GL日期">
               {
                 getFieldDecorator('glDate', {
-                  initialValue: o.glDate ? moment(o.glDate) : null,
-                  rules: [
-                    {required: true, message: '必须选择GL日期'}
-                  ]
+                  initialValue: o.glDate ? moment(o.glDate) : null
                 })(
                   <DatePicker />
                 )
@@ -93,10 +157,7 @@ class ARModal extends Component{
               <FormItem label="报告日期">
                 {
                   getFieldDecorator('reportDate', {
-                    initialValue: o.reportDate ? moment(o.reportDate) : null,
-                    rules: [
-                      {required: true, message: '必须选择报告日期'}
-                    ]
+                    initialValue: o.reportDate ? moment(o.reportDate) : null
                   })(
                     <DatePicker />
                   )
@@ -111,10 +172,7 @@ class ARModal extends Component{
               <FormItem label="考核含税金额">
                 {
                   getFieldDecorator('assessTaxIncludedAmount', {
-                    initialValue: o.assessTaxIncludedAmount,
-                    rules: [
-                      {required: true, message: '必须输入考核含税金额'}
-                    ]
+                    initialValue: o.assessTaxIncludedAmount
                   })(
                     <Input placeholder="考核含税金额" />
                   )

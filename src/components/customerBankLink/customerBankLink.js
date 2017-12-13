@@ -88,8 +88,8 @@ class CustomerBankLink extends React.Component {
   /*
    function handleChangeSize
    params:
-    current: current pageNo
-    size: current pageSize
+   current: current pageNo
+   size: current pageSize
    */
   handleChangeSize = (current, size) => {
     this.queryParam.pageInfo.pageNo = current
@@ -107,7 +107,7 @@ class CustomerBankLink extends React.Component {
   }
   /*
    function showAutoAdd
-    show add modal
+   show add modal
    */
   showAutoAdd = () => {
     this.setState({
@@ -119,7 +119,7 @@ class CustomerBankLink extends React.Component {
   /*
    function showEditModal
    params:
-    record : current data
+   record : current data
    show edit modal
    */
   showEditModal = (record) => {
@@ -130,9 +130,9 @@ class CustomerBankLink extends React.Component {
     })
   }
   /*
-    function submitAddData
-    params: addData post data
-    */
+   function submitAddData
+   params: addData post data
+   */
   submitAddData = (addData) => {
     this.setState({
       editVisible: false,
@@ -184,7 +184,7 @@ class CustomerBankLink extends React.Component {
         }
       })
     }
-}
+  }
   /*
    function delOk
    confirm delete data and hidden del modal
@@ -212,9 +212,9 @@ class CustomerBankLink extends React.Component {
     }
   }
   /*
- function showDelModal
- show del modal
- */
+   function showDelModal
+   show del modal
+   */
   showDelModal = (record) => {
     this.setState({
       delVisible: true,
@@ -277,8 +277,8 @@ class CustomerBankLink extends React.Component {
       fixed: 'right',
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
-          <Icon type="edit" onClick={this.showEditModal.bind(this, record)} />&nbsp;&nbsp;&nbsp;&nbsp;
-          <Icon type="delete" onClick={this.showDelModal.bind(this, record)} />
+          <Icon type="edit" onClick={() => this.showEditModal(record)} />&nbsp;&nbsp;&nbsp;&nbsp;
+          <Icon type="delete" onClick={() => this.showDelModal(record)} />
         </div>
       ),
     },
@@ -333,6 +333,7 @@ class CustomerBankLink extends React.Component {
         onCancel={this.handleEditCancel}
         queryParams={this.submitAddData}
         editModalData={this.state.editModalData}
+        onOk={this.state.edittitle === '编辑客户银行关系数据' ? this.handleEditOk : this.handleAutoAddOk}
       /> : null}
       { /* 删除数据modal */ }
       <Modal

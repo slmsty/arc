@@ -126,6 +126,54 @@ const common = {
           },
         ],
       },
+      {
+        key: '4',
+        path: '/ContractSplit',
+        name: '实际开票管理',
+        icon: 'icon-shijikaipiaoguanli',
+        component: 'HomeContainer',
+        child: [
+          {
+            key: '41',
+            path: '/ContractSplit/ContractSplit',
+            name: '合同拆分',
+            icon: 'icon-BilledAR',
+            component: 'ContractSplit',
+          },
+        ],
+      },
+      {
+        key: '5',
+        path: '/myApply',
+        name: '我的审批',
+        icon: 'icon-shijikaipiaoguanli',
+        component: 'HomeContainer',
+        child: [
+          {
+            key: '51',
+            path: '/myApply/applyList',
+            name: '审批列表',
+            icon: 'icon-BilledAR',
+            component: 'applyListContainer',
+          },
+        ],
+      },
+      {
+        key: '6',
+        path: '/statementSearch',
+        name: '报表查询',
+        icon: 'icon-shijikaipiaoguanli',
+        component: 'HomeContainer',
+        child: [
+          {
+            key: '61',
+            path: '/statementSearch/statementList',
+            name: '报表',
+            icon: 'icon-BilledAR',
+            component: 'statementSearch',
+          },
+        ],
+      },
     ],
   } : {},
 }
