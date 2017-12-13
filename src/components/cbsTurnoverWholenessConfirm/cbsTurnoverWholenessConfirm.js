@@ -74,17 +74,7 @@ const columns = [{
   key: 'custName',
   width: 300,
 }, {
-  title: '流水分类',
-  dataIndex: 'claimTypeName',
-  key: 'claimTypeName',
-  width: 80,
-}, {
-  title: '备注',
-  dataIndex: 'cashierApproveMessage',
-  key: 'cashierApproveMessage',
-  width: 635,
-}, {
-  title: '客户付款方式',
+  title: '付款方式',
   dataIndex: 'custPayMethodName',
   key: 'custPayMethodName',
   width: 100,
