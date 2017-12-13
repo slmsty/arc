@@ -82,3 +82,16 @@ export function initEditData(receiptClaimId) {
     },
   }
 }
+
+export function deleteAttachment(receiptClaimId) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/deleteAttachment',
+      options: {
+        method: 'POST',
+        body: { receiptClaimId },
+      },
+      types: ['DELETE_ATTACHMENT_RECEIPT_CLAIM_INFO_SUCCESS'],
+    },
+  }
+}

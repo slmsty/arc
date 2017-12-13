@@ -36,13 +36,13 @@ const columns = [{
   dataIndex: 'receiptAmount',
   key: 'receiptAmount',
   width: 100,
-  render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : 0.00}</div>),
 }, {
   title: '支出',
   dataIndex: 'payAmount',
   key: 'payAmount',
   width: 100,
-  render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : 0.00}</div>),
 }, {
   title: '公司',
   dataIndex: 'companyName',
@@ -99,6 +99,11 @@ const columns = [{
   key: 'claimTypeName',
   width: 80,
 }, {
+  title: '相关票据',
+  dataIndex: 'relatedBill',
+  key: 'relatedBill',
+  width: 100,
+}, {
   title: '备注',
   dataIndex: 'cashierApproveMessage',
   key: 'cashierApproveMessage',
@@ -120,9 +125,9 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     const tableHeight = screenHeight - 64 - 8 - 12 - 119 - 18 - 28.5 - 18 - 53 - 56
     this.setState({ tableHeight })
   }
-  componentDidMount() {
-    this.handleQuery()
-  }
+  // componentDidMount() {
+  //   this.handleQuery()
+  // }
   componentWillReceiveProps(nextProps) {
     if (this.props.cbsTurnoverEditConfirmResult !== nextProps.cbsTurnoverEditConfirmResult) {
       message.info('保存成功。')
@@ -247,7 +252,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           rowKey="receiptClaimId"
           size="middle"
           pagination={pagination}
-          scroll={{ x: '3250px', y: this.state.tableHeight }}
+          scroll={{ x: '3350px', y: this.state.tableHeight }}
         />
         <EditCBSTurnoverDataWithForm
           onConfirm={this.handleEditConfirm}
