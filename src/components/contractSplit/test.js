@@ -7,104 +7,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SelectSbu from '../common/SelectSbu'
-import ContractType from '../common/contractType'
-import MyDtatePicker from '../common/myDatePicker'
 import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select } from 'antd'
 
 const FormItem = Form.Item
 const { TextArea } = Input
 const Option = Select.Option
 const tableData = []
-const EditableCell = ({ value, onChange, column }) => (
-  <div style={{ position: 'relative' }}>
-    <Input value={value} onChange={e => onChange(e.target.value)} />
-    {column === 'discount' ?
-      <span style={{ position: 'absolute', right: '10px', top: '20%' }}>%</span>
-      : ''
-    }
+
+const EditableCell = ({ value, onChange }) => (
+  <div>
+    {/* <Input style={{ margin: '-5px 0' }} value={value} onChange={e => onChange(e.target.value)} /> */}
+    <SelectSbu />
   </div>
 )
-
-class ContractSplitModal extends React.Component{
+for (let i = 0; i < 4; i++) {
+  tableData.push({
+    contractType: `类型${i}`,
+    projectLine: `产品线${i}`,
+    settleType: `结算方式${i}`,
+  })
+}
+class ContractSplitModal extends  React.Component{
   state = {
     dataSource: tableData,
   }
-  selectDateChange = (data) => {
+  handleChange(value, index, columns) {
     const newData = [...this.state.dataSource]
-    newData[data.indexs][data.columns] = data.dateString
-    this.setState({
-      dataSource: newData,
-    })
-    console.log(data)
-    console.log(this.state.dataSource)
-  }
-  handleChange = (data) => {
-    const newData = [...this.state.dataSource]
-    const indexData = data.sbuNo && data.sbuName ? [data.sbuNo, data.sbuName] : []
-    newData[data.indexs][data.columns] = indexData
-    this.setState({
-      dataSource: newData,
-    })
-  }
-  handleSelectChange = (data) => {
-    let selectData = []
-    selectData = data.key.split('&')
-    const newData = [...this.state.dataSource]
-    newData[selectData[1]][selectData[2]] = selectData[0]
-    this.setState({
-      dataSource: newData,
-    })
-    // console.log(this.state.dataSource)
-  }
-  renderColumns = (text, index, column) => {
-    return (
-      <ContractType onChange={this.handleChange} value={this.state.dataSource[index][column]}  indexs={index} columns={column} />
-    )
-  }
-  renderInputColumns(text, index, column) {
-    return (
-      <EditableCell
-        column={column}
-        value={text}
-        onChange={value => this.handleInputChange(value, index, column)}
-      />
-    )
-  }
-  handleInputChange = (value, index, column) => {
-    const newData = [...this.state.dataSource]
-    newData[index][column] = value
-    if (!newData[index]['catalogue'] || !newData[index]['discount'] ) {
-      newData[index]['discountMoney'] = 0 // 折后合同额
-      newData[index]['SaleBU'] = 0 // 合同含税额
-      newData[index]['salePeo'] = 0  // 合同不含税额
-      newData[index]['contractType1'] = 0 // 退税收入含税额
-      newData[index]['GrossOrder'] = 0 // 退税收入含税额
-    } else {
-      newData[index]['discountMoney'] = (Number(newData[index]['catalogue']) * (1 - Number(newData[index]['discount']) * 0.01)).toFixed(2) // 折后合同额根据目录价和折扣计算出来
-      newData[index]['SaleBU'] = (Number(newData[index]['catalogue']) * (1 - Number(newData[index]['discount']) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
-      newData[index]['salePeo'] = (Number(newData[index]['SaleBU']) / (1 + 0.18)).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
-      newData[index]['contractType1'] = (Number(newData[index]['SaleBU']) / (1 + 0.18) * (1 + Number(newData[index]['contractDate']))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(1+退税率)
-      newData[index]['GrossOrder'] = (Number(newData[index]['SaleBU']) / (1 + 0.18) * (1 + Number(newData[index]['contractDate']))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)*(1+退税率)
-    }
-    this.setState({
-      dataSource: newData,
-    })
-    console.log(this.state.dataSource)
-  }
-  renderSelect = (text, index, column) => {
-    return (
-      <Select labelInValue onChange={this.handleSelectChange} placeholder="请选择拆分状态" defaultValue={{ key: `POC&${index}&${column}` }}>
-        <Option value={`POC&${index}&${column}`}>POC</Option>
-        <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
-        <Option value={`FA&${index}&${column}`}>FA</Option>
-      </Select>
-    )
+    newData[index][columns]=value
+    console.log(newData[index][columns])
+    this.setState({ dataSource: newData })
   }
   closeClaim = () => {
     this.props.closeModal()
   }
   handleAdd = () => {
     const newData = {
+      key: 0,
       contractType: '',
       projectLine: '',
       settleType: '',
@@ -125,6 +63,14 @@ class ContractSplitModal extends React.Component{
     const param = this.props.form.getFieldsValue()
     console.log('param', param)
   }
+  renderColumns(text, index, column) {
+    return (
+      <EditableCell
+        value={text}
+        onChange={value => this.handleChange(value, index, column)}
+      />
+    )
+  }
   render() {
     const { getFieldDecorator } = this.props.form
     const columns = [{
@@ -142,28 +88,24 @@ class ContractSplitModal extends React.Component{
     }, {
       title: <span>合同类型<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractType',
-      width: 200,
+      width: 100,
       render: (text, record, index) => this.renderColumns(text, index, 'contractType'),
     }, {
       title: <span>产品线<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'projectLine',
       width: 150,
-      render: (text, record, index) => this.renderColumns(text, index, 'projectLine'),
     }, {
       title: <span>结算方式<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'settleType',
       width: 100,
-      render: (text, record, index) => this.renderSelect(text, index, 'settleType'),
     }, {
       title: <span>目录价<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'catalogue',
       width: 150,
-      render: (text, record, index) => this.renderInputColumns(text, index, 'catalogue'),
     }, {
       title: <span>折扣<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'discount',
       width: 150,
-      render: (text, record, index) => this.renderInputColumns(text, index, 'discount'),
     }, {
       title: '折后合同额',
       dataIndex: 'discountMoney',
@@ -176,7 +118,6 @@ class ContractSplitModal extends React.Component{
       title: '合同税率',
       dataIndex: 'projectBU',
       width: 150,
-      render: (text, record, index) => (text ? text : 0.18),
     }, {
       title: '合同不含税额',
       dataIndex: 'salePeo',
@@ -185,33 +126,22 @@ class ContractSplitModal extends React.Component{
       title: <span>退税率<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractDate',
       width: 150,
-      render: (text, record, index) => this.renderInputColumns(text, index, 'contractDate'),
     }, {
       title: '退税收入含税额',
       dataIndex: 'contractType1',
       width: 200,
     }, {
       title: 'Gross Order',
-      dataIndex: 'GrossOrder',
+      dataIndex: 'currentMoney1',
       width: 100,
     }, {
       title: <span>服务期起始<em style={{ color: '#FF0000' }}>*</em></span>,
-      dataIndex: 'serverStartDate',
-      width: 200,
-      render: (text, record, index) => {
-        return (
-          <MyDtatePicker onChange={this.selectDateChange} indexs={index} columns='serverStartDate' />
-        )
-      }
+      dataIndex: 'currentMoney2',
+      width: 100,
     }, {
       title: <span>服务期结束<em style={{ color: '#FF0000' }}>*</em></span>,
-      dataIndex: 'serverEndDate',
-      width: 200,
-      render: (text, record, index) => {
-        return (
-          <MyDtatePicker onChange={this.selectDateChange} indexs={index} columns='serverEndDate' />
-        )
-      }
+      dataIndex: 'currentMoney3',
+      width: 100,
     },
     ]
     return (
@@ -449,7 +379,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={4} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('lixiangsbuInfo')(<SelectSbu />)
+                      getFieldDecorator('lixiangsbuInfo')(<SelectSbu/>)
                     }
                   </FormItem>
                 </Col>
@@ -477,7 +407,7 @@ class ContractSplitModal extends React.Component{
                 bordered
                 columns={columns}
                 size="middle"
-                scroll={{ x: '2200px' }}
+                scroll={{ x: '2000px' }}
                 dataSource={this.state.dataSource}
               />
               <h2>外购成本预算</h2>

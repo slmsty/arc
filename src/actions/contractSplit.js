@@ -1,20 +1,7 @@
 import { httpApi } from '../http/reduxRequestMiddleware'
 
 // eslint-disable-next-line import/prefer-default-export
-export function getMyApplyList(queryParam) {
-  return {
-    [httpApi]: {
-      url: '/arc/workFlow/myTask',
-      options: {
-        method: 'POST',
-        body: queryParam,
-      },
-      types: ['GET_MYAPPLY_LIST_SUCCESS'],
-    },
-  }
-}
-
-export function approveSubmit(queryParam) {
+export function getContractList(queryParam) {
   return {
     [httpApi]: {
       url: '/arc/workFlow/approveAgree',
@@ -22,7 +9,20 @@ export function approveSubmit(queryParam) {
         method: 'POST',
         body: queryParam,
       },
-      types: ['APPROVE_MYAPPLY_SUCCESS'],
+      types: ['GET_CONTRACT_LIST_SUCCESS'],
+    },
+  }
+}
+
+export function saveContractSplitInfo(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/workFlow/approveAgree',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['SAVE_CONTRACTSPLITINFO_SUCCESS'],
     },
   }
 }
@@ -35,18 +35,6 @@ export function approveReject(queryParam) {
         body: queryParam,
       },
       types: ['APPROVE_REJECT_MYAPPLY_SUCCESS'],
-    },
-  }
-}
-export function myApplyInfo(queryParam) {
-  return {
-    [httpApi]: {
-      url: '/arc/workFlow/myTaskDetail',
-      options: {
-        method: 'POST',
-        body: queryParam,
-      },
-      types: ['APPROVE_MYAPPLYINFO_SUCCESS'],
     },
   }
 }

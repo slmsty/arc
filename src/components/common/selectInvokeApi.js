@@ -42,6 +42,7 @@ export default class SelectInvokeApi extends React.Component {
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
         value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : 'all')}
+        disabled={this.props.disabled}
       >
         {optionDom}
       </Select>

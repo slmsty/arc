@@ -36,13 +36,13 @@ const columns = [{
   dataIndex: 'receiptAmount',
   key: 'receiptAmount',
   width: 100,
-  render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : 0.00}</div>),
 }, {
   title: '支出',
   dataIndex: 'payAmount',
   key: 'payAmount',
   width: 100,
-  render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : 0.00}</div>),
 }, {
   title: '公司',
   dataIndex: 'companyName',
@@ -74,17 +74,7 @@ const columns = [{
   key: 'custName',
   width: 300,
 }, {
-  title: '流水分类',
-  dataIndex: 'claimTypeName',
-  key: 'claimTypeName',
-  width: 80,
-}, {
-  title: '备注',
-  dataIndex: 'cashierApproveMessage',
-  key: 'cashierApproveMessage',
-  width: 635,
-}, {
-  title: '客户付款方式',
+  title: '付款方式',
   dataIndex: 'custPayMethodName',
   key: 'custPayMethodName',
   width: 100,
@@ -109,6 +99,11 @@ const columns = [{
   key: 'claimTypeName',
   width: 80,
 }, {
+  title: '相关票据',
+  dataIndex: 'relatedBill',
+  key: 'relatedBill',
+  width: 100,
+}, {
   title: '备注',
   dataIndex: 'cashierApproveMessage',
   key: 'cashierApproveMessage',
@@ -129,9 +124,6 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
     const tableHeight = screenHeight - 64 - 8 - 12 - 119 - 18 - 28.5 - 18 - 53 - 56
     this.setState({ tableHeight })
-  }
-  componentDidMount() {
-    this.handleQuery()
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.cbsTurnoverEditConfirmResult !== nextProps.cbsTurnoverEditConfirmResult) {
@@ -257,7 +249,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           rowKey="receiptClaimId"
           size="middle"
           pagination={pagination}
-          scroll={{ x: '3250px', y: this.state.tableHeight }}
+          scroll={{ x: '3350px', y: this.state.tableHeight }}
         />
         <EditCBSTurnoverDataWithForm
           onConfirm={this.handleEditConfirm}

@@ -49,6 +49,7 @@ const successColumns = [{
   dataIndex: 'amount',
   key: 'amount',
   width: 100,
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : 0.00}</div>),
 }, {
   title: '客户名称',
   dataIndex: 'erpCustName',
