@@ -7,7 +7,7 @@ export function getUserInfo() {
       url: '/account/getCurrentAccount',
       types: ['GET_USER_INFO_SUCCESS'],
       options: {
-        method: 'POST',
+        method: 'GET',
       },
     },
   }
