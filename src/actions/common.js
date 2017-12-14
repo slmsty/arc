@@ -6,7 +6,9 @@ export function getUserInfo() {
     [httpApi]: {
       url: '/account/getCurrentAccount',
       types: ['GET_USER_INFO_SUCCESS'],
-      options: {},
+      options: {
+        method: 'POST',
+      },
     },
   }
 }
