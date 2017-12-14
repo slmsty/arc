@@ -5,15 +5,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import ContractSplit from '../../components/contractSplit/contractSplit'
-import { getMyApplyList, approveSubmit } from '../../actions/myApply'
+import { getContractList, saveContractSplitInfo } from '../../actions/contractSplit'
 
 const mapStateToProps = state => ({
   myApply: state.myApply,
 })
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    getMyApplyList,
-    approveSubmit,
+    getContractList,
+    saveContractSplitInfo,
   }, dispatch)
 )
 // eslint-disable-next-line react/prefer-stateless-function

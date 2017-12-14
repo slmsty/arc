@@ -72,7 +72,7 @@ class ApplySearchCon extends React.Component {
               </FormItem>
             </Col>
             <Col span={10} style={{ textAlign: 'right' }}>
-              <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
+              <Button type="primary" key="search" onClick={this.handleQuery} disabled={this.props.loading}><Icon type="search" />查询</Button>
             </Col>
           </Row>
         </Form>
