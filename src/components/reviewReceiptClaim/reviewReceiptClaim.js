@@ -29,10 +29,6 @@ const columns = [{
   dataIndex: 'claimTypeName',
   width: 100,
 }, {
-  title: '收款来源',
-  dataIndex: 'sourceTypeName',
-  width: 100,
-}, {
   title: '公司',
   dataIndex: 'companyName',
   width: 150,
