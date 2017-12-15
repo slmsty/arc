@@ -3,7 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import { getReceiptList, reject, getReceiptInfo, changeClaimType, hangUp } from '../../actions/projectReceiptClaim'
+import { getReceiptList, reject, getReceiptInfo, changeClaimType, hangUp, emailClaim } from '../../actions/projectReceiptClaim'
 import ProjectReceiptClaim from '../../components/projectReceiptClaim/projectReceiptClaim'
 
 const mapStateToProps = state => ({
@@ -19,6 +19,7 @@ const mapDispatchToProps = dispatch => (
     getReceiptInfo,
     changeClaimType,
     hangUp,
+    emailClaim,
   }, dispatch)
 )
 

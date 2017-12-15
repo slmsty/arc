@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Button, Input, Table, Modal, Spin} from 'antd';
+import React, { Component } from 'react'
+import { Form, Row, Col, DatePicker, Button, Input, Table, Modal, Spin, message } from 'antd';
 import SelectSbu from '../common/SelectSbu'
 import SelectDept from '../common/SelectDept'
 import MultipleInput from '../common/multipleInput'
@@ -7,8 +7,10 @@ import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import BDModal2 from './BDModal2'
 import GlModal from './GlModal'
-const FormItem = Form.Item;
-const RangePicker = DatePicker.RangePicker;
+import BadDebtModal from './infoModal'
+
+const FormItem = Form.Item
+const RangePicker = DatePicker.RangePicker
 
 class Status extends Component{
   state = {
@@ -22,97 +24,114 @@ class Status extends Component{
     rows2: [],
     editDis: true,
     erp2Dis: true,
+    unDoDis: true,
     isEdit: false,
     isGLEdit: false,
-    o: {}
+    infoModalVisitable: false,
+    infoDetail: {},
+    o: {},
   }
 
-  constructor(props){
-    super(props);
+  constructor(props) {
+    super(props)
     const columns = [
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'statusName'
+        key: 'statusName',
+      },
+      {
+        title: '申请单账号',
+        key: 'applyCount',
       },
       {
         title: 'GL已提坏账金额',
-        key: 'badDebtProvisionAmount'
+        key: 'badDebtProvisionAmount',
       },
       {
         title: 'Billed AR余额',
-        key: 'billedArBalance'
+        key: 'billedArBalance',
       },
       {
-        title: <span>划销金额<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'badDebtAmount'
+        title: <span>划销金额<em style={{ color: '#FF0000' }}>*</em></span>,
+        key: 'badDebtAmount',
       },
       {
-        title: <span>申请日期<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'applicationDate'
+        title: <span>申请日期<em style={{ color: '#FF0000' }}>*</em></span>,
+        key: 'applicationDate',
       },
       {
         title: '备注',
-        key: 'badDebtBackRemark'
+        key: 'badDebtBackRemark',
       },
       {
         title: '已划销金额',
-        key: 'badDebtDeductedAmount'
+        key: 'badDebtDeductedAmount',
       },
       {
         title: '已划销退回金额',
-        key: 'badDebtReturnAmount'
+        key: 'badDebtReturnAmount',
       },
       {
         title: '项目编码',
-        key: 'projectNo'
+        key: 'projectNo',
       },
       {
         title: '项目名称',
-        key: 'projectName'
+        key: 'projectName',
       },
       {
         title: '签约公司',
-        key: 'companyName'
+        key: 'companyName',
       },
       {
         title: '客户名称',
-        key: 'custName'
+        key: 'custName',
       },
       {
         title: '币种',
-        key: 'contractCurrency'
+        key: 'contractCurrency',
       },
       {
         title: '部门',
-        key: 'deptName'
+        key: 'deptName',
       },
       {
         title: 'SBU',
-        key: 'sbuName'
+        key: 'sbuName',
       },
       {
         title: '合同金额',
-        key: 'contractAmount'
+        key: 'contractAmount',
       },
       {
         title: 'Billed AR日期',
-        key: 'billedArDate'
+        key: 'billedArDate',
       },
       {
         title: 'GL日期',
-        key: 'glDate'
+        key: 'glDate',
       },
       {
         title: 'Billed AR金额',
-        key: 'billedArAmount'
+        key: 'billedArAmount',
       },
       {
         title: '回款金额',
-        key: 'receiptAmount'
+        key: 'receiptAmount',
       },
-    ];
-    this.columns = columns.map(o=>({
+      {
+        title: '操作',
+        key: 'opration',
+        fixed: 'right',
+        textAlign: 'center',
+        width: '80px',
+        render: (text, record, index) => (
+          <Button style={{ marginLeft: '33px' }} onClick={() => this.showInfo(record)}>详情</Button>
+        ),
+      },
+    ]
+    this.columns = columns.map(o => ({
       ...o,
       dataIndex: o.key,
       width: 140,
@@ -120,77 +139,77 @@ class Status extends Component{
     const columns2 = [
       {
         title: 'GL已提坏账金额',
-        key: 'badDebtProvisionAmount'
+        key: 'badDebtProvisionAmount',
       },
       {
         title: 'Billed AR余额',
-        key: 'billedArBalance'
+        key: 'billedArBalance',
       },
       {
         title: '坏账划销金额',
-        key: 'badDebtAmount'
+        key: 'badDebtAmount',
       },
       {
         title: '已划销退回金额',
-        key: 'badDebtReturnAmount'
+        key: 'badDebtReturnAmount',
       },
       {
-        title: <span>划销退回金额<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'badDebtBackAmount'
+        title: <span>划销退回金额<em style={{ color: '#FF0000' }}>*</em></span>,
+        key: 'badDebtBackAmount',
       },
       {
-        title: <span>GL日期<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'glDate'
+        title: <span>GL日期<em style={{ color: '#FF0000' }}>*</em></span>,
+        key: 'glDate',
       },
       {
         title: '备注',
-        key: 'badDebtBackRemark'
+        key: 'badDebtBackRemark',
       },
       {
         title: 'Billed AR金额',
-        key: 'billedArAmount'
+        key: 'billedArAmount',
       },
       {
         title: '回款金额',
-        key: 'receiptAmount'
+        key: 'receiptAmount',
       },
       {
         title: '项目编码',
-        key: 'projectNo'
+        key: 'projectNo',
       },
       {
         title: '项目名称',
-        key: 'projectName'
+        key: 'projectName',
       },
       {
         title: '签约公司',
-        key: 'companyName'
+        key: 'companyName',
       },
       {
         title: '客户名称',
-        key: 'custName'
+        key: 'custName',
       },
       {
         title: '币种',
-        key: 'contractCurrency'
+        key: 'contractCurrency',
       },
       {
         title: '部门',
-        key: 'deptName'
+        key: 'deptName',
       },
       {
         title: 'SBU',
-        key: 'sbuName'
+        key: 'sbuName',
       },
       {
         title: '合同金额',
-        key: 'contractAmount'
+        key: 'contractAmount',
       },
       {
         title: 'Billed AR日期',
-        key: 'billedArDate'
+        key: 'billedArDate',
       },
-    ];
+    ]
     this.columns2 = columns2.map(o=>({
       ...o,
       dataIndex: o.key,
@@ -198,9 +217,9 @@ class Status extends Component{
     }))
   }
 
-  doSearch = (e)=>{
-    if(e){
-      e.preventDefault();
+  doSearch = (e) => {
+    if (e) {
+      e.preventDefault()
     }
     this.props.form.validateFields((err, values) => {
       this.setState({
@@ -216,9 +235,21 @@ class Status extends Component{
         },
         ...values
       })
-    });
+    })
   }
-
+  showInfo = (record) => {
+    this.setState({
+      infoModalVisitable: true,
+      infoDetail: record,
+    })
+    console.log(record)
+  }
+  closeShowInfo = () => {
+    this.setState({
+      infoModalVisitable: false,
+      infoDetail: {},
+    })
+  }
   pageSizeChange = (current, size)=>{
     this.props.form.validateFields((err, values) => {
       this.setState({
@@ -263,8 +294,9 @@ class Status extends Component{
     this.setState({
       rowKeys: rowKeys,
       rows: rows,
-      returnDis: !(rows.length>0 && rows.every(o=>o.status==='20')),
-      erpDis: !(rows.length>0 && rows.every(o=>o.status==='12'||o.status==='22'))
+      returnDis: !(rows.length > 0 && rows.every(o => o.status === '20')),
+      erpDis: !(rows.length > 0 && rows.every(o => o.status === '12' || o.status === '22')),
+      unDoDis: !(rows.length > 0 && rows.every(o => o.status === '11')),
     })
   }
 
@@ -298,18 +330,50 @@ class Status extends Component{
     })
   }
 
-  close = ()=>{
+  close = () => {
     this.setState({
       visible: false
     })
     this.props.UpdateResult(this.state.result)
   }
 
-  sendErp = ()=>{
+  sendErp = () => {
     this.setState({isGLEdit: true})
   }
+  unDoErp = () => {
+    this.setState({
+      unDoDis: false,
+    })
+    if (this.state.rowKeys.length === 0) {
+      message.error('请选择要撤销的收款流水')
+      return
+    }
+    if (this.state.rowKeys.length > 1) {
+      message.error('每次只能撤销一条收款流水')
+      return
+    }
+    const that = this
+    Modal.confirm({
+      title: '操作确认',
+      content: '确定撤销此数据？',
+      okText: '是',
+      cancelText: '否',
+      onOk() {
+        const emailQueryParam = {
+          businessKey: that.state.rowKeys[0],
+        }
+        that.props.cancelApply(emailQueryParam).then((res) => {
+          if (res && res.response && res.response.resultCode === '000000') {
+            message.success('撤销成功')
+          } else {
+            message.error('撤销失败')
+          }
+        })
+      },
+    })
+  }
 
-  hideGlEdit = ()=>{
+  hideGlEdit = () => {
     this.setState({isGLEdit: false})
   }
 
@@ -372,6 +436,12 @@ class Status extends Component{
       return false;
     }else{
       return true;
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.cancelApply.cancelApplyRefresh !== nextProps.cancelApply.cancelApplyRefresh) {
+      this.doSearch()
     }
   }
 
@@ -460,13 +530,13 @@ class Status extends Component{
             <Col span={8}>
               <FormItem label="部门" {...layout}>
                 {
-                  getFieldDecorator('orgInfo')(<SelectDept/>)
+                  getFieldDecorator('orgInfo')(<SelectDept />)
                 }
               </FormItem>
             </Col>
           </Row>
           <Row>
-            <Col span={24} style={{textAlign: 'right'}}>
+            <Col span={24} style={{ textAlign: 'right' }}>
               <Button type="primary" htmlType="submit">查询</Button>
             </Col>
           </Row>
@@ -474,40 +544,41 @@ class Status extends Component{
         <br/>
         <Row>
           <Col span={24}>
-            <Button onClick={this.bdReturn} style={{marginRight: '20px'}} disabled={this.state.returnDis}>划销退回</Button>
-            <Button onClick={this.sendErp} type="primary" disabled={this.state.erpDis}>传送ERP</Button>
+            <Button onClick={this.bdReturn} style={{ marginRight: '20px' }} disabled={this.state.returnDis}>划销退回</Button>
+            <Button onClick={this.sendErp} type="primary" disabled={this.state.erpDis} style={{ marginRight: '20px' }}>传送ERP</Button>
+            <Button onClick={this.unDoErp} type="primary" disabled={this.state.unDoDis}>撤销</Button>
           </Col>
         </Row>
-        <br/>
-        <Table 
-          style={{backgroundColor: '#FFFFFF'}}
+        <br />
+        <Table
+          style={{ backgroundColor: '#FFFFFF' }}
           rowKey="badDebtId"
           bordered
           rowSelection={{
             selectedRowKeys: this.state.rowKeys,
-            onChange: this.rowSelectionChange
+            onChange: this.rowSelectionChange,
           }}
-          columns={columns} 
+          columns={columns}
           dataSource={result}
           pagination={{
             pageSizeOptions: ['5', '10', '20', '30'],
             showSizeChanger: true,
             onShowSizeChange: this.pageSizeChange,
-            showTotal: t=>`共${t}条`,
+            showTotal: t => `共${t}条`,
             onChange: this.pageNoChange,
             current: pageNo,
             pageSize: pageSize,
-            total: count
+            total: count,
           }}
-          scroll={{ x: 2862}}></Table>
+          scroll={{ x: 2862 }}></Table>
         <GlModal
           visible={this.state.isGLEdit}
           onCancel={this.hideGlEdit}
           onOk={this.postGLEdit}
            />
-        <Modal 
+        <Modal
           width={1080}
-          title="划销退回" 
+          title="划销退回"
           visible={this.state.visible}
           onCancel={this.close}
           footer={[
@@ -520,7 +591,7 @@ class Status extends Component{
             </Col>
           </Row>
           <br/>
-          <Table 
+          <Table
             style={{backgroundColor: '#FFFFFF'}}
             rowKey="badDebtId"
             bordered
@@ -529,16 +600,21 @@ class Status extends Component{
               onChange: this.rowSelectionChange2
             }}
             pagination={false}
-            columns={columns2} 
+            columns={columns2}
             dataSource={this.state.result}
             scroll={{ x: 2582}}></Table>
         </Modal>
-        <BDModal2 
+        <BDModal2
           visible={this.state.isEdit}
           onCancel={this.editCancel}
           onOk={this.editDone}
           o={this.state.o}
          />
+        <BadDebtModal
+          visible={this.state.infoModalVisitable}
+          onCancel={this.closeShowInfo}
+          data={this.state.infoDetail}
+        />
       </div>
     )
   }

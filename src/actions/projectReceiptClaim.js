@@ -100,3 +100,15 @@ export function hangUp(queryParam) {
     },
   }
 }
+export function emailClaim(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/askContract',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['EMAILCLAIM_SUCCESS'],
+    },
+  }
+}

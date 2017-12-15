@@ -204,6 +204,31 @@ export default class ProjectReceiptClaim extends React.Component {
       },
     })
   }
+  handleEmailCliam = () => {
+    if (this.state.selectedRowKeys.length === 0) {
+      message.error('请选择要邮件确认的收款流水')
+      return
+    }
+    const that = this
+    Modal.confirm({
+      title: '操作确认',
+      content: '确定将向AR管理部群组发送邮件？',
+      okText: '是',
+      cancelText: '否',
+      onOk() {
+        const emailQueryParam = {
+          receiptClaimIds: that.state.selectedRowKeys,
+        }
+        that.props.emailClaim(emailQueryParam).then((res) => {
+          if (res && res.response && res.response.resultCode === '000000') {
+            message.success('邮件确认成功')
+          } else {
+            message.error('邮件确认失败')
+          }
+        })
+      },
+    })
+  }
   handleReject = () => {
     if (this.state.selectedRowKeys.length === 0) {
       message.error('请选择要拒绝的收款流水')
@@ -226,10 +251,25 @@ export default class ProjectReceiptClaim extends React.Component {
       message.error('请选择要暂挂的收款流水')
       return
     }
-    const changeParam = {
-      receiptClaimIds: this.state.selectedRowKeys,
-    }
-    this.props.hangUp(changeParam)
+    const that = this
+    Modal.confirm({
+      title: '操作确认',
+      content: '确定暂挂此数据？',
+      okText: '是',
+      cancelText: '否',
+      onOk() {
+        const emailQueryParam = {
+          receiptClaimIds: that.state.selectedRowKeys,
+        }
+        that.props.hangUp(emailQueryParam).then((res) => {
+          if (res && res.response && res.response.resultCode === '000000') {
+            message.success('暂挂成功')
+          } else {
+            message.error('暂挂失败')
+          }
+        })
+      },
+    })
   }
   render() {
     const { selectedRowKeys } = this.state
@@ -253,7 +293,9 @@ export default class ProjectReceiptClaim extends React.Component {
             {rejectBtn}
             &nbsp;&nbsp;
             {hangUpBtn}
-          </Col>
+            &nbsp;&nbsp;
+            <Button onClick={this.handleEmailCliam}>邮件确认</Button>
+          </Col>x
           <Col span={12} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
           </Col>
@@ -287,6 +329,7 @@ ProjectReceiptClaim.propTypes = {
   // history: PropTypes.shape({
   //   push: PropTypes.func.isRequired,
   // }).isRequired,
+  emailClaim: PropTypes.func.isRequired,
   hangUp: PropTypes.func.isRequired,
   getReceiptList: PropTypes.func.isRequired,
   reject: PropTypes.func.isRequired,

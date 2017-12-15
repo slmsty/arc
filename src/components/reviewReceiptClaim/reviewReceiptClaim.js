@@ -48,7 +48,7 @@ const columns = [{
   title: '收款金额',
   dataIndex: 'receiptAmount',
   width: 100,
-  render: (text, record, index) => (record.transactionType !== 'RECEIPT' ? (-text ? -text.toFixed(2) : -text) : (text ? text.toFixed(2) : text)),
+  render: (text, record, index) => (record.transactionType !== 'RECEIPT' ? (-text ? Number(-text).toFixed(2) : 0.00) : (text ? text.toFixed(2) : 0.00)),
 }, {
   title: '银行流水号',
   dataIndex: 'bankTransactionNo',
