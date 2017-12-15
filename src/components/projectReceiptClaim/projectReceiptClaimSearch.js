@@ -128,7 +128,8 @@ class ProjectReceiptClaimSearch extends React.Component {
                     <Option value="21">出纳已确认</Option>
                     <Option value="40">复核退回</Option>
                     <Option value="51">已传送AR</Option>
-                  </Select>,
+                    <Option value="60">暂挂</Option>
+                  </Select>
                 )}
               </FormItem>
             </Col>
