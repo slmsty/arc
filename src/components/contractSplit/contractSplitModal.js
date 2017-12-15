@@ -103,19 +103,20 @@ class ContractSplitModal extends React.Component{
   closeClaim = () => {
     this.props.closeModal()
   }
-  handleAdd = () => {
-    const newData = {
-      contractType: '',
-      projectLine: '',
-      settleType: '',
+  handleAdd = (index, flag) => {
+    const newData = {}
+    if (flag === '0') {
+      tableData.splice(Number(index) + 1, 0, newData)
     }
-    tableData.push(newData)
+    if (flag === '1') {
+      tableData.push(newData)
+    }
     this.setState({
       dataSource: tableData,
     })
   }
-  handleMinus = (_index) => {
-    this.state.dataSource.splice(_index, 1)
+  handleMinus = (index) => {
+    this.state.dataSource.splice(index, 1)
     const newData = this.state.dataSource
     this.setState({
       data: newData,
@@ -135,7 +136,7 @@ class ContractSplitModal extends React.Component{
       fixed: 'left',
       render: (text, record, index) => (
         <div>
-          <Button onClick={this.handleAdd}>＋</Button>&nbsp;&nbsp;
+          <Button onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;
           <Button onClick={() => this.handleMinus(index)}>－</Button>
         </div>
       ),
@@ -469,7 +470,7 @@ class ContractSplitModal extends React.Component{
                   <h2>合同拆分</h2>
                 </Col>
                 <Col>
-                  <Button onClick={this.handleAdd}>新增</Button>
+                  <Button onClick={() => this.handleAdd('0', '1')}>新增</Button>
                 </Col>
               </Row>
               <br />

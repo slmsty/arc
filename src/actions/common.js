@@ -4,9 +4,11 @@ import { httpApi } from '../http/reduxRequestMiddleware'
 export function getUserInfo() {
   return {
     [httpApi]: {
-      url: '/sdm/getCurrentStaff',
+      url: '/account/getCurrentAccount',
       types: ['GET_USER_INFO_SUCCESS'],
-      options: {},
+      options: {
+        method: 'GET',
+      },
     },
   }
 }

@@ -179,7 +179,7 @@ const common = {
 }
 
 function getUserInfo(state, action) {
-  return { ...state, user: action.response.staffInfo }
+  return { ...state, user: action.response.data }
 }
 
 function getPermission(state, action) {

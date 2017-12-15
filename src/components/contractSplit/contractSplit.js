@@ -14,6 +14,7 @@ for (let i = 0; i < 4; i++) {
     contractInnerNo: i + 1,
     projectId: `1000${i}`,
     contractName: '合同名称test',
+    tableHeight: '',
   })
 }
 export default class ApplySearchCon extends React.Component {
@@ -21,8 +22,14 @@ export default class ApplySearchCon extends React.Component {
     loading: false,
     contarctSplitModal: false,
   }
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div147.5-按钮56-翻页160
+    const tableHeight = screenHeight - 8 - 12 - 147.5 - 56 - 160
+    this.setState({ tableHeight })
+  }
   componentWillReceiveProps(nextProps) {
-    if (this.props.myApply.myapplyListRefresh !== nextProps.myApply.myapplyListRefresh) {
+    if (this.props.contactSplitData.myContractRefresh !== nextProps.contactSplitData.myContractRefresh) {
       this.handleQuery()
     }
   }
@@ -40,13 +47,10 @@ export default class ApplySearchCon extends React.Component {
     this.setState({
       loading: true,
     })
-    this.props.getMyApplyList(this.queryParam).then((res) => {
+    this.props.getContractList(this.queryParam).then((res) => {
       this.setState({
         loading: false,
       })
-      console.log(this.queryParam)
-      message.success('测试成功')
-      return
       if (res && res.response && res.response.resultCode === '000000') {
         console.log('数据查询成功')
       } else {
@@ -67,10 +71,32 @@ export default class ApplySearchCon extends React.Component {
     this.queryParam.pageInfo.pageSize = size
     this.handleQuery()
   }
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    this.setState({ selectedRowKeys, selectedRows })
+  }
+  saveContractSplitInfo = (param) => {
+    this.porps.saveContractSplitInfo(param).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.error('保存成功')
+      } else {
+        message.error('保存失败')
+      }
+    })
+  }
+  /*
+   function closeModalClaim
+   关闭详情modal
+   */
+  closeModalClaim = () => {
+    this.setState({
+      contarctSplitModal: false,
+      applyData: '',
+    })
+  }
   /*
    function contractSplitInfo
    */
-  contractSplitInfo = () => {
+  showContractSplitInfo = () => {
     this.setState({
       contarctSplitModal: true,
     })
@@ -85,19 +111,6 @@ export default class ApplySearchCon extends React.Component {
       } else {
         message.error('加载数据失败')
       }
-    })
-  }
-  onSelectChange = (selectedRowKeys, selectedRows) => {
-    this.setState({ selectedRowKeys, selectedRows })
-  }
-  /*
-   function closeModalClaim
-   关闭详情modal
-   */
-  closeModalClaim = () => {
-    this.setState({
-      contarctSplitModal: false,
-      applyData: '',
     })
   }
   render() {
@@ -180,12 +193,13 @@ export default class ApplySearchCon extends React.Component {
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />
         <br /><br />
-        <Button type="primary" onClick={this.contractSplitInfo}>合同拆分</Button>
+        <Button type="primary" onClick={this.showContractSplitInfo}>合同拆分</Button>
         <br /><br />
         <ContractSplitModal
           ModalVisible={this.state.contarctSplitModal}
           closeModal={this.closeModalClaim}
-          />
+          saveInfo={this.saveContractSplitInfo}
+        />
         <Table
           rowKey="receiptClaimId"
           rowSelection={rowSelection}
@@ -193,7 +207,7 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="middle"
-          scroll={{ x: '1900px' }}
+          scroll={{ x: '1900px', y: this.state.tableHeight }}
           loading={this.state.loading}
           dataSource={data}
           // dataSource={this.props.myApply.getMyApplyList.result}
@@ -203,9 +217,9 @@ export default class ApplySearchCon extends React.Component {
   }
 }
 ApplySearchCon.propTypes = {
-  getMyApplyList: PropTypes.func.isRequired,
-  approveSubmit: PropTypes.func.isRequired,
-  myApply: PropTypes.shape({
-    myapplyListRefresh: PropTypes.number.isRequired,
+  getContractList: PropTypes.func.isRequired,
+  saveContractSplitInfo: PropTypes.func.isRequired,
+  contactSplitData: PropTypes.shape({
+    myContractRefresh: PropTypes.number.isRequired,
   }).isRequired,
 }

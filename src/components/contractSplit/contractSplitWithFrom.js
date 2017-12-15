@@ -69,7 +69,7 @@ class ContractSplitCon extends React.Component {
               <FormItem {...formItemLayout} label="合同名称">
                 {
                   getFieldDecorator('contractName')(
-                    <Input />,
+                    <Input placeholder="请输入合同名称" />,
                   )
                 }
               </FormItem>
@@ -78,7 +78,7 @@ class ContractSplitCon extends React.Component {
               <FormItem {...formItemLayout} label="拆分责任人">
                 {
                   getFieldDecorator('SplitPeo')(
-                    <Input />,
+                    <Input placeholder="请输入拆分责任人" />,
                   )
                 }
               </FormItem>
@@ -119,7 +119,7 @@ class ContractSplitCon extends React.Component {
               <FormItem {...formItemLayout} label="拆分操作人">
                 {
                   getFieldDecorator('splitOprationPeo')(
-                    <Input />,
+                    <Input placeholder="请输入拆分操作人" />,
                   )
                 }
               </FormItem>
@@ -127,7 +127,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8} key={9}>
               <FormItem {...formItemLayout} label="立项BU">
                 {
-                  getFieldDecorator('lisbuInfo')(<SelectSbu/>)
+                  getFieldDecorator('lisbuInfo')(<SelectSbu />)
                 }
               </FormItem>
             </Col>

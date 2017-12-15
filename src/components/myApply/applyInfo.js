@@ -8,7 +8,6 @@ import { Modal, Row, Col, Button, Input, Form, Table } from 'antd'
 const FormItem = Form.Item
 const { TextArea } = Input
 class ApplyInfoModal extends React.Component {
-  tet = this.props.applyData.arcFlowId
   applyComfirm = () => {
     const applyComfirmQueryParam = {
       arcFlowId: this.props.applyData.arcFlowId,
@@ -46,10 +45,11 @@ class ApplyInfoModal extends React.Component {
     return str.replace(/(^\s*)|(\s*$)/g, '')
   }
   render() {
+    const applyInfoDatas = this.props.applyInfoData
     const { getFieldDecorator } = this.props.form
     const columns = [{
       title: '节点',
-      dataIndex: 'Node',
+      dataIndex: 'projectNode',
       width: 50,
       textAlign: 'center',
       fixed: 'left',
@@ -60,41 +60,41 @@ class ApplyInfoModal extends React.Component {
     }, {
       title: '合同编码',
       dataIndex: 'contractNo',
-      width: 100,
+      width: 200,
     }, {
       title: '合同名称',
       dataIndex: 'contractName',
-      width: 200,
+      width: 300,
     }, {
       title: '付款条款',
       dataIndex: 'paymentName',
-      width: 200,
+      width: 100,
     }, {
       title: '划销金额',
-      dataIndex: 'huaxiaoMoney',
-      width: 150,
+      dataIndex: 'badDebtAmount',
+      width: 100,
       render: (text, record) => (text ? text.toFixed(2) : text),
     }, {
       title: '申请日期',
-      dataIndex: 'applyDate',
-      width: 300,
+      dataIndex: 'applicationDate',
+      width: 150,
     }, {
       title: '应收日期',
-      dataIndex: 'reciptDate',
-      width: 100,
+      dataIndex: 'arDate',
+      width: 150,
     }, {
       title: '应收金额',
-      dataIndex: 'reciptMoney',
-      width: 150,
+      dataIndex: 'billedArBalance',
+      width: 100,
       render: (text, record) => (text ? text.toFixed(2) : text),
     }, {
       title: 'GL已提坏账准备金额',
-      dataIndex: 'testMoney',
+      dataIndex: 'badDebtProvisionAmount',
       width: 150,
       render: (text, record) => (text ? text.toFixed(2) : text),
     }, {
       title: '备注',
-      dataIndex: 'remark',
+      dataIndex: 'applicantRemark',
       width: 80,
     },
     ]
@@ -119,49 +119,62 @@ class ApplyInfoModal extends React.Component {
             <br />
             <Row>
               <Col style={{ textAlign: 'right' }} span={3} key={1}>申请人：</Col>
-              <Col span={5} key={2}>张欣</Col>
+              <Col span={5} key={2}>{applyInfoDatas.applyPersonName}</Col>
               <Col style={{ textAlign: 'right' }} span={3} key={3}>申请人部门：</Col>
-              <Col span={5} key={4}>CFO Accounting</Col>
+              <Col span={5} key={4}>{applyInfoDatas.applyPersonDept}</Col>
             </Row>
             <Row>
               <Col style={{ textAlign: 'right' }} span={3} key={5}>联系电话：</Col>
-              <Col span={5} key={6}>18310586898</Col>
+              <Col span={5} key={6}>{applyInfoDatas.applyPersonPhone}</Col>
               <Col style={{ textAlign: 'right' }} span={3} key={7}>邮箱地址：</Col>
-              <Col span={5} key={8}>zhangxin19@asiainfo.com</Col>
+              <Col span={5} key={8}>{applyInfoDatas.applyPersonEmail}</Col>
             </Row>
             <br />
             <hr style={{ borderTop: '1px solid #d9d9d9' }} />
             <br />
-            <h2>坏账划销申请</h2>
-            <Table
-              rowKey="receiptClaimId"
-              columns={columns}
-              bordered
-              size="middle"
-              scroll={{ x: '1580px' }}
-            />
+            <div style={{ display: applyInfoDatas.serviceType === 'badDebt' ? 'block' : 'none' }}>
+              <h2>坏账划销申请</h2>
+              <Table
+                rowKey="receiptClaimId"
+                columns={columns}
+                bordered
+                size="middle"
+                scroll={{ x: '1480px' }}
+                dataSource={applyInfoDatas.serviceDetail}
+              />
+            </div>
             <br />
             <br />
             <hr style={{ borderTop: '1px solid #d9d9d9' }} />
             <br />
             <h2>审批意见</h2>
             <br />
-            <Row>
-              <Col style={{ textAlign: 'left' }} span={4}>一级审批（上级经理）：</Col>
-              <Col span={5}>姚世棋</Col>
-              <Col style={{ textAlign: 'right' }} span={3}>审批结果：</Col>
-              <Col span={4}>同意</Col>
-              <Col style={{ textAlign: 'right' }} span={3}>审批时间：</Col>
-              <Col span={5}>2017-07-26 14:20:45</Col>
-            </Row>
-            <Row>
-              <Col style={{ textAlign: 'left' }} span={4}>审批意见：</Col>
-              <Row>
-                <Col style={{ textAlign: 'left' }} span={24}>
-                  &nbsp;&nbsp;同意
-                </Col>
-              </Row>
-            </Row>
+            { applyInfoDatas.approveInfoList ?
+              applyInfoDatas.approveInfoList.map((item, index) => {
+                return (
+                  <div key={index}>
+                    <Row>
+                      <Col style={{ textAlign: 'left' }} span={3}>{item.taskName}：</Col>
+                      <Col span={5}>{item.assigneeName}</Col>
+                      <Col style={{ textAlign: 'right' }} span={3}>审批结果：</Col>
+                      <Col span={4}>{item.approveType}</Col>
+                      <Col style={{ textAlign: 'right' }} span={3}>审批时间：</Col>
+                      <Col span={5}>{item.approveDate}</Col>
+                    </Row>
+                    <Row>
+                      <Col style={{ textAlign: 'left' }} span={4}>审批意见：</Col>
+                      <Row>
+                        <Col style={{ textAlign: 'left' }} span={24}>
+                          &nbsp;&nbsp;{item.approveRemark}
+                        </Col>
+                      </Row>
+                    </Row>
+                    <br />
+                    <hr style={{ borderTop: '1px solid #d9d9d9' }} />
+                  </div>
+                )
+              }) : ''
+            }
             <br />
             <h3 style={{ color: '#F4A034' }}>审批意见</h3>
             <Row>
@@ -180,7 +193,6 @@ class ApplyInfoModal extends React.Component {
   }
 }
 ApplyInfoModal.propTypes = {
-  applyData: PropTypes.object.isRequired,
   closeClaim: PropTypes.func.isRequired,
   applyReject: PropTypes.func.isRequired,
   applyComfirm: PropTypes.func.isRequired,

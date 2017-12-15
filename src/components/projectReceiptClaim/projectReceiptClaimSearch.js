@@ -109,13 +109,6 @@ class ProjectReceiptClaimSearch extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={7}>
-              <FormItem {...formItemLayout} label="收款日期">
-                {getFieldDecorator('receiptDates')(
-                  <MultipleDayInput />,
-                )}
-              </FormItem>
-            </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="公司">
                 {getFieldDecorator('companyName')(
@@ -139,8 +132,6 @@ class ProjectReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-          </Row>
-          <Row gutter={40}>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="合同编码">
                 {getFieldDecorator('contractIds')(
@@ -150,7 +141,9 @@ class ProjectReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={16} style={{ textAlign: 'right' }}>
+          </Row>
+          <Row gutter={40}>
+            <Col span={24} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>

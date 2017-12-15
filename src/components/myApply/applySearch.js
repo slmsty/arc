@@ -58,10 +58,21 @@ export default class ApplySearchCon extends React.Component {
   /*
    function approveClick
    */
-  approveClick = (_record) => {
-    this.setState({
-      infoVisitable: true,
-      applyData: _record,
+  approveClick = (record) => {
+    const paramsData = {}
+    paramsData.arcFlowId = record.arcFlowId
+    paramsData.processInstanceId = record.processInstanceId
+    paramsData.businessKey = record.businessKey
+    paramsData.taskId = record.taskId
+    this.props.myApplyInfo(paramsData).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          infoVisitable: true,
+          applyData: record,
+        })
+      } else {
+        message.error(res.response.resultMessage)
+      }
     })
   }
   /*
@@ -111,14 +122,7 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   render() {
-
     const columns = [{
-      title: '序号',
-      dataIndex: 'Num',
-      width: 50,
-      textAlign: 'center',
-      fixed: 'left',
-    }, {
       title: '申请单编号',
       dataIndex: 'businessKey',
       width: 200,
@@ -161,6 +165,7 @@ export default class ApplySearchCon extends React.Component {
       fixed: 'right',
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
+          {/* disabled={record.statusName === '审批中' ? 'false' : 'true'} */}
           <Button onClick={() => this.approveClick(record)}>审批</Button>
         </div>
       ),
@@ -175,20 +180,20 @@ export default class ApplySearchCon extends React.Component {
       onShowSizeChange: this.handleChangeSize,
 
     }
-    const { selectedRowKeys } = this.state
     return (
       <div>
-        <ApplySearchConWithForm onQuery={this.handleChangeParam} />
+        <ApplySearchConWithForm onQuery={this.handleChangeParam} loading={this.state.loading} />
         <ApplyInfoModal
           infoVisitable={this.state.infoVisitable}
           closeClaim={this.closeModalClaim}
           applyComfirm={this.applyComfirm}
           applyReject={this.applyReject}
           applyData={this.state.applyData}
+          applyInfoData={this.props.myApply.getMyApplyInfo}
         />
         <br /><br />
         <Table
-          rowKey="id"
+          rowKey="getMyApplyList"
           pagination={pagination}
           bordered
           columns={columns}
@@ -205,7 +210,10 @@ ApplySearchCon.propTypes = {
   getMyApplyList: PropTypes.func.isRequired,
   approveSubmit: PropTypes.func.isRequired,
   approveReject: PropTypes.func.isRequired,
+  myApplyInfo: PropTypes.func.isRequired,
   myApply: PropTypes.shape({
     myapplyListRefresh: PropTypes.number.isRequired,
+    getMyApplyList: PropTypes.object.isRequired,
+    getMyApplyInfo: PropTypes.object.isRequired,
   }).isRequired,
 }

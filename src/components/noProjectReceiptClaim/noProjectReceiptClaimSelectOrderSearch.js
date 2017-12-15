@@ -148,6 +148,7 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
             current: this.props.receiptClaimOrderList.pageNo,
             total: this.props.receiptClaimOrderList.count,
             pageSize: this.state.pageSize,
+            showTotal: (total, range) => `共 ${total} 条记录 当前显示 ${range[0]}-${range[1]}`,
             onChange: this.handleChangePage,
           }}
           dataSource={this.props.receiptClaimOrderList.result}

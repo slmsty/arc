@@ -88,3 +88,15 @@ export function closeClaim() {
     type: 'CLOSE_PROJECT_CLAIM',
   }
 }
+export function hangUp(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/hangUp',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['HANG_UP_SUCCESS'],
+    },
+  }
+}

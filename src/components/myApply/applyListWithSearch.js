@@ -64,15 +64,15 @@ class ApplySearchCon extends React.Component {
                 })(
                   <RadioGroup size="large" style={{ width: '330px' }}>
                     <RadioButton value="ALL" style={{ borderRadius: '4px' }}>全部</RadioButton>
-                    <RadioButton value="A" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批中</RadioButton>
-                    <RadioButton value="F" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批完成</RadioButton>
-                    <RadioButton value="R" style={{ marginLeft: '10px', borderRadius: '4px' }}>驳回</RadioButton>
+                    <RadioButton value="approve" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批中</RadioButton>
+                    <RadioButton value="finish" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批完成</RadioButton>
+                    <RadioButton value="reject" style={{ marginLeft: '10px', borderRadius: '4px' }}>驳回</RadioButton>
                   </RadioGroup>
                 )}
               </FormItem>
             </Col>
             <Col span={10} style={{ textAlign: 'right' }}>
-              <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
+              <Button type="primary" key="search" onClick={this.handleQuery} disabled={this.props.loading}><Icon type="search" />查询</Button>
             </Col>
           </Row>
         </Form>
