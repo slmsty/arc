@@ -295,7 +295,7 @@ export default class ProjectReceiptClaim extends React.Component {
             {hangUpBtn}
             &nbsp;&nbsp;
             <Button onClick={this.handleEmailCliam}>邮件确认</Button>
-          </Col>x
+          </Col>
           <Col span={12} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
           </Col>
