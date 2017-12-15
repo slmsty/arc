@@ -69,6 +69,12 @@ class EditManualEntryBankTurnoverData extends React.Component {
       return
     }
 
+    if (param.relatedBills && param.relatedBills.length && param.relatedBills[0] &&
+      parseFloat(param.relatedBills[2]).toFixed(2) !== parseFloat(param.amount).toFixed(2)) {
+      message.error('当前流水的金额与相关票据金额不一致，请重新选择相关票据。')
+      return
+    }
+
     param.receiptClaimId = this.props.editKey
     param.erpCustId = param.customer.length ? param.customer[0] : null
     param.erpCustName = param.customer.length ? param.customer[1] : ''
@@ -115,7 +121,7 @@ class EditManualEntryBankTurnoverData extends React.Component {
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="相关票据">
                   {getFieldDecorator('relatedBills', {
-                    initialValue: this.props.initData.relatedBill,
+                    initialValue: [this.props.initData.relatedBill, this.props.initData.relatedBillBankTranNo, this.props.initData.relatedBillReceiptAmount],
                   })(<SelectBillDialog
                     disabled={this.props.initData.custPayMethod === 'bank_acceptance' || this.props.initData.custPayMethod === 'trade_acceptance'}
                   />)}
@@ -145,7 +151,9 @@ class EditManualEntryBankTurnoverData extends React.Component {
               </Col>
               <Col span={12} key={5}>
                 <FormItem {...formItemLayout} label="收款方法">
-                  {getFieldDecorator('receiptMethodId')(<SelectReceiptMethodWithForm />)}
+                  {getFieldDecorator('receiptMethodId', {
+                    initialValue: [this.props.initData.erpReceiptMethodId || '', this.props.initData.erpReceiptMethodName],
+                  })(<SelectReceiptMethodWithForm />)}
                 </FormItem>
               </Col>
             </Row>

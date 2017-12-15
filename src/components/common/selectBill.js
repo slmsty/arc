@@ -41,8 +41,9 @@ class SelectBill extends React.Component {
     width: 100,
   }, {
     title: '金额',
-    dataIndex: 'claimAmount',
+    dataIndex: 'receiptAmount',
     width: 100,
+    render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : '0.00'}</div>),
   }, {
     title: '解付状态',
     dataIndex: 'paidStatusName',
@@ -53,7 +54,7 @@ class SelectBill extends React.Component {
       message.error('请选择票据')
       return
     }
-    this.props.onChange([this.state.selectedRows[0].receiptClaimId, this.state.selectedRows[0].bankTransactionNo])
+    this.props.onChange([this.state.selectedRows[0].receiptClaimId, this.state.selectedRows[0].bankTransactionNo, this.state.selectedRows[0].receiptAmount])
     this.handleCancel()
   }
   handleCancel = () => {
@@ -95,7 +96,7 @@ class SelectBill extends React.Component {
     this.setState({ loading: false })
   }
   handleEmitEmpty = () => {
-    this.props.onChange('')
+    this.props.onChange(['', '', ''])
   }
   render() {
     const { visible } = this.state

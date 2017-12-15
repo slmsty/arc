@@ -36,13 +36,13 @@ const columns = [{
   dataIndex: 'receiptAmount',
   key: 'receiptAmount',
   width: 100,
-  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : 0.00}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : '0.00'}</div>),
 }, {
   title: '支出',
   dataIndex: 'payAmount',
   key: 'payAmount',
   width: 100,
-  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : 0.00}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : '0.00'}</div>),
 }, {
   title: '公司',
   dataIndex: 'companyName',
