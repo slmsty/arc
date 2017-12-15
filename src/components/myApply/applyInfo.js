@@ -60,32 +60,32 @@ class ApplyInfoModal extends React.Component {
     }, {
       title: '合同编码',
       dataIndex: 'contractNo',
-      width: 100,
+      width: 200,
     }, {
       title: '合同名称',
       dataIndex: 'contractName',
-      width: 200,
+      width: 300,
     }, {
       title: '付款条款',
       dataIndex: 'paymentName',
-      width: 200,
+      width: 100,
     }, {
       title: '划销金额',
       dataIndex: 'badDebtAmount',
-      width: 150,
+      width: 100,
       render: (text, record) => (text ? text.toFixed(2) : text),
     }, {
       title: '申请日期',
       dataIndex: 'applicationDate',
-      width: 300,
+      width: 150,
     }, {
       title: '应收日期',
       dataIndex: 'arDate',
-      width: 100,
+      width: 150,
     }, {
       title: '应收金额',
       dataIndex: 'billedArBalance',
-      width: 150,
+      width: 100,
       render: (text, record) => (text ? text.toFixed(2) : text),
     }, {
       title: 'GL已提坏账准备金额',
@@ -139,8 +139,8 @@ class ApplyInfoModal extends React.Component {
                 columns={columns}
                 bordered
                 size="middle"
-                scroll={{ x: '1580px' }}
-                // dataSource={applyInfoDatas.serviceDetail}
+                scroll={{ x: '1480px' }}
+                dataSource={applyInfoDatas.serviceDetail}
               />
             </div>
             <br />

@@ -221,6 +221,16 @@ export default class ProjectReceiptClaim extends React.Component {
       },
     })
   }
+  handleHangUp = () => {
+    if (this.state.selectedRowKeys.length === 0) {
+      message.error('请选择要暂挂的收款流水')
+      return
+    }
+    const changeParam = {
+      receiptClaimIds: this.state.selectedRowKeys,
+    }
+    this.props.hangUp(changeParam)
+  }
   render() {
     const { selectedRowKeys } = this.state
     const rowSelection = {
@@ -229,6 +239,7 @@ export default class ProjectReceiptClaim extends React.Component {
       onChange: this.onSelectChange,
     }
     const rejectBtn = this.queryParam.status === '21' || this.queryParam.status === '40' ? <Button type="danger" onClick={this.handleReject}>拒绝</Button> : null
+    const hangUpBtn = <Button onClick={this.handleHangUp}>暂挂</Button>
     const makeSummary = this.props.amountTotals && this.props.amountTotals.length ? this.props.amountTotals.map(item => `${item.currency}：${item.totalAmount}`).join('  ') : '0.00'
     return (
       <div>
@@ -240,6 +251,8 @@ export default class ProjectReceiptClaim extends React.Component {
             <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
             <Button type="primary" onClick={this.handleChangeClaimType}>订单认款</Button>&nbsp;&nbsp;
             {rejectBtn}
+            &nbsp;&nbsp;
+            {hangUpBtn}
           </Col>
           <Col span={12} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
@@ -274,6 +287,7 @@ ProjectReceiptClaim.propTypes = {
   // history: PropTypes.shape({
   //   push: PropTypes.func.isRequired,
   // }).isRequired,
+  hangUp: PropTypes.func.isRequired,
   getReceiptList: PropTypes.func.isRequired,
   reject: PropTypes.func.isRequired,
   changeClaimType: PropTypes.func.isRequired,
