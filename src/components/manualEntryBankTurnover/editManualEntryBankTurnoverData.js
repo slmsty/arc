@@ -71,7 +71,7 @@ class EditManualEntryBankTurnoverData extends React.Component {
 
     if (param.relatedBills && param.relatedBills.length && param.relatedBills[0] &&
       parseFloat(param.relatedBills[2]).toFixed(2) !== parseFloat(param.amount).toFixed(2)) {
-      message.error('当前流水的金额与相关票据金额不一致，请重新选择相关票据。')
+      message.error('收款金额不等于解付票据金额，请选正确票据。')
       return
     }
 
