@@ -16,90 +16,104 @@ class Approve extends Component{
 
   constructor(props){
     super(props);
-    const columns = [
+    this.columns = [
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'statusName'
+        dataIndex: 'statusName',
+        width: 120
       },
       {
         title: '付款条件',
-        key: 'paymentTerm'
+        dataIndex: 'paymentTerm',
+        width: 120
       },
       {
         title: '付款金额',
-        key: 'paymentAmount'
+        dataIndex: 'paymentAmount',
+        width: 120
       },
       {
         title: '考核含税金额',
-        key: 'assessTaxIncludedAmount'
+        dataIndex: 'assessTaxIncludedAmount',
+        width: 120
       },
       {
         title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'billedArAmount'
+        dataIndex: 'billedArAmount',
+        width: 120
       },
       {
         title: '款项ID',
-        key: 'fundId'
+        dataIndex: 'fundId',
+        width: 120
       },
       {
         title: '合同币种',
-        key: 'contractCurrency'
+        dataIndex: 'contractCurrency',
+        width: 80
       },
       {
         title: '合同金额',
-        key: 'contractAmount'
+        dataIndex: 'contractAmount',
+        width: 120
       },
       {
         title: '项目编码',
-        key: 'projectNo'
+        dataIndex: 'projectNo',
+        width: 120
       },
       {
         title: '签约公司',
-        key: 'companyShow'
+        dataIndex: 'companyShow',
+        width: 300
       },
       {
         title: '合同编码',
-        key: 'contractNo'
+        dataIndex: 'contractNo',
+        width: 300
       },
       {
         title: '合同名称',
-        key: 'contractName'
+        dataIndex: 'contractName',
+        width: 300
       },
       {
         title: '客户名称',
-        key: 'custName'
+        dataIndex: 'custName',
+        width: 120
       },
       {
         title: '付款阶段(里程碑)',
-        key: 'paymentPhrases'
+        dataIndex: 'paymentPhrases',
+        width: 120
       },
       {
         title: '付款条款',
-        key: 'paymentName'
+        dataIndex: 'paymentName',
+        width: 120
       },
       {
         title: '应收日期',
-        key: 'arDate'
+        dataIndex: 'arDate',
+        width: 120
       },
       {
         title: '报告日期',
-        key: 'reportDate'
+        dataIndex: 'reportDate',
+        width: 120
       },
       {
         title: '付款百分比',
-        key: 'paymentPercent'
+        dataIndex: 'paymentPercent',
+        width: 100
       },
       {
         title: '提示',
-        key: 'reminder'
+        dataIndex: 'reminder',
+        width: 300
       },
     ];
-    this.columns = columns.map(o=>({
-      ...o,
-      dataIndex: o.key,
-      width: 120,
-    }))
   }
 
   doSearch = (e)=>{
@@ -273,7 +287,7 @@ class Approve extends Component{
           columns={columns} 
           dataSource={result}
           pagination={false}
-          scroll={{ x: 2342}}></Table>
+          scroll={{ x: 3002}}></Table>
       </div>
     )
   }
