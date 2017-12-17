@@ -34,187 +34,216 @@ class Status extends Component{
 
   constructor(props) {
     super(props)
-    const columns = [
+    this.columns = [
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'statusName',
+        dataIndex: 'statusName',
+        width: 140
       },
       {
         title: '申请单账号',
-        key: 'applyCount',
+        dataIndex: 'applyCount',
+        width: 140
       },
       {
         title: 'GL已提坏账金额',
-        key: 'badDebtProvisionAmount',
+        dataIndex: 'badDebtProvisionAmount',
+        width: 140
       },
       {
         title: 'Billed AR余额',
-        key: 'billedArBalance',
+        dataIndex: 'billedArBalance',
+        width: 140
       },
       {
         title: <span>划销金额<em style={{ color: '#FF0000' }}>*</em></span>,
-        key: 'badDebtAmount',
+        dataIndex: 'badDebtAmount',
+        width: 140
       },
       {
         title: <span>申请日期<em style={{ color: '#FF0000' }}>*</em></span>,
-        key: 'applicationDate',
+        dataIndex: 'applicationDate',
+        width: 80
       },
       {
         title: '备注',
-        key: 'badDebtBackRemark',
+        dataIndex: 'badDebtBackRemark',
+        width: 300
       },
       {
         title: '已划销金额',
-        key: 'badDebtDeductedAmount',
+        dataIndex: 'badDebtDeductedAmount',
+        width: 140
       },
       {
         title: '已划销退回金额',
-        key: 'badDebtReturnAmount',
+        dataIndex: 'badDebtReturnAmount',
+        width: 140
       },
       {
         title: '项目编码',
-        key: 'projectNo',
+        dataIndex: 'projectNo',
+        width: 140
       },
       {
         title: '项目名称',
-        key: 'projectName',
+        dataIndex: 'projectName',
+        width: 140
       },
       {
         title: '签约公司',
-        key: 'companyName',
+        dataIndex: 'companyName',
+        width: 300
       },
       {
         title: '客户名称',
-        key: 'custName',
+        dataIndex: 'custName',
+        width: 300
       },
       {
         title: '币种',
-        key: 'contractCurrency',
+        dataIndex: 'contractCurrency',
+        width: 60
       },
       {
         title: '部门',
-        key: 'deptName',
+        dataIndex: 'deptName',
+        width: 300
       },
       {
         title: 'SBU',
-        key: 'sbuName',
+        dataIndex: 'sbuName',
+        width: 140
       },
       {
         title: '合同金额',
-        key: 'contractAmount',
+        dataIndex: 'contractAmount',
+        width: 140
       },
       {
         title: 'Billed AR日期',
-        key: 'billedArDate',
+        dataIndex: 'billedArDate',
+        width: 100
       },
       {
         title: 'GL日期',
-        key: 'glDate',
+        dataIndex: 'glDate',
+        width: 80
       },
       {
         title: 'Billed AR金额',
-        key: 'billedArAmount',
+        dataIndex: 'billedArAmount',
+        width: 140
       },
       {
         title: '回款金额',
-        key: 'receiptAmount',
+        dataIndex: 'receiptAmount',
+        width: 140
       },
       {
         title: '操作',
-        key: 'opration',
+        dataIndex: 'opration',
         fixed: 'right',
         textAlign: 'center',
-        width: '80px',
+        width: 100,
         render: (text, record, index) => (
-          <Button style={{ marginLeft: '33px' }} onClick={() => this.showInfo(record)}>详情</Button>
+          <Button style={{display: 'block', margin: '0 auto'}} onClick={() => this.showInfo(record)}>详情</Button>
         ),
       },
     ]
-    this.columns = columns.map(o => ({
-      ...o,
-      dataIndex: o.key,
-      width: 140,
-    }))
-    const columns2 = [
+    this.columns2 = [
       {
         title: 'GL已提坏账金额',
-        key: 'badDebtProvisionAmount',
+        dataIndex: 'badDebtProvisionAmount',
+        width: 140,
       },
       {
         title: 'Billed AR余额',
-        key: 'billedArBalance',
+        dataIndex: 'billedArBalance',
+        width: 140,
       },
       {
         title: '坏账划销金额',
-        key: 'badDebtAmount',
+        dataIndex: 'badDebtAmount',
+        width: 140,
       },
       {
         title: '已划销退回金额',
-        key: 'badDebtReturnAmount',
+        dataIndex: 'badDebtReturnAmount',
+        width: 140,
       },
       {
         title: <span>划销退回金额<em style={{ color: '#FF0000' }}>*</em></span>,
-        key: 'badDebtBackAmount',
+        dataIndex: 'badDebtBackAmount',
+        width: 140,
       },
       {
         title: <span>GL日期<em style={{ color: '#FF0000' }}>*</em></span>,
-        key: 'glDate',
+        dataIndex: 'glDate',
+        width: 80,
       },
       {
         title: '备注',
-        key: 'badDebtBackRemark',
+        dataIndex: 'badDebtBackRemark',
+        width: 300,
       },
       {
         title: 'Billed AR金额',
-        key: 'billedArAmount',
+        dataIndex: 'billedArAmount',
+        width: 140,
       },
       {
         title: '回款金额',
-        key: 'receiptAmount',
+        dataIndex: 'receiptAmount',
+        width: 140,
       },
       {
         title: '项目编码',
-        key: 'projectNo',
+        dataIndex: 'projectNo',
+        width: 140,
       },
       {
         title: '项目名称',
-        key: 'projectName',
+        dataIndex: 'projectName',
+        width: 140,
       },
       {
         title: '签约公司',
-        key: 'companyName',
+        dataIndex: 'companyName',
+        width: 300,
       },
       {
         title: '客户名称',
-        key: 'custName',
+        dataIndex: 'custName',
+        width: 300,
       },
       {
         title: '币种',
-        key: 'contractCurrency',
+        dataIndex: 'contractCurrency',
+        width: 60,
       },
       {
         title: '部门',
-        key: 'deptName',
+        dataIndex: 'deptName',
+        width: 300,
       },
       {
         title: 'SBU',
-        key: 'sbuName',
+        dataIndex: 'sbuName',
+        width: 140,
       },
       {
         title: '合同金额',
-        key: 'contractAmount',
+        dataIndex: 'contractAmount',
+        width: 140,
       },
       {
         title: 'Billed AR日期',
-        key: 'billedArDate',
+        dataIndex: 'billedArDate',
+        width: 100,
       },
     ]
-    this.columns2 = columns2.map(o=>({
-      ...o,
-      dataIndex: o.key,
-      width: 140,
-    }))
   }
 
   doSearch = (e) => {
@@ -570,7 +599,7 @@ class Status extends Component{
             pageSize: pageSize,
             total: count,
           }}
-          scroll={{ x: 2862 }}></Table>
+          scroll={{ x: 3502 }}></Table>
         <GlModal
           visible={this.state.isGLEdit}
           onCancel={this.hideGlEdit}
@@ -602,7 +631,7 @@ class Status extends Component{
             pagination={false}
             columns={columns2}
             dataSource={this.state.result}
-            scroll={{ x: 2582}}></Table>
+            scroll={{ x: 3042}}></Table>
         </Modal>
         <BDModal2
           visible={this.state.isEdit}

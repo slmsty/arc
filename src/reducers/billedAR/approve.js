@@ -40,7 +40,7 @@ export default ({
           return {
             ...o,
             status: '20',
-            statusName: '待应收会计确认'
+            statusName: '待会计确认'
           }
         }else{
           return o;

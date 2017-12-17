@@ -26,175 +26,203 @@ class Apply extends Component{
 
   constructor(props){
     super(props);
-    const columns = [
+    this.columns = [
       {
         title: '项目编码',
         fixed: 'left',
-        key: 'projectNo'
+        dataIndex: 'projectNo',
+        width: 140,
       },
       {
         title: '项目名称',
         fixed: 'left',
-        key: 'projectName'
+        dataIndex: 'projectName',
+        width: 140,
       },
       {
         title: '签约公司',
-        key: 'companyName'
+        dataIndex: 'companyName',
+        width: 300,
       },
       {
         title: '合同编码',
-        key: 'contractNo'
+        dataIndex: 'contractNo',
+        width: 300,
       },
       {
         title: '客户名称',
-        key: 'custName'
+        dataIndex: 'custName',
+        width: 300,
       },
       {
         title: '币种',
-        key: 'contractCurrency'
+        dataIndex: 'contractCurrency',
+        width: 60,
       },
       {
         title: '付款阶段(里程碑)',
-        key: 'paymentPhrases'
+        dataIndex: 'paymentPhrases',
+        width: 140,
       },
       {
         title: '付款条件',
-        key: 'paymentTerm'
+        dataIndex: 'paymentTerm',
+        width: 80,
       },
       {
         title: '应收日期',
-        key: 'arDate'
+        dataIndex: 'arDate',
+        width: 80,
       },
       {
         title: '报告日期',
-        key: 'reportingDate'
+        dataIndex: 'reportingDate',
+        width: 80,
       },
       {
         title: '回款条款',
-        key: 'paymentName'
+        dataIndex: 'paymentName',
+        width: 140,
       },
       {
         title: '付款百分比',
-        key: 'paymentPercent'
+        dataIndex: 'paymentPercent',
+        width: 100,
       },
       {
         title: '合同金额',
-        key: 'contractAmount'
+        dataIndex: 'contractAmount',
+        width: 140,
       },
       {
         title: 'Billed AR日期',
-        key: 'billedArDate'
+        dataIndex: 'billedArDate',
+        width: 100,
       },
       {
         title: 'GL日期',
-        key: 'erpGlDate'
+        dataIndex: 'erpGlDate',
+        width: 80,
       },
       {
         title: 'Billed AR金额',
-        key: 'billedArAmount'
+        dataIndex: 'billedArAmount',
+        width: 140,
       },
       {
         title: '回款金额',
-        key: 'receiptAmount'
+        dataIndex: 'receiptAmount',
+        width: 140,
       },
       {
         title: 'GL已提坏账金额',
-        key: 'badDebtProvisionAmount'
+        dataIndex: 'badDebtProvisionAmount',
+        width: 140,
       },
       {
         title: 'Billed AR余额',
-        key: 'billedArBalance'
+        dataIndex: 'billedArBalance',
+        width: 140,
       },
     ];
-    this.columns = columns.map(o=>({
-      ...o,
-      dataIndex: o.key,
-      width: 140,
-    }))
-    const columns2 = [
+    this.columns2 = [
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'statusName'
+        dataIndex: 'statusName',
+        width: 140,
       },
       {
         title: 'GL已提坏账准备金额',
-        key: 'badDebtProvisionAmount'
+        dataIndex: 'badDebtProvisionAmount',
+        width: 140,
       },
       {
         title: 'Billed AR余额',
-        key: 'billedArBalance'
+        dataIndex: 'billedArBalance',
+        width: 140,
       },
       {
         title: <span>坏账划销金额<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'badDebtAmount'
+        dataIndex: 'badDebtAmount',
+        width: 140,
       },
       {
         title: <span>申请日期<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'applicationDate'
+        dataIndex: 'applicationDate',
+        width: 80,
       },
       {
         title: '备注',
-        key: 'applicantRemark'
+        dataIndex: 'applicantRemark',
+        width: 300,
       },
       {
         title: '币种',
-        key: 'contractCurrency'
+        dataIndex: 'contractCurrency',
+        width: 60,
       },
       {
         title: '合同金额',
-        key: 'contractAmount '
+        dataIndex: 'contractAmount ',
+        width: 140,
       },
       {
         title: '应收日期',
-        key: 'arDate'
+        dataIndex: 'arDate',
+        width: 80,
       },
       {
         title: 'Billed AR日期',
-        key: 'billedArDate'
+        dataIndex: 'billedArDate',
+        width: 100,
       },
       {
         title: 'Billed AR金额',
-        key: 'billedArAmount'
+        dataIndex: 'billedArAmount',
+        width: 140,
       },
       {
         title: '回款金额',
-        key: 'receiptAmount'
+        dataIndex: 'receiptAmount',
+        width: 140,
       },
       {
         title: '项目编码',
-        key: 'projectNo'
+        dataIndex: 'projectNo',
+        width: 140,
       },
       {
         title: '项目名称',
-        key: 'projectName'
+        dataIndex: 'projectName',
+        width: 140,
       },
       {
         title: '付款条款',
-        key: 'paymentName'
+        dataIndex: 'paymentName',
+        width: 140,
       },
       {
         title: '付款百分比',
-        key: 'paymentPercent'
+        dataIndex: 'paymentPercent',
+        width: 100,
       },
       {
         title: '部门',
-        key: 'deptName'
+        dataIndex: 'deptName',
+        width: 140,
       },
       {
         title: '签约公司',
-        key: 'companyName'
+        dataIndex: 'companyName',
+        width: 300,
       },
       {
         title: '客户名称',
-        key: 'custName'
+        dataIndex: 'custName',
+        width: 300,
       },
     ];
-    this.columns2 = columns2.map(o=>({
-      ...o,
-      dataIndex: o.key,
-      width: 140,
-    }))
   }
 
   doSearch = (e)=>{
@@ -520,7 +548,7 @@ class Apply extends Component{
           pagination={false}
           columns={columns2} 
           dataSource={this.state.result}
-          scroll={{ x: 2722}}></Table>
+          scroll={{ x: 2922}}></Table>
         <BDModal 
           visible={this.state.isEdit}
           onCancel={this.editCancel}
@@ -554,7 +582,7 @@ class Apply extends Component{
               pageSize: pageSize,
               total: count
             }}
-            scroll={{ x: 2722}} />
+            scroll={{ x: 2802}} />
         </Modal>
       </div>
     )
