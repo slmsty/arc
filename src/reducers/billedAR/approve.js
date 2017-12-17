@@ -1,7 +1,4 @@
 export default ({
-  pageNo=1,
-  pageSize=5,
-  count=0,
   result=[],
   title="",
   loading=false
@@ -15,11 +12,8 @@ export default ({
       loading = false;
       break;
     case 'BILLEDARAPPROVE_SEARCH_SUCCESS':
-      const pageInfo = action.response.pageInfo;
-      pageNo = pageInfo.pageNo;
-      pageSize = pageInfo.pageSize;
-      count = pageInfo.count;
-      result = pageInfo.result.map(o=>({
+      const billedArDetailList = action.response.billedArDetailList;
+      result = billedArDetailList.map(o=>({
         ...o,
         companyShow: `${o.companyId}_${o.companyName}`
       }));
@@ -62,9 +56,6 @@ export default ({
       // nothing
   }
   return {
-    pageNo,
-    pageSize,
-    count,
     result,
     title,
     loading,

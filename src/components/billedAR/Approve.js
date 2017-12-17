@@ -112,40 +112,6 @@ class Approve extends Component{
         confirmDis: true
       })
       this.props.Search({
-        pageInfo: {
-          pageNo: 1,
-          pageSize: this.props.pageSize
-        },
-        ...values
-      })
-    });
-  }
-
-  pageSizeChange = (current, size)=>{
-    this.props.form.validateFields((err, values) => {
-      this.setState({
-        rowKeys: [],
-        rows: [],
-        rejectDis: true,
-        confirmDis: true
-      })
-      this.props.Search({
-        pageInfo: {
-          pageNo: 1,
-          pageSize: size
-        },
-        ...values
-      })
-    });
-  }
-
-  pageNoChange = (page, pageSize)=>{
-    this.props.form.validateFields((err, values) => {
-      this.props.Search({
-        pageInfo: {
-          pageNo: page,
-          pageSize: pageSize
-        },
         ...values
       })
     });
@@ -203,7 +169,7 @@ class Approve extends Component{
   render(){
     const { getFieldDecorator } = this.props.form;
     const columns = this.columns;
-    const {pageNo, pageSize, count, result, loading} = this.props;
+    const {result, loading} = this.props;
 
     const layout = {
       labelCol: {
@@ -306,16 +272,7 @@ class Approve extends Component{
           }}
           columns={columns} 
           dataSource={result}
-          pagination={{
-            pageSizeOptions: ['5', '10', '20', '30'],
-            showSizeChanger: true,
-            onShowSizeChange: this.pageSizeChange,
-            showTotal: t=>`共${t}条`,
-            onChange: this.pageNoChange,
-            current: pageNo,
-            pageSize: pageSize,
-            total: count
-          }}
+          pagination={false}
           scroll={{ x: 2342}}></Table>
       </div>
     )
