@@ -38,7 +38,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
       editable
       value={text}
       min={0}
-      max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount > (record.receivableBalance + 3) ? record.receivableBalance : this.props.receiptInfo.receiptAmount}
+      max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount > (record.receivableBalance + 3) ? (record.receivableBalance + 3) : this.props.receiptInfo.receiptAmount}
       onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
     />),
   }, {
