@@ -70,25 +70,18 @@ class ReviewReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={3}>
+            <Col span={8} key={9}>
               <FormItem {...formItemLayout} label="数据状态">
-                {getFieldDecorator('status', {
-                  initialValue: '31',
-                })(
-                  <Select
-                    placeholder="请选择数据状态"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
-                    onChange={this.handleChange}
-                  >
-                    {/* <Option value="10">新建</Option> */}
-                    <Option value="31">会计已认款</Option>
-                    <Option value="50">等待传送AR</Option>
-                    <Option value="51">已传送AR</Option>
-                    <Option value="52">传送失败</Option>
-                  </Select>,
-                )}
+                {
+                  getFieldDecorator('status', {
+                    initialValue: '31',
+                  })(
+                    <SelectInvokeApi
+                      typeCode="ARC_CLAIM_REVIEW_FUNC"
+                      paramCode="STATUS"
+                    />
+                  )
+                }
               </FormItem>
             </Col>
           </Row>
