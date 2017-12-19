@@ -35,22 +35,22 @@ class Confirm extends Component{
       },
       {
         title: '付款条件',
-        dataIndexdataIndex: 'paymentTerm',
+        dataIndex: 'paymentTerm',
         width: 120,
       },
       {
         title: '付款金额',
-        dataIndexdataIndex: 'paymentAmount',
+        dataIndex: 'paymentAmount',
         width: 120,
       },
       {
         title: '考核含税金额',
-        dataIndexdataIndex: 'assessTaxIncludedAmount',
+        dataIndex: 'assessTaxIncludedAmount',
         width: 120,
       },
       {
         title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
-        dataIndexdataIndex: 'billedArAmount',
+        dataIndex: 'billedArAmount',
         width: 120,
       },
       {
@@ -460,7 +460,7 @@ class Confirm extends Component{
           </Col>
         </Row>
         <br/>
-        <Table 
+        <Table
           style={{backgroundColor: '#FFFFFF'}}
           rowKey="billedArId"
           bordered
@@ -469,7 +469,7 @@ class Confirm extends Component{
             selectedRowKeys: this.state.rowKeys,
             onChange: this.rowSelectionChange
           }}
-          columns={columns} 
+          columns={columns}
           dataSource={result}
           pagination={{
             pageSizeOptions: ['5', '10', '20', '30'],
@@ -482,7 +482,7 @@ class Confirm extends Component{
             total: count
           }}
           scroll={{ x: 4222}} />
-          <ARModal 
+          <ARModal
             visible={this.state.visible}
             onCancel={this.Cancel}
             onOk={this.OK}
@@ -501,11 +501,11 @@ class Confirm extends Component{
             <p>成功传送AR：<b style={{color: '#FF0000'}}>{this.state.sLength}</b> 条</p>
             <p>传送AR失败：<b style={{color: '#FF0000'}}>{this.state.fLength}</b> 条</p>
             <br/>
-            <Table 
+            <Table
               rowKey="id"
               bordered
               size="middle"
-              columns={this.columns2} 
+              columns={this.columns2}
               dataSource={this.state.failures}
               pagination={false}/>
           </Modal>
