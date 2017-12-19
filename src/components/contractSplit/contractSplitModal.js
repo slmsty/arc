@@ -14,7 +14,23 @@ import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Sele
 const FormItem = Form.Item
 const { TextArea } = Input
 const Option = Select.Option
-const tableData = []
+const tableData = [{
+  taskOpration: '合计',
+  contractType: '合计',
+  projectLine: '合计',
+  settleType: '合计',
+  catalogue: '合计',
+  discount: '合计',
+  discountMoney: '合计',
+  SaleBU: '合计',
+  projectBU: '合计',
+  salePeo: '合计',
+  contractDate: '合计',
+  contractType1: '合计',
+  GrossOrder: '合计',
+  serverStartDate: '合计',
+  serverEndDate: '合计',
+}]
 const EditableCell = ({ value, onChange, column }) => (
   <div style={{ position: 'relative' }}>
     <Input value={value} onChange={e => onChange(e.target.value)} />
@@ -28,6 +44,7 @@ const EditableCell = ({ value, onChange, column }) => (
 class ContractSplitModal extends React.Component{
   state = {
     dataSource: tableData,
+    countCatalPrice: 0.00,
   }
   selectDateChange = (data) => {
     const newData = [...this.state.dataSource]
@@ -109,7 +126,7 @@ class ContractSplitModal extends React.Component{
       tableData.splice(Number(index) + 1, 0, newData)
     }
     if (flag === '1') {
-      tableData.push(newData)
+      tableData.splice(-1, 0, newData)
     }
     this.setState({
       dataSource: tableData,
@@ -126,71 +143,87 @@ class ContractSplitModal extends React.Component{
     const param = this.props.form.getFieldsValue()
     console.log('param', param)
   }
+
   render() {
+    let countCatalPrice = 0.00
+    const coutnData = [...this.state.dataSource]
+    coutnData.map((item, index) => {
+      console.log(item.catalogue)
+      if (item.catalogue === "合计") {
+        item.catalogue = 0
+      }
+      countCatalPrice += Number(item.catalogue)
+    })
+    console.log(countCatalPrice)
     const { getFieldDecorator } = this.props.form
     const columns = [{
       title: 'Task操作',
       dataIndex: 'taskOpration',
-      width: 150,
+      width: 120,
       textAlign: 'center',
       fixed: 'left',
       render: (text, record, index) => (
-        <div>
-          <Button onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;
-          <Button onClick={() => this.handleMinus(index)}>－</Button>
-        </div>
+        text === '合计' ? text :
+          <div>
+            <Button onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;
+            <Button onClick={() => this.handleMinus(index)}>－</Button>
+          </div>
       ),
     }, {
       title: <span>合同类型<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractType',
       width: 200,
-      render: (text, record, index) => this.renderColumns(text, index, 'contractType'),
+      render: (text, record, index) => text === '合计' ? '' : this.renderColumns(text, index, 'contractType'),
     }, {
       title: <span>产品线<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'projectLine',
       width: 150,
-      render: (text, record, index) => this.renderColumns(text, index, 'projectLine'),
+      render: (text, record, index) => text === '合计' ? '' : this.renderColumns(text, index, 'projectLine'),
     }, {
       title: <span>结算方式<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'settleType',
       width: 100,
-      render: (text, record, index) => this.renderSelect(text, index, 'settleType'),
+      render: (text, record, index) => text === '合计' ? '' : this.renderSelect(text, index, 'settleType'),
     }, {
       title: <span>目录价<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'catalogue',
       width: 150,
-      render: (text, record, index) => this.renderInputColumns(text, index, 'catalogue'),
+      render: (text, record, index) => text === '合计' ? countCatalPrice : this.renderInputColumns(text, index, 'catalogue'),
     }, {
       title: <span>折扣<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'discount',
       width: 150,
-      render: (text, record, index) => this.renderInputColumns(text, index, 'discount'),
+      render: (text, record, index) => text === '合计' ? '' : this.renderInputColumns(text, index, 'discount'),
     }, {
-      title: '折后合同额',
+      title: '折后目录价',
       dataIndex: 'discountMoney',
       width: 150,
+      render: (text, record, index) => text === '合计' ? this.countdiscountMoney : text,
     }, {
       title: '合同含税额',
       dataIndex: 'SaleBU',
       width: 100,
+      render: (text, record, index) => text === '合计' ? this.countSaleBU : text,
     }, {
       title: '合同税率',
       dataIndex: 'projectBU',
       width: 150,
-      render: (text, record, index) => (text ? text : 0.18),
+      render: (text, record, index) => text === '合计' ? '' : (text ? text : 0.18),
     }, {
       title: '合同不含税额',
       dataIndex: 'salePeo',
       width: 150,
+      render: (text, record, index) => text === '合计' ? this.countsalePeo : text,
     }, {
       title: <span>退税率<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractDate',
       width: 150,
-      render: (text, record, index) => this.renderInputColumns(text, index, 'contractDate'),
+      render: (text, record, index) => text === '合计' ? '' : this.renderInputColumns(text, index, 'contractDate'),
     }, {
       title: '退税收入含税额',
       dataIndex: 'contractType1',
       width: 200,
+      render: (text, record, index) => text === '合计' ? this.countcontractType1 : text,
     }, {
       title: 'Gross Order',
       dataIndex: 'GrossOrder',

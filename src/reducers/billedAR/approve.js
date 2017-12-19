@@ -1,8 +1,8 @@
 export default ({
-  result=[],
-  title="",
-  loading=false
-}={}, action)=>{
+   result=[],
+   title="",
+   loading=false
+    }={}, action)=>{
   switch(action.type){
     case 'BILLEDARAPPROVE_HTTP_REQUEST':
       loading = true;
@@ -53,7 +53,7 @@ export default ({
       title = ''
       break;
     default:
-      // nothing
+    // nothing
   }
   return {
     result,

@@ -59,6 +59,7 @@ export default class ApplySearchCon extends React.Component {
    function approveClick
    */
   approveClick = (record) => {
+    console.log(record.statusName)
     const paramsData = {}
     paramsData.arcFlowId = record.arcFlowId
     paramsData.processInstanceId = record.processInstanceId
@@ -166,7 +167,7 @@ export default class ApplySearchCon extends React.Component {
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
           {/* disabled={record.statusName === '审批中' ? 'false' : 'true'} */}
-          <Button onClick={() => this.approveClick(record)}>审批</Button>
+          <Button disabled={record.statusName === '审批中' ? false : true} onClick={() => this.approveClick(record)}>审批</Button>
         </div>
       ),
     },
