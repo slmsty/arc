@@ -150,7 +150,9 @@ export default class ProjectReceiptClaimModal extends React.Component {
       } else {
         funds[index][key] = value
         if (key === 'claimAmount' && this.props.receiptInfo.receiptCurrency === funds[index].contractCurrency) {
-          funds[index].claimContractAmount = value
+          if (value - funds[index].claimContractAmount > 3) {
+            funds[index].claimContractAmount = value
+          }
         }
       }
       this.setState({ funds })
