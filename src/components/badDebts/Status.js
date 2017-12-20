@@ -336,7 +336,7 @@ class Status extends Component{
       rowKeys: rowKeys,
       rows: rows,
       returnDis: !(rows.length > 0 && rows.every(o => o.status === '20')),
-      erpDis: !(rows.length > 0 && rows.every(o => o.status === '12' || o.status === '22')),
+      erpDis: !(rows.length > 0 && rows.every(o => o.status === '12' || o.status === '22' || o.status === '23' || o.status === '24')),
       unDoDis: !(rows.length > 0 && rows.every(o => o.status === '11')),
     })
   }
