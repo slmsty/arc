@@ -41,7 +41,7 @@ export default ({
           return {
             ...o,
             status: '22',
-            statusName: '错误'
+            statusName: '划消错误'
           }
         }else{
           return o;
@@ -62,7 +62,7 @@ export default ({
           return {
             ...o,
             status: '22',
-            statusName: '错误'
+            statusName: '划消退回错误'
           }
         }else{
           return o;
