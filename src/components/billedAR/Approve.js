@@ -24,12 +24,52 @@ class Approve extends Component{
         width: 120
       },
       {
+        title: '签约公司',
+        dataIndex: 'companyShow',
+        width: 300
+      },
+      {
         title: '付款条件',
         dataIndex: 'paymentTerm',
         width: 120
       },
       {
-        title: '付款金额',
+        title: '项目编码',
+        dataIndex: 'projectNo',
+        width: 120
+      },
+      {
+        title: '节点',
+        dataIndex: 'projectNode',
+        width: 120,
+      },
+      {
+        title: '付款阶段(里程碑)',
+        dataIndex: 'paymentPhrases',
+        width: 120
+      },
+      {
+        title: '付款条款',
+        dataIndex: 'paymentName',
+        width: 120
+      },
+      {
+        title: '付款百分比',
+        dataIndex: 'paymentPercent',
+        width: 100
+      },
+      {
+        title: '应收日期',
+        dataIndex: 'arDate',
+        width: 120
+      },
+      {
+        title: '报告日期',
+        dataIndex: 'reportDate',
+        width: 120
+      },
+      {
+        title: '应收金额',
         dataIndex: 'paymentAmount',
         width: 120
       },
@@ -49,23 +89,13 @@ class Approve extends Component{
         width: 120
       },
       {
-        title: '合同币种',
-        dataIndex: 'contractCurrency',
-        width: 80
-      },
-      {
-        title: '合同金额',
-        dataIndex: 'contractAmount',
+        title: '客户名称',
+        dataIndex: 'custName',
         width: 120
       },
       {
-        title: '项目编码',
-        dataIndex: 'projectNo',
-        width: 120
-      },
-      {
-        title: '签约公司',
-        dataIndex: 'companyShow',
+        title: '合同名称',
+        dataIndex: 'contractName',
         width: 300
       },
       {
@@ -74,39 +104,14 @@ class Approve extends Component{
         width: 300
       },
       {
-        title: '合同名称',
-        dataIndex: 'contractName',
-        width: 300
+        title: '合同币种',
+        dataIndex: 'contractCurrency',
+        width: 80
       },
       {
-        title: '客户名称',
-        dataIndex: 'custName',
+        title: '合同金额',
+        dataIndex: 'contractAmount',
         width: 120
-      },
-      {
-        title: '付款阶段(里程碑)',
-        dataIndex: 'paymentPhrases',
-        width: 120
-      },
-      {
-        title: '付款条款',
-        dataIndex: 'paymentName',
-        width: 120
-      },
-      {
-        title: '应收日期',
-        dataIndex: 'arDate',
-        width: 120
-      },
-      {
-        title: '报告日期',
-        dataIndex: 'reportDate',
-        width: 120
-      },
-      {
-        title: '付款百分比',
-        dataIndex: 'paymentPercent',
-        width: 100
       },
       {
         title: '提示',
@@ -260,6 +265,16 @@ class Approve extends Component{
                 }
               </FormItem>
             </Col>
+            <Col span={8}>
+              <FormItem label="款项ID" {...layout}>
+                {
+                  getFieldDecorator('fundId', {initialValue: ''})(<Input
+                    placeholder="款项ID"
+                    hasEmpty
+                  />)
+                }
+              </FormItem>
+            </Col>
           </Row>
           <Row>
             <Col span={24} style={{textAlign: 'right'}}>
@@ -275,7 +290,7 @@ class Approve extends Component{
           </Col>
         </Row>
         <br/>
-        <Table 
+        <Table
           style={{backgroundColor: '#FFFFFF'}}
           rowKey="contractItemId"
           bordered
@@ -284,7 +299,7 @@ class Approve extends Component{
             selectedRowKeys: this.state.rowKeys,
             onChange: this.rowSelectionChange
           }}
-          columns={columns} 
+          columns={columns}
           dataSource={result}
           pagination={false}
           scroll={{ x: 3002}}></Table>

@@ -34,23 +34,38 @@ class Confirm extends Component{
         width: 120,
       },
       {
-        title: '付款条件',
-        dataIndex: 'paymentTerm',
+        title: '签约公司',
+        dataIndex: 'companyShow',
+        width: 400,
+      },
+      {
+        title: '项目编码',
+        dataIndex: 'projectNo',
         width: 120,
       },
       {
-        title: '付款金额',
-        dataIndex: 'paymentAmount',
+        title: '节点',
+        dataIndex: 'projectNode',
         width: 120,
       },
       {
-        title: '考核含税金额',
-        dataIndex: 'assessTaxIncludedAmount',
+        title: '付款阶段(里程碑)',
+        dataIndex: 'paymentPhrases',
         width: 120,
       },
       {
-        title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
-        dataIndex: 'billedArAmount',
+        title: '付款条款',
+        dataIndex: 'paymentName',
+        width: 120,
+      },
+      {
+        title: '付款百分比',
+        dataIndex: 'paymentPercent',
+        width: 120,
+      },
+      {
+        title: <span>GL日期<em style={{color:'#FF0000'}}>*</em></span>,
+        dataIndex: 'glDate',
         width: 120,
       },
       {
@@ -59,8 +74,8 @@ class Confirm extends Component{
         width: 120,
       },
       {
-        title: <span>GL日期<em style={{color:'#FF0000'}}>*</em></span>,
-        dataIndex: 'glDate',
+        title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
+        dataIndexdataIndex: 'billedArAmount',
         width: 120,
       },
       {
@@ -84,16 +99,6 @@ class Confirm extends Component{
         width: 120,
       },
       {
-        title: '项目编码',
-        dataIndex: 'projectNo',
-        width: 120,
-      },
-      {
-        title: '签约公司',
-        dataIndex: 'companyShow',
-        width: 400,
-      },
-      {
         title: '合同编码',
         dataIndex: 'contractNo',
         width: 400,
@@ -107,31 +112,6 @@ class Confirm extends Component{
         title: '客户名称',
         dataIndex: 'custName',
         width: 400,
-      },
-      {
-        title: '付款阶段(里程碑)',
-        dataIndex: 'paymentPhrases',
-        width: 120,
-      },
-      {
-        title: '付款条款',
-        dataIndex: 'paymentName',
-        width: 120,
-      },
-      {
-        title: '应收日期',
-        dataIndex: 'arDate',
-        width: 120,
-      },
-      {
-        title: '报告日期',
-        dataIndex: 'reportDate',
-        width: 120,
-      },
-      {
-        title: '付款百分比',
-        dataIndex: 'paymentPercent',
-        width: 120,
       },
       {
         title: '收入额',
@@ -426,6 +406,16 @@ class Confirm extends Component{
                     typeCode="BILLED_AR"
                     paramCode="PAYMENT_TERM"
                     placeholder="付款条件"
+                    hasEmpty
+                  />)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="款项ID" {...layout}>
+                {
+                  getFieldDecorator('fundId', {initialValue: ''})(<Input
+                    placeholder="款项ID"
                     hasEmpty
                   />)
                 }

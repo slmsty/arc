@@ -4,10 +4,7 @@
 import caseReducer from '../caseReducer'
 
 const cancelApplyData = {
-  getMyApplyList: {
-    pageNo: 1,
-    count: 0,
-    result: [],
+  getTaskDetail: {
   },
   getMyApplyInfo: {},
   cancelApplyRefresh: new Date().getTime(),

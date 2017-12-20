@@ -16,20 +16,20 @@ const { TextArea } = Input
 const Option = Select.Option
 const tableData = [{
   taskOpration: '合计',
-  contractType: '合计',
-  projectLine: '合计',
-  settleType: '合计',
+  contractType: 0,
+  projectLine: 0,
+  settleType: 0,
   catalogue: '合计',
-  discount: '合计',
-  discountMoney: '合计',
-  SaleBU: '合计',
-  projectBU: '合计',
-  salePeo: '合计',
-  contractDate: '合计',
-  contractType1: '合计',
-  GrossOrder: '合计',
-  serverStartDate: '合计',
-  serverEndDate: '合计',
+  discount: 0,
+  discountMoney: 0,
+  SaleBU: 0,
+  projectBU: 0,
+  salePeo: 0,
+  contractDate: 0,
+  contractType1: 0,
+  GrossOrder: 0,
+  serverStartDate: 0,
+  serverEndDate: 0,
 }]
 const EditableCell = ({ value, onChange, column }) => (
   <div style={{ position: 'relative' }}>
@@ -52,8 +52,6 @@ class ContractSplitModal extends React.Component{
     this.setState({
       dataSource: newData,
     })
-    console.log(data)
-    console.log(this.state.dataSource)
   }
   handleChange = (data) => {
     const newData = [...this.state.dataSource]
@@ -106,7 +104,6 @@ class ContractSplitModal extends React.Component{
     this.setState({
       dataSource: newData,
     })
-    console.log(this.state.dataSource)
   }
   renderSelect = (text, index, column) => {
     return (
@@ -145,16 +142,29 @@ class ContractSplitModal extends React.Component{
   }
 
   render() {
-    let countCatalPrice = 0.00
+    let countCatalPrice = 0
+    let discountCatalPrice = 0
+    let countsalePeo = 0
+    let countcontractType1 = 0
+    let countGrossOrder = 0
     const coutnData = [...this.state.dataSource]
-    coutnData.map((item, index) => {
-      console.log(item.catalogue)
-      if (item.catalogue === "合计") {
+    console.log(coutnData)
+    coutnData.map((item) => {
+      if (item.catalogue === '合计') {
         item.catalogue = 0
       }
+      !item || !item.discountMoney ? 0 : Number(item.discountMoney)
+      !item || !item.salePeo ? 0 : Number(item.salePeo)
+      !item || !item.contractType1 ? 0 : Number(item.contractType1)
+      !item || !item.GrossOrder ? 0 : Number(item.GrossOrder)
+
       countCatalPrice += Number(item.catalogue)
+      discountCatalPrice += Number(item.discountMoney)
+      countsalePeo += Number(item.salePeo)
+      countcontractType1 += Number(item.contractType1)
+      countGrossOrder += Number(item.GrossOrder)
     })
-    console.log(countCatalPrice)
+    console.log(discountCatalPrice)
     const { getFieldDecorator } = this.props.form
     const columns = [{
       title: 'Task操作',
@@ -173,67 +183,69 @@ class ContractSplitModal extends React.Component{
       title: <span>合同类型<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractType',
       width: 200,
-      render: (text, record, index) => text === '合计' ? '' : this.renderColumns(text, index, 'contractType'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractType'),
     }, {
       title: <span>产品线<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'projectLine',
       width: 150,
-      render: (text, record, index) => text === '合计' ? '' : this.renderColumns(text, index, 'projectLine'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'projectLine'),
     }, {
       title: <span>结算方式<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'settleType',
       width: 100,
-      render: (text, record, index) => text === '合计' ? '' : this.renderSelect(text, index, 'settleType'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderSelect(text, index, 'settleType'),
     }, {
       title: <span>目录价<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'catalogue',
       width: 150,
-      render: (text, record, index) => text === '合计' ? countCatalPrice : this.renderInputColumns(text, index, 'catalogue'),
+      render: (text, record, index) => record.taskOpration === '合计' ? countCatalPrice.toFixed(2) : this.renderInputColumns(text, index, 'catalogue'),
     }, {
       title: <span>折扣<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'discount',
       width: 150,
-      render: (text, record, index) => text === '合计' ? '' : this.renderInputColumns(text, index, 'discount'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderInputColumns(text, index, 'discount'),
     }, {
       title: '折后目录价',
       dataIndex: 'discountMoney',
       width: 150,
-      render: (text, record, index) => text === '合计' ? this.countdiscountMoney : text,
+      render: (text, record, index) => record.taskOpration === '合计' ? discountCatalPrice.toFixed(2) : text,
     }, {
       title: '合同含税额',
       dataIndex: 'SaleBU',
       width: 100,
-      render: (text, record, index) => text === '合计' ? this.countSaleBU : text,
+      render: (text, record, index) => record.taskOpration === '合计' ? discountCatalPrice.toFixed(2) : text,
     }, {
       title: '合同税率',
       dataIndex: 'projectBU',
       width: 150,
-      render: (text, record, index) => text === '合计' ? '' : (text ? text : 0.18),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : (text ? text : 0.18),
     }, {
       title: '合同不含税额',
       dataIndex: 'salePeo',
       width: 150,
-      render: (text, record, index) => text === '合计' ? this.countsalePeo : text,
+      render: (text, record, index) => record.taskOpration === '合计' ? countsalePeo.toFixed(2) : text,
     }, {
       title: <span>退税率<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractDate',
       width: 150,
-      render: (text, record, index) => text === '合计' ? '' : this.renderInputColumns(text, index, 'contractDate'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderInputColumns(text, index, 'contractDate'),
     }, {
       title: '退税收入含税额',
       dataIndex: 'contractType1',
       width: 200,
-      render: (text, record, index) => text === '合计' ? this.countcontractType1 : text,
+      render: (text, record, index) => record.taskOpration === '合计' ? countcontractType1.toFixed(2) : text,
     }, {
       title: 'Gross Order',
       dataIndex: 'GrossOrder',
       width: 100,
+      render: (text, record, index) => record.taskOpration === '合计' ? countGrossOrder.toFixed(2) : text,
     }, {
       title: <span>服务期起始<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'serverStartDate',
       width: 200,
       render: (text, record, index) => {
         return (
+          record.taskOpration === '合计' ? '' :
           <MyDtatePicker onChange={this.selectDateChange} indexs={index} columns='serverStartDate' />
         )
       }
@@ -243,6 +255,7 @@ class ContractSplitModal extends React.Component{
       width: 200,
       render: (text, record, index) => {
         return (
+          record.taskOpration === '合计' ? '' :
           <MyDtatePicker onChange={this.selectDateChange} indexs={index} columns='serverEndDate' />
         )
       }

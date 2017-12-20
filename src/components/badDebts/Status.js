@@ -267,11 +267,23 @@ class Status extends Component{
     })
   }
   showInfo = (record) => {
-    this.setState({
-      infoModalVisitable: true,
-      infoDetail: record,
+    if (!record.processInstanceId) {
+      message.error('没有流程信息')
+      return
+    }
+    const param = {
+      processInstanceId: record.processInstanceId,
+      businessKey: record.badDebtId,
+    }
+    this.props.myApplyInfo(param).then((res) => {
+      this.setState({
+        infoModalVisitable: true,
+      })
+      if (res && res.response && res.response.resultCode === '000000') {
+      } else {
+        message.error(res.response.resultMessage)
+      }
     })
-    console.log(record)
   }
   closeShowInfo = () => {
     this.setState({
@@ -479,7 +491,6 @@ class Status extends Component{
     const columns = this.columns;
     const columns2 = this.columns2;
     const {pageNo, pageSize, count, result, loading} = this.props;
-
     const layout = {
       labelCol: {
         span: 8
@@ -642,7 +653,7 @@ class Status extends Component{
         <BadDebtModal
           visible={this.state.infoModalVisitable}
           onCancel={this.closeShowInfo}
-          data={this.state.infoDetail}
+          data={this.props.myApply.getMyApplyInfo}
         />
       </div>
     )

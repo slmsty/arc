@@ -127,6 +127,7 @@ class BadDebtsInfoModal extends React.Component {
                     </Row>
                     <br />
                     <hr style={{ borderTop: '1px solid #d9d9d9' }} />
+                    <br />
                   </div>
                 )
               }) : ''
