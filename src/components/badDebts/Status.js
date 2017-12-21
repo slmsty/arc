@@ -142,6 +142,11 @@ class Status extends Component{
         width: 140
       },
       {
+        title: '创建提示',
+        dataIndex: 'statusRemark',
+        width: 140
+      },
+      {
         title: '操作',
         dataIndex: 'opration',
         fixed: 'right',
@@ -336,7 +341,7 @@ class Status extends Component{
       rowKeys: rowKeys,
       rows: rows,
       returnDis: !(rows.length > 0 && rows.every(o => o.status === '20')),
-      erpDis: !(rows.length > 0 && rows.every(o => o.status === '12' || o.status === '23' || o.status === '24')),
+      erpDis: !(rows.length > 0 && rows.every(o => o.status === '12' || o.status === '23' || o.status === '24' || o.status === '21')),
       unDoDis: !(rows.length > 0 && rows.every(o => o.status === '11')),
     })
   }
@@ -418,7 +423,7 @@ class Status extends Component{
     this.setState({isGLEdit: false})
   }
 
-  postGLEdit = glDate=>{
+  postGLEdit = (glDate) => {
     this.props.SendErp(this.state.rowKeys, glDate)
     this.setState({
       isGLEdit: false,

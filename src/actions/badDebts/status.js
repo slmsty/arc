@@ -44,7 +44,7 @@ const SendErp = (badDebtIds, glDate)=>({
       'BADDEBTSTATUS_HTTP_REQUEST',
       'HTTP_FAILURE',
       'BADDEBTSTATUS_HTTP_ERROR',
-      'BADDEBTSTATUS_HTTP_REQUEST_COMPLETED'
+      'BADDEBTSTATUS_HTTP_REQUEST_COMPLETED',
     ],
     options: {
       method: 'POST',
