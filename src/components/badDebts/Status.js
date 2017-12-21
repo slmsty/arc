@@ -340,8 +340,8 @@ class Status extends Component{
     this.setState({
       rowKeys: rowKeys,
       rows: rows,
-      returnDis: !(rows.length > 0 && rows.every(o => o.status === '20')),
-      erpDis: !(rows.length > 0 && rows.every(o => o.status === '12' || o.status === '23' || o.status === '24' || o.status === '21')),
+      returnDis: !(rows.length > 0 && rows.every(o => o.status === '20' || o.status === '21' || o.status === '24')),
+      erpDis: !(rows.length > 0 && rows.every(o => o.status === '12' || o.status === '23')),
       unDoDis: !(rows.length > 0 && rows.every(o => o.status === '11')),
     })
   }

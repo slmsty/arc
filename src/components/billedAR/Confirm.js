@@ -75,7 +75,7 @@ class Confirm extends Component{
       },
       {
         title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
-        dataIndexdataIndex: 'billedArAmount',
+        dataIndex: 'billedArAmount',
         width: 120,
       },
       {
