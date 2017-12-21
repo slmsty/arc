@@ -146,7 +146,7 @@ class Status extends Component{
         dataIndex: 'opration',
         fixed: 'right',
         textAlign: 'center',
-        width: 100,
+        width: 80,
         render: (text, record, index) => (
           <Button style={{display: 'block', margin: '0 auto'}} onClick={() => this.showInfo(record)}>详情</Button>
         ),
@@ -610,7 +610,7 @@ class Status extends Component{
             pageSize: pageSize,
             total: count,
           }}
-          scroll={{ x: 3502 }}></Table>
+          scroll={{ x: 3420 }}></Table>
         <GlModal
           visible={this.state.isGLEdit}
           onCancel={this.hideGlEdit}

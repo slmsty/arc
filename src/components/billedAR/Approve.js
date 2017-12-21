@@ -302,7 +302,7 @@ class Approve extends Component{
           columns={columns}
           dataSource={result}
           pagination={false}
-          scroll={{ x: 3002}}></Table>
+          scroll={{ x: 3002 , y : '100px'}}></Table>
       </div>
     )
   }

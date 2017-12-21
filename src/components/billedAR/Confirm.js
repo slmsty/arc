@@ -471,7 +471,7 @@ class Confirm extends Component{
             pageSize: pageSize,
             total: count
           }}
-          scroll={{ x: 4222}} />
+          scroll={{ x: 3680}} />
           <ARModal
             visible={this.state.visible}
             onCancel={this.Cancel}
