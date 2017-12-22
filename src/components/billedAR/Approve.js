@@ -121,9 +121,11 @@ class Approve extends Component{
       },
     ];
   }
-
+  componentDidMount() {
+    this.doSearch()
+  }
   doSearch = (e)=>{
-    e.preventDefault();
+    // e.preventDefault();
     this.props.form.validateFields((err, values) => {
       this.setState({
         rowKeys: [],

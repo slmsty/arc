@@ -13,6 +13,9 @@ export default class ApplySearchCon extends React.Component {
     loading: false,
     applyData: '',
   }
+  componentDidMount() {
+    this.handleQuery()
+  }
   componentWillReceiveProps(nextProps) {
     if (this.props.myApply.myapplyListRefresh !== nextProps.myApply.myapplyListRefresh) {
       this.handleQuery()

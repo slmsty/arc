@@ -224,9 +224,11 @@ class Apply extends Component{
       },
     ];
   }
-
+  componentDidMount() {
+    this.doSearch()
+  }
   doSearch = (e)=>{
-    e.preventDefault();
+    //e.preventDefault();
     this.props.form.validateFields((err, values) => {
       this.setState({
         visible: true,
@@ -537,7 +539,7 @@ class Apply extends Component{
           </Col>
         </Row>
         <br/>
-        <Table 
+        <Table
           style={{backgroundColor: '#FFFFFF'}}
           rowKey="contractItemId"
           bordered
@@ -546,22 +548,22 @@ class Apply extends Component{
             onChange: this.rowSelectionChange2
           }}
           pagination={false}
-          columns={columns2} 
+          columns={columns2}
           dataSource={this.state.result}
           scroll={{ x: 2922}}></Table>
-        <BDModal 
+        <BDModal
           visible={this.state.isEdit}
           onCancel={this.editCancel}
           onOk={this.editDone}
           o={this.state.o}
          />
-        <Modal 
+        <Modal
           width={1080}
-          title="坏账划销参考查询" 
+          title="坏账划销参考查询"
           visible={this.state.visible}
           onCancel={this.onCancel}
           onOk={this.onOk}>
-          <Table 
+          <Table
             style={{backgroundColor: '#FFFFFF'}}
             rowKey="contractItemId"
             bordered
@@ -570,7 +572,7 @@ class Apply extends Component{
               selectedRowKeys: this.state.rowKeys,
               onChange: this.rowSelectionChange
             }}
-            columns={columns} 
+            columns={columns}
             dataSource={result}
             pagination={{
               pageSizeOptions: ['5', '10', '20', '30'],

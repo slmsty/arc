@@ -60,7 +60,7 @@ class ApplySearchCon extends React.Component {
             <Col span={10} key={4}>
               <FormItem {...formItemLayout} label="申请状态">
                 {getFieldDecorator('status', {
-                  initialValue: 'ALL',
+                  initialValue: 'approve',
                 })(
                   <RadioGroup size="large" style={{ width: '330px' }}>
                     <RadioButton value="ALL" style={{ borderRadius: '4px' }}>全部</RadioButton>

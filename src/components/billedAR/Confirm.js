@@ -172,9 +172,12 @@ class Confirm extends Component{
     const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160
     this.setState({ tableHeight })
   }
+  componentDidMount() {
+    this.doSearch()
+  }
 
   doSearch = (e)=>{
-    e.preventDefault();
+    //e.preventDefault();
     this.props.form.validateFields((err, values) => {
       this.setState({
         rowKeys: [],

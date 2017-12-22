@@ -264,7 +264,7 @@ class Status extends Component{
     if (this.props.myApply.myapplyListRefresh !== nextProps.myApply.myapplyListRefresh) {
       this.doSearch()
     }
-    if (this.props.cancelApply.myapplyListRefresh !== nextProps.cancelApply.myapplyListRefresh) {
+    if (this.props.cancelApply.cancelApplyRefresh !== nextProps.cancelApply.cancelApplyRefresh) {
       this.doSearch()
     }
   }
@@ -273,6 +273,9 @@ class Status extends Component{
     // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
     const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160
     this.setState({ tableHeight })
+  }
+  componentDidMount() {
+    this.doSearch()
   }
   doSearch = (e) => {
     if (e) {
