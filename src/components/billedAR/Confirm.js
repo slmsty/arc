@@ -22,6 +22,7 @@ class Confirm extends Component{
     failures: [],
     sLength: 0,
     fLength: 0,
+    tableHeight: '',
   }
 
   constructor(props){
@@ -77,6 +78,7 @@ class Confirm extends Component{
         title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
         dataIndex: 'billedArAmount',
         width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: '备注',
@@ -97,6 +99,7 @@ class Confirm extends Component{
         title: '合同金额',
         dataIndex: 'contractAmount',
         width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: '合同编码',
@@ -106,7 +109,7 @@ class Confirm extends Component{
       {
         title: '合同名称',
         dataIndex: 'contractName',
-        width: 400,
+        width: 700,
       },
       {
         title: '客户名称',
@@ -114,9 +117,37 @@ class Confirm extends Component{
         width: 400,
       },
       {
+        title: '付款条件',
+        dataIndex: 'paymentTerm',
+        width: 120,
+      },
+      {
+        title: '应收日期',
+        dataIndex: 'arDate',
+        width: 120,
+      },
+      {
+        title: '报告日期',
+        dataIndex: 'reportDate',
+        width: 120,
+      },
+      {
+        title: '付款金额',
+        dataIndex: 'paymentAmount',
+        width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
+      },
+      {
+        title: '考核含税金额',
+        dataIndex: 'assessTaxIncludedAmount',
+        width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
+      },
+      {
         title: '收入额',
         dataIndex: 'revenueAmount',
         width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: '提示',
@@ -134,6 +165,12 @@ class Confirm extends Component{
         dataIndex: 'remark',
       }
     ]
+  }
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160
+    this.setState({ tableHeight })
   }
 
   doSearch = (e)=>{
@@ -471,7 +508,7 @@ class Confirm extends Component{
             pageSize: pageSize,
             total: count
           }}
-          scroll={{ x: 3680}} />
+          scroll={{ x: 4580, y: this.state.tableHeight }} />
           <ARModal
             visible={this.state.visible}
             onCancel={this.Cancel}
