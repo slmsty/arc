@@ -227,9 +227,9 @@ class Apply extends Component{
   componentDidMount() {
     this.doSearch()
   }
-  doSearch = (e)=>{
-    //e.preventDefault();
+  doSearch = ()=>{
     this.props.form.validateFields((err, values) => {
+      console.log('value',values)
       this.setState({
         visible: true,
         rowKeys: [],
@@ -453,7 +453,7 @@ class Apply extends Component{
 
     return (
       <div className="badDebtsApply">
-        <Form onSubmit={this.doSearch}>
+        <Form>
           <Row>
             <Col span={8}>
               <FormItem label="GL日期" {...layout}>
@@ -525,7 +525,7 @@ class Apply extends Component{
               </FormItem>
             </Col>
             <Col span={8} style={{textAlign: 'right'}}>
-              <Button type="primary" htmlType="submit">查询</Button>
+              <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
             </Col>
           </Row>
         </Form>

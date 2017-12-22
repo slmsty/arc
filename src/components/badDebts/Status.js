@@ -261,10 +261,7 @@ class Status extends Component{
     ]
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.myApply.myapplyListRefresh !== nextProps.myApply.myapplyListRefresh) {
-      this.doSearch()
-    }
-    if (this.props.cancelApply.cancelApplyRefresh !== nextProps.cancelApply.cancelApplyRefresh) {
+    if (this.props.myApply.myapplyListRefresh !== nextProps.myApply.myapplyListRefresh || this.props.cancelApply.cancelApplyRefresh !== nextProps.cancelApply.cancelApplyRefresh) {
       this.doSearch()
     }
   }
