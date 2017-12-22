@@ -22,28 +22,21 @@ class BDModal2 extends Component{
     )
   }
 
-  onOk = ()=>{
+  onOk = () => {
     this.props.form.validateFields((err, values) => {
       if(err) return
-
       let body = {
         badDebtBack: {
-          badDebtId: this.props.o.badDebtId,
+          badDebtId: this.props.o[0].badDebtId,
           badDebtBackAmount: values.badDebtBackAmount,
           glDate: values.glDate.format('YYYY-MM-DD'),
           badDebtBackRemark: values.badDebtBackRemark
         }
       }
+      this.props.onOk(body)
+      this.props.form.resetFields()
 
-      this.postEdit(body, response=>{
-        if(response.resultCode === '000000'){
-          this.props.onOk(body.badDebtBack);
-          this.props.form.resetFields();
-        }else{
-          message.error(response.resultMessage);
-        }
-      })
-    });
+    })
   }
 
   RAValidator = (rule, value, callback)=>{
@@ -63,58 +56,59 @@ class BDModal2 extends Component{
         title="编辑"
         visible={visible}
         onCancel={this.onCancel}
-        onOk={this.onOk}>
-          <Form>
-            <FormItem label="已划销退回金额">
-              {
-                getFieldDecorator('badDebtReturnAmount', {
-                  initialValue: o.badDebtReturnAmount
-                })(
-                  <Input disabled />
-                )
-              }
-            </FormItem>
-            <FormItem label="划销金额">
-              {
-                getFieldDecorator('badDebtAmount', {
-                  initialValue: o.badDebtAmount
-                })(
-                  <Input disabled />
-                )
-              }
-            </FormItem>
-            <FormItem label="划销退回金额">
-              {
-                getFieldDecorator('badDebtBackAmount', {
-                  initialValue: o.badDebtBackAmount,
-                  rules: [
-                    {required: true, message: '必须输入划销退回金额'},
-                    {validator: this.RAValidator}
-                  ]
-                })(
-                  <Input />
-                )
-              }
-            </FormItem>
-            <FormItem label="GL日期">
-              {
-                getFieldDecorator('glDate', {
-                  initialValue: o.glDate ? moment(o.glDate) : null,
-                  rules: [
-                    {required: true, message: '必须选择GL日期'}
-                  ]})(
-                  <DatePicker />
-                )
-              }
-            </FormItem>
-            <FormItem label="备注">
-              {
-                getFieldDecorator('badDebtBackRemark', {initialValue: o.badDebtBackRemark})(
-                  <TextArea rows={4} />
-                )
-              }
-            </FormItem>
-          </Form>
+        onOk={this.onOk}
+      >
+        <Form>
+          <FormItem label="已划销退回金额">
+            {
+              getFieldDecorator('badDebtReturnAmount', {
+                initialValue: o.badDebtReturnAmount
+              })(
+                <Input disabled />
+              )
+            }
+          </FormItem>
+          <FormItem label="划销金额">
+            {
+              getFieldDecorator('badDebtAmount', {
+                initialValue: o.badDebtAmount
+              })(
+                <Input disabled />
+              )
+            }
+          </FormItem>
+          <FormItem label="划销退回金额">
+            {
+              getFieldDecorator('badDebtBackAmount', {
+                initialValue: o.badDebtBackAmount,
+                rules: [
+                  {required: true, message: '必须输入划销退回金额'},
+                  {validator: this.RAValidator}
+                ]
+              })(
+                <Input />
+              )
+            }
+          </FormItem>
+          <FormItem label="GL日期">
+            {
+              getFieldDecorator('glDate', {
+                initialValue: o.glDate ? moment(o.glDate) : null,
+                rules: [
+                  {required: true, message: '必须选择GL日期'}
+                ]})(
+                <DatePicker />
+              )
+            }
+          </FormItem>
+          <FormItem label="备注">
+            {
+              getFieldDecorator('badDebtBackRemark', {initialValue: o.badDebtBackRemark})(
+                <TextArea rows={4} />
+              )
+            }
+          </FormItem>
+        </Form>
       </Modal>
     )
   }

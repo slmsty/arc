@@ -8,6 +8,7 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import BDModal2 from './BDModal2'
 import GlModal from './GlModal'
 import BadDebtModal from './infoModal'
+import ReturnModal from './returnModal'
 
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
@@ -30,6 +31,7 @@ class Status extends Component{
     infoModalVisitable: false,
     infoDetail: {},
     o: {},
+    tableHeight: '',
   }
 
   constructor(props) {
@@ -39,112 +41,120 @@ class Status extends Component{
         title: '数据状态',
         fixed: 'left',
         dataIndex: 'statusName',
-        width: 140
+        width: 100,
       },
       {
         title: '申请单账号',
         dataIndex: 'applyCount',
-        width: 140
+        width: 140,
       },
       {
         title: 'GL已提坏账金额',
         dataIndex: 'badDebtProvisionAmount',
-        width: 140
+        width: 140,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: 'Billed AR余额',
         dataIndex: 'billedArBalance',
-        width: 140
+        width: 140,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: <span>划销金额<em style={{ color: '#FF0000' }}>*</em></span>,
         dataIndex: 'badDebtAmount',
-        width: 140
+        width: 140,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: <span>申请日期<em style={{ color: '#FF0000' }}>*</em></span>,
         dataIndex: 'applicationDate',
-        width: 80
+        width: 100,
       },
       {
         title: '备注',
         dataIndex: 'badDebtBackRemark',
-        width: 300
+        width: 300,
       },
       {
         title: '已划销金额',
         dataIndex: 'badDebtDeductedAmount',
-        width: 140
+        width: 140,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: '已划销退回金额',
         dataIndex: 'badDebtReturnAmount',
-        width: 140
+        width: 140,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: '项目编码',
         dataIndex: 'projectNo',
-        width: 140
+        width: 140,
       },
       {
         title: '项目名称',
         dataIndex: 'projectName',
-        width: 140
+        width: 140,
       },
       {
         title: '签约公司',
         dataIndex: 'companyName',
-        width: 300
+        width: 300,
       },
       {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 300
+        width: 300,
       },
       {
         title: '币种',
         dataIndex: 'contractCurrency',
-        width: 60
+        width: 60,
       },
       {
         title: '部门',
         dataIndex: 'deptName',
-        width: 300
+        width: 300,
       },
       {
         title: 'SBU',
         dataIndex: 'sbuName',
-        width: 140
+        width: 140,
       },
       {
         title: '合同金额',
         dataIndex: 'contractAmount',
-        width: 140
+        width: 140,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: 'Billed AR日期',
         dataIndex: 'billedArDate',
-        width: 100
+        width: 100,
       },
       {
         title: 'GL日期',
         dataIndex: 'glDate',
-        width: 80
+        width: 100,
       },
       {
         title: 'Billed AR金额',
         dataIndex: 'billedArAmount',
-        width: 140
+        width: 140,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: '回款金额',
         dataIndex: 'receiptAmount',
-        width: 140
+        width: 140,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: '创建提示',
         dataIndex: 'statusRemark',
-        width: 140
+        width: 140,
       },
       {
         title: '操作',
@@ -153,7 +163,7 @@ class Status extends Component{
         textAlign: 'center',
         width: 80,
         render: (text, record, index) => (
-          <Button style={{display: 'block', margin: '0 auto'}} onClick={() => this.showInfo(record)}>详情</Button>
+          <Button size={'small'} style={{ display: 'block', margin: '0 auto'}} onClick={() => this.showInfo(record)}>详情</Button>
         ),
       },
     ]
@@ -250,7 +260,20 @@ class Status extends Component{
       },
     ]
   }
-
+  componentWillReceiveProps(nextProps) {
+    if (this.props.myApply.myapplyListRefresh !== nextProps.myApply.myapplyListRefresh) {
+      this.doSearch()
+    }
+    if (this.props.cancelApply.myapplyListRefresh !== nextProps.cancelApply.myapplyListRefresh) {
+      this.doSearch()
+    }
+  }
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160
+    this.setState({ tableHeight })
+  }
   doSearch = (e) => {
     if (e) {
       e.preventDefault()
@@ -287,6 +310,18 @@ class Status extends Component{
       if (res && res.response && res.response.resultCode === '000000') {
       } else {
         message.error(res.response.resultMessage)
+      }
+    })
+  }
+  returnEditClim = (params) => {
+    this.props.returnEditClim(params).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.success('保存成功')
+        this.setState({
+          result: [this.props.myApply.getReturnEditInfo],
+        })
+      } else {
+        message.error('保存失败')
       }
     })
   }
@@ -365,7 +400,12 @@ class Status extends Component{
     })
   }
 
-  bdReturn = ()=>{
+  bdReturn = () => {
+    const selectData = this.state.rows
+    if (selectData.length > 1) {
+      message.error('一次只能对一条数据进行划销退回')
+      return
+    }
     this.setState({
       visible: true,
       result: this.state.rows,
@@ -424,7 +464,7 @@ class Status extends Component{
   }
 
   postGLEdit = (glDate) => {
-    this.props.SendErp(this.state.rowKeys, glDate)
+    this.props.BillStatusSendErp(this.state.rowKeys, glDate)
     this.setState({
       isGLEdit: false,
       rowKeys: [],
@@ -474,6 +514,15 @@ class Status extends Component{
       })
     })
   }
+  returnEditSendErp = (params) => {
+    this.props.returnEditSendErp(params).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.success('传送erp成功')
+      } else {
+        message.error(res.response.resultMessage)
+      }
+    })
+  }
 
   shouldComponentUpdate({title}, nextState){
     if(title){
@@ -482,12 +531,6 @@ class Status extends Component{
       return false;
     }else{
       return true;
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.cancelApply.cancelApplyRefresh !== nextProps.cancelApply.cancelApplyRefresh) {
-      this.doSearch()
     }
   }
 
@@ -579,9 +622,7 @@ class Status extends Component{
                 }
               </FormItem>
             </Col>
-          </Row>
-          <Row>
-            <Col span={24} style={{ textAlign: 'right' }}>
+            <Col span={8} style={{ textAlign: 'right' }}>
               <Button type="primary" htmlType="submit">查询</Button>
             </Col>
           </Row>
@@ -615,46 +656,19 @@ class Status extends Component{
             pageSize: pageSize,
             total: count,
           }}
-          scroll={{ x: 3420 }}></Table>
+          scroll={{ x: 3420, y: this.state.tableHeight }}></Table>
         <GlModal
           visible={this.state.isGLEdit}
           onCancel={this.hideGlEdit}
           onOk={this.postGLEdit}
-           />
-        <Modal
-          width={1080}
-          title="划销退回"
+        />
+        <ReturnModal
           visible={this.state.visible}
           onCancel={this.close}
-          footer={[
-            <Button key="close" onClick={this.close}>关闭</Button>
-          ]}>
-          <Row>
-            <Col span={24}>
-              <Button onClick={this.doEdit} style={{marginRight: '20px'}} disabled={this.state.editDis}>编辑</Button>
-              <Button onClick={this.sendErp2} type="primary" disabled={this.state.erp2Dis}>传送ERP</Button>
-            </Col>
-          </Row>
-          <br/>
-          <Table
-            style={{backgroundColor: '#FFFFFF'}}
-            rowKey="badDebtId"
-            bordered
-            rowSelection={{
-              selectedRowKeys: this.state.rowKeys2,
-              onChange: this.rowSelectionChange2
-            }}
-            pagination={false}
-            columns={columns2}
-            dataSource={this.state.result}
-            scroll={{ x: 3042}}></Table>
-        </Modal>
-        <BDModal2
-          visible={this.state.isEdit}
-          onCancel={this.editCancel}
-          onOk={this.editDone}
-          o={this.state.o}
-         />
+          dataSource={this.state.result}
+          returnEditClim={this.returnEditClim}
+          sendErp={this.returnEditSendErp}
+        />
         <BadDebtModal
           visible={this.state.infoModalVisitable}
           onCancel={this.closeShowInfo}

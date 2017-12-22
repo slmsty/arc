@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import BadDebtsStatus from '../../components/badDebts/Status'
 import { Search, SendErp, SendErp2, ResetTitle, UpdateResult } from '../../actions/badDebts/status'
 import { cancelApply } from '../../actions/badDebts/cancelApply'
-import { myApplyInfo } from '../../actions/myApply'
+import { myApplyInfo, returnEditClim, returnEditSendErp,BillStatusSendErp } from '../../actions/myApply'
 
 const mapStateToProps = state => ({
   myApply: state.myApply,
@@ -18,6 +18,9 @@ const mapDispatchToProps = dispatch => (
     UpdateResult,
     cancelApply,
     myApplyInfo,
+    returnEditClim,
+    returnEditSendErp,
+    BillStatusSendErp,
   }, dispatch)
 )
 

@@ -11,7 +11,8 @@ class Approve extends Component{
     rowKeys: [],
     rows: [],
     rejectDis: true,
-    confirmDis: true
+    confirmDis: true,
+    tableHeight: '',
   }
 
   constructor(props){
@@ -135,7 +136,12 @@ class Approve extends Component{
       })
     });
   }
-
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160
+    this.setState({ tableHeight })
+  }
   rowSelectionChange = (selectedRowKeys, selectedRows)=>{
     let rowKeys = this.state.rowKeys
     let rows = this.state.rows
@@ -275,14 +281,11 @@ class Approve extends Component{
                 }
               </FormItem>
             </Col>
-          </Row>
-          <Row>
-            <Col span={24} style={{textAlign: 'right'}}>
+            <Col span={8} style={{textAlign: 'right'}}>
               <Button type="primary" htmlType="submit">查询</Button>
             </Col>
           </Row>
         </Form>
-        <br/>
         <Row>
           <Col span={24}>
             <Button onClick={this.reject} style={{marginRight: '20px'}} disabled={this.state.rejectDis}>拒绝</Button>
@@ -302,7 +305,8 @@ class Approve extends Component{
           columns={columns}
           dataSource={result}
           pagination={false}
-          scroll={{ x: 3002 , y : '100px'}}></Table>
+          scroll={{ x: 3002, y: this.state.tableHeight }}
+        />
       </div>
     )
   }

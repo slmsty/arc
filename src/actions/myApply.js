@@ -50,3 +50,41 @@ export function myApplyInfo(queryParam) {
     },
   }
 }
+// bill ar 划销退回编辑确定方法
+export function returnEditClim(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/badDebt/back',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['RETURNEDITCLIM_SUCCESS'],
+    },
+  }
+}
+// bill ar 划销退回编辑后传送erp方法
+export function returnEditSendErp(badDebtIds) {
+  return {
+    [httpApi]: {
+      url: '/arc/badDebt/sendERPBack',
+      options: {
+        method: 'POST',
+        body: {badDebtIds},
+      },
+      types: ['RETURNEDITSENDERP_SUCCESS'],
+    },
+  }
+}
+export function BillStatusSendErp(badDebtIds, glDate) {
+  return {
+    [httpApi]: {
+      url: '/arc/badDebt/sendERP',
+      options: {
+        method: 'POST',
+        body: {badDebtIds, glDate},
+      },
+      types: ['BILLSTATUSSENDERP_SUCCESS'],
+    },
+  }
+}
