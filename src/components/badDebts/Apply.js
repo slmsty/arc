@@ -224,9 +224,6 @@ class Apply extends Component{
       },
     ];
   }
-  componentDidMount() {
-    this.doSearch()
-  }
   doSearch = ()=>{
     this.props.form.validateFields((err, values) => {
       console.log('value',values)
