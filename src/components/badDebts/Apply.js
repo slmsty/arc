@@ -302,7 +302,7 @@ class Apply extends Component{
     this.setState({
       rowKeys2: rowKeys2,
       rows2: rows2,
-      editDis: !(rows2.length===1 && rows2.every(o=>o.status==='10'||o.status==='13'||o.status===''||o.status===undefined)),
+      editDis: !(rows2.length===1 && rows2.every(o=>o.status==='27' || o.status==='10'||o.status==='13'||o.status===''||o.status===undefined)),
       applyDis: !(rows2.length>0 && rows2.every(o=>o.status==='10'))
     })
   }
@@ -524,9 +524,7 @@ class Apply extends Component{
                 }
               </FormItem>
             </Col>
-          </Row>
-          <Row>
-            <Col span={24} style={{textAlign: 'right'}}>
+            <Col span={8} style={{textAlign: 'right'}}>
               <Button type="primary" htmlType="submit">查询</Button>
             </Col>
           </Row>

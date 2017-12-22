@@ -28,8 +28,8 @@ export default class ApplySearchCon extends React.Component {
     },
     businessKey: '',
     applyPersonKeyword: '',
-    applyDate: '',
-    status: '',
+    applyDate: 'ALL',
+    status: 'approve',
   }
   handleQuery = () => {
     this.setState({
