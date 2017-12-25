@@ -226,7 +226,6 @@ class Apply extends Component{
   }
   doSearch = ()=>{
     this.props.form.validateFields((err, values) => {
-      console.log('value',values)
       this.setState({
         visible: true,
         rowKeys: [],

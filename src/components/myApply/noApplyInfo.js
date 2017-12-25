@@ -7,9 +7,45 @@ import { Modal, Row, Col, Button, Input, Form, Table } from 'antd'
 
 const FormItem = Form.Item
 const { TextArea } = Input
-class BadDebtsInfoModal extends React.Component {
+class ApplyInfoModal extends React.Component {
+  applyComfirm = () => {
+    const applyComfirmQueryParam = {
+      arcFlowId: this.props.applyData.arcFlowId,
+      processInstanceId: this.props.applyData.processInstanceId,
+      businessKey: this.props.applyData.businessKey,
+      taskId: this.props.applyData.taskId,
+      approveType: '',
+      approveRemark: '',
+    }
+    const param = this.props.form.getFieldsValue()
+    param.approveRemark = param.approveRemark ? this.trim(param.approveRemark) : param.approveRemark
+    param.approveType = 'agree'
+    applyComfirmQueryParam.approveRemark = param.approveRemark
+    applyComfirmQueryParam.approveType = param.approveType
+    this.props.applyComfirm(applyComfirmQueryParam)
+  }
+  applyReject = () => {
+    const applyRejectQueryParam = {
+      arcFlowId: this.props.applyData.arcFlowId,
+      processInstanceId: this.props.applyData.processInstanceId,
+      businessKey: this.props.applyData.businessKey,
+      taskId: this.props.applyData.taskId,
+      approveType: '',
+      approveRemark: '',
+    }
+    // console.log(applyRejectQueryParam)
+    const param = this.props.form.getFieldsValue()
+    param.approveRemark = param.approveRemark ? this.trim(param.approveRemark) : param.approveRemark
+    param.approveType = 'cancel'
+    applyRejectQueryParam.approveRemark = param.approveRemark
+    applyRejectQueryParam.approveType = param.approveType
+    this.props.applyReject(applyRejectQueryParam)
+  }
+  trim = (str) => {
+    return str.replace(/(^\s*)|(\s*$)/g, '')
+  }
   render() {
-    const applyInfoDatas = this.props.data
+    const applyInfoDatas = this.props.applyInfoData
     const { getFieldDecorator } = this.props.form
     const columns = [{
       title: '节点',
@@ -67,9 +103,9 @@ class BadDebtsInfoModal extends React.Component {
         <Modal
           width={1024}
           title="审批详情"
-          visible={this.props.visible}
-          onCancel={this.props.onCancel}
-          onOk={this.props.onCancel}
+          visible={this.props.infoVisitable}
+          onCancel={this.props.closeClaim}
+          onOk={this.props.closeClaim}
         >
           <Form>
             <h2>申请人信息</h2>
@@ -110,6 +146,7 @@ class BadDebtsInfoModal extends React.Component {
               applyInfoDatas.approveInfoList.map((item, index) => {
                 return (
                   <div key={index}>
+                    <br />
                     <Row>
                       <Col style={{ textAlign: 'left' }} span={3}>{item.taskName}：</Col>
                       <Col span={5}>{item.assigneeName}</Col>
@@ -128,7 +165,6 @@ class BadDebtsInfoModal extends React.Component {
                     </Row>
                     <br />
                     <hr style={{ borderTop: '1px solid #d9d9d9' }} />
-                    <br />
                   </div>
                 )
               }) : ''
@@ -140,13 +176,16 @@ class BadDebtsInfoModal extends React.Component {
     )
   }
 }
-BadDebtsInfoModal.propTypes = {
-  onCancel: PropTypes.bool.isRequired,
+ApplyInfoModal.propTypes = {
+  closeClaim: PropTypes.func.isRequired,
+  applyReject: PropTypes.func.isRequired,
+  applyComfirm: PropTypes.func.isRequired,
+  infoVisitable: PropTypes.bool.isRequired,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
 }
-const BadDebtsInfoModalWithForm = Form.create()(BadDebtsInfoModal)
+const ApplyInfoModalWithForm = Form.create()(ApplyInfoModal)
 
-export default BadDebtsInfoModalWithForm
+export default ApplyInfoModalWithForm

@@ -153,6 +153,7 @@ class ApplyInfoModal extends React.Component {
               applyInfoDatas.approveInfoList.map((item, index) => {
                 return (
                   <div key={index}>
+                    <br />
                     <Row>
                       <Col style={{ textAlign: 'left' }} span={3}>{item.taskName}：</Col>
                       <Col span={5}>{item.assigneeName}</Col>

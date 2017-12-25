@@ -11,11 +11,22 @@ const RadioGroup = Radio.Group
 
 class ApplySearchCon extends React.Component {
   state = {
+    showBillType: false,
   }
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
     this.props.onQuery(param)
+  }
+  showBillType = () => {
+    this.setState({
+      showBillType: true,
+    })
+  }
+  hiddlenBillType = () => {
+    this.setState({
+      showBillType: false,
+    })
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -29,19 +40,72 @@ class ApplySearchCon extends React.Component {
           className="ant-search-form"
         >
           <Row gutter={40}>
-            <Col span={10} key={1}>
+            <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="申请单号">
-                {getFieldDecorator('businessKey')(<Input onPressEnter={this.handleQuery} />)}
+                {getFieldDecorator('businessKey')(<Input placeholder="申请单号" onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
-            <Col span={10} key={2}>
+            <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="申请人">
                 {getFieldDecorator('applyPersonKeyword')(<Input placeholder="姓名／工号／NT" onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={10} key={3}>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="项目编号">
+                {getFieldDecorator('productId')(<Input placeholder="项目编号" onPressEnter={this.handleQuery} />)}
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="合同编号">
+                {getFieldDecorator('constractId')(<Input placeholder="合同编号" onPressEnter={this.handleQuery} />)}
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="合同名称">
+                {getFieldDecorator('constractName')(<Input placeholder="合同名称" onPressEnter={this.handleQuery} />)}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={8} key={3}>
+              <FormItem {...formItemLayout} label="申请类型">
+                {getFieldDecorator('applyType', {
+                  initialValue: 'ALL',
+                })(
+                  <RadioGroup size="large" style={{ width: '330px' }}>
+                    <RadioButton value="ALL" style={{ borderRadius: '4px' }} onClick={this.hiddlenBillType}>全部</RadioButton>
+                    <RadioButton value="WEEK" style={{ marginLeft: '10px', borderRadius: '4px' }} onClick={this.hiddlenBillType}>坏账申请</RadioButton>
+                    <RadioButton value="MONTH" style={{ marginLeft: '10px', borderRadius: '4px' }} onClick={this.showBillType}>发票申请</RadioButton>
+                  </RadioGroup>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40} style={{ display: this.state.showBillType ? 'block' : 'none' }}>
+            <Col span={8} key={3}>
+              <FormItem {...formItemLayout} label="发票类型">
+                {getFieldDecorator('billType', {
+                  initialValue: 'ALL',
+                })(
+                  <RadioGroup size="large" style={{ width: '1000px' }}>
+                    <RadioButton value="ALL" style={{ borderRadius: '4px' }}>全部</RadioButton>
+                    <RadioButton value="WEEK" style={{ marginLeft: '10px', borderRadius: '4px' }}>正常开票</RadioButton>
+                    <RadioButton value="MONTH" style={{ marginLeft: '10px', borderRadius: '4px' }}>已大签项目提前开票</RadioButton>
+                    <RadioButton value="WEEK1" style={{ marginLeft: '10px', borderRadius: '4px' }}>超额开票</RadioButton>
+                    <RadioButton value="MONTH2" style={{ marginLeft: '10px', borderRadius: '4px' }}>未大签提前开票</RadioButton>
+                    <RadioButton value="WEEK3" style={{ marginLeft: '10px', borderRadius: '4px' }}>红字发票开票</RadioButton>
+                    <RadioButton value="MONTH4" style={{ marginLeft: '10px', borderRadius: '4px' }}>其他红字发票</RadioButton>
+                    <RadioButton value="WEEK5" style={{ marginLeft: '10px', borderRadius: '4px' }}>废票开票</RadioButton>
+                    <RadioButton value="MONTH6" style={{ marginLeft: '10px', borderRadius: '4px' }}>其他开票</RadioButton>
+                  </RadioGroup>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="申请时间">
                 {getFieldDecorator('applyDate', {
                   initialValue: 'ALL',
@@ -57,7 +121,7 @@ class ApplySearchCon extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={10} key={4}>
+            <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="申请状态">
                 {getFieldDecorator('status', {
                   initialValue: 'approve',
@@ -71,7 +135,7 @@ class ApplySearchCon extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={10} style={{ textAlign: 'right' }}>
+            <Col span={16} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery} disabled={this.props.loading}><Icon type="search" />查询</Button>
             </Col>
           </Row>

@@ -88,3 +88,15 @@ export function BillStatusSendErp(badDebtIds, glDate) {
     },
   }
 }
+export function cancelApply(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/workFlow/cancelApply',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['UNDOERP_SUCCESS'],
+    },
+  }
+}

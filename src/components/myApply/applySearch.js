@@ -6,12 +6,15 @@ import PropTypes from 'prop-types'
 import { Button, Table, message } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
 import ApplyInfoModal from './applyInfo'
+import NoApplyInfo from './noApplyInfo'
 
 export default class ApplySearchCon extends React.Component {
   state = {
     infoVisitable: false,
     loading: false,
     applyData: '',
+    noApplyInfoVisitable: false,
+    noApplyInfoData: '',
   }
   componentDidMount() {
     this.handleQuery()
@@ -62,7 +65,6 @@ export default class ApplySearchCon extends React.Component {
    function approveClick
    */
   approveClick = (record) => {
-    console.log(record.statusName)
     const paramsData = {}
     paramsData.arcFlowId = record.arcFlowId
     paramsData.processInstanceId = record.processInstanceId
@@ -125,11 +127,37 @@ export default class ApplySearchCon extends React.Component {
       applyData: '',
     })
   }
+  showApplyInfo = (record) => {
+    const paramsData = {}
+    paramsData.arcFlowId = record.arcFlowId
+    paramsData.processInstanceId = record.processInstanceId
+    paramsData.businessKey = record.businessKey
+    paramsData.taskId = record.taskId
+    this.props.myApplyInfo(paramsData).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          noApplyInfoVisitable: true,
+          noApplyInfoData: record,
+        })
+      } else {
+        message.error(res.response.resultMessage)
+      }
+    })
+  }
+  NoApplycloseModalClaim = () => {
+    this.setState({
+      noApplyInfoVisitable: false,
+      noApplyInfoData: '',
+    })
+  }
   render() {
     const columns = [{
       title: '申请单编号',
       dataIndex: 'businessKey',
-      width: 200,
+      width: 150,
+      render: (text, record) => (
+        <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
+      ),
     }, {
       title: '审批状态',
       dataIndex: 'statusName',
@@ -137,7 +165,19 @@ export default class ApplySearchCon extends React.Component {
     }, {
       title: '申请单类型',
       dataIndex: 'modelName',
-      width: 100,
+      width: 120,
+    }, {
+      title: '项目编码',
+      dataIndex: 'productId',
+      width: 200,
+    }, {
+      title: '合同编码',
+      dataIndex: 'constractId',
+      width: 200,
+    }, {
+      title: '合同名称',
+      dataIndex: 'constractName',
+      width: 300,
     }, {
       title: '申请信息',
       dataIndex: 'applyInfo',
@@ -157,7 +197,7 @@ export default class ApplySearchCon extends React.Component {
     }, {
       title: '申请时间',
       dataIndex: 'applyDate',
-      width: 150,
+      width: 160,
     }, {
       title: '审批时间',
       dataIndex: 'approveDate',
@@ -195,6 +235,12 @@ export default class ApplySearchCon extends React.Component {
           applyData={this.state.applyData}
           applyInfoData={this.props.myApply.getMyApplyInfo}
         />
+        <NoApplyInfo
+          infoVisitable={this.state.noApplyInfoVisitable}
+          closeClaim={this.NoApplycloseModalClaim}
+          applyData={this.state.noApplyInfoData}
+          applyInfoData={this.props.myApply.getMyApplyInfo}
+        />
         <br /><br />
         <Table
           rowKey="getMyApplyList"
@@ -202,7 +248,7 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="middle"
-          scroll={{ x: '1630px' }}
+          scroll={{ x: '2310px' }}
           loading={this.state.loading}
           dataSource={this.props.myApply.getMyApplyList.result}
         />

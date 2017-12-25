@@ -2,8 +2,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import BadDebtsStatus from '../../components/badDebts/Status'
 import { Search, SendErp, SendErp2, ResetTitle, UpdateResult } from '../../actions/badDebts/status'
-import { cancelApply } from '../../actions/badDebts/cancelApply'
-import { myApplyInfo, returnEditClim, returnEditSendErp,BillStatusSendErp } from '../../actions/myApply'
+import { myApplyInfo, returnEditClim, returnEditSendErp, BillStatusSendErp, cancelApply } from '../../actions/myApply'
 
 const mapStateToProps = state => ({
   myApply: state.myApply,
@@ -16,11 +15,11 @@ const mapDispatchToProps = dispatch => (
     SendErp2,
     ResetTitle,
     UpdateResult,
-    cancelApply,
     myApplyInfo,
     returnEditClim,
     returnEditSendErp,
     BillStatusSendErp,
+    cancelApply,
   }, dispatch)
 )
 

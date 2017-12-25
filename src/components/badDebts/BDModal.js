@@ -49,7 +49,6 @@ class BDModal extends Component{
   }
 
   render(){
-    console.log(this.props.o)
     const {getFieldDecorator} = this.props.form;
     const {visible, o} = this.props;
 

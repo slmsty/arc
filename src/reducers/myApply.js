@@ -32,6 +32,9 @@ function returnEditSendErp(state) {
 function BillStatusSendErp(state) {
   return { ...state, myapplyListRefresh: new Date().getTime() }
 }
+function cancelApply(state) {
+  return { ...state, myapplyListRefresh: new Date().getTime() }
+}
 
 
 export default caseReducer(myApplyInfoData, {
@@ -42,4 +45,5 @@ export default caseReducer(myApplyInfoData, {
   RETURNEDITCLIM_SUCCESS: returnEditClim,
   RETURNEDITSENDERP_SUCCESS: returnEditSendErp,
   BILLSTATUSSENDERP_SUCCESS: BillStatusSendErp,
+  UNDOERP_SUCCESS: cancelApply,
 })
