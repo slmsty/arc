@@ -387,7 +387,7 @@ class Confirm extends Component{
 
     return (
       <div className="billedARConfirm">
-        <Form onSubmit={this.doSearch}>
+        <Form>
           <Row>
             <Col span={8}>
               <FormItem label="Billed AR日期" {...layout}>
@@ -476,7 +476,7 @@ class Confirm extends Component{
           </Row>
           <Row>
             <Col span={24} style={{textAlign: 'right'}}>
-              <Button type="primary" htmlType="submit">查询</Button>
+              <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
             </Col>
           </Row>
         </Form>
