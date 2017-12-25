@@ -47,7 +47,7 @@ class Approve extends Component{
       {
         title: '付款阶段(里程碑)',
         dataIndex: 'paymentPhrases',
-        width: 120
+        width: 200,
       },
       {
         title: '付款条款',
@@ -92,12 +92,12 @@ class Approve extends Component{
       {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 120
+        width: 200,
       },
       {
         title: '合同名称',
         dataIndex: 'contractName',
-        width: 300
+        width: 400,
       },
       {
         title: '合同编码',
@@ -125,7 +125,7 @@ class Approve extends Component{
     this.doSearch()
   }
   doSearch = (e)=>{
-    // e.preventDefault();
+    //e.preventDefault();
     this.props.form.validateFields((err, values) => {
       this.setState({
         rowKeys: [],
@@ -209,7 +209,7 @@ class Approve extends Component{
 
     return (
       <div className="billedARApprove">
-        <Form onSubmit={this.doSearch}>
+        <Form>
           <Row>
             <Col span={8}>
               <FormItem label="GL日期" {...layout}>
@@ -284,7 +284,7 @@ class Approve extends Component{
               </FormItem>
             </Col>
             <Col span={8} style={{textAlign: 'right'}}>
-              <Button type="primary" htmlType="submit">查询</Button>
+              <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
             </Col>
           </Row>
         </Form>
@@ -296,18 +296,19 @@ class Approve extends Component{
         </Row>
         <br/>
         <Table
+          size="small"
           style={{backgroundColor: '#FFFFFF'}}
           rowKey="contractItemId"
           bordered
           loading={loading}
           rowSelection={{
             selectedRowKeys: this.state.rowKeys,
-            onChange: this.rowSelectionChange
+            onChange: this.rowSelectionChange,
           }}
           columns={columns}
           dataSource={result}
           pagination={false}
-          scroll={{ x: 3002, y: this.state.tableHeight }}
+          scroll={{ x: 3262, y: this.state.tableHeight }}
         />
       </div>
     )
