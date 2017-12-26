@@ -329,7 +329,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
             rowKey="fundId"
             columns={this.columns}
             bordered
-            size="middle"
+            size="small"
             locale={{
               emptyText: '请增加合同百分比',
             }}

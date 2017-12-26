@@ -95,7 +95,7 @@ class BadDebtsInfoModal extends React.Component {
                 rowKey="receiptClaimId"
                 columns={columns}
                 bordered
-                size="middle"
+                size="small"
                 scroll={{ x: '1480px' }}
                 dataSource={applyInfoDatas.serviceDetail}
               />

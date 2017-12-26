@@ -225,7 +225,7 @@ export default class NoProjectReceiptClaim extends React.Component {
           rowSelection={rowSelection}
           columns={this.columns}
           bordered
-          size="middle"
+          size="small"
           dataSource={this.props.receiptClaimList.result}
           scroll={{ x: 2600, y: this.state.tableHeight }}
           pagination={{

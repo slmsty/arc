@@ -320,7 +320,7 @@ class CustomerBankLink extends React.Component {
         rowSelection={rowSelection}
         columns={columns}
         dataSource={tableData}
-        size="middle"
+        size="small"
         loading={this.state.loading}
         bordered
         pagination={pagination}

@@ -54,29 +54,29 @@ class ApplySearchCon extends React.Component {
           <Row gutter={40}>
             <Col span={8}>
               <FormItem {...formItemLayout} label="项目编号">
-                {getFieldDecorator('productId')(<Input placeholder="项目编号" onPressEnter={this.handleQuery} />)}
+                {getFieldDecorator('projectNo')(<Input placeholder="项目编号" onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem {...formItemLayout} label="合同编号">
-                {getFieldDecorator('constractId')(<Input placeholder="合同编号" onPressEnter={this.handleQuery} />)}
+                {getFieldDecorator('contractNo')(<Input placeholder="合同编号" onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem {...formItemLayout} label="合同名称">
-                {getFieldDecorator('constractName')(<Input placeholder="合同名称" onPressEnter={this.handleQuery} />)}
+                {getFieldDecorator('contractName')(<Input placeholder="合同名称" onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={40}>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="申请类型">
-                {getFieldDecorator('applyType', {
+                {getFieldDecorator('serviceType', {
                   initialValue: 'ALL',
                 })(
                   <RadioGroup size="large" style={{ width: '330px' }}>
                     <RadioButton value="ALL" style={{ borderRadius: '4px' }} onClick={this.hiddlenBillType}>全部</RadioButton>
-                    <RadioButton value="WEEK" style={{ marginLeft: '10px', borderRadius: '4px' }} onClick={this.hiddlenBillType}>坏账申请</RadioButton>
+                    <RadioButton value="badDebt" style={{ marginLeft: '10px', borderRadius: '4px' }} onClick={this.hiddlenBillType}>坏账申请</RadioButton>
                     <RadioButton value="MONTH" style={{ marginLeft: '10px', borderRadius: '4px' }} onClick={this.showBillType}>发票申请</RadioButton>
                   </RadioGroup>
                 )}
@@ -86,7 +86,7 @@ class ApplySearchCon extends React.Component {
           <Row gutter={40} style={{ display: this.state.showBillType ? 'block' : 'none' }}>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="发票类型">
-                {getFieldDecorator('billType', {
+                {getFieldDecorator('serviceSonType', {
                   initialValue: 'ALL',
                 })(
                   <RadioGroup size="large" style={{ width: '1000px' }}>

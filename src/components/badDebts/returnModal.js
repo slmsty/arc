@@ -185,6 +185,7 @@ class ReturnModal extends React.Component {
             rowKey="badDebtId"
             rowSelection={rowSelection}
             bordered
+            size="small"
             pagination={false}
             columns={columns}
             dataSource={applyInfoDatas}

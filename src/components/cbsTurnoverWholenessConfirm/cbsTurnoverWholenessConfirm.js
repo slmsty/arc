@@ -52,7 +52,7 @@ const columns = [{
   title: '银行类型',
   dataIndex: 'receiptBankAccountName',
   key: 'receiptBankAccountName',
-  width: 150,
+  width: 300,
 }, {
   title: '银行账号',
   dataIndex: 'receiptBankAccount',
@@ -62,7 +62,7 @@ const columns = [{
   title: '对方户名',
   dataIndex: 'payCustName',
   key: 'payCustName',
-  width: 300,
+  width: 350,
 }, {
   title: '银行流水备注',
   dataIndex: 'bankTransactionPurpose',
@@ -247,9 +247,9 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           dataSource={this.props.cbsTurnoverWholenessList.pageInfo.result}
           bordered
           rowKey="receiptClaimId"
-          size="middle"
+          size="small"
           pagination={pagination}
-          scroll={{ x: '3350px', y: this.state.tableHeight }}
+          scroll={{ x: '3550px', y: this.state.tableHeight }}
         />
         <EditCBSTurnoverDataWithForm
           onConfirm={this.handleEditConfirm}

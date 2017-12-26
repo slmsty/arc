@@ -534,6 +534,7 @@ class Apply extends Component{
         </Row>
         <br/>
         <Table
+          size="small"
           style={{backgroundColor: '#FFFFFF'}}
           rowKey="contractItemId"
           bordered
@@ -558,6 +559,7 @@ class Apply extends Component{
           onCancel={this.onCancel}
           onOk={this.onOk}>
           <Table
+            size="small"
             style={{backgroundColor: '#FFFFFF'}}
             rowKey="contractItemId"
             bordered

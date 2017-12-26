@@ -12,7 +12,7 @@ const successColumns = [{
   title: '收款方法',
   dataIndex: 'receiptMethodName',
   key: 'receiptMethodName',
-  width: 100,
+  width: 200,
   fixed: 'left',
 }, {
   title: '银行流水号',
@@ -206,9 +206,9 @@ export default class BatchImport extends React.Component {
           columns={successColumns}
           dataSource={this.props.successResult.result}
           bordered
-          size="middle"
+          size="small"
           pagination={successPagination}
-          scroll={{ x: '1850px', y: this.state.successTableHeight }}
+          scroll={{ x: '1950px', y: this.state.successTableHeight }}
           rowKey="index"
         />
         <br />
@@ -220,7 +220,7 @@ export default class BatchImport extends React.Component {
           columns={failureColumns}
           dataSource={this.props.failureResult.result}
           bordered
-          size="middle"
+          size="small"
           pagination={failurePagination}
           scroll={{ x: '1950px', y: this.state.failureTableHeight }}
           rowKey="index"

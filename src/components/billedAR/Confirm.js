@@ -295,7 +295,7 @@ class Confirm extends Component{
     })
   }
 
-  approval = ()=>{
+  approval = () => {
     this.props.Approval(this.state.rowKeys)
     this.setState({
       rowKeys: [],
@@ -303,7 +303,7 @@ class Confirm extends Component{
       editDis: true,
       rejectDis: true,
       approvalDis: true,
-      sendDis: true
+      sendDis: true,
     })
   }
 
@@ -344,7 +344,7 @@ class Confirm extends Component{
       editDis: true,
       rejectDis: true,
       approvalDis: true,
-      sendDis: true
+      sendDis: true,
     })
   }
 
@@ -363,6 +363,7 @@ class Confirm extends Component{
 
   shouldComponentUpdate({title}, nextState){
     if(title){
+      console.log()
       Modal.info({title})
       this.props.ResetTitle()
       return false;
@@ -491,6 +492,7 @@ class Confirm extends Component{
         </Row>
         <br/>
         <Table
+          size="small"
           style={{backgroundColor: '#FFFFFF'}}
           rowKey="billedArId"
           bordered
@@ -534,7 +536,7 @@ class Confirm extends Component{
             <Table
               rowKey="id"
               bordered
-              size="middle"
+              size="small"
               columns={this.columns2}
               dataSource={this.state.failures}
               pagination={false}/>

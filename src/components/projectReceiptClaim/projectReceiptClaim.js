@@ -306,7 +306,7 @@ export default class ProjectReceiptClaim extends React.Component {
           rowSelection={rowSelection}
           columns={this.columns}
           bordered
-          size="middle"
+          size="small"
           dataSource={this.props.receiptClaimList.result}
           scroll={{ x: 3000, y: this.state.tableHeight }}
           pagination={{

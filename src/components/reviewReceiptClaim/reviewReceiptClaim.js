@@ -106,11 +106,11 @@ const columns = [{
 }, {
   title: '合同编码',
   dataIndex: 'contractNo',
-  width: 200,
+  width: 250,
 }, {
   title: '合同名称',
   dataIndex: 'contractName',
-  width: 300,
+  width: 500,
 }, {
   title: '发票号',
   dataIndex: 'invoiceNo',
@@ -373,9 +373,9 @@ export default class ReviewReceiptClaim extends React.Component {
         columns={columns}
         dataSource={this.props.reviewReceiptClaim.getReviewReceiptList.result}
         bordered
-        size="middle"
+        size="small"
         pagination={pagination}
-        scroll={{ x: '4400px', y: this.state.tableHeight }}
+        scroll={{ x: '4650px', y: this.state.tableHeight }}
         loading={this.state.loading}
       />
       {/* 弹出传送ARglDatemodal */}

@@ -305,7 +305,7 @@ export default class ManualEntryBankTurnover extends React.Component {
           dataSource={this.props.manualEntryBankTurnoverList.pageInfo.result}
           bordered
           rowKey="receiptClaimId"
-          size="middle"
+          size="small"
           pagination={pagination}
           scroll={{ x: '2295px', y: this.state.tableHeight }}
         />

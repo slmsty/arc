@@ -43,11 +43,11 @@ class Status extends Component{
         dataIndex: 'statusName',
         width: 100,
       },
-      {
+      /* {
         title: '申请单账号',
         dataIndex: 'applyCount',
         width: 140,
-      },
+      }, */
       {
         title: 'GL已提坏账金额',
         dataIndex: 'badDebtProvisionAmount',
@@ -637,6 +637,7 @@ class Status extends Component{
         </Row>
         <br />
         <Table
+          size="small"
           style={{ backgroundColor: '#FFFFFF' }}
           rowKey="badDebtId"
           bordered

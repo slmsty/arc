@@ -139,7 +139,7 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
           rowSelection={rowSelection}
           columns={this.columns}
           bordered
-          size="middle"
+          size="small"
           loading={this.state.loading}
           locale={{
             emptyText: this.state.firstLoad ? '' : '没有符合条件的订单',

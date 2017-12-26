@@ -247,7 +247,7 @@ export default class ApplySearchCon extends React.Component {
           pagination={pagination}
           bordered
           columns={columns}
-          size="middle"
+          size="small"
           scroll={{ x: '2310px' }}
           loading={this.state.loading}
           dataSource={this.props.myApply.getMyApplyList.result}

@@ -70,7 +70,7 @@ export default class ContractList extends React.Component {
           rowKey="contractItemId"
           columns={this.columns}
           bordered
-          size="middle"
+          size="small"
           dataSource={this.props.contractChangeList}
           scroll={{ x: '150%', y: this.state.tableHeight }}
         />

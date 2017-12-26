@@ -63,6 +63,7 @@ export default ({
       })
 
       title = `成功审批${action.response.successList.length}条数据，失败${action.response.failList.length}条数据`
+      console.log(action.response)
       break;
     case 'BILLEDARCONFIRM_RESET_TITLE':
       title = ""

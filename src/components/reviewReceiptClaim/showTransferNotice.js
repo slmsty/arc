@@ -35,7 +35,7 @@ class SelectCustomer extends React.Component {
               rowKey="receiptClaimId"
               columns={this.transfercolumns}
               bordered
-              size="middle"
+              size="small"
               dataSource={this.props.transfNoticeData.failures}
               // style={{ display: this.props.transfNoticeData.failures.length ? 'ture' : 'false' }}
             />

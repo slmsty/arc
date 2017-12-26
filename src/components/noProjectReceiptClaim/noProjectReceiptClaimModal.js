@@ -202,7 +202,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
             locale={{
               emptyText: '请增加订单',
             }}
-            size="middle"
+            size="small"
             dataSource={this.state.funds}
             pagination={false}
             scroll={{ x: '150%' }}
