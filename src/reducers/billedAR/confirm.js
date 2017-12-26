@@ -4,6 +4,7 @@ export default ({
   count=0,
   result=[],
   title="",
+  amountInfo = {},
   loading=false
 }={}, action)=>{
   switch(action.type){
@@ -55,15 +56,14 @@ export default ({
           return {
             ...o,
             status: '30',
-            statusName: '待传送PA'
+            statusName: '待传送PA',
           }
         }else{
           return o;
         }
       })
-
+      amountInfo = action.response.amountInfo
       title = `成功审批${action.response.successList.length}条数据，失败${action.response.failList.length}条数据`
-      console.log(action.response)
       break;
     case 'BILLEDARCONFIRM_RESET_TITLE':
       title = ""
@@ -78,5 +78,6 @@ export default ({
     result,
     title,
     loading,
+    amountInfo,
   }
 }

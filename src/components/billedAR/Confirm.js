@@ -362,9 +362,21 @@ class Confirm extends Component{
   }
 
   shouldComponentUpdate({title}, nextState){
+    console.log(this.props.amountInfo)
+
     if(title){
-      console.log()
-      Modal.info({title})
+      let info = this.props.amountInfo
+      console.log('info',this.props.amountInfo)
+      let str = ''
+      for (let i in this.props.amountInfo) {
+        str += `${i}:${this.props.amountInfo[i]}\n`
+      }
+      console.log(str)
+      Modal.info({
+        title: `${title}`,
+        content: "Billed AR 金额合计："+str,
+      })
+      console.log(str)
       this.props.ResetTitle()
       return false;
     }else{
@@ -373,6 +385,7 @@ class Confirm extends Component{
   }
 
   render(){
+    // console.log("render",this.props.amountInfo)
     const { getFieldDecorator } = this.props.form;
     const columns = this.columns;
     const {pageNo, pageSize, count, result, loading} = this.props;

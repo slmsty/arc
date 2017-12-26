@@ -5,6 +5,7 @@ import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
+const dateFormat = 'YYYY-MM-DD'
 
 class Approve extends Component{
   state = {
@@ -134,7 +135,7 @@ class Approve extends Component{
         confirmDis: true
       })
       this.props.Search({
-        ...values
+        ...values,
       })
     });
   }
@@ -276,9 +277,8 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="款项ID" {...layout}>
                 {
-                  getFieldDecorator('fundId', {initialValue: ''})(<Input
+                  getFieldDecorator('fundId')(<Input
                     placeholder="款项ID"
-                    hasEmpty
                   />)
                 }
               </FormItem>
