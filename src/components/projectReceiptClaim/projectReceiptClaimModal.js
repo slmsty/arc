@@ -37,7 +37,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     render: (text, record, index) => (<EditableNumberCell
       editable
       value={text}
-      max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount > (record.receivableBalance + 3) ? (record.receivableBalance + 3) : this.props.receiptInfo.receiptAmount}
+      // max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount > (record.receivableBalance + 3) ? (record.receivableBalance + 3) : this.props.receiptInfo.receiptAmount}
       onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
     />),
   }, {
@@ -57,7 +57,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     render: (text, record, index) => (<EditableNumberCell
       editable
       value={text}
-      max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount < record.receivableBalance ? this.props.receiptInfo.receiptAmount : record.receivableBalance}
+      // max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount < record.receivableBalance ? this.props.receiptInfo.receiptAmount : record.receivableBalance}
       onChange={value => this.handleClaimFundChange(index, value, 'claimContractAmount')}
     />),
   }, {
@@ -142,12 +142,13 @@ export default class ProjectReceiptClaimModal extends React.Component {
   handleClaimFundChange = (index, value, key) => {
     if (index >= 0 && index < this.state.funds.length) {
       const funds = this.state.funds
+      // console.log(value)
       if (key === 'cust') {
         funds[index].custId = value[0]
         funds[index].custName = value[1]
       } else {
         funds[index][key] = value
-        if (key === 'claimAmount' && this.props.receiptInfo.receiptCurrency === funds[index].contractCurrency) {
+        if (key === 'claimAmount'  && this.props.receiptInfo.receiptCurrency === funds[index].contractCurrency) {
           // console.log(value)
           if (value - funds[index].claimContractAmount > 3) {
             // console.log(value)
@@ -155,12 +156,14 @@ export default class ProjectReceiptClaimModal extends React.Component {
           }
         }
       }
+      // console.log(funds[index].claimContractAmount)
       this.setState({ funds })
       this.edited = true
     }
   }
   handleSubmit = () => {
     let totalClaimAmount = 0
+    console.log(this.state.funds)
     for (let i = 0; i < this.state.funds.length; i += 1) {
       if (this.state.funds[i].claimAmount === 0) {
         message.error(`第${i + 1}条认款金额没有填写`)
@@ -172,6 +175,15 @@ export default class ProjectReceiptClaimModal extends React.Component {
       }
       if (this.state.funds[i].claimContractAmount === 0) {
         message.error(`第${i + 1}条认款合同币种金额没有填写`)
+        return
+      }
+      if (this.state.funds[i].claimAmount < 0 && Math.abs(this.state.funds[i].claimAmount - this.state.funds[i].claimContractAmount) > 3) {
+        console.log(this.state.funds[i].claimAmount - this.state.funds[i].claimContractAmount)
+        message.error(`第${i + 1}合同认款金额不符合校验，请重新输入`)
+        return
+      }
+      if (Math.abs(this.state.funds[i].claimContractAmount) > Math.abs(this.state.funds[i].receivableBalance)) {
+        message.error(`第${i + 1}认款合同币种金额不能大于应收余额，请重新输入`)
         return
       }
       totalClaimAmount += this.state.funds[i].claimAmount

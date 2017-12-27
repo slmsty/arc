@@ -42,7 +42,7 @@ const columns = [{
   dataIndex: 'payAmount',
   key: 'payAmount',
   width: 100,
-  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : '0.00'}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? Math.abs(text).toFixed(2) : '0.00'}</div>),
 }, {
   title: '公司',
   dataIndex: 'companyName',
@@ -221,7 +221,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
       total: this.props.cbsTurnoverWholenessList.pageInfo.count,
     }
     const makeSummary = () => (this.props.cbsTurnoverWholenessList.amountTotals.length ?
-      this.props.cbsTurnoverWholenessList.amountTotals.map(item => `${item.currency}：${item.totalAmount}`).join('  ') : '0.00'
+      this.props.cbsTurnoverWholenessList.amountTotals.map(item => `${item.currency}：`+ Math.abs(`${item.totalAmount}`)).join('  ') : '0.00'
     )
     return (
       <div>
