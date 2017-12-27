@@ -1,3 +1,4 @@
+
 export default ({
   pageNo=1,
   pageSize=5,
@@ -5,6 +6,7 @@ export default ({
   result=[],
   title="",
   amountInfo = {},
+  confirmApproveRefresh = new Date().getTime(),
   loading=false
 }={}, action)=>{
   switch(action.type){
@@ -41,10 +43,16 @@ export default ({
           return {
             ...o,
             status: '21',
-            statusName: '无需确认'
+            statusName: '无需确认',
+            confirmApproveRefresh:new Date().getTime(),
+
           }
         }else{
-          return o;
+          return{
+            ...o,
+            confirmApproveRefresh:new Date().getTime(),
+          }
+
         }
       })
 
@@ -57,11 +65,16 @@ export default ({
             ...o,
             status: '30',
             statusName: '待传送PA',
+            confirmApproveRefresh:new Date().getTime(),
           }
         }else{
-          return o;
+          return{
+            ...0,
+            confirmApproveRefresh:new Date().getTime(),
+          }
         }
       })
+      confirmApproveRefresh=new Date().getTime()
       amountInfo = action.response.amountInfo
       title = `成功审批${action.response.successList.length}条数据，失败${action.response.failList.length}条数据`
       break;
@@ -79,5 +92,6 @@ export default ({
     title,
     loading,
     amountInfo,
+    confirmApproveRefresh,
   }
 }

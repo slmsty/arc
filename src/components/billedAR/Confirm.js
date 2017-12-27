@@ -296,7 +296,22 @@ class Confirm extends Component{
   }
 
   approval = () => {
-    this.props.Approval(this.state.rowKeys)
+    this.props.Approval(this.state.rowKeys).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        let info = this.props.amountInfo
+        let str = ''
+        for (let i in this.props.amountInfo) {
+          str += `${i}:${this.props.amountInfo[i]}\n`
+        }
+        Modal.info({
+          title: this.props.title,
+          content: "Billed AR 金额合计："+str,
+        })
+        this.props.ResetTitle()
+      } else {
+        message.error('加载数据失败')
+      }
+    })
     this.setState({
       rowKeys: [],
       rows: [],
@@ -360,10 +375,12 @@ class Confirm extends Component{
       })
     });
   }
-
-  shouldComponentUpdate({title}, nextState){
-    console.log(this.props.amountInfo)
-
+  componentWillReceiveProps(nextProps) {
+    if (this.props.confirmApproveRefresh !== nextProps.confirmApproveRefresh) {
+      this.doSearch()
+    }
+  }
+  /* shouldComponentUpdate({title}, nextState){
     if(title){
       let info = this.props.amountInfo
       console.log('info',this.props.amountInfo)
@@ -382,10 +399,10 @@ class Confirm extends Component{
     }else{
       return true;
     }
-  }
+  } */
 
   render(){
-    // console.log("render",this.props.amountInfo)
+    console.log(this.props.confirmApproveRefresh)
     const { getFieldDecorator } = this.props.form;
     const columns = this.columns;
     const {pageNo, pageSize, count, result, loading} = this.props;

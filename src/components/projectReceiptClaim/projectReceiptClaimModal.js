@@ -37,7 +37,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
     render: (text, record, index) => (<EditableNumberCell
       editable
       value={text}
-      min={0}
       max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount > (record.receivableBalance + 3) ? (record.receivableBalance + 3) : this.props.receiptInfo.receiptAmount}
       onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
     />),
@@ -58,7 +57,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
     render: (text, record, index) => (<EditableNumberCell
       editable
       value={text}
-      min={0}
       max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount < record.receivableBalance ? this.props.receiptInfo.receiptAmount : record.receivableBalance}
       onChange={value => this.handleClaimFundChange(index, value, 'claimContractAmount')}
     />),
@@ -150,7 +148,9 @@ export default class ProjectReceiptClaimModal extends React.Component {
       } else {
         funds[index][key] = value
         if (key === 'claimAmount' && this.props.receiptInfo.receiptCurrency === funds[index].contractCurrency) {
+          // console.log(value)
           if (value - funds[index].claimContractAmount > 3) {
+            // console.log(value)
             funds[index].claimContractAmount = value
           }
         }

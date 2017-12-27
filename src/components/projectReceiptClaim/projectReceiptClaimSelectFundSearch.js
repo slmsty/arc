@@ -130,7 +130,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
       type: 'checkBox',
       selectedRowKeys: this.state.selectedRowKeys,
       getCheckboxProps: record => ({
-        disabled: record.receivableBalance <= 0,
+        disabled: record.receivableBalance == 0,
       }),
       onChange: this.onSelectChange,
     }

@@ -59,7 +59,7 @@ export default class ProjectReceiptClaim extends React.Component {
     width: 100,
     render: (text, record, index) => {
       const receiptAmount = text ? text.toFixed(2) : 0.00
-      return record.transactionType !== 'RECEIPT' ? -receiptAmount : receiptAmount
+      return receiptAmount
     },
   }, {
     title: '流水分类',

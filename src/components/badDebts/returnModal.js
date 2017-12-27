@@ -154,7 +154,6 @@ class ReturnModal extends React.Component {
     this.props.onCancel()
   }
   render() {
-    console.log(this.state)
     const applyInfoDatas = this.props.dataSource
     const { selectedRowKeys } = this.state
     const rowSelection = {
