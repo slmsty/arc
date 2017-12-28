@@ -367,6 +367,7 @@ class Confirm extends Component{
       rejectDis: true,
       approvalDis: true,
       sendDis: true,
+      glDateModal: false,
     })
   }
   send = () => {
