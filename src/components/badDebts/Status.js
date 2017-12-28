@@ -67,6 +67,12 @@ class Status extends Component{
         render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
+        title: '已划销退回金额',
+        dataIndex: 'badDebtBackAmount',
+        width: 140,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
+      },
+      {
         title: <span>申请日期<em style={{ color: '#FF0000' }}>*</em></span>,
         dataIndex: 'applicationDate',
         width: 100,

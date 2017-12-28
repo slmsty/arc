@@ -85,7 +85,7 @@ class ARModal extends Component{
             }
           })
         }
-        if(!values.assessTaxIncludedAmount){
+        if(values.assessTaxIncludedAmount == ''){
           isError = true
           this.props.form.setFields({
             assessTaxIncludedAmount: {
@@ -182,7 +182,7 @@ class ARModal extends Component{
               <FormItem label="考核含税金额">
                 {
                   getFieldDecorator('assessTaxIncludedAmount', {
-                    initialValue: 0,
+                    initialValue: '0',
                   })(
                     <Input placeholder="考核含税金额" />
                   )
