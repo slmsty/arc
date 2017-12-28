@@ -5,6 +5,7 @@ import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import ARModal from './ARModal'
+import GlDateModal from './glDateModal'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 
@@ -23,6 +24,7 @@ class Confirm extends Component{
     sLength: 0,
     fLength: 0,
     tableHeight: '',
+    glDateModal: false,
   }
 
   constructor(props){
@@ -332,10 +334,15 @@ class Confirm extends Component{
       callback
     )
   }
-
-  send = ()=>{
+  selectCancel = () => {
+    this.setState({
+      glDateModal: false,
+    })
+  }
+  selectOk = (param) => {
     this.postSend({
-      billedArIds: this.state.rowKeys
+      billedArIds: this.state.rowKeys,
+      glDate: param
     }, response=>{
       if(response.resultCode === '000000'){
         let result = response.successFailureResult;
@@ -360,6 +367,11 @@ class Confirm extends Component{
       rejectDis: true,
       approvalDis: true,
       sendDis: true,
+    })
+  }
+  send = () => {
+    this.setState({
+      glDateModal: true,
     })
   }
 
@@ -570,6 +582,11 @@ class Confirm extends Component{
               dataSource={this.state.failures}
               pagination={false}/>
           </Modal>
+        <GlDateModal
+          selectCancel={this.selectCancel}
+          glDateModal={this.state.glDateModal}
+          selectOk={this.selectOk}
+        />
       </div>
     )
   }

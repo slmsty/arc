@@ -150,7 +150,7 @@ class ARModal extends Component{
                 )
               }
             </FormItem>
-            <FormItem label="GL日期">
+            {/*<FormItem label="GL日期">
               {
                 getFieldDecorator('glDate', {
                   initialValue: o.glDate ? moment(o.glDate) : (this.state.glDate ? moment(this.state.glDate).endOf('month') : null)
@@ -158,7 +158,7 @@ class ARModal extends Component{
                   <DatePicker />
                 )
               }
-            </FormItem>
+            </FormItem>*/}
             {
               isShow
               ?

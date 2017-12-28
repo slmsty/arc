@@ -67,7 +67,7 @@ class Status extends Component{
         render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
-        title: '已划销退回金额',
+        title: '划销退回金额',
         dataIndex: 'badDebtBackAmount',
         width: 140,
         render: (text, record, index) => (text ? text.toFixed(2) : text),
@@ -663,7 +663,7 @@ class Status extends Component{
             pageSize: pageSize,
             total: count,
           }}
-          scroll={{ x: 3420, y: this.state.tableHeight }}></Table>
+          scroll={{ x: 3560, y: this.state.tableHeight }}></Table>
         <GlModal
           visible={this.state.isGLEdit}
           onCancel={this.hideGlEdit}
