@@ -402,7 +402,6 @@ class Confirm extends Component{
   } */
 
   render(){
-    console.log(this.props.confirmApproveRefresh)
     const { getFieldDecorator } = this.props.form;
     const columns = this.columns;
     const {pageNo, pageSize, count, result, loading} = this.props;

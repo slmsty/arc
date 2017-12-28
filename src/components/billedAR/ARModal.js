@@ -6,6 +6,9 @@ const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 
 class ARModal extends Component{
+  state = {
+    glDate: '',
+  }
   onCancel = ()=>{
     this.props.onCancel();
     this.props.form.resetFields();
@@ -21,8 +24,13 @@ class ARModal extends Component{
       callback
     )
   }
-
-  onOk = ()=>{
+  handleDateChange = (date, string) => {
+    console.log(string)
+    this.setState({
+      glDate: string,
+    })
+  }
+  onOk = () => {
     this.props.form.validateFields((err, values) => {
       const isShow = !((this.props.o.paymentTerm==='按进度'&&this.props.o.paymentName==='预付款')||(this.props.o.paymentTerm==='按时间'&&this.props.o.paymentName!=='结算款'));
 
@@ -145,7 +153,7 @@ class ARModal extends Component{
             <FormItem label="GL日期">
               {
                 getFieldDecorator('glDate', {
-                  initialValue: o.glDate ? moment(o.glDate) : null
+                  initialValue: o.glDate ? moment(o.glDate) : (this.state.glDate ? moment(this.state.glDate).endOf('month') : null)
                 })(
                   <DatePicker />
                 )
@@ -159,7 +167,9 @@ class ARModal extends Component{
                   getFieldDecorator('reportDate', {
                     initialValue: o.reportDate ? moment(o.reportDate) : null
                   })(
-                    <DatePicker />
+                    <DatePicker
+                      onChange={this.handleDateChange}
+                    />
                   )
                 }
               </FormItem>
@@ -172,7 +182,7 @@ class ARModal extends Component{
               <FormItem label="考核含税金额">
                 {
                   getFieldDecorator('assessTaxIncludedAmount', {
-                    initialValue: o.assessTaxIncludedAmount
+                    initialValue: 0,
                   })(
                     <Input placeholder="考核含税金额" />
                   )
