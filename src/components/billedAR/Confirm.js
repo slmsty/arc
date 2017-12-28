@@ -344,6 +344,9 @@ class Confirm extends Component{
       billedArIds: this.state.rowKeys,
       glDate: param
     }, response=>{
+      this.setState({
+        glDateModal: false,
+      })
       if(response.resultCode === '000000'){
         let result = response.successFailureResult;
         if(!result.failures && result.failures.length<=0){
@@ -353,7 +356,7 @@ class Confirm extends Component{
             isSend: true,
             sLength: result.successIds.length,
             fLength: result.failures.length,
-            failures: result.failures
+            failures: result.failures,
           })
         }
       }else{
@@ -367,7 +370,6 @@ class Confirm extends Component{
       rejectDis: true,
       approvalDis: true,
       sendDis: true,
-      glDateModal: false,
     })
   }
   send = () => {

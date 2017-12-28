@@ -25,7 +25,6 @@ class ARModal extends Component{
     )
   }
   handleDateChange = (date, string) => {
-    console.log(string)
     this.setState({
       glDate: string,
     })
@@ -51,7 +50,8 @@ class ARModal extends Component{
           }
         })
       }
-      if(!values.glDate){
+      /* if(!values.glDate){
+        console.log(3)
         isError = true
         this.props.form.setFields({
           glDate: {
@@ -60,13 +60,14 @@ class ARModal extends Component{
           }
         })
       }else{
+        console.log(4)
         this.props.form.setFields({
           glDate: {
             value: values.glDate,
             errors: null
           }
         })
-      }
+      } */
 
       if(isShow){
         if(!values.reportDate){
@@ -86,6 +87,7 @@ class ARModal extends Component{
           })
         }
         if(values.assessTaxIncludedAmount == ''){
+          console.log(values.assessTaxIncludedAmount)
           isError = true
           this.props.form.setFields({
             assessTaxIncludedAmount: {
@@ -102,13 +104,11 @@ class ARModal extends Component{
           })
         }
       }
-
       if(isError) return
 
       let body = {
         billedArId: this.props.o.billedArId,
         billedArDate: values.billedArDate.format('YYYY-MM-DD'),
-        glDate: values.glDate.format('YYYY-MM-DD'),
         arAccountantApproveMessage: values.arAccountantApproveMessage
       }
 
@@ -116,7 +116,6 @@ class ARModal extends Component{
         body.reportDate = values.reportDate.format('YYYY-MM-DD');
         body.assessTaxIncludedAmount = values.assessTaxIncludedAmount;
       }
-
       this.postEdit(body, response=>{
         if(response.resultCode === '000000'){
           this.props.onOk(body);
