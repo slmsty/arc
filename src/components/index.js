@@ -61,7 +61,7 @@ export default class Index extends React.Component {
   }
   render() {
     const logo = this.state.collapsed ? require('../assets/images/logomini.png') : require('../assets/images/logo.png')
-    const { staffName, orgName, headIcon } = this.props.user
+    const { accountName, orgName, headIcon } = this.props.user
     return (
       <Layout style={{ height: '100%' }}>
         <Sider
@@ -89,7 +89,7 @@ export default class Index extends React.Component {
             />
             <div className="user">
               <img src={headIcon} alt="" />
-              <p>欢迎您，<span>{staffName}</span><span>{orgName}</span></p>
+              <p>欢迎您，<span>{accountName}</span><span>{orgName}</span></p>
             </div>
           </Header>
           <Content style={{ margin: '8px 8px', padding: 12, background: '#fff', minHeight: 280 }}>
@@ -106,7 +106,7 @@ Index.defaultProps = {
 Index.propTypes = {
   children: PropTypes.node,
   user: PropTypes.shape({
-    staffName: PropTypes.string.isRequired,
+    accountName: PropTypes.string.isRequired,
     orgName: PropTypes.string.isRequired,
     headIcon: PropTypes.string.isRequired,
   }).isRequired,
