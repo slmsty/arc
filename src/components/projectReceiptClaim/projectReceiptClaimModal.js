@@ -155,7 +155,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
           }
         }
       }
-      this.addVirtualItem()
       // console.log(funds[index].claimContractAmount)
       this.setState({ funds })
       this.edited = true
@@ -242,7 +241,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
           fund.receiptUse = 'On account'
           funds.push(fund)
         }
-        this.addVirtualItem()
+        // this.addVirtualItem()
       })
       this.setState({ funds })
       this.edited = true
@@ -306,7 +305,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
   handleDeleteFund = (fundIdx) => {
     const funds = this.state.funds
     funds.splice(fundIdx, 1)
-    this.addVirtualItem()
+    // this.addVirtualItem()
     this.setState({ funds })
     this.edited = true
   }
