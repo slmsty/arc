@@ -142,7 +142,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
   handleClaimFundChange = (index, value, key) => {
     if (index >= 0 && index < this.state.funds.length) {
       const funds = this.state.funds
-      // console.log(value)
       if (key === 'cust') {
         funds[index].custId = value[0]
         funds[index].custName = value[1]
@@ -163,7 +162,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
   }
   handleSubmit = () => {
     let totalClaimAmount = 0
-    console.log(this.state.funds)
     for (let i = 0; i < this.state.funds.length; i += 1) {
       if (this.state.funds[i].claimAmount === 0) {
         message.error(`第${i + 1}条认款金额没有填写`)
@@ -178,7 +176,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
         return
       }
       if (this.state.funds[i].claimAmount < 0 && Math.abs(this.state.funds[i].claimAmount - this.state.funds[i].claimContractAmount) > 3) {
-        console.log(this.state.funds[i].claimAmount - this.state.funds[i].claimContractAmount)
         message.error(`第${i + 1}合同认款金额不符合校验，请重新输入`)
         return
       }
@@ -244,11 +241,28 @@ export default class ProjectReceiptClaimModal extends React.Component {
           fund.receiptUse = 'On account'
           funds.push(fund)
         }
+        // this.addVirtualItem()
       })
       this.setState({ funds })
       this.edited = true
     }
     this.setState({ showSelectFund: false })
+  }
+  // 增加虚拟合同认款项
+  addVirtualItem = () => {
+    let total = 0
+    const funds = this.state.funds
+    funds.forEach((item) => {
+      if (item.fundId !== 'ARC001') {
+        total += item.claimAmount
+      }
+    })
+    funds.forEach((item) => {
+      if (item.fundId === 'ARC001') {
+        item.claimAmount = this.props.receiptInfo.receiptAmount - total
+        item.claimContractAmount = this.props.receiptInfo.receiptAmount - total
+      }
+    })
   }
   handleAddVirtualContract = () => {
     const funds = this.state.funds
@@ -260,10 +274,18 @@ export default class ProjectReceiptClaimModal extends React.Component {
       }
     }
     if (!isExist) {
+      let total = 0
+      let funds = this.state.funds
+      funds.forEach((item) => {
+        if (item.fundId !== 'ARC001') {
+          total += parseFloat(item.claimAmount)
+        }
+      })
       const fund = {}
       fund.fundId = 'ARC001'
-      fund.claimAmount = this.props.receiptInfo.receiptAmount
-      fund.claimContractAmount = this.props.receiptInfo.receiptAmount
+      fund.claimAmount = parseFloat(this.props.receiptInfo.receiptAmount) - parseFloat(total)
+      // fund.claimContractAmount = this.props.receiptInfo.receiptAmount
+      fund.claimContractAmount = parseFloat(this.props.receiptInfo.receiptAmount) - parseFloat(total)
       fund.receiptAmount = this.props.receiptInfo.receiptAmount
       fund.fundReceivableBalance = this.props.receiptInfo.receiptAmount
       fund.receiptUse = 'On account'
@@ -283,6 +305,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
   handleDeleteFund = (fundIdx) => {
     const funds = this.state.funds
     funds.splice(fundIdx, 1)
+    // this.addVirtualItem()
     this.setState({ funds })
     this.edited = true
   }
