@@ -10,6 +10,7 @@ module.exports = function override(config, env) {
       '@form-item-margin-bottom': '12px',
       '@input-height-lg': '26px',
       '@layout-header-background': '#F4A034',
+      '@menu-dark-submenu-bg': '#666',
     },
   })(config, env)
   return config
