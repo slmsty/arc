@@ -9,6 +9,7 @@ module.exports = function override(config, env) {
       '@primary-color': '#F4A034',
       '@form-item-margin-bottom': '12px',
       '@input-height-lg': '26px',
+      '@layout-header-background': '#F4A034',
     },
   })(config, env)
   return config
