@@ -4,7 +4,7 @@ import caseReducer from './caseReducer'
 const common = {
   user: {
     accountId: '',
-    staffName: '',
+    accountName: '',
     orgName: '',
     headIcon: '',
   },
