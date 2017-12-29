@@ -25,9 +25,12 @@ class ReviewReceiptClaimSearch extends React.Component {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
     param.custId = param.custId && param.custId.length ? param.custId[0] : null
-    param.startDate = param.receiptDate && param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
-    param.endDate = param.receiptDate && param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
+    param.receiptDateStart = param.receiptDate && param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
+    param.receiptDateEnd = param.receiptDate && param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
+    param.statusDateStart = param.statusDate && param.statusDate.length ? param.statusDate[0].format(dateFormat) : ''
+    param.statusDateEnd = param.statusDate && param.statusDate.length ? param.statusDate[1].format(dateFormat) : ''
     delete param.receiptDate
+    delete param.statusDate
     // console.log(param)
     this.props.onQuery(param)
   }
@@ -51,7 +54,8 @@ class ReviewReceiptClaimSearch extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="收款日期">
                 {getFieldDecorator('receiptDate', {
-                  initialValue: [moment().subtract(1, 'month'), moment()],
+                  // initialValue: [moment().subtract(1, 'month'), moment()],
+                  initialValue: [moment('2017-08-01'), moment()],
                 })(<RangePicker
                   allowClear
                   format={dateFormat}
@@ -66,25 +70,18 @@ class ReviewReceiptClaimSearch extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={3}>
+            <Col span={8} key={9}>
               <FormItem {...formItemLayout} label="数据状态">
-                {getFieldDecorator('status', {
-                  initialValue: '31',
-                })(
-                  <Select
-                    placeholder="请选择数据状态"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
-                    onChange={this.handleChange}
-                  >
-                    {/* <Option value="10">新建</Option> */}
-                    <Option value="31">会计已认款</Option>
-                    <Option value="50">等待传送AR</Option>
-                    <Option value="51">已传送AR</Option>
-                    <Option value="52">传送失败</Option>
-                  </Select>,
-                )}
+                {
+                  getFieldDecorator('status', {
+                    initialValue: '31',
+                  })(
+                    <SelectInvokeApi
+                      typeCode="ARC_CLAIM_REVIEW_FUNC"
+                      paramCode="STATUS"
+                    />
+                  )
+                }
               </FormItem>
             </Col>
           </Row>
@@ -118,6 +115,25 @@ class ReviewReceiptClaimSearch extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="公司">
+                {getFieldDecorator('companyName')(<Input onPressEnter={this.handleQuery} />)}
+              </FormItem>
+            </Col>
+            <Col span={8} key={9}>
+              <FormItem {...formItemLayout} label="收款分类">
+                {getFieldDecorator('claimType', {
+                  initialValue: 'project',
+                })(
+                  <SelectInvokeApi
+                    id="claimType"
+                    typeCode="ARC_RECEIPT_CLAIM"
+                    paramCode="CLAIM_TYPE"
+                    placeholder="请选择收款分类" // <Select><Option value="project">项目</Option><Option value="">百一测评</Option</Select>
+                  />,
+                )}
+              </FormItem>
+            </Col>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="合同编码(多)">
                 {
@@ -129,21 +145,21 @@ class ReviewReceiptClaimSearch extends React.Component {
                 }
               </FormItem>
             </Col>
-            <Col span={8} key={9}>
-              <FormItem {...formItemLayout} label="流水分类">
-                {getFieldDecorator('claimType', {
-                  initialValue: 'project',
-                })(
-                  <SelectInvokeApi
-                    id="claimType"
-                    typeCode="ARC_RECEIPT_CLAIM"
-                    paramCode="CLAIM_TYPE"
-                    placeholder="请选择流水分类" // <Select><Option value="project">项目</Option><Option value="">百一测评</Option</Select>
-                  />,
-                )}
+          </Row>
+          <Row gutter={40}>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="操作日期">
+                {getFieldDecorator('statusDate', {
+                  // initialValue: [moment().subtract(1, 'month'), moment()],
+                  initialValue: [moment('2017-08-01'), moment()],
+                })(<RangePicker
+                  allowClear
+                  format={dateFormat}
+                  ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                />)}
               </FormItem>
             </Col>
-            <Col span={24} style={{ textAlign: 'right' }}>
+            <Col span={16} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>

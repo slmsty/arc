@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal } from 'antd'
 import SelectCustomerWithForm from '../common/selectCustomer'
-import MultipleInput from '../common/multipleInput'
+import ClearInput from '../common/clearInput'
 
 const FormItem = Form.Item
 
@@ -12,8 +12,17 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
     pageSize: 10,
     selectedRowKeys: [],
     selectedRows: [],
+    loading: false,
+    firstLoad: true,
   }
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.getOrderCompleted !== nextProps.getOrderCompleted) {
+      this.setState({ loading: false, firstLoad: false })
+    }
+    if (this.props.visible !== nextProps.visible && nextProps.visible) {
+      this.props.form.resetFields()
+      this.handleQuery()
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -21,11 +30,11 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
   columns = [{
     title: '客户名称',
     dataIndex: 'custName',
-    width: 100,
+    width: 200,
   }, {
     title: '订单号',
     dataIndex: 'projectNo',
-    width: 100,
+    width: 150,
   }, {
     title: '支付方式',
     dataIndex: 'contractNo',
@@ -34,10 +43,12 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
     title: '应收金额',
     dataIndex: 'arAmount',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '应收余额',
     dataIndex: 'arAmount1',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   },
   ]
   handleChangePage = (page) => {
@@ -54,6 +65,7 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
       },
     }
     this.props.getOrder(param)
+    this.setState({ loading: true })
   }
   handleSelectFunds = () => {
     this.props.onClose(this.state.selectedRows)
@@ -85,20 +97,19 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
       >
         <Form
           className="ant-search-form"
-          onSubmit={this.handleSearch}
         >
           <Row>
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="金额从">
                 {getFieldDecorator('amountMin')(
-                  <InputNumber />,
+                  <ClearInput onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="金额到">
                 {getFieldDecorator('amountMax')(
-                  <InputNumber />,
+                  <ClearInput onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -112,9 +123,9 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
           </Row>
           <Row>
             <Col span={8} key={6}>
-              <FormItem {...formItemLayout} label="来源系统">
-                {getFieldDecorator('dept')(
-                  <Input />,
+              <FormItem {...formItemLayout} label="订单号">
+                {getFieldDecorator('projectNo')(
+                  <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -128,15 +139,20 @@ class NoProjectReceiptClaimSelectOrder extends React.Component {
           rowSelection={rowSelection}
           columns={this.columns}
           bordered
-          size="middle"
+          size="small"
+          loading={this.state.loading}
+          locale={{
+            emptyText: this.state.firstLoad ? '' : '没有符合条件的订单',
+          }}
           pagination={{
             current: this.props.receiptClaimOrderList.pageNo,
             total: this.props.receiptClaimOrderList.count,
             pageSize: this.state.pageSize,
+            showTotal: (total, range) => `共 ${total} 条记录 当前显示 ${range[0]}-${range[1]}`,
             onChange: this.handleChangePage,
           }}
           dataSource={this.props.receiptClaimOrderList.result}
-          scroll={{ x: '150%' }}
+          scroll={{ y: '400' }}
         />
       </Modal>
     )
@@ -147,6 +163,7 @@ NoProjectReceiptClaimSelectOrder.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    resetFields: PropTypes.func.isRequired,
   }).isRequired,
   receiptClaimOrderList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
@@ -156,6 +173,7 @@ NoProjectReceiptClaimSelectOrder.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   getOrder: PropTypes.func.isRequired,
+  getOrderCompleted: PropTypes.number.isRequired,
 }
 
 const NoProjectReceiptClaimSelectOrderWithForm = Form.create()(
@@ -163,3 +181,4 @@ const NoProjectReceiptClaimSelectOrderWithForm = Form.create()(
 )
 
 export default NoProjectReceiptClaimSelectOrderWithForm
+

@@ -1,361 +1,595 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Input, Button, Select, Table, message} from 'antd';
-import SelectCustomer from '../common/selectCustomer'
-import SelectContractCompany from '../common/SelectContractCompany'
+import {Form, Row, Col, DatePicker, Input, Button, Table, Modal, message} from 'antd';
+import MultipleInput from '../common/multipleInput'
+import MultipleDayInput from '../common/multipleDayInput'
+import SelectInvokeApi from '../common/selectInvokeApi'
+import requestJsonFetch from '../../http/requestJsonFecth'
 import ARModal from './ARModal'
+import GlDateModal from './glDateModal'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
-const Option = Select.Option;
 
 class Confirm extends Component{
   state = {
     visible: false,
-    editObj: {},
-    selectedRowKeys: [],
-    pageInfo: {
-      pageNo: 1,
-      pageSize: 10,
-      count: 1300,
-      result: [
-        {
-          key: 0,
-          key1: 'test',
-          key2: 'test',
-          key3: 'test',
-          key4: 'test',
-          key5: 'test',
-          key6: '',
-          key7: '',
-          key8: 'test',
-          key9: 'test',
-          key10: 'test',
-          key11: 'test',
-          key12: 'test',
-          key13: 'test',
-          key14: 'test',
-          key15: 'test',
-          key16: 'test',
-          key17: 'test',
-          key18: 'test',
-          key19: 'test',
-          key20: 'test',
-          key21: 'test',
-          key22: 'test',
-          key23: 'test',
-          key24: 'test',
-        },
-        {
-          key: 1,
-          key1: 'test',
-          key2: 'test',
-          key3: 'test',
-          key4: 'test',
-          key5: 'test',
-          key6: '',
-          key7: '',
-          key8: 'test',
-          key9: 'test',
-          key10: 'test',
-          key11: 'test',
-          key12: 'test',
-          key13: 'test',
-          key14: 'test',
-          key15: 'test',
-          key16: 'test',
-          key17: 'test',
-          key18: 'test',
-          key19: 'test',
-          key20: 'test',
-          key21: 'test',
-          key22: 'test',
-          key23: 'test',
-          key24: 'test',
-        }
-      ]
-    }
+    o: {},
+    rowKeys: [],
+    rows: [],
+    editDis: true,
+    rejectDis: true,
+    approvalDis: true,
+    sendDis: true,
+    isSend: false,
+    failures: [],
+    sLength: 0,
+    fLength: 0,
+    tableHeight: '',
+    glDateModal: false,
   }
 
   constructor(props){
     super(props);
-    const columns = [
+    this.columns = [
       {
         title: '数据状态',
         fixed: 'left',
-        key: 'key1'
-      },
-      {
-        title: '付款条件',
-        key: 'key2'
-      },
-      {
-        title: '付款金额',
-        key: 'key3'
-      },
-      {
-        title: '考核含税金额',
-        key: 'key4'
-      },
-      {
-        title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'key5'
-      },
-      {
-        title: <span>Billed AR日期<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'key6'
-      },
-      {
-        title: <span>GL日期<em style={{color:'#FF0000'}}>*</em></span>,
-        key: 'key7'
-      },
-      {
-        title: '备注',
-        key: 'key8'
-      },
-      {
-        title: '款项ID',
-        key: 'key9'
-      },
-      {
-        title: '合同币种',
-        key: 'key10'
-      },
-      {
-        title: '合同金额',
-        key: 'key11'
-      },
-      {
-        title: '项目编码',
-        key: 'key12'
-      },
-      {
-        title: '项目名称',
-        key: 'key13'
+        dataIndex: 'statusName',
+        width: 120,
       },
       {
         title: '签约公司',
-        key: 'key14'
+        dataIndex: 'companyShow',
+        width: 400,
       },
       {
-        title: '合同编码',
-        key: 'key15'
+        title: '项目编码',
+        dataIndex: 'projectNo',
+        width: 120,
       },
       {
-        title: '合同名称',
-        key: 'key16'
-      },
-      {
-        title: '客户名称',
-        key: 'key17'
+        title: '节点',
+        dataIndex: 'projectNode',
+        width: 120,
       },
       {
         title: '付款阶段(里程碑)',
-        key: 'key18'
+        dataIndex: 'paymentPhrases',
+        width: 120,
       },
       {
         title: '付款条款',
-        key: 'key19'
-      },
-      {
-        title: '应收日期',
-        key: 'key20'
-      },
-      {
-        title: '报告日期',
-        key: 'key21'
+        dataIndex: 'paymentName',
+        width: 120,
       },
       {
         title: '付款百分比',
-        key: 'key22'
+        dataIndex: 'paymentPercent',
+        width: 120,
+      },
+      {
+        title: <span>GL日期<em style={{color:'#FF0000'}}>*</em></span>,
+        dataIndex: 'glDate',
+        width: 120,
+      },
+      {
+        title: <span>Billed AR日期<em style={{color:'#FF0000'}}>*</em></span>,
+        dataIndex: 'billedArDate',
+        width: 120,
+      },
+      {
+        title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
+        dataIndex: 'billedArAmount',
+        width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
+      },
+      {
+        title: '备注',
+        dataIndex: 'arAccountantApproveMessage',
+        width: 120,
+      },
+      {
+        title: '款项ID',
+        dataIndex: 'fundId',
+        width: 120,
+      },
+      {
+        title: '合同币种',
+        dataIndex: 'contractCurrency',
+        width: 120,
+      },
+      {
+        title: '合同金额',
+        dataIndex: 'contractAmount',
+        width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
+      },
+      {
+        title: '合同编码',
+        dataIndex: 'contractNo',
+        width: 400,
+      },
+      {
+        title: '合同名称',
+        dataIndex: 'contractName',
+        width: 700,
+      },
+      {
+        title: '客户名称',
+        dataIndex: 'custName',
+        width: 400,
+      },
+      {
+        title: '付款条件',
+        dataIndex: 'paymentTerm',
+        width: 120,
+      },
+      {
+        title: '应收日期',
+        dataIndex: 'arDate',
+        width: 120,
+      },
+      {
+        title: '报告日期',
+        dataIndex: 'reportDate',
+        width: 120,
+      },
+      {
+        title: '付款金额',
+        dataIndex: 'paymentAmount',
+        width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
+      },
+      {
+        title: '考核含税金额',
+        dataIndex: 'assessTaxIncludedAmount',
+        width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: '收入额',
-        key: 'key23'
+        dataIndex: 'revenueAmount',
+        width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
         title: '提示',
-        key: 'key24'
+        dataIndex: 'reminder',
+        width: 400,
       },
     ];
-    this.columns = columns.map(o=>({
-      ...o,
-      className:'tHeader',
-      dataIndex: o.key,
-      width: 120,
-    }))
+    this.columns2 = [
+      {
+        title: 'id',
+        dataIndex: 'id',
+        width: 150,
+      }, {
+        title: '详细信息',
+        dataIndex: 'remark',
+      }
+    ]
   }
-
-  SelectChange = (selectedRowKeys)=>{
-    this.setState({selectedRowKeys})
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160
+    this.setState({ tableHeight })
+  }
+  componentDidMount() {
+    this.doSearch()
   }
 
   doSearch = (e)=>{
-    e.preventDefault();
+    //e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log(values);
+      this.setState({
+        rowKeys: [],
+        rows: [],
+        editDis: true,
+        rejectDis: true,
+        approvalDis: true,
+        sendDis: true
+      })
+      this.props.Search({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
+    })
+  }
+
+  pageSizeChange = (current, size)=>{
+    this.props.form.validateFields((err, values) => {
+      this.setState({
+        rowKeys: [],
+        rows: [],
+        editDis: true,
+        rejectDis: true,
+        approvalDis: true,
+        sendDis: true
+      })
+      this.props.Search({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: size
+        },
+        ...values
+      })
+    })
+  }
+
+  pageNoChange = (page, pageSize)=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: page,
+          pageSize: pageSize
+        },
+        ...values
+      })
     });
   }
 
+  rowSelectionChange = (selectedRowKeys, selectedRows)=>{
+    let rowKeys = this.state.rowKeys
+    let rows = this.state.rows
+    selectedRowKeys.forEach(key=>{
+      if(!rowKeys.includes(key)){
+        rows.push(selectedRows.find(o=>o.billedArId===key))
+      }
+    })
+    rows = rows.filter(o=>selectedRowKeys.includes(o.billedArId))
+    rowKeys = selectedRowKeys
+
+    this.setState({
+      rowKeys: rowKeys,
+      rows: rows,
+      editDis: !(rows.length===1 && rows.every(o=>o.status==='10'||o.status==='20'||o.status==='21'||o.status==='30'||o.status==='32')),
+      rejectDis: !(rows.length>0 && rows.every(o=>o.status==='20'||o.status==='30')),
+      approvalDis: !(rows.length>0 && rows.every(o=>o.status==='20')),
+      sendDis: !(rows.length>0 && rows.every(o=>o.status==='30' || o.status==='32')),
+    })
+  }
+
   doEdit = ()=>{
-    if(this.state.selectedRowKeys.length === 0){
-      message.warning('请选择编辑项')
-    }else if(this.state.selectedRowKeys.length > 1){
-      message.warning('只能编辑一项')
-    }else{
-      this.setState({
-        visible: true,
-        editObj: {...this.state.pageInfo.result[this.state.selectedRowKeys[0]]},
-      })
-    }
+    this.setState({
+      visible: true,
+      o: this.state.rows[0]
+    })
   }
 
   Cancel = ()=>{
+    this.setState({visible: false})
+  }
+
+  OK = ()=>{
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: this.props.pageNo,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
+    })
+
     this.setState({
       visible: false,
-      editObj: {},
+      rowKeys: [],
+      rows: [],
+      editDis: true,
+      rejectDis: true,
+      approvalDis: true,
+      sendDis: true
     })
   }
 
-  OK = ({key6, key7, key8})=>{
+  reject = ()=>{
+    this.props.Reject(this.state.rowKeys)
     this.setState({
-      visible: false,
-      editObj: {},
-      pageInfo: {
-        ...this.state.pageInfo,
-        result: this.state.pageInfo.result.map((o, i)=>{
-          if(i === this.state.selectedRowKeys[0]){
-            return {
-              ...o,
-              key6,
-              key7,
-              key8
-            }
-          }else{
-            return o;
-          }
-        })
-      }
+      rowKeys: [],
+      rows: [],
+      editDis: true,
+      rejectDis: true,
+      approvalDis: true,
+      sendDis: true
     })
   }
+
+  approval = () => {
+    this.props.Approval(this.state.rowKeys).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        let info = this.props.amountInfo
+        let str = ''
+        for (let i in this.props.amountInfo) {
+          str += `${i}:${this.props.amountInfo[i]}\n`
+        }
+        Modal.info({
+          title: this.props.title,
+          content: "Billed AR 金额合计："+str,
+        })
+        this.props.ResetTitle()
+      } else {
+        message.error('加载数据失败')
+      }
+    })
+    this.setState({
+      rowKeys: [],
+      rows: [],
+      editDis: true,
+      rejectDis: true,
+      approvalDis: true,
+      sendDis: true,
+    })
+  }
+
+  postSend = (body, callback)=>{
+    requestJsonFetch(
+      '/arc/billedar/confirm/pushPa',
+      {
+        method: 'POST',
+        body
+      },
+      callback
+    )
+  }
+  selectCancel = () => {
+    this.setState({
+      glDateModal: false,
+    })
+  }
+  selectOk = (param) => {
+    this.postSend({
+      billedArIds: this.state.rowKeys,
+      glDate: param
+    }, response=>{
+      this.setState({
+        glDateModal: false,
+      })
+      if(response.resultCode === '000000'){
+        let result = response.successFailureResult;
+        if(!result.failures && result.failures.length<=0){
+          this.closeSend();
+        }else{
+          this.setState({
+            isSend: true,
+            sLength: result.successIds.length,
+            fLength: result.failures.length,
+            failures: result.failures,
+          })
+        }
+      }else{
+        message.error(response.resultMessage);
+      }
+    })
+    this.setState({
+      rowKeys: [],
+      rows: [],
+      editDis: true,
+      rejectDis: true,
+      approvalDis: true,
+      sendDis: true,
+    })
+  }
+  send = () => {
+    this.setState({
+      glDateModal: true,
+    })
+  }
+
+  closeSend = ()=>{
+    this.setState({isSend: false})
+    this.props.form.validateFields((err, values) => {
+      this.props.Search({
+        pageInfo: {
+          pageNo: this.props.pageNo,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.confirmApproveRefresh !== nextProps.confirmApproveRefresh) {
+      this.doSearch()
+    }
+  }
+  /* shouldComponentUpdate({title}, nextState){
+    if(title){
+      let info = this.props.amountInfo
+      console.log('info',this.props.amountInfo)
+      let str = ''
+      for (let i in this.props.amountInfo) {
+        str += `${i}:${this.props.amountInfo[i]}\n`
+      }
+      console.log(str)
+      Modal.info({
+        title: `${title}`,
+        content: "Billed AR 金额合计："+str,
+      })
+      console.log(str)
+      this.props.ResetTitle()
+      return false;
+    }else{
+      return true;
+    }
+  } */
 
   render(){
     const { getFieldDecorator } = this.props.form;
     const columns = this.columns;
-    const pageInfo = this.state.pageInfo;
+    const {pageNo, pageSize, count, result, loading} = this.props;
+
+    const layout = {
+      labelCol: {
+        span: 8
+      },
+      wrapperCol: {
+        span: 16
+      }
+    }
 
     return (
       <div className="billedARConfirm">
-        <Form onSubmit={this.doSearch}>
-          <Row gutter={40}>
+        <Form>
+          <Row>
             <Col span={8}>
-              <FormItem label="Billed AR日期" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="Billed AR日期" {...layout}>
                 {
-                  getFieldDecorator('BilledARStartEnd')(<RangePicker/>)
+                  getFieldDecorator('billedArDate')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="客户名称" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="客户名称" {...layout}>
                 {
-                  getFieldDecorator('customerId')(<SelectCustomer/>)
+                  getFieldDecorator('custName')(<Input placeholder="客户名称"/>)
                 }
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="项目编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
+              <FormItem label="项目编码(多)" {...layout}>
                 {
-                  getFieldDecorator('projectCode')(<Input placeholder="多项目编码使用英文逗号分隔"/>)
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={40}>
-            <Col span={8}>
-              <FormItem label="GL日期(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
-                {
-                  getFieldDecorator('GLDate')(<DatePicker />)
-                }
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="签约公司" labelCol={{span: 5}} wrapperCol={{span: 19}}>
-                {
-                  getFieldDecorator('companyId')(<SelectContractCompany />)
-                }
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="合同编码(多)" labelCol={{span: 5}} wrapperCol={{span: 19}}>
-                {
-                  getFieldDecorator('contactCode')(<Input placeholder="多合同编码使用英文逗号分隔"/>)
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={40}>
-            <Col span={8}>
-              <FormItem label="付款条件" labelCol={{span: 5}} wrapperCol={{span: 19}}>
-                {
-                  getFieldDecorator('pay', {initialValue: '1'})(
-                    <Select>
-                      <Option value="1">按时间</Option>
-                      <Option value="2">按进度</Option>
-                    </Select>
-                  )
-                }
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="数据状态" labelCol={{span: 5}} wrapperCol={{span: 19}}>
-                {
-                  getFieldDecorator('status', {initialValue: '1'})(
-                    <Select>
-                      <Option value="1">待应收会计确认</Option>
-                      <Option value="2">无需确认</Option>
-                      <Option value="3">待传送PA</Option>
-                      <Option value="4">已传送PA</Option>
-                      <Option value="5">错误</Option>
-                    </Select>
+                  getFieldDecorator('projectNos')(
+                    <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
                   )
                 }
               </FormItem>
             </Col>
           </Row>
           <Row>
+            <Col span={8}>
+              <FormItem label="GL日期(多)" {...layout}>
+                {
+                  getFieldDecorator('glDates')(<MultipleDayInput />)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="签约公司" {...layout}>
+                {
+                  getFieldDecorator('companyName')(<Input placeholder="签约公司" />)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="合同编码(多)" {...layout}>
+                {
+                  getFieldDecorator('contractNos')(
+                    <MultipleInput placeholder="多合同编码使用英文逗号间隔" />
+                  )
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <FormItem label="付款条件" {...layout}>
+                {
+                  getFieldDecorator('paymentTerm', {initialValue: ''})(<SelectInvokeApi
+                    typeCode="BILLED_AR"
+                    paramCode="PAYMENT_TERM"
+                    placeholder="付款条件"
+                    hasEmpty
+                  />)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="款项ID" {...layout}>
+                {
+                  getFieldDecorator('fundId', {initialValue: ''})(<Input
+                    placeholder="款项ID"
+                    hasEmpty
+                  />)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="数据状态" {...layout}>
+                {
+                  getFieldDecorator('status', {initialValue: '20'})(<SelectInvokeApi
+                    typeCode="BILLED_AR"
+                    paramCode="STATUS"
+                    placeholder="数据状态"
+                    hasEmpty
+                  />)
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
             <Col span={24} style={{textAlign: 'right'}}>
-              <Button type="primary" htmlType="submit">查询</Button>
+              <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
             </Col>
           </Row>
         </Form>
         <br/>
         <Row>
           <Col span={24}>
-            <Button onClick={this.doEdit} style={{marginRight: '20px'}}>编辑</Button>
-            <Button style={{marginRight: '20px'}}>拒绝</Button>
-            <Button style={{marginRight: '20px'}}>审批</Button>
-            <Button>传送PA</Button>
+            <Button onClick={this.doEdit} style={{marginRight: '20px'}} disabled={this.state.editDis}>编辑</Button>
+            <Button onClick={this.reject} style={{marginRight: '20px'}} disabled={this.state.rejectDis}>拒绝</Button>
+            <Button onClick={this.approval} style={{marginRight: '20px'}} disabled={this.state.approvalDis}>审批</Button>
+            <Button onClick={this.send} disabled={this.state.sendDis}>传送PA</Button>
           </Col>
         </Row>
         <br/>
-        <Table 
-          rowSelection={{onChange: this.SelectChange}}
-          columns={columns} 
-          dataSource={pageInfo.result}
-          pagination={{
-            showSizeChanger: true,
-            onShowSizeChange: ()=>{},
-            showTotal: t=>`共${t}条`,
-            onChange: ()=>{},
-            total: pageInfo.count
+        <Table
+          size="small"
+          style={{backgroundColor: '#FFFFFF'}}
+          rowKey="billedArId"
+          bordered
+          loading={loading}
+          rowSelection={{
+            selectedRowKeys: this.state.rowKeys,
+            onChange: this.rowSelectionChange
           }}
-          scroll={{ x: 2942}} />
-        <ARModal 
-          visible={this.state.visible}
-          onCancel={this.Cancel}
-          onOk={this.OK}
-          key6={this.state.editObj.key6}
-          key7={this.state.editObj.key7}
-          key8={this.state.editObj.key8}
+          columns={columns}
+          dataSource={result}
+          pagination={{
+            pageSizeOptions: ['5', '10', '20', '30'],
+            showSizeChanger: true,
+            onShowSizeChange: this.pageSizeChange,
+            showTotal: t=>`共${t}条`,
+            onChange: this.pageNoChange,
+            current: pageNo,
+            pageSize: pageSize,
+            total: count
+          }}
+          scroll={{ x: 4580, y: this.state.tableHeight }} />
+          <ARModal
+            visible={this.state.visible}
+            onCancel={this.Cancel}
+            onOk={this.OK}
+            o={this.state.o}
            />
+          <Modal
+            visible={this.state.isSend}
+            onOk={this.closeSend}
+            onCancel={this.closeSend}
+            title=""
+            footer={[
+              <Button key="cofirm" type="primary" onClick={this.closeSend}>
+                确定
+              </Button>,
+            ]}>
+            <p>成功传送AR：<b style={{color: '#FF0000'}}>{this.state.sLength}</b> 条</p>
+            <p>传送AR失败：<b style={{color: '#FF0000'}}>{this.state.fLength}</b> 条</p>
+            <br/>
+            <Table
+              rowKey="id"
+              bordered
+              size="small"
+              columns={this.columns2}
+              dataSource={this.state.failures}
+              pagination={false}/>
+          </Modal>
+        <GlDateModal
+          selectCancel={this.selectCancel}
+          glDateModal={this.state.glDateModal}
+          selectOk={this.selectOk}
+        />
       </div>
     )
   }

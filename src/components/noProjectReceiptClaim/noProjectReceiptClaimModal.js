@@ -25,37 +25,30 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '认款金额',
     dataIndex: 'claimAmount',
     width: 100,
-    render: (text, record, index) => {
-      const editable = true
-      return (<EditableNumberCell
-        editable={editable}
-        value={text}
-        min={0}
-        max={record.receiptAmountDD < this.props.receiptInfo.receiptAmount ? record.receiptAmountDD : this.props.receiptInfo.receiptAmount}
-        onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
-      />)
-    },
+    render: (text, record, index) => (<EditableNumberCell
+      editable
+      value={text}
+      min={0}
+      max={record.receiptAmountDD < this.props.receiptInfo.receiptAmount ? record.receiptAmountDD : this.props.receiptInfo.receiptAmount}
+      onChange={value => this.handleClaimFundChange(index, value, 'claimAmount')}
+    />),
   }, {
     title: '收款用途',
     dataIndex: 'receiptUse',
     width: 100,
-    render: (text, record, index) => {
-      const editable = true
-      return (<EditableSelectCell
-        editable={editable}
-        value={text}
-        options={[{ id: 'On account', name: 'On account' }, { id: 'Deposit', name: 'Deposit' }]}
-        onChange={value => this.handleClaimFundChange(index, value, 'receiptUse')}
-      />)
-    },
+    render: (text, record, index) => (<EditableSelectCell
+      editable
+      value={text}
+      options={[{ id: 'On account', name: 'On account' }, { id: 'Deposit', name: 'Deposit' }]}
+      onChange={value => this.handleClaimFundChange(index, value, 'receiptUse')}
+    />),
   }, {
     title: '备注',
     dataIndex: 'accountantApproveMessage',
     width: 200,
     render: (text, record, index) => {
-      const editable = true
       return (<EditableTextCell
-        editable={editable}
+        editable
         value={text}
         onChange={value => this.handleClaimFundChange(index, value, 'accountantApproveMessage')}
       />)
@@ -64,10 +57,12 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '应收余额',
     dataIndex: 'receiptAmountDD',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '应收金额',
     dataIndex: 'receiptAmount',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '币种',
     dataIndex: 'invoiceNo',
@@ -114,15 +109,17 @@ export default class ProjectReceiptClaimModal extends React.Component {
     if (addFunds && addFunds.length > 0) {
       const funds = this.state.funds
       addFunds.forEach((addFund) => {
+        const fund = addFund
         let isExist = false
         for (let i = 0; i < funds.length; i += 1) {
-          if (funds[i].fundId === addFund.fundId) {
+          if (funds[i].fundId === fund.fundId) {
             isExist = true
             break
           }
         }
         if (!isExist) {
-          funds.push(addFund)
+          fund.receiptUse = 'On account'
+          funds.push(fund)
         }
       })
       this.setState({ funds })
@@ -145,7 +142,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
   }
   handleCloseClaim = () => {
     if (this.edited) {
-      const that = this
+      const self = this
       Modal.confirm({
         title: '操作确认',
         content: '您已修改了认款数据，是否确认放弃修改',
@@ -153,9 +150,11 @@ export default class ProjectReceiptClaimModal extends React.Component {
         okType: 'danger',
         cancelText: '否',
         onOk() {
-          that.props.closeClaim()
+          self.props.closeClaim()
         },
       })
+    } else {
+      this.props.closeClaim()
     }
   }
   render() {
@@ -168,7 +167,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
       <div>
         <Modal
           width={1024}
-          title="非项目认款"
+          title="订单认款"
           visible={!!this.props.receiptInfo.receiptClaimId}
           onCancel={this.handleCloseClaim}
           footer={[
@@ -193,7 +192,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
           </Card>
           <br />
           <Button key="add" type="primary" onClick={() => { this.setState({ showSelectFund: true }) }}><Icon type="plus-circle-o" />增加客户订单</Button>&nbsp;&nbsp;
-          <Button type="danger" onClick={this.handleDeleteFund}>删除</Button>
           <br />
           <br />
           <Table
@@ -201,7 +199,10 @@ export default class ProjectReceiptClaimModal extends React.Component {
             rowSelection={rowSelection}
             columns={this.columns}
             bordered
-            size="middle"
+            locale={{
+              emptyText: '请增加订单',
+            }}
+            size="small"
             dataSource={this.state.funds}
             pagination={false}
             scroll={{ x: '150%' }}
@@ -212,6 +213,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
           visible={this.state.showSelectFund}
           onClose={this.handleCloseSelectFunds}
           getOrder={this.props.getOrder}
+          getOrderCompleted={this.props.getOrderCompleted}
         />
       </div>
     )
@@ -234,4 +236,5 @@ ProjectReceiptClaimModal.propTypes = {
   closeClaim: PropTypes.func.isRequired,
   submitClaim: PropTypes.func.isRequired,
   getOrder: PropTypes.func.isRequired,
+  getOrderCompleted: PropTypes.number.isRequired,
 }

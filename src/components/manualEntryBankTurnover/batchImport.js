@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
-import { Input, Table, Button, notification, Row, Col, Upload, message } from 'antd'
+import { Input, Table, Button, Row, Col, Upload, message } from 'antd'
 import PropTypes from 'prop-types'
 
 const successColumns = [{
@@ -13,7 +12,7 @@ const successColumns = [{
   title: '收款方法',
   dataIndex: 'receiptMethodName',
   key: 'receiptMethodName',
-  width: 100,
+  width: 200,
   fixed: 'left',
 }, {
   title: '银行流水号',
@@ -21,22 +20,22 @@ const successColumns = [{
   key: 'bankTransactionNo',
   width: 150,
 }, {
-  title: '客户付款方式',
+  title: '付款方式',
   dataIndex: 'custPayMethod',
   key: 'custPayMethod',
   width: 100,
 }, {
-  title: '付款客户名称',
+  title: '对方户名',
   dataIndex: 'payCustName',
   key: 'payCustName',
   width: 300,
 }, {
-  title: '客户付款银行',
+  title: '对方银行类型',
   dataIndex: 'payBankName',
   key: 'payBankName',
   width: 300,
 }, {
-  title: '客户付款银行账号',
+  title: '对方银行账号',
   dataIndex: 'payBankAccount',
   key: 'payBankAccount',
   width: 150,
@@ -50,6 +49,7 @@ const successColumns = [{
   dataIndex: 'amount',
   key: 'amount',
   width: 100,
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : '0.00'}</div>),
 }, {
   title: '客户名称',
   dataIndex: 'erpCustName',
@@ -57,8 +57,8 @@ const successColumns = [{
   width: 300,
 }, {
   title: '流水分类',
-  dataIndex: 'claimType',
-  key: 'claimType',
+  dataIndex: 'claimTypeName',
+  key: 'claimTypeName',
   width: 100,
 }, {
   title: '备注',
@@ -78,6 +78,18 @@ export default class BatchImport extends React.Component {
   state = {
     fileList: [],
     batchNo: '',
+    successTableHeight: '',
+    failureTableHeight: '',
+  }
+  componentWillMount() {
+    this.props.initData()
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const successTableHeight = (screenHeight - 230) / 2 - 133
+    this.setState({ successTableHeight })
+
+    const failureTableHeight = successTableHeight - 10
+    this.setState({ failureTableHeight })
   }
   handleDataChanged = (batchNo) => {
     this.setState({ batchNo })
@@ -131,12 +143,10 @@ export default class BatchImport extends React.Component {
     }
   }
   handleDownloadErrorData = () => {
-    window.open(`${process.env.REACT_APP_GATEWAY}../s3/file/v1/bfa219086df7408ebcdb556c7fec12f1/knowledge/FFE75B01A6FC4ED6BC510B297AA99D68.xlsx`, '_blank')
+    window.open(`${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/manual/exportFailure/${this.state.batchNo}`, '_blank')
   }
 
   render() {
-    this.props.failureResult.result = []
-    this.props.successResult.result = []
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/manual/import`,
       onChange: this.handleChange,
@@ -186,7 +196,7 @@ export default class BatchImport extends React.Component {
           <Col span={24} offset={1}>
             <Row>
               <Col span={2}><span>模板下载：</span></Col>
-              <Col span={22}><Button type="primary" icon="download" onClick={() => { window.open('about:blank', '_blank') }}>下载模板</Button></Col>
+              <Col span={22}><Button type="primary" icon="download" onClick={() => { window.open(`${process.env.REACT_APP_GATEWAY}v1.0.0/file/inner/download/FFE75B01A6FC4ED6BC510B297AA99D68`, '_blank') }}>下载模板</Button></Col>
             </Row>
           </Col>
         </Row>
@@ -196,9 +206,9 @@ export default class BatchImport extends React.Component {
           columns={successColumns}
           dataSource={this.props.successResult.result}
           bordered
-          size="middle"
+          size="small"
           pagination={successPagination}
-          scroll={{ x: '1875px' }}
+          scroll={{ x: '1950px', y: this.state.successTableHeight }}
           rowKey="index"
         />
         <br />
@@ -210,9 +220,9 @@ export default class BatchImport extends React.Component {
           columns={failureColumns}
           dataSource={this.props.failureResult.result}
           bordered
-          size="middle"
+          size="small"
           pagination={failurePagination}
-          scroll={{ x: '1875px' }}
+          scroll={{ x: '1950px', y: this.state.failureTableHeight }}
           rowKey="index"
         />
       </div>
@@ -232,4 +242,5 @@ BatchImport.propTypes = {
     result: PropTypes.array.isRequired,
   }).isRequired,
   getImportResultData: PropTypes.func.isRequired,
+  initData: PropTypes.func.isRequired,
 }

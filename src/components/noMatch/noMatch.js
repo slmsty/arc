@@ -5,7 +5,7 @@ export default class Root extends React.Component {
 
   render() {
     return (<div>
-      404
+      没能为您找到功能页面，请确认是否有访问权限。
     </div>)
   }
 }

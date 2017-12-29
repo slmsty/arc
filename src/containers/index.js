@@ -1,11 +1,12 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable react/prop-types,max-len */
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { message } from 'antd'
 import Index from '../components/index'
 import NoMatch from '../components/noMatch/noMatch'
-import { getUserInfo } from '../actions/common'
+import { getUserInfo, getPermission } from '../actions/common'
 
 import HomeContainer from '../containers/home/home'
 import ProjectReceiptClaimContainer from '../containers/projectReceiptClaim/projectReceiptClaim'
@@ -20,27 +21,95 @@ import BilledARApprove from './billedAR/Approve'
 import BilledARConfirm from './billedAR/Confirm'
 import BadDebtsApply from './badDebts/Apply'
 import BadDebtsStatus from './badDebts/Status'
+import ApplyListContainer from './myApply/applyList'
+import ContractSplit from './contractSplit/contractSplit'
+import StatementSearch from './statementSearch/statementList'
 
 const mapStateToProps = state => ({
   user: state.common.user,
-  notification: state.common.notification,
+  permission: state.common.permission,
+  error: state.common.error,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     getUserInfo,
+    getPermission,
   }, dispatch)
 )
+
 
 // eslint-disable-next-line react/prefer-stateless-function
 class IndexContainer extends React.Component {
   componentWillMount() {
     this.props.getUserInfo()
+    this.props.getPermission()
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.notification !== nextProps.notification) {
-      console.log(nextProps.notification)
+    if (this.props.error !== nextProps.error) {
+      message.error(nextProps.error.message)
     }
+  }
+  getMenuComponent = (component) => {
+    if (component === 'HomeContainer') {
+      return HomeContainer
+    }
+    if (component === 'ProjectReceiptClaimContainer') {
+      return ProjectReceiptClaimContainer
+    }
+    if (component === 'NoProjectReceiptClaimContainer') {
+      return NoProjectReceiptClaimContainer
+    }
+    if (component === 'CBSTurnoverWholenessConfirm') {
+      return CBSTurnoverWholenessConfirm
+    }
+    if (component === 'ManualEntryBankTurnover') {
+      return ManualEntryBankTurnover
+    }
+    if (component === 'ReviewReceiptClaimContainer') {
+      return ReviewReceiptClaimContainer
+    }
+    if (component === 'CustomerBankLinkContainer') {
+      return CustomerBankLinkContainer
+    }
+    if (component === 'BatchImport') {
+      return BatchImport
+    }
+    if (component === 'ContractChangeContainer') {
+      return ContractChangeContainer
+    }
+    if (component === 'BilledARApprove') {
+      return BilledARApprove
+    }
+    if (component === 'BilledARConfirm') {
+      return BilledARConfirm
+    }
+    if (component === 'BadDebtsApply') {
+      return BadDebtsApply
+    }
+    if (component === 'BadDebtsStatus') {
+      return BadDebtsStatus
+    }
+    if (component === 'applyListContainer') {
+      return ApplyListContainer
+    }
+    if (component === 'ContractSplit') {
+      return ContractSplit
+    }
+    if (component === 'statementSearch') {
+      return StatementSearch
+    }
+  }
+  getMenuRoutes = (menus) => {
+    if (menus && menus.length > 0) {
+      let menuRoutes = []
+      menus.forEach((menu) => {
+        menuRoutes.push(<Route key={menu.key} exact path={menu.path} component={this.getMenuComponent(menu.component)} />)
+        menuRoutes = menuRoutes.concat(this.getMenuRoutes(menu.child))
+      })
+      return menuRoutes
+    }
+    return null
   }
   render() {
     //  eslint-disable-next-line
@@ -48,26 +117,13 @@ class IndexContainer extends React.Component {
     if (!accountId) {
       return null
     }
+    const menuRoutes = this.getMenuRoutes(this.props.permission.menu)
     return (
-      <Router basename="/">
+      <Router basename={process.env.PUBLIC_URL}>
         <div style={{ height: '100%' }}>
           <Index {...this.props}>
             <Switch>
-              <Route exact path="/" component={HomeContainer} />
-              <Route exact path="/home" component={HomeContainer} />
-              <Route exact path="/receiptManagement" component={HomeContainer} />
-              <Route exact path="/receiptManagement/projectReceiptClaim" component={ProjectReceiptClaimContainer} />
-              <Route exact path="/receiptManagement/noProjectReceiptClaim" component={NoProjectReceiptClaimContainer} />
-              <Route exact path="/receiptManagement/reviewReceiptClaim" component={ReviewReceiptClaimContainer} />
-              <Route exact path="/receiptManagement/customerBankLink" component={CustomerBankLinkContainer} />
-              <Route exact path="/receiptManagement/contractChange" component={ContractChangeContainer} />
-              <Route exact path="/receiptManagement/cbsTurnoverWholenessConfirm" component={CBSTurnoverWholenessConfirm} />
-              <Route exact path="/receiptManagement/manualEntryBankTurnover" component={ManualEntryBankTurnover} />
-              <Route exact path="/receiptManagement/manualEntryBankTurnover/batchImport" component={BatchImport} />
-              <Route exact path="/billedAR/approve" component={BilledARApprove} />
-              <Route exact path="/billedAR/confirm" component={BilledARConfirm} />
-              <Route exact path="/badDebts/apply" component={BadDebtsApply} />
-              <Route exact path="/badDebts/status" component={BadDebtsStatus} />
+              {menuRoutes}
               <Route component={NoMatch} />
             </Switch>
           </Index>

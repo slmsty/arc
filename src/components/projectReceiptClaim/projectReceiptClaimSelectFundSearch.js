@@ -1,30 +1,73 @@
-/* eslint-disable no-unused-vars,react/prefer-stateless-function */
+/* eslint-disable no-unused-vars,react/prefer-stateless-function,max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal, Pagination } from 'antd'
 import SelectCustomerWithForm from '../common/selectCustomer'
 import MultipleInput from '../common/multipleInput'
+import ClearInput from '../common/clearInput'
 
 const FormItem = Form.Item
 
 class ProjectReceiptClaimSelectFund extends React.Component {
   state = {
-    pageSize: 10,
+    pageSize: 5,
     selectedRowKeys: [],
     selectedRows: [],
+    loading: false,
+    firstLoad: true,
   }
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.getPhaseCompleted !== nextProps.getPhaseCompleted) {
+      this.setState({ loading: false, firstLoad: false })
+    }
+    if (this.props.visible !== nextProps.visible && nextProps.visible) {
+      this.props.form.resetFields()
+      this.handleQuery()
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
   columns = [{
-    title: '客户名称',
-    dataIndex: 'custName',
-    width: 100,
-  }, {
     title: '项目编码',
     dataIndex: 'projectNo',
+    width: 20,
+    fixed: 'left',
+  }, {
+    title: '节点',
+    dataIndex: 'projectNode',
+    width: 20,
+    fixed: 'left',
+  }, {
+    title: '付款条款',
+    dataIndex: 'paymentName',
+    width: 20,
+    fixed: 'left',
+  }, {
+    title: '付款百分比',
+    dataIndex: 'paymentPercent',
+    width: 100,
+  }, {
+    title: '合同币种',
+    dataIndex: 'contractCurrency',
+    width: 100,
+  }, {
+    title: '应收金额',
+    dataIndex: 'arAmount',
+    width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
+  }, {
+    title: '应收余额',
+    dataIndex: 'receivableBalance',
+    width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
+  }, {
+    title: '应收日期',
+    dataIndex: 'arDate',
+    width: 100,
+  }, {
+    title: '客户名称',
+    dataIndex: 'custName',
     width: 100,
   }, {
     title: '合同编码',
@@ -33,30 +76,22 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   }, {
     title: '合同名称',
     dataIndex: 'contractName',
-    width: 100,
-  }, {
-    title: '项目阶段',
-    dataIndex: 'paymentPhrases',
-    width: 100,
-  }, {
-    title: '付款百分比',
-    dataIndex: 'paymentPercent',
-    width: 100,
-  }, {
-    title: '发票号',
-    dataIndex: 'invoiceNo',
-    width: 100,
+    width: 200,
   }, {
     title: 'SBU',
     dataIndex: 'sbuId',
     width: 100,
   }, {
-    title: '应收金额',
-    dataIndex: 'arAmount',
+    title: '部门',
+    dataIndex: 'deptName',
     width: 100,
   }, {
-    title: '应收余额',
-    dataIndex: 'arAmount1',
+    title: '项目经理',
+    dataIndex: 'manager',
+    width: 100,
+  }, {
+    title: '发票号',
+    dataIndex: 'invoiceNo',
     width: 100,
   },
   ]
@@ -67,17 +102,23 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     this.handleSelect(1, this.state.pageSize)
   }
   handleSelect = (pageNo, pageSize) => {
-    const param = { ...this.props.form.getFieldsValue(),
+    const queryParam = this.props.form.getFieldsValue()
+    if (queryParam.cust) {
+      queryParam.custName = queryParam.cust[1]
+      delete queryParam.cust
+    }
+    const param = { ...queryParam,
       pageInfo: {
         pageNo,
         pageSize,
       },
     }
     this.props.getPhase(param)
+    this.setState({ loading: true })
   }
   handleSelectFunds = () => {
     this.props.onClose(this.state.selectedRows)
-    this.setState({ selectedRowKeys: [], selectedRows: [] })
+    this.props.form.resetFields()
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -88,19 +129,38 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     const rowSelection = {
       type: 'checkBox',
       selectedRowKeys: this.state.selectedRowKeys,
+      getCheckboxProps: record => ({
+        disabled: record.receivableBalance == 0,
+      }),
       onChange: this.onSelectChange,
     }
+    const amountTotals = {}
+    this.state.selectedRows.forEach((fund) => {
+      if (amountTotals[fund.contractCurrency]) {
+        amountTotals[fund.contractCurrency] += fund.arAmount
+      } else {
+        amountTotals[fund.contractCurrency] = fund.arAmount
+      }
+    })
+    const makeSummary = Object.keys(amountTotals).map(contractCurrency => `${contractCurrency}:${amountTotals[contractCurrency].toFixed(2)}  `)
     return (
       <Modal
         wrapClassName="vertical-center-modal"
         width={800}
         title="查询合同百分比"
         visible={this.props.visible}
-        onCancel={() => { this.props.onClose([]) }}
+        onCancel={() => this.props.onClose([])}
         footer={[
-          <Button key="select" type="primary" onClick={this.handleSelectFunds}>
-            <Icon type="check" />选择合同百分比
-          </Button>,
+          <Row style={{ lineHeight: '28px' }}>
+            <Col span={19} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
+              <span>应收金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
+            </Col>
+            <Col span={5}>
+              <Button key="select" type="primary" onClick={this.handleSelectFunds}>
+                <Icon type="check" />选择合同百分比
+              </Button>,
+            </Col>
+          </Row>,
         ]}
       >
         <Form
@@ -117,15 +177,19 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户">
-                {getFieldDecorator('custId')(
-                  <SelectCustomerWithForm />,
+                {getFieldDecorator('cust', {
+                  initialValue: [this.props.receiptInfo.payCustId, this.props.receiptInfo.payCustName],
+                })(
+                  <SelectCustomerWithForm
+                    defaultQueryParam={this.props.receiptInfo.payCustName}
+                  />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="SBU">
                 {getFieldDecorator('sbu')(
-                  <Input />,
+                  <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -148,7 +212,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="部门">
                 {getFieldDecorator('dept')(
-                  <Input />,
+                  <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -156,15 +220,19 @@ class ProjectReceiptClaimSelectFund extends React.Component {
           <Row>
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="金额从">
-                {getFieldDecorator('amountMin')(
-                  <InputNumber />,
+                {getFieldDecorator('amountMin', {
+                  initialValue: this.props.receiptInfo.receiptAmount,
+                })(
+                  <ClearInput onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="金额到">
-                {getFieldDecorator('amountMax')(
-                  <InputNumber />,
+                {getFieldDecorator('amountMax', {
+                  initialValue: this.props.receiptInfo.receiptAmount,
+                })(
+                  <ClearInput onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
             </Col>
@@ -178,15 +246,20 @@ class ProjectReceiptClaimSelectFund extends React.Component {
           rowSelection={rowSelection}
           columns={this.columns}
           bordered
-          size="middle"
+          size="small"
+          loading={this.state.loading}
+          locale={{
+            emptyText: this.state.firstLoad ? '' : '没有符合条件的合同百分比',
+          }}
+          dataSource={this.props.receiptClaimFundList.result}
+          scroll={{ x: '100%' }}
           pagination={{
             current: this.props.receiptClaimFundList.pageNo,
             total: this.props.receiptClaimFundList.count,
             pageSize: this.state.pageSize,
+            showTotal: (total, range) => `共 ${total} 条记录 当前显示 ${range[0]}-${range[1]}`,
             onChange: this.handleChangePage,
           }}
-          dataSource={this.props.receiptClaimFundList.result}
-          scroll={{ x: '150%' }}
         />
       </Modal>
     )
@@ -197,12 +270,19 @@ ProjectReceiptClaimSelectFund.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
+    resetFields: PropTypes.func.isRequired,
   }).isRequired,
   receiptClaimFundList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,
     result: PropTypes.arrayOf.isRequired,
   }).isRequired,
+  receiptInfo: PropTypes.shape({
+    payCustId: PropTypes.string,
+    payCustName: PropTypes.string,
+    receiptAmount: PropTypes.number,
+  }).isRequired,
+  getPhaseCompleted: PropTypes.number.isRequired,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   getPhase: PropTypes.func.isRequired,

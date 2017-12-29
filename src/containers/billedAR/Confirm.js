@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import BilledARConfirm from '../../components/billedAR/Confirm'
-import * as actions from '../../actions/billedAR/approve'
+import * as actions from '../../actions/billedAR/confirm'
 
 const mapStateToProps = state=>({
   ...state.billedARComfirm

@@ -4,7 +4,7 @@ import { httpApi } from '../http/reduxRequestMiddleware'
 export function getContractChangeList(queryParam) {
   return {
     [httpApi]: {
-      url: '/arc/receiptclaim/claim/search/contractChange',
+      url: '/arc/receiptclaim/contract_change/search',
       options: {
         method: 'POST',
         body: queryParam,

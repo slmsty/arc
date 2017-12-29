@@ -1,15 +1,16 @@
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Button, Input, DatePicker, Select } from 'antd'
+import { Form, Row, Col, Button, DatePicker, Select } from 'antd'
 import moment from 'moment'
 
+import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectCustomerWithForm from '../common/selectCustomer'
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
 
 const { RangePicker } = DatePicker
 const FormItem = Form.Item
-const Option = Select.Option
+const { Option } = Select
 const dateFormat = 'YYYY-MM-DD'
 
 class ManualEntryBankTurnoverSearch extends React.Component {
@@ -42,7 +43,7 @@ class ManualEntryBankTurnoverSearch extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="收款日期">
                 {getFieldDecorator('receiptDate', {
-                  initialValue: [moment().subtract(1, 'month'), moment()],
+                  initialValue: [moment('2017-08-01'), moment()],
                 })(<RangePicker
                   allowClear
                   format={dateFormat}
@@ -74,7 +75,17 @@ class ManualEntryBankTurnoverSearch extends React.Component {
                 {getFieldDecorator('receiptMethodId')(<SelectReceiptMethodWithForm />)}
               </FormItem>
             </Col>
-            <Col span={8} offset={8} style={{ textAlign: 'right' }}>
+            <Col span={8} key={6}>
+              <FormItem {...formItemLayout} label="解付状态">
+                {getFieldDecorator('paidStatus')(<SelectInvokeApi
+                  typeCode="ARC_RECEIPT_CLAIM"
+                  paramCode="PAID_STATUS"
+                  placeholder="请选择解付状态"
+                  hasEmpty
+                />)}
+              </FormItem>
+            </Col>
+            <Col span={8} style={{ textAlign: 'right' }}>
               <Button type="primary" htmlType="submit">查询</Button>
             </Col>
           </Row>

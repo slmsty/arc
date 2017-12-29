@@ -14,17 +14,45 @@ export function getReceiptList(queryParam) {
   }
 }
 
-export function reject(receiptClaimIds) {
+export function getReceiptInfo(receiptClaimId) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/item/info',
+      options: {
+        method: 'POST',
+        body: {
+          ids: [receiptClaimId],
+        },
+      },
+      types: ['GET_PROJECT_RECEIPT_INFO_SUCCESS'],
+    },
+  }
+}
+
+export function reject(receiptActions) {
   return {
     [httpApi]: {
       url: '/arc/receiptclaim/reject',
       options: {
         method: 'POST',
         body: {
-          receiptClaimIds,
+          receiptActions,
         },
       },
       types: ['PROJECT_RECEIPT_CLAIM_REJECT_SUCCESS'],
+    },
+  }
+}
+
+export function changeClaimType(changeParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/changeClaimType',
+      options: {
+        method: 'POST',
+        body: changeParam,
+      },
+      types: ['PROJECT_RECEIPT_CLAIM_CHANGE_SUCCESS'],
     },
   }
 }
@@ -55,15 +83,32 @@ export function getPhase(queryParam) {
   }
 }
 
-export function openClaim(receiptInfo) {
-  return {
-    type: 'OPEN_PROJECT_CLAIM',
-    receiptInfo,
-  }
-}
-
 export function closeClaim() {
   return {
     type: 'CLOSE_PROJECT_CLAIM',
+  }
+}
+export function hangUp(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/hangUp',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['HANG_UP_SUCCESS'],
+    },
+  }
+}
+export function emailClaim(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/receiptclaim/askContract',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['EMAILCLAIM_SUCCESS'],
+    },
   }
 }

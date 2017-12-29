@@ -11,11 +11,23 @@ class SelectCustomer extends React.Component {
   state = {
     visible: false,
     pageNo: 1,
-    pageSize: 10,
+    pageSize: 8,
     total: 1,
     customerList: [],
     selectedRowKeys: [],
     selectedRows: [],
+    loading: false,
+    firstLoad: true,
+  }
+  componentWillMount() {
+    if (this.props.initialValue) {
+      this.props.onChange(this.props.initialValue)
+    }
+  }
+  componentDidMount() {
+    if (this.props.defaultQueryParam) {
+      this.handleQuery()
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
@@ -64,6 +76,7 @@ class SelectCustomer extends React.Component {
         keywords,
       },
     }
+    this.setState({ loading: true })
     requestJsonFetch('/arc/common/customer_name/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
@@ -72,8 +85,10 @@ class SelectCustomer extends React.Component {
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.pageCount,
         customerList: response.pageInfo.result,
+        firstLoad: false,
       })
     }
+    this.setState({ loading: false })
   }
   handleEmitEmpty = () => {
     this.props.onChange(['', ''])
@@ -92,13 +107,12 @@ class SelectCustomer extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = this.props.value && this.props.value[1] ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
-          style={{ height: 30 }}
           placeholder="客户名称"
-          value={this.props.value ? this.props.value[1] : ''}
+          value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
@@ -106,6 +120,7 @@ class SelectCustomer extends React.Component {
           title="选择客户"
           style={{ top: 20 }}
           visible={visible}
+          wrapClassName="vertical-center-modal"
           onCancel={this.handleCancel}
           footer={[
             <Button key="submit" type="primary" onClick={this.handleOk}>
@@ -119,9 +134,12 @@ class SelectCustomer extends React.Component {
             <Row>
               <Col span={16} key={1}>
                 <FormItem {...formItemLayout} label="客户名称">
-                  {getFieldDecorator('keywords')(
+                  {getFieldDecorator('keywords', {
+                    initialValue: this.props.defaultQueryParam,
+                  })(
                     <Input
-                      placeholder="请输入关键字"
+                      onPressEnter={this.handleQuery}
+                      placeholder="请输入客户关键字"
                     />,
                   )}
                 </FormItem>
@@ -140,6 +158,10 @@ class SelectCustomer extends React.Component {
             bordered
             size="middle"
             dataSource={this.state.customerList}
+            loading={this.state.loading}
+            locale={{
+              emptyText: this.state.firstLoad ? '' : '没有符合条件的客户',
+            }}
             pagination={{
               current: this.state.pageNo,
               onChange: this.handleChangePage,
@@ -159,6 +181,7 @@ SelectCustomer.propTypes = {
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
   value: PropTypes.arrayOf(PropTypes.string),
+  defaultQueryParam: PropTypes.string,
 }
 
 const SelectCustomerWithForm = Form.create()(SelectCustomer)

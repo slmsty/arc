@@ -3,19 +3,23 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import { getReceiptList, reject, openClaim } from '../../actions/projectReceiptClaim'
+import { getReceiptList, reject, getReceiptInfo, changeClaimType, hangUp, emailClaim } from '../../actions/projectReceiptClaim'
 import ProjectReceiptClaim from '../../components/projectReceiptClaim/projectReceiptClaim'
 
 const mapStateToProps = state => ({
   receiptClaimList: state.projectReceiptClaim.receiptClaimList,
   receiptClaimListRefresh: state.projectReceiptClaim.receiptClaimListRefresh,
+  amountTotals: state.projectReceiptClaim.amountTotals,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     getReceiptList,
     reject,
-    openClaim,
+    getReceiptInfo,
+    changeClaimType,
+    hangUp,
+    emailClaim,
   }, dispatch)
 )
 

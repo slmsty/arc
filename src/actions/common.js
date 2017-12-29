@@ -4,8 +4,20 @@ import { httpApi } from '../http/reduxRequestMiddleware'
 export function getUserInfo() {
   return {
     [httpApi]: {
-      url: '/sdm/getCurrentStaff',
+      url: '/account/getCurrentAccount',
       types: ['GET_USER_INFO_SUCCESS'],
+      options: {
+        method: 'GET',
+      },
+    },
+  }
+}
+
+export function getPermission() {
+  return {
+    [httpApi]: {
+      url: '/arc/common/getFuncCode',
+      types: ['GET_PERMISSION_SUCCESS'],
       options: {},
     },
   }

@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { getReceiptList, reject, openClaim } from '../../actions/noProjectReceiptClaim'
+import { getReceiptList, reject, openClaim, changeClaimType } from '../../actions/noProjectReceiptClaim'
 import NoProjectReceiptClaim from '../../components/noProjectReceiptClaim/noProjectReceiptClaim'
 
 const mapStateToProps = state => ({
   receiptClaimList: state.noProjectReceiptClaim.receiptClaimList,
   receiptClaimListRefresh: state.noProjectReceiptClaim.receiptClaimListRefresh,
+  amountTotals: state.noProjectReceiptClaim.amountTotals,
 })
 
 const mapDispatchToProps = dispatch => (
@@ -14,6 +15,7 @@ const mapDispatchToProps = dispatch => (
     getReceiptList,
     reject,
     openClaim,
+    changeClaimType,
   }, dispatch)
 )
 

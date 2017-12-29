@@ -1,7 +1,7 @@
-/* eslint-disable no-unused-vars,react/prefer-stateless-function,react/no-unused-prop-types */
+/* eslint-disable no-unused-vars,react/prefer-stateless-function,react/no-unused-prop-types,max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, message, Modal } from 'antd'
+import { Table, Button, message, Modal, Row, Col } from 'antd'
 import moment from 'moment'
 import NoProjectReceiptClaimSearchWithForm from './noProjectReceiptClaimSearch'
 import NoProjectReceiptClaimModal from '../../containers/noProjectReceiptClaim/noProjectReceiptClaimModal'
@@ -16,8 +16,8 @@ export default class NoProjectReceiptClaim extends React.Component {
   }
   componentWillMount() {
     const screenHeight = window.screen.height
-    // 屏幕高-header高64-margin24-padding24-查询条件div224-按钮56-翻页160
-    const tableHeight = screenHeight - 64 - 24 - 24 - 224 - 56 - 160
+    // 屏幕高-header高64-margin8-padding12-查询条件div224-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 8 - 12 - 168 - 56 - 160
     this.setState({ tableHeight })
   }
   componentWillReceiveProps(nextProps) {
@@ -30,7 +30,7 @@ export default class NoProjectReceiptClaim extends React.Component {
   }
   columns = [{
     title: '数据状态',
-    dataIndex: 'statusDesc',
+    dataIndex: 'statusName',
     width: 100,
     fixed: 'left',
   }, {
@@ -40,15 +40,20 @@ export default class NoProjectReceiptClaim extends React.Component {
     render: text => moment(text).format(dateFormat),
   }, {
     title: '收款来源',
-    dataIndex: 'sourceType',
+    dataIndex: 'sourceTypeName',
     width: 100,
   }, {
     title: '收款分类',
-    dataIndex: 'claimType',
+    dataIndex: 'claimTypeName',
     width: 100,
   }, {
     title: '公司',
     dataIndex: 'companyName',
+    width: 150,
+    render: (text, record, index) => `${record.companyId}_${text}`,
+  }, {
+    title: '付款方式',
+    dataIndex: 'custPayMethodName',
     width: 100,
   }, {
     title: '客户名称',
@@ -58,6 +63,7 @@ export default class NoProjectReceiptClaim extends React.Component {
     title: '认款金额',
     dataIndex: 'claimAmount',
     width: 100,
+    render: text => (text ? text.toFixed(2) : 0.00),
   }, {
     title: '收款用途',
     dataIndex: 'receiptUse',
@@ -66,14 +72,19 @@ export default class NoProjectReceiptClaim extends React.Component {
     title: '备注',
     dataIndex: 'accountantApproveMessage',
     width: 100,
+    render: (text, record, index) => text || record.cashierApproveMessage,
   }, {
     title: '币种',
-    dataIndex: 'currency',
+    dataIndex: 'receiptCurrency',
     width: 100,
   }, {
     title: '收款金额',
     dataIndex: 'receiptAmount',
     width: 100,
+    render: (text, record, index) => {
+      const receiptAmount = text ? text.toFixed(2) : 0.00
+      return receiptAmount
+    },
   }, {
     title: '订单号',
     dataIndex: 'projectNo',
@@ -85,15 +96,15 @@ export default class NoProjectReceiptClaim extends React.Component {
   }, {
     title: '付款客户名称',
     dataIndex: 'payCustName',
-    width: 100,
+    width: 200,
   }, {
     title: '客户付款银行',
     dataIndex: 'payBankName',
-    width: 100,
+    width: 200,
   }, {
     title: '客户付款银行账号',
     dataIndex: 'payBankAccount',
-    width: 150,
+    width: 200,
   }, {
     title: '收款编号',
     dataIndex: 'receiptNo',
@@ -149,6 +160,26 @@ export default class NoProjectReceiptClaim extends React.Component {
     }
     this.props.openClaim(this.state.selectedRows[0])
   }
+  handleChangeClaimType = () => {
+    if (this.state.selectedRowKeys.length === 0) {
+      message.error('请选择要认款到项目的收款流水')
+      return
+    }
+    const that = this
+    Modal.confirm({
+      title: '操作确认',
+      content: `您确认要将所选择的${that.state.selectedRowKeys.length}条流水数据认款到项目吗`,
+      okText: '是',
+      cancelText: '否',
+      onOk() {
+        const changeParam = {
+          receiptClaimIds: that.state.selectedRowKeys,
+          claimType: 'project',
+        }
+        that.props.changeClaimType(changeParam)
+      },
+    })
+  }
   handleReject = () => {
     if (this.state.selectedRowKeys.length === 0) {
       message.error('请选择要拒绝的收款流水')
@@ -172,26 +203,36 @@ export default class NoProjectReceiptClaim extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
+    const rejectBtn = this.queryParam.status === '21' || this.queryParam.status === '40' ? <Button type="danger" onClick={this.handleReject}>拒绝</Button> : null
+    const makeSummary = this.props.amountTotals && this.props.amountTotals.length ? this.props.amountTotals.map(item => `${item.currency}：${item.totalAmount}`).join('  ') : '0.00'
     return (
       <div>
         <NoProjectReceiptClaimSearchWithForm
           onQuery={this.handleChangeParam}
         />
-        <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
-        <Button type="danger" onClick={this.handleReject}>拒绝</Button>
-        <br /><br />
+        <Row style={{ lineHeight: '28px' }}>
+          <Col span={12}>
+            <Button type="primary" onClick={this.handleOpenClaim}>{this.queryParam.status === '21' ? '' : '重新'}认款</Button>&nbsp;&nbsp;
+            {rejectBtn}
+          </Col>
+          <Col span={12} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
+            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
+          </Col>
+        </Row>
+        <br />
         <Table
           rowKey="receiptClaimId"
           rowSelection={rowSelection}
           columns={this.columns}
           bordered
-          size="middle"
+          size="small"
           dataSource={this.props.receiptClaimList.result}
-          scroll={{ x: '260%', y: this.state.tableHeight }}
+          scroll={{ x: 2600, y: this.state.tableHeight }}
           pagination={{
             current: this.props.receiptClaimList.pageNo,
             total: this.props.receiptClaimList.count,
             pageSize: this.props.receiptClaimList.pageSize,
+            showTotal: (total, range) => `共 ${total} 条记录 当前显示 ${range[0]}-${range[1]}`,
             onChange: this.handleChangePage,
             showSizeChanger: true,
             onShowSizeChange: this.handleChangeSize,
@@ -209,7 +250,9 @@ NoProjectReceiptClaim.propTypes = {
   // }).isRequired,
   getReceiptList: PropTypes.func.isRequired,
   reject: PropTypes.func.isRequired,
+  changeClaimType: PropTypes.func.isRequired,
   openClaim: PropTypes.func.isRequired,
+  amountTotals: PropTypes.arrayOf(PropTypes.shape),
   receiptClaimList: PropTypes.shape({
     pageNo: PropTypes.number.isRequired,
     count: PropTypes.number.isRequired,

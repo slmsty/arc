@@ -10,8 +10,8 @@ const dateFormat = 'YYYY-MM-DD'
 
 const columns = [{
   title: '数据状态',
-  dataIndex: 'statusDesc',
-  key: 'statusDesc',
+  dataIndex: 'statusName',
+  key: 'statusName',
   width: 80,
   fixed: 'left',
 }, {
@@ -23,52 +23,68 @@ const columns = [{
   render: (text, row, index) => moment(text).format(dateFormat),
 }, {
   title: '币种',
-  dataIndex: 'currency',
-  key: 'currency',
+  dataIndex: 'receiptCurrency',
+  key: 'receiptCurrency',
   width: 45,
 }, {
-  title: '收款金额',
+  title: '银行交易类型',
+  dataIndex: 'transactionTypeName',
+  key: 'transactionTypeName',
+  width: 100,
+}, {
+  title: '收入',
   dataIndex: 'receiptAmount',
   key: 'receiptAmount',
   width: 100,
-  render: (text, row, index) => (<div style={{ textAlign: 'right' }}>{text}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : '0.00'}</div>),
 }, {
-  title: '客户名称',
-  dataIndex: 'custName',
-  key: 'custName',
-  width: 300,
+  title: '支出',
+  dataIndex: 'payAmount',
+  key: 'payAmount',
+  width: 100,
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? Math.abs(text).toFixed(2) : '0.00'}</div>),
 }, {
-  title: '流水分类',
-  dataIndex: 'claimTypeDesc',
-  key: 'claimTypeDesc',
+  title: '公司',
+  dataIndex: 'companyName',
+  key: 'companyName',
   width: 80,
 }, {
-  title: '备注',
-  dataIndex: 'cashierApproveMessage',
-  key: 'cashierApproveMessage',
-  width: 635,
+  title: '银行类型',
+  dataIndex: 'receiptBankAccountName',
+  key: 'receiptBankAccountName',
+  width: 300,
 }, {
-  title: '客户付款方式',
-  dataIndex: 'custPayMethod',
-  key: 'custPayMethod',
-  width: 100,
+  title: '银行账号',
+  dataIndex: 'receiptBankAccount',
+  key: 'receiptBankAccount',
+  width: 150,
+}, {
+  title: '对方户名',
+  dataIndex: 'payCustName',
+  key: 'payCustName',
+  width: 350,
 }, {
   title: '银行流水备注',
   dataIndex: 'bankTransactionPurpose',
   key: 'bankTransactionPurpose',
   width: 300,
 }, {
-  title: '付款客户名称',
-  dataIndex: 'payCustName',
-  key: 'payCustName',
+  title: '客户名称',
+  dataIndex: 'custName',
+  key: 'custName',
   width: 300,
 }, {
-  title: '客户付款银行账号',
+  title: '付款方式',
+  dataIndex: 'custPayMethodName',
+  key: 'custPayMethodName',
+  width: 100,
+}, {
+  title: '对方银行帐号',
   dataIndex: 'payBankAccount',
   key: 'payBankAccount',
   width: 150,
 }, {
-  title: '客户付款银行',
+  title: '对方银行类型',
   dataIndex: 'payBankName',
   key: 'payBankName',
   width: 300,
@@ -78,10 +94,20 @@ const columns = [{
   key: 'bankTransactionNo',
   width: 200,
 }, {
-  title: '公司',
-  dataIndex: 'companyName',
-  key: 'companyName',
-  width: 300,
+  title: '流水分类',
+  dataIndex: 'claimTypeName',
+  key: 'claimTypeName',
+  width: 80,
+}, {
+  title: '相关票据',
+  dataIndex: 'relatedBill',
+  key: 'relatedBill',
+  width: 100,
+}, {
+  title: '备注',
+  dataIndex: 'cashierApproveMessage',
+  key: 'cashierApproveMessage',
+  width: 635,
 },
 ]
 
@@ -91,9 +117,13 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     editVisible: false,
     editReceiptClaimId: -1,
     exceptDisabled: false,
+    tableHeight: '',
   }
-  componentDidMount() {
-    this.handleQuery()
+  componentWillMount() {
+    const screenHeight = window.screen.height
+    // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
+    const tableHeight = screenHeight - 64 - 8 - 12 - 119 - 18 - 28.5 - 18 - 53 - 56
+    this.setState({ tableHeight })
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.cbsTurnoverEditConfirmResult !== nextProps.cbsTurnoverEditConfirmResult) {
@@ -103,7 +133,12 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     }
 
     if (this.props.cbsTurnoverEditExceptResult !== nextProps.cbsTurnoverEditExceptResult) {
-      message.info('数据状态变更为“出纳已确认”。')
+      message.info('数据状态变更为“无需认款”。')
+      this.handleQuery(true)
+    }
+
+    if (this.props.batchConfirmResult !== nextProps.batchConfirmResult) {
+      message.info(`${this.state.selectedRowKeys.length}条已确认成功。`)
       this.handleQuery(true)
     }
   }
@@ -142,6 +177,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     } else if (this.state.selectedRowKeys.length > 1) {
       message.error('只可对一条数据进行编辑。')
     } else {
+      this.props.initEditData(this.state.selectedRowKeys[0])
       this.setState({ editReceiptClaimId: this.state.selectedRowKeys[0], editVisible: true })
     }
   }
@@ -159,7 +195,14 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     if (!this.state.selectedRowKeys.length) {
       message.error('请选择想要排除的数据。')
     } else {
-      this.props.editExcept({ list: this.state.selectedRowKeys.map(item => ({ receiptClaimIds: item, remark: '' })) })
+      this.props.editExcept({ list: this.state.selectedRowKeys.map(item => ({ receiptClaimId: item, remark: '' })) })
+    }
+  }
+  handleBatchConfirm = () => {
+    if (!this.state.selectedRowKeys.length) {
+      message.error('请选择需要批量确认的数据。')
+    } else {
+      this.props.batchConfirm({ receiptClaimIds: this.state.selectedRowKeys })
     }
   }
   handleChangeStatus = (status) => {
@@ -178,7 +221,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
       total: this.props.cbsTurnoverWholenessList.pageInfo.count,
     }
     const makeSummary = () => (this.props.cbsTurnoverWholenessList.amountTotals.length ?
-      this.props.cbsTurnoverWholenessList.amountTotals.map(item => `${item.currency}：${item.totalAmount}`).join('  ') : '0.00'
+      this.props.cbsTurnoverWholenessList.amountTotals.map(item => `${item.currency}：`+ Math.abs(`${item.totalAmount}`)).join('  ') : '0.00'
     )
     return (
       <div>
@@ -191,6 +234,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           <Col span={8}>
             <Button type="primary" onClick={this.handleEdit}>编辑</Button>&nbsp;&nbsp;
             <Button type="default" onClick={this.handleExcept} disabled={this.state.exceptDisabled}>排除</Button>&nbsp;&nbsp;
+            <Button type="default" onClick={this.handleBatchConfirm}>确认</Button>&nbsp;&nbsp;
           </Col>
           <Col span={16} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary()}</span>
@@ -203,15 +247,16 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
           dataSource={this.props.cbsTurnoverWholenessList.pageInfo.result}
           bordered
           rowKey="receiptClaimId"
-          size="middle"
+          size="small"
           pagination={pagination}
-          scroll={{ x: '2970px' }}
+          scroll={{ x: '3550px', y: this.state.tableHeight }}
         />
         <EditCBSTurnoverDataWithForm
           onConfirm={this.handleEditConfirm}
           onCancel={this.handleEditCancel}
           visible={this.state.editVisible}
           receiptClaimId={this.state.editReceiptClaimId}
+          initData={this.props.initSingleReceiptResult}
         />
       </div>
     )
@@ -224,6 +269,7 @@ CBSTurnoverWholenessConfirm.propTypes = {
   editExcept: PropTypes.func.isRequired,
   cbsTurnoverEditConfirmResult: PropTypes.number.isRequired,
   cbsTurnoverEditExceptResult: PropTypes.number.isRequired,
+  batchConfirmResult: PropTypes.number.isRequired,
   cbsTurnoverWholenessList: PropTypes.shape({
     pageInfo: PropTypes.shape({
       pageNo: PropTypes.number.isRequired,
@@ -232,5 +278,8 @@ CBSTurnoverWholenessConfirm.propTypes = {
     }).isRequired,
     amountTotals: PropTypes.array.isRequired,
   }).isRequired,
+  initEditData: PropTypes.func.isRequired,
+  batchConfirm: PropTypes.func.isRequired,
+  initSingleReceiptResult: PropTypes.shape().isRequired,
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import caseReducer from './caseReducer'
 
 const projectReceiptClaim = {
@@ -7,37 +8,43 @@ const projectReceiptClaim = {
     count: 0,
     result: [],
   },
+  amountTotals: [],
   receiptClaimListRefresh: new Date().getTime(),
   receiptInfo: {
-    receiptClaimId: '',
-    receiptAmount: 0,
-    bankTransactionNo: '',
-    receiptNo: '',
-    payCustName: '',
   },
   receiptClaimFundList: {
     pageNo: 1,
     count: 0,
     result: [],
   },
+  getPhaseCompleted: new Date().getTime(),
 }
 
 function getReceiptList(state, action) {
-  return { ...state, receiptClaimList: action.response.pageInfo }
+  return { ...state, receiptClaimList: action.response.pageInfo, amountTotals: action.response.amountTotals }
 }
 
 function getPhaseList(state, action) {
-  return { ...state, receiptClaimFundList: action.response.pageInfo }
+  return { ...state, receiptClaimFundList: action.response.pageInfo, getPhaseCompleted: new Date().getTime() }
 }
 
-function openClaim(state, action) {
-  return { ...state, receiptInfo: action.receiptInfo }
+function getReceiptInfo(state, action) {
+  return { ...state, receiptInfo: action.response.data[0] }
 }
 
 function rejectSuccess(state) {
   return { ...state, receiptClaimListRefresh: new Date().getTime() }
 }
 
+function changeSuccess(state) {
+  return { ...state, receiptClaimListRefresh: new Date().getTime() }
+}
+function hangUp(state) {
+  return { ...state, receiptClaimListRefresh: new Date().getTime() }
+}
+function emailClaim(state) {
+  return { ...state, receiptClaimListRefresh: new Date().getTime() }
+}
 function submitSuccess(state) {
   return { ...state, receiptInfo: {}, receiptClaimListRefresh: new Date().getTime() }
 }
@@ -49,8 +56,11 @@ function closeClaim(state) {
 export default caseReducer(projectReceiptClaim, {
   GET_PROJECT_RECEIPT_LIST_SUCCESS: getReceiptList,
   GET_PROJECT_RECEIPT_FUND_LIST_SUCCESS: getPhaseList,
+  GET_PROJECT_RECEIPT_INFO_SUCCESS: getReceiptInfo,
   PROJECT_RECEIPT_CLAIM_SUBMIT_SUCCESS: submitSuccess,
   PROJECT_RECEIPT_CLAIM_REJECT_SUCCESS: rejectSuccess,
-  OPEN_PROJECT_CLAIM: openClaim,
+  PROJECT_RECEIPT_CLAIM_CHANGE_SUCCESS: changeSuccess,
   CLOSE_PROJECT_CLAIM: closeClaim,
+  HANG_UP_SUCCESS: hangUp,
+  EMAILCLAIM_SUCCESS: emailClaim,
 })

@@ -1,66 +1,198 @@
 import React, {Component} from 'react'
 import moment from 'moment';
-import {Form, DatePicker, Input, Modal} from 'antd';
+import requestJsonFetch from '../../http/requestJsonFecth'
+import {Form, DatePicker, Input, Modal, message} from 'antd';
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 
 class ARModal extends Component{
+  state = {
+    glDate: '',
+  }
   onCancel = ()=>{
     this.props.onCancel();
     this.props.form.resetFields();
   }
 
-  onOk = ()=>{
-    this.props.form.validateFields((err, {key6, key7, key8}) => {
-      if(err) return
+  postEdit = (body, callback)=>{
+    requestJsonFetch(
+      '/arc/billedar/confirm/edit',
+      {
+        method: 'POST',
+        body
+      },
+      callback
+    )
+  }
+  handleDateChange = (date, string) => {
+    this.setState({
+      glDate: string,
+    })
+  }
+  onOk = () => {
+    this.props.form.validateFields((err, values) => {
+      const isShow = !((this.props.o.paymentTerm==='按进度'&&this.props.o.paymentName==='预付款')||(this.props.o.paymentTerm==='按时间'&&this.props.o.paymentName!=='结算款'));
 
-      this.props.onOk({
-        key6: key6.format('YYYY-MM-DD'),
-        key7: key7.format('YYYY-MM-DD'),
-        key8
-      });
-      this.props.form.resetFields();
+      let isError = false
+      if(!values.billedArDate){
+        isError = true
+        this.props.form.setFields({
+          billedArDate: {
+            value: values.billedArDate,
+            errors: [new Error('必须选择Billed AR日期')]
+          }
+        })
+      }else{
+        this.props.form.setFields({
+          billedArDate: {
+            value: values.billedArDate,
+            errors: null
+          }
+        })
+      }
+      /* if(!values.glDate){
+        console.log(3)
+        isError = true
+        this.props.form.setFields({
+          glDate: {
+            value: values.glDate,
+            errors: [new Error('必须选择GL日期')]
+          }
+        })
+      }else{
+        console.log(4)
+        this.props.form.setFields({
+          glDate: {
+            value: values.glDate,
+            errors: null
+          }
+        })
+      } */
+
+      if(isShow){
+        if(!values.reportDate){
+          isError = true
+          this.props.form.setFields({
+            reportDate: {
+              value: values.reportDate,
+              errors: [new Error('必须选择报告日期')]
+            }
+          })
+        }else{
+          this.props.form.setFields({
+            reportDate: {
+              value: values.reportDate,
+              errors: null
+            }
+          })
+        }
+        if(values.assessTaxIncludedAmount == ''){
+          console.log(values.assessTaxIncludedAmount)
+          isError = true
+          this.props.form.setFields({
+            assessTaxIncludedAmount: {
+              value: values.assessTaxIncludedAmount,
+              errors: [new Error('必须输入考核含税金额')]
+            }
+          })
+        }else{
+          this.props.form.setFields({
+            assessTaxIncludedAmount: {
+              value: values.assessTaxIncludedAmount,
+              errors: null
+            }
+          })
+        }
+      }
+      if(isError) return
+
+      let body = {
+        billedArId: this.props.o.billedArId,
+        billedArDate: values.billedArDate.format('YYYY-MM-DD'),
+        arAccountantApproveMessage: values.arAccountantApproveMessage
+      }
+
+      if(isShow){
+        body.reportDate = values.reportDate.format('YYYY-MM-DD');
+        body.assessTaxIncludedAmount = values.assessTaxIncludedAmount;
+      }
+      this.postEdit(body, response=>{
+        if(response.resultCode === '000000'){
+          this.props.onOk(body);
+          this.props.form.resetFields();
+        }else{
+          message.error(response.resultMessage);
+        }
+      })
     });
   }
 
   render(){
     const {getFieldDecorator} = this.props.form;
-    const {visible, key6, key7, key8} = this.props;
+    const {visible, o} = this.props;
+
+    const isShow = !((o.paymentTerm==='按进度'&&o.paymentName==='预付款')||(o.paymentTerm==='按时间'&&o.paymentName!=='结算款'));
 
     return (
       <Modal
-        title="AR编辑"
+        title="编辑"
         visible={visible}
         onCancel={this.onCancel}
         onOk={this.onOk}>
           <Form>
             <FormItem label="Billed AR日期">
               {
-                getFieldDecorator('key6', {
-                  initialValue: key6 ? moment(key6) : null,
-                  rules: [
-                    {required: true, message: '必须选择Billed AR日期'}
-                  ]
+                getFieldDecorator('billedArDate', {
+                  initialValue: o.arDate ? moment(o.arDate) : null
                 })(
                   <DatePicker />
                 )
               }
             </FormItem>
-            <FormItem label="GL日期">
+            {/*<FormItem label="GL日期">
               {
-                getFieldDecorator('key7', {
-                  initialValue: key7 ? moment(key7) : null,
-                  rules: [
-                    {required: true, message: '必须选择GL日期'}
-                  ]
+                getFieldDecorator('glDate', {
+                  initialValue: o.glDate ? moment(o.glDate) : (this.state.glDate ? moment(this.state.glDate).endOf('month') : null)
                 })(
                   <DatePicker />
                 )
               }
-            </FormItem>
+            </FormItem>*/}
+            {
+              isShow
+              ?
+              <FormItem label="报告日期">
+                {
+                  getFieldDecorator('reportDate', {
+                    initialValue: o.reportDate ? moment(o.reportDate) : null
+                  })(
+                    <DatePicker
+                      onChange={this.handleDateChange}
+                    />
+                  )
+                }
+              </FormItem>
+              :
+              null
+            }
+            {
+              isShow
+              ?
+              <FormItem label="考核含税金额">
+                {
+                  getFieldDecorator('assessTaxIncludedAmount', {
+                    initialValue: '0',
+                  })(
+                    <Input placeholder="考核含税金额" />
+                  )
+                }
+              </FormItem>
+              :
+              null
+            }
             <FormItem label="备注">
               {
-                getFieldDecorator('key8', {initialValue: key8})(
+                getFieldDecorator('arAccountantApproveMessage', {initialValue: o.arAccountantApproveMessage})(
                   <TextArea rows={4} />
                 )
               }

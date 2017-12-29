@@ -4,8 +4,12 @@ const rewireLess = require('react-app-rewire-less')
 
 module.exports = function override(config, env) {
   config = injectBabelPlugin(['import', { libraryName: 'antd', style: true }], config)
-  config = rewireLess(config, env, {
-    modifyVars: { '@primary-color': '#F4A034' },
-  })
+  config = rewireLess.withLoaderOptions({
+    modifyVars: {
+      '@primary-color': '#F4A034',
+      '@form-item-margin-bottom': '12px',
+      '@input-height-lg': '26px',
+    },
+  })(config, env)
   return config
 }

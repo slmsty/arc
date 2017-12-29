@@ -32,6 +32,7 @@ export default class MultipleDayInput extends React.Component {
         const day = this.state.day
         day.push(checkDay.format(dateFormat))
         this.setState({ day })
+        this.props.onChange(day)
       }
     }
     this.textTemp = ''

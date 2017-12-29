@@ -8,36 +8,30 @@ import './index.css'
 
 const { Header, Sider, Content } = Layout
 
-const breadcrumbNameMap = {
-  '/receiptManagement': '回款管理',
-  '/receiptManagement/projectReceiptClaim': '项目收款认领',
-  '/receiptManagement/noProjectReceiptClaim': '非项目收款认领',
-  '/receiptManagement/reviewReceiptClaim': '收款认领复核',
-  '/receiptManagement/customerBankLink': '客户银行帐号关系',
-  '/receiptManagement/contractChange': '合同变更明细',
-  '/receiptManagement/cbsTurnoverWholenessConfirm': 'CBS流水完整性确认',
-  '/receiptManagement/manualEntryBankTurnover': '人工录入银行流水',
-  '/receiptManagement/manualEntryBankTurnover/batchImport': '批量导入',
-  '/billedAR': 'Billed AR管理',
-  '/billedAR/approve': 'Billed AR审定',
-  '/billedAR/confirm': 'Billed AR确认',
-  '/badDebts': '坏账管理',
-  '/badDebts/apply': '坏账划销申请',
-  '/badDebts/status': '坏账管理状态',
-  '/apps/2': 'Application2',
-  '/apps/1/detail': 'Detail',
-  '/apps/2/detail': 'Detail',
+const getBreadcrumbName = (menus, url) => {
+  let menuName = ''
+  if (menus && menus.length > 0) {
+    menus.forEach((menu) => {
+      if (menu.path === url) {
+        menuName = menu.name
+      }
+      if (!menuName) {
+        menuName = getBreadcrumbName(menu.child, url)
+      }
+    })
+  }
+  return menuName
 }
 
 const BreadcrumbContainer = withRouter((props) => {
-  const { location } = props
+  const { location, permission } = props
   const pathSnippets = location.pathname.split('/').filter(i => i)
   const extraBreadcrumbItems = pathSnippets.map((_, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
     return (
       <Breadcrumb.Item key={url}>
         <Link to={url}>
-          {breadcrumbNameMap[url]}
+          {getBreadcrumbName(permission.menu, url)}
         </Link>
       </Breadcrumb.Item>
     )
@@ -80,6 +74,7 @@ export default class Index extends React.Component {
           </div>
           <MenuComponent
             collapsed={this.state.collapsed}
+            menu={this.props.permission.menu}
           />
         </Sider>
         <Layout>
@@ -89,13 +84,15 @@ export default class Index extends React.Component {
               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
-            <BreadcrumbContainer />
+            <BreadcrumbContainer
+              permission={this.props.permission}
+            />
             <div className="user">
               <img src={headIcon} alt="" />
               <p>欢迎您，<span>{staffName}</span><span>{orgName}</span></p>
             </div>
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+          <Content style={{ margin: '8px 8px', padding: 12, background: '#fff', minHeight: 280 }}>
             { this.props.children }
           </Content>
         </Layout>
@@ -112,5 +109,8 @@ Index.propTypes = {
     staffName: PropTypes.string.isRequired,
     orgName: PropTypes.string.isRequired,
     headIcon: PropTypes.string.isRequired,
+  }).isRequired,
+  permission: PropTypes.shape({
+    menu: PropTypes.arrayOf(PropTypes.shape()),
   }).isRequired,
 }

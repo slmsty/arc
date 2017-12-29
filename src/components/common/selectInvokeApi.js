@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function,react/prop-types,max-len,react/require-default-props */
+/* eslint-disable react/prefer-stateless-function,react/prop-types,max-len,react/require-default-props,no-nested-ternary */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Select } from 'antd'
@@ -20,21 +20,29 @@ export default class SelectInvokeApi extends React.Component {
     if (response.resultCode === '000000') {
       const options = response.data
       if (this.props.hasEmpty) {
-        options.unshift({ paramValue: '', paramValueDesc: '请选择' })
+        options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
       }
       this.setState({
         options,
       })
     }
   }
+  handleChange = (value) => {
+    if (value === 'all') {
+      this.props.onChange('')
+    } else {
+      this.props.onChange(value)
+    }
+  }
   render() {
-    const optionDom = this.state.options ? this.state.options.map(option => <Option value={option.paramValue}>{option.paramValueDesc}</Option>) : null
+    const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
     return (
       <Select
         id={this.props.id}
         placeholder={this.props.placeholder}
-        onChange={value => this.props.onChange(value)}
-        value={this.props.value}
+        onChange={this.handleChange}
+        value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : 'all')}
+        disabled={this.props.disabled}
       >
         {optionDom}
       </Select>
@@ -47,5 +55,6 @@ SelectInvokeApi.propTypes = {
   typeCode: PropTypes.string.isRequired,
   paramCode: PropTypes.string.isRequired,
   value: PropTypes.string,
+  initialValue: PropTypes.string,
   hasEmpty: PropTypes.bool,
 }

@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom'
 import { createStore, applyMiddleware, compose } from 'redux'
@@ -23,11 +24,8 @@ function loader() {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
     // eslint-disable-next-line no-underscore-dangle
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose
-
   const enhancer = composeEnhancers(applyMiddleware(...middleware))
-
   const store = createStore(reducers, enhancer)
-
   render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
@@ -37,7 +35,6 @@ function loader() {
     document.getElementById('root'),
   )
 }
-
 
 function bootstrap() {
   if (window.location.hash && window.location.hash.indexOf('access_token=') > -1) {
@@ -52,7 +49,7 @@ function bootstrap() {
       window.location.origin = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`
     }
     // token不存在 去访问第三方授权网站 （注意：redirect_uri 需要和 后端设置的完全一样）
-    window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${window.location.origin}/`
+    window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${window.location.origin}${process.env.PUBLIC_URL}`
   }
 }
 

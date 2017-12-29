@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function,react/prop-types,react/require-default-props */
+/* eslint-disable react/prefer-stateless-function,react/prop-types,react/require-default-props,max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd'
@@ -10,31 +10,26 @@ const FormItem = Form.Item
 class SelectReceiptCompany extends React.Component {
   state = {
     visible: false,
-    companyName: '',
     pageNo: 1,
     pageSize: 10,
     total: 1,
     companyList: [],
     selectedRowKeys: [],
     selectedRows: [],
+    loading: false,
+    firstLoad: true,
+  }
+  componentWillMount() {
+    if (this.props.initialValue) {
+      this.props.onChange(this.props.initialValue)
+    }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
   columns = [{
     title: '公司名称',
-    dataIndex: '1',
-    key: '1',
-    width: 100,
-  }, {
-    title: '公司编号',
-    dataIndex: '2',
-    key: '2',
-    width: 100,
-  }, {
-    title: '所属BG',
-    dataIndex: '3',
-    key: '3',
+    dataIndex: 'companyName',
     width: 100,
   },
   ]
@@ -43,10 +38,7 @@ class SelectReceiptCompany extends React.Component {
       message.error('请选择认款公司')
       return
     }
-    this.setState({
-      methodName: this.state.selectedRows[0].receiptMethodName,
-    })
-    this.props.onChange(this.state.selectedRows[0].receiptMethodId)
+    this.props.onChange([this.state.selectedRows[0].companyId, this.state.selectedRows[0].companyName])
     this.handleCancel()
   }
   handleCancel = () => {
@@ -75,7 +67,8 @@ class SelectReceiptCompany extends React.Component {
         keywords,
       },
     }
-    requestJsonFetch('/arc/common/receipt_method/list', param, this.handleCallback)
+    this.setState({ loading: true })
+    requestJsonFetch('/arc/common/arc_company/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
@@ -83,8 +76,10 @@ class SelectReceiptCompany extends React.Component {
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.pageCount,
         companyList: response.pageInfo.result,
+        firstLoad: false,
       })
     }
+    this.setState({ loading: false })
   }
   handleEmitEmpty = () => {
     this.props.onChange('')
@@ -103,13 +98,13 @@ class SelectReceiptCompany extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const value = (this.props.value && this.props.value[0] !== undefined) ? this.props.value : this.props.initialValue
+    const suffix = value && value[0] !== undefined ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
-          style={{ height: 30 }}
           placeholder="认款公司"
-          value={this.props.value ? this.state.companyName : ''}
+          value={value && value[0] !== undefined ? value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
@@ -117,6 +112,7 @@ class SelectReceiptCompany extends React.Component {
           title="选择认款公司"
           style={{ top: 20 }}
           visible={visible}
+          wrapClassName="vertical-center-modal"
           onCancel={this.handleCancel}
           footer={[
             <Button key="submit" type="primary" onClick={this.handleOk}>
@@ -132,6 +128,7 @@ class SelectReceiptCompany extends React.Component {
                 <FormItem {...formItemLayout} label="认款公司">
                   {getFieldDecorator('keywords')(
                     <Input
+                      onPressEnter={this.handleQuery}
                       placeholder="请输入关键字"
                     />,
                   )}
@@ -145,11 +142,15 @@ class SelectReceiptCompany extends React.Component {
           </Form>
 
           <Table
-            rowKey="receiptMethodId"
+            rowKey="companyId"
             columns={this.columns}
             rowSelection={rowSelection}
             bordered
             size="middle"
+            loading={this.state.loading}
+            locale={{
+              emptyText: this.state.firstLoad ? '' : '没有符合条件的认款公司',
+            }}
             dataSource={this.state.companyList}
             pagination={{
               current: this.state.pageNo,
@@ -169,7 +170,8 @@ SelectReceiptCompany.propTypes = {
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldValue: PropTypes.func.isRequired,
   }).isRequired,
-  value: PropTypes.string,
+  value: PropTypes.arrayOf(PropTypes.string),
+  initialValue: PropTypes.arrayOf(PropTypes.string),
 }
 
 const SelectReceiptCompanyWithForm = Form.create()(SelectReceiptCompany)
