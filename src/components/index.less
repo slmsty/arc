@@ -1,0 +1,203 @@
+.ant-layout-sider {
+  background: #fff;
+}
+
+.ant-menu-dark, .ant-menu-dark .ant-menu-sub {
+  color: #141414;
+  background: #fff;
+}
+
+.ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-item-group-title, .ant-menu-dark .ant-menu-item > a {
+  color: #141414;
+}
+
+.ant-menu-dark .ant-menu-inline.ant-menu-sub {
+  background: #fff;
+}
+
+.trigger {
+  float: left;
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.trigger:hover {
+  color: #108ee9;
+}
+
+.logo {
+  height: 64px;
+  padding: 15px 11px;
+  background-color: #F4A034;
+}
+
+.logo img {
+  width: 152px;
+}
+
+.logo-mini {
+  padding: 16px 13px;
+}
+.logo-mini img {
+  width: 35px;
+}
+
+.vertical-center-modal {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.vertical-center-modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  width: 0;
+}
+
+.vertical-center-modal .ant-modal {
+  display: inline-block;
+  vertical-align: middle;
+  top: 0;
+  text-align: left;
+}
+.ant-calendar-picker{
+  width: 100%;
+}
+.user {
+  float: right;
+  display: flex;
+  height: 100%;
+  margin-right: 16px;
+  align-items: center;
+}
+
+.user img {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  margin: 0 30px 0 40px;
+}
+
+.user p {
+  white-space: nowrap;
+}
+
+.user span {
+  margin: 0 4px;
+}
+.mycolumn{
+  text-align: center !important;
+  width: 100px !important;
+}
+.my-review-column{
+  text-align: center !important;
+  width: 100px;
+}
+.contractRowBorder{
+  border:1px solid #d9d9d9;
+}
+.text-css{
+  text-align: right;
+  line-height: 30px;
+}
+.contractRowBorderLeft{
+  border-left:1px solid #d9d9d9;
+}
+.contractRowBorderRight{
+  border-right:1px solid #d9d9d9;
+}
+.contractRowBorderTop{
+  border-top:1px solid #d9d9d9;
+}
+.contractRowBorderBottom{
+  border-bottom:1px solid #d9d9d9;
+}
+
+
+.contractRowBorderNo{
+  border:none !important;
+}
+.contractRowBorderNo:focus{
+  border:none !important;
+}
+.contractRowBorderLeft>.ant-form-item{
+  margin-bottom: 0px;
+}
+.contractRowBorderNo>.ant-select-selection--single,.contractRowBorderLeft input {
+  height: 30px !important;
+  border: none;
+}
+
+// 菜单展开
+.m-menu.ant-menu-inline {
+  border-right: 0; // 去掉菜单右边的边框
+  // 一级菜单 icon
+  .ant-menu-item,
+  .ant-menu-submenu-title{
+    .anticon {
+      position: relative;
+      top: 2px;
+      font-size: 20px;
+    }
+  }
+  // 有子菜单的一级菜单文字颜色
+  .ant-menu-submenu-title {
+    color: #141414;
+    font-size: 16px;
+  }
+  // 点击可跳转的菜单（一级或二级）的文字颜色
+  .ant-menu-item {
+    color: #141414;
+  }
+
+  .ant-menu-item a:hover {
+    color: #141414;
+  }
+
+  .ant-menu-submenu-title i {
+    font-size: 18px;
+  }
+
+  .ant-menu-item-active .ant-menu-item:hover {
+    color: #141414;
+  }
+
+  // 选中的菜单左侧边框效果
+  .ant-menu-item:after, .ant-menu-vertical .ant-menu-item:after {
+    right: auto;
+    left: 0;
+    border-right-width: 4px;
+  }
+}
+
+// 选中的菜单背景颜色
+.m-menu.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: #f3f3f3;
+}
+
+.m-menu.ant-menu-inline-collapsed.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: transparent;
+}
+
+// 菜单折叠
+.m-menu.ant-menu-inline-collapsed {
+  width: 63px; // 设置宽度
+  // 一级跳转菜单和一级主菜单icon设置
+  > .ant-menu-item,
+  > .ant-menu-submenu > .ant-menu-submenu-title {
+    .anticon{
+      position: relative;
+      top: 2px;
+      font-size: 20px;
+    }
+  }
+}
+
+// 菜单折叠
+.m-menu.ant-menu-vertical {
+  border-right: none; // 去掉右边边框
+}

@@ -23,6 +23,7 @@ export default class MenuComponent extends React.Component {
       <Menu
         theme="dark"
         mode="inline"
+        className="m-menu"
       >
         {menus}
       </Menu>
