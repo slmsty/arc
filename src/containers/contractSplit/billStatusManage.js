@@ -4,7 +4,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import ContractSplit from '../../components/contractSplit/contractSplit'
+import BillStatusManage from '../../components/billStatusManage/billStatusManage'
 import { getContractList, saveContractSplitInfo } from '../../actions/contractSplit'
 
 const mapStateToProps = state => ({
@@ -17,13 +17,13 @@ const mapDispatchToProps = dispatch => (
   }, dispatch)
 )
 // eslint-disable-next-line react/prefer-stateless-function
-class ContractSplitContainer extends React.Component {
+class BillStatusManageContainer extends React.Component {
   render() {
     return (
-      <ContractSplit {...this.props} />
+      <BillStatusManage {...this.props} />
     )
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContractSplitContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(BillStatusManageContainer)
 
