@@ -140,6 +140,13 @@ const common = {
             icon: 'icon-BilledAR',
             component: 'ContractSplit',
           },
+          {
+            key: '42',
+            path: '/ContractSplit/BillStatusManage',
+            name: '开票状态管理',
+            icon: 'icon-BilledAR',
+            component: 'BillStatusManage',
+          },
         ],
       },
       {
