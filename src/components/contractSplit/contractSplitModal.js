@@ -19,7 +19,7 @@ const tableData = [{
   contractType: 0,
   projectLine: 0,
   settleType: 0,
-  catalogue: '合计',
+  catalogue: 0,
   discount: 0,
   discountMoney: 0,
   SaleBU: 0,
@@ -45,6 +45,8 @@ class ContractSplitModal extends React.Component{
   state = {
     dataSource: tableData,
     countCatalPrice: 0.00,
+    rcontent: '',
+    rcontentnum: 0,
   }
   selectDateChange = (data) => {
     const newData = [...this.state.dataSource]
@@ -69,7 +71,6 @@ class ContractSplitModal extends React.Component{
     this.setState({
       dataSource: newData,
     })
-    // console.log(this.state.dataSource)
   }
   renderColumns = (text, index, column) => {
     return (
@@ -80,7 +81,7 @@ class ContractSplitModal extends React.Component{
     return (
       <EditableCell
         column={column}
-        value={text}
+        value={text ? text : 0}
         onChange={value => this.handleInputChange(value, index, column)}
       />
     )
@@ -88,21 +89,33 @@ class ContractSplitModal extends React.Component{
   handleInputChange = (value, index, column) => {
     const newData = [...this.state.dataSource]
     newData[index][column] = value
-    if (!newData[index]['catalogue'] || !newData[index]['discount'] ) {
-      newData[index]['discountMoney'] = 0 // 折后合同额
-      newData[index]['SaleBU'] = 0 // 合同含税额
-      newData[index]['salePeo'] = 0  // 合同不含税额
-      newData[index]['contractType1'] = 0 // 退税收入含税额
-      newData[index]['GrossOrder'] = 0 // 退税收入含税额
+    if (!newData[index].catalogue || !newData[index].discount) {
+      newData[index].discountMoney = 0 // 折后合同额
+      newData[index].SaleBU = 0 // 合同含税额
+      newData[index].salePeo = 0  // 合同不含税额
+      newData[index].contractType1 = 0 // 退税收入含税额
+      newData[index].GrossOrder = 0 // 退税收入含税额
     } else {
-      newData[index]['discountMoney'] = (Number(newData[index]['catalogue']) * (1 - Number(newData[index]['discount']) * 0.01)).toFixed(2) // 折后合同额根据目录价和折扣计算出来
-      newData[index]['SaleBU'] = (Number(newData[index]['catalogue']) * (1 - Number(newData[index]['discount']) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
-      newData[index]['salePeo'] = (Number(newData[index]['SaleBU']) / (1 + 0.18)).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
-      newData[index]['contractType1'] = (Number(newData[index]['SaleBU']) / (1 + 0.18) * (1 + Number(newData[index]['contractDate']))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(1+退税率)
-      newData[index]['GrossOrder'] = (Number(newData[index]['SaleBU']) / (1 + 0.18) * (1 + Number(newData[index]['contractDate']))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)*(1+退税率)
+      newData[index].discountMoney = (parseFloat(newData[index].catalogue) * (1 - parseFloat(newData[index].discount) * 0.01)).toFixed(2) // 折后合同额根据目录价和折扣计算出来
+      newData[index].SaleBU = (parseFloat(newData[index].catalogue) * (1 - parseFloat(newData[index].discount) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
+      newData[index].salePeo = (parseFloat(newData[index].SaleBU) / (1 + 0.18)).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
+      newData[index].contractType1 = (parseFloat(newData[index].SaleBU) / (1 + 0.18) * (parseFloat(newData[index].contractDate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
+      newData[index].GrossOrder = (parseFloat(newData[index].SaleBU) / (1 + 0.18)).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
     }
     this.setState({
       dataSource: newData,
+    })
+  }
+  onTextAreaChange = (event) => {
+    let getValue = event.target.value
+    let len = getValue.length
+    let maxLenght = 150
+    if (len > maxLenght) {
+      getValue = getValue.substring(0, maxLenght)
+    }
+    this.setState({
+      rcontent: getValue,
+      rcontentnum: len,
     })
   }
   renderSelect = (text, index, column) => {
@@ -119,8 +132,14 @@ class ContractSplitModal extends React.Component{
   }
   handleAdd = (index, flag) => {
     const newData = {}
+    const newSubData = {
+      taskOpration: 'addSub',
+      parentKey: index,
+      subRow: true,
+    }
+    // flag == 0 为增加子行
     if (flag === '0') {
-      tableData.splice(Number(index) + 1, 0, newData)
+      tableData.splice(Number(index) + 1, 0, newSubData)
     }
     if (flag === '1') {
       tableData.splice(-1, 0, newData)
@@ -138,33 +157,41 @@ class ContractSplitModal extends React.Component{
   }
   handleOk = () => {
     const param = this.props.form.getFieldsValue()
-    console.log('param', param)
+    const newData = this.state.dataSource
+    let subCatalogue = {}
+    newData.map((item) => {
+      if (item.subRow) {
+        if (!subCatalogue[item.parentKey]) {
+          subCatalogue[item.parentKey] = 0
+        }
+        subCatalogue[item.parentKey] += parseFloat(item.catalogue)
+      }
+    })
+    for (let i in subCatalogue) {
+      if (newData[i].catalogue != subCatalogue[i]) {
+        console.log(`合同拆分父行与子行的目录价之和不等`)
+        return
+      }
+    }
   }
 
   render() {
-    let countCatalPrice = 0
-    let discountCatalPrice = 0
-    let countsalePeo = 0
-    let countcontractType1 = 0
-    let countGrossOrder = 0
+    let countCatalPrice = 0 // 合计目录价 catalogue
+    let discountCatalPrice = 0 // 折后目录价
+    let countsalePeo = 0 // 合同不含税额
+    let countcontractType1 = 0 // 退税收入含税额
+    let countGrossOrder = 0 // GrossOrder
     const coutnData = [...this.state.dataSource]
     console.log(coutnData)
     coutnData.map((item) => {
-      if (item.catalogue === '合计') {
-        item.catalogue = 0
+      if (item.taskOpration !== 'addSub') {
+        countCatalPrice += !item || !item.catalogue ? 0 : parseFloat(item.catalogue) // 合计目录价
+        discountCatalPrice += !item || !item.discountMoney ? 0 : parseFloat(item.discountMoney) // 折后目录价
+        countsalePeo += !item || !item.salePeo ? 0 : parseFloat(item.salePeo) // 合同不含税额
+        countcontractType1 += !item || !item.contractType1 ? 0 : parseFloat(item.contractType1) // 退税收入含税额
+        countGrossOrder += !item || !item.GrossOrder ? 0 : parseFloat(item.GrossOrder) // GrossOrder
       }
-      !item || !item.discountMoney ? 0 : Number(item.discountMoney)
-      !item || !item.salePeo ? 0 : Number(item.salePeo)
-      !item || !item.contractType1 ? 0 : Number(item.contractType1)
-      !item || !item.GrossOrder ? 0 : Number(item.GrossOrder)
-
-      countCatalPrice += Number(item.catalogue)
-      discountCatalPrice += Number(item.discountMoney)
-      countsalePeo += Number(item.salePeo)
-      countcontractType1 += Number(item.contractType1)
-      countGrossOrder += Number(item.GrossOrder)
     })
-    console.log(discountCatalPrice)
     const { getFieldDecorator } = this.props.form
     const columns = [{
       title: 'Task操作',
@@ -174,10 +201,17 @@ class ContractSplitModal extends React.Component{
       fixed: 'left',
       render: (text, record, index) => (
         text === '合计' ? text :
-          <div>
-            <Button onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;
-            <Button onClick={() => this.handleMinus(index)}>－</Button>
-          </div>
+          (
+            text === 'addSub' ?
+              <div>
+                <Button onClick={() => this.handleMinus(index)}>－</Button>
+              </div>
+              :
+              <div>
+                <Button onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;
+                <Button onClick={() => this.handleMinus(index)}>－</Button>
+              </div>
+          )
       ),
     }, {
       title: <span>合同类型<em style={{ color: '#FF0000' }}>*</em></span>,
@@ -279,7 +313,14 @@ class ContractSplitModal extends React.Component{
         >
           <div>
             <Form>
-              <h2>合同OrderList信息</h2>
+              <Row>
+                <Col span={4}>
+                  <h2>合同OrderList信息</h2>
+                </Col>
+                <Col span={4}>
+                  <button>合同审批表及合同扫描件</button>
+                </Col>
+              </Row>
               <br />
               <Row className="contractRowBorder text-css">
                 <Col span={4}>
@@ -414,15 +455,21 @@ class ContractSplitModal extends React.Component{
                     彭红
                   </div>
                 </Col>
-                <Col span={3} className="contractRowBorderLeft">
+                <Col span={2} className="contractRowBorderLeft">
                   关联BU<em style={{ color: '#FF0000' }}>*</em>：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft">
+                <Col span={2} className="contractRowBorderLeft">
                   <FormItem>
                     {
                       getFieldDecorator('sbuInfo')(<SelectSbu />)
                     }
                   </FormItem>
+                </Col>
+                <Col span={2} className="contractRowBorderLeft">
+                  考核比例：
+                </Col>
+                <Col span={2} className="contractRowBorderLeft">
+                  <Input className="contractRowBorderNo" />
                 </Col>
               </Row>
               <Row className="text-css contractRowBorder">
@@ -585,7 +632,7 @@ class ContractSplitModal extends React.Component{
               <br />
               <h2>拆分备注</h2>
               <br />
-              <TextArea rows={4} />
+              <TextArea rows={4} value={this.state.rcontent} onChange={this.onTextAreaChange} placeholder="根据实际情况录入，且不超过150字符" />
               <br />
               <br />
               <h2>Order</h2>
@@ -594,19 +641,19 @@ class ContractSplitModal extends React.Component{
                   Gross Order：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft contractRowBorderRight">
-                  <Input className="contractRowBorderNo" />
+                  <Input className="contractRowBorderNo" value={countGrossOrder.toFixed(2)} disabled />
                 </Col>
                 <Col span={4}>
                   Net Order(Legal)：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft contractRowBorderRight">
-                  <Input className="contractRowBorderNo" />
+                  <Input className="contractRowBorderNo" value={countGrossOrder.toFixed(2)} disabled />
                 </Col>
                 <Col span={4}>
                   Net Order（Management)：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
-                  <Input className="contractRowBorderNo" />
+                  <Input className="contractRowBorderNo" value={countGrossOrder.toFixed(2)} disabled />
                 </Col>
               </Row>
               <br />
