@@ -4,7 +4,7 @@ import { withRouter, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { Layout, Icon, Breadcrumb } from 'antd'
 import MenuComponent from './common/menu'
-import './index.css'
+import './index.less'
 
 const { Header, Sider, Content } = Layout
 
