@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { Button, Table, message, Modal } from 'antd'
 import BillStatusManageWithFrom from './billStatusManageWithFrom'
 import ItemInfo from './noApplyInfo'
+import DetailModal from './detail'
 
 const data = []
 for (let i = 0; i < 4; i++) {
@@ -14,7 +15,7 @@ for (let i = 0; i < 4; i++) {
     contractInnerNo: i + 1,
     projectId: `1000${i}`,
     contractName: '合同名称test',
-    tableHeight: '',
+    badDebtAmount: `2000${i}`,
   })
 }
 export default class BillStatusCon extends React.Component {
@@ -25,6 +26,9 @@ export default class BillStatusCon extends React.Component {
     noApplyInfoData: '',
     selectedRowKeys: '',
     selectedRows: '',
+    detailVisible: false,
+    detail: '',
+    tableHeight: '',
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -160,11 +164,24 @@ export default class BillStatusCon extends React.Component {
       content: failMsg,
     })
   }
+  // 查看详情
+  showDetail = (record) => {
+    this.setState({
+      detailVisible: true,
+      detail: record,
+    })
+  }
+  closeDetailModal = () => {
+    this.setState({
+      detailVisible: false,
+      detail: '',
+    })
+  }
   render() {
     const columns = [{
       title: '数据状态',
       dataIndex: 'splitStatus',
-      width: 150,
+      width: 80,
       textAlign: 'center',
       fixed: 'left',
     }, {
@@ -175,20 +192,52 @@ export default class BillStatusCon extends React.Component {
         <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
       ),
     }, {
+      title: '项目编码',
+      dataIndex: 'projectNo',
+      width: 150,
+    }, {
       title: '签约公司',
       dataIndex: 'projectId',
+      width: 150,
+    }, {
+      title: '签约日期',
+      dataIndex: 'signDate2',
+      width: 150,
+    }, {
+      title: '合同编码',
+      dataIndex: 'constractNo',
       width: 150,
     }, {
       title: '客户名称',
       dataIndex: 'contractName',
       width: 200,
     }, {
-      title: '发票号',
-      dataIndex: 'contractNo',
+      title: '付款条款',
+      dataIndex: 'projectIds',
+      width: 150,
+    }, {
+      title: '提前开票原因',
+      dataIndex: 'projectIdss',
+      width: 150,
+    }, {
+      title: '预计回款日期',
+      dataIndex: 'projectIds1',
+      width: 150,
+    }, {
+      title: '开票要求',
+      dataIndex: 'projectIds2',
       width: 150,
     }, {
       title: '开票客户名称',
       dataIndex: 'contractMoney',
+      width: 150,
+    }, {
+      title: '开票客户名称',
+      dataIndex: 'contractNo2',
+      width: 150,
+    }, {
+      title: '纳税人识别号',
+      dataIndex: 'contractNo3',
       width: 150,
     }, {
       title: '开票日期',
@@ -227,6 +276,10 @@ export default class BillStatusCon extends React.Component {
       dataIndex: 'currentMoney3',
       width: 100,
     }, {
+      title: '发票号',
+      dataIndex: 'contractNo',
+      width: 150,
+    }, {
       title: '备注',
       dataIndex: 'currentMoney4',
       width: 100,
@@ -234,6 +287,16 @@ export default class BillStatusCon extends React.Component {
       title: '创建提示',
       dataIndex: 'currentMoney5',
       width: 100,
+    }, {
+      title: '开票详情',
+      dataIndex: 'contractNo4',
+      width: 80,
+      fixed: 'right',
+      render: (text, record) => (
+        <div>
+          <Button onClick={() => this.showDetail(record)}>查看</Button>
+        </div>
+      ),
     },
     ]
     const { selectedRowKeys } = this.state
@@ -257,7 +320,6 @@ export default class BillStatusCon extends React.Component {
     return (
       <div>
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />
-        <Button onClick={this.disableItem}>作废</Button> &nbsp;&nbsp;
         <Button onClick={this.sendAp}>传送AP</Button>&nbsp;&nbsp;
         <Button onClick={this.cancelHandle}>撤销</Button>
         <br /><br />
@@ -268,7 +330,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={columns}
           size="small"
-          scroll={{ x: '2400px', y: this.state.tableHeight }}
+          scroll={{ x: '3700px', y: this.state.tableHeight }}
           loading={this.state.loading}
           dataSource={data}
           // dataSource={this.props.myApply.getMyApplyList.result}
@@ -278,6 +340,11 @@ export default class BillStatusCon extends React.Component {
           closeClaim={this.NoApplycloseModalClaim}
           applyData={this.state.noApplyInfoData}
           applyInfoData={this.props.myApply.getMyApplyInfo}
+        />
+        <DetailModal
+          detailVisible={this.state.detailVisible}
+          data={this.state.detail}
+          closeDetailModal={this.closeDetailModal}
         />
       </div>
     )
