@@ -142,6 +142,13 @@ const common = {
           },
           {
             key: '42',
+            path: '/ContractSplit/billingApplication',
+            name: '开票申请',
+            icon: 'icon-BilledAR',
+            component: 'BillingApplication',
+          },
+          {
+            key: '43',
             path: '/ContractSplit/BillStatusManage',
             name: '开票状态管理',
             icon: 'icon-BilledAR',

@@ -25,7 +25,7 @@ import ApplyListContainer from './myApply/applyList'
 import ContractSplit from './contractSplit/contractSplit'
 import BillStatusManage from './contractSplit/billStatusManage'
 import StatementSearch from './statementSearch/statementList'
-
+import BillingApplication from './contractSplit/billingApplication'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -97,6 +97,9 @@ class IndexContainer extends React.Component {
     }
     if (component === 'ContractSplit') {
       return ContractSplit
+    }
+    if (component === 'BillingApplication') {
+      return BillingApplication
     }
     if (component === 'BillStatusManage') {
       return BillStatusManage
