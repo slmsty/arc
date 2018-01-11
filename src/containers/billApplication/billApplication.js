@@ -1,17 +1,14 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { getContractList, saveContractSplitInfo } from '../../actions/contractSplit'
 import BillingApplication from '../../components/billApplication/billingApplication'
+import * as actions from '../../actions/billApplication'
 
 const mapStateToProps = state => ({
-  myApply: state.myApply,
+  ...state.billApplication
 })
 
-const mapDispatchToProps = dispatch => (
-  bindActionCreators({
-    getContractList,
-    saveContractSplitInfo,
-  }, dispatch)
-)
+const mapDispatchToProps = dispatch => ({
+  ...bindActionCreators(actions, dispatch)
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(BillingApplication)

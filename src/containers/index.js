@@ -25,7 +25,7 @@ import ApplyListContainer from './myApply/applyList'
 import ContractSplit from './contractSplit/contractSplit'
 import BillStatusManage from './contractSplit/billStatusManage'
 import StatementSearch from './statementSearch/statementList'
-import BillingApplication from './contractSplit/billingApplication'
+import BillingApplication from '../containers/billApplication/billApplication'
 
 const mapStateToProps = state => ({
   user: state.common.user,

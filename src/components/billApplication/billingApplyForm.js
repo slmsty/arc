@@ -1,6 +1,9 @@
 import React from 'react'
 import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
+import SelectClient from './selectClient'
+import SelectCompany from './selectCompany'
+import SelectInvokeApi from '../common/selectInvokeApi'
 import './billingApplication.less'
 
 const FormItem = Form.Item
@@ -10,12 +13,13 @@ class BillingApplyForm extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
+    console.log(param)
     this.props.onQuery(param)
   }
 
   handleChange = (value) => {
     console.log(`selected ${value}`);
-    this.props.applyChange(value)
+    this.props.getApplyChange(value)
   }
 
   render() {
@@ -32,20 +36,20 @@ class BillingApplyForm extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="签约日期从">
-                {getFieldDecorator('signDateStart')(<DatePicker />)}
+                {getFieldDecorator('arDateStart')(<DatePicker />)}
               </FormItem>
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户名称">
                 {
-                  getFieldDecorator('clientName')(<Input />)
+                  getFieldDecorator('custName')(<SelectClient />)
                 }
               </FormItem>
             </Col>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="项目编码(多)">
                 {
-                  getFieldDecorator('projectIds')(
+                  getFieldDecorator('projectNos')(
                     <Input
                       placeholder="多项目编码使用英文逗号间隔"
                     />,
@@ -57,13 +61,13 @@ class BillingApplyForm extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="签约日期至">
-                {getFieldDecorator('signDateEnd')(<DatePicker />)}
+                {getFieldDecorator('arDateEnd')(<DatePicker />)}
               </FormItem>
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="合同编码(多)">
                 {
-                  getFieldDecorator('projectIds')(
+                  getFieldDecorator('contractNos')(
                     <Input
                       placeholder="多合同编码使用英文逗号间隔"
                     />,
@@ -74,7 +78,7 @@ class BillingApplyForm extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="发票号(多)">
                 {
-                  getFieldDecorator('projectIds')(
+                  getFieldDecorator('invoiceNumbers')(
                     <Input
                       placeholder="多发票号使用英文逗号间隔"
                     />,
@@ -86,40 +90,26 @@ class BillingApplyForm extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="开票申请分类">
-                {getFieldDecorator('applyType', {
-                  initialValue: '1',
-                })(<Select
-                    placeholder="请选择申请分类"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
-                    onChange={this.handleChange}
-                  >
-                    <Option value="1">正常开票</Option>
-                    <Option value="2">已大签项目提前开票</Option>
-                    <Option value="3">未大签项目已提前立项开票</Option>
-                    <Option value="4">未大签项目未提前立项开票</Option>
-                    <Option value="5">红字发票开票</Option>
-                    <Option value="6">超额开票</Option>
-                    <Option value="7">其他开票</Option>
-                    <Option value="8">其他红字开票</Option>
-                </Select>)
+                {getFieldDecorator('billingApplicationType', {
+                  initialValue: '',
+                })(
+                  <SelectInvokeApi
+                    typeCode="BILLING_APPLICATION"
+                    paramCode="BILLING_APPLICATION_TYPE"
+                    placeholder="开票申请分类"
+                    hasEmpty
+                  />
+                )
                 }
               </FormItem>
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="付款条款">
                 {
-                  getFieldDecorator('paymentTerms')(
-                    <Select
-                      placeholder="请选择付款条款"
-                      defaultActiveFirstOption={false}
-                      filterOption={false}
-                      onChange={this.handleChange}
-                    >
-                      <Option value="1">付款条款1</Option>
-                      <Option value="2">付款条款2</Option>
-                    </Select>
+                  getFieldDecorator('paymentName')(
+                    <Input
+                      placeholder="请输入付款条款"
+                    />
                   )
                 }
               </FormItem>
@@ -127,18 +117,31 @@ class BillingApplyForm extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="签约公司">
                 {
-                  getFieldDecorator('company')(
-                    <Input
-                      placeholder="请输入签约公司"
-                    />
+                  getFieldDecorator('companyName')(
+                    <SelectCompany />
                   )
                 }
               </FormItem>
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={24} style={{ textAlign: 'right' }}>
-              <Button type="primary" key="search" onClick={() => this.handleQuery}><Icon type="search" />申请开票</Button>
+            <Col span={8} key={4}>
+              <FormItem {...formItemLayout} label="数据状态">
+                {getFieldDecorator('status', {
+                  initialValue: '',
+                })(
+                  <SelectInvokeApi
+                    typeCode="BILLING_APPLICATION"
+                    paramCode="STATUS"
+                    placeholder="开票申请分类"
+                    hasEmpty
+                  />
+                )
+                }
+              </FormItem>
+            </Col>
+            <Col style={{ textAlign: 'right' }}>
+              <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />申请开票</Button>
             </Col>
           </Row>
         </Form>

@@ -194,9 +194,6 @@ export default class BillingApplication extends React.Component {
       currentType: '1',
     }
   }
-  componentWillMount() {
-    console.log('componentWillMount')
-  }
 
   getApplyChange = (value) => {
     this.setState({
@@ -230,6 +227,7 @@ export default class BillingApplication extends React.Component {
       <div>
         <BillingApplyForm
           applyChange={value => this.getApplyChange(value)}
+          onQuery={this.props.billApplySearch}
         />
         <div className="form-btns">
           <Button type="primary" ghost>开票</Button>
