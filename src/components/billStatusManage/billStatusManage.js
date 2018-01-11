@@ -484,7 +484,6 @@ export default class BillStatusCon extends React.Component {
               size="small"
               scroll={{ x: '900px', y: this.state.tableHeight }}
               loading={this.state.loading}
-              pagination ={false}
               dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
             />
             <br />
