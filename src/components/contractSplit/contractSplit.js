@@ -29,19 +29,23 @@ export default class ApplySearchCon extends React.Component {
     this.setState({ tableHeight })
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.contactSplitData.myContractRefresh !== nextProps.contactSplitData.myContractRefresh) {
+    /*if (this.props.contractSplitDara.myContractRefresh !== nextProps.contractSplitDara.myContractRefresh) {
       this.handleQuery()
-    }
+    }*/
+  }
+  componentDidMount() {
+    // this.handleQuery()
   }
   queryParam = {
-    pageInfo: {
-      pageNo: 1,
-      pageSize: 10,
-    },
-    applayNum: '',
-    applayCount: '',
-    applayTime: '',
-    applayStatus: '',
+    contractDateStart: '',
+    contractDateEnd: '',
+    projectNos: '',
+    contractNos: '',
+    contractName: '',
+    projectBuNo: '',
+    salesBuNo: '',
+    status: '',
+    operator: '',
   }
   handleQuery = () => {
     this.setState({
@@ -51,6 +55,7 @@ export default class ApplySearchCon extends React.Component {
       this.setState({
         loading: false,
       })
+      console.log(this.queryParam)
       if (res && res.response && res.response.resultCode === '000000') {
         console.log('数据查询成功')
       } else {
@@ -116,58 +121,58 @@ export default class ApplySearchCon extends React.Component {
   render() {
     const columns = [{
       title: '拆分状态',
-      dataIndex: 'splitStatus',
+      dataIndex: 'status',
       width: 150,
       textAlign: 'center',
       fixed: 'left',
     }, {
       title: '合同内部编码',
-      dataIndex: 'contractInnerNo',
+      dataIndex: 'internalNo',
       width: 200,
     }, {
       title: '项目编码',
-      dataIndex: 'projectId',
+      dataIndex: 'projectNo',
       width: 150,
     }, {
       title: '合同名称',
       dataIndex: 'contractName',
-      width: 200,
+      width: 600,
     }, {
       title: '合同编码',
       dataIndex: 'contractNo',
-      width: 150,
+      width: 200,
     }, {
       title: '合同金额',
-      dataIndex: 'contractMoney',
+      dataIndex: 'contractAmount',
       width: 150,
       render: (text, record, index) => (text ? text.toFixed(2) : text),
     }, {
       title: '签约日期',
-      dataIndex: 'signDate',
+      dataIndex: 'contractDate',
       width: 150,
     }, {
       title: 'Sale签约BU',
-      dataIndex: 'SaleBU',
+      dataIndex: 'salesBuNo',
       width: 100,
     }, {
       title: '立项BU',
-      dataIndex: 'projectBU',
+      dataIndex: 'projectBuNo',
       width: 150,
     }, {
       title: '销售人员',
-      dataIndex: 'salePeo',
+      dataIndex: 'salesPerson',
       width: 150,
     }, {
       title: '合同生效日',
-      dataIndex: 'contractDate',
+      dataIndex: 'contractActiveDate',
       width: 150,
     }, {
       title: '合同种类',
       dataIndex: 'contractType',
-      width: 100,
+      width: 150,
     }, {
       title: '币种',
-      dataIndex: 'currentMoney',
+      dataIndex: 'contractCurrency',
       width: 100,
     },
     ]
@@ -178,12 +183,9 @@ export default class ApplySearchCon extends React.Component {
       onChange: this.onSelectChange,
     }
     const pagination = {
-      current: 1,
-      total: 10,
-      pageSize: 10,
-      // current: this.props.myApply.getMyApplyList.pageNo,
-      // total: this.props.myApply.getMyApplyList.count,
-      // pageSize: this.props.myApply.getMyApplyList.pageSize,
+      current: this.props.contractSplitDara.getContractList.pageNo,
+      total: this.props.contractSplitDara.getContractList.count,
+      pageSize: this.props.contractSplitDara.getContractList.pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
@@ -195,11 +197,16 @@ export default class ApplySearchCon extends React.Component {
         <br /><br />
         <Button type="primary" onClick={this.showContractSplitInfo}>合同拆分</Button>
         <br /><br />
-        <ContractSplitModal
-          ModalVisible={this.state.contarctSplitModal}
-          closeModal={this.closeModalClaim}
-          saveInfo={this.saveContractSplitInfo}
-        />
+        {
+          this.state.selectedRows ?
+            <ContractSplitModal
+              ModalVisible={this.state.contarctSplitModal}
+              closeModal={this.closeModalClaim}
+              saveInfo={this.saveContractSplitInfo}
+              data={this.state.selectedRows[0]}
+            />
+            : ''
+        }
         <Table
           rowKey="receiptClaimId"
           rowSelection={rowSelection}
@@ -207,10 +214,9 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="middle"
-          scroll={{ x: '1900px', y: this.state.tableHeight }}
+          scroll={{ x: '2400px', y: this.state.tableHeight }}
           loading={this.state.loading}
-          dataSource={data}
-          // dataSource={this.props.myApply.getMyApplyList.result}
+          dataSource={this.props.contractSplitDara.getContractList.result}
         />
       </div>
     )
@@ -221,5 +227,6 @@ ApplySearchCon.propTypes = {
   saveContractSplitInfo: PropTypes.func.isRequired,
   contactSplitData: PropTypes.shape({
     myContractRefresh: PropTypes.number.isRequired,
+    getContractList:PropTypes.object.isRequired,
   }).isRequired,
 }

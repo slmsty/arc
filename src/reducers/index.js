@@ -17,6 +17,7 @@ import cancelApply from './badDebts/cancelApply'
 import myApply from './myApply'
 import contractSplitDara from './constractSplit'
 import billApplication from './billApplication'
+import billStatusManage from './billStatusManage/billStatusManage'
 
 export default combineReducers({
   common,
@@ -36,5 +37,6 @@ export default combineReducers({
   contractSplitDara,
   cancelApply,
   billApplication,
+  billStatusManage,
   routing: routerReducer, // 整合路由
 })

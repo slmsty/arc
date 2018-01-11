@@ -5,15 +5,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import BillStatusManage from '../../components/billStatusManage/billStatusManage'
-import { getContractList, saveContractSplitInfo } from '../../actions/contractSplit'
+import { getBillStatusList, getBillStatusDetail, getBillStatusContractDetail, getBillStatusBillResult } from '../../actions/billStatusManage/billStatusManage'
 
 const mapStateToProps = state => ({
-  myApply: state.myApply,
+  billStatusManage: state.billStatusManage,
 })
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    getContractList,
-    saveContractSplitInfo,
+    getBillStatusList,
+    getBillStatusDetail,
+    getBillStatusContractDetail,
+    getBillStatusBillResult,
   }, dispatch)
 )
 // eslint-disable-next-line react/prefer-stateless-function

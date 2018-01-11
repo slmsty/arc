@@ -8,7 +8,7 @@ import ContractSplit from '../../components/contractSplit/contractSplit'
 import { getContractList, saveContractSplitInfo } from '../../actions/contractSplit'
 
 const mapStateToProps = state => ({
-  myApply: state.myApply,
+  contractSplitDara: state.contractSplitDara,
 })
 const mapDispatchToProps = dispatch => (
   bindActionCreators({

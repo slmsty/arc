@@ -176,6 +176,8 @@ class ContractSplitModal extends React.Component{
   }
 
   render() {
+    const constractData = this.props.data
+    // console.log('name',constractData.contractName)
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
     let countsalePeo = 0 // 合同不含税额
@@ -327,7 +329,7 @@ class ContractSplitModal extends React.Component{
                   合同名称：
                 </Col>
                 <Col span={20} className="contractRowBorderLeft">
-                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value='合同名称测试' disabled />
+                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value={constractData.contractName} disabled />
                 </Col>
               </Row>
               <Row className="text-css contractRowBorderLeft contractRowBorderRight contractRowBorderBottom">
@@ -335,7 +337,7 @@ class ContractSplitModal extends React.Component{
                   合同编码：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
-                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value='合同编码测试' disabled />
+                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value={constractData.contractNo} disabled />
                 </Col>
                 <Col span={3} className="contractRowBorderLeft">
                   签约公司：

@@ -19,6 +19,12 @@ class ContractSplitCon extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
+    param.contractDateStart = param.signDate && param.signDate.length ? param.signDate[0].format(dateFormat) : ''
+    param.contractDateEnd = param.signDate && param.signDate.length ? param.signDate[1].format(dateFormat) : ''
+    param.projectBuNo = param.projectBuNo && param.projectBuNo ? param.projectBuNo[0] : ''
+    param.salesBuNo = param.salesBuNo && param.salesBuNo ? param.salesBuNo[0] : ''
+    delete param.signDate
+    console.log(param)
     this.props.onQuery(param)
   }
   render() {
@@ -34,7 +40,7 @@ class ContractSplitCon extends React.Component {
         >
           <Row gutter={40}>
             <Col span={8} key={1}>
-              <FormItem {...formItemLayout} label="收款日期">
+              <FormItem {...formItemLayout} label="签约日期">
                 {getFieldDecorator('signDate', {
                   // initialValue: [moment().subtract(1, 'month'), moment()],
                   initialValue: [moment('2017-08-01'), moment()],
@@ -48,7 +54,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="项目编码(多)">
                 {
-                  getFieldDecorator('projectIds')(
+                  getFieldDecorator('projectNos')(
                     <MultipleInput
                       placeholder="多项目编码使用英文逗号间隔"
                     />,
@@ -59,7 +65,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="Sales签约BU">
                 {
-                  getFieldDecorator('SalessbuInfo')(<SelectSbu/>)
+                  getFieldDecorator('salesBuNo')(<SelectSbu/>)
                 }
               </FormItem>
             </Col>
@@ -75,18 +81,16 @@ class ContractSplitCon extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={5}>
-              <FormItem {...formItemLayout} label="拆分责任人">
+              <FormItem {...formItemLayout} label="立项BU">
                 {
-                  getFieldDecorator('SplitPeo')(
-                    <Input placeholder="请输入拆分责任人" />,
-                  )
+                  getFieldDecorator('projectBuNo')(<SelectSbu />)
                 }
               </FormItem>
             </Col>
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="拆分状态">
-                {getFieldDecorator('Splitstatus', {
-                  initialValue: '31',
+                {getFieldDecorator('status', {
+                  initialValue: 'N',
                 })(
                   <Select
                     placeholder="请选择拆分状态"
@@ -95,9 +99,9 @@ class ContractSplitCon extends React.Component {
                     filterOption={false}
                     onChange={this.handleChange}
                   >
-                    <Option value="31">未拆分合同</Option>
-                    <Option value="50">已拆分合同</Option>
-                    <Option value="51">全部合同</Option>
+                    <Option value="N">未拆分合同</Option>
+                    <Option value="Y">已拆分合同</Option>
+                    <Option value="A">全部合同</Option>
                   </Select>,
                 )}
               </FormItem>
@@ -107,7 +111,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8} key={7}>
               <FormItem {...formItemLayout} label="合同编码(多)">
                 {
-                  getFieldDecorator('contractIds')(
+                  getFieldDecorator('contractNos')(
                     <MultipleInput
                       placeholder="多合同编码使用英文逗号间隔"
                     />,
@@ -118,22 +122,13 @@ class ContractSplitCon extends React.Component {
             <Col span={8} key={8}>
               <FormItem {...formItemLayout} label="拆分操作人">
                 {
-                  getFieldDecorator('splitOprationPeo')(
+                  getFieldDecorator('operator')(
                     <Input placeholder="请输入拆分操作人" />,
                   )
                 }
               </FormItem>
             </Col>
-            <Col span={8} key={9}>
-              <FormItem {...formItemLayout} label="立项BU">
-                {
-                  getFieldDecorator('lisbuInfo')(<SelectSbu />)
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={40}>
-            <Col span={24} style={{ textAlign: 'right' }}>
+            <Col span={8} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>

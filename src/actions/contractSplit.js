@@ -4,7 +4,7 @@ import { httpApi } from '../http/reduxRequestMiddleware'
 export function getContractList(queryParam) {
   return {
     [httpApi]: {
-      url: '/arc/workFlow/approveAgree',
+      url: '/arc/contract/split/search',
       options: {
         method: 'POST',
         body: queryParam,

@@ -5,7 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 
-class ApplyInfoModal extends React.Component {
+class CancelModal extends React.Component {
   state = {
     selectedRowKeys: '',
     selectedRows: '',
@@ -31,53 +31,52 @@ class ApplyInfoModal extends React.Component {
     })
   }
   render() {
-    let dataSource = []
-    dataSource.push(this.props.data)
+    let dataSource = this.props.data
     console.log(dataSource)
     const columns = [{
-      title: '数据状态',
-      dataIndex: 'splitStatus',
+      title: '项目编码',
+      dataIndex: 'projectCode',
       width: 80,
       textAlign: 'center',
       fixed: 'left',
     }, {
-      title: '发票号码',
-      dataIndex: 'contractInnerNo',
+      title: '签约公司',
+      dataIndex: 'invoiceCompany',
       width: 100,
     }, {
-      title: '签约公司',
-      dataIndex: 'projectId',
+      title: '合同编码',
+      dataIndex: 'contractCode',
       width: 200,
     }, {
-      title: '开票客户名称',
-      dataIndex: 'contractName',
+      title: '付款条件',
+      dataIndex: 'paymentTerm',
       width: 300,
     }, {
-      title: '发票类型',
+      title: '付款条款',
       dataIndex: 'paymentName',
       width: 100,
     }, {
-      title: '发票代码',
-      dataIndex: 'badDebtAmount',
+      title: '付款阶段',
+      dataIndex: 'paymentPhrases',
       width: 100,
       render: (text, record) => (
         <a href="javascript:;">{text}</a>
       ),
     }, {
-      title: '开票日期',
-      dataIndex: 'applicationDate',
+      title: '付款金额',
+      dataIndex: 'paymentAmount',
       width: 150,
     }, {
-      title: '含税金额',
-      dataIndex: 'arDate',
+      title: 'Billed AR金额',
+      dataIndex: 'arAmount',
       width: 150,
       render: (text, record) => (text ? text.toFixed(2) : text),
     }, {
-      title: '税率',
-      dataIndex: 'billedArBalance',
+      title: '已开票金额',
+      dataIndex: 'invoiceAmount',
       width: 100,
     }, {
-      title: '不含税金额',
+      title: '作废金额',
       dataIndex: 'badDebtProvisionAmount',
       width: 150,
       render: (text, record) => (text ? text.toFixed(2) : text),
@@ -93,10 +92,11 @@ class ApplyInfoModal extends React.Component {
       <div>
         <Modal
           width={1024}
-          title="发票详情"
-          visible={this.props.detailVisible}
-          onCancel={this.props.closeDetailModal}
-          onOk={this.props.closeDetailModal}
+          title="作废详情"
+          visible={this.props.visible}
+          onCancel={this.props.onCancel}
+          onOk={this.props.onOk}
+          footer={null}
         >
           <Button onClick={this.disableItem}>作废</Button> &nbsp;&nbsp;
           <br />
@@ -105,6 +105,7 @@ class ApplyInfoModal extends React.Component {
             rowKey="receiptClaimId"
             rowSelection={rowSelection}
             columns={columns}
+            pagination ={false}
             bordered
             size="small"
             scroll={{ x: '1400px' }}
@@ -115,7 +116,7 @@ class ApplyInfoModal extends React.Component {
     )
   }
 }
-ApplyInfoModal.propTypes = {
+CancelModal.propTypes = {
   closeClaim: PropTypes.func.isRequired,
   applyReject: PropTypes.func.isRequired,
   applyComfirm: PropTypes.func.isRequired,
@@ -125,6 +126,6 @@ ApplyInfoModal.propTypes = {
     getFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
 }
-const ApplyInfoModalWithForm = Form.create()(ApplyInfoModal)
+const CancelModalWithForm = Form.create()(CancelModal)
 
-export default ApplyInfoModalWithForm
+export default CancelModalWithForm

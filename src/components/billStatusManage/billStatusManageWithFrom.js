@@ -5,6 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
+import SelectInvokeApi from '../common/selectInvokeApi'
 import MultipleInput from '../common/multipleInput'
 import SelectSbu from '../common/SelectSbu'
 
@@ -19,6 +20,13 @@ class BillStatusManageWithFormCon extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
+    param.beginDate = param.signDate && param.signDate.length ? param.signDate[0].format(dateFormat) : ''
+    param.endDate = param.signDate && param.signDate.length ? param.signDate[1].format(dateFormat) : ''
+    param.projectCode = param.projectCode && param.projectCode.length ? param.projectCode.join(',') : ''
+    param.contractCode = param.contractCode && param.contractCode.length ? param.contractCode.join(',') : ''
+    param.invoiceCode = param.invoiceCode && param.invoiceCode.length ? param.invoiceCode.join(',') : ''
+    delete param.signDate
+    console.log(param)
     this.props.onQuery(param)
   }
   render() {
@@ -48,14 +56,14 @@ class BillStatusManageWithFormCon extends React.Component {
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="合同客户名称">
                 {
-                  getFieldDecorator('SalessbuInfo')(<Input />)
+                  getFieldDecorator('cutomer')(<Input />)
                 }
               </FormItem>
             </Col>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="项目编码(多)">
                 {
-                  getFieldDecorator('projectIds')(
+                  getFieldDecorator('projectCode')(
                     <MultipleInput
                       placeholder="多项目编码使用英文逗号间隔"
                     />,
@@ -67,32 +75,22 @@ class BillStatusManageWithFormCon extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="数据状态">
-                {getFieldDecorator('Splitstatus', {
-                  initialValue: '31',
+                {getFieldDecorator('status', {
+                  initialValue: 'BILLING_OK',
                 })(
-                  <Select
-                    placeholder="请选择拆分状态"
-                    notFoundContent=""
-                    defaultActiveFirstOption={false}
-                    filterOption={false}
-                    onChange={this.handleChange}
-                  >
-                    <Option value="31">已开票</Option>
-                    <Option value="50">回写中</Option>
-                    <Option value="51">已回写</Option>
-                    <Option value="32">作废中</Option>
-                    <Option value="502">已作废</Option>
-                    <Option value="512">已传送AP</Option>
-                    <Option value="5124">错误</Option>
-                    <Option value="514">传送中</Option>
-                  </Select>,
+                  <SelectInvokeApi
+                    typeCode="BILLING_APPLICATION_STATUS"
+                    paramCode="STATUS"
+                    placeholder="数据状态"
+                    hasEmpty
+                  />
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="合同编码(多)">
                 {
-                  getFieldDecorator('projectIds')(
+                  getFieldDecorator('contractCode')(
                     <MultipleInput
                       placeholder="多合同编码使用英文逗号间隔"
                     />,
@@ -103,7 +101,7 @@ class BillStatusManageWithFormCon extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="发票号(多)">
                 {
-                  getFieldDecorator('projectIds')(
+                  getFieldDecorator('invoiceCode')(
                     <MultipleInput
                       placeholder="多发票号使用英文逗号间隔"
                     />,
