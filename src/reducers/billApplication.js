@@ -9,21 +9,21 @@ const initState = {
 function getBillCompany(state, action) {
   return {
     ...state,
-    billCompany: action.reponse.data,
+    billCompany: action.response.data,
   }
 }
 
 function getBillClients(state, action) {
   return {
     ...state,
-    billClient: action.reponse.data,
+    billClient: action.response.data,
   }
 }
 
 function billApplySearch(state, action) {
   return {
     ...state,
-    billList: action.reponse.data,
+    billList: action.response.data,
   }
 }
 

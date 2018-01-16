@@ -12,7 +12,15 @@ const Option = Select.Option
 class BillingApplyForm extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
-    const param = this.props.form.getFieldsValue()
+    const values = this.props.form.getFieldsValue()
+    const param = {
+      ...values,
+      arDateStart: values.arDateStart ? values.arDateStart.format('YYYY-MM-DD') : '',
+      arDateEnd: values.arDateEnd ? values.arDateEnd.format('YYYY-MM-DD') : '',
+      projectNos: values.projectNos ? values.projectNos.split(',') : [],
+      contractNos: values.contractNos ? values.contractNos.split(',') : [],
+      invoiceNumbers: values.invoiceNumbers ? values.invoiceNumbers.split(',') : [],
+    }
     console.log(param)
     this.props.onQuery(param)
   }
@@ -36,20 +44,24 @@ class BillingApplyForm extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="签约日期从">
-                {getFieldDecorator('arDateStart')(<DatePicker />)}
+                {getFieldDecorator('arDateStart')(<DatePicker format="YYYY-MM-DD"/>)}
               </FormItem>
             </Col>
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="客户名称">
                 {
-                  getFieldDecorator('custName')(<SelectClient />)
+                  getFieldDecorator('custName',{
+                    initialValue: '',
+                  })(<SelectClient />)
                 }
               </FormItem>
             </Col>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="项目编码(多)">
                 {
-                  getFieldDecorator('projectNos')(
+                  getFieldDecorator('projectNos',{
+                    initialValue: '',
+                  })(
                     <Input
                       placeholder="多项目编码使用英文逗号间隔"
                     />,
@@ -61,13 +73,15 @@ class BillingApplyForm extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="签约日期至">
-                {getFieldDecorator('arDateEnd')(<DatePicker />)}
+                {getFieldDecorator('arDateEnd')(<DatePicker format="YYYY-MM-DD"/>)}
               </FormItem>
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="合同编码(多)">
                 {
-                  getFieldDecorator('contractNos')(
+                  getFieldDecorator('contractNos',{
+                    initialValue: '',
+                  })(
                     <Input
                       placeholder="多合同编码使用英文逗号间隔"
                     />,
@@ -78,7 +92,9 @@ class BillingApplyForm extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="发票号(多)">
                 {
-                  getFieldDecorator('invoiceNumbers')(
+                  getFieldDecorator('invoiceNumbers',{
+                    initialValue: '',
+                  })(
                     <Input
                       placeholder="多发票号使用英文逗号间隔"
                     />,
@@ -106,7 +122,9 @@ class BillingApplyForm extends React.Component {
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="付款条款">
                 {
-                  getFieldDecorator('paymentName')(
+                  getFieldDecorator('paymentName', {
+                    initialValue: ''
+                  })(
                     <Input
                       placeholder="请输入付款条款"
                     />
@@ -117,7 +135,9 @@ class BillingApplyForm extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="签约公司">
                 {
-                  getFieldDecorator('companyName')(
+                  getFieldDecorator('companyName', {
+                    initialValue: '',
+                  })(
                     <SelectCompany />
                   )
                 }

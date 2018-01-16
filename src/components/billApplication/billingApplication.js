@@ -1,5 +1,6 @@
 import React from 'react'
 import BillingApplyForm from './billingApplyForm'
+import BillDetail from './billDetail'
 import { Table, Button } from 'antd'
 import './billingApplication.less'
 
@@ -7,63 +8,63 @@ const normalCols = [
   {
     title: '开票申请类别',
     dataIndex: 'applyType',
-    width: 150,
+    width: 100,
   }, {
     title: '项目编码',
     dataIndex: 'projectCode',
-    width: 150,
+    width: 100,
   }, {
     title: '签约公司',
-    dataIndex: 'signCompany',
-    width: 150,
+    dataIndex: 'comName',
+    width: 100,
   }, {
     title: '签约日期',
     dataIndex: 'signDate',
-    width: 150,
+    width: 100,
   }, {
     title: '合同编码',
-    dataIndex: 'contractCode',
-    width: 150,
+    dataIndex: 'contractNo',
+    width: 100,
   }, {
     title: '发票号',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'invoiceNumber',
+    width: 100,
   }, {
     title: '客户名称',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'custName',
+    width: 100,
   }, {
     title: '付款条件',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'paymentTerm',
+    width: 100,
   }, {
     title: '付款条款',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'paymentName',
+    width: 100,
   }, {
     title: '付款阶段',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'paymentPhrases',
+    width: 100,
   }, {
     title: '付款金额',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'billedArAmount',
+    width: 100,
   }, {
     title: '已开票金额',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'alreadyBillingAmount',
+    width: 100,
   }, {
     title: '提前开票原因',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'reason',
+    width: 100,
   }, {
     title: '预计回款日期',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'backdate',
+    width: 100,
   }, {
     title: '提前开票备注',
-    dataIndex: 'invoiceNo',
-    width: 150,
+    dataIndex: 'note',
+    width: 100,
   }, {
     title: '操作',
     dataIndex: '',
@@ -82,11 +83,11 @@ const advanceCols = [
     width: 150,
   }, {
     title: '客户名称',
-    dataIndex: 'company',
+    dataIndex: 'client',
     width: 150,
   }, {
     title: '项目编码',
-    dataIndex: 'company',
+    dataIndex: 'project',
     width: 150,
   }, {
     title: '提前开票原因',
@@ -94,11 +95,11 @@ const advanceCols = [
     width: 150,
   }, {
     title: '预计回款日期',
-    dataIndex: 'reason',
+    dataIndex: 'datea',
     width: 150,
   }, {
     title: '提前开票备注',
-    dataIndex: 'reason',
+    dataIndex: 'note',
     width: 150,
   }, {
     title: '操作',
@@ -122,7 +123,7 @@ const redFontCols = [
     width: 150,
   }, {
     title: '开票税额',
-    dataIndex: 'invoiceRate',
+    dataIndex: 'invoiceshuie',
     width: 150,
   }, {
     title: '开票税率',
@@ -130,35 +131,35 @@ const redFontCols = [
     width: 150,
   }, {
     title: '项目编码',
-    dataIndex: 'invoiceRate',
+    dataIndex: 'proNumber',
     width: 150,
   }, {
     title: '签约公司',
-    dataIndex: 'invoiceRate',
+    dataIndex: 'company',
     width: 150,
   }, {
     title: '签约日期',
-    dataIndex: 'invoiceRate',
+    dataIndex: 'date',
     width: 150,
   }, {
     title: '合同编码',
-    dataIndex: 'invoiceRate',
+    dataIndex: 'contractNumber',
     width: 150,
   }, {
     title: '客户名称',
-    dataIndex: 'invoiceRate',
+    dataIndex: 'clientName',
     width: 150,
   }, {
     title: '付款条款',
-    dataIndex: 'invoiceRate',
+    dataIndex: 'tiaokuan',
     width: 150,
   }, {
     title: '付款阶段',
-    dataIndex: 'invoiceRate',
+    dataIndex: 'progress',
     width: 150,
   }, {
     title: '付款金额',
-    dataIndex: 'invoiceRate',
+    dataIndex: 'money',
     width: 150,
   }, {
     title: '操作',
@@ -192,6 +193,7 @@ export default class BillingApplication extends React.Component {
     super(props)
     this.state = {
       currentType: '1',
+      visible: false
     }
   }
 
@@ -215,6 +217,8 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
+    const { billList } = this.props
+    console.log(this.props)
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
@@ -230,7 +234,7 @@ export default class BillingApplication extends React.Component {
           onQuery={this.props.billApplySearch}
         />
         <div className="form-btns">
-          <Button type="primary" ghost>开票</Button>
+          <Button type="primary" ghost onClick={() => this.setState({visible: true})}>开票</Button>
           <Button type="primary" ghost>编辑</Button>
         </div>
         <Table
@@ -238,7 +242,11 @@ export default class BillingApplication extends React.Component {
           rowSelection={rowSelection}
           bordered
           columns={this.getApplyColumns()}
-          dataSource={[]}
+          dataSource={billList}
+        />
+        <BillDetail
+          visible={this.state.visible}
+          onCancel={() => this.setState({visible: false})}
         />
       </div>
     )
