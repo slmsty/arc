@@ -6,17 +6,6 @@ import PropTypes from 'prop-types'
 import { Button, Table, message } from 'antd'
 import ContractSplitWithFrom from './contractSplitWithFrom'
 import ContractSplitModal  from './contractSplitModal'
-
-const data = []
-for (let i = 0; i < 4; i++) {
-  data.push({
-    splitStatus: '已拆分',
-    contractInnerNo: i + 1,
-    projectId: `1000${i}`,
-    contractName: '合同名称test',
-    tableHeight: '',
-  })
-}
 export default class ApplySearchCon extends React.Component {
   state = {
     loading: false,
@@ -80,7 +69,7 @@ export default class ApplySearchCon extends React.Component {
     this.setState({ selectedRowKeys, selectedRows })
   }
   saveContractSplitInfo = (param) => {
-    this.porps.saveContractSplitInfo(param).then((res) => {
+    this.props.saveContractSplitInfo(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         message.error('保存成功')
       } else {
@@ -104,18 +93,6 @@ export default class ApplySearchCon extends React.Component {
   showContractSplitInfo = () => {
     this.setState({
       contarctSplitModal: true,
-    })
-    message.success('测试成功')
-    return
-    this.props.approveSubmit().then((res) => {
-      this.setState({
-        loading: false,
-      })
-      if (res && res.response && res.response.resultCode === '000000') {
-        message.success('审批成功')
-      } else {
-        message.error('加载数据失败')
-      }
     })
   }
   render() {

@@ -25,6 +25,7 @@ class DateModalCom extends React.Component {
       {/* 弹出传送ARglDatemodal */}
       <Modal
         visible={this.props.glDateModal}
+        // onOk={this.props.selectOk}
         onOk={this.handleQuery}
         onCancel={this.props.selectCancel}
         title="请选择GL日期"

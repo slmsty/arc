@@ -7,6 +7,7 @@ import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
 import MultipleInput from '../common/multipleInput'
 import SelectSbu from '../common/SelectSbu'
+import SelectOperator from '../common/selectOperator'
 
 const FormItem = Form.Item
 const { RangePicker } = DatePicker
@@ -123,7 +124,9 @@ class ContractSplitCon extends React.Component {
               <FormItem {...formItemLayout} label="拆分操作人">
                 {
                   getFieldDecorator('operator')(
-                    <Input placeholder="请输入拆分操作人" />,
+                    <SelectOperator
+                      placeholder="请输入拆分操作人"
+                    />,
                   )
                 }
               </FormItem>

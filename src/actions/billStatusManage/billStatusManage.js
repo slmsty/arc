@@ -51,4 +51,43 @@ export function getBillStatusBillResult(queryParam) {
     },
   }
 }
+// 撤销
+export function cancelApprove(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/application/invoice/rollback',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['CANCEL_APPROVE_SUCCESS'],
+    },
+  }
+}
+// 作废
+export function disableApprove(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/application/invoice/invalid',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['DISSABLE_APPROVE_SUCCESS'],
+    },
+  }
+}
+// 传送AR
+export function sendAP(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/application/invoice/sendap',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['SEND_AP_SUCCESS'],
+    },
+  }
+}
 

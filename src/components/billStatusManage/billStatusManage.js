@@ -7,6 +7,8 @@ import { Button, Table, message, Modal } from 'antd'
 import BillStatusManageWithFrom from './billStatusManageWithFrom'
 import ItemInfo from './noApplyInfo'
 import DetailModal from './calcelDetail'
+import GlDateModal from './../common/glDateModal'
+import currency from '../../util/currency'
 
 export default class BillStatusCon extends React.Component {
   state = {
@@ -22,6 +24,8 @@ export default class BillStatusCon extends React.Component {
     detail: '',
     tableHeight: '',
     calcelModalVisitable: false,
+    cancelDis: true,
+    showGlDateModal: false,
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -30,9 +34,9 @@ export default class BillStatusCon extends React.Component {
     this.setState({ tableHeight })
   }
   componentWillReceiveProps(nextProps) {
-    /* if (this.props.contactSplitData.myContractRefresh !== nextProps.contactSplitData.myContractRefresh) {
+     if (this.props.billStatusManage.cancelApproveRefresh !== nextProps.billStatusManage.cancelApproveRefresh) {
       this.handleQuery()
-    } */
+    }
   }
   queryParam = {
     pageInfo: {
@@ -58,7 +62,7 @@ export default class BillStatusCon extends React.Component {
       },
       status: 'BILLING_NEW',
     }
-    this.props.getBillStatusList(param).then((res) => {
+    this.props.getBillStatusList(this.queryParam).then((res) => {
       this.setState({
         loading: false,
       })
@@ -83,6 +87,19 @@ export default class BillStatusCon extends React.Component {
     this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
+    if(selectedRowKeys.length>1){
+      selectedRowKeys.splice(0,selectedRowKeys.length-1);
+    }
+    if((selectedRows.length && selectedRows[0].status=='开票审批中') || (selectedRows.length && selectedRows[0].status=='作废审批中')) {
+      this.setState({
+        cancelDis: false,
+      })
+    }
+    if(!selectedRows.length){
+      this.setState({
+        cancelDis: true,
+      })
+    }
     this.setState({ selectedRowKeys, selectedRows }, () => {
       if (this.state.selectedRows.length > 0) {
         let billingApplicationId = this.state.selectedRows[0].billingApplicationId
@@ -122,16 +139,10 @@ export default class BillStatusCon extends React.Component {
     })
   }
   showApplyInfo = (record) => {
-    this.setState({
-      noApplyInfoVisitable: true,
-      noApplyInfoData: record,
-    })
     const paramsData = {}
-    paramsData.arcFlowId = record.arcFlowId
     paramsData.processInstanceId = record.processInstanceId
-    paramsData.businessKey = record.businessKey
-    paramsData.taskId = record.taskId
-    /* this.props.myApplyInfo(paramsData).then((res) => {
+    paramsData.businessKey = record.billingApplicationId
+     this.props.myApplyInfo(paramsData).then((res) => {
      if (res && res.response && res.response.resultCode === '000000') {
      this.setState({
      noApplyInfoVisitable: true,
@@ -140,7 +151,7 @@ export default class BillStatusCon extends React.Component {
      } else {
      message.error(res.response.resultMessage)
      }
-     }) */
+     })
   }
   // 撤销
   cancelHandle = () => {
@@ -155,29 +166,60 @@ export default class BillStatusCon extends React.Component {
     const that = this
     Modal.confirm({
       title: '操作确认',
-      content: `您确认要将所选择的${that.state.selectedRowKeys.length}条数据作废吗`,
+      content: `您确认要将所选择的数据撤销吗`,
       okText: '是',
       cancelText: '否',
       onOk() {
         const changeParam = {
-          receiptClaimIds: that.state.selectedRowKeys,
-          claimType: 'order',
+          applicationId: that.state.selectedRows[0].billingApplicationId,
         }
-        console.log(that.state.selectedRows)
+        that.props.cancelApprove(changeParam).then((res)=>{
+          if (res && res.response && res.response.resultCode === '000000') {
+            that.setState({
+              selectedRowKeys: '',
+              selectedRows: {},
+            })
+            message.success('撤销成功')
+          } else {
+            message.error(res.response.resultMessage)
+          }
+        })
       },
     })
   }
   // 传送AP
-  sendAp = () => {
+  sendAp = (param) => {
     if (this.state.selectedRowKeys.length === 0) {
       message.error('请选择要传送AP的数据')
       return
     }
+    console.log(param)
+    return
+    this.props.sendAP(param).then((res)=>{
+      if (res && res.response && res.response.resultCode === '000000') {
+        that.setState({
+        })
+        message.success('撤销成功')
+      } else {
+        message.error(res.response.resultMessage)
+      }
+    })
     const that = this
     let successMsg = `传送成功${this.state.selectedRowKeys.length}条数据`
     let failMsg = `${this.state.selectedRowKeys.length}条数据传送失败，且提示失败原因`
     Modal.info({
       content: failMsg,
+    })
+
+  }
+  showGlDate = () => {
+    this.setState({
+      showGlDateModal: true,
+    })
+  }
+  closeGlDateModal = () => {
+    this.setState({
+      showGlDateModal: false,
     })
   }
   // 作废
@@ -194,6 +236,19 @@ export default class BillStatusCon extends React.Component {
       calcelModalVisitable: true,
     })
   }
+  disableApprove = (param) => {
+    console.log(param)
+    this.props.disableApprove(param).then((res)=>{
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          calcelModalVisitable: false,
+        })
+        message.success('作废成功')
+      } else {
+        message.error('作废失败')
+      }
+    })
+}
   // 关闭作废modal
   closeDisableModal = () => {
     this.setState({
@@ -288,11 +343,13 @@ export default class BillStatusCon extends React.Component {
         title: '单价',
         dataIndex: 'unitPrice',
         width: 100,
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '开票金额',
         dataIndex: 'billingAmount',
         width: 100,
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '开票税率',
@@ -340,16 +397,19 @@ export default class BillStatusCon extends React.Component {
         title: '付款金额',
         dataIndex: 'paymentAmount',
         width: 100,
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: 'Billed AR金额',
         dataIndex: 'arAmount',
         width: 100,
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '已开票金额',
         dataIndex: 'invoiceAmount',
         width: 100,
+        render: (text, record, index) => (text ? currency(text) : text),
       },
     ]
     const billApproveResultcolumns = [
@@ -392,6 +452,7 @@ export default class BillStatusCon extends React.Component {
         title: '含税金额',
         dataIndex: 'taxIncludeAmount',
         width: 100,
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '税率',
@@ -402,6 +463,7 @@ export default class BillStatusCon extends React.Component {
         title: '不含税金额',
         dataIndex: 'taxExcludeAmount',
         width: 100,
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '操作',
@@ -418,7 +480,7 @@ export default class BillStatusCon extends React.Component {
     const { selectedRowKeys } = this.state
     const rowSelection = {
       selectedRowKeys,
-      type: 'radio',
+      type: 'checkBox',
       onChange: this.onSelectChange,
     }
     const pagination = {
@@ -440,8 +502,8 @@ export default class BillStatusCon extends React.Component {
     return (
       <div>
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />
-        <Button onClick={this.sendAp}>传送AP</Button>&nbsp;&nbsp;
-        <Button onClick={this.cancelHandle}>撤销</Button>
+        <Button onClick={this.showGlDate}>传送AP</Button>&nbsp;&nbsp;
+        <Button onClick={this.cancelHandle} disabled={this.state.cancelDis}>撤销</Button>
         <br /><br />
         <h2>开票审批</h2>
         <br />
@@ -506,13 +568,34 @@ export default class BillStatusCon extends React.Component {
           />
           : ''
         }
-        <DetailModal
-          visible={this.state.calcelModalVisitable}
-          onOk={this.closeDisableModal}
-          onCancel={this.closeDisableModal}
-          data={this.state.billResultSelectedRows}
+        {
+          this.state.billResultSelectedRows ?
+            <DetailModal
+              visible={this.state.calcelModalVisitable}
+              onOk={this.closeDisableModal}
+              onCancel={this.closeDisableModal}
+              data={this.state.billResultSelectedRows}
+              dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
+              disableApprove={this.disableApprove}
+            />
+            : ''
+        }
+        {
+          this.props.myApply.getMyApplyInfo.length>0 ?
+            <ItemInfo
+              visible={this.state.noApplyInfoVisitable}
+              onOk={this.NoApplycloseModalClaim}
+              onCancel={this.NoApplycloseModalClaim}
+              data={this.props.myApply.getMyApplyInfo}
+            />
+            : ''
+        }
+        {/* 弹出传送ARglDatemodal */}
+        <GlDateModal
+          glDateModal={this.state.showGlDateModal}
+          selectOk={this.sendAp}
+          selectCancel={this.closeGlDateModal}
         />
-
       </div>
     )
   }

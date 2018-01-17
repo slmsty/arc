@@ -17,7 +17,7 @@ export function getContractList(queryParam) {
 export function saveContractSplitInfo(queryParam) {
   return {
     [httpApi]: {
-      url: '/arc/workFlow/approveAgree',
+      url: '/arc/contract/split/add',
       options: {
         method: 'POST',
         body: queryParam,

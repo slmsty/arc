@@ -4,6 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table } from 'antd'
+import currency from '../../util/currency'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -37,7 +38,7 @@ class BadDebtsInfoModal extends React.Component {
       title: '划销金额',
       dataIndex: 'badDebtAmount',
       width: 100,
-      render: (text, record) => (text ? text.toFixed(2) : text),
+      render: (text, record, index) => (text ? currency(text) : text),
     }, {
       title: '申请日期',
       dataIndex: 'applicationDate',
@@ -50,12 +51,12 @@ class BadDebtsInfoModal extends React.Component {
       title: '应收金额',
       dataIndex: 'billedArBalance',
       width: 100,
-      render: (text, record) => (text ? text.toFixed(2) : text),
+      render: (text, record, index) => (text ? currency(text) : text),
     }, {
       title: 'GL已提坏账准备金额',
       dataIndex: 'badDebtProvisionAmount',
       width: 150,
-      render: (text, record) => (text ? text.toFixed(2) : text),
+      render: (text, record, index) => (text ? currency(text) : text),
     }, {
       title: '备注',
       dataIndex: 'applicantRemark',

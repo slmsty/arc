@@ -51,7 +51,7 @@ class ApplySearchCon extends React.Component {
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={40}>
+          {/* <Row gutter={40}>
             <Col span={8}>
               <FormItem {...formItemLayout} label="项目编号">
                 {getFieldDecorator('projectNo')(<Input placeholder="项目编号" onPressEnter={this.handleQuery} />)}
@@ -67,7 +67,7 @@ class ApplySearchCon extends React.Component {
                 {getFieldDecorator('contractName')(<Input placeholder="合同名称" onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
-          </Row>
+          </Row> */}
           <Row gutter={40}>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="申请类型">

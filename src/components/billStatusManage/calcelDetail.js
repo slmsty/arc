@@ -9,8 +9,20 @@ class CancelModal extends React.Component {
   state = {
     selectedRowKeys: '',
     selectedRows: '',
+    disableDis: true,
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
+    if(selectedRowKeys.length){
+      this.setState({
+        disableDis: false,
+      })
+    }else{
+      this.setState({
+        disableDis: true,
+      })
+    }
+    console.log(selectedRows)
+    console.log(this.props.data)
     this.setState({ selectedRowKeys, selectedRows })
   }
   // 作废
@@ -19,30 +31,35 @@ class CancelModal extends React.Component {
       message.error('请选择要作废的数据')
       return
     }
-    if (this.state.selectedRowKeys.length > 1) {
-      message.error('一次只能作废一条数据')
-      return
+    console.log(this.state.selectedRows)
+    console.log(this.props.data)
+    const params={
+      applicationId: this.props.data[0].applicationId,
+      applineId: this.state.selectedRows[0].billingLineId,
+      outcomeId: this.props.data[0].outcomeId,
+      /*invalidAmount: this.state.selectedRows[0].invalidAmount,*/
+      invalidAmount: "100",
     }
-    const that = this
+    this.props.disableApprove(params)
+    /*const that = this
     let successMsg = `作废成功${this.state.selectedRowKeys.length}条数据`
     let failMsg = `${this.state.selectedRowKeys.length}条数据作废失败，且提示失败原因`
     Modal.info({
       content: failMsg,
-    })
+    })*/
   }
   render() {
     let dataSource = this.props.data
-    console.log(dataSource)
     const columns = [{
       title: '项目编码',
       dataIndex: 'projectCode',
-      width: 80,
+      width: 180,
       textAlign: 'center',
       fixed: 'left',
     }, {
       title: '签约公司',
-      dataIndex: 'invoiceCompany',
-      width: 100,
+      dataIndex: 'company',
+      width: 300,
     }, {
       title: '合同编码',
       dataIndex: 'contractCode',
@@ -59,9 +76,6 @@ class CancelModal extends React.Component {
       title: '付款阶段',
       dataIndex: 'paymentPhrases',
       width: 100,
-      render: (text, record) => (
-        <a href="javascript:;">{text}</a>
-      ),
     }, {
       title: '付款金额',
       dataIndex: 'paymentAmount',
@@ -70,16 +84,14 @@ class CancelModal extends React.Component {
       title: 'Billed AR金额',
       dataIndex: 'arAmount',
       width: 150,
-      render: (text, record) => (text ? text.toFixed(2) : text),
     }, {
       title: '已开票金额',
       dataIndex: 'invoiceAmount',
       width: 100,
     }, {
       title: '作废金额',
-      dataIndex: 'badDebtProvisionAmount',
+      dataIndex: 'invalidAmount',
       width: 150,
-      render: (text, record) => (text ? text.toFixed(2) : text),
     },
     ]
     const { selectedRowKeys } = this.state
@@ -98,7 +110,7 @@ class CancelModal extends React.Component {
           onOk={this.props.onOk}
           footer={null}
         >
-          <Button onClick={this.disableItem}>作废</Button> &nbsp;&nbsp;
+          <Button onClick={this.disableItem} disabled={this.state.disableDis}>作废</Button> &nbsp;&nbsp;
           <br />
           <br />
           <Table
@@ -108,8 +120,8 @@ class CancelModal extends React.Component {
             pagination ={false}
             bordered
             size="small"
-            scroll={{ x: '1400px' }}
-            dataSource={dataSource}
+            scroll={{ x: '1700px' }}
+            dataSource={this.props.dataSource}
           />
         </Modal>
       </div>

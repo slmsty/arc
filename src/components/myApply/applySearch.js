@@ -166,7 +166,7 @@ export default class ApplySearchCon extends React.Component {
       title: '申请单类型',
       dataIndex: 'modelName',
       width: 120,
-    }, {
+    },/* {
       title: '项目编码',
       dataIndex: 'productId',
       width: 200,
@@ -178,7 +178,7 @@ export default class ApplySearchCon extends React.Component {
       title: '合同名称',
       dataIndex: 'constractName',
       width: 300,
-    }, {
+    },*/ {
       title: '申请信息',
       dataIndex: 'applyInfo',
       width: 250,
@@ -248,7 +248,7 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="small"
-          scroll={{ x: '2310px' }}
+          scroll={{ x: '1610px' }}
           loading={this.state.loading}
           dataSource={this.props.myApply.getMyApplyList.result}
         />

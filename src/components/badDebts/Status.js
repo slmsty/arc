@@ -9,9 +9,11 @@ import BDModal2 from './BDModal2'
 import GlModal from './GlModal'
 import BadDebtModal from './infoModal'
 import ReturnModal from './returnModal'
+import currency from '../../util/currency'
 
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
+
 
 class Status extends Component{
   state = {
@@ -52,25 +54,25 @@ class Status extends Component{
         title: 'GL已提坏账金额',
         dataIndex: 'badDebtProvisionAmount',
         width: 140,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: 'Billed AR余额',
         dataIndex: 'billedArBalance',
         width: 140,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: <span>划销金额<em style={{ color: '#FF0000' }}>*</em></span>,
         dataIndex: 'badDebtAmount',
         width: 140,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '划销退回金额',
         dataIndex: 'badDebtBackAmount',
         width: 140,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: <span>申请日期<em style={{ color: '#FF0000' }}>*</em></span>,
@@ -86,13 +88,13 @@ class Status extends Component{
         title: '已划销金额',
         dataIndex: 'badDebtDeductedAmount',
         width: 140,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '已划销退回金额',
         dataIndex: 'badDebtReturnAmount',
         width: 140,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '项目编码',
@@ -133,7 +135,7 @@ class Status extends Component{
         title: '合同金额',
         dataIndex: 'contractAmount',
         width: 140,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: 'Billed AR日期',
@@ -149,13 +151,13 @@ class Status extends Component{
         title: 'Billed AR金额',
         dataIndex: 'billedArAmount',
         width: 140,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '回款金额',
         dataIndex: 'receiptAmount',
         width: 140,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '创建提示',
@@ -280,6 +282,7 @@ class Status extends Component{
   componentDidMount() {
     this.doSearch()
   }
+
   doSearch = (e) => {
     if (e) {
       e.preventDefault()

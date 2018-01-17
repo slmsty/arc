@@ -5,10 +5,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import BillStatusManage from '../../components/billStatusManage/billStatusManage'
-import { getBillStatusList, getBillStatusDetail, getBillStatusContractDetail, getBillStatusBillResult } from '../../actions/billStatusManage/billStatusManage'
+import { getBillStatusList, getBillStatusDetail, getBillStatusContractDetail, getBillStatusBillResult, cancelApprove, disableApprove, sendAP } from '../../actions/billStatusManage/billStatusManage'
+import { myApplyInfo } from '../../actions/myApply'
 
 const mapStateToProps = state => ({
   billStatusManage: state.billStatusManage,
+  myApply: state.myApply,
 })
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
@@ -16,6 +18,10 @@ const mapDispatchToProps = dispatch => (
     getBillStatusDetail,
     getBillStatusContractDetail,
     getBillStatusBillResult,
+    cancelApprove,
+    disableApprove,
+    sendAP,
+    myApplyInfo,
   }, dispatch)
 )
 // eslint-disable-next-line react/prefer-stateless-function

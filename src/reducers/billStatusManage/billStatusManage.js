@@ -15,7 +15,7 @@ const billStatusManageData = {
   },
   getBillStatusBillResultList: {
   },
-  myBillStatusManageRefresh: new Date().getTime(),
+  cancelApproveRefresh: new Date().getTime(),
 }
 
 function getBillStatusList(state, action) {
@@ -30,9 +30,15 @@ function getBillStatusContractDetail(state, action) {
 function getBillStatusBillResult(state, action) {
   return { ...state, getBillStatusBillResultList: action.response.data }
 }
-/* function saveContractSplitInfo(state) {
-  return { ...state, myContractRefresh: new Date().getTime() }
-} */
+function disableApprove(state) {
+  return { ...state, cancelApproveRefresh: new Date().getTime() }
+}
+function cancelApprove(state) {
+  return { ...state, cancelApproveRefresh: new Date().getTime() }
+}
+function sendAP(state) {
+  return { ...state, cancelApproveRefresh: new Date().getTime() }
+}
 
 
 export default caseReducer(billStatusManageData, {
@@ -40,4 +46,7 @@ export default caseReducer(billStatusManageData, {
   GET_BILLSTATUS_DETAIL_LIST_SUCCESS: getBillStatusDetail,
   GET_BILLSTATUS_CONTRACT_LIST_SUCCESS: getBillStatusContractDetail,
   GET_BILLSTATUS_RESULT_SUCCESS: getBillStatusBillResult,
+  CANCEL_APPROVE_SUCCESS: cancelApprove,
+  DISSABLE_APPROVE_SUCCESS: disableApprove,
+  SEND_AP_SUCCESS: sendAP,
 })
