@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload, message, Icon } from 'antd'
 import './billDetail.less'
+import SelectInvokeApi from '../common/selectInvokeApi'
 import moment from 'moment'
 
 const Option = Select.Option
@@ -166,10 +167,12 @@ class BillDetail extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="费用承担着">
                 {getFieldDecorator('costCommit')(
-                  <Select>
-                    <Option value='1'>项目</Option>
-                    <Option value='2'>部门</Option>
-                  </Select>
+                  <SelectInvokeApi
+                    typeCode="BILLING_APPLICATION"
+                    paramCode="COST_BEAR"
+                    placeholder="费用承担着"
+                    hasEmpty
+                  />
                 )}
               </FormItem>
             </Col>
@@ -179,10 +182,12 @@ class BillDetail extends React.Component {
                   getFieldDecorator('billType',{
                     initialValue: '',
                   })(
-                    <Select>
-                      <Option value='1'>项目</Option>
-                      <Option value='2'>部门</Option>
-                    </Select>
+                    <SelectInvokeApi
+                      typeCode="BILLING_APPLICATION"
+                      paramCode="BILLING_TYPE"
+                      placeholder="开票类型"
+                      hasEmpty
+                    />
                   )
                 }
               </FormItem>

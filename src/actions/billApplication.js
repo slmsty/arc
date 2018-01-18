@@ -47,8 +47,20 @@ export const billApplySearch = (params) => {
         method: 'POST',
         body: params,
       },
-      types: ['BILL_APPLY_SEARCH_SUCCESS'],
+      types: ['BILL_APPLY_SEARCH_SUCCESS', 'LOADING_REQUEST'],
     },
   }
 }
 
+export const updateBillInfo = (params) => {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/edit/save',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_UPDATE_INFO_SUCCESS'],
+    },
+  }
+}

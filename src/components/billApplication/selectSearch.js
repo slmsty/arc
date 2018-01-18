@@ -5,28 +5,27 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 
 const FormItem = Form.Item
 const columns = [{
-  title: '公司名称',
-  dataIndex: 'comName',
+  title: '客户名称',
+  dataIndex: 'custName',
   width: 200,
 }, {
-  title: '公司编号',
-  dataIndex: 'comId',
+  title: '客户编号',
+  dataIndex: 'custId',
   width: 200,
 }
 ]
 
-class SelectCompany extends React.Component {
+class SelectSearch extends React.Component {
   state = {
     visible: false,
     pageNo: 1,
     pageSize: 10,
     total: 1,
-    List: [],
+    dataSource: [],
     selectedRowKeys: [],
     selectedRows: [],
     loading: false,
     firstLoad: true,
-    companyList: [],
   }
 
   componentWillMount() {
@@ -47,10 +46,10 @@ class SelectCompany extends React.Component {
 
   handleOk = () => {
     if (this.state.selectedRows.length === 0) {
-      message.error('请选择公司')
+      message.error('请选择的记录')
       return
     }
-    this.props.onChange(this.state.selectedRows[0].comName)
+    this.props.onChange(this.state.selectedRows[0].custName)
     this.handleCancel()
   }
 
@@ -84,7 +83,7 @@ class SelectCompany extends React.Component {
       },
     }
     this.setState({ loading: true })
-    requestJsonFetch('/arc/billingApplication/company/search', param, this.handleCallback)
+    requestJsonFetch('/arc/billingApplication/custom/search', param, this.handleCallback)
   }
 
   handleCallback = (response) => {
@@ -92,7 +91,7 @@ class SelectCompany extends React.Component {
       this.setState({
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.count,
-        companyList: response.pageInfo.result,
+        dataSource: response.pageInfo.result,
         firstLoad: false,
       })
     }
@@ -121,20 +120,20 @@ class SelectCompany extends React.Component {
     return (
       <div>
         <Input
-          placeholder="公司名称"
+          placeholder="客户名称"
           value={this.props.value}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
         <Modal
-          title="选择公司"
+          title="选择客户"
           style={{ top: 20 }}
           visible={visible}
           wrapClassName="vertical-center-modal"
           onCancel={this.handleCancel}
           footer={[
             <Button key="submit" type="primary" onClick={this.handleOk}>
-              <Icon type="check" />选择公司
+              <Icon type="check" />选择客户
             </Button>,
           ]}
         >
@@ -143,13 +142,13 @@ class SelectCompany extends React.Component {
           >
             <Row>
               <Col span={16} key={1}>
-                <FormItem {...formItemLayout} label="公司名称">
+                <FormItem {...formItemLayout} label="客户名称">
                   {getFieldDecorator('keywords', {
                     initialValue: this.props.defaultQueryParam,
                   })(
                     <Input
                       onPressEnter={this.handleQuery}
-                      placeholder="请输入公司关键字"
+                      placeholder="请输入客户关键字"
                     />,
                   )}
                 </FormItem>
@@ -167,10 +166,10 @@ class SelectCompany extends React.Component {
             rowSelection={rowSelection}
             bordered
             size="middle"
-            dataSource={this.state.companyList}
+            dataSource={this.state.dataSource}
             loading={this.state.loading}
             locale={{
-              emptyText: this.state.firstLoad ? '' : '没有符合条件的公司',
+              emptyText: this.state.firstLoad ? '' : '没有符合条件的记录',
             }}
             pagination={{
               current: this.state.pageNo,
@@ -185,4 +184,4 @@ class SelectCompany extends React.Component {
   }
 }
 
-export default Form.create()(SelectCompany)
+export default Form.create()(SelectSearch)

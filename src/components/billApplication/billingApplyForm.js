@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
+import SelectSearch from './SelectSearch'
 import SelectClient from './selectClient'
 import SelectCompany from './selectCompany'
 import SelectInvokeApi from '../common/selectInvokeApi'
@@ -8,7 +9,24 @@ import './billingApplication.less'
 
 const FormItem = Form.Item
 const Option = Select.Option
-
+const clientCols = [{
+  title: '客户名称',
+  dataIndex: 'custName',
+  width: 200,
+}, {
+  title: '客户编号',
+  dataIndex: 'custId',
+  width: 200,
+}]
+const comCols = [{
+  title: '公司名称',
+  dataIndex: 'comName',
+  width: 200,
+}, {
+  title: '公司编号',
+  dataIndex: 'comId',
+  width: 200,
+}]
 class BillingApplyForm extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
@@ -52,7 +70,12 @@ class BillingApplyForm extends React.Component {
                 {
                   getFieldDecorator('custName',{
                     initialValue: '',
-                  })(<SelectClient />)
+                  })(
+                    <SelectSearch
+                      url="/arc/billingApplication/custom/search"
+                      columns={clientCols}
+                    />
+                  )
                 }
               </FormItem>
             </Col>
@@ -138,28 +161,16 @@ class BillingApplyForm extends React.Component {
                   getFieldDecorator('companyName', {
                     initialValue: '',
                   })(
-                    <SelectCompany />
+                    <SelectSearch
+                      url="/arc/billingApplication/company/search"
+                      columns={comCols}
+                    />
                   )
                 }
               </FormItem>
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={4}>
-              <FormItem {...formItemLayout} label="数据状态">
-                {getFieldDecorator('status', {
-                  initialValue: '',
-                })(
-                  <SelectInvokeApi
-                    typeCode="BILLING_APPLICATION"
-                    paramCode="STATUS"
-                    placeholder="开票申请分类"
-                    hasEmpty
-                  />
-                )
-                }
-              </FormItem>
-            </Col>
             <Col style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />申请开票</Button>
             </Col>

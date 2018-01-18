@@ -1,76 +1,9 @@
 import React from 'react'
 import BillingApplyForm from './billingApplyForm'
 import BillDetail from './billDetail'
-import { Table, Button } from 'antd'
+import BillUpdate from './billUpdate'
+import { Table, Button, message } from 'antd'
 import './billingApplication.less'
-
-const normalCols = [
-  {
-    title: '开票申请类别',
-    dataIndex: 'applyType',
-    width: 100,
-  }, {
-    title: '项目编码',
-    dataIndex: 'projectCode',
-    width: 100,
-  }, {
-    title: '签约公司',
-    dataIndex: 'comName',
-    width: 100,
-  }, {
-    title: '签约日期',
-    dataIndex: 'signDate',
-    width: 100,
-  }, {
-    title: '合同编码',
-    dataIndex: 'contractNo',
-    width: 100,
-  }, {
-    title: '发票号',
-    dataIndex: 'invoiceNumber',
-    width: 100,
-  }, {
-    title: '客户名称',
-    dataIndex: 'custName',
-    width: 100,
-  }, {
-    title: '付款条件',
-    dataIndex: 'paymentTerm',
-    width: 100,
-  }, {
-    title: '付款条款',
-    dataIndex: 'paymentName',
-    width: 100,
-  }, {
-    title: '付款阶段',
-    dataIndex: 'paymentPhrases',
-    width: 100,
-  }, {
-    title: '付款金额',
-    dataIndex: 'billedArAmount',
-    width: 100,
-  }, {
-    title: '已开票金额',
-    dataIndex: 'alreadyBillingAmount',
-    width: 100,
-  }, {
-    title: '提前开票原因',
-    dataIndex: 'reason',
-    width: 100,
-  }, {
-    title: '预计回款日期',
-    dataIndex: 'backdate',
-    width: 100,
-  }, {
-    title: '提前开票备注',
-    dataIndex: 'note',
-    width: 100,
-  }, {
-    title: '操作',
-    dataIndex: '',
-    render: () => <a href="#">修改</a>,
-  },
-]
 
 const advanceCols = [
   {
@@ -193,7 +126,17 @@ export default class BillingApplication extends React.Component {
     super(props)
     this.state = {
       currentType: '1',
-      visible: false
+      detailVisible: false,
+      updateVisible: false,
+      selectedRows: [],
+      arBillingId: '',
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(this.props.updateSuccess !== nextProps.updateSuccess) {
+      message.success('发票信息修改成功!')
+      this.setState({updateVisible: false})
     }
   }
 
@@ -205,6 +148,70 @@ export default class BillingApplication extends React.Component {
 
   getApplyColumns = () => {
     const type = this.state.currentType
+    const normalCols = [
+      {
+        title: '开票申请类别',
+        dataIndex: 'applyType',
+        width: 100,
+      }, {
+        title: '项目编码',
+        dataIndex: 'projectCode',
+        width: 150,
+      }, {
+        title: '签约公司',
+        dataIndex: 'comName',
+        width: 150,
+      },  {
+        title: '合同编码',
+        dataIndex: 'contractNo',
+        width: 150,
+      }, {
+        title: '发票号',
+        dataIndex: 'invoiceNumber',
+        width: 100,
+      }, {
+        title: '客户名称',
+        dataIndex: 'custName',
+        width: 100,
+      }, {
+        title: '付款条件',
+        dataIndex: 'paymentTerm',
+        width: 100,
+      }, {
+        title: '付款条款',
+        dataIndex: 'paymentName',
+        width: 100,
+      }, {
+        title: '付款阶段',
+        dataIndex: 'paymentPhrases',
+        width: 100,
+      }, {
+        title: '付款金额',
+        dataIndex: 'billedArAmount',
+        width: 100,
+      }, {
+        title: '已开票金额',
+        dataIndex: 'alreadyBillingAmount',
+        width: 100,
+      }, {
+        title: '提前开票原因',
+        dataIndex: 'reason',
+        width: 100,
+      }, {
+        title: '预计回款日期',
+        dataIndex: 'backdate',
+        width: 100,
+      }, {
+        title: '提前开票备注',
+        dataIndex: 'note',
+        width: 100,
+      }, {
+        title: '操作',
+        dataIndex: '',
+        width: 80,
+        render: (record) => <a href="#" onClick={() => {this.setState({updateVisible: true, arBillingId: record.arBillingId})}}>修改</a>,
+      },
+    ]
     if (type === '1' || type === '2' || type === '6') {
       return normalCols
     } else if (type === '4' || type === '5') {
@@ -216,16 +223,20 @@ export default class BillingApplication extends React.Component {
     }
   }
 
+  handleBilling = () => {
+    if(this.state.selectedRows.length === 0) {
+      message.warn('请选择要开票的记录!')
+    }
+    this.setState({visible: true})
+  }
+
   render() {
-    const { billList } = this.props
-    console.log(this.props)
+    const { billList, updateBillInfo, isLoading } = this.props
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-      },
-      getCheckboxProps: record => ({
-        disabled: record.name === 'Disabled User',
-      }),
+        this.setState({selectedRows: selectedRows})
+      }
     }
     return (
       <div>
@@ -234,10 +245,11 @@ export default class BillingApplication extends React.Component {
           onQuery={this.props.billApplySearch}
         />
         <div className="form-btns">
-          <Button type="primary" ghost onClick={() => this.setState({visible: true})}>开票</Button>
+          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票</Button>
           <Button type="primary" ghost>编辑</Button>
         </div>
         <Table
+          loading={isLoading}
           rowKey="receiptClaimId"
           rowSelection={rowSelection}
           bordered
@@ -245,8 +257,14 @@ export default class BillingApplication extends React.Component {
           dataSource={billList}
         />
         <BillDetail
-          visible={this.state.visible}
-          onCancel={() => this.setState({visible: false})}
+          visible={this.state.detailVisible}
+          onCancel={() => this.setState({detailVisible: false})}
+        />
+        <BillUpdate
+          visible={this.state.updateVisible}
+          onCancel={() => this.setState({updateVisible: false})}
+          updateBillInfo={updateBillInfo}
+          arBillingId={this.state.arBillingId}
         />
       </div>
     )

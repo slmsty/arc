@@ -92,7 +92,7 @@ export default class Index extends React.Component {
               <p>欢迎您，<span>{accountName}</span><span>{orgName}</span></p>
             </div>
           </Header>
-          <Content style={{ margin: '8px 8px', padding: 12, background: '#fff', minHeight: 280 }}>
+          <Content style={{ margin: '8px 8px', padding: 12, background: '#fff' }}>
             { this.props.children }
           </Content>
         </Layout>
