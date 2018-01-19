@@ -1,11 +1,31 @@
 import React from 'react'
 import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from 'antd'
-import SelectClient from './selectClient'
-import SelectCompany from './selectCompany'
+import SelectSearch from './selectSearch'
 import SelectInvokeApi from '../common/selectInvokeApi'
-const Option = Select.Option
 const FormItem = Form.Item
-const TextArea = Input.TextArea
+const clientCols = [{
+  title: '客户名称',
+  dataIndex: 'custName',
+  width: 200,
+}, {
+  title: '客户编号',
+  dataIndex: 'custId',
+  width: 200,
+}]
+const comCols = [{
+  title: '公司名称',
+  dataIndex: 'comName',
+  width: 200,
+}, {
+  title: '公司编号',
+  dataIndex: 'comId',
+  width: 200,
+}]
+const proCols = [{
+  title: '项目编码',
+  dataIndex: 'projectNo',
+  width: 200,
+}]
 
 
 class BillUpdate extends React.Component {
@@ -18,13 +38,25 @@ class BillUpdate extends React.Component {
 
   handleOk = () => {
     const values = this.props.form.getFieldsValue()
-    const params = {
+    const { arBillingId, contractItemId, isAdd } = this.props;
+    const params = isAdd ? {
       ...values,
-      arBillingId: this.props.arBillingId,
+      comName: values.comName[1],
+      custName: values.custName[1],
+      projectNo: values.projectNo[1],
+      receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
+    } : {
+      ...values,
+      arBillingId: arBillingId,
+      contractItemId: contractItemId,
+      comId: values.comName[0],
+      comName: values.comName[1],
+      custId: values.custName[0],
+      custName: values.custName[1],
       receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
     }
     console.log(params)
-    this.props.updateBillInfo(params)
+    this.props.billAction(params)
   }
 
   render() {
@@ -37,7 +69,7 @@ class BillUpdate extends React.Component {
       <div>
         <Modal
           width="650px"
-          title="发票编辑"
+          title={this.props.isAdd ? '发票添加' : '发票编辑'}
           visible={this.props.visible}
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
@@ -53,7 +85,15 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
-                  {getFieldDecorator('comName')(<SelectCompany />)}
+                  {getFieldDecorator('comName')(
+                    <SelectSearch
+                      url="/arc/billingApplication/company/search"
+                      columns={comCols}
+                      label="公司名称"
+                      idKey="comId"
+                      valueKey="comName"
+                    />
+                  )}
                 </FormItem>
               </Col>
               <Col span={12} key={2}>
@@ -61,7 +101,14 @@ class BillUpdate extends React.Component {
                   {
                     getFieldDecorator('custName',{
                       initialValue: '',
-                    })(<SelectClient />)
+                    })(
+                      <SelectSearch
+                        url="/arc/billingApplication/custom/search"
+                        columns={clientCols}
+                        label="客户名称"
+                        idKey="custId"
+                        valueKey="custName"
+                    />)
                   }
                 </FormItem>
               </Col>
@@ -95,20 +142,35 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('tempProjectId')(
-                    <SelectCompany />
+                  {getFieldDecorator('projectNo')(
+                    <SelectSearch
+                      url="/arc/billingApplication/projectNo/search"
+                      columns={proCols}
+                      label="项目编码"
+                      idKey="projectNo"
+                      valueKey="projectNo"
+                    />
                   )}
                 </FormItem>
               </Col>
-              <Col span={12} key={2}>
-                <FormItem {...formItemLayout} label="关联发票">
-                  {
-                    getFieldDecorator('billingOutcomeId',{
-                      initialValue: '',
-                    })(<SelectClient />)
-                  }
-                </FormItem>
-              </Col>
+              {
+                !this.props.isAdd ?
+                  <Col span={12} key={2}>
+                    <FormItem {...formItemLayout} label="关联发票">
+                      {
+                        getFieldDecorator('billingOutcomeId',{
+                          initialValue: '',
+                        })(<SelectSearch
+                          url="/arc/billingApplication/outcome/search"
+                          columns={proCols}
+                          label="发票抬头"
+                          idKey="custId"
+                          valueKey="custName"
+                        />)
+                      }
+                    </FormItem>
+                  </Col> : null
+              }
             </Row>
             {
               this.state.reasonId === 'other' ?

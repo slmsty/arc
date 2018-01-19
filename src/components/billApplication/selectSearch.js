@@ -4,16 +4,6 @@ import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd
 import requestJsonFetch from '../../http/requestJsonFecth'
 
 const FormItem = Form.Item
-const columns = [{
-  title: '客户名称',
-  dataIndex: 'custName',
-  width: 200,
-}, {
-  title: '客户编号',
-  dataIndex: 'custId',
-  width: 200,
-}
-]
 
 class SelectSearch extends React.Component {
   state = {
@@ -49,7 +39,8 @@ class SelectSearch extends React.Component {
       message.error('请选择的记录')
       return
     }
-    this.props.onChange(this.state.selectedRows[0].custName)
+    const selectedRow = this.state.selectedRows[0]
+    this.props.onChange([selectedRow[this.props.idKey], selectedRow[this.props.valueKey]])
     this.handleCancel()
   }
 
@@ -83,7 +74,7 @@ class SelectSearch extends React.Component {
       },
     }
     this.setState({ loading: true })
-    requestJsonFetch('/arc/billingApplication/custom/search', param, this.handleCallback)
+    requestJsonFetch(this.props.url, param, this.handleCallback)
   }
 
   handleCallback = (response) => {
@@ -120,20 +111,20 @@ class SelectSearch extends React.Component {
     return (
       <div>
         <Input
-          placeholder="客户名称"
-          value={this.props.value}
+          placeholder={this.props.label}
+          value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
         <Modal
-          title="选择客户"
+          title="选择"
           style={{ top: 20 }}
           visible={visible}
           wrapClassName="vertical-center-modal"
           onCancel={this.handleCancel}
           footer={[
             <Button key="submit" type="primary" onClick={this.handleOk}>
-              <Icon type="check" />选择客户
+              <Icon type="check" />确认
             </Button>,
           ]}
         >
@@ -142,13 +133,13 @@ class SelectSearch extends React.Component {
           >
             <Row>
               <Col span={16} key={1}>
-                <FormItem {...formItemLayout} label="客户名称">
+                <FormItem {...formItemLayout} label={this.props.label}>
                   {getFieldDecorator('keywords', {
                     initialValue: this.props.defaultQueryParam,
                   })(
                     <Input
                       onPressEnter={this.handleQuery}
-                      placeholder="请输入客户关键字"
+                      placeholder="请输入关键字"
                     />,
                   )}
                 </FormItem>
@@ -161,8 +152,8 @@ class SelectSearch extends React.Component {
           </Form>
 
           <Table
-            rowKey="custId"
-            columns={columns}
+            rowKey={this.props.idKey}
+            columns={this.props.columns}
             rowSelection={rowSelection}
             bordered
             size="middle"

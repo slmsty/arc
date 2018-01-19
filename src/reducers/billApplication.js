@@ -6,6 +6,9 @@ const initState = {
   billClient: [],
   billList: [],
   updateSuccess: false,
+  addContractSuccess: false,
+  otherSuccess: false,
+  billEditInfo: {},
 }
 
 function loadingRequest(state) {
@@ -34,16 +37,42 @@ function billApplySearch(state, action) {
     ...state,
     billList: action.response.data,
     isLoading: false,
+    updateSuccess: false,
+    addSuccess: false,
   }
 }
 
-function billUpdateInfo(state, action) {
+function billUpdateInfo(state) {
   return {
     ...state,
     updateSuccess: true,
   }
 }
 
+function addBillUnContract(state) {
+  return {
+    ...state,
+    addSuccess: true,
+  }
+}
+
+function addOtherContract(state) {
+  return {
+    ...state,
+    addSuccess: true,
+  }
+}
+
+function billApplyEdit(state, action) {
+  return {
+    ...state,
+    editInfo: {
+      custInfo: action.response.custInfo,
+      comInfo: action.response.comInfo,
+      appLineItems: action.response.appLineItems,
+    },
+  }
+}
 
 export default caseReducer(initState, {
   LOADING_REQUEST: loadingRequest,
@@ -51,4 +80,7 @@ export default caseReducer(initState, {
   GET_BILL_CLIENTS_SUCCESS: getBillClients,
   BILL_APPLY_SEARCH_SUCCESS: billApplySearch,
   BILL_UPDATE_INFO_SUCCESS: billUpdateInfo,
+  ADD_BILL_UN_CONTRACT_SUCCESS: addBillUnContract,
+  ADD_OTHER_CONTRACT_SUCCESS: addOtherContract,
+  BILL_APPLY_EDIT_SUCCESS: billApplyEdit,
 })

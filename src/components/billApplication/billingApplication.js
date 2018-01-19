@@ -2,6 +2,7 @@ import React from 'react'
 import BillingApplyForm from './billingApplyForm'
 import BillDetail from './billDetail'
 import BillUpdate from './billUpdate'
+import OtherContractAdd from './otherContractAdd'
 import { Table, Button, message } from 'antd'
 import './billingApplication.less'
 
@@ -12,91 +13,32 @@ const advanceCols = [
     width: 150,
   }, {
     title: '签约公司',
-    dataIndex: 'company',
+    dataIndex: 'comName',
     width: 150,
   }, {
     title: '客户名称',
-    dataIndex: 'client',
+    dataIndex: 'custName',
     width: 150,
   }, {
     title: '项目编码',
-    dataIndex: 'project',
+    dataIndex: 'projectNo',
     width: 150,
   }, {
     title: '提前开票原因',
-    dataIndex: 'reason',
+    dataIndex: 'advanceBillingReason',
     width: 150,
   }, {
     title: '预计回款日期',
-    dataIndex: 'datea',
-    width: 150,
+    dataIndex: 'receiptReturnDate',
+    width: 100,
   }, {
     title: '提前开票备注',
-    dataIndex: 'note',
+    dataIndex: 'advanceBillingRemark',
     width: 150,
   }, {
     title: '操作',
     dataIndex: '',
-    render: () => <a href="#">修改</a>,
-  },
-]
-
-const redFontCols = [
-  {
-    title: '开票申请类别',
-    dataIndex: 'applyType',
-    width: 150,
-  }, {
-    title: '发票号',
-    dataIndex: 'invoiceNo',
-    width: 150,
-  }, {
-    title: '开票金额',
-    dataIndex: 'invoiceMoney',
-    width: 150,
-  }, {
-    title: '开票税额',
-    dataIndex: 'invoiceshuie',
-    width: 150,
-  }, {
-    title: '开票税率',
-    dataIndex: 'invoiceRate',
-    width: 150,
-  }, {
-    title: '项目编码',
-    dataIndex: 'proNumber',
-    width: 150,
-  }, {
-    title: '签约公司',
-    dataIndex: 'company',
-    width: 150,
-  }, {
-    title: '签约日期',
-    dataIndex: 'date',
-    width: 150,
-  }, {
-    title: '合同编码',
-    dataIndex: 'contractNumber',
-    width: 150,
-  }, {
-    title: '客户名称',
-    dataIndex: 'clientName',
-    width: 150,
-  }, {
-    title: '付款条款',
-    dataIndex: 'tiaokuan',
-    width: 150,
-  }, {
-    title: '付款阶段',
-    dataIndex: 'progress',
-    width: 150,
-  }, {
-    title: '付款金额',
-    dataIndex: 'money',
-    width: 150,
-  }, {
-    title: '操作',
-    dataIndex: '',
+    width: 80,
     render: () => <a href="#">修改</a>,
   },
 ]
@@ -105,38 +47,62 @@ const otherCols = [
   {
     title: '开票申请类别',
     dataIndex: 'applyType',
-    width: 150,
   }, {
     title: '签约公司',
-    dataIndex: 'invoiceRate',
-    width: 150,
+    dataIndex: 'comName',
   }, {
     title: '客户名称',
-    dataIndex: 'clientName',
-    width: 150,
+    dataIndex: 'custName',
   }, {
     title: '操作',
     dataIndex: '',
+    width: 150,
     render: () => <a href="#">修改</a>,
   },
 ]
+
+const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
+const advanceTypes = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
+const redTypes = ['BILLING_RED', 'BILLING_RED_OTHER']
+const otherTypes = ['BILLING_OTHER']
 
 export default class BillingApplication extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentType: '1',
+      currentType: 'BILLING_NORMAL',
       detailVisible: false,
       updateVisible: false,
+      otherAddVisible: false,
       selectedRows: [],
+      isAdd: false,
       arBillingId: '',
+      contractItemId: '',
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.updateSuccess !== nextProps.updateSuccess) {
-      message.success('发票信息修改成功!')
+    if(this.props.updateSuccess !== nextProps.updateSuccess && nextProps.updateSuccess) {
+      message.success('申请信息修改成功!')
       this.setState({updateVisible: false})
+    } else if(this.props.addSuccess !== nextProps.addSuccess && nextProps.addSuccess) {
+      message.success('申请信息添加成功!')
+      this.setState({
+        updateVisible: false,
+        otherAddVisible: false,
+      })
+      const params = {
+        arDateStart: '',
+        arDateEnd: '',
+        companyName: '',
+        custName: '',
+        projectNos: [],
+        contractNos: [],
+        invoiceNumbers: [],
+        paymentName: '',
+        billingApplicationType: this.state.currentType,
+      }
+      this.props.billApplySearch(params)
     }
   }
 
@@ -155,7 +121,7 @@ export default class BillingApplication extends React.Component {
         width: 100,
       }, {
         title: '项目编码',
-        dataIndex: 'projectCode',
+        dataIndex: 'projectNo',
         width: 150,
       }, {
         title: '签约公司',
@@ -195,30 +161,101 @@ export default class BillingApplication extends React.Component {
         width: 100,
       }, {
         title: '提前开票原因',
-        dataIndex: 'reason',
+        dataIndex: 'advanceBillingReason',
         width: 100,
       }, {
         title: '预计回款日期',
-        dataIndex: 'backdate',
+        dataIndex: 'receiptReturnDate',
         width: 100,
       }, {
         title: '提前开票备注',
-        dataIndex: 'note',
+        dataIndex: 'advanceBillingRemark',
         width: 100,
       }, {
         title: '操作',
-        dataIndex: '',
+        dataIndex: 'action',
         width: 80,
-        render: (record) => <a href="#" onClick={() => {this.setState({updateVisible: true, arBillingId: record.arBillingId})}}>修改</a>,
+        render: (text, record) => (
+          <a href="#"
+             onClick={() => {
+               this.setState({
+                 updateVisible: true,
+                 arBillingId: record.arBillingId,
+                 contractItemId: record.contractItemId,
+               })}
+             }
+          >修改</a>
+        )
       },
     ]
-    if (type === '1' || type === '2' || type === '6') {
+    const redFontCols = [
+      {
+        title: '开票申请类别',
+        dataIndex: 'applyType',
+        width: 100,
+      }, {
+        title: '发票号',
+        dataIndex: 'invoiceNumber',
+        width: 150,
+      }, {
+        title: '开票金额',
+        dataIndex: 'invoiceMoney',
+        width: 100,
+      }, {
+        title: '开票税额',
+        dataIndex: 'invoiceshuie',
+        width: 100,
+      }, {
+        title: '开票税率',
+        dataIndex: 'invoiceRate',
+        width: 100,
+      }, {
+        title: '项目编码',
+        dataIndex: 'projectNo',
+        width: 150,
+      }, {
+        title: '签约公司',
+        dataIndex: 'comName',
+        width: 150,
+      }, {
+        title: '合同编码',
+        dataIndex: 'contractNo',
+        width: 150,
+      }, {
+        title: '客户名称',
+        dataIndex: 'custName',
+        width: 150,
+      }, {
+        title: '付款条款',
+        dataIndex: 'paymentName',
+        width: 150,
+      }, {
+        title: '付款阶段',
+        dataIndex: 'paymentPhrases',
+        width: 100,
+      }, {
+        title: '付款金额',
+        dataIndex: 'billedArAmount',
+        width: 150,
+      }, {
+        title: '操作',
+        dataIndex: 'action',
+        width: 80,
+        render: (record) =>
+          <a href="#"
+            onClick={() => {
+              this.setState({updateVisible: true, arBillingId: record.arBillingId})}
+            }
+          >修改</a>,
+      },
+    ]
+    if (normalTypes.includes(type)) {
       return normalCols
-    } else if (type === '4' || type === '5') {
+    } else if (advanceTypes.includes(type)) {
       return advanceCols
-    } else if (type === '5' || type === '8') {
+    } else if (redTypes.includes(type)) {
       return redFontCols
-    } else if (type === '7') {
+    } else if (otherTypes.includes(type)) {
       return otherCols
     }
   }
@@ -227,26 +264,73 @@ export default class BillingApplication extends React.Component {
     if(this.state.selectedRows.length === 0) {
       message.warn('请选择要开票的记录!')
     }
-    this.setState({visible: true})
+    let contractItems = []
+    this.state.selectedRows.map(b => {
+      contractItems.push({
+        arBillingId: b.arBillingId,
+        contractItemId: b.contractItemId,
+      })
+    })
+    const param = {
+      billingApplicationType: this.state.currentType,
+      contractItems,
+    }
+    console.log(param)
+    this.props.billApplyEdit(param)
+    this.setState({detailVisible: true})
+  }
+
+  handleAddBill = () => {
+    this.setState({
+      updateVisible: true,
+      isAdd: true,
+    })
+  }
+
+  getBillBtns = () => {
+    const type = this.state.currentType
+    if (normalTypes.includes(type)) {
+      return (
+        <Button type="primary" ghost onClick={() => this.handleBilling()}>开票</Button>
+      )
+    } else if (advanceTypes.includes(type)) {
+      return (
+        <div>
+          <Button type="primary" ghost onClick={() => this.handleAddBill()}>增加</Button>
+          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
+        </div>
+      )
+    } else if (redTypes.includes(type)) {
+      return (
+        <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
+      )
+    } else if (otherTypes.includes(type)) {
+      return (
+        <div>
+          <Button type="primary" ghost onClick={() => this.setState({otherAddVisible: true})}>增加</Button>
+          <Button type="primary" ghost onClick={() => this.setState({otherAddVisible: true})}>开票编辑</Button>
+        </div>
+      )
+    }
   }
 
   render() {
-    const { billList, updateBillInfo, isLoading } = this.props
+    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract } = this.props
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
         this.setState({selectedRows: selectedRows})
       }
     }
+    const { isAdd, arBillingId, contractItemId, updateVisible, otherAddVisible } = this.state
     return (
       <div>
         <BillingApplyForm
-          applyChange={value => this.getApplyChange(value)}
+          getApplyChange={value => this.getApplyChange(value)}
           onQuery={this.props.billApplySearch}
         />
         <div className="form-btns">
-          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票</Button>
-          <Button type="primary" ghost>编辑</Button>
+          {this.getBillBtns()}
         </div>
         <Table
           loading={isLoading}
@@ -261,10 +345,18 @@ export default class BillingApplication extends React.Component {
           onCancel={() => this.setState({detailVisible: false})}
         />
         <BillUpdate
-          visible={this.state.updateVisible}
+          visible={updateVisible}
           onCancel={() => this.setState({updateVisible: false})}
-          updateBillInfo={updateBillInfo}
-          arBillingId={this.state.arBillingId}
+          billAction={isAdd ? addBillUnContract : updateBillInfo}
+          arBillingId={arBillingId}
+          contractItemId={contractItemId}
+          isAdd={isAdd}
+        />
+        <OtherContractAdd
+          addAction={addOtherContract}
+          billType={this.state.currentType}
+          visible={otherAddVisible}
+          onCancel={() => this.setState({otherAddVisible: false})}
         />
       </div>
     )

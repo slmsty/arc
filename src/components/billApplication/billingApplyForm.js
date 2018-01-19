@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
-import SelectSearch from './SelectSearch'
+import SelectSearch from './selectSearch'
 import SelectClient from './selectClient'
 import SelectCompany from './selectCompany'
 import SelectInvokeApi from '../common/selectInvokeApi'
@@ -74,6 +74,9 @@ class BillingApplyForm extends React.Component {
                     <SelectSearch
                       url="/arc/billingApplication/custom/search"
                       columns={clientCols}
+                      label="客户名称"
+                      idKey="custId"
+                      valueKey="custName"
                     />
                   )
                 }
@@ -130,12 +133,13 @@ class BillingApplyForm extends React.Component {
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="开票申请分类">
                 {getFieldDecorator('billingApplicationType', {
-                  initialValue: '',
+                  initialValue: 'BILLING_NORMAL',
                 })(
                   <SelectInvokeApi
                     typeCode="BILLING_APPLICATION"
                     paramCode="BILLING_APPLICATION_TYPE"
                     placeholder="开票申请分类"
+                    onChange={(v) => this.handleChange(v)}
                     hasEmpty
                   />
                 )
@@ -164,6 +168,9 @@ class BillingApplyForm extends React.Component {
                     <SelectSearch
                       url="/arc/billingApplication/company/search"
                       columns={comCols}
+                      label="公司名称"
+                      idKey="comId"
+                      valueKey="comName"
                     />
                   )
                 }

@@ -51,7 +51,11 @@ export const billApplySearch = (params) => {
     },
   }
 }
-
+/**
+ * 发票信息单条修改
+ * @param params
+ * @returns {{}}
+ */
 export const updateBillInfo = (params) => {
   return {
     [httpApi]: {
@@ -61,6 +65,57 @@ export const updateBillInfo = (params) => {
         body: params,
       },
       types: ['BILL_UPDATE_INFO_SUCCESS'],
+    },
+  }
+}
+/**
+ * 新增未大签合同
+ * @param params
+ * @returns {{}}
+ */
+export const addBillUnContract = (params) => {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/billingUnContract/add',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['ADD_BILL_UN_CONTRACT_SUCCESS'],
+    },
+  }
+}
+/**
+ * 新增其他合同
+ * @param params
+ * @returns {{}}
+ */
+export const addOtherContract = (params) => {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/billingOther/add',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['ADD_OTHER_CONTRACT_SUCCESS'],
+    },
+  }
+}
+/**
+ * 开票申请编辑
+ * @param params
+ * @returns {{}}
+ */
+export const billApplyEdit = (params) => {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/apply/edit',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_APPLY_EDIT_SUCCESS'],
     },
   }
 }
