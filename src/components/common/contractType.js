@@ -1,195 +1,67 @@
-/**
- * Created by liangshuang on 17/12/12.
- */
+/* eslint-disable react/prefer-stateless-function,react/prop-types,max-len,react/require-default-props,no-nested-ternary */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Row, Col, Button, Input, Table, Icon, message } from 'antd'
+import { Select } from 'antd'
 
 import requestJsonFetch from '../../http/requestJsonFecth'
 
-const FormItem = Form.Item
+const Option = Select.Option
 
-class SelectSbu extends React.Component {
+export default class SelectInvokeApi extends React.Component {
   state = {
-    visible: false,
-    pageNo: 1,
-    pageSize: 8,
-    total: 1,
-    customerList: [],
-    selectedRowKeys: [],
-    selectedRows: [],
-    loading: false,
-    firstLoad: true,
-  }
-  componentWillMount() {
-    if (this.props.initialValue) {
-      this.props.onChange(this.props.initialValue)
-    }
+    options: [],
   }
   componentDidMount() {
-    if (this.props.defaultQueryParam) {
-      this.handleQuery()
+    if (this.props.typeCode && this.props.paramCode) {
+      requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
     }
-  }
-  onSelectChange = (selectedRowKeys, selectedRows) => {
-    this.setState({ selectedRowKeys, selectedRows })
-  }
-  columns = [{
-    title: 'SBU编码',
-    dataIndex: 'sbuNo',
-    width: 200,
-  }, {
-    title: 'SBU名称',
-    dataIndex: 'sbuName',
-    width: 200,
-  },
-  ]
-  handleOk = () => {
-    const {indexs, columns} = this.props
-    if (this.state.selectedRows.length === 0) {
-      message.error('请选择SBU')
-      return
-    }
-    this.props.onChange({
-      sbuNo: this.state.selectedRows[0].sbuNo,
-      sbuName: this.state.selectedRows[0].sbuName,
-      indexs: indexs,
-      columns: columns,
-    })
-    this.handleCancel()
-  }
-  handleCancel = () => {
-    this.setState({
-      visible: false,
-      selectedRowKeys: [],
-      selectedRows: [],
-    })
-  }
-  handleChangePage = (page) => {
-    this.handleQueryFetch(page)
-  }
-  handleQuery = () => {
-    this.setState({ selectedRowKeys: [], selectedRows: [] })
-    this.handleQueryFetch(1)
-  }
-  handleQueryFetch= (pageNo) => {
-    const keywords = this.props.form.getFieldValue('keywords')
-    const param = {
-      method: 'POST',
-      body: {
-        pageInfo: {
-          pageNo: pageNo || 1,
-          pageSize: this.state.pageSize,
-        },
-        keywords,
-      },
-    }
-    this.setState({ loading: true })
-    requestJsonFetch('/arc/common/sbu_name/list', param, this.handleCallback)
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
+      const options = response.data
+      if (this.props.hasEmpty) {
+        options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
+      }
       this.setState({
-        pageNo: response.pageInfo.pageNo,
-        total: response.pageInfo.pageCount,
-        customerList: response.pageInfo.result,
-        firstLoad: false,
+        options,
       })
     }
-    this.setState({ loading: false })
   }
-  handleEmitEmpty = () => {
-    this.props.onChange(['', ''])
+  handleChange = (value) => {
+    const {indexs, columns} = this.props
+    if (value === 'all') {
+      this.props.onChange('')
+    } else {
+      this.props.onChange({
+        No: value,
+        Name:value,
+        indexs: indexs,
+        columns: columns,
+      })
+      // this.props.onChange(value)
+    }
   }
   render() {
-    const { visible } = this.state
-    const formItemLayout = {
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
-    }
-    const { getFieldDecorator } = this.props.form
-    const { selectedRowKeys } = this.state
-    const rowSelection = {
-      type: 'radio',
-      hideDefaultSelections: true,
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    }
-    const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
     return (
-      <div>
-        <Input
-          placeholder="SBU"
-          value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
-          suffix={suffix}
-          onClick={() => this.setState({ visible: true })}
-        />
-        <Modal
-          title="SBU查询"
-          style={{ top: 20 }}
-          visible={visible}
-          wrapClassName="vertical-center-modal"
-          onCancel={this.handleCancel}
-          footer={[
-            <Button key="submit" type="primary" onClick={this.handleOk}>
-              <Icon type="check" />确认
-            </Button>,
-          ]}
-        >
-          <Form
-            className="ant-search-form"
-          >
-            <Row>
-              <Col span={16} key={1}>
-                <FormItem {...formItemLayout} label="SBU">
-                  {getFieldDecorator('keywords', {
-                    initialValue: this.props.defaultQueryParam,
-                  })(
-                    <Input
-                      onPressEnter={this.handleQuery}
-                      placeholder="请输入SBU关键字"
-                    />,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={1} key={2} />
-              <Col span={7} key={3}>
-                <Button type="primary" icon="search" htmlType="submit" onClick={this.handleQuery}>查询</Button>
-              </Col>
-            </Row>
-          </Form>
-
-          <Table
-            rowKey="sbuNo"
-            columns={this.columns}
-            rowSelection={rowSelection}
-            bordered
-            size="middle"
-            dataSource={this.state.customerList}
-            loading={this.state.loading}
-            locale={{
-              emptyText: this.state.firstLoad ? '' : '没有符合条件的SBU',
-            }}
-            pagination={{
-              current: this.state.pageNo,
-              onChange: this.handleChangePage,
-              total: this.state.total,
-              size: 'small',
-            }}
-          />
-        </Modal>
-      </div>
+      <Select
+        id={this.props.id}
+        placeholder={this.props.placeholder}
+        onChange={this.handleChange}
+        value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : 'all')}
+        disabled={this.props.disabled}
+      >
+        {optionDom}
+      </Select>
     )
   }
 }
 
-SelectSbu.propTypes = {
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func.isRequired,
-    getFieldValue: PropTypes.func.isRequired,
-  }).isRequired,
-  value: PropTypes.arrayOf(PropTypes.string),
-  defaultQueryParam: PropTypes.string,
+SelectInvokeApi.propTypes = {
+  placeholder: PropTypes.string.isRequired,
+  typeCode: PropTypes.string.isRequired,
+  paramCode: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  initialValue: PropTypes.string,
+  hasEmpty: PropTypes.bool,
 }
-
-export default Form.create()(SelectSbu)
