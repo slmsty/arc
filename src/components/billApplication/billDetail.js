@@ -10,36 +10,66 @@ const { TextArea } = Input
 
 const columns = [{
   title: '开票内容',
-  dataIndex: 'content',
+  dataIndex: 'billingContent',
   width: 150,
+  render: () => (
+    <Input />
+  )
 }, {
   title: '规格型号',
-  dataIndex: 'xinghao',
+  dataIndex: 'specificationType',
   width: 100,
+  render: () => (
+    <Input placeholder="规格型号"/>
+  )
 }, {
   title: '单位',
-  dataIndex: 'danwei',
+  dataIndex: 'unit',
   width: 100,
+  render: () => (
+    <Input placeholder="单位"/>
+  )
 }, {
   title: '数量',
-  dataIndex: 'count',
+  dataIndex: 'quantity',
   width: 100,
+  render: () => (
+    <Input placeholder="数量" defaultValue="1" />
+  )
 }, {
   title: '单价',
-  dataIndex: 'price',
+  dataIndex: 'unitPrice',
   width: 100,
+  render: () => (
+    <Input placeholder="单价"/>
+  )
 }, {
   title: '金额',
-  dataIndex: 'money',
+  dataIndex: 'billingAmount',
   width: 100,
+  render: () => (
+    <Input placeholder="金额"/>
+  )
 }, {
   title: '税率',
-  dataIndex: 'rate',
+  dataIndex: 'billingTaxRate	',
   width: 100,
+  render: () => (
+    <SelectInvokeApi
+      typeCode="BILLING_APPLICATION"
+      paramCode="TAX_RATE"
+      placeholder="开票申请分类"
+      onChange={(v) => this.handleChange(v)}
+      hasEmpty
+    />
+  )
 }, {
   title: '税额',
-  dataIndex: 'rateaccount',
+  dataIndex: 'billingTaxAmount',
   width: 100,
+  render: () => (
+    <Input placeholder="税额"/>
+  )
 }]
 
 const totalColumns = [
@@ -98,29 +128,34 @@ const data = [{
   tax: '21000',
 }]
 
-const detailData = [{
-  title: '购买方',
-  customerName: '中国移动',
-  taxPayer: '212SDFX',
-  address: '北京市海淀区知春路010-89332322',
-  bankAccount: '招商银行'
-}, {
-  title: '销售方',
-  customerName: '亚信科技',
-  taxPayer: '243SDaaFX',
-  address: '北京市海淀区中关村',
-  bankAccount: '招商银行'
-}]
-
 class BillDetail extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      dataSource: [{
-
-      }]
+      dataSource: [],
+      count: 0,
     }
   }
+
+  handleAdd = () => {
+    const { count, dataSource } = this.state;
+    const newData = {
+      key: count,
+      billingContent: '',
+      specificationType: '',
+      unit: '',
+      quantity: '',
+      unitPrice: '',
+      billingAmount: '',
+      billingTaxRate: '',
+      billingTaxAmount: '',
+    };
+    this.setState({
+      dataSource: [...dataSource, newData],
+      count: count + 1,
+    });
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -148,6 +183,20 @@ class BillDetail extends React.Component {
         }
       },
     };
+    const { custInfo, comInfo, appLineItems} = this.props.detail
+    const detailData = [{
+      title: '购买方',
+      customerName: custInfo.billingCustName,
+      taxPayer: custInfo.taxpayerIdentificationNumber,
+      address: custInfo.addressPhoneNumber,
+      bankAccount: custInfo.bankBankAccount,
+    }, {
+      title: '销售方',
+      customerName: comInfo.billingComName,
+      taxPayer: comInfo.taxpayerIdentificationNumber,
+      address: comInfo.addressPhoneNumber,
+      bankAccount: comInfo.bankBankAccount
+    }]
     return (
       <div className="billing">
       <Modal
@@ -211,7 +260,7 @@ class BillDetail extends React.Component {
             pagination={false}
           />
           <div className="add-btns">
-            <Button type="primary" ghost onClick={() => this.setState({visible: true})}>新增</Button>
+            <Button type="primary" ghost onClick={() => this.setState({visible: true})}>+</Button>
           </div>
           <Table
             style={{marginBottom: '10px'}}

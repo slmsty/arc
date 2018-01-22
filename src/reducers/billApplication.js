@@ -8,7 +8,11 @@ const initState = {
   updateSuccess: false,
   addContractSuccess: false,
   otherSuccess: false,
-  billEditInfo: {},
+  editInfo: {
+    custInfo: {},
+    comInfo: {},
+    appLineItems: []
+  },
 }
 
 function loadingRequest(state) {

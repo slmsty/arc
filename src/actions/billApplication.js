@@ -119,3 +119,20 @@ export const billApplyEdit = (params) => {
     },
   }
 }
+/**
+ * 发票内容查询
+ * @param params
+ * @returns {{}}
+ */
+export const billContentSearch = (params) => {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/billingContent/search',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_CONTENT_SEARCH_SUCCESS'],
+    },
+  }
+}

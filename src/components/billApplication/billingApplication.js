@@ -53,12 +53,7 @@ const otherCols = [
   }, {
     title: '客户名称',
     dataIndex: 'custName',
-  }, {
-    title: '操作',
-    dataIndex: '',
-    width: 150,
-    render: () => <a href="#">修改</a>,
-  },
+  }
 ]
 
 const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
@@ -237,17 +232,7 @@ export default class BillingApplication extends React.Component {
         title: '付款金额',
         dataIndex: 'billedArAmount',
         width: 150,
-      }, {
-        title: '操作',
-        dataIndex: 'action',
-        width: 80,
-        render: (record) =>
-          <a href="#"
-            onClick={() => {
-              this.setState({updateVisible: true, arBillingId: record.arBillingId})}
-            }
-          >修改</a>,
-      },
+      }
     ]
     if (normalTypes.includes(type)) {
       return normalCols
@@ -275,7 +260,6 @@ export default class BillingApplication extends React.Component {
       billingApplicationType: this.state.currentType,
       contractItems,
     }
-    console.log(param)
     this.props.billApplyEdit(param)
     this.setState({detailVisible: true})
   }
@@ -302,7 +286,10 @@ export default class BillingApplication extends React.Component {
       )
     } else if (redTypes.includes(type)) {
       return (
-        <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
+        <div>
+          <Button type="primary" ghost onClick={() => this.handleBilling()}>红冲</Button>
+          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
+        </div>
       )
     } else if (otherTypes.includes(type)) {
       return (
@@ -315,7 +302,7 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
-    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract } = this.props
+    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo } = this.props
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
@@ -343,6 +330,7 @@ export default class BillingApplication extends React.Component {
         <BillDetail
           visible={this.state.detailVisible}
           onCancel={() => this.setState({detailVisible: false})}
+          detail={editInfo}
         />
         <BillUpdate
           visible={updateVisible}
