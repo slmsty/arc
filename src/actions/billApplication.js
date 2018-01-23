@@ -136,3 +136,24 @@ export const billContentSearch = (params) => {
     },
   }
 }
+/**
+ * 开票
+ * @param params
+ * @returns {{}}
+ */
+export const billApplySave = (params) => {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/apply/save',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_APPLY_SAVE_SUCCESS'],
+    },
+  }
+}
+
+export const initData = () => (
+  {type: 'INIT_DATA'}
+)

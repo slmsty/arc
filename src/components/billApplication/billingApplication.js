@@ -102,6 +102,7 @@ export default class BillingApplication extends React.Component {
   }
 
   getApplyChange = (value) => {
+    this.props.initData()
     this.setState({
       currentType: value,
     })
@@ -248,6 +249,7 @@ export default class BillingApplication extends React.Component {
   handleBilling = () => {
     if(this.state.selectedRows.length === 0) {
       message.warn('请选择要开票的记录!')
+      return
     }
     let contractItems = []
     this.state.selectedRows.map(b => {
@@ -302,7 +304,7 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
-    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo } = this.props
+    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave } = this.props
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
@@ -327,11 +329,14 @@ export default class BillingApplication extends React.Component {
           columns={this.getApplyColumns()}
           dataSource={billList}
         />
-        <BillDetail
-          visible={this.state.detailVisible}
-          onCancel={() => this.setState({detailVisible: false})}
-          detail={editInfo}
-        />
+        {this.state.detailVisible ?
+          <BillDetail
+            onCancel={() => this.setState({detailVisible: false})}
+            detail={editInfo}
+            billType={this.state.currentType}
+            billApplySave={billApplySave}
+          /> : null
+        }
         <BillUpdate
           visible={updateVisible}
           onCancel={() => this.setState({updateVisible: false})}

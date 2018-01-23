@@ -85,7 +85,7 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
-                  {getFieldDecorator('comName')(
+                  {getFieldDecorator('comName', {rules: [{ required: true, message: '请选择签约公司!' }]} )(
                     <SelectSearch
                       url="/arc/billingApplication/company/search"
                       columns={comCols}
@@ -100,7 +100,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="客户名称">
                   {
                     getFieldDecorator('custName',{
-                      initialValue: '',
+                      initialValue: '', rules: [{ required: true, message: '请选择客户名称!' }]
                     })(
                       <SelectSearch
                         url="/arc/billingApplication/custom/search"
@@ -142,7 +142,7 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('projectNo')(
+                  {getFieldDecorator('projectNo', {rules: [{ required: true, message: '请选择项目编码!' }]})(
                     <SelectSearch
                       url="/arc/billingApplication/projectNo/search"
                       columns={proCols}
@@ -177,7 +177,7 @@ class BillUpdate extends React.Component {
                 <Row gutter={30}>
                   <Col span={12} key={1}>
                     <FormItem {...formItemLayout} label="提前开票备注">
-                      {getFieldDecorator('advanceBillingRemark')(
+                      {getFieldDecorator('advanceBillingRemark', {rules: [{ required: this.state.reasonId === 'other', message: '请选择项目编码!' }]})(
                         <Input placeholder="提前开票备注"/>
                       )}
                     </FormItem>

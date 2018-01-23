@@ -66,7 +66,7 @@ class OtherContractAdd extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
-                  {getFieldDecorator('comName')(
+                  {getFieldDecorator('comName', {rules: [{ required: true, message: '请选择签约公司!' }]})(
                     <SelectSearch
                       url="/arc/billingApplication/company/search"
                       columns={comCols}
@@ -81,7 +81,7 @@ class OtherContractAdd extends React.Component {
                 <FormItem {...formItemLayout} label="客户名称">
                   {
                     getFieldDecorator('custName',{
-                      initialValue: '',
+                      initialValue: '', rules: [{ required: true, message: '请选择客户名称!' }]
                     })(
                       <SelectSearch
                         url="/arc/billingApplication/custom/search"

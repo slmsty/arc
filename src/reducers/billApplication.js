@@ -13,6 +13,8 @@ const initState = {
     comInfo: {},
     appLineItems: []
   },
+  billContents: [],
+  billSaveSuccess: false,
 }
 
 function loadingRequest(state) {
@@ -78,8 +80,33 @@ function billApplyEdit(state, action) {
   }
 }
 
+function billContentSearch(state, action) {
+  return {
+    ...state,
+    billContents: action.response.data,
+  }
+}
+
+function billApplySave(state, action) {
+  return {
+    ...state,
+    billSaveSuccess: true,
+  }
+}
+
+function initData(state) {
+  return {
+    ...state,
+    billList: [],
+    addSuccess: false,
+    updateSuccess: false,
+    billSaveSuccess: false,
+  }
+}
+
 export default caseReducer(initState, {
   LOADING_REQUEST: loadingRequest,
+  INIT_DATA: initData,
   GET_BILL_COMPANY_SUCCESS: getBillCompany,
   GET_BILL_CLIENTS_SUCCESS: getBillClients,
   BILL_APPLY_SEARCH_SUCCESS: billApplySearch,
@@ -87,4 +114,6 @@ export default caseReducer(initState, {
   ADD_BILL_UN_CONTRACT_SUCCESS: addBillUnContract,
   ADD_OTHER_CONTRACT_SUCCESS: addOtherContract,
   BILL_APPLY_EDIT_SUCCESS: billApplyEdit,
+  BILL_CONTENT_SEARCH_SUCCESS: billContentSearch,
+  BILL_APPLY_SAVE_SUCCESS: billApplySave,
 })
