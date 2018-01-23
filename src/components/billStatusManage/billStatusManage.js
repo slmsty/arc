@@ -193,26 +193,41 @@ export default class BillStatusCon extends React.Component {
       message.error('请选择要传送AP的数据')
       return
     }
-    console.log(param)
-    return
-    this.props.sendAP(param).then((res)=>{
+    const sendApParam = {
+      applicationId: this.state.selectedRows[0].billingApplicationId,
+      glData: param,
+    }
+    let title = ''
+    let msgtitle = <div><p style={{display: 'inline-block',width:'100px'}}>id</p><p style={{display: 'inline-block',width:'190px'}}>msg</p></div>
+    this.props.sendAP(sendApParam).then((res)=>{
+      title = res.response.data.description
+      let data = res.response.data.applicationStatusResults
+      //let data = res.response.data.applicationStatusResults = [ { "applicationId":"18010500003", "errorMessage":"状态不为作废审批中,不允许撤销!" }, { "applicationId":"18010500004", "errorMessage":"" } ]
+      let msg = data.map((item)=>{
+        return <div><p style={{display: 'inline-block',width:'100px'}}>{item.applicationId}</p><p style={{display: 'inline-block',width:'190px'}}>{item.errorMessage}</p></div>
+      })
       if (res && res.response && res.response.resultCode === '000000') {
-        that.setState({
-        })
-        message.success('撤销成功')
       } else {
-        message.error(res.response.resultMessage)
       }
+      Modal.info({
+        title: title,
+        content: msg,
+      })
     })
-    const that = this
-    let successMsg = `传送成功${this.state.selectedRowKeys.length}条数据`
-    let failMsg = `${this.state.selectedRowKeys.length}条数据传送失败，且提示失败原因`
-    Modal.info({
-      content: failMsg,
+    this.setState({
+      showGlDateModal: false,
     })
-
   }
   showGlDate = () => {
+    console.log(this.state.billResultSelectedRowKeys)
+    if (this.state.selectedRowKeys.length === 0) {
+      message.error('请选择要传送AP的数据')
+      return
+    }
+    if (this.state.selectedRowKeys.length > 1) {
+      message.error('一次只能传送一条数据')
+      return
+    }
     this.setState({
       showGlDateModal: true,
     })
@@ -240,13 +255,13 @@ export default class BillStatusCon extends React.Component {
     console.log(param)
     this.props.disableApprove(param).then((res)=>{
       if (res && res.response && res.response.resultCode === '000000') {
-        this.setState({
-          calcelModalVisitable: false,
-        })
         message.success('作废成功')
       } else {
         message.error('作废失败')
       }
+    })
+    this.setState({
+      calcelModalVisitable: false,
     })
 }
   // 关闭作废modal
@@ -360,6 +375,7 @@ export default class BillStatusCon extends React.Component {
         title: '开票税额',
         dataIndex: 'billingTaxAmount',
         width: 100,
+        render: (text, record, index) => (text ? currency(text) : text),
       },
     ]
     const billApproveItemColumns = [
@@ -577,6 +593,7 @@ export default class BillStatusCon extends React.Component {
               data={this.state.billResultSelectedRows}
               dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
               disableApprove={this.disableApprove}
+              DetailList={this.props.billStatusManage.getBillStatusDetailList}
             />
             : ''
         }

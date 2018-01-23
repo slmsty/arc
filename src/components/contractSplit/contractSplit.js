@@ -10,6 +10,9 @@ export default class ApplySearchCon extends React.Component {
   state = {
     loading: false,
     contarctSplitModal: false,
+    splitStatus: true,
+    selectedRowKeys: '',
+    selectedRows: '',
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -44,9 +47,7 @@ export default class ApplySearchCon extends React.Component {
       this.setState({
         loading: false,
       })
-      console.log(this.queryParam)
       if (res && res.response && res.response.resultCode === '000000') {
-        console.log('数据查询成功')
       } else {
         message.error('加载数据失败')
       }
@@ -66,7 +67,10 @@ export default class ApplySearchCon extends React.Component {
     this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    this.setState({ selectedRowKeys, selectedRows })
+    this.setState({
+      selectedRowKeys:selectedRowKeys,
+      selectedRows:selectedRows,
+    })
   }
   saveContractSplitInfo = (param) => {
     this.props.saveContractSplitInfo(param).then((res) => {
@@ -91,6 +95,14 @@ export default class ApplySearchCon extends React.Component {
    function contractSplitInfo
    */
   showContractSplitInfo = () => {
+    if(this.state.selectedRowKeys.length>1){
+      message.error('一次只能对一条数据进行拆分')
+      return
+    }
+    if(this.state.selectedRowKeys.length==0){
+      message.error('请选择需要拆分的数据')
+      return
+    }
     this.setState({
       contarctSplitModal: true,
     })
@@ -172,10 +184,10 @@ export default class ApplySearchCon extends React.Component {
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />
         <br /><br />
-        <Button type="primary" onClick={this.showContractSplitInfo}>合同拆分</Button>
+        <Button type="primary" onClick={this.showContractSplitInfo} disabled={this.state.selectedRowKeys.length>0 ? false : true}>合同拆分</Button>
         <br /><br />
         {
-          this.state.selectedRows ?
+          this.state.selectedRows && this.state.selectedRows[0] ?
             <ContractSplitModal
               ModalVisible={this.state.contarctSplitModal}
               closeModal={this.closeModalClaim}

@@ -3,13 +3,17 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
+import currency from '../../util/currency'
+import { Modal, Row, Col, Button, Input, Form, Table, message, Select } from 'antd'
 
+const { TextArea } = Input
+const Option = Select.Option
 class CancelModal extends React.Component {
   state = {
     selectedRowKeys: '',
     selectedRows: '',
     disableDis: true,
+    showNewApplayDis: false,
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     if(selectedRowKeys.length){
@@ -21,8 +25,6 @@ class CancelModal extends React.Component {
         disableDis: true,
       })
     }
-    console.log(selectedRows)
-    console.log(this.props.data)
     this.setState({ selectedRowKeys, selectedRows })
   }
   // 作废
@@ -31,22 +33,29 @@ class CancelModal extends React.Component {
       message.error('请选择要作废的数据')
       return
     }
-    console.log(this.state.selectedRows)
-    console.log(this.props.data)
     const params={
       applicationId: this.props.data[0].applicationId,
       applineId: this.state.selectedRows[0].billingLineId,
       outcomeId: this.props.data[0].outcomeId,
-      /*invalidAmount: this.state.selectedRows[0].invalidAmount,*/
-      invalidAmount: "100",
+      invalidAmount: this.state.selectedRows[0].invalidAmount,
+      isAgainInvoice: this.state.showNewApplayDis,
+      appLineItems:this.props.DetailList,
     }
+    // console.log('params',params)
     this.props.disableApprove(params)
-    /*const that = this
-    let successMsg = `作废成功${this.state.selectedRowKeys.length}条数据`
-    let failMsg = `${this.state.selectedRowKeys.length}条数据作废失败，且提示失败原因`
-    Modal.info({
-      content: failMsg,
-    })*/
+  }
+  showNewApplay = (flag) => {
+    console.log(flag)
+    if(flag=='1'){
+      this.setState({
+        showNewApplayDis: true,
+      })
+    }
+    if(flag=='2'){
+      this.setState({
+        showNewApplayDis: false,
+      })
+    }
   }
   render() {
     let dataSource = this.props.data
@@ -80,20 +89,99 @@ class CancelModal extends React.Component {
       title: '付款金额',
       dataIndex: 'paymentAmount',
       width: 150,
+      render: (text, record, index) => (text ? currency(text) : text),
     }, {
       title: 'Billed AR金额',
       dataIndex: 'arAmount',
       width: 150,
+      render: (text, record, index) => (text ? currency(text) : text),
     }, {
       title: '已开票金额',
       dataIndex: 'invoiceAmount',
       width: 100,
+      render: (text, record, index) => (text ? currency(text) : text),
     }, {
       title: '作废金额',
       dataIndex: 'invalidAmount',
       width: 150,
+      render: (text, record, index) => (text ? currency(text) : text),
     },
     ]
+    const newColumns = [
+      {
+        title: '',
+        dataIndex: 'title',
+        width: 150,
+      }, {
+        title: '客户名称',
+        dataIndex: 'customerName',
+        width: 150,
+      },
+      {
+        title: '纳税人识别号',
+        dataIndex: 'taxPayer',
+        width: 150,
+      },
+      {
+        title: '地址电话',
+        dataIndex: 'address',
+        width: 150,
+      },
+      {
+        title: '开户行及账号',
+        dataIndex: 'bankAccount',
+        width: 150,
+      },
+    ]
+    const detailData = [{
+      title: '购买方',
+      customerName: '中国移动',
+      taxPayer: '212SDFX',
+      address: '北京市海淀区知春路010-89332322',
+      bankAccount: '招商银行'
+    }, {
+      title: '销售方',
+      customerName: '亚信科技',
+      taxPayer: '243SDaaFX',
+      address: '北京市海淀区中关村',
+      bankAccount: '招商银行'
+    }]
+    const contentsColumns = [{
+      title: '开票内容',
+      dataIndex: 'billingContent',
+      width: 150,
+    }, {
+      title: '规格型号',
+      dataIndex: 'specificationType',
+      width: 100,
+    }, {
+      title: '单位',
+      dataIndex: 'unit',
+      width: 100,
+    }, {
+      title: '数量',
+      dataIndex: 'quantity',
+      width: 100,
+    }, {
+      title: '单价',
+      dataIndex: 'unitPrice',
+      width: 100,
+      render: (text, record, index) => (text ? currency(text) : text),
+    }, {
+      title: '金额',
+      dataIndex: 'billingAmount',
+      width: 100,
+      render: (text, record, index) => (text ? currency(text) : text),
+    }, {
+      title: '税率',
+      dataIndex: 'billingTaxRate',
+      width: 100,
+    }, {
+      title: '税额',
+      dataIndex: 'billingTaxAmount',
+      width: 100,
+      render: (text, record, index) => (text ? currency(text) : text),
+    }]
     const { selectedRowKeys } = this.state
     const rowSelection = {
       selectedRowKeys,
@@ -108,9 +196,21 @@ class CancelModal extends React.Component {
           visible={this.props.visible}
           onCancel={this.props.onCancel}
           onOk={this.props.onOk}
-          footer={null}
+          footer={
+            <Button onClick={this.disableItem}>
+              确认
+            </Button>
+          }
         >
-          <Button onClick={this.disableItem} disabled={this.state.disableDis}>作废</Button> &nbsp;&nbsp;
+          <Row gutter={40}>
+            <Col span={16} key={1}>
+             是否重新开票：
+              <Select disabled={this.state.selectedRowKeys.length > 0 ? false : true} defaultValue="N" onChange={(v) => this.setState({showNewApplayDis: v === 'Y' ? true : false })}>
+                <Option value="Y">是</Option>
+                <Option value="N">否</Option>
+              </Select>
+            </Col>
+          </Row>
           <br />
           <br />
           <Table
@@ -123,6 +223,44 @@ class CancelModal extends React.Component {
             scroll={{ x: '1700px' }}
             dataSource={this.props.dataSource}
           />
+          <br /><br />
+          {
+            this.state.showNewApplayDis && this.state.selectedRowKeys.length ?
+              <div>
+                <Table
+                  rowKey="receiptClaimId"
+                  columns={newColumns}
+                  pagination={false}
+                  bordered
+                  size="small"
+                  scroll={{x: '750px'}}
+                  dataSource={detailData}
+                />
+                <br /><br />
+                <Table
+                  rowKey="receiptClaimId"
+                  columns={contentsColumns}
+                  pagination={false}
+                  bordered
+                  size="small"
+                  scroll={{x: '750px'}}
+                  dataSource={this.props.DetailList}
+                />
+                <br /><br />
+                <div>
+                  <span style={{display:'inline-block'}}>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</span>
+                  <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea/></span>
+
+                </div>
+                <div style={{marginTop:'20px'}}>
+                  <span style={{display:'inline-block'}}>开票要求：</span>
+                  <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea/></span>
+
+                </div>
+              </div>
+
+            : ''
+          }
         </Modal>
       </div>
     )

@@ -34,16 +34,16 @@ const tableData = [{
   serviceStartDate: 0,
   serviceEndDate: 0,
 }]
-const EditableCell = ({ value, onChange, column }) => (
+
+const EditableCell = ({ value, onChange, column,disable}) => (
   <div style={{ position: 'relative' }}>
-    <Input value={value} onChange={e => onChange(e.target.value)} />
+    <Input value={value} onChange={e => onChange(e.target.value)} disabled={disable}/>
     {column === 'discount' ?
       <span style={{ position: 'absolute', right: '10px', top: '20%' }}>%</span>
       : ''
     }
   </div>
 )
-
 class ContractSplitModal extends React.Component{
   state = {
     dataSource: tableData,
@@ -52,6 +52,7 @@ class ContractSplitModal extends React.Component{
     rcontentnum: 0,
     countTaskCost: 0.00,
     countTaskCostData: {},
+    editFlag: true,
   }
   selectDateChange = (data) => {
     const newData = [...this.state.dataSource]
@@ -114,6 +115,7 @@ class ContractSplitModal extends React.Component{
         column={column}
         value={text ? text : 0}
         onChange={value => this.handleInputChange(value, index, column)}
+        disable={this.state.editFlag}
       />
     )
   }
@@ -198,6 +200,7 @@ class ContractSplitModal extends React.Component{
     param.projectBuNo = param && param.projectBuNo ? param.projectBuNo[1] : ''
     param.relatedBuNo = param && param.relatedBuNo ? param.relatedBuNo[1] : ''
     const splitListInfo = this.state.dataSource
+    splitListInfo.pop()
     const postParams = {}
     postParams.splitListInfo = splitListInfo
     postParams.contractInfo = this.props.data
@@ -216,15 +219,18 @@ class ContractSplitModal extends React.Component{
     this.props.saveInfo(postParams)
   }
   handleTaskCostChange = (e,flag) =>{
-    console.log(e.target.value)
-    console.log(flag)
     const currentValue = e.target.value
     const countValueData = this.state.countTaskCostData
     countValueData[flag] = currentValue
     this.setState({
       countTaskCostData:countValueData,
     })
-
+  }
+  handleEdit = () => {
+    const editFlag = this.state.editFlag
+    this.setState({
+      editFlag: !editFlag,
+    })
   }
   render() {
     const constractData = this.props.data
@@ -235,12 +241,9 @@ class ContractSplitModal extends React.Component{
     let countGrossOrder = 0 // GrossOrder
     let countTaskCost = 0;
     const countTaskCostData = this.state.countTaskCostData
-    console.log(this.state.countTaskCostData)
-    console.log(countTaskCostData)
     for(let i in countTaskCostData){
       countTaskCost +=parseFloat(countTaskCostData[i])
     }
-    console.log(countTaskCost)
     const coutnData = [...this.state.dataSource]
     coutnData.map((item) => {
       if (item.taskOpration !== 'addSub') {
@@ -362,6 +365,9 @@ class ContractSplitModal extends React.Component{
           visible={this.props.ModalVisible}
           onCancel={this.closeClaim}
           footer={[
+            <Button onClick={this.handleEdit}>
+              编辑
+            </Button>,
             <Button key="submit" onClick={this.handleOk}>
               保存
             </Button>,
@@ -602,7 +608,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={5} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('task3tCost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task3tCost')} />)
+                      getFieldDecorator('task3tCost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task3tCost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
 
@@ -613,7 +619,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={9} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('task4tCost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task4tCost')} />)
+                      getFieldDecorator('task4tCost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task4tCost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
@@ -625,7 +631,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={5} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('task5Cost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task5Cost')} />)
+                      getFieldDecorator('task5Cost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task5Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
@@ -635,7 +641,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={9} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('task9Cost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task9Cost')} />)
+                      getFieldDecorator('task9Cost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task9Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
@@ -647,7 +653,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={19} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('intercompanyCost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'intercompanyCost')} />)
+                      getFieldDecorator('intercompanyCost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'intercompanyCost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
@@ -659,7 +665,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={19} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('subcontractFee')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'subcontractFee')} />)
+                      getFieldDecorator('subcontractFee')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'subcontractFee')} disabled={this.state.editFlag}/>)
                     }
                   </FormItem>
                 </Col>
