@@ -15,6 +15,7 @@ const initState = {
   },
   billContents: [],
   billSaveSuccess: false,
+  redApplySuccess: false,
 }
 
 function loadingRequest(state) {
@@ -104,6 +105,13 @@ function initData(state) {
   }
 }
 
+function billRedApply(state) {
+  return {
+    ...state,
+    redApplySuccess: true,
+  }
+}
+
 export default caseReducer(initState, {
   LOADING_REQUEST: loadingRequest,
   INIT_DATA: initData,
@@ -116,4 +124,5 @@ export default caseReducer(initState, {
   BILL_APPLY_EDIT_SUCCESS: billApplyEdit,
   BILL_CONTENT_SEARCH_SUCCESS: billContentSearch,
   BILL_APPLY_SAVE_SUCCESS: billApplySave,
+  BILL_RED_APPLY_SUCCESS: billRedApply,
 })

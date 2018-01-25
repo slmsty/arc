@@ -295,6 +295,12 @@ class BillDetail extends React.Component {
       address: comInfo.addressPhoneNumber,
       bankAccount: comInfo.bankBankAccount
     }]
+    const rowSelection = {
+      type: 'checkbox',
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+      }
+    }
     return (
       <Modal
         title="发票编辑"
@@ -362,6 +368,7 @@ class BillDetail extends React.Component {
             />
           </div>
           <Table
+            rowSelection={rowSelection}
             style={{marginBottom: '10px'}}
             rowKey="receiptClaimId"
             bordered

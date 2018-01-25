@@ -98,6 +98,8 @@ export default class BillingApplication extends React.Component {
         billingApplicationType: this.state.currentType,
       }
       this.props.billApplySearch(params)
+    } else if(this.props.redApplySuccess != nextProps.redApplySuccess && nextProps.redApplySuccess) {
+      message.success('发票红冲成功!')
     }
   }
 
@@ -187,7 +189,7 @@ export default class BillingApplication extends React.Component {
     const redFontCols = [
       {
         title: '开票申请类别',
-        dataIndex: 'applyType',
+        dataIndex: 'billingApplicationTypeName',
         width: 100,
       }, {
         title: '发票号',
@@ -195,16 +197,19 @@ export default class BillingApplication extends React.Component {
         width: 150,
       }, {
         title: '开票金额',
-        dataIndex: 'invoiceMoney',
+        dataIndex: 'taxIncludeAmount',
         width: 100,
       }, {
         title: '开票税额',
-        dataIndex: 'invoiceshuie',
+        dataIndex: 'taxAmount',
         width: 100,
       }, {
         title: '开票税率',
-        dataIndex: 'invoiceRate',
+        dataIndex: 'taxRate',
         width: 100,
+        render: (text) => {
+          return `${text * 100}%`
+        }
       }, {
         title: '项目编码',
         dataIndex: 'projectNo',
@@ -232,7 +237,7 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '付款金额',
         dataIndex: 'billedArAmount',
-        width: 150,
+        width: 100,
       }
     ]
     if (normalTypes.includes(type)) {
@@ -273,6 +278,17 @@ export default class BillingApplication extends React.Component {
     })
   }
 
+  billRedApply = () => {
+    if(this.state.selectedRows.length === 0) {
+      message.warn('请选择要红冲的记录!')
+      return
+    }
+    const params = {
+      billingOutcomeId: this.state.selectedRows[0].billingOutcomeId
+    }
+    this.props.billRedApply(params)
+  }
+
   getBillBtns = () => {
     const type = this.state.currentType
     if (normalTypes.includes(type)) {
@@ -289,7 +305,7 @@ export default class BillingApplication extends React.Component {
     } else if (redTypes.includes(type)) {
       return (
         <div>
-          <Button type="primary" ghost onClick={() => this.handleBilling()}>红冲</Button>
+          <Button type="primary" ghost onClick={() => this.billRedApply()}>红冲</Button>
           <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
         </div>
       )
@@ -306,6 +322,7 @@ export default class BillingApplication extends React.Component {
   render() {
     const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave } = this.props
     const rowSelection = {
+      type: redTypes.includes(this.state.currentType) ? 'radio' : 'checkbox',
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
         this.setState({selectedRows: selectedRows})

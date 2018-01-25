@@ -157,3 +157,21 @@ export const billApplySave = (params) => {
 export const initData = () => (
   {type: 'INIT_DATA'}
 )
+
+/**
+ * 发票红冲
+ * @param params
+ * @returns {{}}
+ */
+export const billRedApply = (params) => {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/redApply',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_RED_APPLY_SUCCESS'],
+    },
+  }
+}
