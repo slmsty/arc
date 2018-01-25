@@ -82,7 +82,7 @@ class EditCBSTurnoverData extends React.Component {
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="相关票据">
                   {getFieldDecorator('relatedBills', {
-                    initialValue: this.props.initData.relatedBill,
+                    initialValue: [this.props.initData.relatedBill, this.props.initData.relatedBillBankTranNo, this.props.initData.relatedBillReceiptAmount],
                   })(<SelectBillDialog
                     disabled={this.props.initData.custPayMethod === 'bank_acceptance' || this.props.initData.custPayMethod === 'trade_acceptance'}
                   />)}
