@@ -4,16 +4,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import currency from '../../util/currency'
-import { Modal, Row, Col, Button, Input, Form, Table, message, Select } from 'antd'
+import SelectInvokeApi from '../common/selectInvokeApi'
+import moment from 'moment'
+import { Modal, Row, Col, Button, Input, Form, Table, message, Select,DatePicker } from 'antd'
 
 const { TextArea } = Input
 const Option = Select.Option
+const FormItem = Form.Item
+let No = parseInt(0)
+
 class CancelModal extends React.Component {
   state = {
     selectedRowKeys: '',
     selectedRows: '',
     disableDis: true,
-    showNewApplayDis: false,
+    showNewApplayDis: true,
+    contentData: [],
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     if(selectedRowKeys.length){
@@ -44,21 +50,102 @@ class CancelModal extends React.Component {
     // console.log('params',params)
     this.props.disableApprove(params)
   }
-  showNewApplay = (flag) => {
-    console.log(flag)
-    if(flag=='1'){
+  editContentLine = (flag) => {
+    if(this.state.selectedRows.length==0){
+      message.error('请选择数据')
+      return
+    }
+    if(this.state.selectedRows.length>1){
+      message.error('一次只能对一条数据进行操作')
+      return
+    }
+    const selectData = this.state.selectedRows
+     const selectKey = this.state.selectedRowKeys
+     const addData = {
+       billingContent: '',
+       specificationType: '',
+       unit: '',
+       quantity: 1,
+       unitPrice: '',
+       billingAmount: '',
+       billingTaxRate: '',
+       billingTaxAmount: '',
+       arBillingId:'',
+       contractItemId:'',
+       lineNo:'',
+       addFlag: true,
+       groupNo:'',
+     }
+    let propsData = this.state.contentData.length ? this.state.contentData : this.props.DetailList
+    console.log('length',propsData)
+    if(flag=='add'){
+      addData.arBillingId = selectData[0].arBillingId
+      addData.contractItemId = selectData[0].contractItemId
+      addData.lineNo = Number(selectKey) + 1
+      propsData.splice(Number(selectKey) + 1, 0, addData)
       this.setState({
-        showNewApplayDis: true,
+        selectedRows: '',
+        selectedRowKeys: '',
       })
     }
-    if(flag=='2'){
+    if(flag =='del' && selectData[0].addFlag ){
+      propsData.splice(Number(selectKey), 1)
       this.setState({
-        showNewApplayDis: false,
+        selectedRows: '',
+        selectedRowKeys: '',
       })
     }
+    this.setState({
+      contentData: propsData,
+    })
+  }
+  handleChangle = (e,index,colum) => {
+    let contentData = this.state.contentData
+    contentData[index][colum] = e.target.value
+    this.setState({
+      contentData: contentData,
+    })
+  }
+  inSameBill = () => {
+    No++
+    const selectData = this.state.selectedRowKeys
+    const contentData = this.state.contentData
+    console.log(selectData)
+    selectData.map((item,index)=>{
+      contentData.map((item2,index2)=>{
+        if(item==index2){
+          item2.groupNo = No
+        }
+      })
+    })
+    this.setState({
+      selectedRows: '',
+      selectedRowKeys: '',
+      contentData: contentData,
+    })
   }
   render() {
+    console.log('contentData',this.state.contentData)
+    const { getFieldDecorator } = this.props.form
+    const formItemLayout = {
+      labelCol: { span: 7 },
+      wrapperCol: { span: 12 },
+    }
     let dataSource = this.props.data
+    let detailDatas = this.props.applyData[0]
+    const detailData = [{
+      title: '购买方',
+      customerName: detailDatas.customerName,
+      taxPayer: detailDatas.customerTaxIdentifyCode,
+      address: detailDatas.customerAddressPhone,
+      bankAccount: detailDatas.customerBackAccount,
+    }, {
+      title: '销售方',
+      customerName: detailDatas.companyName,
+      taxPayer: detailDatas.companyTaxIdentifyCode,
+      address: detailDatas.companyAddressPhone,
+      bankAccount: detailDatas.companyBackAccount,
+    }]
     const columns = [{
       title: '项目编码',
       dataIndex: 'projectCode',
@@ -104,7 +191,14 @@ class CancelModal extends React.Component {
       title: '作废金额',
       dataIndex: 'invalidAmount',
       width: 150,
-      render: (text, record, index) => (text ? currency(text) : text),
+      render: (text, record, index) => {
+        return(
+          <Input
+            defaultValue={text ? currency(text) : text}
+            onChange={()=>this.handleChange(index)}
+          />
+        )
+      },
     },
     ]
     const newColumns = [
@@ -133,19 +227,6 @@ class CancelModal extends React.Component {
         width: 150,
       },
     ]
-    const detailData = [{
-      title: '购买方',
-      customerName: '中国移动',
-      taxPayer: '212SDFX',
-      address: '北京市海淀区知春路010-89332322',
-      bankAccount: '招商银行'
-    }, {
-      title: '销售方',
-      customerName: '亚信科技',
-      taxPayer: '243SDaaFX',
-      address: '北京市海淀区中关村',
-      bankAccount: '招商银行'
-    }]
     const contentsColumns = [{
       title: '开票内容',
       dataIndex: 'billingContent',
@@ -154,33 +235,69 @@ class CancelModal extends React.Component {
       title: '规格型号',
       dataIndex: 'specificationType',
       width: 100,
+      render:(text,record,index)=>{
+        return(
+          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'specificationType')} /> : text
+        )
+      },
     }, {
       title: '单位',
       dataIndex: 'unit',
       width: 100,
+      render:(text,record,index)=>{
+        return(
+          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'unit')} /> : text
+        )
+      },
     }, {
       title: '数量',
       dataIndex: 'quantity',
       width: 100,
+      render:(text,record,index)=>{
+        return(
+          record.addFlag ? <Input defaultValue={1} onChange={(e)=>this.handleChangle(e,index,'quantity')} /> : text
+        )
+      },
     }, {
       title: '单价',
       dataIndex: 'unitPrice',
       width: 100,
-      render: (text, record, index) => (text ? currency(text) : text),
+      render:(text,record,index)=>{
+        return(
+          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'unitPrice')} /> : (text ? currency(text) : text)
+        )
+      },
     }, {
       title: '金额',
       dataIndex: 'billingAmount',
       width: 100,
-      render: (text, record, index) => (text ? currency(text) : text),
+      render:(text,record,index)=>{
+        return(
+          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'billingAmount')} /> : (text ? currency(text) : text)
+        )
+      },
     }, {
       title: '税率',
       dataIndex: 'billingTaxRate',
       width: 100,
+      render:(text,record,index)=>{
+        return(
+          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'billingTaxRate')} /> : text
+        )
+      },
     }, {
       title: '税额',
       dataIndex: 'billingTaxAmount',
       width: 100,
-      render: (text, record, index) => (text ? currency(text) : text),
+      render:(text,record,index)=>{
+        return(
+          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'billingTaxAmount')} /> : (text ? currency(text) : text)
+        )
+      },
+    }, {
+      title: '组号',
+      dataIndex: 'groupNo',
+      width: 100,
     }]
     const { selectedRowKeys } = this.state
     const rowSelection = {
@@ -197,70 +314,101 @@ class CancelModal extends React.Component {
           onCancel={this.props.onCancel}
           onOk={this.props.onOk}
           footer={
-            <Button onClick={this.disableItem}>
-              确认
-            </Button>
+            <div>
+              <Button onClick={this.disableItem}>
+                开票
+              </Button>
+            </div>
           }
         >
-          <Row gutter={40}>
-            <Col span={16} key={1}>
-             是否重新开票：
-              <Select disabled={this.state.selectedRowKeys.length > 0 ? false : true} defaultValue="N" onChange={(v) => this.setState({showNewApplayDis: v === 'Y' ? true : false })}>
-                <Option value="Y">是</Option>
-                <Option value="N">否</Option>
-              </Select>
-            </Col>
-          </Row>
-          <br />
-          <br />
-          <Table
-            rowKey="receiptClaimId"
-            rowSelection={rowSelection}
-            columns={columns}
-            pagination ={false}
-            bordered
-            size="small"
-            scroll={{ x: '1700px' }}
-            dataSource={this.props.dataSource}
-          />
-          <br /><br />
-          {
-            this.state.showNewApplayDis && this.state.selectedRowKeys.length ?
-              <div>
-                <Table
-                  rowKey="receiptClaimId"
-                  columns={newColumns}
-                  pagination={false}
-                  bordered
-                  size="small"
-                  scroll={{x: '750px'}}
-                  dataSource={detailData}
-                />
-                <br /><br />
-                <Table
-                  rowKey="receiptClaimId"
-                  columns={contentsColumns}
-                  pagination={false}
-                  bordered
-                  size="small"
-                  scroll={{x: '750px'}}
-                  dataSource={this.props.DetailList}
-                />
-                <br /><br />
+          <Form>
+            <Row gutter={40}>
+              <Col span={8} key={1}>
+                <FormItem {...formItemLayout} label="是否重新开票:">
+                  {getFieldDecorator('isAgainInvoice',{
+                    initialValue: 'N',
+                  })(
+                    <Select onChange={(v) => this.setState({showNewApplayDis: v === 'Y' ? true : false })}>
+                      <Option value="Y">是</Option>
+                      <Option value="N">否</Option>
+                    </Select>
+                  )}
+
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8} key={2}>
+                <FormItem {...formItemLayout} label="开票类型">
+                  {
+                    getFieldDecorator('billType',{
+                      initialValue: '',
+                    })(
+                      <SelectInvokeApi
+                        typeCode="BILLING_APPLICATION"
+                        paramCode="BILLING_TYPE"
+                        placeholder="开票类型"
+                        hasEmpty
+                      />
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8} key={3}>
+                <FormItem {...formItemLayout} label="开票日期">
+                  {
+                    getFieldDecorator('billingDate',{
+                      initialValue: moment(),
+                    })(
+                      <DatePicker format="YYYY-MM-DD"/>,
+                    )
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <br />
+            {
+              this.state.showNewApplayDis ?
                 <div>
-                  <span style={{display:'inline-block'}}>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</span>
-                  <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea/></span>
+                  <Table
+                    rowKey="receiptClaimId"
+                    columns={newColumns}
+                    pagination={false}
+                    bordered
+                    size="small"
+                    scroll={{x: '750px'}}
+                    dataSource={detailData}
+                  />
+                  <br /><br />
+                  <Button onClick={()=>this.editContentLine('add')}>+</Button>&nbsp;&nbsp;
+                  <Button onClick={()=>this.editContentLine('del')}>-</Button>&nbsp;&nbsp;
+                  <Button onClick={this.inSameBill}>同一开票</Button>
+                  <Table
+                    rowKey="receiptClaimId"
+                    rowSelection={rowSelection}
+                    columns={contentsColumns}
+                    pagination={false}
+                    bordered
+                    size="small"
+                    scroll={{x: '750px'}}
+                    dataSource={this.state.contentData.length ? this.state.contentData : this.props.DetailList}
+                  />
+                  <br /><br />
+                  <div>
+                    <span style={{display:'inline-block'}}>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</span>
+                    <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea/></span>
 
+                  </div>
+                  <div style={{marginTop:'20px'}}>
+                    <span style={{display:'inline-block'}}>开票要求：</span>
+                    <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea/></span>
+
+                  </div>
                 </div>
-                <div style={{marginTop:'20px'}}>
-                  <span style={{display:'inline-block'}}>开票要求：</span>
-                  <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea/></span>
 
-                </div>
-              </div>
-
-            : ''
-          }
+              : ''
+            }
+          </Form>
         </Modal>
       </div>
     )

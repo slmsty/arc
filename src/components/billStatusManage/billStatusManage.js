@@ -8,6 +8,7 @@ import BillStatusManageWithFrom from './billStatusManageWithFrom'
 import ItemInfo from './noApplyInfo'
 import DetailModal from './calcelDetail'
 import GlDateModal from './../common/glDateModal'
+import FileDownModal from './fileDownMotal'
 import currency from '../../util/currency'
 
 export default class BillStatusCon extends React.Component {
@@ -26,6 +27,8 @@ export default class BillStatusCon extends React.Component {
     calcelModalVisitable: false,
     cancelDis: true,
     showGlDateModal: false,
+    fileDownDis: false,
+    fileDownData: [],
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -277,6 +280,36 @@ export default class BillStatusCon extends React.Component {
       detail: record,
     })
   }
+  showBillFiles = (record) => {
+    // console.log(this.props.getBillStatusBillResultList)
+    record.attachment = "101111|下载文件一"
+    const attachment = record.attachment
+    let attachmentArray = attachment.split('|')
+    this.setState({
+      fileDownDis: true,
+      fileDownData: attachmentArray,
+    })
+  }
+  CloseFileDownModal = () => {
+    this.setState({
+      fileDownDis: false,
+      fileDownData: [],
+    })
+  }
+  fileDown = (id, name) => {
+    let params = {}
+    params.objectId = id
+    params.objectName = name
+    console.log(params)
+    this.props.fileDown(params).then((res)=>{
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.success('下载成功')
+      } else {
+        message.error('下载失败')
+      }
+    })
+
+  }
   render() {
     const billApprovecolumns = [{
       title: '数据状态',
@@ -438,6 +471,11 @@ export default class BillStatusCon extends React.Component {
         title: '发票号码',
         dataIndex: 'invoiceNumber',
         width: 100,
+        render: (text, record, index) => {
+          return (
+            <a href="javascript:;" onClick={()=>this.showBillFiles(record)}>{text}</a>
+          )
+        },
       },
       {
         title: '签约公司',
@@ -585,7 +623,7 @@ export default class BillStatusCon extends React.Component {
           : ''
         }
         {
-          this.state.billResultSelectedRows ?
+          this.state.billResultSelectedRows && this.state.selectedRowKeys.length>0?
             <DetailModal
               visible={this.state.calcelModalVisitable}
               onOk={this.closeDisableModal}
@@ -594,6 +632,7 @@ export default class BillStatusCon extends React.Component {
               dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
               disableApprove={this.disableApprove}
               DetailList={this.props.billStatusManage.getBillStatusDetailList}
+              applyData={this.state.selectedRows}
             />
             : ''
         }
@@ -612,6 +651,13 @@ export default class BillStatusCon extends React.Component {
           glDateModal={this.state.showGlDateModal}
           selectOk={this.sendAp}
           selectCancel={this.closeGlDateModal}
+        />
+        <FileDownModal
+          visible={this.state.fileDownDis}
+          onOk={this.CloseFileDownModal}
+          onCancel={this.CloseFileDownModal}
+          data={this.state.fileDownData}
+          fileDown={this.fileDown}
         />
       </div>
     )

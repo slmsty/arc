@@ -90,4 +90,16 @@ export function sendAP(queryParam) {
     },
   }
 }
+// 文件下载
+export function fileDown(queryParam) {
+  return {
+    [httpApi]: {
+      url: `/arc/file/download/${queryParam.objectId}/${queryParam.objectName}`,
+      options: {
+        method: 'GET',
+      },
+      types: ['FILE_DOWN_SUCCESS'],
+    },
+  }
+}
 

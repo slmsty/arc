@@ -12,7 +12,7 @@ import ProductLine from '../common/productLine'
 import MyDtatePicker from '../common/myDatePicker'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import currency from '../../util/currency'
-import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select } from 'antd'
+import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select, message } from 'antd'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -65,7 +65,7 @@ class ContractSplitModal extends React.Component{
     console.log(data)
     if(data){
       const newData = [...this.state.dataSource]
-      const indexData = data.No && data.Name ? data.Name : ''
+      const indexData = data.No && data.Name ? data.No : ''
       if(data.columns){
         newData[data.indexs][data.columns] = indexData
       }
@@ -201,6 +201,29 @@ class ContractSplitModal extends React.Component{
     param.relatedBuNo = param && param.relatedBuNo ? param.relatedBuNo[1] : ''
     const splitListInfo = this.state.dataSource
     splitListInfo.pop()
+    let length = splitListInfo.length
+    for(let i = 0; i< length; i++){
+      let parentPrice = splitListInfo[i].listPrice
+      let parentId = splitListInfo[i].orderListLineId
+      let subPrice = 0
+      let flag = true
+      for(let j=i;j<length;j++){
+        if(splitListInfo[j].parentOrderListLineId==parentId){
+          subPrice =parseFloat(splitListInfo[j].listPrice) + parseFloat(subPrice)
+          flag = false
+        }
+      }
+      console.log('parentPrice',parentPrice)
+      console.log('subPrice',subPrice)
+      if(!flag && parentPrice != subPrice){
+        message.error(`父级目录价与子级目录价之和不想等`)
+        return
+      }
+    }
+
+    splitListInfo.map((item,index)=>{
+
+    })
     const postParams = {}
     postParams.splitListInfo = splitListInfo
     postParams.contractInfo = this.props.data
@@ -215,7 +238,7 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
-    console.log('param',postParams)
+    console.log('splitListInfo',postParams.splitListInfo)
     this.props.saveInfo(postParams)
   }
   handleTaskCostChange = (e,flag) =>{

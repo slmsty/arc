@@ -15,6 +15,7 @@ const billStatusManageData = {
   },
   getBillStatusBillResultList: {
   },
+  getFileDownList: {},
   cancelApproveRefresh: new Date().getTime(),
 }
 
@@ -39,6 +40,9 @@ function cancelApprove(state) {
 function sendAP(state) {
   return { ...state, cancelApproveRefresh: new Date().getTime() }
 }
+function fileDown(state, action) {
+  return { ...state, getFileDownList: action.response.resultDetail }
+}
 
 
 export default caseReducer(billStatusManageData, {
@@ -49,4 +53,5 @@ export default caseReducer(billStatusManageData, {
   CANCEL_APPROVE_SUCCESS: cancelApprove,
   DISSABLE_APPROVE_SUCCESS: disableApprove,
   SEND_AP_SUCCESS: sendAP,
+  FILE_DOWN_SUCCESS: fileDown,
 })
