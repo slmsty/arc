@@ -3,6 +3,9 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
+import SelectRadioApi from '../common/selectRadioApi'
+import SelectInvokeApi from '../common/selectInvokeApi'
+import requestJsonFetch from '../../http/requestJsonFecth'
 import { Form, Row, Col, Button, Input, Icon, Radio } from 'antd'
 
 const FormItem = Form.Item
@@ -12,21 +15,40 @@ const RadioGroup = Radio.Group
 class ApplySearchCon extends React.Component {
   state = {
     showBillType: false,
+    options:[],
+    typeCode:'',
   }
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
+    console.log(param)
     this.props.onQuery(param)
   }
-  showBillType = () => {
+  handleRadioChange = (e) => {
     this.setState({
-      showBillType: true,
+      typeCode:e.target.value,
     })
+    const typeCode = e.target.value
+    const paramCode = "APPLY_TYPE"
+    requestJsonFetch(`/arc/sysparam/get/${typeCode}/${paramCode}`, { method: 'get' }, this.handleCallback)
   }
-  hiddlenBillType = () => {
-    this.setState({
-      showBillType: false,
-    })
+  handleCallback = (response) => {
+    if (response.resultCode === '000000') {
+      const options = response.data
+      if(options.length){
+        this.setState({
+          showBillType:true,
+        })
+      }
+      if(!options.length){
+        this.setState({
+          showBillType:false,
+        })
+      }
+      this.setState({
+        options,
+      })
+    }
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -51,34 +73,16 @@ class ApplySearchCon extends React.Component {
               </FormItem>
             </Col>
           </Row>
-          {/* <Row gutter={40}>
-            <Col span={8}>
-              <FormItem {...formItemLayout} label="项目编号">
-                {getFieldDecorator('projectNo')(<Input placeholder="项目编号" onPressEnter={this.handleQuery} />)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem {...formItemLayout} label="合同编号">
-                {getFieldDecorator('contractNo')(<Input placeholder="合同编号" onPressEnter={this.handleQuery} />)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem {...formItemLayout} label="合同名称">
-                {getFieldDecorator('contractName')(<Input placeholder="合同名称" onPressEnter={this.handleQuery} />)}
-              </FormItem>
-            </Col>
-          </Row> */}
           <Row gutter={40}>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="申请类型">
-                {getFieldDecorator('serviceType', {
-                  initialValue: 'ALL',
-                })(
-                  <RadioGroup size="large" style={{ width: '330px' }}>
-                    <RadioButton value="ALL" style={{ borderRadius: '4px' }} onClick={this.hiddlenBillType}>全部</RadioButton>
-                    <RadioButton value="badDebt" style={{ marginLeft: '10px', borderRadius: '4px' }} onClick={this.hiddlenBillType}>坏账申请</RadioButton>
-                    <RadioButton value="MONTH" style={{ marginLeft: '10px', borderRadius: '4px' }} onClick={this.showBillType}>发票申请</RadioButton>
-                  </RadioGroup>
+                {getFieldDecorator('serviceType')(
+                  <SelectRadioApi
+                    typeCode="WORK_FLOW"
+                    paramCode="APPLY_TYPE"
+                    onChange={(e)=>this.handleRadioChange(e)}
+                    options={[]}
+                  />
                 )}
               </FormItem>
             </Col>
@@ -89,17 +93,9 @@ class ApplySearchCon extends React.Component {
                 {getFieldDecorator('serviceSonType', {
                   initialValue: 'ALL',
                 })(
-                  <RadioGroup size="large" style={{ width: '1000px' }}>
-                    <RadioButton value="ALL" style={{ borderRadius: '4px' }}>全部</RadioButton>
-                    <RadioButton value="WEEK" style={{ marginLeft: '10px', borderRadius: '4px' }}>正常开票</RadioButton>
-                    <RadioButton value="MONTH" style={{ marginLeft: '10px', borderRadius: '4px' }}>已大签项目提前开票</RadioButton>
-                    <RadioButton value="WEEK1" style={{ marginLeft: '10px', borderRadius: '4px' }}>超额开票</RadioButton>
-                    <RadioButton value="MONTH2" style={{ marginLeft: '10px', borderRadius: '4px' }}>未大签提前开票</RadioButton>
-                    <RadioButton value="WEEK3" style={{ marginLeft: '10px', borderRadius: '4px' }}>红字发票开票</RadioButton>
-                    <RadioButton value="MONTH4" style={{ marginLeft: '10px', borderRadius: '4px' }}>其他红字发票</RadioButton>
-                    <RadioButton value="WEEK5" style={{ marginLeft: '10px', borderRadius: '4px' }}>废票开票</RadioButton>
-                    <RadioButton value="MONTH6" style={{ marginLeft: '10px', borderRadius: '4px' }}>其他开票</RadioButton>
-                  </RadioGroup>
+                  <SelectRadioApi
+                    options={this.state.options}
+                  />
                 )}
               </FormItem>
             </Col>
