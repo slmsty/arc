@@ -65,7 +65,7 @@ class ContractSplitModal extends React.Component{
     console.log(data)
     if(data){
       const newData = [...this.state.dataSource]
-      const indexData = data.No && data.Name ? data.No : ''
+      const indexData = data.No && data.Name ? data.Name : ''
       if(data.columns){
         newData[data.indexs][data.columns] = indexData
       }
@@ -94,19 +94,48 @@ class ContractSplitModal extends React.Component{
     if(column=="product"){
       return <ProductLine onCancel={()=>this.canCel(index,column)} onChange={this.handleChange} value={this.state.dataSource[index][column]}  indexs={index} columns={column} />
     }
-    if(column =='contractCategory'){
+    let typeCode = ''
+    let paramCode = ''
+    if(column ==='contractCategory'){
+      typeCode="BILLED_SPLIT"
+      paramCode="STATUS"
       return(
         <ContractType
           typeCode="BILLED_SPLIT"
           paramCode="STATUS"
-          placeholder="合同类型"
           hasEmpty
           onChange={this.handleChange}
-          value={this.state.dataSource[index][column]}
+          value={this.state.dataSource[index]['contractCategory']}
           indexs={index}
-          columns={column}
+          columns='contractCategory'
         />
-        )
+      )
+    }
+    if(column ==="returnTaxRate"){
+      return(
+        <ContractType
+          typeCode="BILLED_SPLIT"
+          paramCode="CONTRACT_TAX"
+          hasEmpty
+          onChange={this.handleChange}
+          value={this.state.dataSource[index]['returnTaxRate']}
+          indexs={index}
+          columns='returnTaxRate'
+        />
+      )
+    }
+    if(column ==='contractTaxRate'){
+      return(
+        <ContractType
+          typeCode='BILLED_SPLIT'
+          paramCode='RETURN_CONTRACT_TAX'
+          hasEmpty
+          onChange={this.handleChange}
+          value={this.state.dataSource[index]['contractTaxRate']}
+          indexs={index}
+          columns='contractTaxRate'
+        />
+      )
     }
   }
   renderInputColumns(text, index, column) {
@@ -238,7 +267,7 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
-    console.log('splitListInfo',postParams.splitListInfo)
+    //console.log('splitListInfo',postParams.splitListInfo)
     this.props.saveInfo(postParams)
   }
   handleTaskCostChange = (e,flag) =>{
@@ -337,7 +366,7 @@ class ContractSplitModal extends React.Component{
       title: '合同税率',
       dataIndex: 'contractTaxRate',
       width: 150,
-      render: (text, record, index) => record.taskOpration === '合计' ? '' : (text ? text : 0.18),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : (text ? text : this.renderColumns(text, index, 'contractTaxRate')),
     }, {
       title: '合同不含税额',
       dataIndex: 'contractAmountTaxExclude',
@@ -347,7 +376,7 @@ class ContractSplitModal extends React.Component{
       title: <span>退税率<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'returnTaxRate',
       width: 150,
-      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderInputColumns(text, index, 'returnTaxRate'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'returnTaxRate'),
     }, {
       title: '退税收入含税额',
       dataIndex: 'returnTaxRevenue',

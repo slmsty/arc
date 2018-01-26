@@ -13,6 +13,7 @@ export default class SelectInvokeApi extends React.Component {
   }
   componentDidMount() {
     if (this.props.typeCode && this.props.paramCode) {
+      console.log(this.props.paramCode)
       requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
     }
   }
@@ -28,6 +29,7 @@ export default class SelectInvokeApi extends React.Component {
     }
   }
   handleChange = (value) => {
+    console.log(value)
     const {indexs, columns} = this.props
     if (value === 'all') {
       this.props.onChange('')

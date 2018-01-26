@@ -326,7 +326,7 @@ export default class BillStatusCon extends React.Component {
       ),
     }, {
       title: '开票公司',
-      dataIndex: 'company',
+      dataIndex: 'companyName',
       width: 150,
     }, {
       title: '提前开票原因',
@@ -342,7 +342,7 @@ export default class BillStatusCon extends React.Component {
       width: 150,
     }, {
       title: '开票客户名称',
-      dataIndex: 'invoiceCustomer',
+      dataIndex: 'customerName',
       width: 150,
     }, {
       title: '纳税人识别号',
@@ -564,12 +564,12 @@ export default class BillStatusCon extends React.Component {
         <Table
           rowKey="receiptClaimId"
           rowSelection={rowSelection}
-          pagination={pagination}
           bordered
           columns={billApprovecolumns}
           size="small"
           scroll={{ x: '1530px', y: this.state.tableHeight }}
           loading={this.state.loading}
+          pagination={false}
           dataSource={this.props.billStatusManage.getBillStatusManageList.result}
         />
         <h2>开票申请详情</h2>
@@ -584,6 +584,7 @@ export default class BillStatusCon extends React.Component {
               scroll={{ x: '900px', y: this.state.tableHeight }}
               loading={this.state.loading}
               dataSource={this.props.billStatusManage.getBillStatusDetailList}
+              pagination={false}
             />
             <br />
           </div>
@@ -600,6 +601,7 @@ export default class BillStatusCon extends React.Component {
               size="small"
               scroll={{ x: '900px', y: this.state.tableHeight }}
               loading={this.state.loading}
+              pagination={false}
               dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
             />
             <br />
