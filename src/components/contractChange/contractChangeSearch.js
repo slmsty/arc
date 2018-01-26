@@ -40,7 +40,7 @@ class ContractChangeSerch extends React.Component {
             <Col span={9} key={1}>
               <FormItem {...formItemLayout} label="合同变更日期">
                 {getFieldDecorator('contractChangeDate', {
-                  initialValue: [moment('2017-08-01'), moment()],
+                  initialValue: [moment().subtract(1, 'day'), moment()],
                 })(
                   <RangePicker
                     allowClear

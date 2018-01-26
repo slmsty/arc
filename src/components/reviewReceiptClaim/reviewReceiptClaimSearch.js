@@ -55,7 +55,7 @@ class ReviewReceiptClaimSearch extends React.Component {
               <FormItem {...formItemLayout} label="收款日期">
                 {getFieldDecorator('receiptDate', {
                   // initialValue: [moment().subtract(1, 'month'), moment()],
-                  initialValue: [moment('2017-08-01'), moment()],
+                  initialValue: [moment().startOf('month'), moment().endOf('month')],
                 })(<RangePicker
                   allowClear
                   format={dateFormat}
@@ -151,7 +151,7 @@ class ReviewReceiptClaimSearch extends React.Component {
               <FormItem {...formItemLayout} label="操作日期">
                 {getFieldDecorator('statusDate', {
                   // initialValue: [moment().subtract(1, 'month'), moment()],
-                  initialValue: [moment('2017-08-01'), moment()],
+                  initialValue: [moment().startOf('month'), moment().endOf('month')],
                 })(<RangePicker
                   allowClear
                   format={dateFormat}
