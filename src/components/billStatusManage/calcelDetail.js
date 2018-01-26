@@ -5,6 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import currency from '../../util/currency'
 import SelectInvokeApi from '../common/selectInvokeApi'
+import SelectSearch from '../billApplication/selectSearch'
 import moment from 'moment'
 import { Modal, Row, Col, Button, Input, Form, Table, message, Select,DatePicker } from 'antd'
 
@@ -12,6 +13,15 @@ const { TextArea } = Input
 const Option = Select.Option
 const FormItem = Form.Item
 let No = parseInt(0)
+const contentCols = [{
+  title: '内容名称',
+  dataIndex: 'billingContentName',
+  width: 200,
+}, {
+  title: '内容',
+  dataIndex: 'billingRecordId',
+  width: 200,
+}]
 
 class CancelModal extends React.Component {
   state = {
@@ -20,6 +30,8 @@ class CancelModal extends React.Component {
     disableDis: true,
     showNewApplayDis: true,
     contentData: [],
+    invoiceRequire: '',
+    remark: '',
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     if(selectedRowKeys.length){
@@ -34,11 +46,10 @@ class CancelModal extends React.Component {
     this.setState({ selectedRowKeys, selectedRows })
   }
   // 作废
-  disableItem = () => {
-    if (this.state.selectedRowKeys.length === 0) {
-      message.error('请选择要作废的数据')
-      return
-    }
+  retBillItem = () => {
+    const param = this.props.form.getFieldsValue()
+    param.invoiceDate = param.invoiceDate && param.invoiceDate.length ? param.invoiceDate.format('YYYY-MM-DD') : ''
+    const selectData = this.state.contentData
     const params={
       applicationId: this.props.data[0].applicationId,
       applineId: this.state.selectedRows[0].billingLineId,
@@ -46,8 +57,11 @@ class CancelModal extends React.Component {
       invalidAmount: this.state.selectedRows[0].invalidAmount,
       isAgainInvoice: this.state.showNewApplayDis,
       appLineItems:this.props.DetailList,
+      remark:this.state.remark,
+      invoiceRequire:this.state.invoiceRequire,
+
     }
-    // console.log('params',params)
+    console.log('params',params)
     this.props.disableApprove(params)
   }
   editContentLine = (flag) => {
@@ -110,7 +124,6 @@ class CancelModal extends React.Component {
     No++
     const selectData = this.state.selectedRowKeys
     const contentData = this.state.contentData
-    console.log(selectData)
     selectData.map((item,index)=>{
       contentData.map((item2,index2)=>{
         if(item==index2){
@@ -124,7 +137,33 @@ class CancelModal extends React.Component {
       contentData: contentData,
     })
   }
+  handleContentChange = (value, col, index) => {
+    console.log(value, col, index)
+    let dataSource = this.state.contentData.length ? this.state.contentData : this.props.DetailList
+    if(col === 'billingContent') {
+      dataSource[index][col] = value[1]
+    } else {
+      dataSource[index][col] = value
+    }
+
+    this.setState({
+      contentData: dataSource
+    })
+  }
+  onTextAreaChange = (e) => {
+    const value = e.target.value
+    this.setState({
+      remark: value,
+    })
+  }
+  onTextAreaRequireChange = (e) => {
+    const value = e.target.value
+    this.setState({
+      invoiceRequire: value,
+    })
+  }
   render() {
+    console.log('init',this.props.DetailList)
     console.log('contentData',this.state.contentData)
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -231,6 +270,17 @@ class CancelModal extends React.Component {
       title: '开票内容',
       dataIndex: 'billingContent',
       width: 150,
+      render: (text, record, index) => (
+        <SelectSearch
+          url="/arc/billingApplication/billingContent/search"
+          columns={contentCols}
+          label="开票内容"
+          idKey="billingRecordId"
+          valueKey="billingContentName"
+          value={['',this.state.contentData.length ? this.state.contentData[index]['billingContent'] : '']}
+          onChange={(v) => this.handleContentChange(v, 'billingContent', index)}
+        />
+      )
     }, {
       title: '规格型号',
       dataIndex: 'specificationType',
@@ -315,7 +365,7 @@ class CancelModal extends React.Component {
           onOk={this.props.onOk}
           footer={
             <div>
-              <Button onClick={this.disableItem}>
+              <Button onClick={this.retBillItem}>
                 开票
               </Button>
             </div>
@@ -326,11 +376,11 @@ class CancelModal extends React.Component {
               <Col span={8} key={1}>
                 <FormItem {...formItemLayout} label="是否重新开票:">
                   {getFieldDecorator('isAgainInvoice',{
-                    initialValue: 'N',
+                    initialValue: 'true',
                   })(
-                    <Select onChange={(v) => this.setState({showNewApplayDis: v === 'Y' ? true : false })}>
-                      <Option value="Y">是</Option>
-                      <Option value="N">否</Option>
+                    <Select onChange={(v) => this.setState({showNewApplayDis: v === 'true' ? true : false })}>
+                      <Option value="true">是</Option>
+                      <Option value="false">否</Option>
                     </Select>
                   )}
 
@@ -341,7 +391,7 @@ class CancelModal extends React.Component {
               <Col span={8} key={2}>
                 <FormItem {...formItemLayout} label="开票类型">
                   {
-                    getFieldDecorator('billType',{
+                    getFieldDecorator('invoiceType',{
                       initialValue: '',
                     })(
                       <SelectInvokeApi
@@ -357,7 +407,7 @@ class CancelModal extends React.Component {
               <Col span={8} key={3}>
                 <FormItem {...formItemLayout} label="开票日期">
                   {
-                    getFieldDecorator('billingDate',{
+                    getFieldDecorator('invoiceDate',{
                       initialValue: moment(),
                     })(
                       <DatePicker format="YYYY-MM-DD"/>,
@@ -396,12 +446,12 @@ class CancelModal extends React.Component {
                   <br /><br />
                   <div>
                     <span style={{display:'inline-block'}}>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</span>
-                    <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea/></span>
+                    <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea value={this.state.remark} onChange={(e)=>this.onTextAreaChange(e)} /></span>
 
                   </div>
                   <div style={{marginTop:'20px'}}>
                     <span style={{display:'inline-block'}}>开票要求：</span>
-                    <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea/></span>
+                    <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea value={this.state.invoiceRequire} onChange={(e)=>this.onTextAreaRequireChange(e)} /></span>
 
                   </div>
                 </div>
