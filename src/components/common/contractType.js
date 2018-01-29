@@ -29,14 +29,19 @@ export default class SelectInvokeApi extends React.Component {
     }
   }
   handleChange = (value) => {
-    console.log(value)
+    let name = ''
+    this.state.options.map((item)=>{
+      if(item.paramValue==value){
+        name = item.paramValueDesc
+      }
+    })
     const {indexs, columns} = this.props
     if (value === 'all') {
       this.props.onChange('')
     } else {
       this.props.onChange({
         No: value,
-        Name:value,
+        Name:name,
         indexs: indexs,
         columns: columns,
       })
@@ -44,13 +49,14 @@ export default class SelectInvokeApi extends React.Component {
     }
   }
   render() {
-    const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
+    const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue ? option.paramValueDesc : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
+    console.log('propsvalue',this.props.value)
     return (
       <Select
         id={this.props.id}
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
-        value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : 'all')}
+        value={this.props.value ? this.props.value[1] : (this.props.initialValue ? this.props.initialValue : 'all')}
         disabled={this.props.disabled}
       >
         {optionDom}

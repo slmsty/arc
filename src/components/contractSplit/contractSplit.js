@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, Table, message } from 'antd'
+import { Button, Table, message, Row, Col } from 'antd'
 import ContractSplitWithFrom from './contractSplitWithFrom'
 import ContractSplitModal  from './contractSplitModal'
 export default class ApplySearchCon extends React.Component {
@@ -90,12 +90,15 @@ export default class ApplySearchCon extends React.Component {
     this.setState({
       contarctSplitModal: false,
       applyData: '',
+      selectedRowKeys: '',
+      selectedRows: '',
     })
   }
   /*
    function contractSplitInfo
    */
   showContractSplitInfo = () => {
+    console.log('length',this.state.selectedRowKeys.length)
     if(this.state.selectedRowKeys.length>1){
       message.error('一次只能对一条数据进行拆分')
       return
@@ -197,6 +200,11 @@ export default class ApplySearchCon extends React.Component {
             />
             : ''
         }
+        <Row>
+          <Col span={24} style={{textAlign:'right'}}>
+            共{this.props.contractSplitDara.getContractList.result.length}条记录
+          </Col>
+        </Row>
         <Table
           rowKey="receiptClaimId"
           rowSelection={rowSelection}

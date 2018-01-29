@@ -12,6 +12,7 @@ import ProductLine from '../common/productLine'
 import MyDtatePicker from '../common/myDatePicker'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import currency from '../../util/currency'
+import percent from '../../util/percent'
 import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select, message } from 'antd'
 
 const FormItem = Form.Item
@@ -65,10 +66,11 @@ class ContractSplitModal extends React.Component{
     console.log(data)
     if(data){
       const newData = [...this.state.dataSource]
-      const indexData = data.No && data.Name ? data.Name : ''
+      const indexData = data.No && data.Name ? [data.No,data.Name] : ''
       if(data.columns){
         newData[data.indexs][data.columns] = indexData
       }
+      this.inputChange(newData,[data.indexs])
       this.setState({
         dataSource: newData,
       })
@@ -105,9 +107,9 @@ class ContractSplitModal extends React.Component{
           paramCode="STATUS"
           hasEmpty
           onChange={this.handleChange}
-          value={this.state.dataSource[index]['contractCategory']}
+          value={this.state.dataSource[index][column]}
           indexs={index}
-          columns='contractCategory'
+          columns={column}
         />
       )
     }
@@ -118,9 +120,9 @@ class ContractSplitModal extends React.Component{
           paramCode="CONTRACT_TAX"
           hasEmpty
           onChange={this.handleChange}
-          value={this.state.dataSource[index]['returnTaxRate']}
+          value={this.state.dataSource[index][column]}
           indexs={index}
-          columns='returnTaxRate'
+          columns={column}
         />
       )
     }
@@ -131,9 +133,9 @@ class ContractSplitModal extends React.Component{
           paramCode='RETURN_CONTRACT_TAX'
           hasEmpty
           onChange={this.handleChange}
-          value={this.state.dataSource[index]['contractTaxRate']}
+          value={this.state.dataSource[index][column]}
           indexs={index}
-          columns='contractTaxRate'
+          columns={column}
         />
       )
     }
@@ -158,15 +160,23 @@ class ContractSplitModal extends React.Component{
       newData[index].returnTaxRevenue = 0 // 退税收入含税额
       newData[index].GrossOrder = 0 // 退税收入含税额
     } else {
-      newData[index].discountedPrice = (parseFloat(newData[index].listPrice) * (1 - parseFloat(newData[index].discount) * 0.01)).toFixed(2) // 折后合同额根据目录价和折扣计算出来
-      newData[index].contractAmountTaxInclude = (parseFloat(newData[index].listPrice) * (1 - parseFloat(newData[index].discount) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
-      newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + 0.18)).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
-      newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + 0.18) * (parseFloat(newData[index].returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
-      newData[index].GrossOrder = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + 0.18)).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
+      this.inputChange(newData,index)
     }
+
     this.setState({
       dataSource: newData,
     })
+  }
+  inputChange = (newData,index) => {
+    const contractTaxRate = newData[index].contractTaxRate && newData[index].contractTaxRate[1] ? percent(newData[index].contractTaxRate[1]) : ''
+    const returnTaxRate = newData[index].returnTaxRate && newData[index].returnTaxRate[1] ? percent(newData[index].returnTaxRate[1]) : ''
+    console.log('rate',returnTaxRate)
+    newData[index].discountedPrice = (parseFloat(newData[index].listPrice) * (1 - parseFloat(newData[index].discount) * 0.01)).toFixed(2) // 折后合同额根据目录价和折扣计算出来
+    newData[index].contractAmountTaxInclude = (parseFloat(newData[index].listPrice) * (1 - parseFloat(newData[index].discount) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
+    newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
+    newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate)) * (parseFloat(returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
+    newData[index].GrossOrder = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
+    return newData
   }
   onTextAreaChange = (event) => {
     let getValue = event.target.value
@@ -198,7 +208,7 @@ class ContractSplitModal extends React.Component{
       orderListLineId: '110'+new Date().getTime(),
       subRow: false,
     }
-    const subParentOrderListLineId = this.state.dataSource[index].orderListLineId
+    const subParentOrderListLineId = this.state.dataSource.length && this.state.dataSource[index].orderListLineId ? this.state.dataSource[index].orderListLineId : ''
     const newSubData = {
       taskOpration: 'addSub',
       parentKey: index,
@@ -250,10 +260,13 @@ class ContractSplitModal extends React.Component{
       }
     }
 
-    splitListInfo.map((item,index)=>{
-
-    })
     const postParams = {}
+    splitListInfo.map((item,index)=>{
+      item.product = item.product && item.product[0] ? item.product[0]:""
+      item.returnTaxRate = item.returnTaxRate && item.returnTaxRate[0] ? item.returnTaxRate[0] : ''
+      item.contractTaxRate = item.contractTaxRate && item.contractTaxRate[0] ? item.contractTaxRate[0] : ''
+      item.contractCategory = item.contractCategory && item.contractCategory[0] ? item.contractCategory[0] : ''
+    })
     postParams.splitListInfo = splitListInfo
     postParams.contractInfo = this.props.data
     postParams.contractInfo.projectBuNo = param.projectBuNo
@@ -285,6 +298,7 @@ class ContractSplitModal extends React.Component{
     })
   }
   render() {
+    console.log('dataSource',this.state.dataSource)
     const constractData = this.props.data
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
@@ -366,7 +380,7 @@ class ContractSplitModal extends React.Component{
       title: '合同税率',
       dataIndex: 'contractTaxRate',
       width: 150,
-      render: (text, record, index) => record.taskOpration === '合计' ? '' : (text ? text : this.renderColumns(text, index, 'contractTaxRate')),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractTaxRate'),
     }, {
       title: '合同不含税额',
       dataIndex: 'contractAmountTaxExclude',
@@ -478,7 +492,7 @@ class ContractSplitModal extends React.Component{
                   A-第三方产品：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
-                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value={constractData.aThirdProduct} disabled />
+                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value={constractData.aThirdProduct ? constractData.aThirdProduct : 0 } disabled />
                 </Col>
               </Row>
               <Row className="text-css contractRowBorderLeft contractRowBorderRight contractRowBorderTop">
@@ -486,7 +500,7 @@ class ContractSplitModal extends React.Component{
                   B-集成服务：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
-                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value={constractData.bIntegration} disabled />
+                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value={constractData.bIntegration ? constractData.bIntegration : 0} disabled />
                 </Col>
                 <Col span={3} className="contractRowBorderLeft">
                   C-软件解决方案：
@@ -498,7 +512,7 @@ class ContractSplitModal extends React.Component{
                   D-培训：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
-                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value={constractData.dTraining} disabled />
+                  <Input className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }} value={constractData.dTraining ? constractData.dTraining : 0} disabled />
                 </Col>
               </Row>
               <Row className="text-css contractRowBorderLeft contractRowBorderRight contractRowBorderTop">
