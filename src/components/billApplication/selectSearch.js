@@ -107,7 +107,7 @@ class SelectSearch extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = (this.props.value) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const suffix = (this.props.value && this.props.value[1] !== undefined) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input

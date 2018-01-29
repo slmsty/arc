@@ -3,6 +3,8 @@ import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from '
 import SelectSearch from './selectSearch'
 import SelectInvokeApi from '../common/selectInvokeApi'
 const FormItem = Form.Item
+const Option = Select.Option
+
 const clientCols = [{
   title: '客户名称',
   dataIndex: 'custName',
@@ -82,6 +84,35 @@ class BillUpdate extends React.Component {
           <Form
             className="ant-search-form"
           >
+            <Row gutter={30}>
+              <Col span={12} key={1}>
+                <FormItem {...formItemLayout} label="发票是否丢失">
+                  {getFieldDecorator('isLost', {initialValue: '', rules: [{ required: false, message: '请选择丢失情况!' }]} )(
+                    <Select>
+                      <Option value="">请选择</Option>
+                      <Option value="Y">是</Option>
+                      <Option value="N">否</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12} key={2}>
+                <FormItem {...formItemLayout} label="丢失类型">
+                  {
+                    getFieldDecorator('lostType',{
+                      initialValue: '', rules: [{ required: false, message: '请选择丢失类型!' }]
+                    })(
+                      <SelectInvokeApi
+                        typeCode="BILLING_APPLICATION"
+                        paramCode="LOSE_TYPE"
+                        placeholder="请选择丢失类型"
+                        hasEmpty
+                        onChange={(value) => this.setState({reasonId: value})}
+                      />)
+                  }
+                </FormItem>
+              </Col>
+            </Row>
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">

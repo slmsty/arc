@@ -82,6 +82,9 @@ class BillDetail extends React.Component {
       count: 0,
       content: '',
       taxRate: '',
+      selectedRowKeys: [],
+      selectedRows: [],
+      currentNo: 1,
     }
   }
 
@@ -91,6 +94,7 @@ class BillDetail extends React.Component {
       nextProps.detail.appLineItems.map((item, index) => {
         data.push({
           lineNo: index,
+          level: 1,
           arBillingId: item.arBillingId,
           contractItemId: item.contractItemId,
           billingContent: '',
@@ -111,6 +115,7 @@ class BillDetail extends React.Component {
     const { count, dataSource } = this.state;
     const newData = {
       lineNo: count,
+      level: 2,
       arBillingId,
       contractItemId,
       billingContent: '',
@@ -154,17 +159,39 @@ class BillDetail extends React.Component {
     });
   }
 
-  handleChange = (value, col, index) => {
+  handleChange = (value, col, index, record) => {
     console.log(value, col, index)
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
       dataSource[index][col] = value[1]
+    } else if(col === 'billingAmount') {
+      const result = dataSource.filter(d => d.level === 1 && record.arBillingId === d.arBillingId)[0]
+      dataSource[result.lineNo][col] = result.billingAmount - value
+      dataSource[index][col] = value
     } else {
       dataSource[index][col] = value
     }
-
     this.setState({
       dataSource: dataSource
+    })
+  }
+
+  billingUnify = () => {
+    let { selectedRows, currentNo, dataSource } = this.state
+    //判断是否存在不一致组号
+    const groupNo = selectedRows[0].groupNo
+    selectedRows.map(record => {
+      if(dataSource[record.lineNo]['groupNo'] !== groupNo) {
+        currentNo = 1
+      }
+    })
+    selectedRows.map((record, index) => {
+      dataSource[record.lineNo]['groupNo'] = currentNo
+    })
+    this.setState({
+      dataSource: dataSource,
+      selectedRowKeys: [],
+      currentNo: currentNo + 1,
     })
   }
 
@@ -179,20 +206,28 @@ class BillDetail extends React.Component {
       wrapperCol: { span: 21 },
     }
     const columns = [{
-        title: '操作',
-        dataIndex: 'action',
-        width: 70,
-        render: (text, record, index) => (
-          <div>
-            <Button type="primary" style={{padding: '0 10px'}} ghost onClick={() => this.handleAdd(record.arBillingId, record.contractItemId)}>+</Button>
-            {
-              this.state.dataSource.length > 1 ?
-                <Button type="primary" style={{marginLeft: '5px', padding: '0 10px'}} ghost onClick={() => this.handleDelete(record.lineNo)}>-</Button>
-                : null
-            }
-          </div>
-        )
-      }, {
+      title: '操作',
+      dataIndex: 'action',
+      width: 70,
+      render: (text, record, index) => (
+        <div>
+          {
+            record.level === 1 ?
+            <Button type="primary" ghost onClick={() => this.handleAdd(record.arBillingId, record.contractItemId)}>+</Button>
+            : null
+          }
+          {
+            record.level === 2 ?
+              <Button type="primary" ghost onClick={() => this.handleDelete(record.lineNo)}>-</Button>
+              : null
+          }
+        </div>
+      )
+    }, {
+      title: '组号',
+      dataIndex: 'groupNo',
+      width: 50,
+    }, {
       title: '开票内容',
       dataIndex: 'billingContent',
       width: 150,
@@ -224,7 +259,7 @@ class BillDetail extends React.Component {
     }, {
       title: '数量',
       dataIndex: 'quantity',
-      width: 100,
+      width: 70,
       render: (text, record, index) => (
         <Input placeholder="数量" defaultValue="1" onChange={(e) => this.handleChange(e.target.value, 'quantity', index)} />
       )
@@ -240,7 +275,11 @@ class BillDetail extends React.Component {
       dataIndex: 'billingAmount',
       width: 100,
       render: (text, record, index) => (
-        <Input placeholder="金额" defaultValue={record.billingAmount} onChange={(e) => this.handleChange(e.target.value, 'billingAmount', index)}/>
+        <Input
+          placeholder="金额"
+          defaultValue={record.billingAmount}
+          value={this.state.dataSource[index]['billingAmount']}
+          onChange={(e) => this.handleChange(e.target.value, 'billingAmount', index, record)}/>
       )
     }, {
       title: '税率',
@@ -298,13 +337,17 @@ class BillDetail extends React.Component {
     const rowSelection = {
       type: 'checkbox',
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-      }
+        this.setState({
+          selectedRows,
+          selectedRowKeys
+        })
+      },
+      selectedRowKeys: this.state.selectedRowKeys,
     }
     return (
       <Modal
         title="发票编辑"
-        width="1000px"
+        width="1100px"
         style={{ top: 20 }}
         visible={true}
         wrapClassName="vertical-center-modal"
@@ -366,6 +409,9 @@ class BillDetail extends React.Component {
               dataSource={detailData}
               pagination={false}
             />
+          </div>
+          <div className="add-btns">
+            <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
           </div>
           <Table
             rowSelection={rowSelection}

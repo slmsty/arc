@@ -71,13 +71,7 @@ class BillingApplyForm extends React.Component {
                   getFieldDecorator('custName',{
                     initialValue: '',
                   })(
-                    <SelectSearch
-                      url="/arc/billingApplication/custom/search"
-                      columns={clientCols}
-                      label="客户名称"
-                      idKey="custId"
-                      valueKey="custName"
-                    />
+                    <Input placeholder="客户名称"/>
                   )
                 }
               </FormItem>
@@ -165,13 +159,7 @@ class BillingApplyForm extends React.Component {
                   getFieldDecorator('companyName', {
                     initialValue: '',
                   })(
-                    <SelectSearch
-                      url="/arc/billingApplication/company/search"
-                      columns={comCols}
-                      label="公司名称"
-                      idKey="comId"
-                      valueKey="comName"
-                    />
+                    <Input placeholder="签约公司"/>
                   )
                 }
               </FormItem>
@@ -179,7 +167,7 @@ class BillingApplyForm extends React.Component {
           </Row>
           <Row gutter={40}>
             <Col style={{ textAlign: 'right' }}>
-              <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />申请开票</Button>
+              <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />查询</Button>
             </Col>
           </Row>
         </Form>
