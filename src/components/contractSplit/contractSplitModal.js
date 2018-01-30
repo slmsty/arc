@@ -224,8 +224,14 @@ class ContractSplitModal extends React.Component{
       dataSource: tableData,
     })
   }
+  // 合同拆分删除数据
   handleMinus = (index) => {
     const newData = this.state.dataSource
+    const parentId = newData[index].orderListLineId
+    newData.map((item,indexs)=>{
+      item.parentOrderListLineId = parentId
+      newData.splice(indexs, 1)
+    })
     newData.splice(index, 1)
 
     this.setState({
@@ -362,6 +368,7 @@ class ContractSplitModal extends React.Component{
           (
             text === 'addSub' ?
               <div>
+                <Button style={{visibility:"hidden"}}>＋</Button>&nbsp;&nbsp;
                 <Button onClick={() => this.handleMinus(index)}>－</Button>
               </div>
               :
@@ -699,6 +706,19 @@ class ContractSplitModal extends React.Component{
               />
               <h2>外购成本预算</h2>
               <br />
+              <Row className="text-css contractRowBorderLeft contractRowBorderRight contractRowBorderTop">
+                <Col span={5}>
+                  Task 1 cost(成本)：
+                </Col>
+                <Col span={19} className="contractRowBorderLeft">
+                  <FormItem>
+                    {
+                      getFieldDecorator('task1Cost')(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task1Cost')} disabled={this.state.editFlag} />)
+                    }
+                  </FormItem>
+
+                </Col>
+              </Row>
               <Row className="text-css contractRowBorderLeft contractRowBorderRight contractRowBorderTop">
                 <Col span={5}>
                   Task 3T cost(第三方软件成本)：
