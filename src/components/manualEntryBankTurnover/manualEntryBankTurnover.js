@@ -159,6 +159,9 @@ export default class ManualEntryBankTurnover extends React.Component {
       message.error(`${info.file.name} 附件上传时发生系统错误。`)
     }
   }
+  handleFileDownload = (filepath, filename) => {
+    this.props.fileDown(filepath, filename)
+  }
   handleDeleteFile = (receiptClaimId) => {
     this.props.deleteAttachment(receiptClaimId)
   }
@@ -266,7 +269,7 @@ export default class ManualEntryBankTurnover extends React.Component {
             render: (text, record) => (
               record.filePath ?
                 <span>
-                  <a href={`${process.env.REACT_APP_GATEWAY}v1.0.0/file/inner/download/${record.filePath}`} target="_blank">{record.fileName}</a>&nbsp;
+                  <a href="javascript:void(0)" onClick={() => this.handleFileDownload(record.filePath, record.fileName)}>{record.fileName}</a>&nbsp;
                   <Icon type="close-circle" onClick={() => this.handleDeleteFile(record.receiptClaimId)} />
                 </span> :
                 ''
@@ -327,6 +330,7 @@ ManualEntryBankTurnover.propTypes = {
   deleteManualEntryBankTurnover: PropTypes.func.isRequired,
   confirmBatchManualEntryBankTurnover: PropTypes.func.isRequired,
   deleteBatchManualEntryBankTurnover: PropTypes.func.isRequired,
+  fileDown: PropTypes.func.isRequired,
   manualEntryBankTurnoverList: PropTypes.shape({
     pageInfo: PropTypes.shape({
       pageNo: PropTypes.number.isRequired,

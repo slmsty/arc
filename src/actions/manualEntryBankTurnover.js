@@ -95,3 +95,17 @@ export function deleteAttachment(receiptClaimId) {
     },
   }
 }
+
+export function fileDown(filePath, filename) {
+  return {
+    [httpApi]: {
+      url: `/arc/file/download/${filePath}/${filename}`,
+      options: {
+        method: 'GET',
+      },
+      types: ['ATTACHMENT_DOWNLOAD_SUCCESS'],
+      acceptType: 'blob',
+    },
+    fileName: filename,
+  }
+}

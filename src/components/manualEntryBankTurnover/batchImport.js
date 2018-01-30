@@ -143,9 +143,11 @@ export default class BatchImport extends React.Component {
     }
   }
   handleDownloadErrorData = () => {
-    window.open(`${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/manual/exportFailure/${this.state.batchNo}`, '_blank')
+    this.props.importErrorFileDownload(this.state.batchNo)
   }
-
+  handleTemplateDownload = () => {
+    this.props.fileDown()
+  }
   render() {
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/manual/import`,
@@ -196,7 +198,7 @@ export default class BatchImport extends React.Component {
           <Col span={24} offset={1}>
             <Row>
               <Col span={2}><span>模板下载：</span></Col>
-              <Col span={22}><Button type="primary" icon="download" onClick={() => { window.open(`${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/downFileTemp`, '_blank') }}>下载模板</Button></Col>
+              <Col span={22}><Button type="primary" icon="download" onClick={() => { this.handleTemplateDownload() }}>下载模板</Button></Col>
             </Row>
           </Col>
         </Row>
@@ -242,5 +244,7 @@ BatchImport.propTypes = {
     result: PropTypes.array.isRequired,
   }).isRequired,
   getImportResultData: PropTypes.func.isRequired,
+  fileDown: PropTypes.func.isRequired,
+  importErrorFileDownload: PropTypes.func.isRequired,
   initData: PropTypes.func.isRequired,
 }
