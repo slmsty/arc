@@ -92,7 +92,8 @@ class SelectOperator extends React.Component {
     this.setState({
       inputValue: getValue,
     })
-    this.handleEmitEmpty()
+    this.props.onChange([getValue, getValue])
+    // this.handleEmitEmpty()
   }
   render() {
     const { visible } = this.state

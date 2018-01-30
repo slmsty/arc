@@ -58,7 +58,6 @@ class ContractSplitModal extends React.Component{
   componentWillReceiveProps(nextProps) {
     if (this.props.data !== nextProps.data) {
       const constractData = nextProps.data
-      console.log('constractData',constractData)
      this.setState({
        dataSource: tableData,
      })
@@ -102,7 +101,7 @@ class ContractSplitModal extends React.Component{
   }
   renderColumns = (text, index, column) => {
     if(column=="product"){
-      return <ProductLine onCancel={()=>this.canCel(index,column)} onChange={this.handleChange} value={this.state.dataSource[index]['productName']}  indexs={index} columns={column} />
+      return <ProductLine onCancel={()=>this.canCel(index,column)} onChange={this.handleChange} valueName={this.state.dataSource[index]['productName'] ? this.state.dataSource[index]['productName'] : ''} value={this.state.dataSource[index][column]}  indexs={index} columns={column} />
     }
     let typeCode = ''
     let paramCode = ''
@@ -696,6 +695,7 @@ class ContractSplitModal extends React.Component{
                 scroll={{ x: '2200px' }}
                 //dataSource={this.state.dataSource}
                 dataSource = {dataSource}
+                pagination={false}
               />
               <h2>外购成本预算</h2>
               <br />

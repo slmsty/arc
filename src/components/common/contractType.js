@@ -18,7 +18,7 @@ export default class SelectInvokeApi extends React.Component {
       requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
     }
   }
-  componentWillReceiveProps(nextProps){
+  /*componentWillReceiveProps(nextProps){
     if(this.props.value !== nextProps.value){
       const options = this.state.options
       options.map((item,index)=>{
@@ -29,7 +29,7 @@ export default class SelectInvokeApi extends React.Component {
         }
       })
     }
-  }
+  }*/
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
       const options = response.data
@@ -68,7 +68,8 @@ export default class SelectInvokeApi extends React.Component {
         id={this.props.id}
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
-        value={this.state.selectValue ? this.state.selectValue : (this.props.initialValue ? this.props.initialValue : 'all')}
+        //value={this.state.selectValue ? this.state.selectValue : (this.props.initialValue ? this.props.initialValue : 'all')}
+        value={this.props.value && this.props.value[1]? this.props.value[1] : (this.props.initialValue ? this.props.initialValue : 'all')}
         disabled={this.props.disabled}
       >
         {optionDom}
