@@ -2,32 +2,9 @@ import React from 'react'
 import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from 'antd'
 import SelectSearch from './selectSearch'
 import SelectInvokeApi from '../common/selectInvokeApi'
+import { clientCols, comCols, proCols } from './billColumns'
 const FormItem = Form.Item
 const Option = Select.Option
-
-const clientCols = [{
-  title: '客户名称',
-  dataIndex: 'custName',
-  width: 200,
-}, {
-  title: '客户编号',
-  dataIndex: 'custId',
-  width: 200,
-}]
-const comCols = [{
-  title: '公司名称',
-  dataIndex: 'comName',
-  width: 200,
-}, {
-  title: '公司编号',
-  dataIndex: 'comId',
-  width: 200,
-}]
-const proCols = [{
-  title: '项目编码',
-  dataIndex: 'projectNo',
-  width: 200,
-}]
 
 
 class BillUpdate extends React.Component {

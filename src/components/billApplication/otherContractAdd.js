@@ -1,30 +1,8 @@
 import React from 'react'
 import { Form, Button, Row, Col, Modal, Icon, Input } from 'antd'
 import SelectSearch from './selectSearch'
+import { clientCols, comCols, proCols } from './billColumns'
 const FormItem = Form.Item
-const clientCols = [{
-  title: '客户名称',
-  dataIndex: 'custName',
-  width: 200,
-}, {
-  title: '客户编号',
-  dataIndex: 'custId',
-  width: 200,
-}]
-const comCols = [{
-  title: '公司名称',
-  dataIndex: 'comName',
-  width: 200,
-}, {
-  title: '公司编号',
-  dataIndex: 'comId',
-  width: 200,
-}]
-const proCols = [{
-  title: '项目编码',
-  dataIndex: 'projectNo',
-  width: 200,
-}]
 
 class OtherContractAdd extends React.Component {
   constructor(props){
@@ -41,7 +19,6 @@ class OtherContractAdd extends React.Component {
       custName: values.custName[1],
       comName: values.comName[1],
     }
-    console.log(params)
     this.props.addAction(params)
   }
 

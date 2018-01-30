@@ -1,32 +1,11 @@
 import React from 'react'
 import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
-import SelectSearch from './selectSearch'
-import SelectClient from './selectClient'
-import SelectCompany from './selectCompany'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import './billingApplication.less'
-
 const FormItem = Form.Item
 const Option = Select.Option
-const clientCols = [{
-  title: '客户名称',
-  dataIndex: 'custName',
-  width: 200,
-}, {
-  title: '客户编号',
-  dataIndex: 'custId',
-  width: 200,
-}]
-const comCols = [{
-  title: '公司名称',
-  dataIndex: 'comName',
-  width: 200,
-}, {
-  title: '公司编号',
-  dataIndex: 'comId',
-  width: 200,
-}]
+
 class BillingApplyForm extends React.Component {
   handleQuery = () => {
     // 验证通过后查询

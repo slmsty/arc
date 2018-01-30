@@ -4,57 +4,11 @@ import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import moment from 'moment'
+import { contentCols, totalColumns, detailColumns } from './billColumns'
 
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
-const contentCols = [{
-  title: '内容名称',
-  dataIndex: 'billingContentName',
-  width: 200,
-}, {
-  title: '内容',
-  dataIndex: 'billingRecordId',
-  width: 200,
-}]
-
-const totalColumns = [
-  {
-    title: '',
-    dataIndex: 'title',
-    width: 80,
-  }, {
-    title: '税率',
-    dataIndex: 'taxRate',
-    width: 150,
-  }, {
-    title: '税额',
-    dataIndex: 'tax',
-    width: 150,
-  }
-]
-
-const detailColumns = [{
-  title: '',
-  dataIndex: 'title',
-  width: 80,
-}, {
-  title: '客户名称',
-  dataIndex: 'customerName',
-  width: 150,
-}, {
-  title: '纳税人识别码',
-  dataIndex: 'taxPayer',
-  width: 150,
-}, {
-  title: '地址电话',
-  dataIndex: 'address',
-  width: 150,
-}, {
-  title: '开户行及账号',
-  dataIndex: 'bankAccount',
-  width: 150,
-}]
 
 const data = [{
   title: '城建',
