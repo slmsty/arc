@@ -196,7 +196,7 @@ export default class BatchImport extends React.Component {
           <Col span={24} offset={1}>
             <Row>
               <Col span={2}><span>模板下载：</span></Col>
-              <Col span={22}><Button type="primary" icon="download" onClick={() => { window.open(`${process.env.REACT_APP_GATEWAY}v1.0.0/file/inner/download/${process.env.REACT_APP_MANUAL_IMP_TMPLT}`, '_blank') }}>下载模板</Button></Col>
+              <Col span={22}><Button type="primary" icon="download" onClick={() => { window.open(`${process.env.REACT_APP_GATEWAY}v1.0.0/arc/receiptclaim/downFileTemp`, '_blank') }}>下载模板</Button></Col>
             </Row>
           </Col>
         </Row>
