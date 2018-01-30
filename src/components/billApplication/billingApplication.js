@@ -9,8 +9,8 @@ import './billingApplication.less'
 const advanceCols = [
   {
     title: '开票申请类别',
-    dataIndex: 'applyType',
-    width: 150,
+    dataIndex: 'billingApplicationTypeName',
+    width: 120,
   }, {
     title: '签约公司',
     dataIndex: 'comName',
@@ -18,7 +18,7 @@ const advanceCols = [
   }, {
     title: '客户名称',
     dataIndex: 'custName',
-    width: 150,
+    width: 220,
   }, {
     title: '项目编码',
     dataIndex: 'projectNo',
@@ -38,7 +38,7 @@ const advanceCols = [
   }, {
     title: '操作',
     dataIndex: '',
-    width: 80,
+    width: 70,
     render: () => <a href="#">修改</a>,
   },
 ]
@@ -46,7 +46,7 @@ const advanceCols = [
 const otherCols = [
   {
     title: '开票申请类别',
-    dataIndex: 'applyType',
+    dataIndex: 'billingApplicationTypeName',
   }, {
     title: '签约公司',
     dataIndex: 'comName',
@@ -103,6 +103,11 @@ export default class BillingApplication extends React.Component {
       this.props.billApplySearch(params)
     } else if(this.props.redApplySuccess != nextProps.redApplySuccess && nextProps.redApplySuccess) {
       message.success('发票红冲成功!')
+    } else if(this.props.billSaveSuccess !== nextProps.billSaveSuccess && nextProps.billSaveSuccess) {
+      message.success('申请开票成功!')
+      this.setState({
+        detailVisible: false,
+      })
     }
   }
 
@@ -118,20 +123,22 @@ export default class BillingApplication extends React.Component {
     const normalCols = [
       {
         title: '开票申请类别',
-        dataIndex: 'applyType',
-        width: 100,
+        dataIndex: 'billingApplicationTypeName',
+        width: 130,
+        fixed: 'left',
       }, {
         title: '项目编码',
         dataIndex: 'projectNo',
         width: 150,
+        fixed: 'left',
       }, {
         title: '签约公司',
         dataIndex: 'comName',
-        width: 150,
+        width: 220,
       },  {
         title: '合同编码',
         dataIndex: 'contractNo',
-        width: 150,
+        width: 260,
       }, {
         title: '发票号',
         dataIndex: 'invoiceNumber',
@@ -139,7 +146,7 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 100,
+        width: 180,
       }, {
         title: '付款条件',
         dataIndex: 'paymentTerm',
@@ -151,7 +158,7 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '付款阶段',
         dataIndex: 'paymentPhrases',
-        width: 100,
+        width: 170,
       }, {
         title: '付款金额',
         dataIndex: 'billedArAmount',
@@ -176,6 +183,7 @@ export default class BillingApplication extends React.Component {
         title: '操作',
         dataIndex: 'action',
         width: 80,
+        fixed: 'right',
         render: (text, record) => (
           <a href="#"
              onClick={() => {
@@ -327,7 +335,6 @@ export default class BillingApplication extends React.Component {
     const rowSelection = {
       type: redTypes.includes(this.state.currentType) ? 'radio' : 'checkbox',
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
         this.setState({selectedRows: selectedRows})
       }
     }
@@ -348,6 +355,7 @@ export default class BillingApplication extends React.Component {
           bordered
           columns={this.getApplyColumns()}
           dataSource={billList}
+          scroll={ normalTypes.includes(this.state.currentType) ? { x: 2030 } : false}
         />
         {this.state.detailVisible ?
           <BillDetail

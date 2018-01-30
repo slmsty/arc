@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload, message, Icon } from 'antd'
+import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload, message, Icon, InputNumber } from 'antd'
 import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
@@ -103,6 +103,7 @@ class BillDetail extends React.Component {
           unit: '',
           quantity: '',
           unitPrice: 0,
+          noRateAmount: 0,
           billingAmount: item.billingAmount,
           totalAmount: item.billingAmount,
           billingTaxRate: 0,
@@ -125,6 +126,7 @@ class BillDetail extends React.Component {
       unit: '',
       quantity: '',
       unitPrice: 0,
+      noRateAmount: 0,
       billingAmount: 0,
       billingTaxRate: 0,
       billingTaxAmount: 0,
@@ -139,12 +141,10 @@ class BillDetail extends React.Component {
     let dataSource = [...this.state.dataSource];
     this.state.dataSource.map((item, index) => {
       if(record.arBillingId === item.arBillingId && item.level === 1) {
-        console.log(dataSource[item.lineNo]['billingAmount'])
         const amount = dataSource[item.lineNo]['billingAmount']
         dataSource[item.lineNo]['billingAmount'] = parseFloat(record.billingAmount) + parseFloat(amount)
       }
       if(item.lineNo === record.lineNo) {
-        console.log('1111')
         dataSource = dataSource.slice(index - 1, index)
       }
     })
@@ -155,8 +155,6 @@ class BillDetail extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        //const values = this.props.form.getFieldsValue()
-        console.log(values)
         const { custInfo, comInfo } = this.props.detail
         const params = {
           ...values,
@@ -173,7 +171,6 @@ class BillDetail extends React.Component {
   }
 
   handleChange = (value, col, index, record) => {
-    console.log(value, col, index)
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
       dataSource[index][col] = value[1]
@@ -226,7 +223,7 @@ class BillDetail extends React.Component {
     const columns = [{
       title: '操作',
       dataIndex: 'action',
-      width: 70,
+      width: 60,
       render: (text, record, index) => (
         <div>
           {
@@ -270,7 +267,7 @@ class BillDetail extends React.Component {
     }, {
       title: '单位',
       dataIndex: 'unit',
-      width: 100,
+      width: 80,
       render: (text, record, index) => (
         <Input placeholder="单位" onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
       )
@@ -279,32 +276,50 @@ class BillDetail extends React.Component {
       dataIndex: 'quantity',
       width: 70,
       render: (text, record, index) => (
-        <Input placeholder="数量" defaultValue="1" onChange={(e) => this.handleChange(e.target.value, 'quantity', index)} />
+        <InputNumber
+          placeholder="数量"
+          defaultValue="1"
+          onChange={(value) => this.handleChange(value, 'quantity', index)} />
       )
     }, {
       title: '单价',
       dataIndex: 'unitPrice',
       width: 100,
       render: (text, record, index) => {
-        const { billingAmount, billingTaxRate} = this.state.dataSource[index]
+        const { billingAmount, billingTaxRate, quantity} = this.state.dataSource[index]
+        console.log(billingTaxRate)
         return (
-          <Input
+          <InputNumber
             placeholder="单价"
-            value={(billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2)}
-            onChange={(e) => this.handleChange(e.target.value, 'unitPrice', index)}
+            value={billingTaxRate ? (billingAmount / (1 + parseFloat(billingTaxRate)) / (quantity ? quantity : 1)).toFixed(2) : 0}
+            onChange={(value) => this.handleChange(value, 'unitPrice', index)}
           />
         )
       }
     }, {
-      title: '金额',
+      title: '不含税金额',
+      dataIndex: 'noRateAmount',
+      width: 100,
+      render: (text, record, index) => {
+        const { billingAmount, billingTaxRate } = this.state.dataSource[index]
+        console.log(billingTaxRate)
+        return (
+          <InputNumber
+            placeholder="不含税金额"
+            value={billingTaxRate ? (billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2) : 0}
+            onChange={(value) => this.handleChange(value, 'noRateAmount', index, record)}/>
+        )
+      }
+    }, {
+      title: '含税金额',
       dataIndex: 'billingAmount',
       width: 100,
       render: (text, record, index) => (
-        <Input
-          placeholder="金额"
+        <InputNumber
+          placeholder="含税金额"
           defaultValue={record.billingAmount}
           value={this.state.dataSource[index]['billingAmount']}
-          onChange={(e) => this.handleChange(e.target.value, 'billingAmount', index, record)}/>
+          onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
       )
     }, {
       title: '税率',
@@ -328,10 +343,10 @@ class BillDetail extends React.Component {
         const { billingAmount, billingTaxRate} = this.state.dataSource[index]
         const unitPrice = billingAmount / (1 + parseFloat(billingTaxRate))
         return (
-          <Input
+          <InputNumber
             placeholder="税额"
             value={(unitPrice * billingTaxRate).toFixed(2)}
-            onChange={(e) => this.handleChange(e.target.value, 'billingTaxAmount', index)}
+            onChange={(value) => this.handleChange(value, 'billingTaxAmount', index)}
           />
         )
       }
@@ -493,17 +508,20 @@ class BillDetail extends React.Component {
               </FormItem>
             </Col>
           </Row>
-          <div className="arc-info">
-            <Table
-              style={{width: '50%'}}
-              rowKey="id"
-              size="small"
-              bordered
-              columns={totalColumns}
-              dataSource={data}
-              pagination={false}
-            />
-          </div>
+          {
+            this.props.billType === 'BILLING_EXCESS' ?
+              <div className="arc-info">
+                <Table
+                  style={{width: '50%'}}
+                  rowKey="id"
+                  size="small"
+                  bordered
+                  columns={totalColumns}
+                  dataSource={data}
+                  pagination={false}
+                />
+              </div> : null
+          }
         </Form>
       </Modal>
     )
