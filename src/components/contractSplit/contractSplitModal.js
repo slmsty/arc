@@ -55,6 +55,15 @@ class ContractSplitModal extends React.Component{
     countTaskCostData: {},
     editFlag: true,
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.data !== nextProps.data) {
+      const constractData = nextProps.data
+      console.log('constractData',constractData)
+     this.setState({
+       dataSource: tableData,
+     })
+     }
+  }
   selectDateChange = (data) => {
     const newData = [...this.state.dataSource]
     newData[data.indexs][data.columns] = data.dateString
@@ -63,7 +72,6 @@ class ContractSplitModal extends React.Component{
     })
   }
   handleChange = (data) => {
-    console.log(data)
     if(data){
       const newData = [...this.state.dataSource]
       const indexData = data.No && data.Name ? [data.No,data.Name] : ''
@@ -153,31 +161,22 @@ class ContractSplitModal extends React.Component{
   handleInputChange = (value, index, column) => {
     const newData = [...this.state.dataSource]
     newData[index][column] = value
-    if (!newData[index].listPrice) {
-      newData[index].discountedPrice = 0 // 折后合同额
-      newData[index].contractAmountTaxInclude = 0 // 合同含税额
-      newData[index].contractAmountTaxExclude = 0  // 合同不含税额
-      newData[index].returnTaxRevenue = 0 // 退税收入含税额
-      newData[index].GrossOrder = 0 // 退税收入含税额
-    } else {
-      console.log("data",newData)
-      this.inputChange(newData,index)
-    }
-
+    this.inputChange(newData,index)
     this.setState({
       dataSource: newData,
     })
   }
   inputChange = (newData,index) => {
-    const contractTaxRate = newData[index].contractTaxRate && newData[index].contractTaxRate[1] ? percent(newData[index].contractTaxRate[1]) : ''
-    const returnTaxRate = newData[index].returnTaxRate && newData[index].returnTaxRate[1] ? percent(newData[index].returnTaxRate[1]) : ''
+    const contractTaxRate = newData[index].contractTaxRate && newData[index].contractTaxRate[1] ? percent(newData[index].contractTaxRate[1]) : '0'
+    const returnTaxRate = newData[index].returnTaxRate && newData[index].returnTaxRate[1] ? percent(newData[index].returnTaxRate[1]) : '0'
     const discount = newData[index].discount  ? newData[index].discount : "0"
-    newData[index].discountedPrice = (parseFloat(newData[index].listPrice) * (1 - parseFloat(discount) * 0.01)).toFixed(2) // 折后合同额根据目录价和折扣计算出来
-    newData[index].contractAmountTaxInclude = (parseFloat(newData[index].listPrice) * (1 - parseFloat(discount) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
+    const listPrice = newData[index].listPrice ? newData[index].listPrice : "0"
+    console.log('listPrice',listPrice)
+    newData[index].discountedPrice = (parseFloat(listPrice) * (1 - parseFloat(discount) * 0.01)).toFixed(2) // 折后合同额根据目录价和折扣计算出来
+    newData[index].contractAmountTaxInclude = (parseFloat(listPrice) * (1 - parseFloat(discount) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
     newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
     newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate)) * (parseFloat(returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
     newData[index].GrossOrder = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
-    console.log('change',newData)
     return newData
   }
   onTextAreaChange = (event) => {
@@ -234,6 +233,7 @@ class ContractSplitModal extends React.Component{
       data: newData,
     })
   }
+  // 拆分保存接口
   handleOk = () => {
     const param = this.props.form.getFieldsValue()
     param.projectBuNo = param && param.projectBuNo ? param.projectBuNo[1] : ''
@@ -252,8 +252,6 @@ class ContractSplitModal extends React.Component{
           flag = false
         }
       }
-      console.log('parentPrice',parentPrice)
-      console.log('subPrice',subPrice)
       if(!flag && parentPrice != subPrice){
         message.error(`父级目录价与子级目录价之和不想等`)
         return
@@ -261,12 +259,12 @@ class ContractSplitModal extends React.Component{
     }
 
     const postParams = {}
-    splitListInfo.map((item,index)=>{
+    /*splitListInfo.map((item,index)=>{
       item.product = item.product && item.product[0] ? item.product[0]:""
       item.returnTaxRate = item.returnTaxRate && item.returnTaxRate[0] ? item.returnTaxRate[0] : ''
       item.contractTaxRate = item.contractTaxRate && item.contractTaxRate[0] ? item.contractTaxRate[0] : ''
       item.contractCategory = item.contractCategory && item.contractCategory[0] ? item.contractCategory[0] : ''
-    })
+    })*/
     postParams.splitListInfo = splitListInfo
     postParams.contractInfo = this.props.data
     postParams.contractInfo.projectBuNo = param.projectBuNo
@@ -282,9 +280,7 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.subcontractFee = param.subcontractFee
     //console.log('splitListInfo',postParams.splitListInfo)
     this.props.saveInfo(postParams)
-    this.setState({
-      dataSource: [],
-    })
+    this.closeModal()
   }
   closeModal = () => {
     this.props.closeModal()
@@ -307,8 +303,32 @@ class ContractSplitModal extends React.Component{
     })
   }
   render() {
-    console.log('dataSource',this.state.dataSource)
-    const constractData = this.props.data
+    const dataSource = this.state.dataSource
+    const constractDatas = this.props.data
+    const constractData = constractDatas[0]
+    /*constractDatas[0].splitListInfo = {
+      GrossOrder: "133.33",
+      contractAmountTaxExclude: "133.33",
+      contractAmountTaxInclude:"160.00",
+      contractCategory: ["ARC_PRD_6", "B:Task 6(咨询服务)"],
+      contractTaxRate: ["C_TAX-20", "20%"],
+      discount: "20",
+      discountedPrice: "160.00",
+      listPrice: "200",
+      orderListLineId: "1101517289982541",
+      parentOrderListLineId: "",
+      product: ["100P0002", "AIOBS-V5.6-电信级综合业务管理系统"],
+      returnTaxRate: ["R_TAX-14", "14%"],
+      returnTaxRevenue: "18.67",
+      serviceEndDate: "2018-01-31",
+      serviceStartDate: "2018-01-24",
+      subRow: false
+    }*/
+    console.log('constractData',constractDatas.length)
+    if(constractDatas.length && constractDatas[0].splitListInfo){
+      dataSource.splice(-1, 0, constractDatas[0].splitListInfo)
+    }
+    console.log('dataSource',dataSource)
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
     let countsalePeo = 0 // 合同不含税额
@@ -401,7 +421,7 @@ class ContractSplitModal extends React.Component{
       width: 150,
       render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'returnTaxRate'),
     }, {
-      title: '退税收入含税额',
+      title: '退税额',
       dataIndex: 'returnTaxRevenue',
       width: 200,
       render: (text, record, index) => record.taskOpration === '合计' ? currency(countcontractType1) : text,
@@ -417,7 +437,7 @@ class ContractSplitModal extends React.Component{
       render: (text, record, index) => {
         return (
           record.taskOpration === '合计' ? '' :
-          <MyDtatePicker onChange={this.selectDateChange} indexs={index} columns='serviceStartDate' />
+          <MyDtatePicker value={this.state.dataSource[index]['serviceStartDate']} onChange={this.selectDateChange} indexs={index} columns='serviceStartDate'  />
         )
       }
     }, {
@@ -427,7 +447,7 @@ class ContractSplitModal extends React.Component{
       render: (text, record, index) => {
         return (
           record.taskOpration === '合计' ? '' :
-          <MyDtatePicker onChange={this.selectDateChange} indexs={index} columns='serviceEndDate' />
+          <MyDtatePicker value={this.state.dataSource[index]['serviceEndDate']} onChange={this.selectDateChange} indexs={index} columns='serviceEndDate' />
         )
       }
     },
@@ -672,7 +692,8 @@ class ContractSplitModal extends React.Component{
                 columns={columns}
                 size="middle"
                 scroll={{ x: '2200px' }}
-                dataSource={this.state.dataSource}
+                //dataSource={this.state.dataSource}
+                dataSource = {dataSource}
               />
               <h2>外购成本预算</h2>
               <br />

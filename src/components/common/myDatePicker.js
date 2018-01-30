@@ -4,6 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { DatePicker } from 'antd'
+import moment from 'moment'
 
 export default class MyDatePicker extends React.Component{
   handleChange = (date, dateString) => {
@@ -16,8 +17,9 @@ export default class MyDatePicker extends React.Component{
     })
   }
   render() {
+    const value = this.props.value
     return (
-      <DatePicker onChange={this.handleChange} />
+      <DatePicker onChange={this.handleChange} defaultValue={value ? moment(value) : ''} />
     )
   }
 }

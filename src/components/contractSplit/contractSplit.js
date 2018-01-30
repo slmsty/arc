@@ -197,7 +197,7 @@ export default class ApplySearchCon extends React.Component {
               ModalVisible={this.state.contarctSplitModal}
               closeModal={this.closeModalClaim}
               saveInfo={this.saveContractSplitInfo}
-              data={this.state.selectedRows[0]}
+              data={this.state.selectedRows}
             />
             : ''
         }

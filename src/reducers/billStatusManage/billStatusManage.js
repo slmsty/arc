@@ -47,7 +47,6 @@ function fileDown(state, action) {
     ...state
   }
 }
-
 export default caseReducer(billStatusManageData, {
   GET_BILLSTATUS_LIST_SUCCESS: getBillStatusList,
   GET_BILLSTATUS_DETAIL_LIST_SUCCESS: getBillStatusDetail,

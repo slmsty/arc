@@ -133,7 +133,8 @@ class ProductLine extends React.Component {
       <div>
         <Input
           placeholder="产品线"
-          value={this.state.inputValue ? this.state.inputValue : ''}
+          // value={this.state.inputValue ? this.state.inputValue : ''}
+          value={this.props.value && this.props.value[1] ? this.props.value[1] : (this.props.initialValue ? this.props.initialValue : '请选择')}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />

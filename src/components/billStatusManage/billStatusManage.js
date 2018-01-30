@@ -80,9 +80,8 @@ export default class BillStatusCon extends React.Component {
         const resultData = this.props.billStatusManage.getBillStatusManageList.result
         let billingApplicationId = resultData.length ? resultData[0].billingApplicationId : ''
         this.subSearch(billingApplicationId)
-
       } else {
-        message.error('加载数据失败')
+        // message.error('加载数据失败')
       }
     })
   }
@@ -134,7 +133,6 @@ export default class BillStatusCon extends React.Component {
     this.props.getBillStatusDetail(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
       } else {
-        message.error('开票结果查询失败')
       }
     })
   }
@@ -143,7 +141,6 @@ export default class BillStatusCon extends React.Component {
     this.props.getBillStatusContractDetail(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
       } else {
-        message.error('开票结果查询失败')
       }
     })
   }
@@ -152,7 +149,6 @@ export default class BillStatusCon extends React.Component {
     this.props.getBillStatusBillResult(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
       } else {
-        message.error('开票结果查询失败')
       }
     })
   }
@@ -350,11 +346,11 @@ export default class BillStatusCon extends React.Component {
     }, {
       title: '开票公司',
       dataIndex: 'companyName',
-      width: 150,
+      width: 300,
     }, {
       title: '提前开票原因',
       dataIndex: 'preInvoiceReason',
-      width: 150,
+      width: 300,
     }, {
       title: '预计回款日期',
       dataIndex: 'preReceiveDate',
@@ -362,11 +358,11 @@ export default class BillStatusCon extends React.Component {
     }, {
       title: '开票要求',
       dataIndex: 'invoiceRequire',
-      width: 150,
+      width: 300,
     }, {
       title: '开票客户名称',
       dataIndex: 'customerName',
-      width: 150,
+      width: 300,
     }, {
       title: '纳税人识别号',
       dataIndex: 'taxIdentifyCode',
@@ -378,7 +374,7 @@ export default class BillStatusCon extends React.Component {
     }, {
       title: '备注',
       dataIndex: 'remark',
-      width: 100,
+      width: 300,
     }, {
       title: '创建提示',
       dataIndex: 'errorMessage',
@@ -393,7 +389,7 @@ export default class BillStatusCon extends React.Component {
       }, {
         title: '开票内容',
         dataIndex: 'billingContent',
-        width: 100,
+        width: 300,
       },
       {
         title: '规格型号',
@@ -503,12 +499,12 @@ export default class BillStatusCon extends React.Component {
       {
         title: '签约公司',
         dataIndex: 'invoiceCompany',
-        width: 100,
+        width: 300,
       },
       {
         title: '开票客户名称',
         dataIndex: 'invoiceCustomer',
-        width: 100,
+        width: 300,
       },
       {
         title: '发票类型',
@@ -518,7 +514,7 @@ export default class BillStatusCon extends React.Component {
       {
         title: '发票代码',
         dataIndex: 'invoiceCode',
-        width: 100,
+        width: 300,
       },
       {
         title: '开票日期',
@@ -567,9 +563,6 @@ export default class BillStatusCon extends React.Component {
       current: 1,
       total: 10,
       pageSize: 10,
-      // current: this.props.myApply.getMyApplyList.pageNo,
-      // total: this.props.myApply.getMyApplyList.count,
-      // pageSize: this.props.myApply.getMyApplyList.pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
@@ -606,7 +599,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveInfoColumns}
           size="small"
-          scroll={{ x: '900px', y: this.state.tableHeight }}
+          scroll={{ x: '1100px', y: this.state.tableHeight }}
           loading={this.state.loading}
           dataSource={this.props.billStatusManage.getBillStatusDetailList}
           pagination={false}
@@ -632,7 +625,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveResultcolumns}
           size="small"
-          scroll={{ x: '1100px', y: this.state.tableHeight }}
+          scroll={{ x: '1700px', y: this.state.tableHeight }}
           loading={this.state.loading}
           pagination ={false}
           dataSource={this.props.billStatusManage.getBillStatusBillResultList}
@@ -667,13 +660,18 @@ export default class BillStatusCon extends React.Component {
           selectOk={this.sendAp}
           selectCancel={this.closeGlDateModal}
         />
-        <FileDownModal
+        {
+          this.state.fileDownData.length ?
+          <FileDownModal
           visible={this.state.fileDownDis}
           onOk={this.CloseFileDownModal}
           onCancel={this.CloseFileDownModal}
           data={this.state.fileDownData}
           fileDown={this.fileDown}
-        />
+          />
+          : ''
+        }
+
       </div>
     )
   }
