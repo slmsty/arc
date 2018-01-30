@@ -99,7 +99,7 @@ class BillDetail extends React.Component {
         dataSource[item.lineNo]['billingAmount'] = parseFloat(record.billingAmount) + parseFloat(amount)
       }
       if(item.lineNo === record.lineNo) {
-        dataSource = dataSource.slice(index - 1, index)
+        dataSource.splice(index, 1)
       }
     })
     this.setState({ dataSource: dataSource });
@@ -135,7 +135,7 @@ class BillDetail extends React.Component {
         message.warn(`拆分金额必须小于拆分前金额`)
         return
       }
-      dataSource[result.lineNo][col] = result.totalAmount - value
+      dataSource[result.lineNo][col] = result.billingAmount - value
       dataSource[index][col] = value
     } else {
       dataSource[index][col] = value
@@ -252,16 +252,15 @@ class BillDetail extends React.Component {
       }
     }, {
       title: '不含税金额',
-      dataIndex: 'noRateAmount',
+      dataIndex: 'billingAmountExcludeTax',
       width: 100,
       render: (text, record, index) => {
         const { billingAmount, billingTaxRate } = this.state.dataSource[index]
-        console.log(billingTaxRate)
         return (
           <InputNumber
             placeholder="不含税金额"
             value={billingTaxRate ? (billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2) : 0}
-            onChange={(value) => this.handleChange(value, 'noRateAmount', index, record)}/>
+            onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
         )
       }
     }, {
@@ -285,7 +284,7 @@ class BillDetail extends React.Component {
           paramCode="TAX_RATE"
           placeholder="税率"
           hasEmpty
-          value={this.state.dataSource[index]['billingTaxRate']}
+          value={`${this.state.dataSource[index]['billingTaxRate']}`}
           onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
         />
       )
@@ -322,7 +321,7 @@ class BillDetail extends React.Component {
         }
       },
     };
-    const { custInfo, comInfo, appLineItems} = this.props.detail
+    const { custInfo, comInfo } = this.props.detail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,

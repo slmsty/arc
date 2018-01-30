@@ -18,7 +18,6 @@ class BillingApplyForm extends React.Component {
       contractNos: values.contractNos ? values.contractNos.split(',') : [],
       invoiceNumbers: values.invoiceNumbers ? values.invoiceNumbers.split(',') : [],
     }
-    console.log(param)
     this.props.onQuery(param)
   }
 
