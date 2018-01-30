@@ -78,7 +78,7 @@ export default class BillStatusCon extends React.Component {
       })
       if (res && res.response && res.response.resultCode === '000000') {
         const resultData = this.props.billStatusManage.getBillStatusManageList.result
-        let billingApplicationId = resultData.length ? resultData[0].billingApplicationId : ''
+        let billingApplicationId = resultData.length ? resultData[0].billingApplicationId : '0'
         this.subSearch(billingApplicationId)
       } else {
         // message.error('加载数据失败')

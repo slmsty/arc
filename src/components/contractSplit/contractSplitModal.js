@@ -102,7 +102,7 @@ class ContractSplitModal extends React.Component{
   }
   renderColumns = (text, index, column) => {
     if(column=="product"){
-      return <ProductLine onCancel={()=>this.canCel(index,column)} onChange={this.handleChange} value={this.state.dataSource[index][column]}  indexs={index} columns={column} />
+      return <ProductLine onCancel={()=>this.canCel(index,column)} onChange={this.handleChange} value={this.state.dataSource[index]['productName']}  indexs={index} columns={column} />
     }
     let typeCode = ''
     let paramCode = ''
@@ -176,7 +176,7 @@ class ContractSplitModal extends React.Component{
     newData[index].contractAmountTaxInclude = (parseFloat(listPrice) * (1 - parseFloat(discount) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
     newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
     newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate)) * (parseFloat(returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
-    newData[index].GrossOrder = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
+    newData[index].GrossOrder = (parseFloat(newData[index].contractAmountTaxExclude) + parseFloat(newData[index].returnTaxRevenue)).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
     return newData
   }
   onTextAreaChange = (event) => {
@@ -236,8 +236,9 @@ class ContractSplitModal extends React.Component{
   // 拆分保存接口
   handleOk = () => {
     const param = this.props.form.getFieldsValue()
-    param.projectBuNo = param && param.projectBuNo ? param.projectBuNo[1] : ''
-    param.relatedBuNo = param && param.relatedBuNo ? param.relatedBuNo[1] : ''
+    /*param.projectBuNo = param && param.projectBuNo ? param.projectBuNo[1] : ''
+    param.relatedBuNo = param && param.relatedBuNo ? param.relatedBuNo[1] : ''*/
+    console.log('param',param)
     const splitListInfo = this.state.dataSource
     splitListInfo.pop()
     let length = splitListInfo.length
@@ -259,14 +260,14 @@ class ContractSplitModal extends React.Component{
     }
 
     const postParams = {}
-    /*splitListInfo.map((item,index)=>{
+    splitListInfo.map((item,index)=>{
       item.product = item.product && item.product[0] ? item.product[0]:""
       item.returnTaxRate = item.returnTaxRate && item.returnTaxRate[0] ? item.returnTaxRate[0] : ''
       item.contractTaxRate = item.contractTaxRate && item.contractTaxRate[0] ? item.contractTaxRate[0] : ''
       item.contractCategory = item.contractCategory && item.contractCategory[0] ? item.contractCategory[0] : ''
-    })*/
+    })
     postParams.splitListInfo = splitListInfo
-    postParams.contractInfo = this.props.data
+    postParams.contractInfo = this.props.data[0]
     postParams.contractInfo.projectBuNo = param.projectBuNo
     postParams.contractInfo.relatedBuNo = param.relatedBuNo
     postParams.contractInfo.revenueCheckout = param.revenueCheckout
@@ -310,15 +311,16 @@ class ContractSplitModal extends React.Component{
       GrossOrder: "133.33",
       contractAmountTaxExclude: "133.33",
       contractAmountTaxInclude:"160.00",
-      contractCategory: ["ARC_PRD_6", "B:Task 6(咨询服务)"],
-      contractTaxRate: ["C_TAX-20", "20%"],
+      contractCategory: "ARC_PRD_6",
+      contractTaxRate: "C_TAX-20",
       discount: "20",
       discountedPrice: "160.00",
       listPrice: "200",
       orderListLineId: "1101517289982541",
       parentOrderListLineId: "",
-      product: ["100P0002", "AIOBS-V5.6-电信级综合业务管理系统"],
-      returnTaxRate: ["R_TAX-14", "14%"],
+      product: "100P0002",
+      productName:"test",
+      returnTaxRate: "R_TAX-14",
       returnTaxRevenue: "18.67",
       serviceEndDate: "2018-01-31",
       serviceStartDate: "2018-01-24",
@@ -617,7 +619,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={12} className="contractRowBorderLeft" style={{ textAlign: 'left'}}>
                   <FormItem>
                     {getFieldDecorator('revenueCheckout', {
-                      initialValue: 'RATABLY',
+                      initialValue: '',
                     })(
                       <Checkbox.Group>
                         <Checkbox value="POC">POC</Checkbox>

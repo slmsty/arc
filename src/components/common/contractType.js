@@ -10,11 +10,24 @@ const Option = Select.Option
 export default class SelectInvokeApi extends React.Component {
   state = {
     options: [],
+    selectValue: '',
   }
   componentDidMount() {
     if (this.props.typeCode && this.props.paramCode) {
       console.log(this.props.paramCode)
       requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
+    }
+  }
+  componentWillReceiveProps(nextProps){
+    if(this.props.value !== nextProps.value){
+      const options = this.state.options
+      options.map((item,index)=>{
+        if(item.paramValue === nextProps.value){
+          this.setState({
+            selectValue: item.paramValueDesc,
+          })
+        }
+      })
     }
   }
   handleCallback = (response) => {
@@ -55,7 +68,7 @@ export default class SelectInvokeApi extends React.Component {
         id={this.props.id}
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
-        value={this.props.value && this.props.value[1] ? this.props.value[1] : (this.props.initialValue ? this.props.initialValue : 'all')}
+        value={this.state.selectValue ? this.state.selectValue : (this.props.initialValue ? this.props.initialValue : 'all')}
         disabled={this.props.disabled}
       >
         {optionDom}

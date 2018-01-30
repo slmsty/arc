@@ -21,6 +21,19 @@ class ProductLine extends React.Component {
     loading: false,
     firstLoad: true,
     inputValue: '',
+    selectValue:'',
+  }
+  componentWillReceiveProps(nextProps){
+    if(this.props.value !== nextProps.value){
+      const options = this.state.options
+      options.map((item,index)=>{
+        if(item.paramValue === nextProps.value){
+          this.setState({
+            selectValue: item.paramValueDesc,
+          })
+        }
+      })
+    }
   }
   componentWillMount() {
     if (this.props.initialValue) {
@@ -134,7 +147,7 @@ class ProductLine extends React.Component {
         <Input
           placeholder="产品线"
           // value={this.state.inputValue ? this.state.inputValue : ''}
-          value={this.props.value && this.props.value[1] ? this.props.value[1] : (this.props.initialValue ? this.props.initialValue : '请选择')}
+          value={this.state.selectValue ? this.state.selectValue : (this.props.initialValue ? this.props.initialValue : '请选择')}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />
