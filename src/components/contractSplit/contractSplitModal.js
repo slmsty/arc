@@ -235,8 +235,8 @@ class ContractSplitModal extends React.Component{
   // 拆分保存接口
   handleOk = () => {
     const param = this.props.form.getFieldsValue()
-    /*param.projectBuNo = param && param.projectBuNo ? param.projectBuNo[1] : ''
-    param.relatedBuNo = param && param.relatedBuNo ? param.relatedBuNo[1] : ''*/
+    param.projectBuNo = param && param.projectBuNo ? param.projectBuNo[1] : ''
+    param.relatedBuNo = param && param.relatedBuNo ? param.relatedBuNo[1] : ''
     console.log('param',param)
     const splitListInfo = this.state.dataSource
     splitListInfo.pop()
@@ -432,7 +432,7 @@ class ContractSplitModal extends React.Component{
       width: 100,
       render: (text, record, index) => record.taskOpration === '合计' ? currency(countGrossOrder) : text,
     }, {
-      title: <span>服务期起始<em style={{ color: '#FF0000' }}>*</em></span>,
+      title: <span>服务期起始</span>,
       dataIndex: 'serviceStartDate',
       width: 200,
       render: (text, record, index) => {
@@ -442,7 +442,7 @@ class ContractSplitModal extends React.Component{
         )
       }
     }, {
-      title: <span>服务期结束<em style={{ color: '#FF0000' }}>*</em></span>,
+      title: <span>服务期结束</span>,
       dataIndex: 'serviceEndDate',
       width: 200,
       render: (text, record, index) => {
