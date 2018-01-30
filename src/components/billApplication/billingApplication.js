@@ -53,6 +53,9 @@ const otherCols = [
   }, {
     title: '客户名称',
     dataIndex: 'custName',
+  }, {
+    title: '项目编码',
+    dataIndex: 'proCode',
   }
 ]
 
@@ -313,7 +316,7 @@ export default class BillingApplication extends React.Component {
       return (
         <div>
           <Button type="primary" ghost onClick={() => this.setState({otherAddVisible: true})}>增加</Button>
-          <Button type="primary" ghost onClick={() => this.setState({otherAddVisible: true})}>开票编辑</Button>
+          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
         </div>
       )
     }

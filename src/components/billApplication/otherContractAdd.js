@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, Row, Col, Modal, Icon } from 'antd'
+import { Form, Button, Row, Col, Modal, Icon, Input } from 'antd'
 import SelectSearch from './selectSearch'
 const FormItem = Form.Item
 const clientCols = [{
@@ -18,6 +18,11 @@ const comCols = [{
 }, {
   title: '公司编号',
   dataIndex: 'comId',
+  width: 200,
+}]
+const proCols = [{
+  title: '项目编码',
+  dataIndex: 'projectNo',
   width: 200,
 }]
 
@@ -91,6 +96,21 @@ class OtherContractAdd extends React.Component {
                         valueKey="custName"
                       />)
                   }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={30}>
+              <Col span={12} key={1}>
+                <FormItem {...formItemLayout} label="项目编码">
+                  {getFieldDecorator('projectNo', {rules: [{ required: true, message: '请选择项目编码!' }]})(
+                    <SelectSearch
+                      url="/arc/billingApplication/projectNo/search"
+                      columns={proCols}
+                      label="项目编码"
+                      idKey="projectNo"
+                      valueKey="projectNo"
+                    />
+                  )}
                 </FormItem>
               </Col>
             </Row>

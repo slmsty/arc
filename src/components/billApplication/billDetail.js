@@ -85,6 +85,7 @@ class BillDetail extends React.Component {
       selectedRowKeys: [],
       selectedRows: [],
       currentNo: 1,
+      totalAmount: 0,
     }
   }
 
@@ -101,10 +102,11 @@ class BillDetail extends React.Component {
           specificationType: '',
           unit: '',
           quantity: '',
-          unitPrice: '',
+          unitPrice: 0,
           billingAmount: item.billingAmount,
-          billingTaxRate: '',
-          billingTaxAmount: '',
+          totalAmount: item.billingAmount,
+          billingTaxRate: 0,
+          billingTaxAmount: 0,
         })
       })
       this.setState({ dataSource: data, count: data.length })
@@ -122,10 +124,10 @@ class BillDetail extends React.Component {
       specificationType: '',
       unit: '',
       quantity: '',
-      unitPrice: '',
-      billingAmount: '',
-      billingTaxRate: '',
-      billingTaxAmount: '',
+      unitPrice: 0,
+      billingAmount: 0,
+      billingTaxRate: 0,
+      billingTaxAmount: 0,
     };
     this.setState({
       dataSource: [...dataSource, newData],
@@ -133,9 +135,20 @@ class BillDetail extends React.Component {
     });
   }
 
-  handleDelete = (lineNo) => {
-    const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.lineNo !== lineNo) });
+  handleDelete = (record) => {
+    let dataSource = [...this.state.dataSource];
+    this.state.dataSource.map((item, index) => {
+      if(record.arBillingId === item.arBillingId && item.level === 1) {
+        console.log(dataSource[item.lineNo]['billingAmount'])
+        const amount = dataSource[item.lineNo]['billingAmount']
+        dataSource[item.lineNo]['billingAmount'] = parseFloat(record.billingAmount) + parseFloat(amount)
+      }
+      if(item.lineNo === record.lineNo) {
+        console.log('1111')
+        dataSource = dataSource.slice(index - 1, index)
+      }
+    })
+    this.setState({ dataSource: dataSource });
   }
 
   handleOk = (e) => {
@@ -165,8 +178,13 @@ class BillDetail extends React.Component {
     if(col === 'billingContent') {
       dataSource[index][col] = value[1]
     } else if(col === 'billingAmount') {
+      //发票拆分子记录输入金额后，从新计算携带数据的金额
       const result = dataSource.filter(d => d.level === 1 && record.arBillingId === d.arBillingId)[0]
-      dataSource[result.lineNo][col] = result.billingAmount - value
+      if(value >= result.billingAmount) {
+        message.warn(`拆分金额必须小于拆分前金额`)
+        return
+      }
+      dataSource[result.lineNo][col] = result.totalAmount - value
       dataSource[index][col] = value
     } else {
       dataSource[index][col] = value
@@ -218,7 +236,7 @@ class BillDetail extends React.Component {
           }
           {
             record.level === 2 ?
-              <Button type="primary" ghost onClick={() => this.handleDelete(record.lineNo)}>-</Button>
+              <Button type="primary" ghost onClick={() => this.handleDelete(record)}>-</Button>
               : null
           }
         </div>
@@ -267,9 +285,16 @@ class BillDetail extends React.Component {
       title: '单价',
       dataIndex: 'unitPrice',
       width: 100,
-      render: (text, record, index) => (
-        <Input placeholder="单价" onChange={(e) => this.handleChange(e.target.value, 'unitPrice', index)}/>
-      )
+      render: (text, record, index) => {
+        const { billingAmount, billingTaxRate} = this.state.dataSource[index]
+        return (
+          <Input
+            placeholder="单价"
+            value={(billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2)}
+            onChange={(e) => this.handleChange(e.target.value, 'unitPrice', index)}
+          />
+        )
+      }
     }, {
       title: '金额',
       dataIndex: 'billingAmount',
@@ -283,7 +308,7 @@ class BillDetail extends React.Component {
       )
     }, {
       title: '税率',
-      dataIndex: 'billingTaxRate	',
+      dataIndex: 'billingTaxRate',
       width: 100,
       render: (text, record, index) => (
         <SelectInvokeApi
@@ -299,9 +324,17 @@ class BillDetail extends React.Component {
       title: '税额',
       dataIndex: 'billingTaxAmount',
       width: 100,
-      render: (text, record, index) => (
-        <Input placeholder="税额" onChange={(e) => this.handleChange(e.target.value, 'billingTaxAmount', index)}/>
-      )
+      render: (text, record, index) => {
+        const { billingAmount, billingTaxRate} = this.state.dataSource[index]
+        const unitPrice = billingAmount / (1 + parseFloat(billingTaxRate))
+        return (
+          <Input
+            placeholder="税额"
+            value={(unitPrice * billingTaxRate).toFixed(2)}
+            onChange={(e) => this.handleChange(e.target.value, 'billingTaxAmount', index)}
+          />
+        )
+      }
     }]
     const props = {
       name: 'file',
