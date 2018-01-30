@@ -24,7 +24,7 @@ const middleware = (requestJson, catchError) => store => next => (action) => {
   if (typeof httpSymbol === 'undefined') {
     return next(action)
   }
-  const { options, types, url } = httpSymbol
+  const { options, types, url, acceptType } = httpSymbol
   if (typeof url !== 'string') {
     throw new Error('请指定请求路径！')
   }
@@ -47,7 +47,24 @@ const middleware = (requestJson, catchError) => store => next => (action) => {
     requestCompletedType = 'HTTP_REQUEST_COMPLETED',
   ] = types
   next(actionWith({ type: requestType }))
-  
+  console.log(acceptType)
+  if (acceptType === 'blob') {
+    return requestJson(url, options, acceptType)
+      .then(response => response.blob().then(blob => next(actionWith({
+        files: {
+          name: response.headers.get('filename'),
+          blob,
+        },
+        type: successType,
+      }))).catch(error => next(actionWith({
+        error,
+        type: errorType,
+      }))))
+      .catch(error => next(actionWith({
+        error,
+        type: errorType,
+      })));
+  }
   return requestJson(url, options).then((response) => {
     next(actionWith({ type: requestCompletedType }))
     if (response.resultCode === '000000') {

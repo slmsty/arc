@@ -25,11 +25,10 @@ function queryParams(url, params) {
 // 解析
 function parseFetch(response) {
   const type = response.headers.get('content-type')
-  console.log(type)
   if (type.includes('application/json')) {
     return response.json()
   } else if (type.includes('application/octet-stream')) {
-    return response.blob()
+    return response
   } else if (type.includes('text/plain')) {
     return response.text()
   } else if (type.includes('arrayBuffer')) {
@@ -69,7 +68,7 @@ function parseFetch(response) {
 const invokeApi = ({
   prefixG,
   versionG = 'v1.0.0',
-}, { getToken, setToken, removeToken, authRefused }) => (url, options = {}) => {
+}, { getToken, setToken, removeToken, authRefused }) => (url, options = {}, type) => {
   if (!prefixG) {
     throw new Error('请设置全局统一网关，即请求前缀')
   }

@@ -325,19 +325,11 @@ export default class BillStatusCon extends React.Component {
     })
   }
   fileDown = (id, name) => {
-    let params = {}
-    params.objectId = id
-    params.objectName = name
-    console.log(params)
-    this.props.fileDown(params).then((res)=>{
-      console.log(res.response)
-      if (res && res.response && res.response.resultCode === '000000') {
-        message.success('下载成功')
-      } else {
-        message.error('下载失败')
-      }
-    })
-
+    const params = {
+      objectId: id,
+      objectName: name
+    }
+    this.props.fileDown(params)
   }
   render() {
     const getBillStatusManageList  = this.props.billStatusManage.getBillStatusManageList.result

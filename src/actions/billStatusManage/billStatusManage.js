@@ -98,8 +98,10 @@ export function fileDown(queryParam) {
       options: {
         method: 'GET',
       },
+      acceptType: 'blob',
       types: ['FILE_DOWN_SUCCESS'],
     },
+    fileName: queryParam.objectName,
   }
 }
 
