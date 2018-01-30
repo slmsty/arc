@@ -1,4 +1,5 @@
 import caseReducer from './caseReducer'
+import { saveAs } from '../util/downFile'
 
 const manualEntryBankTurnoverData = {
   manualEntryBankTurnoverList: {
@@ -56,6 +57,11 @@ function editBatchDelete(state) {
   return { ...state, manualEntryBankTurnoverBatchDeleteResult: new Date().getTime() }
 }
 
+function fileDown(state, action) {
+  saveAs(action.files.blob, action.fileName)
+  return { ...state }
+}
+
 export default caseReducer(manualEntryBankTurnoverData, {
   GET_MANUAL_ENTRY_BANK_TURNOVER_DATA_SUCCESS: getManualEntryBankTurnoverData,
   CONFIRM_MANUAL_ENTRY_BANK_TURNOVER_EDIT_SUCCESS: editConfirm,
@@ -64,4 +70,5 @@ export default caseReducer(manualEntryBankTurnoverData, {
   DELETE_BATCH_MANUAL_ENTRY_BANK_TURNOVER_EDIT_SUCCESS: editBatchDelete,
   GET_SINGLE_MANUAL_RECEIPT_CLAIM_INFO_SUCCESS: initEditData,
   DELETE_ATTACHMENT_RECEIPT_CLAIM_INFO_SUCCESS: deleteAttachment,
+  ATTACHMENT_DOWNLOAD_SUCCESS: fileDown,
 })
