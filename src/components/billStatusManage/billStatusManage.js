@@ -29,6 +29,7 @@ export default class BillStatusCon extends React.Component {
     showGlDateModal: false,
     fileDownDis: false,
     fileDownData: [],
+    firstID: '',
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -39,7 +40,13 @@ export default class BillStatusCon extends React.Component {
   componentWillReceiveProps(nextProps) {
      if (this.props.billStatusManage.cancelApproveRefresh !== nextProps.billStatusManage.cancelApproveRefresh) {
       this.handleQuery()
-    }
+     }
+     if(nextProps.billStatusManage.getBillStatusManageList.result.length > 0) {
+       this.setState({
+         firstID: nextProps.billStatusManage.getBillStatusManageList.result[0].billingApplicationId,
+       })
+     }
+
   }
   queryParam = {
     pageInfo: {
@@ -70,7 +77,10 @@ export default class BillStatusCon extends React.Component {
         loading: false,
       })
       if (res && res.response && res.response.resultCode === '000000') {
-        console.log('数据查询成功')
+        const resultData = this.props.billStatusManage.getBillStatusManageList.result
+        let billingApplicationId = resultData.length ? resultData[0].billingApplicationId : ''
+        this.subSearch(billingApplicationId)
+
       } else {
         message.error('加载数据失败')
       }
@@ -90,6 +100,7 @@ export default class BillStatusCon extends React.Component {
     this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log(selectedRowKeys)
     if(selectedRowKeys.length>1){
       selectedRowKeys.splice(0,selectedRowKeys.length-1);
     }
@@ -106,26 +117,42 @@ export default class BillStatusCon extends React.Component {
     this.setState({ selectedRowKeys, selectedRows }, () => {
       if (this.state.selectedRows.length > 0) {
         let billingApplicationId = this.state.selectedRows[0].billingApplicationId
-        let param = {}
-        param.applicationId = billingApplicationId
-        this.props.getBillStatusDetail(param).then((res) => {
-          if (res && res.response && res.response.resultCode === '000000') {
-          } else {
-            message.error('申请单详细信息查询失败')
-          }
-        })
-        this.props.getBillStatusContractDetail(param).then((res) => {
-          if (res && res.response && res.response.resultCode === '000000') {
-          } else {
-            message.error('申请单合同信息查询失败')
-          }
-        })
-        this.props.getBillStatusBillResult(param).then((res) => {
-          if (res && res.response && res.response.resultCode === '000000') {
-          } else {
-            message.error('开票结果查询失败')
-          }
-        })
+        this.subSearch(billingApplicationId)
+      }
+    })
+  }
+  // 进一步查询
+  subSearch = (billingApplicationId) => {
+    let param = {}
+    param.applicationId = billingApplicationId
+    this.searchBillInfoResult(param)
+    this.searchContractResult(param)
+    this.searchBillResult(param)
+  }
+  // 查询申请单详细信息
+  searchBillInfoResult = (param) => {
+    this.props.getBillStatusDetail(param).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+      } else {
+        message.error('开票结果查询失败')
+      }
+    })
+  }
+  // 查询请单合同信息
+  searchContractResult = (param) => {
+    this.props.getBillStatusContractDetail(param).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+      } else {
+        message.error('开票结果查询失败')
+      }
+    })
+  }
+  // 查询开票结果
+  searchBillResult = (param) => {
+    this.props.getBillStatusBillResult(param).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+      } else {
+        message.error('开票结果查询失败')
       }
     })
   }
@@ -209,6 +236,7 @@ export default class BillStatusCon extends React.Component {
       let msg = data.map((item)=>{
         return <div><p style={{display: 'inline-block',width:'100px'}}>{item.applicationId}</p><p style={{display: 'inline-block',width:'190px'}}>{item.errorMessage}</p></div>
       })
+      console.log(res.response)
       if (res && res.response && res.response.resultCode === '000000') {
       } else {
       }
@@ -282,7 +310,7 @@ export default class BillStatusCon extends React.Component {
   }
   showBillFiles = (record) => {
     // console.log(this.props.getBillStatusBillResultList)
-    record.attachment = "101111|下载文件一"
+    // record.attachment = "101111|下载文件一"
     const attachment = record.attachment
     let attachmentArray = attachment.split('|')
     this.setState({
@@ -302,6 +330,7 @@ export default class BillStatusCon extends React.Component {
     params.objectName = name
     console.log(params)
     this.props.fileDown(params).then((res)=>{
+      console.log(res.response)
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('下载成功')
       } else {
@@ -311,6 +340,8 @@ export default class BillStatusCon extends React.Component {
 
   }
   render() {
+    const getBillStatusManageList  = this.props.billStatusManage.getBillStatusManageList.result
+    console.log(getBillStatusManageList)
     const billApprovecolumns = [{
       title: '数据状态',
       dataIndex: 'status',
@@ -420,12 +451,12 @@ export default class BillStatusCon extends React.Component {
       {
         title: '签约公司',
         dataIndex: 'company',
-        width: 100,
+        width: 250,
       },
       {
         title: '合同编码',
         dataIndex: 'contractCode',
-        width: 100,
+        width: 300,
       },
       {
         title: '付款条件',
@@ -531,11 +562,14 @@ export default class BillStatusCon extends React.Component {
         )
       },
     ]
-    const { selectedRowKeys } = this.state
+    const { selectedRowKeys, firstID } = this.state
     const rowSelection = {
       selectedRowKeys,
       type: 'checkBox',
       onChange: this.onSelectChange,
+      getCheckboxProps: record => ({
+        defaultChecked:record.billingApplicationId == firstID
+      })
     }
     const pagination = {
       current: 1,
@@ -558,11 +592,11 @@ export default class BillStatusCon extends React.Component {
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />
         <Button onClick={this.showGlDate}>传送AP</Button>&nbsp;&nbsp;
         <Button onClick={this.cancelHandle} disabled={this.state.cancelDis}>撤销</Button>
-        <br /><br />
-        <h2>开票审批</h2>
+        <br />
+        <h3>开票审批</h3>
         <br />
         <Table
-          rowKey="receiptClaimId"
+          rowKey="billingApplicationId"
           rowSelection={rowSelection}
           bordered
           columns={billApprovecolumns}
@@ -570,60 +604,47 @@ export default class BillStatusCon extends React.Component {
           scroll={{ x: '1530px', y: this.state.tableHeight }}
           loading={this.state.loading}
           pagination={false}
-          dataSource={this.props.billStatusManage.getBillStatusManageList.result}
+          dataSource={getBillStatusManageList}
         />
-        <h2>开票申请详情</h2>
         <br />
-        {this.props.billStatusManage.getBillStatusDetailList.length > 0 && this.state.selectedRows.length > 0 ?
-          <div>
-            <Table
-              rowKey="receiptClaimId"
-              bordered
-              columns={billApproveInfoColumns}
-              size="small"
-              scroll={{ x: '900px', y: this.state.tableHeight }}
-              loading={this.state.loading}
-              dataSource={this.props.billStatusManage.getBillStatusDetailList}
-              pagination={false}
-            />
-            <br />
-          </div>
-          : ''
-        }
-        <h2>对应项目条款</h2>
+        <h3>开票申请详情</h3>
         <br />
-        {this.props.billStatusManage.getBillStatusContractDetailList.length > 0 && this.state.selectedRows.length > 0 ?
-          <div>
-            <Table
-              rowKey="receiptClaimId"
-              bordered
-              columns={billApproveItemColumns}
-              size="small"
-              scroll={{ x: '900px', y: this.state.tableHeight }}
-              loading={this.state.loading}
-              pagination={false}
-              dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
-            />
-            <br />
-          </div>
-          : ''
-        }
-        <h2>开票结果</h2>
+        <Table
+          rowKey="arBillingId"
+          bordered
+          columns={billApproveInfoColumns}
+          size="small"
+          scroll={{ x: '900px', y: this.state.tableHeight }}
+          loading={this.state.loading}
+          dataSource={this.props.billStatusManage.getBillStatusDetailList}
+          pagination={false}
+        />
         <br />
-        {this.props.billStatusManage.getBillStatusBillResultList.length > 0 && this.state.selectedRows.length > 0 ?
-          <Table
-            rowKey="receiptClaimId"
-            rowSelection={billResultRowSelection}
-            bordered
-            columns={billApproveResultcolumns}
-            size="small"
-            scroll={{ x: '1100px', y: this.state.tableHeight }}
-            loading={this.state.loading}
-            pagination ={false}
-            dataSource={this.props.billStatusManage.getBillStatusBillResultList}
-          />
-          : ''
-        }
+        <h3>对应项目条款</h3>
+        <br />
+        <Table
+          rowKey="receiptClaimId"
+          bordered
+          columns={billApproveItemColumns}
+          size="small"
+          scroll={{ x: '1250px', y: this.state.tableHeight }}
+          loading={this.state.loading}
+          pagination={false}
+          dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
+        />
+        <br />
+        <h3>开票结果</h3>
+        <br />
+        <Table
+          rowSelection={billResultRowSelection}
+          bordered
+          columns={billApproveResultcolumns}
+          size="small"
+          scroll={{ x: '1100px', y: this.state.tableHeight }}
+          loading={this.state.loading}
+          pagination ={false}
+          dataSource={this.props.billStatusManage.getBillStatusBillResultList}
+        />
         {
           this.state.billResultSelectedRows && this.state.selectedRowKeys.length>0?
             <DetailModal

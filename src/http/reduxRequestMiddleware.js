@@ -47,6 +47,7 @@ const middleware = (requestJson, catchError) => store => next => (action) => {
     requestCompletedType = 'HTTP_REQUEST_COMPLETED',
   ] = types
   next(actionWith({ type: requestType }))
+  
   return requestJson(url, options).then((response) => {
     next(actionWith({ type: requestCompletedType }))
     if (response.resultCode === '000000') {

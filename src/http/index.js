@@ -25,6 +25,7 @@ function queryParams(url, params) {
 // 解析
 function parseFetch(response) {
   const type = response.headers.get('content-type')
+  console.log(type)
   if (type.includes('application/json')) {
     return response.json()
   } else if (type.includes('application/octet-stream')) {

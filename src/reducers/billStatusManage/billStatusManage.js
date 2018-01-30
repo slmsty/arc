@@ -2,6 +2,7 @@
  * Created by liangshuang on 17/12/13.
  */
 import caseReducer from './../caseReducer'
+import saveFile from './../../util/downFile'
 
 const billStatusManageData = {
   getBillStatusManageList: {
@@ -9,12 +10,12 @@ const billStatusManageData = {
     count: 0,
     result: [],
   },
-  getBillStatusDetailList: {
-  },
-  getBillStatusContractDetailList: {
-  },
-  getBillStatusBillResultList: {
-  },
+  getBillStatusDetailList: []
+  ,
+  getBillStatusContractDetailList: []
+  ,
+  getBillStatusBillResultList: []
+  ,
   getFileDownList: {},
   cancelApproveRefresh: new Date().getTime(),
 }
@@ -41,9 +42,10 @@ function sendAP(state) {
   return { ...state, cancelApproveRefresh: new Date().getTime() }
 }
 function fileDown(state, action) {
+  console.log('response',action)
+  saveFile(action.response.Blob, '20180129.pdf')
   return { ...state, getFileDownList: action.response.resultDetail }
 }
-
 
 export default caseReducer(billStatusManageData, {
   GET_BILLSTATUS_LIST_SUCCESS: getBillStatusList,

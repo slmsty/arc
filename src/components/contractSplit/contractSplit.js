@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { Button, Table, message, Row, Col } from 'antd'
 import ContractSplitWithFrom from './contractSplitWithFrom'
 import ContractSplitModal  from './contractSplitModal'
+import currency from '../../util/currency'
 export default class ApplySearchCon extends React.Component {
   state = {
     loading: false,
@@ -75,12 +76,11 @@ export default class ApplySearchCon extends React.Component {
   saveContractSplitInfo = (param) => {
     this.props.saveContractSplitInfo(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
-        message.success('保存成功')
-        this.closeModalClaim()
       } else {
         message.error('保存失败')
       }
     })
+    this.closeModalClaim()
   }
   /*
    function closeModalClaim
@@ -118,6 +118,7 @@ export default class ApplySearchCon extends React.Component {
       width: 150,
       textAlign: 'center',
       fixed: 'left',
+      render: (text, record, index) => (text=='N' ? "未拆分合同" : "已拆分合同"),
     }, {
       title: '合同内部编码',
       dataIndex: 'internalNo',
@@ -138,7 +139,7 @@ export default class ApplySearchCon extends React.Component {
       title: '合同金额',
       dataIndex: 'contractAmount',
       width: 150,
-      render: (text, record, index) => (text ? text.toFixed(2) : text),
+      render: (text, record, index) => (text ? currency(text) : 0),
     }, {
       title: '签约日期',
       dataIndex: 'contractDate',
@@ -206,7 +207,7 @@ export default class ApplySearchCon extends React.Component {
           </Col>
         </Row>
         <Table
-          rowKey="receiptClaimId"
+          rowKey="contractId"
           rowSelection={rowSelection}
           pagination={pagination}
           bordered
