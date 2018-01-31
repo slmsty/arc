@@ -22,6 +22,7 @@ class ProductLine extends React.Component {
     firstLoad: true,
     inputValue: '',
     selectValue:'',
+    flag: true,
   }
   componentWillMount() {
     if (this.props.initialValue) {
@@ -34,7 +35,10 @@ class ProductLine extends React.Component {
     }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    this.setState({ selectedRowKeys, selectedRows })
+    this.setState({
+      selectedRowKeys,
+      selectedRows,
+    })
   }
   columns = [{
     title: '产品线编码',
@@ -61,6 +65,7 @@ class ProductLine extends React.Component {
     })
     this.setState({
       inputValue: this.state.selectedRows[0].proName,
+      flag: false,
     })
     this.handleCancel()
   }
@@ -135,7 +140,7 @@ class ProductLine extends React.Component {
       <div>
         <Input
           placeholder="产品线"
-          value={this.state.inputValue ? this.state.inputValue : (this.props.valueName ? this.props.valueName : '' )}
+          value={this.state.flag && this.props.text ? this.props.text : (this.state.inputValue ? this.state.inputValue : (this.props.valueName ? this.props.valueName : '' ))}
           // value={this.state.selectValue ? this.state.selectValue : (this.props.initialValue ? this.props.initialValue : '请选择')}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}

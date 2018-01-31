@@ -77,11 +77,12 @@ export default class ApplySearchCon extends React.Component {
     this.props.saveContractSplitInfo(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
+        this.closeModalClaim()
       } else {
         message.error('保存失败')
       }
     })
-    this.closeModalClaim()
+
   }
   /*
    function closeModalClaim
