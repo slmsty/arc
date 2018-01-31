@@ -11,6 +11,7 @@ export default class SelectInvokeApi extends React.Component {
   state = {
     options: [],
     selectValue: '',
+    flag: true,
   }
   componentDidMount() {
     if (this.props.typeCode && this.props.paramCode) {
@@ -19,9 +20,9 @@ export default class SelectInvokeApi extends React.Component {
     }
   }
   showTextValue = () => {
+    console.log(88)
     const options = this.state.options
     const result = options.filter(o => o.paramValue === this.props.text)
-    console.log(result[0])
     return result.length ? result[0].paramValueDesc : ''
   }
 
@@ -37,6 +38,9 @@ export default class SelectInvokeApi extends React.Component {
     }
   }
   handleChange = (value) => {
+    this.setState({
+      flag: false,
+    })
     let name = ''
     this.state.options.map((item)=>{
       if(item.paramValue==value){
@@ -64,7 +68,7 @@ export default class SelectInvokeApi extends React.Component {
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
         //value={this.state.selectValue ? this.state.selectValue : (this.props.initialValue ? this.props.initialValue : 'all')}
-        value={this.props.text ? this.showTextValue() : (this.props.value && this.props.value[1]? this.props.value[1] : (this.props.initialValue ? this.props.initialValue : 'all'))}
+        value={this.state.flag && this.props.text ? this.showTextValue() : (this.props.value && this.props.value[1] ? this.props.value[1] : (this.props.initialValue ? this.props.initialValue : 'all'))}
         disabled={this.props.disabled}
       >
         {optionDom}

@@ -198,7 +198,7 @@ export default class ApplySearchCon extends React.Component {
               closeModal={this.closeModalClaim}
               saveInfo={this.saveContractSplitInfo}
               data={this.state.selectedRows}
-              tableDetail={this.state.selectedRows[0].orderListLines.length ? this.state.selectedRows[0].orderListLines : []}
+              tableDetail={this.state.selectedRows[0].orderListLines ? this.state.selectedRows[0].orderListLines : []}
             /> : null
         }
         <Row>
