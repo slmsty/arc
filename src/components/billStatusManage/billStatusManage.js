@@ -175,7 +175,7 @@ export default class BillStatusCon extends React.Component {
      noApplyInfoData: record,
      })
      } else {
-     message.error(res.response.resultMessage)
+
      }
      })
   }
@@ -578,6 +578,7 @@ export default class BillStatusCon extends React.Component {
         <Button onClick={this.showGlDate}>传送AP</Button>&nbsp;&nbsp;
         <Button onClick={this.cancelHandle} disabled={this.state.cancelDis}>撤销</Button>
         <br />
+        <br />
         <h3>开票审批</h3>
         <br />
         <Table
@@ -586,7 +587,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApprovecolumns}
           size="small"
-          scroll={{ x: '1530px', y: this.state.tableHeight }}
+          scroll={{ x: '2330px', y: this.state.tableHeight }}
           loading={this.state.loading}
           pagination={false}
           dataSource={getBillStatusManageList}
@@ -631,7 +632,7 @@ export default class BillStatusCon extends React.Component {
           dataSource={this.props.billStatusManage.getBillStatusBillResultList}
         />
         {
-          this.state.billResultSelectedRows && this.state.selectedRowKeys.length>0?
+          this.state.billResultSelectedRows.length > 0 ?
             <DetailModal
               visible={this.state.calcelModalVisitable}
               onOk={this.closeDisableModal}
@@ -640,20 +641,16 @@ export default class BillStatusCon extends React.Component {
               dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
               disableApprove={this.disableApprove}
               DetailList={this.props.billStatusManage.getBillStatusDetailList}
-              applyData={this.state.selectedRows}
+              applyData={this.state.selectedRows ? this.state.selectedRows : this.props.billStatusManage.getBillStatusManageList.result}
             />
             : ''
         }
-        {
-          this.props.myApply.getMyApplyInfo.length>0 ?
-            <ItemInfo
-              visible={this.state.noApplyInfoVisitable}
-              onOk={this.NoApplycloseModalClaim}
-              onCancel={this.NoApplycloseModalClaim}
-              data={this.props.myApply.getMyApplyInfo}
-            />
-            : ''
-        }
+        <ItemInfo
+          infoVisitable={this.state.noApplyInfoVisitable}
+          closeClaim={this.NoApplycloseModalClaim}
+          applyData={this.state.noApplyInfoData}
+          applyInfoData={this.props.myApply.getMyApplyInfo}
+        />
         {/* 弹出传送ARglDatemodal */}
         <GlDateModal
           glDateModal={this.state.showGlDateModal}

@@ -142,13 +142,9 @@ class ApplyInfoModal extends React.Component {
                 scroll={{ x: '1480px' }}
                 dataSource={applyInfoDatas.serviceDetail}
               />
+              <hr style={{ borderTop: '1px solid #d9d9d9' }} />
             </div>
-            <br />
-            <br />
-            <hr style={{ borderTop: '1px solid #d9d9d9' }} />
-            <br />
             <h2>审批意见</h2>
-            <br />
             { applyInfoDatas.approveInfoList ?
               applyInfoDatas.approveInfoList.map((item, index) => {
                 return (

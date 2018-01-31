@@ -140,7 +140,7 @@ export default class ApplySearchCon extends React.Component {
           noApplyInfoData: record,
         })
       } else {
-        message.error(res.response.resultMessage)
+        // message.error(res.response.resultMessage)
       }
     })
   }

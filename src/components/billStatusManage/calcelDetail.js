@@ -172,6 +172,7 @@ class CancelModal extends React.Component {
     }
     let dataSource = this.props.data
     let detailDatas = this.props.applyData[0]
+    console.log('detailDatas',detailDatas)
     const detailData = [{
       title: '购买方',
       customerName: detailDatas.customerName,

@@ -22,9 +22,9 @@ export default class ApplySearchCon extends React.Component {
     this.setState({ tableHeight })
   }
   componentWillReceiveProps(nextProps) {
-    /*if (this.props.contractSplitDara.myContractRefresh !== nextProps.contractSplitDara.myContractRefresh) {
+    if (this.props.contractSplitDara.myContractRefresh !== nextProps.contractSplitDara.myContractRefresh) {
       this.handleQuery()
-    }*/
+    }
   }
   componentDidMount() {
     // this.handleQuery()
@@ -76,7 +76,7 @@ export default class ApplySearchCon extends React.Component {
   saveContractSplitInfo = (param) => {
     this.props.saveContractSplitInfo(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
-        message.error('保存成功')
+        message.success('保存成功')
       } else {
         message.error('保存失败')
       }
@@ -193,14 +193,13 @@ export default class ApplySearchCon extends React.Component {
         <Button type="primary" onClick={this.showContractSplitInfo} disabled={this.state.selectedRowKeys.length>0 ? false : true}>合同拆分</Button>
         <br /><br />
         {
-          this.state.selectedRows && this.state.selectedRows[0] ?
+          this.state.selectedRows && this.state.selectedRows[0] && this.state.contarctSplitModal ?
             <ContractSplitModal
-              ModalVisible={this.state.contarctSplitModal}
               closeModal={this.closeModalClaim}
               saveInfo={this.saveContractSplitInfo}
               data={this.state.selectedRows}
-            />
-            : ''
+              tableDetail={this.state.selectedRows[0].orderListLines.length ? this.state.selectedRows[0].orderListLines : []}
+            /> : null
         }
         <Row>
           <Col span={24} style={{textAlign:'right'}}>
@@ -210,7 +209,7 @@ export default class ApplySearchCon extends React.Component {
         <Table
           rowKey="contractId"
           rowSelection={rowSelection}
-          pagination={pagination}
+          pagination={false}
           bordered
           columns={columns}
           size="middle"
