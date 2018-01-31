@@ -2,7 +2,7 @@ import React from 'react'
 import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from 'antd'
 import SelectSearch from './selectSearch'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import { clientCols, comCols, proCols } from './billColumns'
+import { clientCols, comCols, proCols, invoiceCols } from './billColumns'
 const FormItem = Form.Item
 const Option = Select.Option
 
@@ -17,7 +17,7 @@ class BillUpdate extends React.Component {
 
   handleOk = () => {
     const values = this.props.form.getFieldsValue()
-    const { arBillingId, contractItemId, isAdd } = this.props;
+    const { record, isAdd } = this.props;
     const params = isAdd ? {
       ...values,
       comName: values.comName[1],
@@ -26,8 +26,8 @@ class BillUpdate extends React.Component {
       receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
     } : {
       ...values,
-      arBillingId: arBillingId,
-      contractItemId: contractItemId,
+      arBillingId: record.arBillingId,
+      contractItemId: record.contractItemId,
       comId: values.comName[0],
       comName: values.comName[1],
       custId: values.custName[0],
@@ -40,6 +40,7 @@ class BillUpdate extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
+    const { record, isAdd, visible } = this.props
     const formItemLayout = {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
@@ -48,8 +49,8 @@ class BillUpdate extends React.Component {
       <div>
         <Modal
           width="650px"
-          title={this.props.isAdd ? '发票添加' : '发票编辑'}
-          visible={this.props.visible}
+          title={isAdd ? '发票添加' : '发票编辑'}
+          visible={visible}
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
           footer={[
@@ -93,7 +94,7 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
-                  {getFieldDecorator('comName', {rules: [{ required: true, message: '请选择签约公司!' }]} )(
+                  {getFieldDecorator('comName', {initialValue: record.comName , rules: [{ required: true, message: '请选择签约公司!' }]} )(
                     <SelectSearch
                       url="/arc/billingApplication/company/search"
                       columns={comCols}
@@ -155,8 +156,8 @@ class BillUpdate extends React.Component {
                       url="/arc/billingApplication/projectNo/search"
                       columns={proCols}
                       label="项目编码"
-                      idKey="projectNo"
-                      valueKey="projectNo"
+                      idKey="tempProjectId"
+                      valueKey="tempProjectNo"
                     />
                   )}
                 </FormItem>
@@ -170,10 +171,10 @@ class BillUpdate extends React.Component {
                           initialValue: '',
                         })(<SelectSearch
                           url="/arc/billingApplication/outcome/search"
-                          columns={proCols}
-                          label="发票抬头"
-                          idKey="custId"
-                          valueKey="custName"
+                          columns={invoiceCols}
+                          label="关联发票"
+                          idKey="invoiceId"
+                          valueKey="invoiceNumber"
                         />)
                       }
                     </FormItem>

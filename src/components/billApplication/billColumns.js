@@ -19,9 +19,27 @@ const comCols = [{
 }]
 
 const proCols = [{
+  title: '公司ID',
+  dataIndex: 'comId',
+  width: 100,
+}, {
+  title: 'BU',
+  dataIndex: 'sbuName',
+  width: 100,
+}, {
   title: '项目编码',
-  dataIndex: 'projectNo',
-  width: 200,
+  dataIndex: 'tempProjectNo',
+  width: 100,
+}]
+
+const invoiceCols = [{
+  title: '发票ID',
+  dataIndex: 'invoiceId',
+  width: 100,
+}, {
+  title: '发票编号',
+  dataIndex: 'invoiceNumber',
+  width: 100,
 }]
 
 const contentCols = [{
@@ -72,5 +90,5 @@ const detailColumns = [{
   width: 150,
 }]
 
-export { clientCols, comCols, proCols, contentCols, totalColumns, detailColumns }
+export { clientCols, comCols, proCols, contentCols, totalColumns, detailColumns, invoiceCols }
 

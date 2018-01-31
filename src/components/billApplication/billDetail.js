@@ -33,7 +33,7 @@ class BillDetail extends React.Component {
     super(props)
     this.state = {
       dataSource: [],
-      count: 0,
+      count: 1,
       content: '',
       taxRate: '',
       selectedRowKeys: [],
@@ -68,8 +68,8 @@ class BillDetail extends React.Component {
     }
   }
 
-  handleAdd = (arBillingId, contractItemId) => {
-    const { count, dataSource } = this.state;
+  handleAdd = (lineNo, arBillingId, contractItemId) => {
+    let { count, dataSource } = this.state;
     const newData = {
       lineNo: count,
       level: 2,
@@ -85,8 +85,18 @@ class BillDetail extends React.Component {
       billingTaxRate: 0,
       billingTaxAmount: 0,
     };
+    this.state.dataSource.map((record, index) => {
+      if(record.lineNo === lineNo){
+        dataSource.splice(index + 1, 0, newData)
+      }
+    })
+    const source = dataSource.map((record, index) => ({
+        ...record,
+        lineNo: index,
+      }
+    ))
     this.setState({
-      dataSource: [...dataSource, newData],
+      dataSource: source,
       count: count + 1,
     });
   }
@@ -102,7 +112,11 @@ class BillDetail extends React.Component {
         dataSource.splice(index, 1)
       }
     })
-    this.setState({ dataSource: dataSource });
+    const newSource = dataSource.map((record, index) => ({
+      ...record,
+      lineNo: index,
+    }))
+    this.setState({ dataSource: newSource });
   }
 
   handleOk = (e) => {
@@ -116,7 +130,10 @@ class BillDetail extends React.Component {
           billingComInfoId: comInfo.billingComInfoId,
           billingApplicationType: this.props.billType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
-          appLineItems: this.state.dataSource
+          appLineItems: this.state.dataSource.map(record => ({
+            ...record,
+            lineNo: record.lineNo + 1,
+          }))
         }
         console.log(params)
         this.props.billApplySave(params)
@@ -131,11 +148,18 @@ class BillDetail extends React.Component {
     } else if(col === 'billingAmount') {
       //发票拆分子记录输入金额后，从新计算携带数据的金额
       const result = dataSource.filter(d => d.level === 1 && record.arBillingId === d.arBillingId)[0]
+      console.log(index, result.lineNo)
       if(value >= result.billingAmount) {
         message.warn(`拆分金额必须小于拆分前金额`)
         return
       }
-      dataSource[result.lineNo][col] = result.billingAmount - value
+      let total = 0
+      dataSource.map(d => {
+        if(d.arBillingId === record.arBillingId && d.level === 2 && d.lineNo !== index){
+          total += d.billingAmount ? d.billingAmount : 0
+        }
+      })
+      dataSource[result.lineNo][col] = result.totalAmount - total - value
       dataSource[index][col] = value
     } else {
       dataSource[index][col] = value
@@ -182,7 +206,7 @@ class BillDetail extends React.Component {
         <div>
           {
             record.level === 1 ?
-            <Button type="primary" ghost onClick={() => this.handleAdd(record.arBillingId, record.contractItemId)}>+</Button>
+            <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
             : null
           }
           {
@@ -241,7 +265,6 @@ class BillDetail extends React.Component {
       width: 100,
       render: (text, record, index) => {
         const { billingAmount, billingTaxRate, quantity} = this.state.dataSource[index]
-        console.log(billingTaxRate)
         return (
           <InputNumber
             placeholder="单价"
@@ -417,7 +440,7 @@ class BillDetail extends React.Component {
           <Table
             rowSelection={rowSelection}
             style={{marginBottom: '10px'}}
-            rowKey="receiptClaimId"
+            rowKey={record => record.lineNo}
             bordered
             size="small"
             columns={columns}

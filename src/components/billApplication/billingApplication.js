@@ -74,8 +74,7 @@ export default class BillingApplication extends React.Component {
       otherAddVisible: false,
       selectedRows: [],
       isAdd: false,
-      arBillingId: '',
-      contractItemId: '',
+      currentRecord: {},
     }
   }
 
@@ -189,8 +188,7 @@ export default class BillingApplication extends React.Component {
              onClick={() => {
                this.setState({
                  updateVisible: true,
-                 arBillingId: record.arBillingId,
-                 contractItemId: record.contractItemId,
+                 currentRecord: record
                })}
              }
           >修改</a>
@@ -202,10 +200,12 @@ export default class BillingApplication extends React.Component {
         title: '开票申请类别',
         dataIndex: 'billingApplicationTypeName',
         width: 100,
+        fixed: 'left',
       }, {
         title: '发票号',
         dataIndex: 'invoiceNumber',
-        width: 150,
+        width: 180,
+        fixed: 'left',
       }, {
         title: '开票金额',
         dataIndex: 'taxIncludeAmount',
@@ -213,7 +213,7 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '开票税额',
         dataIndex: 'taxAmount',
-        width: 100,
+        width: 120,
       }, {
         title: '开票税率',
         dataIndex: 'taxRate',
@@ -224,19 +224,19 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '项目编码',
         dataIndex: 'projectNo',
-        width: 150,
+        width: 200,
       }, {
         title: '签约公司',
         dataIndex: 'comName',
-        width: 150,
+        width: 250,
       }, {
         title: '合同编码',
         dataIndex: 'contractNo',
-        width: 150,
+        width: 260,
       }, {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 150,
+        width: 200,
       }, {
         title: '付款条款',
         dataIndex: 'paymentName',
@@ -244,11 +244,11 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '付款阶段',
         dataIndex: 'paymentPhrases',
-        width: 100,
+        width: 200,
       }, {
         title: '付款金额',
         dataIndex: 'billedArAmount',
-        width: 100,
+        width: 120,
       }
     ]
     if (normalTypes.includes(type)) {
@@ -355,7 +355,7 @@ export default class BillingApplication extends React.Component {
           bordered
           columns={this.getApplyColumns()}
           dataSource={billList}
-          scroll={ normalTypes.includes(this.state.currentType) ? { x: 2030 } : false}
+          scroll={ normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType) ? { x: 2030 } : false}
         />
         {this.state.detailVisible ?
           <BillDetail
@@ -369,8 +369,7 @@ export default class BillingApplication extends React.Component {
           visible={updateVisible}
           onCancel={() => this.setState({updateVisible: false})}
           billAction={isAdd ? addBillUnContract : updateBillInfo}
-          arBillingId={arBillingId}
-          contractItemId={contractItemId}
+          record={this.state.currentRecord}
           isAdd={isAdd}
         />
         <OtherContractAdd
