@@ -2,7 +2,7 @@ import React from 'react'
 import { Table, Form, message, Row, Col, Input, DatePicker, Button, InputNumber, Icon, Select } from 'antd'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import { proColumns, billDetailColumns, detailColumns, contentCols, taxCategoryCols } from '../billApplication/billColumns'
-import SelectSearch from '../billApplication/selectSearch'
+import SearchAllColumns from '../common/SearchAllColumns'
 import moment from 'moment';
 import './billApplyDetail.css'
 const FormItem = Form.Item
@@ -82,9 +82,19 @@ class BillApplyDetail extends React.Component  {
     this.setState({ dataSource: newSource });
   }
   handleChange = (value, col, index, record) => {
+    console.log(value)
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
-      dataSource[index][col] = value[1]
+      dataSource[index][col] = value.billingContentName
+      dataSource[index]['taxCategoryCode'] = value.taxCategoryCode
+      dataSource[index]['taxCategoryName'] = value.taxCategoryName
+      dataSource[index]['prefPolicySign'] = value.prefPolicySign
+      dataSource[index]['prefPolicyType'] = value.prefPolicyContent
+    } else if (col === 'taxCategoryCode') {
+      dataSource[index][col] = value.taxCategoryCode
+      dataSource[index]['taxCategoryName'] = value.taxCategoryName
+      dataSource[index]['prefPolicySign'] = value.prefPolicySign
+      dataSource[index]['prefPolicyType'] = value.prefPolicyType
     } else if(col === 'billingAmount') {
       //发票拆分子记录输入金额后，从新计算携带数据的金额
       const result = dataSource.filter(d => d.isParent === 1 && record.arBillingId === d.arBillingId)[0]
@@ -101,7 +111,9 @@ class BillApplyDetail extends React.Component  {
       })
       dataSource[result.lineNo][col] = result.totalAmount - total - value
       dataSource[index][col] = value
-    } else {
+    }
+
+    else {
       dataSource[index][col] = value
     }
     this.setState({
@@ -208,13 +220,13 @@ class BillApplyDetail extends React.Component  {
       dataIndex: 'billingContent',
       width: 150,
       render: (text, record, index) => (
-        <SelectSearch
+        <SearchAllColumns
           url="/arc/billingApplication/billingContent/search"
           columns={contentCols}
           label="开票内容"
           idKey="billingRecordId"
           valueKey="billingContentName"
-          value={['', this.state.dataSource[index]['billingContent']]}
+          value={this.state.dataSource[index]['billingContent']}
           onChange={(v) => this.handleChange(v, 'billingContent', index)}
         />
       )
@@ -315,13 +327,13 @@ class BillApplyDetail extends React.Component  {
       width: 120,
       render: (text, record, index) => {
         return (
-          <SelectSearch
+          <SearchAllColumns
             url="/arc/billingApplication/taxInfo/search"
             columns={taxCategoryCols}
             label="税收分类编码"
             idKey="taxCategoryCode"
             valueKey="taxCategoryCode"
-            value={['', this.state.dataSource[index]['taxCategoryCode']]}
+            value={this.state.dataSource[index]['taxCategoryCode']}
             onChange={(v) => this.handleChange(v, 'taxCategoryCode', index)}
           />
         )
@@ -332,7 +344,7 @@ class BillApplyDetail extends React.Component  {
       width: 120,
       render: (text, record, index) => {
         return (
-          <Input defaultValue={this.state.dataSource[index]['taxCategoryName']}/>
+          <Input value={this.state.dataSource[index]['taxCategoryName']}/>
         )
       }
     }, {
@@ -341,7 +353,7 @@ class BillApplyDetail extends React.Component  {
       width: 100,
       render: (text, record, index) => {
         return (
-          <Select defaultValue={this.state.dataSource[index]['prefPolicySign']}>
+          <Select value={this.state.dataSource[index]['prefPolicySign']}>
             <Option value="">-请选择-</Option>
             <Option value="1">是</Option>
             <Option value="0">否</Option>
@@ -354,7 +366,7 @@ class BillApplyDetail extends React.Component  {
       width: 100,
       render: (text, record, index) => {
         return (
-          <Select defaultValue={this.state.dataSource[index]['prefPolicyType']}>
+          <Select value={this.state.dataSource[index]['prefPolicyType']}>
             <Option value="">-请选择-</Option>
             <Option value="超税负3%即征即退">超税负3%即征即退</Option>
             <Option value="免税">免税</Option>
