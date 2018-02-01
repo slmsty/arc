@@ -111,9 +111,7 @@ class BillApplyDetail extends React.Component  {
       })
       dataSource[result.lineNo][col] = result.totalAmount - total - value
       dataSource[index][col] = value
-    }
-
-    else {
+    } else {
       dataSource[index][col] = value
     }
     this.setState({
@@ -218,7 +216,7 @@ class BillApplyDetail extends React.Component  {
     }, {
       title: '开票内容',
       dataIndex: 'billingContent',
-      width: 150,
+      width: 250,
       render: (text, record, index) => (
         <SearchAllColumns
           url="/arc/billingApplication/billingContent/search"
@@ -344,7 +342,10 @@ class BillApplyDetail extends React.Component  {
       width: 120,
       render: (text, record, index) => {
         return (
-          <Input value={this.state.dataSource[index]['taxCategoryName']}/>
+          <Input
+            value={this.state.dataSource[index]['taxCategoryName']}
+            onChange={(e) => this.handleChange(e.target.value, 'taxCategoryName', index)}
+          />
         )
       }
     }, {
@@ -353,7 +354,9 @@ class BillApplyDetail extends React.Component  {
       width: 100,
       render: (text, record, index) => {
         return (
-          <Select value={this.state.dataSource[index]['prefPolicySign']}>
+          <Select
+            value={this.state.dataSource[index]['prefPolicySign']}
+            onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
             <Option value="">-请选择-</Option>
             <Option value="1">是</Option>
             <Option value="0">否</Option>
@@ -366,7 +369,10 @@ class BillApplyDetail extends React.Component  {
       width: 100,
       render: (text, record, index) => {
         return (
-          <Select value={this.state.dataSource[index]['prefPolicyType']}>
+          <Select
+            value={this.state.dataSource[index]['prefPolicyType']}
+            onChange={(v) => this.handleChange(v, 'prefPolicyType', index)}
+          >
             <Option value="">-请选择-</Option>
             <Option value="超税负3%即征即退">超税负3%即征即退</Option>
             <Option value="免税">免税</Option>
@@ -399,7 +405,7 @@ class BillApplyDetail extends React.Component  {
               columns={billDetailColumns}
               bordered
               size="small"
-              scroll={{ x: '1480px' }}
+              scroll={{ x: '1580px' }}
               dataSource={outcomeList}
               pagination={false}
             />
