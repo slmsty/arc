@@ -132,9 +132,10 @@ class ContractSplitModal extends React.Component{
   test = (data) => {
     console.log('test',data)
   }
-  renderColumns = (text, index, column) => {
+  renderColumns = (text, index, column,record) => {
+    console.log('record',record,column)
     if(column=="product"){
-      return <ProductLine onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={this.state.dataSource[index]['productName'] ? this.state.dataSource[index]['productName'] : ''} value={this.state.dataSource[index][column]}  indexs={index} columns={column} />
+      return <ProductLine onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record[column]}  indexs={index} columns={column} />
     }
     if(column ==='contractCategory'){
       return(
@@ -143,7 +144,7 @@ class ContractSplitModal extends React.Component{
           paramCode="STATUS"
           hasEmpty
           onChange={this.handleChange}
-          value={this.state.dataSource[index][column]}
+          value={record[column]}
           text={text ? text : ''}
           indexs={index}
           columns={column}
@@ -248,7 +249,7 @@ class ContractSplitModal extends React.Component{
     )
   }
   handleAdd = (index, flag) => {
-    const newDataSource = this.state.dataSource
+    const newDataSource = this.state.dataSource.slice(0)
     console.log('addnewDataSource',newDataSource)
     const newData = {
       parentOrderListLineId: '',
@@ -263,13 +264,39 @@ class ContractSplitModal extends React.Component{
       orderListLineId: '110'+new Date().getTime(),
       subRow: true,
     }
+    const indexArray = []
+      newDataSource.map((item,index)=>{
+      if(item.parentOrderListLineId && item.parentOrderListLineId === subParentOrderListLineId){
+        indexArray.push(index)
+      }
+    })
+    let max = indexArray[0];
+
+    for(var i=1;i<indexArray.length;i++){
+
+      if(max<indexArray[i])max=indexArray[i];
+
+    }
+    console.log('indexArray',indexArray)
+    console.log('max',max)
     // flag == 0 为增加子行
     if (flag === '0') {
-      newDataSource.splice(Number(index) + 1, 0, newSubData)
+      if(max){
+        newDataSource.splice(parseInt(max) + 1, 0, newSubData)
+      }else{
+        newDataSource.splice(parseInt(index) + 1, 0, newSubData)
+      }
+      console.info('add sub', newDataSource)
     }
+
     if (flag === '1') {
       newDataSource.splice(-1, 0, newData)
+      console.info('add main',newDataSource)
     }
+
+    console.log('___________________________',newDataSource)
+
+    // return
     this.setState({
       dataSource: newDataSource,
     })
@@ -549,12 +576,12 @@ class ContractSplitModal extends React.Component{
       title: <span>合同类型<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractCategory',
       width: 200,
-      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractCategory'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractCategory',record),
     }, {
       title: <span>产品线<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'product',
       width: 150,
-      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'product'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'product',record),
     }, {
       title: <span>结算方式<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'revenueCheckout',
@@ -584,7 +611,7 @@ class ContractSplitModal extends React.Component{
       title: '合同税率',
       dataIndex: 'contractTaxRate',
       width: 150,
-      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractTaxRate'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractTaxRate',record),
     }, {
       title: '合同不含税额',
       dataIndex: 'contractAmountTaxExclude',
@@ -594,7 +621,7 @@ class ContractSplitModal extends React.Component{
       title: <span>退税率<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'returnTaxRate',
       width: 150,
-      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'returnTaxRate'),
+      render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'returnTaxRate',record),
     }, {
       title: '退税额',
       dataIndex: 'returnTaxRevenue',
