@@ -75,6 +75,7 @@ export default class SelectInvokeApi extends React.Component {
     const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue ? option.paramValueDesc : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
     return (
       <Select
+        style={{zIndex:'0'}}
         id={this.props.id}
         placeholder={this.props.placeholder}
         onChange={this.handleChange}

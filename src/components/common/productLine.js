@@ -139,6 +139,7 @@ class ProductLine extends React.Component {
     return (
       <div>
         <Input
+          style={{zIndex:'0'}}
           placeholder="产品线"
           value={this.state.flag && this.props.text ? this.props.text : (this.state.inputValue ? this.state.inputValue : (this.props.valueName ? this.props.valueName : '' ))}
           // value={this.state.selectValue ? this.state.selectValue : (this.props.initialValue ? this.props.initialValue : '请选择')}

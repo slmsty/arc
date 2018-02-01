@@ -14,7 +14,7 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import currency from '../../util/currency'
 import percent from '../../util/percent'
 import './contract.less'
-import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select, message } from 'antd'
+import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select, message, InputNumber } from 'antd'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -39,7 +39,7 @@ let tableData = [{
 
 const EditableCell = ({ value, onChange, column,disable}) => (
   <div style={{ position: 'relative' }}>
-    <Input value={value} onChange={e => onChange(e.target.value)} disabled={disable}/>
+    <InputNumber defaultValue={value} onChange={value => onChange(value)} disabled={disable} />
     {column === 'discount' ?
       <span style={{ position: 'absolute', right: '10px', top: '20%' }}>%</span>
       : ''
@@ -95,8 +95,14 @@ class ContractSplitModal extends React.Component{
     })
   }
   handleChange = (data) => {
+    const newData = [...this.state.dataSource]
+    if(newData.collectionProject && data.columns==='contractCategory'){
+      if(data.No !=="ARC_PRD_1"){
+        message.error('集采项目只能拆分Task1')
+        return
+      }
+    }
     if(data){
-      const newData = [...this.state.dataSource]
       const indexData = data.No && data.Name ? [data.No,data.Name] : ''
       if(data.columns){
         newData[data.indexs][data.columns] = indexData
@@ -131,7 +137,6 @@ class ContractSplitModal extends React.Component{
       return <ProductLine onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={this.state.dataSource[index]['productName'] ? this.state.dataSource[index]['productName'] : ''} value={this.state.dataSource[index][column]}  indexs={index} columns={column} />
     }
     if(column ==='contractCategory'){
-      console.log('this.state.dataSource[index][column]1',this.state.dataSource)
       return(
         <ContractType
           typeCode="BILLED_SPLIT"
@@ -145,7 +150,6 @@ class ContractSplitModal extends React.Component{
         />
       )
     }
-    console.log('this.state.dataSource[index][column]2',this.state.dataSource)
     if(column ==="returnTaxRate"){
       return(
         <ContractType
@@ -174,7 +178,6 @@ class ContractSplitModal extends React.Component{
         />
       )
     }
-    console.log('this.state.dataSource[index][column]3',this.state.dataSource)
   }
   renderInputColumns(text, index, column) {
     return (
@@ -188,6 +191,22 @@ class ContractSplitModal extends React.Component{
   }
   handleInputChange = (value, index, column) => {
     const newData = [...this.state.dataSource]
+    const contractAmount = parseFloat(this.props.data[0].contractAmount)
+    if(column==='listPrice'){
+      if(typeof value !== "number"){
+        message.error('请输入数字类型的数')
+        return
+      }
+      if(contractAmount < 0 && parseFloat(value) > 0){
+        message.error('合同总金额为负数，目录价不能为正数')
+        return
+      }
+      if(contractAmount > 0 && parseFloat(value) < 0){
+        message.error('合同总金额为正数，目录价不能为负数')
+        return
+      }
+
+    }
     newData[index][column] = value
     this.inputChange(newData,index)
     this.setState({
@@ -274,7 +293,21 @@ class ContractSplitModal extends React.Component{
   }
   // 拆分保存接口
   handleOk = () => {
-    console.log('this.state.dataSource',this.state.dataSource)
+    const coutnData = this.state.dataSource
+    const contractAmount = parseFloat(this.props.data[0].contractAmount)
+    let totalListPrice = 0
+    coutnData.map((item) => {
+      if (item.taskOpration !== 'addSub') {
+        totalListPrice += !item || !item.listPrice ? 0 : parseFloat(item.listPrice) // 合计目录价
+      }
+    })
+    console.log('totalListPrice',totalListPrice)
+    console.log('contractAmount',contractAmount)
+    if(Math.abs(totalListPrice) > Math.abs(contractAmount)) {
+      message.error('目录价之和不能大于合同总金额')
+      return
+    }
+
     const param = this.props.form.getFieldsValue()
     console.log('param',param)
     const relatedBuNoName = param && param.relatedBuNo ? param.relatedBuNo[1] : ''
