@@ -26,9 +26,11 @@ class OtherContractAdd extends React.Component {
           projectNo: values.projectNo[1],
         } : {
           ...values,
+          billingApplicationType: this.props.billType,
           arBillingId: record.arBillingId,
           custName: values.custName[1],
           comName: values.comName[1],
+          projectNo: values.projectNo[1],
         }
         console.log(params)
         this.props.addAction(params)
@@ -39,6 +41,7 @@ class OtherContractAdd extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
+    console.log(this.props.record)
     const { comName, custName, projectNo, contractCurrency } = this.props.record
     const formItemLayout = {
       labelCol: { span: 7 },
@@ -96,7 +99,7 @@ class OtherContractAdd extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('projectNo', {initialValue: projectNo, rules: [{ required: true, message: '请选择项目编码!' }]})(
+                  {getFieldDecorator('projectNo', {initialValue: ['', projectNo], rules: [{ required: true, message: '请选择项目编码!' }]})(
                     <SelectSearch
                       url="/arc/billingApplication/projectNo/search"
                       columns={proCols}

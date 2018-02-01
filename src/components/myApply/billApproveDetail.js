@@ -4,13 +4,13 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import { proColumns, billDetailColumns, detailColumns, contentCols, taxCategoryCols } from '../billApplication/billColumns'
 import SearchAllColumns from '../common/SearchAllColumns'
 import moment from 'moment';
-import './billApplyDetail.css'
+import './billApproveDetail.css'
 const FormItem = Form.Item
 const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
 const Option = Select.Option
 
-class BillApplyDetail extends React.Component  {
+class BillApproveDetail extends React.Component  {
   constructor(props) {
     super(props)
     const dataSource = props.serviceDetail.appLineList.map(detail => ({
@@ -513,4 +513,4 @@ class BillApplyDetail extends React.Component  {
   }
 }
 
-export default Form.create()(BillApplyDetail)
+export default Form.create()(BillApproveDetail)

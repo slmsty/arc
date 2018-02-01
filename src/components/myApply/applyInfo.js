@@ -4,7 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
-import BillApplyDetail from './billApplyDetail'
+import BillApproveDetail from './billApproveDetail'
 const FormItem = Form.Item
 const { TextArea } = Input
 
@@ -113,12 +113,12 @@ class ApplyInfoModal extends React.Component {
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           footer={[
-            <Button key="submit" type="primary" onClick={this.applyComfirm}>
-              同意
-            </Button>,
             <Button type="primary" key="reset" onClick={this.applyReject}>
               驳回
             </Button>,
+            <Button key="submit" type="primary" onClick={this.applyComfirm}>
+              同意
+            </Button>
           ]}
         >
           <Form>
@@ -157,7 +157,7 @@ class ApplyInfoModal extends React.Component {
               BILL_APPLY_TYPE.includes(applyInfoDatas.serviceType) ?
                 <div>
                   <h2>{applyInfoDatas.serviceTypeName}详情</h2>
-                  <BillApplyDetail
+                  <BillApproveDetail
                     serviceDetail={applyInfoDatas.serviceDetail}
                     isEdit={this.props.isEdit === 'Y' ? true : false}
                     applyType={applyInfoDatas.serviceType}
@@ -217,8 +217,8 @@ class ApplyInfoModal extends React.Component {
 }
 ApplyInfoModal.propTypes = {
   closeClaim: PropTypes.func.isRequired,
-  applyReject: PropTypes.func.isRequired,
-  applyComfirm: PropTypes.func.isRequired,
+  applyReject: PropTypes.func,
+  applyComfirm: PropTypes.func,
   infoVisitable: PropTypes.bool.isRequired,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,

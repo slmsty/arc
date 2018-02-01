@@ -31,7 +31,9 @@ export default class BillingApplication extends React.Component {
       message.success('申请信息修改成功!')
       this.setState({
         updateVisible: false,
-        otherAddVisible: false
+        otherAddVisible: false,
+        selectedRows: [],
+        currentRecord: {},
       })
       this.getInitQuery()
     } else if(this.props.addSuccess !== nextProps.addSuccess && nextProps.addSuccess) {
@@ -353,15 +355,19 @@ export default class BillingApplication extends React.Component {
           record={this.state.currentRecord}
           isAdd={isAdd}
           billType={this.state.currentType}
+          isProCodeEdit={normalTypes.includes(this.state.currentType)}
         />
-        <OtherContractAdd
-          addAction={isAdd ? addOtherContract : updateBillInfo}
-          billType={this.state.currentType}
-          visible={otherAddVisible}
-          onCancel={() => this.setState({otherAddVisible: false})}
-          record={this.state.currentRecord}
-          isAdd={isAdd}
-        />
+        {
+          otherAddVisible ?
+            <OtherContractAdd
+              addAction={isAdd ? addOtherContract : updateBillInfo}
+              billType={this.state.currentType}
+              visible={otherAddVisible}
+              onCancel={() => this.setState({otherAddVisible: false})}
+              record={this.state.currentRecord}
+              isAdd={isAdd}
+            /> : null
+        }
       </div>
     )
   }

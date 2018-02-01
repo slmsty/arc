@@ -4,49 +4,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table } from 'antd'
-
+import BillDetail from './billDetail'
 const FormItem = Form.Item
 const { TextArea } = Input
-class ApplyInfoModal extends React.Component {
-  applyComfirm = () => {
-    const applyComfirmQueryParam = {
-      arcFlowId: this.props.applyData.arcFlowId,
-      processInstanceId: this.props.applyData.processInstanceId,
-      businessKey: this.props.applyData.businessKey,
-      taskId: this.props.applyData.taskId,
-      approveType: '',
-      approveRemark: '',
-    }
-    const param = this.props.form.getFieldsValue()
-    param.approveRemark = param.approveRemark ? this.trim(param.approveRemark) : param.approveRemark
-    param.approveType = 'agree'
-    applyComfirmQueryParam.approveRemark = param.approveRemark
-    applyComfirmQueryParam.approveType = param.approveType
-    this.props.applyComfirm(applyComfirmQueryParam)
-  }
-  applyReject = () => {
-    const applyRejectQueryParam = {
-      arcFlowId: this.props.applyData.arcFlowId,
-      processInstanceId: this.props.applyData.processInstanceId,
-      businessKey: this.props.applyData.businessKey,
-      taskId: this.props.applyData.taskId,
-      approveType: '',
-      approveRemark: '',
-    }
-    // console.log(applyRejectQueryParam)
-    const param = this.props.form.getFieldsValue()
-    param.approveRemark = param.approveRemark ? this.trim(param.approveRemark) : param.approveRemark
-    param.approveType = 'cancel'
-    applyRejectQueryParam.approveRemark = param.approveRemark
-    applyRejectQueryParam.approveType = param.approveType
-    this.props.applyReject(applyRejectQueryParam)
-  }
-  trim = (str) => {
-    return str.replace(/(^\s*)|(\s*$)/g, '')
-  }
+const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER']
+
+class NoApplyInfo extends React.Component {
   render() {
     const applyInfoDatas = this.props.applyInfoData
-    const { getFieldDecorator } = this.props.form
     const columns = [{
       title: '节点',
       dataIndex: 'projectNode',
@@ -101,13 +66,12 @@ class ApplyInfoModal extends React.Component {
     return (
       <div>
         <Modal
-          width={1024}
+          width='1024px'
           title="审批详情"
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           onOk={this.props.closeClaim}
         >
-          <Form>
             <h2>申请人信息</h2>
             <br />
             <Row>
@@ -125,21 +89,36 @@ class ApplyInfoModal extends React.Component {
             <br />
             <hr style={{ borderTop: '1px solid #d9d9d9' }} />
             <br />
-            <div style={{ display: applyInfoDatas.serviceType === 'badDebt' ? 'block' : 'none' }}>
-              <h2>坏账划销申请</h2>
-              <Table
-                rowKey="receiptClaimId"
-                columns={columns}
-                bordered
-                size="small"
-                scroll={{ x: '1480px' }}
-                dataSource={applyInfoDatas.serviceDetail}
-              />
-              <hr style={{ borderTop: '1px solid #d9d9d9' }} />
-            </div>
+            {
+              applyInfoDatas.serviceType === 'badDebt' ?
+                <div>
+                <h2>坏账划销申请</h2>
+                <Table
+                  rowKey="receiptClaimId"
+                  columns={columns}
+                  bordered
+                  size="small"
+                  scroll={{ x: '1480px' }}
+                  dataSource={applyInfoDatas.serviceDetail}
+                />
+                <hr style={{ borderTop: '1px solid #d9d9d9' }} />
+              </div> : null
+            }
+            {
+              BILL_APPLY_TYPE.includes(applyInfoDatas.serviceType) ?
+                <div>
+                  <h2>{applyInfoDatas.serviceTypeName}详情</h2>
+                  <BillDetail
+                    serviceDetail={applyInfoDatas.serviceDetail}
+                    applyType={applyInfoDatas.serviceType}
+                  />
+                </div>
+                : null
+            }
             <br />
             <h2>审批意见</h2>
-            { applyInfoDatas.approveInfoList ?
+            {
+              applyInfoDatas.approveInfoList ?
               applyInfoDatas.approveInfoList.map((item, index) => {
                 return (
                   <div key={index}>
@@ -167,22 +146,20 @@ class ApplyInfoModal extends React.Component {
               }) : ''
             }
             <br />
-          </Form>
         </Modal>
       </div>
     )
   }
 }
-ApplyInfoModal.propTypes = {
+NoApplyInfo.propTypes = {
   closeClaim: PropTypes.func.isRequired,
-  applyReject: PropTypes.func.isRequired,
-  applyComfirm: PropTypes.func.isRequired,
+  applyReject: PropTypes.func,
+  applyComfirm: PropTypes.func,
   infoVisitable: PropTypes.bool.isRequired,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
 }
-const ApplyInfoModalWithForm = Form.create()(ApplyInfoModal)
 
-export default ApplyInfoModalWithForm
+export default NoApplyInfo

@@ -54,9 +54,9 @@ export default class SelectRadioApi extends React.Component {
 }
 
 SelectRadioApi.propTypes = {
-  placeholder: PropTypes.string.isRequired,
-  typeCode: PropTypes.string.isRequired,
-  paramCode: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  typeCode: PropTypes.string,
+  paramCode: PropTypes.string,
   value: PropTypes.string,
   initialValue: PropTypes.string,
   hasEmpty: PropTypes.bool,

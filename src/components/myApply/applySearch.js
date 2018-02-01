@@ -139,8 +139,6 @@ export default class ApplySearchCon extends React.Component {
           noApplyInfoVisitable: true,
           noApplyInfoData: record,
         })
-      } else {
-        // message.error(res.response.resultMessage)
       }
     })
   }
@@ -238,12 +236,15 @@ export default class ApplySearchCon extends React.Component {
           billApplySave={this.props.billApplySave}
           billSaveSuccess={billSaveSuccess}
         />
-        <NoApplyInfo
-          infoVisitable={this.state.noApplyInfoVisitable}
-          closeClaim={this.NoApplycloseModalClaim}
-          applyData={this.state.noApplyInfoData}
-          applyInfoData={this.props.myApply.getMyApplyInfo}
-        />
+        {
+          this.state.noApplyInfoVisitable ?
+            <NoApplyInfo
+              infoVisitable={this.state.noApplyInfoVisitable}
+              closeClaim={this.NoApplycloseModalClaim}
+              applyData={this.state.noApplyInfoData}
+              applyInfoData={this.props.myApply.getMyApplyInfo}
+            /> : null
+        }
         <br /><br />
         <Table
           rowKey="getMyApplyList"

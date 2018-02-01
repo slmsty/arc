@@ -158,7 +158,7 @@ class BillUpdate extends React.Component {
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
                   {getFieldDecorator('projectNo', {initialValue: record.projectNo ,rules: [{ required: true, message: '请选择项目编码!' }]})(
-                    <Input disabled/>
+                    <Input disabled={this.props.isProCodeEdit}/>
                   )}
                 </FormItem>
               </Col>
