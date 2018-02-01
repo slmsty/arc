@@ -114,6 +114,7 @@ class SelectSbu extends React.Component {
           value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
+          disabled={this.props.disabled}
         />
         <Modal
           title="SBU查询"

@@ -25,7 +25,7 @@ export default class SelectInvokeApi extends React.Component {
     const {indexs, columns} = this.props
     const text = this.props.text
     let value = ''
-    if(typeof text ==='string'){
+    if(typeof text ==='string' || typeof text ==='number'){
       value = text
     }else if(text.length > 0){
       value = text[0]

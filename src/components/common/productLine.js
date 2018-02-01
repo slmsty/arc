@@ -155,6 +155,7 @@ class ProductLine extends React.Component {
           // value={this.state.selectValue ? this.state.selectValue : (this.props.initialValue ? this.props.initialValue : '请选择')}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
+          disabled={this.props.disabled}
         />
         <Modal
           title="产品线查询"

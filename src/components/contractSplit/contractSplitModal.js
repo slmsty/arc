@@ -135,7 +135,7 @@ class ContractSplitModal extends React.Component{
   renderColumns = (text, index, column,record) => {
     console.log('record',record,column)
     if(column=="product"){
-      return <ProductLine onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record[column]}  indexs={index} columns={column} />
+      return <ProductLine disabled={this.state.editFlag} onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record[column]}  indexs={index} columns={column} />
     }
     if(column ==='contractCategory'){
       return(
@@ -148,6 +148,7 @@ class ContractSplitModal extends React.Component{
           text={text ? text : ''}
           indexs={index}
           columns={column}
+          disabled={this.state.editFlag}
         />
       )
     }
@@ -162,6 +163,7 @@ class ContractSplitModal extends React.Component{
           text={text ? text : ''}
           indexs={index}
           columns={column}
+          disabled={this.state.editFlag}
         />
       )
     }
@@ -176,6 +178,7 @@ class ContractSplitModal extends React.Component{
           text={text ? text : ''}
           indexs={index}
           columns={column}
+          disabled={this.state.editFlag}
         />
       )
     }
@@ -241,7 +244,7 @@ class ContractSplitModal extends React.Component{
   }
   renderSelect = (text, index, column) => {
     return (
-      <Select labelInValue onChange={this.handleSelectChange} placeholder="请选择拆分状态" defaultValue={{ key: text ? `${text}&${index}&${column}` : `POC&${index}&${column}` }}>
+      <Select disabled={this.state.editFlag} labelInValue onChange={this.handleSelectChange} placeholder="请选择拆分状态" defaultValue={{ key: text ? `${text}&${index}&${column}` : `POC&${index}&${column}` }}>
         <Option value={`POC&${index}&${column}`}>POC</Option>
         <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
         <Option value={`FA&${index}&${column}`}>FA</Option>
@@ -563,12 +566,12 @@ class ContractSplitModal extends React.Component{
           (
             (text === 'addSub' || record.parentOrderListLineId) ?
               <div style={{textAlign:'right',paddingRight: '8px'}}>
-                <Button onClick={() => this.handleMinus(index)}>－</Button>
+                <Button disabled={this.state.editFlag} onClick={() => this.handleMinus(index)}>－</Button>
               </div>
               :
               <div>
-                <Button onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;
-                <Button onClick={() => this.handleMinus(index)}>－</Button>
+                <Button disabled={this.state.editFlag} onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;
+                <Button disabled={this.state.editFlag} onClick={() => this.handleMinus(index)}>－</Button>
               </div>
           )
       ),
@@ -639,7 +642,7 @@ class ContractSplitModal extends React.Component{
       render: (text, record, index) => {
         return (
           record.taskOpration === '合计' ? '' :
-          <MyDtatePicker value={this.state.dataSource[index]['serviceStartDate']} onChange={this.selectDateChange} indexs={index} columns='serviceStartDate'  />
+          <MyDtatePicker disabled={this.state.editFlag} value={this.state.dataSource[index]['serviceStartDate']} onChange={this.selectDateChange} indexs={index} columns='serviceStartDate'  />
         )
       }
     }, {
@@ -649,7 +652,7 @@ class ContractSplitModal extends React.Component{
       render: (text, record, index) => {
         return (
           record.taskOpration === '合计' ? '' :
-          <MyDtatePicker value={this.state.dataSource[index]['serviceEndDate']} onChange={this.selectDateChange} indexs={index} columns='serviceEndDate' />
+          <MyDtatePicker disabled={this.state.editFlag} value={this.state.dataSource[index]['serviceEndDate']} onChange={this.selectDateChange} indexs={index} columns='serviceEndDate' />
         )
       }
     },
@@ -811,6 +814,7 @@ class ContractSplitModal extends React.Component{
                         placeholder="请选择保修期开始时间"
                         paramCode="MAINTAIN_TIME"
                         typeCode="BILLED_SPLIT"
+                        disabled={this.state.editFlag}
                       />
                     )}
                   </FormItem>
@@ -859,7 +863,7 @@ class ContractSplitModal extends React.Component{
                     {getFieldDecorator('revenueCheckout', {
                       initialValue: constractData['revenueCheckout'],
                     })(
-                      <Checkbox.Group>
+                      <Checkbox.Group disabled={this.state.editFlag}>
                         <Checkbox value="POC">POC</Checkbox>
                         <Checkbox value="RATABLY">RATABLY</Checkbox>
                         <Checkbox value="FA">FA</Checkbox>
@@ -933,7 +937,7 @@ class ContractSplitModal extends React.Component{
                   <h2>合同拆分</h2>
                 </Col>
                 <Col>
-                  <Button onClick={() => this.handleAdd('0', '1')}>新增</Button>
+                  <Button disabled={this.state.editFlag} onClick={() => this.handleAdd('0', '1')}>新增</Button>
                 </Col>
               </Row>
               <br />
@@ -1041,7 +1045,7 @@ class ContractSplitModal extends React.Component{
               <br />
               <h2>拆分备注</h2>
               <br />
-              <TextArea rows={4} defaultValue={constractData.subcontractFee}  value={this.state.rcontent} onChange={this.onTextAreaChange} placeholder="根据实际情况录入，且不超过150字符" />
+              <TextArea disabled={this.state.editFlag} rows={4} defaultValue={constractData.subcontractFee}  value={this.state.rcontent} onChange={this.onTextAreaChange} placeholder="根据实际情况录入，且不超过150字符" />
               <br />
               <br />
               <h2>Order</h2>
