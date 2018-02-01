@@ -352,7 +352,7 @@ class ContractSplitModal extends React.Component{
         returnTaxRate,
         contractTaxRate,
         contractCategory,
-        key: j++,
+        orderKey: j++,
       })
 
     }
