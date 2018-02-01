@@ -43,6 +43,8 @@ export default class ApplySearchCon extends React.Component {
   handleQuery = () => {
     this.setState({
       loading: true,
+      selectedRowKeys: '',
+      selectedRows: '',
     })
     this.props.getContractList(this.queryParam).then((res) => {
       this.setState({

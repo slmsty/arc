@@ -319,6 +319,7 @@ class ContractSplitModal extends React.Component{
       return
     }*/
     const newLisfInfo = []
+    let j = 1
     for(let i of splitListInfo) {
       console.log('i',i)
       let contractCategory = ''
@@ -330,23 +331,33 @@ class ContractSplitModal extends React.Component{
       }else if (i.contractCategory.length > 0) {
         contractCategory = i.contractCategory[0]
       }
-      if(typeof i.product ==='string'){
+      if(typeof i.product ==='string' || typeof i.product ==='number'){
         product = i.product
       }else if (i.product.length > 0) {
-        product = i.product[0]
+        product = i.product[1]
       }
-      if(typeof i.returnTaxRate ==='string'){
+      if(typeof i.returnTaxRate ==='string' || typeof i.returnTaxRate ==='number'){
         returnTaxRate = i.returnTaxRate
       }else if (i.returnTaxRate.length > 0) {
         returnTaxRate = i.returnTaxRate[0]
       }
-      if(typeof i.contractTaxRate ==='string'){
+      if(typeof i.contractTaxRate ==='string' || typeof i.contractTaxRate ==='number'){
         contractTaxRate = i.contractTaxRate
       }else if (i.contractTaxRate.length > 0) {
         contractTaxRate = i.contractTaxRate[0]
       }
-      newLisfInfo.push({...i,product,returnTaxRate,contractTaxRate,contractCategory})
+      newLisfInfo.push({
+        ...i,
+        product,
+        returnTaxRate,
+        contractTaxRate,
+        contractCategory,
+        key: j++,
+      })
+
     }
+
+
     console.log('newLisfInfo',newLisfInfo)
     let msg = ''
     const postParams = {}
