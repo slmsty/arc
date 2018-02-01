@@ -360,15 +360,18 @@ export default class BillingApplication extends React.Component {
             billApplySave={billApplySave}
           /> : null
         }
-        <BillUpdate
-          visible={updateVisible}
-          onCancel={() => this.setState({updateVisible: false})}
-          billAction={isAdd ? addBillUnContract : updateBillInfo}
-          record={this.state.currentRecord}
-          isAdd={isAdd}
-          billType={this.state.currentType}
-          isProCodeEdit={normalTypes.includes(this.state.currentType)}
-        />
+        {
+          updateVisible ?
+            <BillUpdate
+              visible={updateVisible}
+              onCancel={() => this.setState({updateVisible: false})}
+              billAction={isAdd ? addBillUnContract : updateBillInfo}
+              record={this.state.currentRecord}
+              isAdd={isAdd}
+              billType={this.state.currentType}
+              isProCodeEdit={normalTypes.includes(this.state.currentType)}
+            /> : null
+        }
         {
           otherAddVisible ?
             <OtherContractAdd
