@@ -158,7 +158,17 @@ class BillUpdate extends React.Component {
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
                   {getFieldDecorator('projectNo', {initialValue: record.projectNo ,rules: [{ required: true, message: '请选择项目编码!' }]})(
-                    <Input disabled={this.props.isProCodeEdit}/>
+                    this.props.isProCodeEdit ?
+                      <Input disabled/>
+                      :
+                      <SelectSearch
+                        url="/arc/billingApplication/projectNo/search"
+                        columns={proCols}
+                        label="项目编码"
+                        idKey="tempProjectNo"
+                        valueKey="tempProjectNo"
+                      />
+
                   )}
                 </FormItem>
               </Col>

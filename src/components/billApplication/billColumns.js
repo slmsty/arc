@@ -211,7 +211,7 @@ const redFontCols = [
   }, {
     title: '发票号',
     dataIndex: 'invoiceNumber',
-    width: 180,
+    width: 150,
     fixed: 'left',
   }, {
     title: '开票金额',
@@ -220,11 +220,11 @@ const redFontCols = [
   }, {
     title: '开票税额',
     dataIndex: 'taxAmount',
-    width: 120,
+    width: 100,
   }, {
     title: '开票税率',
     dataIndex: 'taxRate',
-    width: 100,
+    width: 80,
     render: (text) => {
       return `${text * 100}%`
     }
@@ -239,7 +239,7 @@ const redFontCols = [
   }, {
     title: '合同编码',
     dataIndex: 'contractNo',
-    width: 260,
+    width: 200,
   }, {
     title: '客户名称',
     dataIndex: 'custName',
@@ -251,7 +251,7 @@ const redFontCols = [
   }, {
     title: '付款阶段',
     dataIndex: 'paymentPhrases',
-    width: 200,
+    width: 150,
   }, {
     title: '付款金额',
     dataIndex: 'billedArAmount',

@@ -206,6 +206,7 @@ class BillDetail extends React.Component {
       title: '操作',
       dataIndex: 'action',
       width: 60,
+      fixed: 'left',
       render: (text, record, index) => (
         <div>
           {
@@ -224,10 +225,11 @@ class BillDetail extends React.Component {
       title: '组号',
       dataIndex: 'groupNo',
       width: 50,
+      fixed: 'left',
     }, {
       title: '开票内容',
       dataIndex: 'billingContent',
-      width: 150,
+      width: 200,
       render: (text, record, index) => (
         <SelectSearch
           url="/arc/billingApplication/billingContent/search"
@@ -456,6 +458,7 @@ class BillDetail extends React.Component {
             columns={columns}
             pagination={false}
             dataSource={this.state.dataSource}
+            scroll={{ x: 1160 }}
           />
           <Row gutter={40}>
             <Col span={14}>

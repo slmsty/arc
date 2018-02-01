@@ -313,6 +313,18 @@ export default class BillingApplication extends React.Component {
     }
   }
 
+  getScrollWidth() {
+    let scroll = null
+    if(normalTypes.includes(this.state.currentType)){
+      scroll = { x: 2050 }
+    } else if (redTypes.includes(this.state.currentType)) {
+      scroll = { x: 1840 }
+    } else {
+      scroll = false
+    }
+    return scroll
+  }
+
   render() {
     const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave } = this.props
     const rowSelection = {
@@ -338,7 +350,7 @@ export default class BillingApplication extends React.Component {
           bordered
           columns={this.getApplyColumns()}
           dataSource={billList}
-          scroll={ normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType) ? { x: 2050 } : false}
+          scroll={this.getScrollWidth()}
         />
         {this.state.detailVisible ?
           <BillDetail
