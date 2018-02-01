@@ -22,9 +22,18 @@ export default class SelectInvokeApi extends React.Component {
   showTextValue = () => {
     console.log('this.props.text',this.props.text)
     const options = this.state.options
-    console.log('options',options)
+    const {indexs, columns} = this.props
     const result = options.filter(o => o.paramValue == this.props.text)
-    console.log(result.length ? result[0].paramValueDesc : '')
+    const paramValue = result.length ? result[0].paramValue : ''
+    const paramValueDesc = result.length ? result[0].paramValueDesc : ''
+    console.log('paramValue',paramValue)
+    console.log('paramValueDesc',paramValueDesc)
+    /*this.props.onChange({
+      No: paramValue,
+      Name:paramValueDesc,
+      indexs: indexs,
+      columns: columns,
+    })*/
     return result.length ? result[0].paramValueDesc : ''
   }
 
@@ -69,7 +78,6 @@ export default class SelectInvokeApi extends React.Component {
         id={this.props.id}
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
-        //value={this.state.selectValue ? this.state.selectValue : (this.props.initialValue ? this.props.initialValue : 'all')}
         value={this.state.flag && this.props.text ? this.showTextValue() : (this.props.value && this.props.value[1] ? this.props.value[1] : (this.props.initialValue ? this.props.initialValue : 'all'))}
         disabled={this.props.disabled}
       >
