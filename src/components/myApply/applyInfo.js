@@ -3,11 +3,18 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Row, Col, Button, Input, Form, Table } from 'antd'
-
+import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
+import BillApplyDetail from './billApplyDetail'
 const FormItem = Form.Item
 const { TextArea } = Input
+
+const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER']
 class ApplyInfoModal extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    if(this.props.billSaveSuccess != nextProps.billSaveSuccess && nextProps.billSaveSuccess) {
+      message.success('发票申请详情保存成功!')
+    }
+  }
   applyComfirm = () => {
     const applyComfirmQueryParam = {
       arcFlowId: this.props.applyData.arcFlowId,
@@ -132,18 +139,37 @@ class ApplyInfoModal extends React.Component {
             <br />
             <hr style={{ borderTop: '1px solid #d9d9d9' }} />
             <br />
-            <div style={{ display: applyInfoDatas.serviceType === 'badDebt' ? 'block' : 'none' }}>
-              <h2>坏账划销申请</h2>
-              <Table
-                rowKey="receiptClaimId"
-                columns={columns}
-                bordered
-                size="small"
-                scroll={{ x: '1480px' }}
-                dataSource={applyInfoDatas.serviceDetail}
-              />
-              <hr style={{ borderTop: '1px solid #d9d9d9' }} />
-            </div>
+            {
+              applyInfoDatas.serviceType === 'badDebt' ?
+                <div>
+                  <h2>坏账划销申请</h2>
+                  <Table
+                    rowKey="receiptClaimId"
+                    columns={columns}
+                    bordered
+                    size="small"
+                    scroll={{ x: '1480px' }}
+                    dataSource={applyInfoDatas.serviceDetail}
+                  />
+                </div> : null
+            }
+            {
+              BILL_APPLY_TYPE.includes(applyInfoDatas.serviceType) ?
+                <div>
+                  <h2>{applyInfoDatas.serviceTypeName}详情</h2>
+                  <BillApplyDetail
+                    serviceDetail={applyInfoDatas.serviceDetail}
+                    isEdit={this.props.isEdit === 'Y' ? true : false}
+                    applyType={applyInfoDatas.serviceType}
+                    billApplySave={this.props.billApplySave}
+                  />
+                </div>
+                : null
+            }
+            <br />
+            <br />
+            <hr style={{ borderTop: '1px solid #d9d9d9' }} />
+            <br />
             <h2>审批意见</h2>
             { applyInfoDatas.approveInfoList ?
               applyInfoDatas.approveInfoList.map((item, index) => {

@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from 'antd'
 import SelectSearch from './selectSearch'
 import SelectInvokeApi from '../common/selectInvokeApi'
+import moment from 'moment'
 import { clientCols, comCols, proCols, invoiceCols } from './billColumns'
 const FormItem = Form.Item
 const Option = Select.Option
@@ -20,18 +21,21 @@ class BillUpdate extends React.Component {
     const { record, isAdd } = this.props;
     const params = isAdd ? {
       ...values,
+      billingApplicationType: this.props.billType,
       comName: values.comName[1],
       custName: values.custName[1],
       projectNo: values.projectNo[1],
       receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
     } : {
       ...values,
+      billingApplicationType: this.props.billType,
       arBillingId: record.arBillingId,
       contractItemId: record.contractItemId,
       comId: values.comName[0],
       comName: values.comName[1],
       custId: values.custName[0],
       custName: values.custName[1],
+      projectNo: values.projectNo[1],
       receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
     }
     console.log(params)
@@ -94,12 +98,12 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
-                  {getFieldDecorator('comName', {initialValue: record.comName , rules: [{ required: true, message: '请选择签约公司!' }]} )(
+                  {getFieldDecorator('comName', {initialValue: ['', record.comName] , rules: [{ required: true, message: '请选择签约公司!' }]} )(
                     <SelectSearch
                       url="/arc/billingApplication/company/search"
                       columns={comCols}
                       label="公司名称"
-                      idKey="comId"
+                      idKey="billingComInfoId"
                       valueKey="comName"
                     />
                   )}
@@ -109,7 +113,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="客户名称">
                   {
                     getFieldDecorator('custName',{
-                      initialValue: '', rules: [{ required: true, message: '请选择客户名称!' }]
+                      initialValue: ['', record.custName], rules: [{ required: true, message: '请选择客户名称!' }]
                     })(
                       <SelectSearch
                         url="/arc/billingApplication/custom/search"
@@ -127,7 +131,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="提前开票原因">
                   {
                     getFieldDecorator('advanceBillingReason',{
-                      initialValue: '',
+                      initialValue: record.advanceBillingReason,
                     })(
                       <SelectInvokeApi
                         typeCode="BILLING_APPLICATION"
@@ -143,7 +147,9 @@ class BillUpdate extends React.Component {
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="预计回款日期">
                   {
-                    getFieldDecorator('receiptReturnDate')(<DatePicker format="YYYY-MM-DD"/>)
+                    getFieldDecorator('receiptReturnDate', {
+                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : '',}
+                      )(<DatePicker format="YYYY-MM-DD"/>)
                   }
                 </FormItem>
               </Col>
@@ -151,14 +157,8 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('projectNo', {rules: [{ required: true, message: '请选择项目编码!' }]})(
-                    <SelectSearch
-                      url="/arc/billingApplication/projectNo/search"
-                      columns={proCols}
-                      label="项目编码"
-                      idKey="tempProjectId"
-                      valueKey="tempProjectNo"
-                    />
+                  {getFieldDecorator('projectNo', {initialValue: record.projectNo ,rules: [{ required: true, message: '请选择项目编码!' }]})(
+                    <Input disabled/>
                   )}
                 </FormItem>
               </Col>

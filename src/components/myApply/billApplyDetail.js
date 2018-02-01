@@ -1,38 +1,27 @@
 import React from 'react'
-import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload, message, Icon, InputNumber } from 'antd'
-import './billDetail.less'
+import { Table, Form, message, Row, Col, Input, DatePicker, Button, InputNumber, Icon, Select } from 'antd'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import SelectSearch from './selectSearch'
-import moment from 'moment'
-import { contentCols, totalColumns, detailColumns } from './billColumns'
-
-const Option = Select.Option
+import { proColumns, billDetailColumns, detailColumns, contentCols, taxCategoryCols } from '../billApplication/billColumns'
+import SelectSearch from '../billApplication/selectSearch'
+import moment from 'moment';
+import './billApplyDetail.css'
 const FormItem = Form.Item
-const { TextArea } = Input
+const TextArea = Input.TextArea
+const dateFormat = 'YYYY/MM/DD';
+const Option = Select.Option
 
-const data = [{
-  title: '城建',
-  taxRate: '5%',
-  tax: '2021',
-}, {
-  title: '教育',
-  taxRate: '8%',
-  tax: '12000',
-}, {
-  title: '所得税',
-  taxRate: '10%',
-  tax: '3000',
-}, {
-  title: '合计',
-  taxRate: '20%',
-  tax: '21000',
-}]
-
-class BillDetail extends React.Component {
+class BillApplyDetail extends React.Component  {
   constructor(props) {
     super(props)
+    const dataSource = props.serviceDetail.appLineList.map(detail => ({
+      ...detail,
+      isParent: 1,
+      lineNo: detail.lineNo - 1,
+      })
+    )
+    console.log(dataSource)
     this.state = {
-      dataSource: [],
+      dataSource: dataSource,
       count: 1,
       content: '',
       taxRate: '',
@@ -40,35 +29,8 @@ class BillDetail extends React.Component {
       selectedRows: [],
       currentNo: 1,
       totalAmount: 0,
-      fileName: '',
     }
   }
-
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.detail && nextProps.detail.appLineItems.length > 0 && this.state.dataSource.length === 0) {
-      let data = []
-      nextProps.detail.appLineItems.map((item, index) => {
-        data.push({
-          lineNo: index,
-          isParent: 1,
-          arBillingId: item.arBillingId,
-          contractItemId: item.contractItemId,
-          billingContent: '',
-          specificationType: '',
-          unit: '',
-          quantity: '',
-          unitPrice: 0,
-          noRateAmount: 0,
-          billingAmount: item.billingAmount,
-          totalAmount: item.billingAmount,
-          billingTaxRate: 0,
-          billingTaxAmount: 0,
-        })
-      })
-      this.setState({ dataSource: data, count: data.length })
-    }
-  }
-
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;
     const newData = {
@@ -119,29 +81,6 @@ class BillDetail extends React.Component {
     }))
     this.setState({ dataSource: newSource });
   }
-
-  handleOk = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const { custInfo, comInfo } = this.props.detail
-        const params = {
-          ...values,
-          billingCustInfoId: custInfo.billingCustInfoId,
-          billingComInfoId: comInfo.billingComInfoId,
-          billingApplicationType: this.props.billType,
-          billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
-          appLineItems: this.state.dataSource.map(record => ({
-            ...record,
-            lineNo: record.lineNo + 1,
-          }))
-        }
-        console.log(params)
-        this.props.billApplySave(params)
-      }
-    });
-  }
-
   handleChange = (value, col, index, record) => {
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
@@ -173,9 +112,6 @@ class BillDetail extends React.Component {
   billingUnify = () => {
     let { selectedRows, currentNo, dataSource } = this.state
     //判断是否存在不一致组号
-    dataSource.map(data => {
-
-    })
     const groupNo = selectedRows[0].groupNo
     selectedRows.map(record => {
       if(dataSource[record.lineNo]['groupNo'] !== groupNo) {
@@ -191,27 +127,69 @@ class BillDetail extends React.Component {
       currentNo: currentNo + 1,
     })
   }
-
+  handleOk = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const params = {
+          ...values,
+          billingApplicationType: this.props.applyType,
+          billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
+          appLineItems: this.state.dataSource.map(record => ({
+            ...record,
+            lineNo: record.lineNo + 1,
+          }))
+        }
+        console.log(params)
+        this.props.billApplySave(params)
+      }
+    });
+  }
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
       labelCol: { span: 7 },
       wrapperCol: { span: 12 },
     }
-    const formItemLayout1 = {
-      labelCol: { span: 3 },
-      wrapperCol: { span: 21 },
+    const span3ItemLayout = {
+      labelCol: { span: 2 },
+      wrapperCol: { span: 20 },
+    }
+    const { billingType, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark } = this.props.serviceDetail
+    const detailData = [{
+      title: '购买方',
+      customerName: custInfo.billingCustName,
+      taxPayer: custInfo.taxpayerIdentificationNumber,
+      address: custInfo.addressPhoneNumber,
+      bankAccount: custInfo.bankBankAccount,
+    }, {
+      title: '销售方',
+      customerName: comInfo.billingComName,
+      taxPayer: comInfo.taxpayerIdentificationNumber,
+      address: comInfo.addressPhoneNumber,
+      bankAccount: comInfo.bankBankAccount
+    }]
+    const rowSelection = {
+      type: 'checkbox',
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.setState({
+          selectedRows,
+          selectedRowKeys
+        })
+      },
+      selectedRowKeys: this.state.selectedRowKeys,
     }
     const columns = [{
       title: '操作',
       dataIndex: 'action',
       width: 60,
+      fixed: 'left',
       render: (text, record, index) => (
         <div>
           {
             record.isParent === 1 ?
-            <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
-            : null
+              <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
+              : null
           }
           {
             record.isParent === 0 ?
@@ -224,6 +202,7 @@ class BillDetail extends React.Component {
       title: '组号',
       dataIndex: 'groupNo',
       width: 50,
+      fixed: 'left',
     }, {
       title: '开票内容',
       dataIndex: 'billingContent',
@@ -244,14 +223,14 @@ class BillDetail extends React.Component {
       dataIndex: 'specificationType',
       width: 100,
       render: (text, record, index) => (
-        <Input placeholder="规格型号" onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}/>
+        <Input placeholder="规格型号" defaultValue={this.state.dataSource[index]['specificationType']} onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}/>
       )
     }, {
       title: '单位',
       dataIndex: 'unit',
       width: 80,
       render: (text, record, index) => (
-        <Input placeholder="单位" onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
+        <Input placeholder="单位" defaultValue={this.state.dataSource[index]['unit']} onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
       )
     }, {
       title: '数量',
@@ -330,89 +309,95 @@ class BillDetail extends React.Component {
           />
         )
       }
-    }]
-    const props = {
-      name: 'file',
-      action: `${process.env.REACT_APP_GATEWAY}/api/v1.0.0/arc/file/upload/${this.state.fileName}`,
-      headers: {
-        authorization: 'authorization-text',
-      },
-      onChange(info) {
-        console.log(info.file.name)
-        if(info.file.name) {
-          this.setState({
-            fileName: info.file.name
-          })
-        }
-        if (info.file.status !== 'uploading') {
-          console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-          message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      },
-    };
-    const { custInfo, comInfo } = this.props.detail
-    const detailData = [{
-      title: '购买方',
-      customerName: custInfo.billingCustName,
-      taxPayer: custInfo.taxpayerIdentificationNumber,
-      address: custInfo.addressPhoneNumber,
-      bankAccount: custInfo.bankBankAccount,
     }, {
-      title: '销售方',
-      customerName: comInfo.billingComName,
-      taxPayer: comInfo.taxpayerIdentificationNumber,
-      address: comInfo.addressPhoneNumber,
-      bankAccount: comInfo.bankBankAccount
+      title: '税收分类编码',
+      dataIndex: 'taxCategoryCode',
+      width: 120,
+      render: (text, record, index) => {
+        return (
+          <SelectSearch
+            url="/arc/billingApplication/taxInfo/search"
+            columns={taxCategoryCols}
+            label="税收分类编码"
+            idKey="taxCategoryCode"
+            valueKey="taxCategoryCode"
+            value={['', this.state.dataSource[index]['taxCategoryCode']]}
+            onChange={(v) => this.handleChange(v, 'taxCategoryCode', index)}
+          />
+        )
+      }
+    }, {
+      title: '税收分类名称',
+      dataIndex: 'taxCategoryName',
+      width: 120,
+      render: (text, record, index) => {
+        return (
+          <Input defaultValue={this.state.dataSource[index]['taxCategoryName']}/>
+        )
+      }
+    }, {
+      title: '优惠政策',
+      dataIndex: 'prefPolicySign',
+      width: 100,
+      render: (text, record, index) => {
+        return (
+          <Select defaultValue={this.state.dataSource[index]['prefPolicySign']}>
+            <Option value="">-请选择-</Option>
+            <Option value="1">是</Option>
+            <Option value="0">否</Option>
+          </Select>
+        )
+      }
+    }, {
+      title: '优惠政策类型',
+      dataIndex: 'prefPolicyType',
+      width: 100,
+      render: (text, record, index) => {
+        return (
+          <Select defaultValue={this.state.dataSource[index]['prefPolicyType']}>
+            <Option value="">-请选择-</Option>
+            <Option value="超税负3%即征即退">超税负3%即征即退</Option>
+            <Option value="免税">免税</Option>
+            <Option value="不征税">不征税</Option>
+          </Select>
+        )
+      }
     }]
-    const rowSelection = {
-      type: 'checkbox',
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.setState({
-          selectedRows,
-          selectedRowKeys
-        })
-      },
-      selectedRowKeys: this.state.selectedRowKeys,
-    }
     return (
-      <Modal
-        title="发票编辑"
-        width="1100px"
-        style={{ top: 20 }}
-        visible={true}
-        wrapClassName="vertical-center-modal"
-        footer={[
-          <Button key="submit" type="primary" onClick={this.handleOk}>
-            <Icon type="check" />开票
-          </Button>,
-        ]}
-        onCancel={() => this.props.onCancel()}
-      >
+      <div>
         <Form
           className="ant-search-form"
         >
+          <div className="infoPanel">
+            <h1>项目信息</h1>
+            <Table
+              rowKey="receiptClaimId"
+              columns={proColumns}
+              bordered
+              size="small"
+              scroll={{ x: '1480px' }}
+              dataSource={contractList}
+              pagination={false}
+            />
+          </div>
+          <div className="infoPanel">
+            <h1>开票结果详情</h1>
+            <Table
+              rowKey="receiptClaimId"
+              columns={billDetailColumns}
+              bordered
+              size="small"
+              scroll={{ x: '1480px' }}
+              dataSource={outcomeList}
+              pagination={false}
+            />
+          </div>
           <Row gutter={40}>
             <Col span={8} key={1}>
-              <FormItem {...formItemLayout} label="费用承担着">
-                {getFieldDecorator('costBear')(
-                  <SelectInvokeApi
-                    typeCode="BILLING_APPLICATION"
-                    paramCode="COST_BEAR"
-                    placeholder="费用承担着"
-                    hasEmpty
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="开票类型">
                 {
                   getFieldDecorator('billingType', {
-                    initialValue: '', rules: [{ required: true, message: '请选择开票类型!' }]
+                    initialValue: billingType
                   })(
                     <SelectInvokeApi
                       typeCode="BILLING_APPLICATION"
@@ -424,17 +409,32 @@ class BillDetail extends React.Component {
                 }
               </FormItem>
             </Col>
-            <Col span={8} key={3}>
+            <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="开票日期">
                 {
-                  getFieldDecorator('billingDate', {rules: [{ required: true, message: '请选择开票日期!' }]})(
+                  getFieldDecorator('billingDate', {initialValue: moment(billingDate, dateFormat)})(
                     <DatePicker format="YYYY-MM-DD"/>,
                   )
                 }
               </FormItem>
             </Col>
+            {
+              this.props.applyType === 'BILLING_RED' ?
+                <Col span={8} key={2}>
+                  <FormItem {...formItemLayout} label="是否收到发票">
+                    {
+                      getFieldDecorator('receiptOutcome', {initialValue: ''})(
+                        <Select>
+                          <Option value="Y">是</Option>
+                          <Option value="N">否</Option>
+                        </Select>
+                      )
+                    }
+                  </FormItem>
+                </Col> : null
+            }
           </Row>
-          <div className="arc-info">
+          <div style={{margin: '10px 0'}}>
             <Table
               rowKey="id"
               size="small"
@@ -456,63 +456,43 @@ class BillDetail extends React.Component {
             columns={columns}
             pagination={false}
             dataSource={this.state.dataSource}
+            scroll={{ x: '1500px' }}
           />
           <Row gutter={40}>
-            <Col span={14}>
-              <FormItem {...formItemLayout1} label="发票备注">
+            <Col span={24}>
+              <FormItem {...span3ItemLayout} label="备注">
                 {
-                  getFieldDecorator('billingApplicantRemark')(
-                    <TextArea placeholder="请输入发票备注" rows="2" />
+                  getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 350, message: '备注不能超过350个字符!' }]})(
+                    <TextArea placeholder="备注" rows="2" />
                   )
                 }
               </FormItem>
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={14}>
-              <FormItem {...formItemLayout1} label="附件">
+            <Col span={24}>
+              <FormItem {...span3ItemLayout} label="开票要求">
                 {
-                  getFieldDecorator('file')(
-                    <Upload {...props}>
-                      <Button>
-                        <Icon type="upload" />点击上传
-                      </Button>
-                    </Upload>
-                  )
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={40}>
-            <Col span={14}>
-              <FormItem {...formItemLayout1} label="开票要求">
-                {
-                  getFieldDecorator('billingApplicantRequest', {rules: [{max: 350, message: '开票要求不能超过350个字符!' }]})(
+                  getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票要求不能超过350个字符!' }]})(
                     <TextArea placeholder="请输入开票要求" rows="2" />
                   )
                 }
               </FormItem>
             </Col>
           </Row>
-          {
-            this.props.billType === 'BILLING_EXCESS' ?
-              <div className="arc-info">
-                <Table
-                  style={{width: '50%'}}
-                  rowKey="id"
-                  size="small"
-                  bordered
-                  columns={totalColumns}
-                  dataSource={data}
-                  pagination={false}
-                />
-              </div> : null
-          }
+          <div className="add-btns">
+            <Button
+              type="primary"
+              style={{marginLeft: '5px'}}
+              ghost
+              onClick={(e) => this.handleOk(e)}>
+              <Icon type="check" />保存修改
+            </Button>
+          </div>
         </Form>
-      </Modal>
+      </div>
     )
   }
 }
 
-export default Form.create()(BillDetail)
-
+export default Form.create()(BillApplyDetail)

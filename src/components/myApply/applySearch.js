@@ -224,6 +224,7 @@ export default class ApplySearchCon extends React.Component {
       onShowSizeChange: this.handleChangeSize,
 
     }
+    const { billSaveSuccess } = this.props.myApply
     return (
       <div>
         <ApplySearchConWithForm onQuery={this.handleChangeParam} loading={this.state.loading} />
@@ -234,6 +235,8 @@ export default class ApplySearchCon extends React.Component {
           applyReject={this.applyReject}
           applyData={this.state.applyData}
           applyInfoData={this.props.myApply.getMyApplyInfo}
+          billApplySave={this.props.billApplySave}
+          billSaveSuccess={billSaveSuccess}
         />
         <NoApplyInfo
           infoVisitable={this.state.noApplyInfoVisitable}

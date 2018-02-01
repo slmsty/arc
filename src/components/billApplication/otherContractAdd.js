@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Button, Row, Col, Modal, Icon, Input } from 'antd'
 import SelectSearch from './selectSearch'
+import SelectInvokeApi from '../common/selectInvokeApi'
 import { clientCols, comCols, proCols } from './billColumns'
 const FormItem = Form.Item
 
@@ -12,18 +13,33 @@ class OtherContractAdd extends React.Component {
     }
   }
 
-  handleOk = () => {
-    const values = this.props.form.getFieldsValue()
-    const params = {
-      billingApplicationType: this.props.billType,
-      custName: values.custName[1],
-      comName: values.comName[1],
-    }
-    this.props.addAction(params)
+  handleOk = (e) => {
+    e.preventDefault();
+    const { isAdd, record } = this.props
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const params = isAdd ? {
+          ...values,
+          billingApplicationType: this.props.billType,
+          custName: values.custName[1],
+          comName: values.comName[1],
+          projectNo: values.projectNo[1],
+        } : {
+          ...values,
+          arBillingId: record.arBillingId,
+          custName: values.custName[1],
+          comName: values.comName[1],
+        }
+        console.log(params)
+        this.props.addAction(params)
+      }
+    });
+
   }
 
   render() {
     const { getFieldDecorator } = this.props.form
+    const { comName, custName, projectNo, contractCurrency } = this.props.record
     const formItemLayout = {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
@@ -37,7 +53,7 @@ class OtherContractAdd extends React.Component {
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
           footer={[
-            <Button key="submit" type="primary" onClick={this.handleOk}>
+            <Button key="submit" type="primary" onClick={(e) => this.handleOk(e)}>
               <Icon type="check" />保存
             </Button>,
           ]}
@@ -48,12 +64,12 @@ class OtherContractAdd extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
-                  {getFieldDecorator('comName', {rules: [{ required: true, message: '请选择签约公司!' }]})(
+                  {getFieldDecorator('comName', {initialValue: ['', comName], rules: [{ required: true, message: '请选择签约公司!' }]})(
                     <SelectSearch
                       url="/arc/billingApplication/company/search"
                       columns={comCols}
                       label="公司名称"
-                      idKey="comId"
+                      idKey="billingComInfoId"
                       valueKey="comName"
                     />
                   )}
@@ -63,7 +79,7 @@ class OtherContractAdd extends React.Component {
                 <FormItem {...formItemLayout} label="客户名称">
                   {
                     getFieldDecorator('custName',{
-                      initialValue: '', rules: [{ required: true, message: '请选择客户名称!' }]
+                      initialValue: ['', custName], rules: [{ required: true, message: '请选择客户名称!' }]
                     })(
                       <SelectSearch
                         url="/arc/billingApplication/custom/search"
@@ -71,6 +87,7 @@ class OtherContractAdd extends React.Component {
                         label="客户名称"
                         idKey="custId"
                         valueKey="custName"
+                        width='800px'
                       />)
                   }
                 </FormItem>
@@ -79,13 +96,25 @@ class OtherContractAdd extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('projectNo', {rules: [{ required: true, message: '请选择项目编码!' }]})(
+                  {getFieldDecorator('projectNo', {initialValue: projectNo, rules: [{ required: true, message: '请选择项目编码!' }]})(
                     <SelectSearch
                       url="/arc/billingApplication/projectNo/search"
                       columns={proCols}
                       label="项目编码"
-                      idKey="projectNo"
-                      valueKey="projectNo"
+                      idKey="tempProjectNo"
+                      valueKey="tempProjectNo"
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12} key={2}>
+                <FormItem {...formItemLayout} label="币种">
+                  {getFieldDecorator('contractCurrency', { initialValue : contractCurrency, rules: [{ required: true, message: '请选择币种!' }]})(
+                    <SelectInvokeApi
+                      typeCode="COMMON"
+                      paramCode="CURRENCY"
+                      placeholder="请选择币种"
+                      hasEmpty
                     />
                   )}
                 </FormItem>

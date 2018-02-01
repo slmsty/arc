@@ -9,6 +9,7 @@ const myApplyInfoData = {
   getMyApplyInfo: {},
   getReturnEditInfo: {},
   myapplyListRefresh: new Date().getTime(),
+  billSaveSuccess: false,
 }
 
 function getMyApplyList(state, action) {
@@ -35,7 +36,9 @@ function BillStatusSendErp(state) {
 function cancelApply(state) {
   return { ...state, myapplyListRefresh: new Date().getTime() }
 }
-
+function billApplySave(state, action) {
+  return { ...state, billSaveSuccess: true}
+}
 
 export default caseReducer(myApplyInfoData, {
   GET_MYAPPLY_LIST_SUCCESS: getMyApplyList,
@@ -46,4 +49,5 @@ export default caseReducer(myApplyInfoData, {
   RETURNEDITSENDERP_SUCCESS: returnEditSendErp,
   BILLSTATUSSENDERP_SUCCESS: BillStatusSendErp,
   UNDOERP_SUCCESS: cancelApply,
+  BILL_APPLY_SAVE_SUCCESS: billApplySave,
 })

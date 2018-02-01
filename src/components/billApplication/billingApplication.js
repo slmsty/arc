@@ -4,60 +4,8 @@ import BillDetail from './billDetail'
 import BillUpdate from './billUpdate'
 import OtherContractAdd from './otherContractAdd'
 import { Table, Button, message } from 'antd'
+import { redFontCols } from './billColumns'
 import './billingApplication.less'
-
-const advanceCols = [
-  {
-    title: '开票申请类别',
-    dataIndex: 'billingApplicationTypeName',
-    width: 120,
-  }, {
-    title: '签约公司',
-    dataIndex: 'comName',
-    width: 150,
-  }, {
-    title: '客户名称',
-    dataIndex: 'custName',
-    width: 220,
-  }, {
-    title: '项目编码',
-    dataIndex: 'projectNo',
-    width: 150,
-  }, {
-    title: '提前开票原因',
-    dataIndex: 'advanceBillingReason',
-    width: 150,
-  }, {
-    title: '预计回款日期',
-    dataIndex: 'receiptReturnDate',
-    width: 100,
-  }, {
-    title: '提前开票备注',
-    dataIndex: 'advanceBillingRemark',
-    width: 150,
-  }, {
-    title: '操作',
-    dataIndex: '',
-    width: 70,
-    render: () => <a href="#">修改</a>,
-  },
-]
-
-const otherCols = [
-  {
-    title: '开票申请类别',
-    dataIndex: 'billingApplicationTypeName',
-  }, {
-    title: '签约公司',
-    dataIndex: 'comName',
-  }, {
-    title: '客户名称',
-    dataIndex: 'custName',
-  }, {
-    title: '项目编码',
-    dataIndex: 'proCode',
-  }
-]
 
 const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
 const advanceTypes = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
@@ -81,25 +29,18 @@ export default class BillingApplication extends React.Component {
   componentWillReceiveProps(nextProps) {
     if(this.props.updateSuccess !== nextProps.updateSuccess && nextProps.updateSuccess) {
       message.success('申请信息修改成功!')
-      this.setState({updateVisible: false})
+      this.setState({
+        updateVisible: false,
+        otherAddVisible: false
+      })
+      this.getInitQuery()
     } else if(this.props.addSuccess !== nextProps.addSuccess && nextProps.addSuccess) {
       message.success('申请信息添加成功!')
       this.setState({
         updateVisible: false,
         otherAddVisible: false,
       })
-      const params = {
-        arDateStart: '',
-        arDateEnd: '',
-        companyName: '',
-        custName: '',
-        projectNos: [],
-        contractNos: [],
-        invoiceNumbers: [],
-        paymentName: '',
-        billingApplicationType: this.state.currentType,
-      }
-      this.props.billApplySearch(params)
+      this.getInitQuery()
     } else if(this.props.redApplySuccess != nextProps.redApplySuccess && nextProps.redApplySuccess) {
       message.success('发票红冲成功!')
     } else if(this.props.billSaveSuccess !== nextProps.billSaveSuccess && nextProps.billSaveSuccess) {
@@ -108,6 +49,21 @@ export default class BillingApplication extends React.Component {
         detailVisible: false,
       })
     }
+  }
+
+  getInitQuery = () => {
+    const params = {
+      arDateStart: '',
+      arDateEnd: '',
+      companyName: '',
+      custName: '',
+      projectNos: [],
+      contractNos: [],
+      invoiceNumbers: [],
+      paymentName: '',
+      billingApplicationType: this.state.currentType,
+    }
+    this.props.billApplySearch(params)
   }
 
   getApplyChange = (value) => {
@@ -119,8 +75,7 @@ export default class BillingApplication extends React.Component {
 
   getApplyColumns = () => {
     const type = this.state.currentType
-    const normalCols = [
-      {
+    const normalCols = [{
         title: '开票申请类别',
         dataIndex: 'billingApplicationTypeName',
         width: 130,
@@ -195,60 +150,86 @@ export default class BillingApplication extends React.Component {
         )
       },
     ]
-    const redFontCols = [
+    const advanceCols = [
       {
         title: '开票申请类别',
         dataIndex: 'billingApplicationTypeName',
-        width: 100,
-        fixed: 'left',
-      }, {
-        title: '发票号',
-        dataIndex: 'invoiceNumber',
-        width: 180,
-        fixed: 'left',
-      }, {
-        title: '开票金额',
-        dataIndex: 'taxIncludeAmount',
-        width: 100,
-      }, {
-        title: '开票税额',
-        dataIndex: 'taxAmount',
         width: 120,
-      }, {
-        title: '开票税率',
-        dataIndex: 'taxRate',
-        width: 100,
-        render: (text) => {
-          return `${text * 100}%`
-        }
-      }, {
-        title: '项目编码',
-        dataIndex: 'projectNo',
-        width: 200,
       }, {
         title: '签约公司',
         dataIndex: 'comName',
-        width: 250,
-      }, {
-        title: '合同编码',
-        dataIndex: 'contractNo',
-        width: 260,
+        width: 150,
       }, {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 200,
+        width: 220,
       }, {
-        title: '付款条款',
-        dataIndex: 'paymentName',
+        title: '项目编码',
+        dataIndex: 'projectNo',
         width: 150,
       }, {
-        title: '付款阶段',
-        dataIndex: 'paymentPhrases',
-        width: 200,
+        title: '提前开票原因',
+        dataIndex: 'advanceBillingReason',
+        width: 150,
       }, {
-        title: '付款金额',
-        dataIndex: 'billedArAmount',
-        width: 120,
+        title: '预计回款日期',
+        dataIndex: 'receiptReturnDate',
+        width: 100,
+      }, {
+        title: '提前开票备注',
+        dataIndex: 'advanceBillingRemark',
+        width: 150,
+      }, {
+        title: '操作',
+        dataIndex: '',
+        width: 70,
+        render: (text, record) => (
+          <a href="#"
+             onClick={() => {
+               this.setState({
+                 updateVisible: true,
+                 currentRecord: record
+               })}
+             }
+          >修改</a>
+        ),
+      },
+    ]
+    const otherCols = [
+      {
+        title: '开票申请类别',
+        dataIndex: 'billingApplicationTypeName',
+        width: 80
+      }, {
+        title: '签约公司',
+        dataIndex: 'comName',
+        width: 200
+      }, {
+        title: '客户名称',
+        dataIndex: 'custName',
+        width: 200
+      }, {
+        title: '项目编码',
+        dataIndex: 'projectNo',
+        width: 130
+      }, {
+        title: '币种',
+        dataIndex: 'contractCurrency',
+        width: 90
+      }, {
+        title: '操作',
+        dataIndex: 'action',
+        width: 80,
+        render: (text, record) => (
+          <a href="#"
+             onClick={() => {
+               this.setState({
+                 otherAddVisible: true,
+                 currentRecord: record
+               })}
+             }
+          >修改</a>
+        )
       }
     ]
     if (normalTypes.includes(type)) {
@@ -323,7 +304,7 @@ export default class BillingApplication extends React.Component {
     } else if (otherTypes.includes(type)) {
       return (
         <div>
-          <Button type="primary" ghost onClick={() => this.setState({otherAddVisible: true})}>增加</Button>
+          <Button type="primary" ghost onClick={() => this.setState({otherAddVisible: true, isAdd: true})}>增加</Button>
           <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
         </div>
       )
@@ -355,7 +336,7 @@ export default class BillingApplication extends React.Component {
           bordered
           columns={this.getApplyColumns()}
           dataSource={billList}
-          scroll={ normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType) ? { x: 2030 } : false}
+          scroll={ normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType) ? { x: 2050 } : false}
         />
         {this.state.detailVisible ?
           <BillDetail
@@ -371,12 +352,15 @@ export default class BillingApplication extends React.Component {
           billAction={isAdd ? addBillUnContract : updateBillInfo}
           record={this.state.currentRecord}
           isAdd={isAdd}
+          billType={this.state.currentType}
         />
         <OtherContractAdd
-          addAction={addOtherContract}
+          addAction={isAdd ? addOtherContract : updateBillInfo}
           billType={this.state.currentType}
           visible={otherAddVisible}
           onCancel={() => this.setState({otherAddVisible: false})}
+          record={this.state.currentRecord}
+          isAdd={isAdd}
         />
       </div>
     )

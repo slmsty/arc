@@ -111,6 +111,7 @@ class SelectSearch extends React.Component {
     return (
       <div>
         <Input
+          style={{zIndex: '0'}}
           placeholder={this.props.label}
           value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
           suffix={suffix}
@@ -118,7 +119,7 @@ class SelectSearch extends React.Component {
         />
         <Modal
           title="选择"
-          style={{ top: 20 }}
+          style={{ top: 20}}
           visible={visible}
           wrapClassName="vertical-center-modal"
           onCancel={this.handleCancel}

@@ -100,3 +100,16 @@ export function cancelApply(queryParam) {
     },
   }
 }
+
+export function billApplySave(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/workFlowEdit',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['BILL_APPLY_SAVE_SUCCESS'],
+    },
+  }
+}
