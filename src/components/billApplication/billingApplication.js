@@ -100,7 +100,7 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 180,
+        width: 220,
       }, {
         title: '付款条件',
         dataIndex: 'paymentTerm',
@@ -120,11 +120,11 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '已开票金额',
         dataIndex: 'alreadyBillingAmount',
-        width: 100,
+        width: 80,
       }, {
         title: '提前开票原因',
-        dataIndex: 'advanceBillingReason',
-        width: 100,
+        dataIndex: 'advanceBillingReasonName',
+        width: 130,
       }, {
         title: '预计回款日期',
         dataIndex: 'receiptReturnDate',
@@ -169,7 +169,7 @@ export default class BillingApplication extends React.Component {
         width: 150,
       }, {
         title: '提前开票原因',
-        dataIndex: 'advanceBillingReason',
+        dataIndex: 'advanceBillingReasonName',
         width: 150,
       }, {
         title: '预计回款日期',

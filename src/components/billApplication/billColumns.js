@@ -34,38 +34,38 @@ const invoiceCols = [{
   width: 100,
 }, {
   title: '客户名称',
-  dataIndex: 'invoiceNumber',
+  dataIndex: 'billingOutcomeId',
   width: 100,
 }, {
   title: '开票金额',
-  dataIndex: 'invoiceNumber',
+  dataIndex: 'taxIncludeAmount',
   width: 60,
 }, {
   title: '开票税率',
-  dataIndex: 'invoiceNumber',
+  dataIndex: 'taxRate',
   width: 50,
 }, {
   title: '开票税额',
-  dataIndex: 'invoiceNumber',
+  dataIndex: 'taxExcludeAmount',
   width: 50,
 }]
 
 const contentCols = [{
   title: '内容名称',
   dataIndex: 'billingContentName',
-  width: 200,
+  width: 100,
 }, {
   title: '税收分类编码',
   dataIndex: 'taxCategoryCode',
-  width: 200,
+  width: 100,
 }, {
   title: '税收分类名称',
   dataIndex: 'taxCategoryName',
-  width: 200,
+  width: 100,
 }, {
   title: '优惠政策',
   dataIndex: 'prefPolicySign',
-  width: 200,
+  width: 100,
   render: (text) => {
     return text === '0' ? '否' : '是'
   }
