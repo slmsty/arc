@@ -6,6 +6,7 @@ import moment from 'moment'
 import { clientCols, comCols, proCols, invoiceCols } from './billColumns'
 const FormItem = Form.Item
 const Option = Select.Option
+const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
 
 
 class BillUpdate extends React.Component {
@@ -157,7 +158,7 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('projectNo', {initialValue: ['', record.projectNo] ,rules: [{ required: true, message: '请选择项目编码!' }]})(
+                  {getFieldDecorator('projectNo', {initialValue: this.props.billType === 'BILLING_UN_CONTRACT_PROJECT' ? record.projectNo : ['', record.projectNo] ,rules: [{ required: true, message: '请选择项目编码!' }]})(
                     this.props.isProCodeEdit ?
                       <Input disabled={this.props.billType === 'BILLING_UN_CONTRACT_PROJECT'? false : true}/>
                       :
@@ -173,7 +174,7 @@ class BillUpdate extends React.Component {
                 </FormItem>
               </Col>
               {
-                !this.props.isAdd ?
+                normalTypes.includes(this.props.billType) && !this.props.isAdd ?
                   <Col span={12} key={2}>
                     <FormItem {...formItemLayout} label="关联发票">
                       {
@@ -188,7 +189,19 @@ class BillUpdate extends React.Component {
                         />)
                       }
                     </FormItem>
-                  </Col> : null
+                  </Col> :
+                  <Col span={12} key={2}>
+                    <FormItem {...formItemLayout} label="币种">
+                      {getFieldDecorator('contractCurrency', { initialValue : record.contractCurrency, rules: [{ required: true, message: '请选择币种!' }]})(
+                        <SelectInvokeApi
+                          typeCode="COMMON"
+                          paramCode="CURRENCY"
+                          placeholder="请选择币种"
+                          hasEmpty
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
               }
             </Row>
             {

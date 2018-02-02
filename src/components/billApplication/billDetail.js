@@ -4,6 +4,7 @@ import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import moment from 'moment'
+import requestJsonFetch from '../../http/requestJsonFecth'
 import { contentCols, totalColumns, detailColumns } from './billColumns'
 
 const Option = Select.Option
@@ -40,7 +41,7 @@ class BillDetail extends React.Component {
       selectedRows: [],
       currentNo: 1,
       totalAmount: 0,
-      fileName: '',
+      file: {},
     }
   }
 
@@ -172,9 +173,6 @@ class BillDetail extends React.Component {
   billingUnify = () => {
     let { selectedRows, currentNo, dataSource } = this.state
     //判断是否存在不一致组号
-    dataSource.map(data => {
-
-    })
     const groupNo = selectedRows[0].groupNo
     selectedRows.map(record => {
       if(dataSource[record.lineNo]['groupNo'] !== groupNo) {
@@ -191,6 +189,28 @@ class BillDetail extends React.Component {
     })
   }
 
+  beforeUpload = (file) => {
+    this.setState({
+      file,
+    })
+  }
+
+  customRequest = (file) => {
+    console.log(file)
+    const option = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/octet-stream;charset=UTF-8',
+      },
+      body: file.file,
+    }
+    requestJsonFetch(`/arc/file/upload/${this.state.file.name}`, option, this.handleCallback)
+  }
+
+  handleCallback = (response) => {
+    console.log(response)
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -201,7 +221,8 @@ class BillDetail extends React.Component {
       labelCol: { span: 3 },
       wrapperCol: { span: 21 },
     }
-    const columns = [{
+    const columns = [
+      {
       title: '操作',
       dataIndex: 'action',
       width: 60,
@@ -333,25 +354,21 @@ class BillDetail extends React.Component {
       }
     }]
     const props = {
-      name: 'file',
-      action: `${process.env.REACT_APP_GATEWAY}/api/v1.0.0/arc/file/upload/${this.state.fileName}`,
+      action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
       headers: {
-        authorization: 'authorization-text',
+        Authorization: sessionStorage.getItem('token'),
       },
+      beforeUpload: this.beforeUpload,
+      customRequest: this.customRequest,
       onChange(info) {
-        console.log(info.file.name)
-        if(info.file.name) {
-          this.setState({
-            fileName: info.file.name
-          })
-        }
+        console.log(info)
         if (info.file.status !== 'uploading') {
           console.log(info.file, info.fileList);
         }
         if (info.file.status === 'done') {
-          message.success(`${info.file.name} file uploaded successfully`);
+          message.success(`${info.file.name} 上传成功`);
         } else if (info.file.status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
+          message.error(`${info.file.name} 上传失败.`);
         }
       },
     };

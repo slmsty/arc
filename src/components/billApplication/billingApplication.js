@@ -171,6 +171,10 @@ export default class BillingApplication extends React.Component {
         dataIndex: 'projectNo',
         width: 150,
       }, {
+        title: '币种',
+        dataIndex: 'contractCurrency',
+        width: 100,
+      }, {
         title: '提前开票原因',
         dataIndex: 'advanceBillingReasonName',
         width: 150,
