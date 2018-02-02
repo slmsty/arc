@@ -3,10 +3,9 @@ import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload
 import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
-import moment from 'moment'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import { contentCols, totalColumns, detailColumns } from './billColumns'
-
+import 'whatwg-fetch'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -41,7 +40,10 @@ class BillDetail extends React.Component {
       selectedRows: [],
       currentNo: 1,
       totalAmount: 0,
+      uploading: false,
       file: {},
+      fileList: [],
+      fileId: '',
     }
   }
 
@@ -135,7 +137,8 @@ class BillDetail extends React.Component {
           appLineItems: this.state.dataSource.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,
-          }))
+          })),
+          objectId: this.state.fileId
         }
         console.log(params)
         this.props.billApplySave(params)
@@ -190,13 +193,17 @@ class BillDetail extends React.Component {
   }
 
   beforeUpload = (file) => {
+    const isLt10M = file.size / 1024 / 1024 < 10;
+    if (!isLt10M) {
+      message.error('上传文件大小必须小于10MB!');
+      return false
+    }
     this.setState({
       file,
     })
   }
 
   customRequest = (file) => {
-    console.log(file)
     const option = {
       method: 'POST',
       headers: {
@@ -208,7 +215,34 @@ class BillDetail extends React.Component {
   }
 
   handleCallback = (response) => {
-    console.log(response)
+    if(response.resultCode === '000000') {
+      const { file, fileList, count } = this.state
+      message.success(`${file.name} 上传成功`);
+      this.setState({
+        fileId: response.data,
+        fileList: [...fileList, {
+          uid: new Date().getTime(),
+          name: file.name,
+          status: 'done',
+          response: '', // custom error message to show
+          url: '',
+        }]
+      })
+    } else {
+      message.success(`${this.state.file.name} 上传失败`);
+    }
+  }
+
+  handleFileChange = (info) => {
+    console.log(info)
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'removed') {
+      this.setState({
+        fileList: info.fileList,
+      })
+    }
   }
 
   render() {
@@ -358,19 +392,10 @@ class BillDetail extends React.Component {
       headers: {
         Authorization: sessionStorage.getItem('token'),
       },
+      showUploadList: { showPreviewIcon: true, showRemoveIcon: true },
       beforeUpload: this.beforeUpload,
       customRequest: this.customRequest,
-      onChange(info) {
-        console.log(info)
-        if (info.file.status !== 'uploading') {
-          console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-          message.success(`${info.file.name} 上传成功`);
-        } else if (info.file.status === 'error') {
-          message.error(`${info.file.name} 上传失败.`);
-        }
-      },
+      onChange: this.handleFileChange,
     };
     const { custInfo, comInfo } = this.props.detail
     const detailData = [{
@@ -492,7 +517,7 @@ class BillDetail extends React.Component {
               <FormItem {...formItemLayout1} label="附件">
                 {
                   getFieldDecorator('file')(
-                    <Upload {...props}>
+                    <Upload {...props} fileList={this.state.fileList}>
                       <Button>
                         <Icon type="upload" />点击上传
                       </Button>
