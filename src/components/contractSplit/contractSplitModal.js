@@ -40,6 +40,9 @@ const url = "http://home2.asiainfo.com/AISCA/salesContractApplication/detailAppl
 
 const EditableCell = ({ value, onChange, column,disable}) => {
   if(column === 'listPrice'){
+    if(value){
+
+    }
   }
   return(<div style={{ position: 'relative' }}>
     <InputNumber value={value || value=== 0 ? value : ''} onChange={onChange} disabled={disable} />
@@ -84,15 +87,6 @@ class ContractSplitModal extends React.Component{
       controactInfo:props.data[0]
     }
   }
-  /*componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data) {
-      const constractData = nextProps.data
-      console.log('constractData',constractData)
-     this.setState({
-       dataSource: tableData,
-     })
-     }
-  }*/
   selectDateChange = (data) => {
     const newData = [...this.state.dataSource]
     newData[data.indexs][data.columns] = data.dateString
@@ -130,19 +124,12 @@ class ContractSplitModal extends React.Component{
     let selectData = []
     selectData = data.split('&')
     const newData = [...this.state.dataSource]
-    console.log('selectData[0]',selectData[0])
     newData[selectData[1]][selectData[2]] = selectData[0]
     this.setState({
       dataSource: newData,
     })
   }
-  test = (data) => {
-    console.log('test',data)
-  }
   renderColumns = (text, index, column,record) => {
-    if(column==="returnTaxRate"){
-      console.log('returnTaxRate',text)
-    }
     if(column=="product"){
       return <ProductLine disabled={this.state.editFlag} onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record.product}  indexs={index} columns={column} />
     }
@@ -222,7 +209,6 @@ class ContractSplitModal extends React.Component{
     }
     newData[index][column] = value
     newData = this.inputChange(newData,index)
-    console.log('change',newData)
     this.setState({
       dataSource: newData,
     })
@@ -262,7 +248,6 @@ class ContractSplitModal extends React.Component{
   }
   handleAdd = (index, flag) => {
     const newDataSource = this.state.dataSource.slice(0)
-    console.log('addnewDataSource',newDataSource)
     const newData = {
       parentOrderListLineId: '',
       orderListLineId: '110'+new Date().getTime(),
@@ -343,7 +328,6 @@ class ContractSplitModal extends React.Component{
     }
 
     const param = this.props.form.getFieldsValue()
-    console.log('param555',param)
     const relatedBuNoName = param && param.relatedBuNo ? param.relatedBuNo[1] : ''
     const projectBuNoName = param && param.projectBuNo ? param.projectBuNo[1] : ''
 
@@ -361,8 +345,6 @@ class ContractSplitModal extends React.Component{
       return
     }
     if (param.revenueCheckout && param.revenueCheckout.length<=0 || typeof param.revenueCheckout ==='undefined') {
-      console.log('revenueCheckout444',param.revenueCheckout)
-      //return
       message.error('收入结算方式不能为空！')
       return
     }
@@ -406,23 +388,18 @@ class ContractSplitModal extends React.Component{
         return
       }
       if (!i.revenueCheckout || typeof i.revenueCheckout === "undefined") {
-        console.log('i.revenueCheckout',i.revenueCheckout)
-        console.log('i.revenueCheckout',i.revenueCheckout)
         message.error('结算方式不能为空！')
         return
       }
       if (i.listPrice === '' || typeof i.listPrice === "undefined") {
-        console.log('i.listPrice',i.listPrice)
         message.error('目录价不能为空3！')
         return
       }
       if (i.discount === '' || typeof i.discount === "undefined") {
-        console.log('i.discount',i.discount)
         message.error('折扣不能为空！')
         return
       }
       if (i.returnTaxRate === '' || typeof i.returnTaxRate === "undefined") {
-        console.log('i.returnTaxRate',i.returnTaxRate)
         message.error('退税率不能为空！')
         return
       }
@@ -495,7 +472,6 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
-    console.log('postParams',postParams)
     this.props.saveInfo(postParams)
     this.closeModal()
   }
@@ -823,7 +799,7 @@ class ContractSplitModal extends React.Component{
                     {constractData.solutionMaintain}
                   </div>
                 </Col>
-                <Col span={3} className="contractRowBorderLeft contract-bg">
+                <Col span={3} className="contractRowBorderLeft contractRowBorderRight contract-bg">
                   维护服务开始时间：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
@@ -831,7 +807,7 @@ class ContractSplitModal extends React.Component{
                     {constractData.maintainStartDate}
                   </div>
                 </Col>
-                <Col span={3} className="contractRowBorderLeft contract-bg">
+                <Col span={3} className="contractRowBorderLeft contractRowBorderRight contract-bg">
                   维护服务结束时间：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
@@ -858,7 +834,7 @@ class ContractSplitModal extends React.Component{
                     )}
                   </FormItem>
                 </Col>
-                <Col span={3} className="contractRowBorderLeft contract-bg">
+                <Col span={3} className="contractRowBorderLeft contractRowBorderRight contract-bg">
                   合同拆分操作人：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
@@ -886,7 +862,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
               </Row>
               <Row className="text-css contractRowBorder">
-                <Col span={4} className="contract-bg">
+                <Col span={4} className="contract-bg contractRowBorderRight">
                   C-FORM版本GM%：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
@@ -942,7 +918,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
               </Row>
               <Row className="text-css contractRowBorder">
-                <Col span={4} className="contract-bg">
+                <Col span={4} className="contract-bg contractRowBorderRight">
                   是否集采项目：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
