@@ -189,6 +189,7 @@ export default class ApplySearchCon extends React.Component {
       onShowSizeChange: this.handleChangeSize,
 
     }
+    console.log('seletctDATA',this.state.selectedRows)
     return (
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />

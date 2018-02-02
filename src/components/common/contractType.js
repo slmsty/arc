@@ -33,14 +33,6 @@ export default class SelectInvokeApi extends React.Component {
     const result = options.filter(o => o.paramValue == value)
     const paramValue = result.length ? result[0].paramValue : ''
     const paramValueDesc = result.length ? result[0].paramValueDesc : ''
-    console.log('paramValue',paramValue)
-    console.log('paramValueDesc',paramValueDesc)
-    /*this.props.onChange({
-      No: paramValue,
-      Name:paramValueDesc,
-      indexs: indexs,
-      columns: columns,
-    })*/
     return result.length ? result[0].paramValueDesc : ''
   }
 
