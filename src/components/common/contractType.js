@@ -15,12 +15,10 @@ export default class SelectInvokeApi extends React.Component {
   }
   componentDidMount() {
     if (this.props.typeCode && this.props.paramCode) {
-      console.log(this.props.paramCode)
       requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
     }
   }
   showTextValue = () => {
-    console.log('this.props.text',this.props.text)
     const options = this.state.options
     const {indexs, columns} = this.props
     const text = this.props.text
@@ -71,6 +69,16 @@ export default class SelectInvokeApi extends React.Component {
     }
   }
   render() {
+    let showVaule = ''
+    if(this.state.flag && (this.props.text || this.props.text === 0)){
+      showVaule = this.showTextValue()
+    } else if(this.props.value && (this.props.value[1] || this.props.value[1] === 0)){
+      showVaule = this.props.value[1]
+    } else if(this.props.value === 0) {
+      showVaule = "0%"
+    } else if(this.props.initialValue){
+      showVaule = this.props.initialValue
+    }
     const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue ? option.paramValueDesc : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
     return (
       <Select
@@ -78,7 +86,8 @@ export default class SelectInvokeApi extends React.Component {
         id={this.props.id}
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
-        value={this.state.flag && this.props.text ? this.showTextValue() : (this.props.value && this.props.value[1] ? this.props.value[1] : (this.props.initialValue ? this.props.initialValue : 'all'))}
+        value={this.state.flag && (this.props.text || this.props.text === 0)? this.showTextValue() : ((this.props.value && (this.props.value[1] || this.props.value[1] === 0)) ? this.props.value[1] : ((typeof this.props.value ==='string' || typeof this.props.value === 'number') ? (this.props.value === 0 ? "0%" :this.props.value ) :(this.props.initialValue ? this.props.initialValue : 'all')))}
+        //value={showVaule || showVaule === 0 ? showVaule : 'all'}
         disabled={this.props.disabled}
       >
         {optionDom}

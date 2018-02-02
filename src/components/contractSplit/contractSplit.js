@@ -119,14 +119,14 @@ export default class ApplySearchCon extends React.Component {
     const columns = [{
       title: '拆分状态',
       dataIndex: 'status',
-      width: 150,
+      width: 80,
       textAlign: 'center',
       fixed: 'left',
       render: (text, record, index) => (text=='N' ? "未拆分合同" : "已拆分合同"),
     }, {
       title: '合同内部编码',
       dataIndex: 'internalNo',
-      width: 200,
+      width: 150,
     }, {
       title: '项目编码',
       dataIndex: 'projectNo',
@@ -142,12 +142,12 @@ export default class ApplySearchCon extends React.Component {
     }, {
       title: '合同金额',
       dataIndex: 'contractAmount',
-      width: 150,
+      width: 100,
       render: (text, record, index) => (text ? currency(text) : 0),
     }, {
       title: '签约日期',
       dataIndex: 'contractDate',
-      width: 150,
+      width: 90,
     }, {
       title: 'Sale签约BU',
       dataIndex: 'salesBuNo',
@@ -155,23 +155,23 @@ export default class ApplySearchCon extends React.Component {
     }, {
       title: '立项BU',
       dataIndex: 'projectBuNo',
-      width: 150,
+      width: 80,
     }, {
       title: '销售人员',
       dataIndex: 'salesPerson',
-      width: 150,
+      width: 80,
     }, {
       title: '合同生效日',
       dataIndex: 'contractActiveDate',
-      width: 150,
+      width: 100,
     }, {
       title: '合同种类',
       dataIndex: 'contractType',
-      width: 150,
+      width: 120,
     }, {
       title: '币种',
       dataIndex: 'contractCurrency',
-      width: 100,
+      width: 50,
     },
     ]
     const { selectedRowKeys } = this.state
@@ -202,6 +202,7 @@ export default class ApplySearchCon extends React.Component {
               closeModal={this.closeModalClaim}
               saveInfo={this.saveContractSplitInfo}
               data={this.state.selectedRows}
+              user={this.props.user.accountName}
               tableDetail={this.state.selectedRows[0].orderListLines ? this.state.selectedRows[0].orderListLines : []}
             /> : null
         }
@@ -217,7 +218,7 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="middle"
-          scroll={{ x: '2400px', y: this.state.tableHeight }}
+          scroll={{ x: '1900', y: this.state.tableHeight }}
           loading={this.state.loading}
           dataSource={this.props.contractSplitDara.getContractList.result}
         />

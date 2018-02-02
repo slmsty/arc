@@ -9,6 +9,7 @@ import { getContractList, saveContractSplitInfo } from '../../actions/contractSp
 
 const mapStateToProps = state => ({
   contractSplitDara: state.contractSplitDara,
+  user: state.common.user,
 })
 const mapDispatchToProps = dispatch => (
   bindActionCreators({

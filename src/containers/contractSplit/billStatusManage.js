@@ -23,6 +23,7 @@ const mapDispatchToProps = dispatch => (
     sendAP,
     myApplyInfo,
     fileDown,
+
   }, dispatch)
 )
 // eslint-disable-next-line react/prefer-stateless-function
