@@ -18,8 +18,9 @@ export default class MyDatePicker extends React.Component{
   }
   render() {
     const value = this.props.value
+    console.log('datavalue',value)
     return (
-      <DatePicker onChange={this.handleChange} defaultValue={value ? moment(value) : ''} disabled={this.props.disabled} />
+      <DatePicker onChange={this.handleChange} value={value ? moment(value) : ''} disabled={this.props.disabled} />
     )
   }
 }
