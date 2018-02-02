@@ -39,11 +39,6 @@ let tableData = [{
 const url = "http://home2.asiainfo.com/AISCA/salesContractApplication/detailApplication/parameter=detail&applicaiton_id="
 
 const EditableCell = ({ value, onChange, column,disable}) => {
-  if(column === 'listPrice'){
-    if(value){
-
-    }
-  }
   return(<div style={{ position: 'relative' }}>
     <InputNumber value={value || value=== 0 ? value : ''} onChange={onChange} disabled={disable} />
     {column === 'discount' ?
@@ -183,7 +178,7 @@ class ContractSplitModal extends React.Component{
     return (
       <EditableCell
         column={column}
-        value={text ? parseFloat(text) : 0}
+        value={text ? text : 0}
         onChange={value => this.handleInputChange(value, index, column)}
         disable={this.state.editFlag}
       />
@@ -192,11 +187,11 @@ class ContractSplitModal extends React.Component{
   handleInputChange = (value, index, column) => {
     let newData = this.state.dataSource
     const contractAmount = parseFloat(this.props.data[0].contractAmount)
-    if(column==='listPrice'){
-      /*if(typeof(value)!== "number"){
-        message.error('请输入数字类型的数')
+    if(column==='discount') {
+      if(parseFloat(value) < 0){
+        message.error('折扣不能为负数')
         return
-      }*/
+    }
       if(contractAmount < 0 && parseFloat(value) > 0){
         message.error('合同总金额为负数，目录价不能为正数')
         return
@@ -496,7 +491,6 @@ class ContractSplitModal extends React.Component{
     })
   }
   handleReturn = () => {
-    console.log(this.props)
     // this.setState({
     //   dataSource: [],
     // })
@@ -543,7 +537,7 @@ class ContractSplitModal extends React.Component{
   }
   render() {
     const dataSource = this.state.dataSource
-    console.log('render',this.props)
+    console.log('render',dataSource)
     const constractDatas = this.props.data
     const constractData = constractDatas[0]
     let countCatalPrice = 0 // 合计目录价 catalogue
@@ -606,7 +600,7 @@ class ContractSplitModal extends React.Component{
       title: <span>目录价<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'listPrice',
       width: 80,
-      render: (text, record, index) => record.taskOpration === '合计' ? currency(countCatalPrice) : this.renderInputColumns(parseFloat(text), index, 'listPrice'),
+      render: (text, record, index) => record.taskOpration === '合计' ? currency(countCatalPrice) : this.renderInputColumns(text, index, 'listPrice'),
     }, {
       title: <span>折扣<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'discount',
