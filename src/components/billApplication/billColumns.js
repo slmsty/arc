@@ -259,5 +259,26 @@ const redFontCols = [
   }
 ]
 
-export { clientCols, comCols, proCols, contentCols, totalColumns, detailColumns, invoiceCols, proColumns, billDetailColumns, taxCategoryCols, redFontCols }
+const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
+const advanceTypes = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
+const redTypes = ['BILLING_RED', 'BILLING_RED_OTHER']
+const otherTypes = ['BILLING_OTHER']
+
+export {
+  clientCols,
+  comCols,
+  proCols,
+  contentCols,
+  totalColumns,
+  detailColumns,
+  invoiceCols,
+  proColumns,
+  billDetailColumns,
+  taxCategoryCols,
+  redFontCols,
+  normalTypes,
+  advanceTypes,
+  redTypes,
+  otherTypes,
+}
 

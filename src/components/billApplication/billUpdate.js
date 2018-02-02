@@ -3,10 +3,10 @@ import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from '
 import SelectSearch from './selectSearch'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import moment from 'moment'
+import { normalTypes } from './billColumns'
 import { clientCols, comCols, proCols, invoiceCols } from './billColumns'
 const FormItem = Form.Item
 const Option = Select.Option
-const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
 
 
 class BillUpdate extends React.Component {

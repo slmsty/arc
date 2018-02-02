@@ -4,7 +4,7 @@ import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
-import { contentCols, totalColumns, detailColumns } from './billColumns'
+import { contentCols, totalColumns, detailColumns, normalTypes } from './billColumns'
 import 'whatwg-fetch'
 const Option = Select.Option
 const FormItem = Form.Item
@@ -62,8 +62,8 @@ class BillDetail extends React.Component {
           quantity: '',
           unitPrice: 0,
           noRateAmount: 0,
-          billingAmount: item.billingAmount,
-          totalAmount: item.billingAmount,
+          billingAmount: item.billingAmount ? item.billingAmount : 0,
+          totalAmount: item.billingAmount ? item.billingAmount : 0,
           billingTaxRate: 0,
           billingTaxAmount: 0,
         })
@@ -153,18 +153,30 @@ class BillDetail extends React.Component {
     } else if(col === 'billingAmount') {
       //发票拆分子记录输入金额后，从新计算携带数据的金额
       const result = dataSource.filter(d => d.isParent === 1 && record.arBillingId === d.arBillingId)[0]
-      /*if(value >= result.billingAmount) {
-        message.warn(`拆分金额必须小于拆分前金额`)
-        return
-      }*/
       let total = 0
       dataSource.map(d => {
         if(d.arBillingId === record.arBillingId && d.isParent === 0 && d.lineNo !== index){
-          total += d.billingAmount ? d.billingAmount : 0
+          total += (d.billingAmount ? d.billingAmount : 0)
         }
       })
-      dataSource[result.lineNo][col] = result.totalAmount - total - value
+      //校验所有拆分子项的金额必须小于父级含税金额
+      const childAmount = total + value
+      console.log(result.totalAmount, childAmount)
+      if(normalTypes.includes(this.props.billType) && childAmount >= result.totalAmount) {
+        message.error('拆分子项的金额合计必须小于拆分前含税金额')
+        return false
+      } else {
+        if(result.totalAmount !== 0 && record.isParent!== 1 && childAmount >= result.totalAmount) {
+          message.error('拆分子项的金额合计必须小于拆分前含税金额')
+          return false
+        }
+      }
+      dataSource[result.lineNo][col] = result.totalAmount - childAmount
       dataSource[index][col] = value
+      //未大签、红冲、其他开票含税金额为0, 手动输入金额后并赋值给总金额
+      if(record.isParent === 1 && !normalTypes.includes(this.props.billType)) {
+        dataSource[result.lineNo].totalAmount = value
+      }
     } else {
       dataSource[index][col] = value
     }
@@ -216,7 +228,7 @@ class BillDetail extends React.Component {
 
   handleCallback = (response) => {
     if(response.resultCode === '000000') {
-      const { file, fileList, count } = this.state
+      const { file, fileList } = this.state
       message.success(`${file.name} 上传成功`);
       this.setState({
         fileId: response.data,
@@ -234,7 +246,6 @@ class BillDetail extends React.Component {
   }
 
   handleFileChange = (info) => {
-    console.log(info)
     if (info.file.status !== 'uploading') {
       console.log(info.file, info.fileList);
     }
@@ -493,7 +504,7 @@ class BillDetail extends React.Component {
           <Table
             rowSelection={rowSelection}
             style={{marginBottom: '10px'}}
-            rowKey={record => record.lineNo}
+            rowKey="lineNo"
             bordered
             size="small"
             columns={columns}

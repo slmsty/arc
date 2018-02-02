@@ -41,7 +41,6 @@ class OtherContractAdd extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    console.log(this.props.record)
     const { comName, custName, projectNo, contractCurrency } = this.props.record
     const formItemLayout = {
       labelCol: { span: 7 },
