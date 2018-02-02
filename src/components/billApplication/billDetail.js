@@ -161,7 +161,6 @@ class BillDetail extends React.Component {
       })
       //校验所有拆分子项的金额必须小于父级含税金额
       const childAmount = total + value
-      console.log(result.totalAmount, childAmount)
       if(normalTypes.includes(this.props.billType) && childAmount >= result.totalAmount) {
         message.error('拆分子项的金额合计必须小于拆分前含税金额')
         return false

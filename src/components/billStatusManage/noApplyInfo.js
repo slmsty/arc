@@ -175,8 +175,8 @@ class ApplyInfoModal extends React.Component {
 }
 ApplyInfoModal.propTypes = {
   closeClaim: PropTypes.func.isRequired,
-  applyReject: PropTypes.func.isRequired,
-  applyComfirm: PropTypes.func.isRequired,
+  applyReject: PropTypes.func,
+  applyComfirm: PropTypes.func,
   infoVisitable: PropTypes.bool.isRequired,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,

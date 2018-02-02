@@ -107,7 +107,7 @@ Index.propTypes = {
   children: PropTypes.node,
   user: PropTypes.shape({
     accountName: PropTypes.string.isRequired,
-    orgName: PropTypes.string.isRequired,
+    orgName: PropTypes.string,
     headIcon: PropTypes.string.isRequired,
   }).isRequired,
   permission: PropTypes.shape({

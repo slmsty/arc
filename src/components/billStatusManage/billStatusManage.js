@@ -2,7 +2,6 @@
  * Created by liangshuang on 17/12/1.
  */
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Button, Table, message, Modal } from 'antd'
 import BillStatusManageWithFrom from './billStatusManageWithFrom'
 import ItemInfo from './noApplyInfo'
@@ -10,6 +9,7 @@ import DetailModal from './calcelDetail'
 import GlDateModal from './../common/glDateModal'
 import FileDownModal from './fileDownMotal'
 import currency from '../../util/currency'
+import { billApproveItemColumns, billApproveInfoColumns } from './billStatusCols'
 
 export default class BillStatusCon extends React.Component {
   state = {
@@ -46,7 +46,6 @@ export default class BillStatusCon extends React.Component {
          firstID: nextProps.billStatusManage.getBillStatusManageList.result[0].billingApplicationId,
        })
      }
-
   }
   queryParam = {
     pageInfo: {
@@ -99,7 +98,6 @@ export default class BillStatusCon extends React.Component {
     this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(selectedRowKeys)
     if(selectedRowKeys.length>1){
       selectedRowKeys.splice(0,selectedRowKeys.length-1);
     }
@@ -122,48 +120,42 @@ export default class BillStatusCon extends React.Component {
   }
   // 进一步查询
   subSearch = (billingApplicationId) => {
-    let param = {}
-    param.applicationId = billingApplicationId
+    const param = {
+      applicationId: billingApplicationId
+    }
     this.searchBillInfoResult(param)
     this.searchContractResult(param)
     this.searchBillResult(param)
   }
   // 查询申请单详细信息
   searchBillInfoResult = (param) => {
-    this.props.getBillStatusDetail(param).then((res) => {
-      if (res && res.response && res.response.resultCode === '000000') {
-      } else {
-      }
-    })
+    this.props.getBillStatusDetail(param)
   }
+
   // 查询请单合同信息
   searchContractResult = (param) => {
-    this.props.getBillStatusContractDetail(param).then((res) => {
-      if (res && res.response && res.response.resultCode === '000000') {
-      } else {
-      }
-    })
+    this.props.getBillStatusContractDetail(param)
   }
+
   // 查询开票结果
   searchBillResult = (param) => {
-    this.props.getBillStatusBillResult(param).then((res) => {
-      if (res && res.response && res.response.resultCode === '000000') {
-      } else {
-      }
-    })
+    this.props.getBillStatusBillResult(param)
   }
+
   onBillResultSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({
       billResultSelectedRowKeys: selectedRowKeys,
       billResultSelectedRows: selectedRows,
     })
   }
-  NoApplycloseModalClaim = () => {
+
+  noApplycloseModalClaim = () => {
     this.setState({
       noApplyInfoVisitable: false,
       noApplyInfoData: '',
     })
   }
+
   showApplyInfo = (record) => {
     const paramsData = {}
     paramsData.processInstanceId = record.processInstanceId
@@ -329,162 +321,12 @@ export default class BillStatusCon extends React.Component {
   }
   render() {
     const getBillStatusManageList  = this.props.billStatusManage.getBillStatusManageList.result
-    console.log(getBillStatusManageList)
-    const billApprovecolumns = [{
-      title: '数据状态',
-      dataIndex: 'status',
-      width: 80,
-      textAlign: 'center',
-      fixed: 'left',
-    }, {
-      title: '申请单编号',
-      dataIndex: 'billingApplicationId',
-      width: 200,
-      render: (text, record) => (
-        <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
-      ),
-    }, {
-      title: '开票公司',
-      dataIndex: 'companyName',
-      width: 300,
-    }, {
-      title: '提前开票原因',
-      dataIndex: 'preInvoiceReason',
-      width: 300,
-    }, {
-      title: '预计回款日期',
-      dataIndex: 'preReceiveDate',
-      width: 150,
-    }, {
-      title: '开票要求',
-      dataIndex: 'invoiceRequire',
-      width: 300,
-    }, {
-      title: '开票客户名称',
-      dataIndex: 'customerName',
-      width: 300,
-    }, {
-      title: '纳税人识别号',
-      dataIndex: 'taxIdentifyCode',
-      width: 150,
-    }, {
-      title: '开票日期',
-      dataIndex: 'invoiceDate',
-      width: 150,
-    }, {
-      title: '备注',
-      dataIndex: 'remark',
-      width: 300,
-    }, {
-      title: '创建提示',
-      dataIndex: 'errorMessage',
-      width: 100,
-    },
-    ]
-    const billApproveInfoColumns = [
-      {
-        title: '开票行号',
-        dataIndex: 'lineNo',
-        width: 100,
-      }, {
-        title: '开票内容',
-        dataIndex: 'billingContent',
-        width: 300,
-      },
-      {
-        title: '规格型号',
-        dataIndex: 'specificationType',
-        width: 100,
-      },
-      {
-        title: '单位',
-        dataIndex: 'unit',
-        width: 100,
-      },
-      {
-        title: '数量',
-        dataIndex: 'quantity',
-        width: 100,
-      },
-      {
-        title: '单价',
-        dataIndex: 'unitPrice',
-        width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
-      },
-      {
-        title: '开票金额',
-        dataIndex: 'billingAmount',
-        width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
-      },
-      {
-        title: '开票税率',
-        dataIndex: 'billingTaxRate',
-        width: 100,
-      },
-      {
-        title: '开票税额',
-        dataIndex: 'billingTaxAmount',
-        width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
-      },
-    ]
-    const billApproveItemColumns = [
-      {
-        title: '项目编码',
-        dataIndex: 'projectCode',
-        width: 100,
-      },
-      {
-        title: '签约公司',
-        dataIndex: 'company',
-        width: 250,
-      },
-      {
-        title: '合同编码',
-        dataIndex: 'contractCode',
-        width: 300,
-      },
-      {
-        title: '付款条件',
-        dataIndex: 'paymentTerm',
-        width: 100,
-      },
-      {
-        title: '付款条款',
-        dataIndex: 'paymentName',
-        width: 100,
-      },
-      {
-        title: '付款阶段',
-        dataIndex: 'paymentPhrases',
-        width: 100,
-      },
-      {
-        title: '付款金额',
-        dataIndex: 'paymentAmount',
-        width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
-      },
-      {
-        title: 'Billed AR金额',
-        dataIndex: 'arAmount',
-        width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
-      },
-      {
-        title: '已开票金额',
-        dataIndex: 'invoiceAmount',
-        width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
-      },
-    ]
-    const billApproveResultcolumns = [
+    const billApproveResultColumns = [
       {
         title: '数据状态',
         dataIndex: 'status',
         width: 100,
+        fixed: 'left',
       },
       {
         title: '发票号码',
@@ -550,6 +392,62 @@ export default class BillStatusCon extends React.Component {
         )
       },
     ]
+    const billApproveColumns = [
+      {
+      title: '数据状态',
+      dataIndex: 'status',
+      width: 80,
+      textAlign: 'center',
+      fixed: 'left',
+    }, {
+      title: '开票申请分类',
+      dataIndex: 'applicationType',
+      width: 100,
+    }, {
+      title: '申请单编号',
+      dataIndex: 'billingApplicationId',
+      width: 200,
+      render: (text, record) => (
+        <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
+      ),
+    }, {
+      title: '开票公司',
+      dataIndex: 'companyName',
+      width: 300,
+    }, {
+      title: '提前开票原因',
+      dataIndex: 'preInvoiceReason',
+      width: 300,
+    }, {
+      title: '预计回款日期',
+      dataIndex: 'preReceiveDate',
+      width: 150,
+    }, {
+      title: '开票要求',
+      dataIndex: 'invoiceRequire',
+      width: 300,
+    }, {
+      title: '开票客户名称',
+      dataIndex: 'customerName',
+      width: 300,
+    }, {
+      title: '纳税人识别号',
+      dataIndex: 'taxIdentifyCode',
+      width: 150,
+    }, {
+      title: '开票日期',
+      dataIndex: 'invoiceDate',
+      width: 150,
+    }, {
+      title: '备注',
+      dataIndex: 'remark',
+      width: 300,
+    }, {
+      title: '创建提示',
+      dataIndex: 'errorMessage',
+      width: 100,
+    },
+    ]
     const { selectedRowKeys, firstID } = this.state
     const rowSelection = {
       selectedRowKeys,
@@ -585,9 +483,9 @@ export default class BillStatusCon extends React.Component {
           rowKey="billingApplicationId"
           rowSelection={rowSelection}
           bordered
-          columns={billApprovecolumns}
+          columns={billApproveColumns}
           size="small"
-          scroll={{ x: '2330px', y: this.state.tableHeight }}
+          scroll={{ x: '2430px' }}
           loading={this.state.loading}
           pagination={false}
           dataSource={getBillStatusManageList}
@@ -600,7 +498,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveInfoColumns}
           size="small"
-          scroll={{ x: '1100px', y: this.state.tableHeight }}
+          scroll={{ x: '1100px' }}
           loading={this.state.loading}
           dataSource={this.props.billStatusManage.getBillStatusDetailList}
           pagination={false}
@@ -613,7 +511,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveItemColumns}
           size="small"
-          scroll={{ x: '1250px', y: this.state.tableHeight }}
+          scroll={{ x: '1250px' }}
           loading={this.state.loading}
           pagination={false}
           dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
@@ -624,9 +522,9 @@ export default class BillStatusCon extends React.Component {
         <Table
           rowSelection={billResultRowSelection}
           bordered
-          columns={billApproveResultcolumns}
+          columns={billApproveResultColumns}
           size="small"
-          scroll={{ x: '1700px', y: this.state.tableHeight }}
+          scroll={{ x: '1700px' }}
           loading={this.state.loading}
           pagination ={false}
           dataSource={this.props.billStatusManage.getBillStatusBillResultList}
@@ -647,7 +545,7 @@ export default class BillStatusCon extends React.Component {
         }
         <ItemInfo
           infoVisitable={this.state.noApplyInfoVisitable}
-          closeClaim={this.NoApplycloseModalClaim}
+          closeClaim={this.noApplycloseModalClaim}
           applyData={this.state.noApplyInfoData}
           applyInfoData={this.props.myApply.getMyApplyInfo}
         />
@@ -659,23 +557,15 @@ export default class BillStatusCon extends React.Component {
         />
         {
           this.state.fileDownData.length ?
-          <FileDownModal
-          visible={this.state.fileDownDis}
-          onOk={this.CloseFileDownModal}
-          onCancel={this.CloseFileDownModal}
-          data={this.state.fileDownData}
-          fileDown={this.fileDown}
-          />
-          : ''
+            <FileDownModal
+            visible={this.state.fileDownDis}
+            onOk={this.CloseFileDownModal}
+            onCancel={this.CloseFileDownModal}
+            data={this.state.fileDownData}
+            fileDown={this.fileDown}
+            /> : null
         }
-
       </div>
     )
   }
-}
-BillStatusCon.propTypes = {
-  /*getBillStatusList: PropTypes.func.isRequired,
-  getBillStatusManageList: PropTypes.shape({
-    getBillStatusManageList: PropTypes.number.isRequired,
-  }).isRequired,*/
 }
