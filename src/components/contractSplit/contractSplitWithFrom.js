@@ -67,7 +67,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="Sales签约BU">
                 {
-                  getFieldDecorator('salesBuNo')(<SelectSbu/>)
+                  getFieldDecorator('salesBuNo')(<SelectSbu keyName="contract"/>)
                 }
               </FormItem>
             </Col>
@@ -85,7 +85,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="立项BU">
                 {
-                  getFieldDecorator('projectBuNo')(<SelectSbu />)
+                  getFieldDecorator('projectBuNo')(<SelectSbu keyName="contract"/>)
                 }
               </FormItem>
             </Col>

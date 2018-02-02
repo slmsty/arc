@@ -116,6 +116,7 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   render() {
+    console.log('parent',this.state.selectedRows)
     const columns = [{
       title: '拆分状态',
       dataIndex: 'status',
@@ -152,10 +153,12 @@ export default class ApplySearchCon extends React.Component {
       title: 'Sale签约BU',
       dataIndex: 'salesBuNo',
       width: 100,
+      render:(text,record,index)=>(text ? `${text}:${record.salesBuNoName}` : ''),
     }, {
       title: '立项BU',
       dataIndex: 'projectBuNo',
       width: 80,
+      render:(text,record,index)=>(text ? `${text}:${record.projectBuNoName}` : ''),
     }, {
       title: '销售人员',
       dataIndex: 'salesPerson',

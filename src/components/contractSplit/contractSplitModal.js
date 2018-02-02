@@ -50,37 +50,61 @@ const EditableCell = ({ value, onChange, column,disable}) => {
 
 class ContractSplitModal extends React.Component{
   constructor(props) {
-    const tableDeatail = props.tableDetail
     super(props)
+    const tableDeatail = props.tableDetail.slice(0)
+    console.log('props.tableDetail',props.tableDetail)
+    const dataSource = tableDeatail.concat({
+      taskOpration: '合计',
+      contractCategory: 0,
+      product: 0,
+      revenueCheckout: 0,
+      listPrice: 0,
+      discount: 0,
+      discountedPrice: 0,
+      contractAmountTaxInclude: 0,
+      contractTaxRate: 0,
+      contractAmountTaxExclude: 0,
+      returnTaxRate: 0,
+      returnTaxRevenue: 0,
+      grossOrder: 0,
+      serviceStartDate: 0,
+      serviceEndDate: 0,
+    })
+    console.log('props.tableDetail dataSource',dataSource)
+
     this.state = {
-      dataSource: [
-        ...tableDeatail,
-        {
-          taskOpration: '合计',
-          contractCategory: 0,
-          product: 0,
-          revenueCheckout: 0,
-          listPrice: 0,
-          discount: 0,
-          discountedPrice: 0,
-          contractAmountTaxInclude: 0,
-          contractTaxRate: 0,
-          contractAmountTaxExclude: 0,
-          returnTaxRate: 0,
-          returnTaxRevenue: 0,
-          grossOrder: 0,
-          serviceStartDate: 0,
-          serviceEndDate: 0,
-        }
-      ],
+      dataSource: dataSource.slice(0),
       countCatalPrice: 0.00,
       rcontent: '',
       rcontentnum: 0,
       countTaskCost: 0.00,
       countTaskCostData: {},
       editFlag: true,
-      controactInfo:props.data[0]
+      controactInfo: props.data[0],
+      initInfo: null,
     }
+  }
+  componentWillMount(){
+    const tableDeatail = this.props.tableDetail.slice(0)
+    console.log('props.tableDetail2',this.props.tableDetail)
+    const dataSource = tableDeatail.concat({
+      taskOpration: '合计',
+      contractCategory: 0,
+      product: 0,
+      revenueCheckout: 0,
+      listPrice: 0,
+      discount: 0,
+      discountedPrice: 0,
+      contractAmountTaxInclude: 0,
+      contractTaxRate: 0,
+      contractAmountTaxExclude: 0,
+      returnTaxRate: 0,
+      returnTaxRevenue: 0,
+      grossOrder: 0,
+      serviceStartDate: 0,
+      serviceEndDate: 0,
+    })
+    this.setState({initInfo: dataSource.slice(0)})
   }
   selectDateChange = (data) => {
     const newData = [...this.state.dataSource]
@@ -185,7 +209,7 @@ class ContractSplitModal extends React.Component{
     )
   }
   handleInputChange = (value, index, column) => {
-    let newData = this.state.dataSource
+    let newData = this.state.dataSource.slice(0)
     const contractAmount = parseFloat(this.props.data[0].contractAmount)
     if(column==='discount') {
       if(parseFloat(value) < 0){
@@ -217,7 +241,7 @@ class ContractSplitModal extends React.Component{
     newData[index].contractAmountTaxInclude = (parseFloat(listPrice) * (1 - parseFloat(discount) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
     newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
     newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate)) * (parseFloat(returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
-    newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxExclude) + parseFloat(newData[index].returnTaxRevenue)).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
+    newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxInclude)/(1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
     return newData
   }
   onTextAreaChange = (event) => {
@@ -313,7 +337,7 @@ class ContractSplitModal extends React.Component{
     const contractAmount = parseFloat(this.props.data[0].contractAmount)
     let totalListPrice = 0
     coutnData.map((item) => {
-      if (item.taskOpration !== 'addSub') {
+      if (!item.parentOrderListLineId || item.parentOrderListLineId === '') {
         totalListPrice += !item || !item.listPrice ? 0 : parseFloat(item.listPrice) // 合计目录价
       }
     })
@@ -491,46 +515,29 @@ class ContractSplitModal extends React.Component{
     })
   }
   handleReturn = () => {
-    // this.setState({
-    //   dataSource: [],
-    // })
-    // this.setState({
-    //   dataSource: [
-    //     ...this.props.data[0].orderListLines,
-    //     {
-    //       taskOpration: '合计',
-    //       contractCategory: 0,
-    //       product: 0,
-    //       revenueCheckout: 0,
-    //       listPrice: 0,
-    //       discount: 0,
-    //       discountedPrice: 0,
-    //       contractAmountTaxInclude: 0,
-    //       contractTaxRate: 0,
-    //       contractAmountTaxExclude: 0,
-    //       returnTaxRate: 0,
-    //       returnTaxRevenue: 0,
-    //       grossOrder: 0,
-    //       serviceStartDate: 0,
-    //       serviceEndDate: 0,
-    //     }
-    //   ],
-    //
-    // })
-    const constractData = this.props.data[0]
-    this.props.form.setFieldsValue({
-      relatedBuNo: [constractData.relatedBuNo,constractData.relatedBuNoName],
-      maintainBeginDate: constractData.maintainBeginDate,
-      revenueCheckout: constractData['revenueCheckout'],
-      projectBuNo: [constractData.projectBuNo,constractData.projectBuNoName],
-      task1Cost: constractData.task1tCost,
-      task3tCost: constractData.task3tCost,
-      task4tCost: constractData.task4tCost,
-      task5Cost: constractData.task5Cost,
-      task9Cost: constractData.task9Cost,
-      intercompanyCost: constractData.intercompanyCost,
-      subcontractFee: constractData.subcontractFee,
-    });
+    console.log('orderListLines',this.props.data[0].orderListLines)
+
+    console.log('this.backData',this.backData)
+    this.setState({
+      dataSource: this.state.initInfo,
+
+    },()=>{
+      const constractData = this.props.data[0]
+      this.props.form.setFieldsValue({
+        relatedBuNo: [constractData.relatedBuNo,constractData.relatedBuNoName],
+        maintainBeginDate: constractData.maintainBeginDate,
+        revenueCheckout: constractData['revenueCheckout'],
+        projectBuNo: [constractData.projectBuNo,constractData.projectBuNoName],
+        task1Cost: constractData.task1tCost,
+        task3tCost: constractData.task3tCost,
+        task4tCost: constractData.task4tCost,
+        task5Cost: constractData.task5Cost,
+        task9Cost: constractData.task9Cost,
+        intercompanyCost: constractData.intercompanyCost,
+        subcontractFee: constractData.subcontractFee,
+      });
+    })
+
   }
   goDetail = (application_id) => {
     window.open(url+application_id)
@@ -538,6 +545,7 @@ class ContractSplitModal extends React.Component{
   render() {
     const dataSource = this.state.dataSource
     console.log('render',dataSource)
+    console.log('this.props.tableDetail',this.props.tableDetail)
     const constractDatas = this.props.data
     const constractData = constractDatas[0]
     let countCatalPrice = 0 // 合计目录价 catalogue
@@ -610,12 +618,12 @@ class ContractSplitModal extends React.Component{
       title: '折后目录价',
       dataIndex: 'discountedPrice',
       width: 100,
-      render: (text, record, index) => record.taskOpration === '合计' ? currency(discountCatalPrice) : text,
+      render: (text, record, index) => record.taskOpration === '合计' ? currency(discountCatalPrice) : currency(text),
     }, {
       title: '合同含税额',
       dataIndex: 'contractAmountTaxInclude',
       width: 100,
-      render: (text, record, index) => record.taskOpration === '合计' ? currency(discountCatalPrice) : text,
+      render: (text, record, index) => record.taskOpration === '合计' ? currency(discountCatalPrice) : currency(text),
     }, {
       title: '合同税率',
       dataIndex: 'contractTaxRate',
@@ -625,7 +633,7 @@ class ContractSplitModal extends React.Component{
       title: '合同不含税额',
       dataIndex: 'contractAmountTaxExclude',
       width: 100,
-      render: (text, record, index) => record.taskOpration === '合计' ? currency(countsalePeo) : text,
+      render: (text, record, index) => record.taskOpration === '合计' ? currency(countsalePeo) : currency(text),
     }, {
       title: <span>退税率<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'returnTaxRate',
@@ -635,12 +643,12 @@ class ContractSplitModal extends React.Component{
       title: '退税额',
       dataIndex: 'returnTaxRevenue',
       width: 80,
-      render: (text, record, index) => record.taskOpration === '合计' ? currency(countcontractType1) : text,
+      render: (text, record, index) => record.taskOpration === '合计' ? currency(countcontractType1) : currency(text),
     }, {
       title: 'Gross Order',
       dataIndex: 'grossOrder',
       width: 100,
-      render: (text, record, index) => record.taskOpration === '合计' ? currency(countGrossOrder) : text,
+      render: (text, record, index) => record.taskOpration === '合计' ? currency(countGrossOrder) : currency(text),
     }, {
       title: <span>服务期起始</span>,
       dataIndex: 'serviceStartDate',
@@ -764,7 +772,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
-                    {constractData.bIntegration ? constractData.bIntegration : 0}
+                    {constractData.bIntegration ? currency(constractData.bIntegration) : 0}
                   </div>
                 </Col>
                 <Col span={3} className="contractRowBorderLeft contract-bg">
@@ -772,7 +780,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
-                    {constractData.cSolution}
+                    {constractData.cSolution ? currency(constractData.cSolution) : 0}
                   </div>
                 </Col>
                 <Col span={3} className="contractRowBorderLeft contract-bg">
@@ -780,7 +788,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
-                    {constractData.dTraining ? constractData.dTraining : 0}
+                    {constractData.dTraining ? currency(constractData.dTraining) : 0}
                   </div>
                 </Col>
               </Row>
@@ -935,7 +943,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
-                    {constractData.salesBuNo}
+                    {constractData.salesBuNo}:{constractData.salesBuNoName}
                   </div>
                 </Col>
               </Row>

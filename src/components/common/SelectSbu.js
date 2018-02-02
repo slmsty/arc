@@ -106,12 +106,13 @@ class SelectSbu extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
+    console.log('this.props.keyName',this.props.keyName)
     const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
           placeholder="SBU"
-          value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
+          value={this.props.keyName==='contract' && this.props.value && this.props.value[1] !== undefined ? `${this.props.value[0]}:${this.props.value[1]}` : (this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : '')}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
           disabled={this.props.disabled}
