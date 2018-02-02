@@ -22,7 +22,6 @@ class BillingApplyForm extends React.Component {
   }
 
   handleChange = (value) => {
-    console.log(`selected ${value}`);
     this.props.getApplyChange(value)
   }
 

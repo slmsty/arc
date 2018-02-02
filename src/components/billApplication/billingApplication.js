@@ -77,7 +77,8 @@ export default class BillingApplication extends React.Component {
 
   getApplyColumns = () => {
     const type = this.state.currentType
-    const normalCols = [{
+    const normalCols = [
+      {
         title: '开票申请类别',
         dataIndex: 'billingApplicationTypeName',
         width: 130,
@@ -320,7 +321,7 @@ export default class BillingApplication extends React.Component {
     } else if (redTypes.includes(this.state.currentType)) {
       scroll = { x: 1840 }
     } else {
-      scroll = false
+      scroll = {}
     }
     return scroll
   }
@@ -333,7 +334,7 @@ export default class BillingApplication extends React.Component {
         this.setState({selectedRows: selectedRows})
       }
     }
-    const { isAdd, arBillingId, contractItemId, updateVisible, otherAddVisible } = this.state
+    const { isAdd, updateVisible, otherAddVisible } = this.state
     return (
       <div>
         <BillingApplyForm
@@ -345,7 +346,7 @@ export default class BillingApplication extends React.Component {
         </div>
         <Table
           loading={isLoading}
-          rowKey="receiptClaimId"
+          rowKey={record => record.arBillingId ? record.arBillingId : record.billingOutcomeId}
           rowSelection={rowSelection}
           bordered
           columns={this.getApplyColumns()}
@@ -369,7 +370,7 @@ export default class BillingApplication extends React.Component {
               record={this.state.currentRecord}
               isAdd={isAdd}
               billType={this.state.currentType}
-              isProCodeEdit={normalTypes.includes(this.state.currentType)}
+              isProCodeEdit={normalTypes.includes(this.state.currentType) || this.state.currentType === 'BILLING_UN_CONTRACT_PROJECT'}
             /> : null
         }
         {

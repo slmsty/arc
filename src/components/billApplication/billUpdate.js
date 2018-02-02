@@ -35,7 +35,7 @@ class BillUpdate extends React.Component {
       comName: values.comName[1],
       custId: values.custName[0],
       custName: values.custName[1],
-      projectNo: values.projectNo[1],
+      projectNo: this.props.billType === 'BILLING_UN_CONTRACT_PROJECT' ? values.projectNo : values.projectNo[1],
       receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
     }
     console.log(params)
@@ -157,9 +157,9 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('projectNo', {initialValue: record.projectNo ,rules: [{ required: true, message: '请选择项目编码!' }]})(
+                  {getFieldDecorator('projectNo', {initialValue: ['', record.projectNo] ,rules: [{ required: true, message: '请选择项目编码!' }]})(
                     this.props.isProCodeEdit ?
-                      <Input disabled/>
+                      <Input disabled={this.props.billType === 'BILLING_UN_CONTRACT_PROJECT'? false : true}/>
                       :
                       <SelectSearch
                         url="/arc/billingApplication/projectNo/search"
@@ -167,8 +167,8 @@ class BillUpdate extends React.Component {
                         label="项目编码"
                         idKey="tempProjectNo"
                         valueKey="tempProjectNo"
+                        billType={this.props.billType}
                       />
-
                   )}
                 </FormItem>
               </Col>

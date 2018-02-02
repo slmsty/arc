@@ -71,6 +71,7 @@ class SelectSearch extends React.Component {
           pageSize: this.state.pageSize,
         },
         keywords,
+        billingApplicationType: this.props.billType,
       },
     }
     this.setState({ loading: true })

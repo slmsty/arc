@@ -149,11 +149,10 @@ class BillDetail extends React.Component {
     } else if(col === 'billingAmount') {
       //发票拆分子记录输入金额后，从新计算携带数据的金额
       const result = dataSource.filter(d => d.isParent === 1 && record.arBillingId === d.arBillingId)[0]
-      console.log(index, result.lineNo)
-      if(value >= result.billingAmount) {
+      /*if(value >= result.billingAmount) {
         message.warn(`拆分金额必须小于拆分前金额`)
         return
-      }
+      }*/
       let total = 0
       dataSource.map(d => {
         if(d.arBillingId === record.arBillingId && d.isParent === 0 && d.lineNo !== index){
