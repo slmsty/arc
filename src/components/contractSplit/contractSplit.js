@@ -126,11 +126,11 @@ export default class ApplySearchCon extends React.Component {
     }, {
       title: '合同内部编码',
       dataIndex: 'internalNo',
-      width: 150,
+      width: 100,
     }, {
       title: '项目编码',
       dataIndex: 'projectNo',
-      width: 150,
+      width: 100,
     }, {
       title: '合同名称',
       dataIndex: 'contractName',
@@ -218,7 +218,7 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="middle"
-          scroll={{ x: '1900', y: this.state.tableHeight }}
+          scroll={{ x: '1800', y: this.state.tableHeight }}
           loading={this.state.loading}
           dataSource={this.props.contractSplitDara.getContractList.result}
         />
