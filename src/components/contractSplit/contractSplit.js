@@ -104,7 +104,6 @@ export default class ApplySearchCon extends React.Component {
    function contractSplitInfo
    */
   showContractSplitInfo = () => {
-    console.log('length',this.state.selectedRowKeys.length)
     if(this.state.selectedRowKeys.length>1){
       message.error('一次只能对一条数据进行拆分')
       return
@@ -113,6 +112,17 @@ export default class ApplySearchCon extends React.Component {
       message.error('请选择需要拆分的数据')
       return
     }
+    console.log(4)
+    // 获取审批表url
+    const contractId = this.state.selectedRows[0].contractId
+    //const contractId = 201604296622
+    console.log('contractId',contractId)
+    this.props.getUrl(contractId).then((res)=>{
+      if (res && res.response && res.response.resultCode === '000000') {
+      } else {
+        message.error('获取审批列表链接失败')
+      }
+    })
     this.setState({
       contarctSplitModal: true,
     })
@@ -209,6 +219,7 @@ export default class ApplySearchCon extends React.Component {
               data={this.state.contractInfo}
               contractInfo={this.state.contractInfo[0]}
               user={this.props.user.accountName}
+              contractUrl={this.props.contractSplitDara.getUrl}
               tableDetail={this.state.selectedRows[0].orderListLines ? this.state.selectedRows[0].orderListLines : []}
             /> : null
         }

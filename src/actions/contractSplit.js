@@ -38,3 +38,15 @@ export function approveReject(queryParam) {
     },
   }
 }
+ // 获取审批表链接地址
+export function getUrl(queryParam) {
+  return {
+    [httpApi]: {
+      url: `/arc/contract/split/contractUrl/${queryParam}`,
+      options: {
+        method: 'GET',
+      },
+      types: ['GET_URL_SUCCESS'],
+    },
+  }
+}

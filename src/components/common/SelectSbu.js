@@ -140,6 +140,7 @@ class SelectSbu extends React.Component {
                     <Input
                       onPressEnter={this.handleQuery}
                       placeholder="请输入SBU关键字"
+
                     />,
                   )}
                 </FormItem>
