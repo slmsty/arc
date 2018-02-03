@@ -325,7 +325,7 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
-    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave } = this.props
+    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave, billApplyCheck } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) ? 'checkbox' : 'radio',
       onChange: (selectedRowKeys, selectedRows) => {
@@ -357,6 +357,7 @@ export default class BillingApplication extends React.Component {
             detail={editInfo}
             billType={this.state.currentType}
             billApplySave={billApplySave}
+            billApplyCheck={billApplyCheck}
           /> : null
         }
         {

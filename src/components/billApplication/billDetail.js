@@ -9,6 +9,7 @@ import 'whatwg-fetch'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
+const confirm = Modal.confirm
 
 const data = [{
   title: '城建',
@@ -140,8 +141,38 @@ class BillDetail extends React.Component {
           })),
           objectId: this.state.fileId
         }
-        console.log(params)
-        this.props.billApplySave(params)
+        const _this = this
+        //校验拆分金额是否大于含税金额，大于提示用户并更改开票类型为超额开票
+        requestJsonFetch('/arc/billingApplication/apply/check', {
+          method: 'POST',
+          body: {
+            appLineItems: this.state.dataSource,
+            billingApplicationType: this.props.billType,
+          },
+        }, (res) => {
+          console.log(res)
+          const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
+          if(resultCode === '000000') {
+            if(isWarning === 'Y') {
+              confirm({
+                title: '提示',
+                content: warningMessage,
+                onOk() {
+                  _this.props.billApplySave({
+                    ...params,
+                    billingApplicationType,
+                  })
+                }
+              })
+            } else {
+              console.log(params)
+              this.props.billApplySave(params)
+            }
+          } else {
+            message.error(resultMessage)
+            return
+          }
+        })
       }
     });
   }
