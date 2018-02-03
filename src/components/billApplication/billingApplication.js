@@ -27,7 +27,6 @@ export default class BillingApplication extends React.Component {
       this.setState({
         updateVisible: false,
         otherAddVisible: false,
-        selectedRows: [],
         currentRecord: {},
       })
       this.getInitQuery()

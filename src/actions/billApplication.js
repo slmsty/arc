@@ -175,3 +175,20 @@ export const billRedApply = (params) => {
     },
   }
 }
+/**
+ * 提交开票前校验
+ * @param params
+ * @returns {{}}
+ */
+export const billApplyCheck = (params) => {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/apply/check',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_APPLY_CHECK_SUCCESS'],
+    },
+  }
+}
