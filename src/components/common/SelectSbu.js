@@ -106,7 +106,6 @@ class SelectSbu extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    console.log('this.props.keyName',this.props.keyName)
     const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>

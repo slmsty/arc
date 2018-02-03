@@ -14,6 +14,7 @@ export default class ApplySearchCon extends React.Component {
     splitStatus: true,
     selectedRowKeys: '',
     selectedRows: '',
+    contractInfo:'',
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -73,6 +74,7 @@ export default class ApplySearchCon extends React.Component {
     this.setState({
       selectedRowKeys:selectedRowKeys,
       selectedRows:selectedRows,
+      contractInfo:selectedRows,
     })
   }
   saveContractSplitInfo = (param) => {
@@ -192,7 +194,7 @@ export default class ApplySearchCon extends React.Component {
       onShowSizeChange: this.handleChangeSize,
 
     }
-    console.log('seletctDATA',this.state.selectedRows)
+    console.log('seletctDATA',this.state.contractInfo)
     return (
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />
@@ -204,7 +206,8 @@ export default class ApplySearchCon extends React.Component {
             <ContractSplitModal
               closeModal={this.closeModalClaim}
               saveInfo={this.saveContractSplitInfo}
-              data={this.state.selectedRows}
+              data={this.state.contractInfo}
+              contractInfo={this.state.contractInfo[0]}
               user={this.props.user.accountName}
               tableDetail={this.state.selectedRows[0].orderListLines ? this.state.selectedRows[0].orderListLines : []}
             /> : null

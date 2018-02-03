@@ -164,7 +164,8 @@ class ARModal extends Component{
               <FormItem label="报告日期">
                 {
                   getFieldDecorator('reportDate', {
-                    initialValue: o.reportDate ? moment(o.reportDate) : null
+                    //initialValue: o.reportDate ? moment(o.reportDate) : null
+                    initialValue: o.arDate ? moment(o.arDate) : null
                   })(
                     <DatePicker
                       onChange={this.handleDateChange}
