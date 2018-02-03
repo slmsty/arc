@@ -1,7 +1,4 @@
 /**
- * Created by liangshuang on 17/12/12.
- */
-/**
  * Created by liangshuang on 17/12/8.
  */
 import React from 'react'

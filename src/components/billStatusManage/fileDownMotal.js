@@ -3,7 +3,6 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import currency from '../../util/currency'
 import { Modal, Row, Col, Button, Input, Form, Table, message, Select } from 'antd'
 
 class FileDownModal extends React.Component {
@@ -43,10 +42,10 @@ class FileDownModal extends React.Component {
   }
 }
 FileDownModal.propTypes = {
-  closeClaim: PropTypes.func.isRequired,
-  applyReject: PropTypes.func.isRequired,
-  applyComfirm: PropTypes.func.isRequired,
-  infoVisitable: PropTypes.bool.isRequired,
+  closeClaim: PropTypes.func,
+  applyReject: PropTypes.func,
+  applyComfirm: PropTypes.func,
+  infoVisitable: PropTypes.bool,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,

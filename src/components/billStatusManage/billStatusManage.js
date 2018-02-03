@@ -4,7 +4,7 @@
 import React from 'react'
 import { Button, Table, message, Modal } from 'antd'
 import BillStatusManageWithFrom from './billStatusManageWithFrom'
-import ItemInfo from './noApplyInfo'
+import NoApplyInfo from '../myApply/noApplyInfo'
 import DetailModal from './calcelDetail'
 import GlDateModal from './../common/glDateModal'
 import FileDownModal from './fileDownMotal'
@@ -543,7 +543,7 @@ export default class BillStatusCon extends React.Component {
             />
             : ''
         }
-        <ItemInfo
+        <NoApplyInfo
           infoVisitable={this.state.noApplyInfoVisitable}
           closeClaim={this.noApplycloseModalClaim}
           applyData={this.state.noApplyInfoData}

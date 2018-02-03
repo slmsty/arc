@@ -8,6 +8,7 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from '../billApplication/selectSearch'
 import moment from 'moment'
 import { Modal, Row, Col, Button, Input, Form, Table, message, Select,DatePicker } from 'antd'
+import { detailColumns } from '../billApplication/billColumns'
 
 const { TextArea } = Input
 const Option = Select.Option
@@ -23,7 +24,7 @@ const contentCols = [{
   width: 200,
 }]
 
-class CancelModal extends React.Component {
+class CancelDetail extends React.Component {
   state = {
     selectedRowKeys: '',
     selectedRows: '',
@@ -163,8 +164,6 @@ class CancelModal extends React.Component {
     })
   }
   render() {
-    console.log('init',this.props.DetailList)
-    console.log('contentData',this.state.contentData)
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
       labelCol: { span: 7 },
@@ -240,32 +239,6 @@ class CancelModal extends React.Component {
         )
       },
     },
-    ]
-    const newColumns = [
-      {
-        title: '',
-        dataIndex: 'title',
-        width: 150,
-      }, {
-        title: '客户名称',
-        dataIndex: 'customerName',
-        width: 150,
-      },
-      {
-        title: '纳税人识别号',
-        dataIndex: 'taxPayer',
-        width: 150,
-      },
-      {
-        title: '地址电话',
-        dataIndex: 'address',
-        width: 150,
-      },
-      {
-        title: '开户行及账号',
-        dataIndex: 'bankAccount',
-        width: 150,
-      },
     ]
     const contentsColumns = [{
       title: '开票内容',
@@ -423,7 +396,7 @@ class CancelModal extends React.Component {
                 <div>
                   <Table
                     rowKey="receiptClaimId"
-                    columns={newColumns}
+                    columns={detailColumns}
                     pagination={false}
                     bordered
                     size="small"
@@ -465,16 +438,16 @@ class CancelModal extends React.Component {
     )
   }
 }
-CancelModal.propTypes = {
-  closeClaim: PropTypes.func.isRequired,
-  applyReject: PropTypes.func.isRequired,
-  applyComfirm: PropTypes.func.isRequired,
-  infoVisitable: PropTypes.bool.isRequired,
+CancelDetail.propTypes = {
+  closeClaim: PropTypes.func,
+  applyReject: PropTypes.func,
+  applyComfirm: PropTypes.func,
+  infoVisitable: PropTypes.bool,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func.isRequired,
     getFieldsValue: PropTypes.func.isRequired,
   }).isRequired,
 }
-const CancelModalWithForm = Form.create()(CancelModal)
+const CancelModalWithForm = Form.create()(CancelDetail)
 
 export default CancelModalWithForm
