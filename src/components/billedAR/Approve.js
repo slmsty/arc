@@ -77,7 +77,7 @@ class Approve extends Component{
       },
       {
         title: '应收金额',
-        dataIndex: 'drAmount',
+        dataIndex: 'arAmount',
         width: 120
       },
       {
