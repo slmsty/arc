@@ -29,6 +29,12 @@ class ARModal extends Component{
       glDate: string,
     })
   }
+  handleBillDateChange = (date, string) => {
+    console.log(date,string)
+    this.props.form.setFieldsValue({
+      reportDate:date,
+    })
+  }
   onOk = () => {
     this.props.form.validateFields((err, values) => {
       const isShow = !((this.props.o.paymentTerm==='按进度'&&this.props.o.paymentName==='预付款')||(this.props.o.paymentTerm==='按时间'&&this.props.o.paymentName!=='结算款'));
@@ -145,7 +151,7 @@ class ARModal extends Component{
                 getFieldDecorator('billedArDate', {
                   initialValue: o.arDate ? moment(o.arDate) : null
                 })(
-                  <DatePicker />
+                  <DatePicker onChange={this.handleBillDateChange} />
                 )
               }
             </FormItem>

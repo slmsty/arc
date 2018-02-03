@@ -799,7 +799,7 @@ class ContractSplitModal extends React.Component{
                     {constractData.solutionMaintain}
                   </div>
                 </Col>
-                <Col span={3} className="contractRowBorderLeft contractRowBorderRight contract-bg">
+                <Col span={3} className="contractRowBorderLeft contract-bg">
                   维护服务开始时间：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
