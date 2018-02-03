@@ -140,6 +140,12 @@ class Confirm extends Component{
         render: (text, record, index) => (text ? text.toFixed(2) : text),
       },
       {
+        title: '应收金额',
+        dataIndex: 'arAmount',
+        width: 120,
+        render: (text, record, index) => (text ? text.toFixed(2) : text),
+      },
+      {
         title: '考核含税金额',
         dataIndex: 'assessTaxIncludedAmount',
         width: 120,

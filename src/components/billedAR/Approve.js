@@ -36,6 +36,11 @@ class Approve extends Component{
         width: 120
       },
       {
+        title: '付款金额',
+        dataIndex: 'paymentAmount',
+        width: 120
+      },
+      {
         title: '项目编码',
         dataIndex: 'projectNo',
         width: 120
@@ -72,7 +77,7 @@ class Approve extends Component{
       },
       {
         title: '应收金额',
-        dataIndex: 'paymentAmount',
+        dataIndex: 'drAmount',
         width: 120
       },
       {
