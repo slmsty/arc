@@ -158,7 +158,7 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('projectNo', {initialValue: this.props.isProCodeEdit ? record.projectNo : ['', record.projectNo] ,rules: [{ required: true, message: '请选择项目编码!' }]})(
+                  {getFieldDecorator('projectNo', {initialValue: this.props.billType === 'BILLING_UN_CONTRACT_PROJECT' ? record.projectNo : ['', record.projectNo] ,rules: [{ required: true, message: '请选择项目编码!' }]})(
                     this.props.isProCodeEdit ?
                       <Input disabled={this.props.billType === 'BILLING_UN_CONTRACT_PROJECT'? false : true}/>
                       :
