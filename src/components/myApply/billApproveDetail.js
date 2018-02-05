@@ -328,7 +328,7 @@ class BillApproveDetail extends React.Component  {
           <SearchAllColumns
             url="/arc/billingApplication/taxInfo/search"
             columns={taxCategoryCols}
-            label="税收分类编码"
+            label="编码名称"
             idKey="taxCategoryCode"
             valueKey="taxCategoryCode"
             value={this.state.dataSource[index]['taxCategoryCode']}

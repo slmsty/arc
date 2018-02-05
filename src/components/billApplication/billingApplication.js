@@ -140,7 +140,8 @@ export default class BillingApplication extends React.Component {
              onClick={() => {
                this.setState({
                  updateVisible: true,
-                 currentRecord: record
+                 currentRecord: record,
+                 isAdd: false,
                })}
              }
           >修改</a>
@@ -189,7 +190,8 @@ export default class BillingApplication extends React.Component {
              onClick={() => {
                this.setState({
                  updateVisible: true,
-                 currentRecord: record
+                 currentRecord: record,
+                 isAdd: false,
                })}
              }
           >修改</a>
@@ -226,7 +228,8 @@ export default class BillingApplication extends React.Component {
              onClick={() => {
                this.setState({
                  otherAddVisible: true,
-                 currentRecord: record
+                 currentRecord: record,
+                 isAdd: false,
                })}
              }
           >修改</a>

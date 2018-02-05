@@ -25,7 +25,7 @@ class BillUpdate extends React.Component {
       billingApplicationType: this.props.billType,
       comName: values.comName[1],
       custName: values.custName[1],
-      projectNo: values.projectNo[1],
+      projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
       receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
     } : {
       ...values,
@@ -36,7 +36,7 @@ class BillUpdate extends React.Component {
       comName: values.comName[1],
       custId: values.custName[0],
       custName: values.custName[1],
-      projectNo: this.props.billType === 'BILLING_UN_CONTRACT_PROJECT' ? values.projectNo : values.projectNo[1],
+      projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
       receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
     }
     console.log(params)
