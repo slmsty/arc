@@ -2,18 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import StatementListCom from '../../components/statementSearch/statementList'
-import { getReviewReceiptList, approveSubmit, returnReceiptClaim, transferReceiptClaim } from '../../actions/reviewReceiptClaim'
+import { getStatementList } from '../../actions/statement'
 
 const mapStateToProps = state => ({
-  reviewReceiptClaim: state.reviewReceiptClaim,
+  statement: state.statement,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    getReviewReceiptList,
-    approveSubmit,
-    returnReceiptClaim,
-    transferReceiptClaim,
+    getStatementList,
   }, dispatch)
 )
 

@@ -18,6 +18,7 @@ import myApply from './myApply'
 import contractSplitDara from './constractSplit'
 import billApplication from './billApplication'
 import billStatusManage from './billStatusManage/billStatusManage'
+import statement from './statement'
 
 export default combineReducers({
   common,
@@ -38,5 +39,6 @@ export default combineReducers({
   cancelApply,
   billApplication,
   billStatusManage,
+  statement,
   routing: routerReducer, // 整合路由
 })

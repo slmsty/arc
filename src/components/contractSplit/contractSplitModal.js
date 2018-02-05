@@ -505,13 +505,21 @@ class ContractSplitModal extends React.Component{
     })
     this.props.closeModal()
   }
+  chk = (currentValue) => {
+  let patrn = /^\d+(\.\d+)?$/
+  let result = true;
+    currentValue.each(function () {
+    if (!patrn.exec(this.value)) {
+      message.error("请输入正确的数字！");
+      result = false;
+    }
+  })
 
+  return result;
+}
   handleTaskCostChange = (e,flag) =>{
     let currentValue = e.target.value
-    if(typeof currentValue !=='number'){
-      message.error('请输入数字')
-      return
-    }
+    console.log('currentValue',currentValue)
     const countValueData = this.state.countTaskCostData
     countValueData[flag] = currentValue
     this.setState({
@@ -558,6 +566,9 @@ class ContractSplitModal extends React.Component{
   }
 
   render() {
+    const rules = [
+        {message: '请输入正确的数字',type: /^(\-|\+)?\d+(\.\d+)?$/ },
+      ]
     console.log('renderURl',this.props.contractUrl)
     const dataSource = this.state.dataSource
     console.log('render',dataSource)
@@ -991,7 +1002,10 @@ class ContractSplitModal extends React.Component{
                 <Col span={19} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('task1Cost',{initialValue:constractData.task1tCost ? constractData.task1tCost : 0},)(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task1Cost')} disabled={this.state.editFlag} />)
+                      getFieldDecorator('task1Cost',{
+                        initialValue:constractData.task1tCost ? constractData.task1tCost : 0,
+                        rules: rules,
+                      },)(<Input className="contractRowBorderNo" onChange={(e)=>this.handleTaskCostChange(e,'task1Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
 

@@ -165,12 +165,12 @@ export default class ApplySearchCon extends React.Component {
       title: 'Sale签约BU',
       dataIndex: 'salesBuNo',
       width: 100,
-      render:(text,record,index)=>(text ? `${text}:${record.salesBuNoName}` : ''),
+      render:(text,record,index)=>(text ? (record.salesBuNoName ? `${text}:${record.salesBuNoName}` : text) : ''),
     }, {
       title: '立项BU',
       dataIndex: 'projectBuNo',
       width: 80,
-      render:(text,record,index)=>(text ? `${text}:${record.projectBuNoName}` : ''),
+      render:(text,record,index)=>(text ? (record.projectBuNoName ? `${text}:${record.projectBuNoName}` : text) : ''),
     }, {
       title: '销售人员',
       dataIndex: 'salesPerson',

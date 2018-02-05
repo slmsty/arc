@@ -3,105 +3,103 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
+import currency from '../../util/currency'
+import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns } from './statementColumns'
 import { Table, Row, Col, Form, Radio, DatePicker, Input, Icon } from 'antd'
 
 import StatementWithFrom from './statementWithFrom'
-
-const columns = [{
-  title: '签约公司',
-  dataIndex: 'signCompany',
-  width: 100,
-  fixed: 'left',
-}, {
-  title: '项目编码',
-  dataIndex: 'projectIds',
-  width: 200,
-}, {
-  title: '节点',
-  dataIndex: 'node',
-  width: 100,
-}, {
-  title: '付款百分比',
-  dataIndex: 'paymentPercent',
-  width: 100,
-}, {
-  title: '币种',
-  dataIndex: 'receiptCurrency',
-  width: 100,
-}, {
-  title: '应收金额',
-  dataIndex: 'reciptAmount',
-  width: 100,
-  render: (text, record, index) => (text ? text.toFixed(2) : text),
-}, {
-  title: '收款日期',
-  dataIndex: 'receiptDate',
-  width: 150,
-}, {
-  title: '收款编号',
-  dataIndex: 'receiptNo',
-  width: 200,
-}, {
-  title: '收款金额',
-  dataIndex: 'receiptAmount',
-  width: 100,
-  render: (text, record, index) => (text ? text.toFixed(2) : text),
-}, {
-  title: '客户名称',
-  dataIndex: 'custName',
-  width: 200,
-}, {
-  title: '合同编码',
-  dataIndex: 'contractNo',
-  width: 200,
-}, {
-  title: '合同名称',
-  dataIndex: 'contractName',
-  width: 300,
-}, {
-  title: '项目经理',
-  dataIndex: 'projectManager',
-  width: 100,
-}, {
-  title: '销售经理',
-  dataIndex: 'saleManager',
-  width: 100,
-}, {
-  title: '立项部门',
-  dataIndex: 'buildPart',
-  width: 100,
-}, {
-  title: '已开票金额',
-  dataIndex: 'billedMoney',
-  width: 100,
-  render: (text, record, index) => (text ? text.toFixed(2) : text),
-},
-]
 export default class StatementListIndex extends React.Component {
   state = {
     infoVisitable: false,
     loading: false,
     applyData: '',
-    stateType: '',
+    currencyType: '100',
   }
-  queryParms = () => {
+  componentDidMount(){
+  }
+  // 查询接口
+  queryParms = (param) => {
+    this.props.getStatementList(param)
+
+  }
+  // 获取展示列
+  getApplyColumns = () =>{
+    let width = 0
+    const type = this.state.currencyType
+    if(type==='100'){
+      //  获取宽度width
+      reciptMoneyInfoCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,reciptMoneyInfoCols,'收款汇总金额']
+    } else if(type==='1001'){
+      billInfocomCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,billInfocomCols,'发票汇总金额']
+    } else if(type==='1002'){
+      billAndReciptMoneyCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,billAndReciptMoneyCols,'收款汇总金额','发票汇总金额']
+    } else if(type==='1003'){
+      shouldReciptCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,shouldReciptCols]
+    } else if(type==='1004'){
+      projectTotalCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,projectTotalCols,'收款汇总金额','发票汇总金额']
+    } else if(type==='1005'){
+      totalContractContentColumns.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,totalContractContentColumns]
+    } else if(type==='1006'){
+      turnProColumns.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,turnProColumns]
+    } else {
+      reciptMoneyInfoCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,reciptMoneyInfoCols,'收款汇总金额']
+    }
+  }
+  // 展示查询列表回调方法
+  showCols = (type) => {
+    this.setState({
+      currencyType: type,
+    })
   }
   render() {
     return (
       <div>
-        <StatementWithFrom />
-        <br />
-        <br />
+        <StatementWithFrom showCols={this.showCols} />
         <Row  style={{ lineHeight: '28px' }}>
           <Col span={24} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
-            <span>收款汇总金额：</span><span className="primary-color" style={{ color: '#F4A034' }}></span>
+            {
+              this.getApplyColumns()[2] ?
+                <div>
+                  <span>{this.getApplyColumns()[2]}：</span><span className="primary-color" style={{ color: '#F4A034' }}></span>
+                  {this.getApplyColumns()[3] ?
+                    <span><span>{this.getApplyColumns()[3]}：</span> < span className = "primary-color" style={{ color: '#F4A034' }}></span></span>
+                    :''
+                  }
+                </div>
+                : ''
+            }
+
           </Col>
         </Row>
         <Table
-          columns={columns}
+          columns={this.getApplyColumns()[1]}
           bordered
           size="middle"
-          scroll={{ x: '2250px' }}
+          scroll={{ x: this.getApplyColumns()[0] }}
         />
       </div>
     )
