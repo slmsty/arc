@@ -244,6 +244,8 @@ export default class BillingApplication extends React.Component {
       return redFontCols
     } else if (otherTypes.includes(type)) {
       return otherCols
+    } else {
+      return normalCols
     }
   }
 

@@ -396,17 +396,17 @@ export default class BillStatusCon extends React.Component {
       {
       title: '数据状态',
       dataIndex: 'status',
-      width: 80,
+      width: 100,
       textAlign: 'center',
       fixed: 'left',
     }, {
       title: '开票申请分类',
       dataIndex: 'applicationType',
-      width: 100,
+      width: 180,
     }, {
       title: '申请单编号',
       dataIndex: 'billingApplicationId',
-      width: 200,
+      width: 150,
       render: (text, record) => (
         <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
       ),

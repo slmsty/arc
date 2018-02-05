@@ -120,6 +120,7 @@ class SelectSearch extends React.Component {
         />
         <Modal
           title="选择"
+          width={this.props.width ? this.props.width : '600px'}
           style={{ top: 20}}
           visible={visible}
           wrapClassName="vertical-center-modal"

@@ -222,6 +222,7 @@ class BillApproveDetail extends React.Component  {
           url="/arc/billingApplication/billingContent/search"
           columns={contentCols}
           label="开票内容"
+          width="1000px"
           idKey="billingRecordId"
           valueKey="billingContentName"
           value={this.state.dataSource[index]['billingContent']}

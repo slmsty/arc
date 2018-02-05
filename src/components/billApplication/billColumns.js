@@ -34,7 +34,7 @@ const invoiceCols = [{
   width: 100,
 }, {
   title: '客户名称',
-  dataIndex: 'billingOutcomeId',
+  dataIndex: 'custName',
   width: 100,
 }, {
   title: '开票金额',
@@ -44,9 +44,10 @@ const invoiceCols = [{
   title: '开票税率',
   dataIndex: 'taxRate',
   width: 50,
+  render: (text) => (`${text * 100}%`)
 }, {
   title: '开票税额',
-  dataIndex: 'taxExcludeAmount',
+  dataIndex: 'taxAmount',
   width: 50,
 }]
 

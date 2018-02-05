@@ -60,9 +60,9 @@ class BillDetail extends React.Component {
           billingContent: '',
           specificationType: '',
           unit: '',
-          quantity: '',
-          unitPrice: 0,
-          billingAmountExcludeTax: 0,
+          quantity: 1,
+          unitPrice: item.billingAmount ? item.billingAmount : 0,
+          billingAmountExcludeTax: item.billingAmount ? item.billingAmount : 0,
           billingAmount: item.billingAmount ? item.billingAmount : 0,
           totalAmount: item.billingAmount ? item.billingAmount : 0,
           billingTaxRate: 0,
@@ -83,7 +83,7 @@ class BillDetail extends React.Component {
       billingContent: '',
       specificationType: '',
       unit: '',
-      quantity: '',
+      quantity: 1,
       unitPrice: 0,
       noRateAmount: 0,
       billingAmountExcludeTax: 0,
@@ -91,11 +91,8 @@ class BillDetail extends React.Component {
       billingTaxRate: 0,
       billingTaxAmount: 0,
     };
-    this.state.dataSource.map((record, index) => {
-      if(record.lineNo === lineNo){
-        dataSource.splice(index + 1, 0, newData)
-      }
-    })
+    const data = dataSource.filter(r=> r.arBillingId === arBillingId)
+    dataSource.splice(lineNo + data.length, 0, newData)
     const source = dataSource.map((record, index) => ({
         ...record,
         lineNo: index,
@@ -114,10 +111,9 @@ class BillDetail extends React.Component {
         const amount = dataSource[item.lineNo]['billingAmount']
         dataSource[item.lineNo]['billingAmount'] = parseFloat(record.billingAmount) + parseFloat(amount)
       }
-      if(item.lineNo === record.lineNo) {
-        dataSource.splice(index, 1)
-      }
     })
+
+    dataSource.splice(record.lineNo, 1)
     const newSource = dataSource.map((record, index) => ({
       ...record,
       lineNo: index,
@@ -130,16 +126,17 @@ class BillDetail extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const { custInfo, comInfo } = this.props.detail
+        const appLineItems = this.state.dataSource.map(record => ({
+          ...record,
+          lineNo: record.lineNo + 1,
+        }))
         const params = {
           ...values,
           billingCustInfoId: custInfo.billingCustInfoId,
           billingComInfoId: comInfo.billingComInfoId,
           billingApplicationType: this.props.billType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
-          appLineItems: this.state.dataSource.map(record => ({
-            ...record,
-            lineNo: record.lineNo + 1,
-          })),
+          appLineItems: appLineItems,
           objectId: this.state.fileId
         }
         const _this = this
@@ -147,11 +144,10 @@ class BillDetail extends React.Component {
         requestJsonFetch('/arc/billingApplication/apply/check', {
           method: 'POST',
           body: {
-            appLineItems: this.state.dataSource,
+            appLineItems: appLineItems,
             billingApplicationType: this.props.billType,
           },
         }, (res) => {
-          console.log(res)
           const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
           if(resultCode === '000000') {
             if(isWarning === 'Y') {
@@ -159,6 +155,7 @@ class BillDetail extends React.Component {
                 title: '提示',
                 content: warningMessage,
                 onOk() {
+                  console.log(params)
                   _this.props.billApplySave({
                     ...params,
                     billingApplicationType,
@@ -203,11 +200,23 @@ class BillDetail extends React.Component {
         }
       }
       dataSource[result.lineNo][col] = result.totalAmount - childAmount
+      const parent = this.state.dataSource[result.lineNo]
+      this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
       dataSource[index][col] = value
+      const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
+      this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
       //未大签、红冲、其他开票含税金额为0, 手动输入金额后并赋值给总金额
       if(record.isParent === 1 && !normalTypes.includes(this.props.billType)) {
         dataSource[result.lineNo].totalAmount = value
       }
+    } else if (col === 'billingTaxRate') {
+      const { billingAmount, quantity} = this.state.dataSource[index]
+      this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
+      dataSource[index][col] = value
+    } else if (col === 'quantity') {
+      dataSource[index][col] = value
+      const { billingAmountExcludeTax } = this.state.dataSource[index]
+      dataSource[index]['unitPrice'] = (billingAmountExcludeTax / (value ? value : 1)).toFixed(2)
     } else {
       dataSource[index][col] = value
     }
@@ -287,6 +296,13 @@ class BillDetail extends React.Component {
     }
   }
 
+  calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
+    const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
+    dataSource[index]['billingAmountExcludeTax'] = (billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2)
+    dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
+    dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -331,6 +347,7 @@ class BillDetail extends React.Component {
           url="/arc/billingApplication/billingContent/search"
           columns={contentCols}
           label="开票内容"
+          width="1000px"
           idKey="billingRecordId"
           valueKey="billingContentName"
           value={['', this.state.dataSource[index]['billingContent']]}
@@ -342,14 +359,14 @@ class BillDetail extends React.Component {
       dataIndex: 'specificationType',
       width: 100,
       render: (text, record, index) => (
-        <Input placeholder="规格型号" onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}/>
+        <Input placeholder="规格型号" value={this.state.dataSource[index]['specificationType']} onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}/>
       )
     }, {
       title: '单位',
       dataIndex: 'unit',
       width: 80,
       render: (text, record, index) => (
-        <Input placeholder="单位" onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
+        <Input placeholder="单位" value={this.state.dataSource[index]['unit']}  onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
       )
     }, {
       title: '数量',
@@ -359,35 +376,30 @@ class BillDetail extends React.Component {
         <InputNumber
           placeholder="数量"
           defaultValue="1"
+          value={this.state.dataSource[index]['quantity']}
           onChange={(value) => this.handleChange(value, 'quantity', index)} />
       )
     }, {
       title: '单价',
       dataIndex: 'unitPrice',
       width: 100,
-      render: (text, record, index) => {
-        const { billingAmount, billingTaxRate, quantity} = this.state.dataSource[index]
-        return (
-          <InputNumber
-            placeholder="单价"
-            value={billingTaxRate ? (billingAmount / (1 + parseFloat(billingTaxRate)) / (quantity ? quantity : 1)).toFixed(2) : 0}
-            onChange={(value) => this.handleChange(value, 'unitPrice', index)}
-          />
-        )
-      }
+      render: (text, record, index) => (
+        <InputNumber
+          placeholder="单价"
+          value={this.state.dataSource[index]['unitPrice']}
+          onChange={(value) => this.handleChange(value, 'unitPrice', index)}
+        />
+      )
     }, {
       title: '不含税金额',
       dataIndex: 'billingAmountExcludeTax',
       width: 100,
-      render: (text, record, index) => {
-        const { billingAmount, billingTaxRate } = this.state.dataSource[index]
-        return (
-          <InputNumber
-            placeholder="不含税金额"
-            value={billingTaxRate ? (billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2) : 0}
-            onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
-        )
-      }
+      render: (text, record, index) => (
+        <InputNumber
+          placeholder="不含税金额"
+          value={this.state.dataSource[index].billingAmountExcludeTax}
+          onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
+      )
     }, {
       title: '含税金额',
       dataIndex: 'billingAmount',
@@ -408,7 +420,7 @@ class BillDetail extends React.Component {
           typeCode="BILLING_APPLICATION"
           paramCode="TAX_RATE"
           placeholder="税率"
-          hasEmpty
+          hasEmpty={false}
           value={`${this.state.dataSource[index]['billingTaxRate']}`}
           onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
         />
@@ -417,17 +429,13 @@ class BillDetail extends React.Component {
       title: '税额',
       dataIndex: 'billingTaxAmount',
       width: 100,
-      render: (text, record, index) => {
-        const { billingAmount, billingTaxRate} = this.state.dataSource[index]
-        const unitPrice = billingAmount / (1 + parseFloat(billingTaxRate))
-        return (
-          <InputNumber
-            placeholder="税额"
-            value={(unitPrice * billingTaxRate).toFixed(2)}
-            onChange={(value) => this.handleChange(value, 'billingTaxAmount', index)}
-          />
-        )
-      }
+      render: (text, record, index) => (
+        <InputNumber
+          placeholder="税额"
+          value={this.state.dataSource[index]['billingTaxAmount']}
+          onChange={(value) => this.handleChange(value, 'billingTaxAmount', index)}
+        />
+      )
     }]
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,

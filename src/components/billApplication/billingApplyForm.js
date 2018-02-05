@@ -111,7 +111,7 @@ class BillingApplyForm extends React.Component {
                     paramCode="BILLING_APPLICATION_TYPE"
                     placeholder="开票申请分类"
                     onChange={(v) => this.handleChange(v)}
-                    hasEmpty
+                    hasEmpty={false}
                   />
                 )
                 }
