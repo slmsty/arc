@@ -99,6 +99,7 @@ export default class ApplySearchCon extends React.Component {
       selectedRowKeys: '',
       selectedRows: '',
     })
+    this.handleQuery()
   }
   /*
    function contractSplitInfo

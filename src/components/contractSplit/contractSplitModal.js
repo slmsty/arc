@@ -214,6 +214,7 @@ class ContractSplitModal extends React.Component{
     )
   }
   handleInputChange = (value, index, column) => {
+    console.log('changeVale',value)
     let newData = this.state.dataSource.slice(0)
     const contractAmount = parseFloat(this.props.data[0].contractAmount)
     if(column==='discount') {
@@ -277,6 +278,7 @@ class ContractSplitModal extends React.Component{
       orderListLineId: '110'+new Date().getTime(),
       subRow: false,
       discount: 0,
+      returnTaxRate: 0,
       revenueCheckout: "POC",
 
     }
@@ -288,6 +290,7 @@ class ContractSplitModal extends React.Component{
       orderListLineId: '110'+new Date().getTime(),
       subRow: true,
       discount: 0,
+      returnTaxRate: 0,
       revenueCheckout: "POC",
     }
     const indexArray = []
@@ -359,6 +362,7 @@ class ContractSplitModal extends React.Component{
     param.relatedBuNo = param && param.relatedBuNo ? param.relatedBuNo[0] : ''
     param.relatedBuNoName = relatedBuNoName
     param.projectBuNoName = projectBuNoName
+    console.log('projectBuNoName',param)
 
     if (param.maintainBeginDate === '' || typeof param.maintainBeginDate ==='undefined') {
       message.error('保修开始时间不能为空！')
@@ -567,7 +571,7 @@ class ContractSplitModal extends React.Component{
 
   render() {
     const rules = [
-        {message: '请输入正确的数字',type: /^(\-|\+)?\d+(\.\d+)?$/ },
+        {pattern: /^(\-|\+)?\d+(\.\d+)?$/,message: '请输入正确的数字' },
       ]
     console.log('renderURl',this.props.contractUrl)
     const dataSource = this.state.dataSource

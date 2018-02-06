@@ -107,11 +107,12 @@ class SelectSbu extends React.Component {
       onChange: this.onSelectChange,
     }
     const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    console.log('key',this.props.keyName,this.props.value,)
     return (
       <div>
         <Input
           placeholder="SBU"
-          value={this.props.keyName==='contract' && this.props.value && this.props.value[1] !== undefined ? `${this.props.value[0]}:${this.props.value[1]}` : (this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : '')}
+          value={this.props.keyName==='contract' && this.props.value && this.props.value[0] !== undefined ? (this.props.value[1]!== undefined ? `${this.props.value[0]}:${this.props.value[1]}` :this.props.value[0]) : (this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : '')}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
           disabled={this.props.disabled}
