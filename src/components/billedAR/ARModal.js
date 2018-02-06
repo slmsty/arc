@@ -114,7 +114,7 @@ class ARModal extends Component{
               }
             }
             isError=true
-          } else if (paymentAmount < 0 && values.assessTaxIncludedAmount < paymentAmount && values.assessTaxIncludedAmount > 0) {
+          } else if (paymentAmount < 0 && (values.assessTaxIncludedAmount < paymentAmount || values.assessTaxIncludedAmount > 0)) {
             formField = {
               assessTaxIncludedAmount: {
                 value: values.assessTaxIncludedAmount,
