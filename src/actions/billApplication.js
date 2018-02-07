@@ -192,3 +192,7 @@ export const billApplyCheck = (params) => {
     },
   }
 }
+
+export const hideDetailModal = () => (
+  {type: 'HIDE_DETAIL_MODAL'}
+)

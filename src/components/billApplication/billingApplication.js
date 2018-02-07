@@ -12,7 +12,6 @@ export default class BillingApplication extends React.Component {
     super(props)
     this.state = {
       currentType: 'BILLING_NORMAL',
-      detailVisible: false,
       updateVisible: false,
       otherAddVisible: false,
       selectedRows: [],
@@ -41,9 +40,6 @@ export default class BillingApplication extends React.Component {
       message.success('发票红冲成功!')
     } else if(this.props.billSaveSuccess !== nextProps.billSaveSuccess && nextProps.billSaveSuccess) {
       message.success('申请开票成功!')
-      this.setState({
-        detailVisible: false,
-      })
     }
   }
 
@@ -266,7 +262,6 @@ export default class BillingApplication extends React.Component {
       contractItems,
     }
     this.props.billApplyEdit(param)
-    this.setState({detailVisible: true})
   }
 
   handleAddBill = () => {
@@ -356,9 +351,9 @@ export default class BillingApplication extends React.Component {
           dataSource={billList}
           scroll={this.getScrollWidth()}
         />
-        {this.state.detailVisible ?
+        {this.props.searchEditSuccess ?
           <BillDetail
-            onCancel={() => this.setState({detailVisible: false})}
+            onCancel={() => this.props.hideDetailModal()}
             detail={editInfo}
             billType={this.state.currentType}
             billApplySave={billApplySave}

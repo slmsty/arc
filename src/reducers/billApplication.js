@@ -8,6 +8,7 @@ const initState = {
   updateSuccess: false,
   addContractSuccess: false,
   otherSuccess: false,
+  searchEditSuccess: false,
   editInfo: {
     custInfo: {},
     comInfo: {},
@@ -73,6 +74,7 @@ function addOtherContract(state) {
 function billApplyEdit(state, action) {
   return {
     ...state,
+    searchEditSuccess: true,
     editInfo: {
       custInfo: action.response.custInfo,
       comInfo: action.response.comInfo,
@@ -92,6 +94,7 @@ function billApplySave(state, action) {
   return {
     ...state,
     billSaveSuccess: true,
+    searchEditSuccess: false,
   }
 }
 
@@ -112,6 +115,13 @@ function billRedApply(state) {
   }
 }
 
+function hideDetailModal(state) {
+  return {
+    ...state,
+    searchEditSuccess: false,
+  }
+}
+
 export default caseReducer(initState, {
   LOADING_REQUEST: loadingRequest,
   INIT_DATA: initData,
@@ -125,4 +135,5 @@ export default caseReducer(initState, {
   BILL_CONTENT_SEARCH_SUCCESS: billContentSearch,
   BILL_APPLY_SAVE_SUCCESS: billApplySave,
   BILL_RED_APPLY_SUCCESS: billRedApply,
+  HIDE_DETAIL_MODAL: hideDetailModal,
 })
