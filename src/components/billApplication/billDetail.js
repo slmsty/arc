@@ -71,31 +71,6 @@ class BillDetail extends React.Component {
     this.setState({ dataSource: data, count: data.length })
   }
 
-  componentWillReceiveProps(nextProps) {
-    /*if(nextProps.detail && nextProps.detail.appLineItems.length > 0 && this.state.dataSource.length === 0) {
-      let data = []
-      nextProps.detail.appLineItems.map((item, index) => {
-        data.push({
-          lineNo: index,
-          isParent: 1,
-          arBillingId: item.arBillingId,
-          contractItemId: item.contractItemId,
-          billingContent: '',
-          specificationType: '',
-          unit: '',
-          quantity: 1,
-          unitPrice: item.billingAmount ? item.billingAmount : 0,
-          billingAmountExcludeTax: item.billingAmount ? item.billingAmount : 0,
-          billingAmount: item.billingAmount ? item.billingAmount : 0,
-          totalAmount: item.billingAmount ? item.billingAmount : 0,
-          billingTaxRate: 0,
-          billingTaxAmount: 0,
-        })
-      })
-      this.setState({ dataSource: data, count: data.length })
-    }*/
-  }
-
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;
     const newData = {
