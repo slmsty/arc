@@ -1,22 +1,26 @@
 import React from 'react'
-import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
+import { Form, Row, Col, Button, Input, Icon, Select, DatePicker } from 'antd'
 import moment from 'moment'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import './billingApplication.less'
+import MultipleInput from '../common/multipleInput'
+
 const FormItem = Form.Item
 const Option = Select.Option
+const { RangePicker } = DatePicker
 
 class BillingApplyForm extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const values = this.props.form.getFieldsValue()
+    console.log(values)
     const param = {
       ...values,
-      arDateStart: values.arDateStart ? values.arDateStart.format('YYYY-MM-DD') : '',
-      arDateEnd: values.arDateEnd ? values.arDateEnd.format('YYYY-MM-DD') : '',
-      projectNos: values.projectNos ? values.projectNos.split(',') : [],
-      contractNos: values.contractNos ? values.contractNos.split(',') : [],
-      invoiceNumbers: values.invoiceNumbers ? values.invoiceNumbers.split(',') : [],
+      arDateStart: values.arDate ? values.arDate[0].format('YYYY-MM-DD') : '',
+      arDateEnd: values.arDate ? values.arDate[1].format('YYYY-MM-DD') : '',
+      projectNos: values.projectNos ? values.projectNos : [],
+      contractNos: values.contractNos ? values.contractNos : [],
+      invoiceNumbers: values.invoiceNumbers ? values.invoiceNumbers : [],
     }
     this.props.onQuery(param)
   }
@@ -39,7 +43,7 @@ class BillingApplyForm extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="签约日期从">
-                {getFieldDecorator('arDateStart')(<DatePicker format="YYYY-MM-DD"/>)}
+                {getFieldDecorator('arDate')(<RangePicker />)}
               </FormItem>
             </Col>
             <Col span={8} key={2}>
@@ -59,7 +63,7 @@ class BillingApplyForm extends React.Component {
                   getFieldDecorator('projectNos',{
                     initialValue: '',
                   })(
-                    <Input
+                    <MultipleInput
                       placeholder="多项目编码使用英文逗号间隔"
                     />,
                   )
@@ -69,8 +73,14 @@ class BillingApplyForm extends React.Component {
           </Row>
           <Row gutter={40}>
             <Col span={8} key={4}>
-              <FormItem {...formItemLayout} label="签约日期至">
-                {getFieldDecorator('arDateEnd')(<DatePicker format="YYYY-MM-DD"/>)}
+              <FormItem {...formItemLayout} label="签约公司">
+                {
+                  getFieldDecorator('companyName', {
+                    initialValue: '',
+                  })(
+                    <Input placeholder="签约公司"/>
+                  )
+                }
               </FormItem>
             </Col>
             <Col span={8} key={5}>
@@ -79,9 +89,9 @@ class BillingApplyForm extends React.Component {
                   getFieldDecorator('contractNos',{
                     initialValue: '',
                   })(
-                    <Input
+                    <MultipleInput
                       placeholder="多合同编码使用英文逗号间隔"
-                    />,
+                    />
                   )
                 }
               </FormItem>
@@ -92,9 +102,9 @@ class BillingApplyForm extends React.Component {
                   getFieldDecorator('invoiceNumbers',{
                     initialValue: '',
                   })(
-                    <Input
+                    <MultipleInput
                       placeholder="多发票号使用英文逗号间隔"
-                    />,
+                    />
                   )
                 }
               </FormItem>
@@ -126,17 +136,6 @@ class BillingApplyForm extends React.Component {
                     <Input
                       placeholder="请输入付款条款"
                     />
-                  )
-                }
-              </FormItem>
-            </Col>
-            <Col span={8} key={6}>
-              <FormItem {...formItemLayout} label="签约公司">
-                {
-                  getFieldDecorator('companyName', {
-                    initialValue: '',
-                  })(
-                    <Input placeholder="签约公司"/>
                   )
                 }
               </FormItem>

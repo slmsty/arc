@@ -38,6 +38,7 @@ class BillUpdate extends React.Component {
       custName: values.custName[1],
       projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
       receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
+      billingOutcomeId: values.billingOutcomeId[0],
     }
     console.log(params)
     this.props.billAction(params)
@@ -70,7 +71,7 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="发票是否丢失">
-                  {getFieldDecorator('isLost', {initialValue: '', rules: [{ required: false, message: '请选择丢失情况!' }]} )(
+                  {getFieldDecorator('isLose', {initialValue: record.isLose, rules: [{ required: false, message: '请选择丢失情况!' }]} )(
                     <Select>
                       <Option value="">请选择</Option>
                       <Option value="Y">是</Option>
@@ -82,8 +83,8 @@ class BillUpdate extends React.Component {
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="丢失类型">
                   {
-                    getFieldDecorator('lostType',{
-                      initialValue: '', rules: [{ required: false, message: '请选择丢失类型!' }]
+                    getFieldDecorator('loseType',{
+                      initialValue: record.loseType, rules: [{ required: false, message: '请选择丢失类型!' }]
                     })(
                       <SelectInvokeApi
                         typeCode="BILLING_APPLICATION"
@@ -179,12 +180,12 @@ class BillUpdate extends React.Component {
                     <FormItem {...formItemLayout} label="关联发票">
                       {
                         getFieldDecorator('billingOutcomeId',{
-                          initialValue: '',
+                          initialValue: [record.billingOutcomeId, record.outcomeInvoiceNumber],
                         })(<SelectSearch
                           url="/arc/billingApplication/outcome/search"
                           columns={invoiceCols}
                           label="关联发票"
-                          idKey="invoiceId"
+                          idKey="billingOutcomeId"
                           valueKey="invoiceNumber"
                         />)
                       }
