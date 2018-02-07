@@ -297,8 +297,6 @@ export default class BillStatusCon extends React.Component {
     })
   }
   showBillFiles = (record) => {
-    // console.log(this.props.getBillStatusBillResultList)
-    // record.attachment = "101111|下载文件一"
     const attachment = record.attachment
     let attachmentArray = attachment.split('|')
     this.setState({
@@ -373,6 +371,7 @@ export default class BillStatusCon extends React.Component {
         title: '税率',
         dataIndex: 'taxRate',
         width: 100,
+        render: (text) => (`${text * 100}%`)
       },
       {
         title: '不含税金额',
@@ -435,9 +434,13 @@ export default class BillStatusCon extends React.Component {
       dataIndex: 'taxIdentifyCode',
       width: 150,
     }, {
+      title: '开票申请日期',
+      dataIndex: 'applyDate',
+      width: 130,
+    }, {
       title: '开票日期',
       dataIndex: 'invoiceDate',
-      width: 150,
+      width: 130,
     }, {
       title: '备注',
       dataIndex: 'remark',
@@ -477,7 +480,7 @@ export default class BillStatusCon extends React.Component {
         <Button onClick={this.cancelHandle} disabled={this.state.cancelDis}>撤销</Button>
         <br />
         <br />
-        <h3>开票审批</h3>
+        <h3>开票申请</h3>
         <br />
         <Table
           rowKey="billingApplicationId"
@@ -485,9 +488,9 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveColumns}
           size="small"
-          scroll={{ x: '2430px' }}
+          scroll={{ x: '2590px' }}
           loading={this.state.loading}
-          pagination={false}
+          pagination={pagination}
           dataSource={getBillStatusManageList}
         />
         <br />

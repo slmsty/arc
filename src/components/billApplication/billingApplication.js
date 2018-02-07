@@ -115,6 +115,10 @@ export default class BillingApplication extends React.Component {
         dataIndex: 'alreadyBillingAmount',
         width: 80,
       }, {
+        title: '已申请开票金额',
+        dataIndex: 'applyIngAndBillingAmount',
+        width: 120,
+      }, {
         title: '提前开票原因',
         dataIndex: 'advanceBillingReasonName',
         width: 130,
@@ -315,7 +319,7 @@ export default class BillingApplication extends React.Component {
   getScrollWidth() {
     let scroll = null
     if(normalTypes.includes(this.state.currentType)){
-      scroll = { x: 2050 }
+      scroll = { x: 2170 }
     } else if (redTypes.includes(this.state.currentType)) {
       scroll = { x: 1840 }
     } else {

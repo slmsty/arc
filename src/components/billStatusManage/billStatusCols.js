@@ -98,6 +98,7 @@ const billApproveInfoColumns = [
     title: '开票税率',
     dataIndex: 'billingTaxRate',
     width: 100,
+    render: (text) => (`${text * 100}%`)
   },
   {
     title: '开票税额',
