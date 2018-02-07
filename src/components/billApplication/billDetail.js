@@ -188,7 +188,7 @@ class BillDetail extends React.Component {
       })
       //校验所有拆分子项的金额必须小于父级含税金额
       const childAmount = total + value
-      if(normalTypes.includes(this.props.billType) && childAmount >= result.totalAmount) {
+      /*if(normalTypes.includes(this.props.billType) && childAmount >= result.totalAmount) {
         message.error('拆分子项的金额合计必须小于拆分前含税金额')
         return false
       } else {
@@ -196,7 +196,7 @@ class BillDetail extends React.Component {
           message.error('拆分子项的金额合计必须小于拆分前含税金额')
           return false
         }
-      }
+      }*/
       dataSource[result.lineNo][col] = result.totalAmount - childAmount
       const parent = this.state.dataSource[result.lineNo]
       this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
@@ -228,7 +228,7 @@ class BillDetail extends React.Component {
     //判断是否存在不一致组号
     const groupNo = selectedRows[0].groupNo
     selectedRows.map(record => {
-      if(dataSource[record.lineNo]['groupNo'] !== groupNo) {
+      if(dataSource[record.lineNo]['groupNo'] !== groupNo || dataSource[record.lineNo]['groupNo'] === 1) {
         currentNo = 1
       }
     })

@@ -132,7 +132,7 @@ class BillApproveDetail extends React.Component  {
     //判断是否存在不一致组号
     const groupNo = selectedRows[0].groupNo
     selectedRows.map(record => {
-      if(dataSource[record.lineNo]['groupNo'] !== groupNo) {
+      if(dataSource[record.lineNo]['groupNo'] !== groupNo || dataSource[record.lineNo]['groupNo'] === 1) {
         currentNo = 1
       }
     })
