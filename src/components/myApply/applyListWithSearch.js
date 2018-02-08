@@ -91,7 +91,7 @@ class ApplySearchCon extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="发票类型">
                 {getFieldDecorator('serviceSonType', {
-                  initialValue: 'ALL',
+                  initialValue: 'BILLING_NORMAL',
                 })(
                   <SelectRadioApi
                     options={this.state.options}
