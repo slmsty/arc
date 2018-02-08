@@ -71,8 +71,8 @@ export default class SelectRadioApi extends React.Component {
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
-      //const options = response.data
-      const options = testoptions
+      const options = response.data
+      //const options = testoptions
       if (this.props.hasEmpty) {
         options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
       }

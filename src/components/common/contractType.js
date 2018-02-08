@@ -6,7 +6,86 @@ import { Select } from 'antd'
 import requestJsonFetch from '../../http/requestJsonFecth'
 
 const Option = Select.Option
+const testOption = [
+  {
+    paramCode: "STATUS",
+    paramValue: "TASK-9",
+    paramValueDesc: "A:Task 9(外购支持服务)",
+    primaryKey: "BILLED_SPLIT.STATUS",
+    typeCode: "BILLED_SPLIT",
+    children:[
+      {
+        paramCode: "STATUS",
+        paramValue: "TASK 9-K",
+        paramValueDesc: "TASK 9-K",
+        primaryKey: "BILLED_SPLIT.STATUS",
+        typeCode: "BILLED_SPLIT",
+      },
+      {
+        paramCode: "STATUS",
+        paramValue: "TASK 9-P",
+        paramValueDesc: "TASK 9-P",
+        primaryKey: "BILLED_SPLIT.STATUS",
+        typeCode: "BILLED_SPLIT",
+      },
+      {
+        paramCode: "STATUS",
+        paramValue: "TASK 9-P1",
+        paramValueDesc: "TASK 9-P1",
+        primaryKey: "BILLED_SPLIT.STATUS",
+        typeCode: "BILLED_SPLIT",
+      }
+    ]
+  },
+  {
+    paramCode: "STATUS",
+    paramValue: "Task-11",
+    paramValueDesc: "B:Task 11(增值服务)",
+    primaryKey: "BILLED_SPLIT.STATUS",
+    typeCode: "BILLED_SPLIT",
+    children:[
+      {}
+    ]
+  },
+  {
+    paramCode: "STATUS",
+    paramValue: "TASK",
+    paramValueDesc: "TASK (7 10S 7-K 10S-K)",
+    primaryKey: "BILLED_SPLIT.STATUS",
+    typeCode: "BILLED_SPLIT",
+    children:[
+      {
+        paramCode: "STATUS",
+        paramValue: "TASK7",
+        paramValueDesc: "TASK 7",
+        primaryKey: "BILLED_SPLIT.STATUS",
+        typeCode: "BILLED_SPLIT",
+      },
+      {
+        paramCode: "STATUS",
+        paramValue: "TASK7-K",
+        paramValueDesc: "TASK 7-K",
+        primaryKey: "BILLED_SPLIT.STATUS",
+        typeCode: "BILLED_SPLIT",
+      },
+      {
+        paramCode: "STATUS",
+        paramValue: "TASK10",
+        paramValueDesc: "TASK 10",
+        primaryKey: "BILLED_SPLIT.STATUS",
+        typeCode: "BILLED_SPLIT",
+      },
+      {
+        paramCode: "STATUS",
+        paramValue: "TASK10-K",
+        paramValueDesc: "TASK 10-K",
+        primaryKey: "BILLED_SPLIT.STATUS",
+        typeCode: "BILLED_SPLIT",
+      }
+    ]
+  },
 
+]
 export default class SelectInvokeApi extends React.Component {
   state = {
     options: [],
@@ -16,22 +95,42 @@ export default class SelectInvokeApi extends React.Component {
   componentDidMount() {
     if (this.props.typeCode && this.props.paramCode) {
       requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
+    }else {
+      requestJsonFetch(`/arc/contract/split/contractType`, { method: 'get' }, this.handleCallback)
     }
   }
   showTextValue = () => {
     const options = this.state.options
     const {indexs, columns} = this.props
     const text = this.props.text
+    console.log('text',text)
     let value = ''
     if(typeof text ==='string' || typeof text ==='number'){
       value = text
     }else if(text.length > 0){
       value = text[0]
     }
-    const result = options.filter(o => o.paramValue == value)
+    let  paramValueDesc = ''
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].paramValue === value ) {
+        paramValueDesc = options[i].paramValueDesc
+        break;
+      }
+      let children = options[i].children
+      console.log('children',children)
+      for (let j = 0; j < children.length; j++) {
+        if( children.paramValue === value ) {
+          paramValueDesc = children[j].paramValueDesc
+          break;
+        }
+      }
+    }
+    console.log('paramValueDesc',paramValueDesc)
+    return paramValueDesc
+    /*const result = options.filter(o => o.paramValue == value)
     const paramValue = result.length ? result[0].paramValue : ''
     const paramValueDesc = result.length ? result[0].paramValueDesc : ''
-    return result.length ? result[0].paramValueDesc : ''
+    return result.length ? result[0].paramValueDesc : ''*/
   }
 
   handleCallback = (response) => {
@@ -40,8 +139,12 @@ export default class SelectInvokeApi extends React.Component {
       if (this.props.hasEmpty) {
         options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
       }
-      this.setState({
+      /*this.setState({
         options,
+      })*/
+      // 测试
+      this.setState({
+        options: testOption,
       })
     }
   }
@@ -49,12 +152,29 @@ export default class SelectInvokeApi extends React.Component {
     this.setState({
       flag: false,
     })
+    console.log('changevalue',value)
+    const options = this.state.options.slice(0)
     let name = ''
-    this.state.options.map((item)=>{
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].paramValue === value ) {
+        name = options[i].paramValueDesc
+        break;
+      }
+      let children = options[i].children
+      console.log('children',children)
+      for (let j = 0; j < children.length; j++) {
+        if( children[j].paramValue === value ) {
+          name = children[j].paramValueDesc
+          break;
+        }
+      }
+    }
+    console.log('name',name)
+    /*this.state.options.map((item)=>{
       if(item.paramValue==value){
         name = item.paramValueDesc
       }
-    })
+    })*/
     const {indexs, columns} = this.props
     if (value === 'all') {
       this.props.onChange('')
@@ -79,7 +199,27 @@ export default class SelectInvokeApi extends React.Component {
     } else if(this.props.initialValue){
       showVaule = this.props.initialValue
     }
-    const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue ? option.paramValueDesc : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
+    const parentCode = this.props.parentCode !=='' ? this.props.parentCode : ''
+    /*let parentCodeVal = ''
+     if(typeof parentCode ==='string' || typeof parentCode ==='number'){
+     parentCodeVal = parentCode
+     }else if(parentCode.length > 0){
+     parentCodeVal = parentCode[0]
+     }*/
+    console.log('parentCode3',parentCode)
+    const options = this.state.options.slice(0)
+    let optionDoms = []
+    if(parentCode){
+      console.log('options',options)
+      let optionParentDoms = options.filter(o=>o.paramValue === parentCode[0])
+      console.log('optionParentDoms',optionParentDoms)
+      optionDoms = optionParentDoms && optionParentDoms[0] ? optionParentDoms[0].children : []
+    }else{
+      optionDoms = options
+    }
+    console.log('optionDoms',optionDoms)
+    const optionDom = optionDoms ? optionDoms.map(option => <Option key={option.paramValue ? option.paramValueDesc : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
+    console.log('this.props.text',this.props.text,this.props.value)
     return (
       <Select
         style={{zIndex:'0'}}

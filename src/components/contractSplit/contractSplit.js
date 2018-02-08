@@ -7,6 +7,67 @@ import { Button, Table, message, Row, Col } from 'antd'
 import ContractSplitWithFrom from './contractSplitWithFrom'
 import ContractSplitModal  from './contractSplitModal'
 import currency from '../../util/currency'
+
+const columns = [{
+  title: '拆分状态',
+  dataIndex: 'status',
+  width: 80,
+  textAlign: 'center',
+  fixed: 'left',
+  render: (text, record, index) => (text=='N' ? "未拆分合同" : "已拆分合同"),
+}, {
+  title: '合同内部编码',
+  dataIndex: 'internalNo',
+  width: 100,
+}, {
+  title: '项目编码',
+  dataIndex: 'projectNo',
+  width: 100,
+}, {
+  title: '合同名称',
+  dataIndex: 'contractName',
+  width: 600,
+}, {
+  title: '合同编码',
+  dataIndex: 'contractNo',
+  width: 200,
+}, {
+  title: '合同金额',
+  dataIndex: 'contractAmount',
+  width: 100,
+  render: (text, record, index) => (text ? currency(text) : 0),
+}, {
+  title: '签约日期',
+  dataIndex: 'contractDate',
+  width: 90,
+}, {
+  title: 'Sale签约BU',
+  dataIndex: 'salesBuNo',
+  width: 100,
+  render:(text,record,index)=>(text ? (record.salesBuNoName ? `${text}:${record.salesBuNoName}` : text) : ''),
+}, {
+  title: '立项BU',
+  dataIndex: 'projectBuNo',
+  width: 80,
+  render:(text,record,index)=>(text ? (record.projectBuNoName ? `${text}:${record.projectBuNoName}` : text) : ''),
+}, {
+  title: '销售人员',
+  dataIndex: 'salesPerson',
+  width: 80,
+}, {
+  title: '合同生效日',
+  dataIndex: 'contractActiveDate',
+  width: 100,
+}, {
+  title: '合同种类',
+  dataIndex: 'contractType',
+  width: 120,
+}, {
+  title: '币种',
+  dataIndex: 'contractCurrency',
+  width: 50,
+},
+]
 export default class ApplySearchCon extends React.Component {
   state = {
     loading: false,
@@ -14,7 +75,6 @@ export default class ApplySearchCon extends React.Component {
     splitStatus: true,
     selectedRowKeys: '',
     selectedRows: '',
-    contractInfo:'',
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -57,6 +117,14 @@ export default class ApplySearchCon extends React.Component {
       }
     })
   }
+  // 获取tablewidth
+  getTableWidth = () => {
+    let width = 0
+    columns.map((item,index)=>{
+      width += parseFloat(item.width)
+    })
+    return width
+  }
   handleChangeParam = (param) => {
     this.queryParam = { ...this.queryParam, ...param }
     this.handleQuery()
@@ -74,7 +142,6 @@ export default class ApplySearchCon extends React.Component {
     this.setState({
       selectedRowKeys:selectedRowKeys,
       selectedRows:selectedRows,
-      contractInfo:selectedRows,
     })
   }
   saveContractSplitInfo = (param) => {
@@ -113,11 +180,9 @@ export default class ApplySearchCon extends React.Component {
       message.error('请选择需要拆分的数据')
       return
     }
-    console.log(4)
     // 获取审批表url
     const contractId = this.state.selectedRows[0].contractId
     //const contractId = 201604296622
-    console.log('contractId',contractId)
     this.props.getUrl(contractId).then((res)=>{
       if (res && res.response && res.response.resultCode === '000000') {
       } else {
@@ -130,66 +195,6 @@ export default class ApplySearchCon extends React.Component {
   }
   render() {
     console.log('parent',this.state.selectedRows)
-    const columns = [{
-      title: '拆分状态',
-      dataIndex: 'status',
-      width: 80,
-      textAlign: 'center',
-      fixed: 'left',
-      render: (text, record, index) => (text=='N' ? "未拆分合同" : "已拆分合同"),
-    }, {
-      title: '合同内部编码',
-      dataIndex: 'internalNo',
-      width: 100,
-    }, {
-      title: '项目编码',
-      dataIndex: 'projectNo',
-      width: 100,
-    }, {
-      title: '合同名称',
-      dataIndex: 'contractName',
-      width: 600,
-    }, {
-      title: '合同编码',
-      dataIndex: 'contractNo',
-      width: 200,
-    }, {
-      title: '合同金额',
-      dataIndex: 'contractAmount',
-      width: 100,
-      render: (text, record, index) => (text ? currency(text) : 0),
-    }, {
-      title: '签约日期',
-      dataIndex: 'contractDate',
-      width: 90,
-    }, {
-      title: 'Sale签约BU',
-      dataIndex: 'salesBuNo',
-      width: 100,
-      render:(text,record,index)=>(text ? (record.salesBuNoName ? `${text}:${record.salesBuNoName}` : text) : ''),
-    }, {
-      title: '立项BU',
-      dataIndex: 'projectBuNo',
-      width: 80,
-      render:(text,record,index)=>(text ? (record.projectBuNoName ? `${text}:${record.projectBuNoName}` : text) : ''),
-    }, {
-      title: '销售人员',
-      dataIndex: 'salesPerson',
-      width: 80,
-    }, {
-      title: '合同生效日',
-      dataIndex: 'contractActiveDate',
-      width: 100,
-    }, {
-      title: '合同种类',
-      dataIndex: 'contractType',
-      width: 120,
-    }, {
-      title: '币种',
-      dataIndex: 'contractCurrency',
-      width: 50,
-    },
-    ]
     const { selectedRowKeys } = this.state
     const rowSelection = {
       selectedRowKeys,
@@ -205,7 +210,6 @@ export default class ApplySearchCon extends React.Component {
       onShowSizeChange: this.handleChangeSize,
 
     }
-    console.log('seletctDATA',this.state.contractInfo)
     return (
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />
@@ -217,8 +221,7 @@ export default class ApplySearchCon extends React.Component {
             <ContractSplitModal
               closeModal={this.closeModalClaim}
               saveInfo={this.saveContractSplitInfo}
-              data={this.state.contractInfo}
-              contractInfo={this.state.contractInfo[0]}
+              data={this.state.selectedRows}
               user={this.props.user.accountName}
               contractUrl={this.props.contractSplitDara.getUrl}
               tableDetail={this.state.selectedRows[0].orderListLines ? this.state.selectedRows[0].orderListLines : []}
@@ -236,7 +239,7 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="middle"
-          scroll={{ x: '1800', y: this.state.tableHeight }}
+          scroll={{ x: this.getTableWidth(), y: this.state.tableHeight }}
           loading={this.state.loading}
           dataSource={this.props.contractSplitDara.getContractList.result}
         />

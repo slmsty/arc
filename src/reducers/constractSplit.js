@@ -20,7 +20,6 @@ function saveContractSplitInfo(state) {
   return { ...state, myContractRefresh: new Date().getTime() }
 }
 function getUrl(state, action) {
-  console.log('url',action.response)
   return { ...state, getUrl: action.response.result }
 }
 

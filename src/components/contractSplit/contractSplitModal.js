@@ -36,7 +36,8 @@ let tableData = [{
   serviceStartDate: 0,
   serviceEndDate: 0,
 }]
-const EditableCell = ({ value, onChange, column,disable}) => {
+
+const EditableCell = ({onChange, column, value,disable}) => {
   return(<div style={{ position: 'relative' }}>
     <InputNumber value={value || value=== 0 ? value : ''} onChange={onChange} disabled={disable} />
     {column === 'discount' ?
@@ -89,38 +90,17 @@ class ContractSplitModal extends React.Component{
       initInfo: null,
     }
   }
-  componentWillMount(){
-    const tableDeatail = this.props.tableDetail.slice(0)
-    console.log('props.tableDetail2',this.props.tableDetail)
-    const dataSource = tableDeatail.concat({
-      taskOpration: '合计',
-      contractCategory: 0,
-      product: 0,
-      revenueCheckout: 0,
-      listPrice: 0,
-      discount: 0,
-      discountedPrice: 0,
-      contractAmountTaxInclude: 0,
-      contractTaxRate: 0,
-      contractAmountTaxExclude: 0,
-      returnTaxRate: 0,
-      returnTaxRevenue: 0,
-      grossOrder: 0,
-      serviceStartDate: 0,
-      serviceEndDate: 0,
-    })
-    this.setState({initInfo: dataSource.slice(0)})
-  }
   selectDateChange = (data) => {
-    const newData = [...this.state.dataSource]
+    const newData = this.state.dataSource.slice(0)
     newData[data.indexs][data.columns] = data.dateString
     this.setState({
       dataSource: newData,
     })
   }
   handleChange = (data) => {
-    const newData = [...this.state.dataSource]
-    if(newData.collectionProject && data.columns==='contractCategory'){
+    console.log('data',data)
+    const newData = this.state.dataSource.slice(0)
+    if(newData.collectionProject === 'Y' && data.columns==='contractCategory'){
       if(data.No !=="ARC_PRD_1"){
         message.error('集采项目只能拆分Task1')
         return
@@ -129,6 +109,37 @@ class ContractSplitModal extends React.Component{
     if(data){
       const indexData = data.No && data.Name ? [data.No,data.Name] : ''
       if(data.columns){
+        if(data.columns === 'contractCategory'){
+          const dataInfos = this.props.data[0]
+          const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
+          console.log('contractTotalMoney',contractTotalMoney)
+          const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
+          console.log('dataInfos.assessRatio',dataInfos.assessRatio)
+          const assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
+          const incomeRatio =  parseFloat(parseFloat(solutionMaintain)/12 * 0.05)  // 收入比率
+          console.log('assessRatio',assessRatio)
+          let formula = 1
+          if (assessRatio !== 0) {
+            if (data.No === 'TASK7') {
+              formula = (1 + incomeRatio) * (1 - assessRatio)
+              newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
+            }
+            if (data.No === 'TASK7-K') {
+              formula = (1 + incomeRatio) * assessRatio
+              newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
+            }
+            if (data.No === 'TASK10') {
+              formula = (1 + incomeRatio) * incomeRatio * (1 - assessRatio)
+              newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
+            }
+            if (data.No === 'TASK10-K') {
+              formula = (1 + incomeRatio) * incomeRatio * assessRatio
+              newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
+            }
+            console.log('listPrice',newData[data.indexs]['listPrice'])
+            console.log('formula',formula)
+          }
+        }
         newData[data.indexs][data.columns] = indexData
       }
       this.inputChange(newData,[data.indexs])
@@ -138,7 +149,7 @@ class ContractSplitModal extends React.Component{
     }
   }
   canCel = (index,column) => {
-    const newData = [...this.state.dataSource]
+    const newData = this.state.dataSource.slice(0)
     newData[index][column] = ''
     this.setState({
       dataSource: newData,
@@ -147,7 +158,7 @@ class ContractSplitModal extends React.Component{
   handleSelectChange = (data) => {
     let selectData = []
     selectData = data.split('&')
-    const newData = [...this.state.dataSource]
+    const newData = this.state.dataSource.slice(0)
     newData[selectData[1]][selectData[2]] = selectData[0]
     this.setState({
       dataSource: newData,
@@ -158,10 +169,22 @@ class ContractSplitModal extends React.Component{
       return <ProductLine disabled={this.state.editFlag} onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record.product}  indexs={index} columns={column} />
     }
     if(column ==='contractCategory'){
+      console.log('record',record)
+      const parentOrderListLineId = record.parentOrderListLineId ? record.parentOrderListLineId : ''
+      console.log('parentOrderListLineId',parentOrderListLineId)
+      let parentCode = ''
+      if (parentOrderListLineId !== '') {
+        const dataSource = this.state.dataSource.slice(0)
+        let parentContractCategory = []
+        parentContractCategory = dataSource.filter(o=> o.orderListLineId && o.orderListLineId === parentOrderListLineId)
+        console.log('parentContractCategory',parentContractCategory)
+        parentCode = parentContractCategory && parentContractCategory[0].contractCategory ? parentContractCategory[0].contractCategory : ''
+        console.log('parentCode',parentCode)
+      }
+
       return(
         <ContractType
-          typeCode="BILLED_SPLIT"
-          paramCode="STATUS"
+          parentCode={parentCode}
           hasEmpty
           onChange={this.handleChange}
           value={record[column]}
@@ -248,6 +271,7 @@ class ContractSplitModal extends React.Component{
     newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
     newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate)) * (parseFloat(returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
     newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxInclude)/(1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
+
     return newData
   }
   onTextAreaChange = (event) => {
@@ -282,7 +306,7 @@ class ContractSplitModal extends React.Component{
       revenueCheckout: "POC",
 
     }
-    const subParentOrderListLineId = this.state.dataSource.length && this.state.dataSource[index].orderListLineId ? this.state.dataSource[index].orderListLineId : ''
+    const subParentOrderListLineId = newDataSource.length && newDataSource[index].orderListLineId ? newDataSource[index].orderListLineId : ''
     const newSubData = {
       taskOpration: 'addSub',
       parentKey: index,
@@ -324,7 +348,7 @@ class ContractSplitModal extends React.Component{
   }
   // 合同拆分删除数据
   handleMinus = (index) => {
-    const newData = this.state.dataSource
+    const newData = this.state.dataSource.slice(0)
     const parentId = newData[index].orderListLineId
     for(let i = 0, flag = true ; i < newData.length ; flag ? i++ : i) {
       if (newData[i] && newData[i].parentOrderListLineId === parentId) {
@@ -341,7 +365,7 @@ class ContractSplitModal extends React.Component{
   }
   // 拆分保存接口
   handleOk = () => {
-    const coutnData = this.state.dataSource
+    const coutnData = this.state.dataSource.slice(0)
     const contractAmount = parseFloat(this.props.data[0].contractAmount)
     let totalListPrice = 0
     coutnData.map((item) => {
@@ -530,10 +554,9 @@ class ContractSplitModal extends React.Component{
     })
   }
   handleReturn = () => {
-    console.log('contractInfo',this.props.contractInfo)
+    console.log('tableDetail',this.props.tableDetail)
     this.setState({
-      dataSource: this.props.contractInfo.orderListLines,
-
+      dataSource: this.props.tableDetail,
     },()=>{
       const constractData = this.props.data[0]
       this.props.form.setFieldsValue({
@@ -564,10 +587,8 @@ class ContractSplitModal extends React.Component{
   }
 
   render() {
-    console.log('renderURl',this.props.contractUrl)
-    const dataSource = this.state.dataSource
-    console.log('render',dataSource)
-    console.log('this.props.tableDetail',this.props.tableDetail)
+    const dataSource = this.state.dataSource.slice(0)
+    console.log('renderdataSource',dataSource)
     const constractDatas = this.props.data
     const constractData = constractDatas[0]
     let countCatalPrice = 0 // 合计目录价 catalogue
@@ -580,7 +601,7 @@ class ContractSplitModal extends React.Component{
     for(let i in countTaskCostData){
       countTaskCost +=parseFloat(countTaskCostData[i])
     }
-    const coutnData = [...this.state.dataSource]
+    const coutnData = this.state.dataSource.slice(0)
     coutnData.map((item) => {
       if (!item.parentOrderListLineId || item.parentOrderListLineId === '') {
         countCatalPrice += !item || !item.listPrice ? 0 : parseFloat(item.listPrice) // 合计目录价
@@ -947,7 +968,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
-                    {constractData.collectionProject}
+                    {constractData.collectionProject === 'Y'  ? '是' : '否'}
                   </div>
                 </Col>
                 <Col span={3} className="contractRowBorderLeft contract-bg">
