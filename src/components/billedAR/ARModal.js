@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import moment from 'moment';
 import requestJsonFetch from '../../http/requestJsonFecth'
-import {Form, DatePicker, Input, Modal, message} from 'antd';
+import {Form, DatePicker, Input, InputNumber, Modal, message} from 'antd';
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 
@@ -30,7 +30,6 @@ class ARModal extends Component{
     })
   }
   handleBillDateChange = (date, string) => {
-    console.log(date,string)
     this.props.form.setFieldsValue({
       reportDate:date,
     })
@@ -56,24 +55,6 @@ class ARModal extends Component{
           }
         })
       }
-      /* if(!values.glDate){
-        console.log(3)
-        isError = true
-        this.props.form.setFields({
-          glDate: {
-            value: values.glDate,
-            errors: [new Error('必须选择GL日期')]
-          }
-        })
-      }else{
-        console.log(4)
-        this.props.form.setFields({
-          glDate: {
-            value: values.glDate,
-            errors: null
-          }
-        })
-      } */
 
       if(isShow){
         if(!values.reportDate){
@@ -92,8 +73,7 @@ class ARModal extends Component{
             }
           })
         }
-        if(values.assessTaxIncludedAmount == ''){
-          console.log(values.assessTaxIncludedAmount)
+        if(values.assessTaxIncludedAmount === ''){
           isError = true
           this.props.form.setFields({
             assessTaxIncludedAmount: {
@@ -101,13 +81,32 @@ class ARModal extends Component{
               errors: [new Error('必须输入考核含税金额')]
             }
           })
-        }else{
-          this.props.form.setFields({
-            assessTaxIncludedAmount: {
+        } else {
+          const { paymentAmount } = this.props.o
+          let formField = null
+          if(paymentAmount > 0 && (values.assessTaxIncludedAmount > paymentAmount || values.assessTaxIncludedAmount < 0)) {
+            formField = {
+              assessTaxIncludedAmount: {
+                value: values.assessTaxIncludedAmount,
+                errors: [new Error('考核含税金额必须小于付款金额且大于等于0')]
+              }
+            }
+            isError=true
+          } else if (paymentAmount < 0 && (values.assessTaxIncludedAmount < paymentAmount || values.assessTaxIncludedAmount > 0)) {
+            formField = {
+              assessTaxIncludedAmount: {
+                value: values.assessTaxIncludedAmount,
+                errors: [new Error('考核含税金额必须大于付款金额且小于等于0')]
+              }
+            }
+            isError=true
+          } else {
+            formField = {
               value: values.assessTaxIncludedAmount,
               errors: null
             }
-          })
+          }
+          this.props.form.setFields(formField)
         }
       }
       if(isError) return
@@ -136,7 +135,6 @@ class ARModal extends Component{
   render(){
     const {getFieldDecorator} = this.props.form;
     const {visible, o} = this.props;
-
     const isShow = !((o.paymentTerm==='按进度'&&o.paymentName==='预付款')||(o.paymentTerm==='按时间'&&o.paymentName!=='结算款'));
 
     return (
@@ -145,27 +143,27 @@ class ARModal extends Component{
         visible={visible}
         onCancel={this.onCancel}
         onOk={this.onOk}>
-          <Form>
-            <FormItem label="Billed AR日期">
-              {
-                getFieldDecorator('billedArDate', {
-                  initialValue: o.arDate ? moment(o.arDate) : null
-                })(
-                  <DatePicker onChange={this.handleBillDateChange} />
-                )
-              }
-            </FormItem>
-            {/*<FormItem label="GL日期">
-              {
-                getFieldDecorator('glDate', {
-                  initialValue: o.glDate ? moment(o.glDate) : (this.state.glDate ? moment(this.state.glDate).endOf('month') : null)
-                })(
-                  <DatePicker />
-                )
-              }
-            </FormItem>*/}
+        <Form>
+          <FormItem label="Billed AR日期">
             {
-              isShow
+              getFieldDecorator('billedArDate', {
+                initialValue: o.arDate ? moment(o.arDate) : null
+              })(
+                <DatePicker onChange={this.handleBillDateChange} />
+              )
+            }
+          </FormItem>
+          {/*<FormItem label="GL日期">
+           {
+           getFieldDecorator('glDate', {
+           initialValue: o.glDate ? moment(o.glDate) : (this.state.glDate ? moment(this.state.glDate).endOf('month') : null)
+           })(
+           <DatePicker />
+           )
+           }
+           </FormItem>*/}
+          {
+            isShow
               ?
               <FormItem label="报告日期">
                 {
@@ -181,30 +179,32 @@ class ARModal extends Component{
               </FormItem>
               :
               null
-            }
-            {
-              isShow
+          }
+          {
+            isShow
               ?
               <FormItem label="考核含税金额">
                 {
                   getFieldDecorator('assessTaxIncludedAmount', {
                     initialValue: '0',
                   })(
-                    <Input placeholder="考核含税金额" />
+                    <Input
+                      placeholder="考核含税金额"
+                    />
                   )
                 }
               </FormItem>
               :
               null
+          }
+          <FormItem label="备注">
+            {
+              getFieldDecorator('arAccountantApproveMessage', {initialValue: o.arAccountantApproveMessage})(
+                <TextArea rows={4} />
+              )
             }
-            <FormItem label="备注">
-              {
-                getFieldDecorator('arAccountantApproveMessage', {initialValue: o.arAccountantApproveMessage})(
-                  <TextArea rows={4} />
-                )
-              }
-            </FormItem>
-          </Form>
+          </FormItem>
+        </Form>
       </Modal>
     )
   }
