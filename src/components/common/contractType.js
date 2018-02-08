@@ -116,21 +116,18 @@ export default class SelectInvokeApi extends React.Component {
         paramValueDesc = options[i].paramValueDesc
         break;
       }
-      let children = options[i].children
-      console.log('children',children)
-      for (let j = 0; j < children.length; j++) {
-        if( children.paramValue === value ) {
-          paramValueDesc = children[j].paramValueDesc
-          break;
+      let children = options[i].children ? options[i].children : []
+      if (children) {
+        for (let j = 0; j < children.length; j++) {
+          if( children.paramValue === value ) {
+            paramValueDesc = children[j].paramValueDesc
+            break;
+          }
         }
       }
     }
     console.log('paramValueDesc',paramValueDesc)
     return paramValueDesc
-    /*const result = options.filter(o => o.paramValue == value)
-    const paramValue = result.length ? result[0].paramValue : ''
-    const paramValueDesc = result.length ? result[0].paramValueDesc : ''
-    return result.length ? result[0].paramValueDesc : ''*/
   }
 
   handleCallback = (response) => {
@@ -139,12 +136,8 @@ export default class SelectInvokeApi extends React.Component {
       if (this.props.hasEmpty) {
         options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
       }
-      /*this.setState({
-        options,
-      })*/
-      // 测试
       this.setState({
-        options: testOption,
+        options
       })
     }
   }
@@ -152,7 +145,6 @@ export default class SelectInvokeApi extends React.Component {
     this.setState({
       flag: false,
     })
-    console.log('changevalue',value)
     const options = this.state.options.slice(0)
     let name = ''
     for (let i = 0; i < options.length; i++) {
@@ -160,7 +152,7 @@ export default class SelectInvokeApi extends React.Component {
         name = options[i].paramValueDesc
         break;
       }
-      let children = options[i].children
+      let children = options[i].children ? options[i].children : []
       console.log('children',children)
       for (let j = 0; j < children.length; j++) {
         if( children[j].paramValue === value ) {
@@ -169,7 +161,6 @@ export default class SelectInvokeApi extends React.Component {
         }
       }
     }
-    console.log('name',name)
     /*this.state.options.map((item)=>{
       if(item.paramValue==value){
         name = item.paramValueDesc
@@ -206,18 +197,14 @@ export default class SelectInvokeApi extends React.Component {
      }else if(parentCode.length > 0){
      parentCodeVal = parentCode[0]
      }*/
-    console.log('parentCode3',parentCode)
     const options = this.state.options.slice(0)
     let optionDoms = []
     if(parentCode){
-      console.log('options',options)
       let optionParentDoms = options.filter(o=>o.paramValue === parentCode[0])
-      console.log('optionParentDoms',optionParentDoms)
       optionDoms = optionParentDoms && optionParentDoms[0] ? optionParentDoms[0].children : []
     }else{
       optionDoms = options
     }
-    console.log('optionDoms',optionDoms)
     const optionDom = optionDoms ? optionDoms.map(option => <Option key={option.paramValue ? option.paramValueDesc : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
     console.log('this.props.text',this.props.text,this.props.value)
     return (
@@ -227,7 +214,6 @@ export default class SelectInvokeApi extends React.Component {
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
         value={this.state.flag && (this.props.text || this.props.text === 0)? this.showTextValue() : ((this.props.value && (this.props.value[1] || this.props.value[1] === 0)) ? this.props.value[1] : ((typeof this.props.value ==='string' || typeof this.props.value === 'number') ? (this.props.value === 0 ? "0%" :this.props.value ) :(this.props.initialValue ? this.props.initialValue : 'all')))}
-        //value={showVaule || showVaule === 0 ? showVaule : 'all'}
         disabled={this.props.disabled}
       >
         {optionDom}

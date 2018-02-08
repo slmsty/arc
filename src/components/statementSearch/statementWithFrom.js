@@ -16,7 +16,57 @@ const RadioGroup = Radio.Group
 const dateFormat = 'YYYY-MM-DD'
 const { RangePicker } = DatePicker
 const Option = Select.Option;
-
+const testoptions = [
+  {
+    paramCode: "APPLY_TYPE",
+    paramValue: "100",
+    paramValueDesc: "收款信息查询表",
+    primaryKey: "WORK_FLOW.APPLY_TYPE",
+    typeCode: "WORK_FLOW",
+  },
+  {
+    paramCode: "APPLY_TYPE",
+    paramValue: "1001",
+    paramValueDesc: "发票信息查询表",
+    primaryKey: "WORK_FLOW.APPLY_TYPE",
+    typeCode: "WORK_FLOW",
+  },
+  {
+    paramCode: "APPLY_TYPE",
+    paramValue: "1002",
+    paramValueDesc: "发票及收款信息查询表",
+    primaryKey: "WORK_FLOW.APPLY_TYPE",
+    typeCode: "WORK_FLOW",
+  },
+  {
+    paramCode: "APPLY_TYPE",
+    paramValue: "1003",
+    paramValueDesc: "应收账款询证函报表",
+    primaryKey: "WORK_FLOW.APPLY_TYPE",
+    typeCode: "WORK_FLOW",
+  },
+  {
+    paramCode: "APPLY_TYPE",
+    paramValue: "1004",
+    paramValueDesc: "项目综合信息查询报表",
+    primaryKey: "WORK_FLOW.APPLY_TYPE",
+    typeCode: "WORK_FLOW",
+  },
+  {
+    paramCode: "APPLY_TYPE",
+    paramValue: "1005",
+    paramValueDesc: "整体合同内容查询",
+    primaryKey: "WORK_FLOW.APPLY_TYPE",
+    typeCode: "WORK_FLOW",
+  },
+  {
+    paramCode: "APPLY_TYPE",
+    paramValue: "1006",
+    paramValueDesc: "转包项目表",
+    primaryKey: "WORK_FLOW.APPLY_TYPE",
+    typeCode: "WORK_FLOW",
+  },
+]
 class StatementListCom extends React.Component {
   state = {
     infoVisitable: false,
@@ -61,7 +111,7 @@ class StatementListCom extends React.Component {
                     typeCode="WORK_FLOW"
                     paramCode="APPLY_TYPE"
                     onChange={(e)=>this.handleRadioChange(e)}
-                    options={[]}
+                    options={testoptions}
                   />
                 )}
               </FormItem>

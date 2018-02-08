@@ -120,19 +120,19 @@ class ContractSplitModal extends React.Component{
           console.log('assessRatio',assessRatio)
           let formula = 1
           if (assessRatio !== 0) {
-            if (data.No === 'TASK7') {
+            if (data.No === 'ARC_PRD_7') {
               formula = (1 + incomeRatio) * (1 - assessRatio)
               newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
             }
-            if (data.No === 'TASK7-K') {
+            if (data.No === 'ARC_PRD_7-K') {
               formula = (1 + incomeRatio) * assessRatio
               newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
             }
-            if (data.No === 'TASK10') {
+            if (data.No === 'ARC_PRD_TASK_10') {
               formula = (1 + incomeRatio) * incomeRatio * (1 - assessRatio)
               newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
             }
-            if (data.No === 'TASK10-K') {
+            if (data.No === 'ARC_PRD_TASK_10_K') {
               formula = (1 + incomeRatio) * incomeRatio * assessRatio
               newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
             }
