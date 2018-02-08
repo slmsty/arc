@@ -60,13 +60,6 @@ export default class Index extends React.Component {
     })
   }
   render() {
-    const menu = (
-      <Menu>
-        <Menu.Item>
-          <a target="_blank" rel="noopener noreferrer" href="https://xin.asiainfo.com/chat/G6ADE805AC1549359DDB3D803E18E442">问题反馈</a>
-        </Menu.Item>
-      </Menu>
-    );
     const logo = this.state.collapsed ? require('../assets/images/logomini.png') : require('../assets/images/logo.png')
     const { accountName, orgName, headIcon } = this.props.user
     return (
@@ -96,12 +89,10 @@ export default class Index extends React.Component {
             />
             <div className="user">
               <img src={headIcon} alt="" />
-              <Dropdown overlay={menu}>
-                <a className="ant-dropdown-link" href="#">
-                  欢迎您，<span>{accountName}</span><span>{orgName}</span> <Icon type="down" />
-                </a>
-              </Dropdown>
-              {/*<p>欢迎您，<span>{accountName}</span><span>{orgName}</span></p>*/}
+              <p>
+                欢迎您，<span>{accountName}</span><span>{orgName}</span>
+                <a target="_blank" rel="noopener noreferrer" href="https://xin.asiainfo.com/chat/G6ADE805AC1549359DDB3D803E18E442">问题反馈</a>
+              </p>
             </div>
           </Header>
           <Content style={{ margin: '8px 8px', padding: 12, background: '#fff' }}>
