@@ -2,7 +2,7 @@
 import React from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Layout, Icon, Breadcrumb } from 'antd'
+import { Layout, Icon, Breadcrumb, Menu, Dropdown } from 'antd'
 import MenuComponent from './common/menu'
 import './index.less'
 
@@ -60,6 +60,13 @@ export default class Index extends React.Component {
     })
   }
   render() {
+    const menu = (
+      <Menu>
+        <Menu.Item>
+          <a target="_blank" rel="noopener noreferrer" href="https://xin.asiainfo.com/chat/G6ADE805AC1549359DDB3D803E18E442">问题反馈</a>
+        </Menu.Item>
+      </Menu>
+    );
     const logo = this.state.collapsed ? require('../assets/images/logomini.png') : require('../assets/images/logo.png')
     const { accountName, orgName, headIcon } = this.props.user
     return (
@@ -89,7 +96,12 @@ export default class Index extends React.Component {
             />
             <div className="user">
               <img src={headIcon} alt="" />
-              <p>欢迎您，<span>{accountName}</span><span>{orgName}</span></p>
+              <Dropdown overlay={menu}>
+                <a className="ant-dropdown-link" href="#">
+                  欢迎您，<span>{accountName}</span><span>{orgName}</span> <Icon type="down" />
+                </a>
+              </Dropdown>
+              {/*<p>欢迎您，<span>{accountName}</span><span>{orgName}</span></p>*/}
             </div>
           </Header>
           <Content style={{ margin: '8px 8px', padding: 12, background: '#fff' }}>
