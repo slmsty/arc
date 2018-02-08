@@ -38,7 +38,7 @@ class BillUpdate extends React.Component {
       custName: values.custName[1],
       projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
       receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
-      billingOutcomeId: values.billingOutcomeId[0],
+      billingOutcomeId: normalTypes.includes(this.props.billType) ? values.billingOutcomeId[0] : '',
     }
     console.log(params)
     this.props.billAction(params)
