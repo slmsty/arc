@@ -90,7 +90,7 @@ class BadDebtsInfoModal extends React.Component {
             <br />
             <hr style={{ borderTop: '1px solid #d9d9d9' }} />
             <br />
-            <div style={{ display: applyInfoDatas.serviceType === 'badDebt' ? 'block' : 'none' }}>
+            <div style={{ display: applyInfoDatas.serviceType === 'BAD_DEBT' ? 'block' : 'none' }}>
               <h2>坏账划销申请</h2>
               <Table
                 rowKey="receiptClaimId"
