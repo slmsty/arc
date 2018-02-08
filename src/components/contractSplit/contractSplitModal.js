@@ -137,19 +137,13 @@ class ContractSplitModal extends React.Component{
           if(isNaN(assessRatio)){
             assessRatio = 0
           }
-          assessRatio = (assessRatio/100).toFixed(2)
-         // console.log('contractTotalMoney',contractTotalMoney)
-         // console.log('solutionMaintain',solutionMaintain)
-         // console.log('assessRatio',assessRatio)
-         // console.log('incomeRatio',incomeRatio)
+          assessRatio = assessRatio/100 // 考核比率为百分数
           let formula = 1
           let formula2 = 1
           if (assessRatio !== 0) {
             if (data.No === 'ARC_PRD_7') {
               formula = (1 + incomeRatio)
               formula2 = (1 - assessRatio)
-             //console.log('formula',formula)
-              //console.log('(parseFloat(contractTotalMoney / formula)).toFixed(2)',(parseFloat(contractTotalMoney / formula * formula2)).toFixed(2))
               newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
             }
             if (data.No === 'ARC_PRD_7-K') {
