@@ -64,13 +64,6 @@ export default class BillStatusCon extends React.Component {
     this.setState({
       loading: true,
     })
-    const param = {
-      pageInfo: {
-        pageNo: 1,
-        pageSize: 10,
-      },
-      status: 'BILLING_NEW',
-    }
     this.props.getBillStatusList(this.queryParam).then((res) => {
       this.setState({
         loading: false,
@@ -98,9 +91,6 @@ export default class BillStatusCon extends React.Component {
     this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    if(selectedRowKeys.length>1){
-      selectedRowKeys.splice(0,selectedRowKeys.length-1);
-    }
     if((selectedRows.length && selectedRows[0].status=='开票审批中') || (selectedRows.length && selectedRows[0].status=='作废审批中')) {
       this.setState({
         cancelDis: false,
@@ -111,10 +101,10 @@ export default class BillStatusCon extends React.Component {
         cancelDis: true,
       })
     }
+    console.log(selectedRows)
     this.setState({ selectedRowKeys, selectedRows }, () => {
       if (this.state.selectedRows.length > 0) {
-        let billingApplicationId = this.state.selectedRows[0].billingApplicationId
-        this.subSearch(billingApplicationId)
+        this.subSearch(this.state.selectedRows[0].billingApplicationId)
       }
     })
   }
@@ -123,22 +113,9 @@ export default class BillStatusCon extends React.Component {
     const param = {
       applicationId: billingApplicationId
     }
-    this.searchBillInfoResult(param)
-    this.searchContractResult(param)
-    this.searchBillResult(param)
-  }
-  // 查询申请单详细信息
-  searchBillInfoResult = (param) => {
+    console.log(param)
     this.props.getBillStatusDetail(param)
-  }
-
-  // 查询请单合同信息
-  searchContractResult = (param) => {
     this.props.getBillStatusContractDetail(param)
-  }
-
-  // 查询开票结果
-  searchBillResult = (param) => {
     this.props.getBillStatusBillResult(param)
   }
 
@@ -157,19 +134,18 @@ export default class BillStatusCon extends React.Component {
   }
 
   showApplyInfo = (record) => {
-    const paramsData = {}
-    paramsData.processInstanceId = record.processInstanceId
-    paramsData.businessKey = record.billingApplicationId
-     this.props.myApplyInfo(paramsData).then((res) => {
-     if (res && res.response && res.response.resultCode === '000000') {
-     this.setState({
-     noApplyInfoVisitable: true,
-     noApplyInfoData: record,
-     })
-     } else {
-
-     }
-     })
+    const paramsData = {
+      processInstanceId: record.processInstanceId,
+      businessKey: record.billingApplicationId
+    }
+    this.props.myApplyInfo(paramsData).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+         noApplyInfoVisitable: true,
+         noApplyInfoData: record,
+        })
+      }
+    })
   }
   // 撤销
   cancelHandle = () => {
@@ -318,7 +294,7 @@ export default class BillStatusCon extends React.Component {
     this.props.fileDown(params)
   }
   render() {
-    const getBillStatusManageList  = this.props.billStatusManage.getBillStatusManageList.result
+    const { result, count, pageCount, pageSize }  = this.props.billStatusManage.getBillStatusManageList
     const billApproveResultColumns = [
       {
         title: '数据状态',
@@ -454,20 +430,18 @@ export default class BillStatusCon extends React.Component {
     const { selectedRowKeys, firstID } = this.state
     const rowSelection = {
       selectedRowKeys,
-      type: 'checkBox',
+      type: 'radio',
       onChange: this.onSelectChange,
       getCheckboxProps: record => ({
         defaultChecked:record.billingApplicationId == firstID
       })
     }
     const pagination = {
-      current: 1,
-      total: 10,
-      pageSize: 10,
+      total: count,
+      pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
-
     }
     const billResultRowSelection = {
       type: 'checkBox',
@@ -491,7 +465,7 @@ export default class BillStatusCon extends React.Component {
           scroll={{ x: '2590px' }}
           loading={this.state.loading}
           pagination={pagination}
-          dataSource={getBillStatusManageList}
+          dataSource={result}
         />
         <br />
         <h3>开票申请详情</h3>
@@ -542,7 +516,7 @@ export default class BillStatusCon extends React.Component {
               dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
               disableApprove={this.disableApprove}
               DetailList={this.props.billStatusManage.getBillStatusDetailList}
-              applyData={this.state.selectedRows ? this.state.selectedRows : this.props.billStatusManage.getBillStatusManageList.result}
+              applyData={this.state.selectedRows ? this.state.selectedRows : result}
             />
             : ''
         }
