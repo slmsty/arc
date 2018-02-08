@@ -390,14 +390,6 @@ export default class BillStatusCon extends React.Component {
       dataIndex: 'companyName',
       width: 300,
     }, {
-      title: '提前开票原因',
-      dataIndex: 'preInvoiceReason',
-      width: 300,
-    }, {
-      title: '预计回款日期',
-      dataIndex: 'preReceiveDate',
-      width: 150,
-    }, {
       title: '开票要求',
       dataIndex: 'invoiceRequire',
       width: 300,
