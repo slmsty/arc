@@ -103,7 +103,6 @@ export default class SelectInvokeApi extends React.Component {
     const options = this.state.options
     const {indexs, columns} = this.props
     const text = this.props.text
-    console.log('text',text)
     let value = ''
     if(typeof text ==='string' || typeof text ==='number'){
       value = text
@@ -112,21 +111,20 @@ export default class SelectInvokeApi extends React.Component {
     }
     let  paramValueDesc = ''
     for (let i = 0; i < options.length; i++) {
-      if (options[i].paramValue === value ) {
+      if (options[i].paramValue == value ) {
         paramValueDesc = options[i].paramValueDesc
         break;
       }
       let children = options[i].children ? options[i].children : []
       if (children) {
         for (let j = 0; j < children.length; j++) {
-          if( children.paramValue === value ) {
+          if( children[j].paramValue == value ) {
             paramValueDesc = children[j].paramValueDesc
             break;
           }
         }
       }
     }
-    console.log('paramValueDesc',paramValueDesc)
     return paramValueDesc
   }
 
@@ -148,24 +146,18 @@ export default class SelectInvokeApi extends React.Component {
     const options = this.state.options.slice(0)
     let name = ''
     for (let i = 0; i < options.length; i++) {
-      if (options[i].paramValue === value ) {
+      if (options[i].paramValue == value ) {
         name = options[i].paramValueDesc
         break;
       }
       let children = options[i].children ? options[i].children : []
-      console.log('children',children)
       for (let j = 0; j < children.length; j++) {
-        if( children[j].paramValue === value ) {
+        if( children[j].paramValue == value ) {
           name = children[j].paramValueDesc
           break;
         }
       }
     }
-    /*this.state.options.map((item)=>{
-      if(item.paramValue==value){
-        name = item.paramValueDesc
-      }
-    })*/
     const {indexs, columns} = this.props
     if (value === 'all') {
       this.props.onChange('')
@@ -176,7 +168,6 @@ export default class SelectInvokeApi extends React.Component {
         indexs: indexs,
         columns: columns,
       })
-      // this.props.onChange(value)
     }
   }
   render() {
@@ -190,23 +181,23 @@ export default class SelectInvokeApi extends React.Component {
     } else if(this.props.initialValue){
       showVaule = this.props.initialValue
     }
-    const parentCode = this.props.parentCode !=='' ? this.props.parentCode : ''
-    /*let parentCodeVal = ''
+    const parentCode = this.props.parentCode ? this.props.parentCode : []
+    let parentCodeVal = ''
      if(typeof parentCode ==='string' || typeof parentCode ==='number'){
      parentCodeVal = parentCode
      }else if(parentCode.length > 0){
      parentCodeVal = parentCode[0]
-     }*/
+     }
     const options = this.state.options.slice(0)
     let optionDoms = []
-    if(parentCode){
-      let optionParentDoms = options.filter(o=>o.paramValue === parentCode[0])
+    if(parentCodeVal){
+      let optionParentDoms = options.filter(o=>o.paramValue === parentCodeVal)
       optionDoms = optionParentDoms && optionParentDoms[0] ? optionParentDoms[0].children : []
     }else{
       optionDoms = options
     }
     const optionDom = optionDoms ? optionDoms.map(option => <Option key={option.paramValue ? option.paramValueDesc : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
-    console.log('this.props.text',this.props.text,this.props.value)
+    //console.log('this.props.text',this.props.text,this.props.value)
     return (
       <Select
         style={{zIndex:'0'}}

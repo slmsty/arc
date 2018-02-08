@@ -100,24 +100,33 @@ class ContractSplitModal extends React.Component{
   handleChange = (data) => {
     console.log('data',data)
     const newData = this.state.dataSource.slice(0)
-    if(newData.collectionProject === 'Y' && data.columns==='contractCategory'){
-      if(data.No !=="ARC_PRD_1"){
+    if(this.props.data[0].collectionProject == 'Y' && data.columns==='contractCategory'){
+      if(data.No !=="ARC_PRD_1" && data.No !=="ARC_PRD_1-K" ){
         message.error('集采项目只能拆分Task1')
+        newData[data.indexs]['contractCategory'] = ''
         return
       }
     }
+
     if(data){
       const indexData = data.No && data.Name ? [data.No,data.Name] : ''
+
       if(data.columns){
         if(data.columns === 'contractCategory'){
+          // 当父拆分数据改变时 清空子拆分数据的合同类型的数据
+          // 当前的合同类型的父拆分数据的id
+          const orderListLineId = newData[data.indexs].orderListLineId ? newData[data.indexs].orderListLineId : 0
+          newData.map((item,index)=>{
+            if(item.parentOrderListLineId === orderListLineId){
+              item.contractCategory = ''
+            }
+          })
           const dataInfos = this.props.data[0]
           const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
-          console.log('contractTotalMoney',contractTotalMoney)
           const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
-          console.log('dataInfos.assessRatio',dataInfos.assessRatio)
-          const assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
+          const assessRatio = dataInfos.assessRatio ? (parseFloat(dataInfos.assessRatio) === "NaN" ? 0 : parseFloat(dataInfos.assessRatio)) : 0 // 考核比率
           const incomeRatio =  parseFloat(parseFloat(solutionMaintain)/12 * 0.05)  // 收入比率
-          console.log('assessRatio',assessRatio)
+          console.log('assessRatio',dataInfos.assessRatio)
           let formula = 1
           if (assessRatio !== 0) {
             if (data.No === 'ARC_PRD_7') {
@@ -136,8 +145,6 @@ class ContractSplitModal extends React.Component{
               formula = (1 + incomeRatio) * incomeRatio * assessRatio
               newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
             }
-            console.log('listPrice',newData[data.indexs]['listPrice'])
-            console.log('formula',formula)
           }
         }
         newData[data.indexs][data.columns] = indexData
@@ -169,7 +176,6 @@ class ContractSplitModal extends React.Component{
       return <ProductLine disabled={this.state.editFlag} onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record.product}  indexs={index} columns={column} />
     }
     if(column ==='contractCategory'){
-      console.log('record',record)
       const parentOrderListLineId = record.parentOrderListLineId ? record.parentOrderListLineId : ''
       console.log('parentOrderListLineId',parentOrderListLineId)
       let parentCode = ''
@@ -718,6 +724,7 @@ class ContractSplitModal extends React.Component{
       <div>
         <Modal
           width={1024}
+          maskClosable={false}
           title="合同拆分"
           visible={true}
           onCancel={this.closeModal}
