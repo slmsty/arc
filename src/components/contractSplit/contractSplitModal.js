@@ -38,12 +38,14 @@ let tableData = [{
 }]
 
 const EditableCell = ({onChange, column, value,disable}) => {
+
   return(<div style={{ position: 'relative' }}>
-    <InputNumber value={value || value=== 0 ? value : ''} onChange={onChange} disabled={disable} />
-    {column === 'discount' ?
-      <span style={{ position: 'absolute', right: '-4px', top: '20%' }}>%</span>
-      : ''
+    {
+      column === 'discount' ?
+      <InputNumber style={{marginRight: '0px'}} formatter={value => `${value}%`} parser={value => value.replace('%', '')} value={value || value=== 0 ? value : ''} onChange={onChange} disabled={disable} />
+    :<InputNumber style={{marginRight: '0px'}} value={value || value=== 0 ? value : ''} onChange={onChange} disabled={disable} />
     }
+
   </div>)
 }
 
@@ -90,6 +92,13 @@ class ContractSplitModal extends React.Component{
       initInfo: null,
     }
   }
+  getTableWidth = (colum)=> {
+    let width = 0
+    colum.map((item,idnex)=>{
+      width += parseFloat(item.width)
+    })
+    return width
+  }
   selectDateChange = (data) => {
     const newData = this.state.dataSource.slice(0)
     newData[data.indexs][data.columns] = data.dateString
@@ -98,7 +107,6 @@ class ContractSplitModal extends React.Component{
     })
   }
   handleChange = (data) => {
-    console.log('data',data)
     const newData = this.state.dataSource.slice(0)
     if(this.props.data[0].collectionProject == 'Y' && data.columns==='contractCategory'){
       if(data.No !=="ARC_PRD_1" && data.No !=="ARC_PRD_1-K" ){
@@ -124,26 +132,40 @@ class ContractSplitModal extends React.Component{
           const dataInfos = this.props.data[0]
           const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
           const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
-          const assessRatio = dataInfos.assessRatio ? (parseFloat(dataInfos.assessRatio) === "NaN" ? 0 : parseFloat(dataInfos.assessRatio)) : 0 // 考核比率
+          let assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
           const incomeRatio =  parseFloat(parseFloat(solutionMaintain)/12 * 0.05)  // 收入比率
-          console.log('assessRatio',dataInfos.assessRatio)
+          if(isNaN(assessRatio)){
+            assessRatio = 0
+          }
+          assessRatio = (assessRatio/100).toFixed(2)
+         // console.log('contractTotalMoney',contractTotalMoney)
+         // console.log('solutionMaintain',solutionMaintain)
+         // console.log('assessRatio',assessRatio)
+         // console.log('incomeRatio',incomeRatio)
           let formula = 1
+          let formula2 = 1
           if (assessRatio !== 0) {
             if (data.No === 'ARC_PRD_7') {
-              formula = (1 + incomeRatio) * (1 - assessRatio)
-              newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
+              formula = (1 + incomeRatio)
+              formula2 = (1 - assessRatio)
+             //console.log('formula',formula)
+              //console.log('(parseFloat(contractTotalMoney / formula)).toFixed(2)',(parseFloat(contractTotalMoney / formula * formula2)).toFixed(2))
+              newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
             }
             if (data.No === 'ARC_PRD_7-K') {
-              formula = (1 + incomeRatio) * assessRatio
-              newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
+              formula = (1 + incomeRatio)
+              formula2 = assessRatio
+              newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
             }
             if (data.No === 'ARC_PRD_TASK_10') {
-              formula = (1 + incomeRatio) * incomeRatio * (1 - assessRatio)
-              newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
+              formula = (1 + incomeRatio)
+              formula2 = incomeRatio * (1 - assessRatio)
+              newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
             }
             if (data.No === 'ARC_PRD_TASK_10_K') {
-              formula = (1 + incomeRatio) * incomeRatio * assessRatio
-              newData[data.indexs]['listPrice'] = (parseFloat(contractTotalMoney / formula)).toFixed(2)
+              formula = (1 + incomeRatio)
+              formula2 = incomeRatio * assessRatio
+              newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
             }
           }
         }
@@ -176,16 +198,14 @@ class ContractSplitModal extends React.Component{
       return <ProductLine disabled={this.state.editFlag} onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record.product}  indexs={index} columns={column} />
     }
     if(column ==='contractCategory'){
+      console.log('textrender',text)
       const parentOrderListLineId = record.parentOrderListLineId ? record.parentOrderListLineId : ''
-      console.log('parentOrderListLineId',parentOrderListLineId)
       let parentCode = ''
       if (parentOrderListLineId !== '') {
         const dataSource = this.state.dataSource.slice(0)
         let parentContractCategory = []
         parentContractCategory = dataSource.filter(o=> o.orderListLineId && o.orderListLineId === parentOrderListLineId)
-        console.log('parentContractCategory',parentContractCategory)
         parentCode = parentContractCategory && parentContractCategory[0].contractCategory ? parentContractCategory[0].contractCategory : ''
-        console.log('parentCode',parentCode)
       }
 
       return(
@@ -560,7 +580,6 @@ class ContractSplitModal extends React.Component{
     })
   }
   handleReturn = () => {
-    console.log('tableDetail',this.props.tableDetail)
     this.setState({
       dataSource: this.props.tableDetail,
     },()=>{
@@ -1012,7 +1031,7 @@ class ContractSplitModal extends React.Component{
                 bordered
                 columns={columns}
                 size="middle"
-                scroll={{ x: '1675px' }}
+                scroll={{ x: this.getTableWidth(columns) }}
                 dataSource = {dataSource}
                 pagination={false}
               />

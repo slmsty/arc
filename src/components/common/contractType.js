@@ -103,6 +103,7 @@ export default class SelectInvokeApi extends React.Component {
     const options = this.state.options
     const {indexs, columns} = this.props
     const text = this.props.text
+    console.log('text',text)
     let value = ''
     if(typeof text ==='string' || typeof text ==='number'){
       value = text
@@ -125,6 +126,7 @@ export default class SelectInvokeApi extends React.Component {
         }
       }
     }
+    console.log('paramValueDesc',paramValueDesc)
     return paramValueDesc
   }
 
@@ -197,7 +199,7 @@ export default class SelectInvokeApi extends React.Component {
       optionDoms = options
     }
     const optionDom = optionDoms ? optionDoms.map(option => <Option key={option.paramValue ? option.paramValueDesc : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
-    //console.log('this.props.text',this.props.text,this.props.value)
+    console.log('this.props.text',this.props.text,this.props.value)
     return (
       <Select
         style={{zIndex:'0'}}
