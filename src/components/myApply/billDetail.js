@@ -5,7 +5,7 @@ import './billApproveDetail.css'
 
 class BillDetail extends React.Component  {
   render() {
-    const { billingType, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, receiptOutcome } = this.props.serviceDetail
+    const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, receiptOutcome } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -106,7 +106,7 @@ class BillDetail extends React.Component  {
         </div>
         <Row gutter={40}>
           <Col span={8} key={1}>
-              开票类型 :{billingType}
+              开票类型 :{billingTypeName}
           </Col>
           <Col span={8} key={2}>
             开票日期: {billingDate}

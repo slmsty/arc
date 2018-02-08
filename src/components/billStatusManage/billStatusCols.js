@@ -54,13 +54,13 @@ const billApproveItemColumns = [
   },
   {
     title: '已申请金额',
-    dataIndex: 'applyAmount',
+    dataIndex: 'invoiceAmount',
     width: 100,
     render: (text, record, index) => (text ? currency(text) : text),
   },
   {
     title: '已开票金额',
-    dataIndex: 'invoiceAmount',
+    dataIndex: 'billingAmount',
     width: 100,
     render: (text, record, index) => (text ? currency(text) : text),
   },
