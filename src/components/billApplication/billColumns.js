@@ -139,7 +139,7 @@ const proColumns = [{
   dataIndex: 'paymentAmount',
   width: 80,
 }, {
-  title: '已开票金额',
+  title: '已申请金额',
   dataIndex: 'billingAmount',
   width: 80,
 }]

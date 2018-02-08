@@ -407,7 +407,7 @@ export default class BillStatusCon extends React.Component {
       width: 300,
     }, {
       title: '纳税人识别号',
-      dataIndex: 'taxIdentifyCode',
+      dataIndex: 'companyTaxIdentifyCode',
       width: 150,
     }, {
       title: '开票申请日期',

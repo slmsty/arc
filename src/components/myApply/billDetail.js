@@ -56,6 +56,7 @@ class BillDetail extends React.Component  {
       title: '税率',
       dataIndex: 'billingTaxRate',
       width: 100,
+      render: (text) => (`${text * 100}%`)
     }, {
       title: '税额',
       dataIndex: 'billingTaxAmount',

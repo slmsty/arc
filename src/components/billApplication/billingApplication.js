@@ -115,7 +115,7 @@ export default class BillingApplication extends React.Component {
         dataIndex: 'alreadyBillingAmount',
         width: 80,
       }, {
-        title: '已申请开票金额',
+        title: '已申请金额',
         dataIndex: 'applyIngAndBillingAmount',
         width: 120,
       }, {
