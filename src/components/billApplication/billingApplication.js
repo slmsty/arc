@@ -162,6 +162,14 @@ export default class BillingApplication extends React.Component {
         dataIndex: 'custName',
         width: 220,
       }, {
+        title: '已申请金额',
+        dataIndex: 'invoiceAmount',
+        width: 220,
+      }, {
+        title: '已开票金额',
+        dataIndex: 'billingAmount',
+        width: 220,
+      }, {
         title: '项目编码',
         dataIndex: 'projectNo',
         width: 150,
@@ -211,6 +219,14 @@ export default class BillingApplication extends React.Component {
         title: '客户名称',
         dataIndex: 'custName',
         width: 200
+      }, {
+        title: '已申请金额',
+        dataIndex: 'invoiceAmount',
+        width: 100,
+      }, {
+        title: '已开票金额',
+        dataIndex: 'billingAmount',
+        width: 100,
       }, {
         title: '项目编码',
         dataIndex: 'projectNo',

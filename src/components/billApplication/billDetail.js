@@ -5,7 +5,6 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import { contentCols, totalColumns, detailColumns, normalTypes } from './billColumns'
-import 'whatwg-fetch'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -139,36 +138,39 @@ class BillDetail extends React.Component {
         }
         const _this = this
         //校验拆分金额是否大于含税金额，大于提示用户并更改开票类型为超额开票
-        requestJsonFetch('/arc/billingApplication/apply/check', {
-          method: 'POST',
-          body: {
-            appLineItems: appLineItems,
-            billingApplicationType: this.props.billType,
-          },
-        }, (res) => {
-          const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
-          if(resultCode === '000000') {
-            if(isWarning === 'Y') {
-              confirm({
-                title: '提示',
-                content: warningMessage,
-                onOk() {
-                  console.log(params)
-                  _this.props.billApplySave({
-                    ...params,
-                    billingApplicationType,
-                  })
-                }
-              })
+        if(normalTypes.includes(this.props.billType)) {
+          requestJsonFetch('/arc/billingApplication/apply/check', {
+            method: 'POST',
+            body: {
+              appLineItems: appLineItems,
+              billingApplicationType: this.props.billType,
+            },
+          }, (res) => {
+            const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
+            if(resultCode === '000000') {
+              if(isWarning === 'Y') {
+                confirm({
+                  title: '提示',
+                  content: warningMessage,
+                  onOk() {
+                    console.log(params)
+                    _this.props.billApplySave({
+                      ...params,
+                      billingApplicationType,
+                    })
+                  }
+                })
+              } else {
+                this.props.billApplySave(params)
+              }
             } else {
-              console.log(params)
-              this.props.billApplySave(params)
+              message.error(resultMessage)
+              return
             }
-          } else {
-            message.error(resultMessage)
-            return
-          }
-        })
+          })
+        } else {
+          this.props.billApplySave(params)
+        }
       }
     });
   }
