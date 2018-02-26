@@ -194,6 +194,7 @@ export default class BillingApplication extends React.Component {
         title: '操作',
         dataIndex: '',
         width: 70,
+        fixed: 'right',
         render: (text, record) => (
           <a href="#"
              onClick={() => {
