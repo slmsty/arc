@@ -321,7 +321,6 @@ export default class BillingApplication extends React.Component {
       return (
         <div>
           <Button type="primary" ghost onClick={() => this.billRedApply()}>红冲</Button>
-          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
         </div>
       )
     } else if (otherTypes.includes(type)) {

@@ -319,6 +319,10 @@ class BillDetail extends React.Component {
       labelCol: { span: 3 },
       wrapperCol: { span: 21 },
     }
+    const formItemLayout2 = {
+      labelCol: { span: 7 },
+      wrapperCol: { span: 16 },
+    }
     const columns = [
       {
       title: '操作',
@@ -591,6 +595,65 @@ class BillDetail extends React.Component {
                     <TextArea placeholder="请输入开票要求" rows="2" />
                   )
                 }
+              </FormItem>
+            </Col>
+          </Row>
+          <h3 className="sent-info">寄件信息</h3>
+          <Row gutter={40}>
+            <Col span={8} key={1}>
+              <FormItem {...formItemLayout2} label="收件人">
+                {getFieldDecorator('expressReceiptName')(
+                  <Input placeholder="收件人"/>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8} key={2}>
+              <FormItem {...formItemLayout2} label="收件人公司">
+                {
+                  getFieldDecorator('expressReceiptCompany', {
+                    initialValue: ''
+                  })(
+                    <Input placeholder="收件人公司"/>
+                  )
+                }
+              </FormItem>
+            </Col>
+            <Col span={8} key={3}>
+              <FormItem {...formItemLayout2} label="收件人电话">
+                {
+                  getFieldDecorator('expressReceiptPhone')(
+                    <Input placeholder="收件人电话"/>,
+                  )
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={8} key={1}>
+              <FormItem {...formItemLayout2} label="收件人城市">
+                {getFieldDecorator('expressReceiptCity')(
+                  <Input placeholder="收件人城市"/>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8} key={2}>
+              <FormItem {...formItemLayout2} label="收件人详细地址">
+                {
+                  getFieldDecorator('expressReceiptAddress', {
+                    initialValue: ''
+                  })(
+                    <Input placeholder="收件人详细地址"/>
+                  )
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={8} key={1}>
+              <FormItem {...formItemLayout2} label="E-mail">
+                {getFieldDecorator('receiptEmail')(
+                  <Input placeholder="E-mail"/>
+                )}
               </FormItem>
             </Col>
           </Row>
