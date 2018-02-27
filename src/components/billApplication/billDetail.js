@@ -44,6 +44,7 @@ class BillDetail extends React.Component {
       file: {},
       fileList: [],
       fileId: '',
+      loading: false,
     }
   }
 
@@ -122,6 +123,7 @@ class BillDetail extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.setState({loading: true})
         const { custInfo, comInfo } = this.props.detail
         const appLineItems = this.state.dataSource.map(record => ({
           ...record,
@@ -158,13 +160,17 @@ class BillDetail extends React.Component {
                       ...params,
                       billingApplicationType,
                     })
-                  }
+                  },
+                  onCancel() {
+                    _this.setState({loading: false})
+                  },
                 })
               } else {
                 this.props.billApplySave(params)
               }
             } else {
               message.error(resultMessage)
+              this.setState({loading: false})
               return
             }
           })
@@ -479,8 +485,8 @@ class BillDetail extends React.Component {
         visible={true}
         wrapClassName="vertical-center-modal"
         footer={[
-          <Button key="submit" type="primary" onClick={this.handleOk}>
-            <Icon type="check" />开票
+          <Button key="submit" type="primary" loading={this.state.loading} onClick={this.handleOk}>
+            {!this.state.loading ? <Icon type="check" /> : ''}开票
           </Button>,
         ]}
         onCancel={() => this.props.onCancel()}

@@ -371,7 +371,7 @@ export default class BillStatusCon extends React.Component {
       {
       title: '数据状态',
       dataIndex: 'status',
-      width: 100,
+      width: 120,
       textAlign: 'center',
       fixed: 'left',
     }, {
@@ -454,7 +454,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveColumns}
           size="small"
-          scroll={{ x: '2590px' }}
+          scroll={{ x: '2200px' }}
           loading={this.state.loading}
           pagination={pagination}
           dataSource={result}

@@ -152,7 +152,7 @@ export default class ApplySearchCon extends React.Component {
     const columns = [{
       title: '申请单编号',
       dataIndex: 'businessKey',
-      width: 150,
+      width: 120,
       render: (text, record) => (
         <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
       ),
@@ -164,22 +164,10 @@ export default class ApplySearchCon extends React.Component {
       title: '申请单类型',
       dataIndex: 'modelName',
       width: 120,
-    },/* {
-      title: '项目编码',
-      dataIndex: 'productId',
-      width: 200,
     }, {
-      title: '合同编码',
-      dataIndex: 'constractId',
-      width: 200,
-    }, {
-      title: '合同名称',
-      dataIndex: 'constractName',
-      width: 300,
-    },*/ {
       title: '申请信息',
       dataIndex: 'applyInfo',
-      width: 250,
+      width: 300,
     }, {
       title: '审批结果',
       dataIndex: 'approveType',
@@ -195,11 +183,11 @@ export default class ApplySearchCon extends React.Component {
     }, {
       title: '申请时间',
       dataIndex: 'applyDate',
-      width: 160,
+      width: 140,
     }, {
       title: '审批时间',
       dataIndex: 'approveDate',
-      width: 150,
+      width: 140,
     }, {
       title: '操作',
       dataIndex: 'opration',
