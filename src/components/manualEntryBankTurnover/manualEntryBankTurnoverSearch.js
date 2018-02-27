@@ -43,7 +43,8 @@ class ManualEntryBankTurnoverSearch extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="收款日期">
                 {getFieldDecorator('receiptDate', {
-                  initialValue: [moment().subtract(1, 'day'), moment()],
+                  /*initialValue: [moment().subtract(1, 'day'), moment()],*/
+                  initialValue: [moment().startOf('month'), moment().endOf('month')],
                 })(<RangePicker
                   allowClear
                   format={dateFormat}

@@ -74,6 +74,7 @@ class StatementListCom extends React.Component {
     applyData: '',
     stateType: '',
   }
+  // 查询接口
   queryParms = () => {
     const param = this.props.form.getFieldsValue()
     console.log(param)
