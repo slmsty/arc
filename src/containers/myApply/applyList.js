@@ -6,6 +6,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import ApplaySearchCon from '../../components/myApply/applySearch'
 import { getMyApplyList, approveSubmit, approveReject, myApplyInfo, billApplySave } from '../../actions/myApply'
+import { fileDown } from '../../actions/billStatusManage/billStatusManage'
+
 
 const mapStateToProps = state => ({
   myApply: state.myApply,
@@ -17,6 +19,7 @@ const mapDispatchToProps = dispatch => (
     approveReject,
     myApplyInfo,
     billApplySave,
+    fileDown,
   }, dispatch)
 )
 // eslint-disable-next-line react/prefer-stateless-function

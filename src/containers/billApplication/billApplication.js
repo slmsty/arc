@@ -4,7 +4,8 @@ import BillingApplication from '../../components/billApplication/billingApplicat
 import * as actions from '../../actions/billApplication'
 
 const mapStateToProps = state => ({
-  ...state.billApplication
+  ...state.billApplication,
+  currentUser: state.common.user,
 })
 
 const mapDispatchToProps = dispatch => ({

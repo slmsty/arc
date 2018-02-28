@@ -651,7 +651,11 @@ class BillDetail extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout2} label="E-mail">
-                {getFieldDecorator('receiptEmail')(
+                {getFieldDecorator('receiptEmail', {
+                  initialValue: this.props.currentUser.email, rules: [{
+                    type: 'email', message: '请输入正确的E-mail!',
+                  }, { required: true, message: '请填写E-mail!' }]
+                })(
                   <Input placeholder="E-mail"/>
                 )}
               </FormItem>

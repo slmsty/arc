@@ -34,6 +34,7 @@ export default class BillingApplication extends React.Component {
       this.setState({
         updateVisible: false,
         otherAddVisible: false,
+        currentRecord: {},
       })
       this.getInitQuery()
     } else if(this.props.redApplySuccess != nextProps.redApplySuccess && nextProps.redApplySuccess) {
@@ -348,7 +349,7 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
-    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave, billApplyCheck } = this.props
+    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave, billApplyCheck, currentUser } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) ? 'checkbox' : 'radio',
       onChange: (selectedRowKeys, selectedRows) => {
@@ -381,6 +382,7 @@ export default class BillingApplication extends React.Component {
             billType={this.state.currentType}
             billApplySave={billApplySave}
             billApplyCheck={billApplyCheck}
+            currentUser={currentUser}
           /> : null
         }
         {

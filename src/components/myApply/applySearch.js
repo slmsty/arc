@@ -231,6 +231,7 @@ export default class ApplySearchCon extends React.Component {
               closeClaim={this.NoApplycloseModalClaim}
               applyData={this.state.noApplyInfoData}
               applyInfoData={this.props.myApply.getMyApplyInfo}
+              fileDown={this.props.fileDown}
             /> : null
         }
         <br /><br />

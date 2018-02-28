@@ -442,8 +442,9 @@ export default class BillStatusCon extends React.Component {
     return (
       <div>
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />
-        <Button onClick={this.showGlDate}>传送AP</Button>&nbsp;&nbsp;
-        <Button onClick={this.cancelHandle} disabled={this.state.cancelDis}>撤销</Button>
+        <Button onClick={this.showGlDate}>传送AP</Button>
+        <Button style={{marginLeft: '10px'}} onClick={this.cancelHandle} disabled={this.state.cancelDis}>撤销</Button>
+        <Button style={{marginLeft: '10px'}} type="primary" ghost>传送金税</Button>
         <br />
         <br />
         <h3>开票申请</h3>

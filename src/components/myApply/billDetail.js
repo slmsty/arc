@@ -5,7 +5,7 @@ import './billApproveDetail.css'
 
 class BillDetail extends React.Component  {
   render() {
-    const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, receiptOutcome } = this.props.serviceDetail
+    const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, receiptOutcome, fileName, filePath } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -146,6 +146,11 @@ class BillDetail extends React.Component  {
         <Row gutter={40}>
           <Col span={24}>
             开票要求: {billingApplicantRequest}
+          </Col>
+        </Row>
+        <Row gutter={40}>
+          <Col span={24}>
+            附件: <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
           </Col>
         </Row>
       </div>

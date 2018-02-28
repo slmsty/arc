@@ -111,6 +111,7 @@ class NoApplyInfo extends React.Component {
                   <BillDetail
                     serviceDetail={applyInfoDatas.serviceDetail}
                     applyType={applyInfoDatas.serviceType}
+                    fileDown={this.props.fileDown}
                   />
                 </div>
                 : null

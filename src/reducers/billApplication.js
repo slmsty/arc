@@ -45,6 +45,7 @@ function billApplySearch(state, action) {
     ...state,
     billList: action.response.data,
     isLoading: false,
+    billSaveSuccess: false,
     updateSuccess: false,
     addSuccess: false,
   }
