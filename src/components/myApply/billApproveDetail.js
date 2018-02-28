@@ -182,7 +182,7 @@ class BillApproveDetail extends React.Component  {
       labelCol: { span: 2 },
       wrapperCol: { span: 20 },
     }
-    const { billingType, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark } = this.props.serviceDetail
+    const { billingType, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, fileName, filePath } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -512,6 +512,11 @@ class BillApproveDetail extends React.Component  {
                   )
                 }
               </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={24}>
+              附件: <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
             </Col>
           </Row>
           <div className="add-btns">

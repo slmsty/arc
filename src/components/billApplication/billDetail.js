@@ -4,6 +4,7 @@ import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
+import moment from 'moment'
 import { contentCols, totalColumns, detailColumns, normalTypes } from './billColumns'
 const Option = Select.Option
 const FormItem = Form.Item
@@ -136,7 +137,8 @@ class BillDetail extends React.Component {
           billingApplicationType: this.props.billType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
           appLineItems: appLineItems,
-          objectId: this.state.fileId
+          objectId: this.state.fileId,
+          objectName: this.state.file.name,
         }
         const _this = this
         //校验拆分金额是否大于含税金额，大于提示用户并更改开票类型为超额开票
@@ -386,6 +388,7 @@ class BillDetail extends React.Component {
         <InputNumber
           placeholder="数量"
           defaultValue="1"
+          min={0}
           value={this.state.dataSource[index]['quantity']}
           onChange={(value) => this.handleChange(value, 'quantity', index)} />
       )
@@ -396,6 +399,7 @@ class BillDetail extends React.Component {
       render: (text, record, index) => (
         <InputNumber
           placeholder="单价"
+          min={0}
           value={this.state.dataSource[index]['unitPrice']}
           onChange={(value) => this.handleChange(value, 'unitPrice', index)}
         />
@@ -407,6 +411,7 @@ class BillDetail extends React.Component {
       render: (text, record, index) => (
         <InputNumber
           placeholder="不含税金额"
+          min={0}
           value={this.state.dataSource[index].billingAmountExcludeTax}
           onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
       )
@@ -417,6 +422,7 @@ class BillDetail extends React.Component {
       render: (text, record, index) => (
         <InputNumber
           placeholder="含税金额"
+          min={0}
           defaultValue={record.billingAmount}
           value={this.state.dataSource[index]['billingAmount']}
           onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
@@ -442,6 +448,7 @@ class BillDetail extends React.Component {
       render: (text, record, index) => (
         <InputNumber
           placeholder="税额"
+          min={0}
           value={this.state.dataSource[index]['billingTaxAmount']}
           onChange={(value) => this.handleChange(value, 'billingTaxAmount', index)}
         />
@@ -530,7 +537,7 @@ class BillDetail extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="开票日期">
                 {
-                  getFieldDecorator('billingDate', {rules: [{ required: true, message: '请选择开票日期!' }]})(
+                  getFieldDecorator('billingDate', {initialValue: moment(), rules: [{ required: true, message: '请选择开票日期!' }]})(
                     <DatePicker format="YYYY-MM-DD"/>,
                   )
                 }

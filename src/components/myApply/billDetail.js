@@ -5,6 +5,7 @@ import './billApproveDetail.css'
 
 class BillDetail extends React.Component  {
   render() {
+    console.log(this.props)
     const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, receiptOutcome, fileName, filePath } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',

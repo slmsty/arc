@@ -518,6 +518,7 @@ export default class BillStatusCon extends React.Component {
           closeClaim={this.noApplycloseModalClaim}
           applyData={this.state.noApplyInfoData}
           applyInfoData={this.props.myApply.getMyApplyInfo}
+          fileDown={this.props.fileDown}
         />
         {/* 弹出传送ARglDatemodal */}
         <GlDateModal
