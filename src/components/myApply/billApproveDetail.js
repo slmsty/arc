@@ -152,6 +152,7 @@ class BillApproveDetail extends React.Component  {
       if (!err) {
         const params = {
           ...values,
+          billingApplicationId: this.props.serviceDetail.billingApplicationId,
           billingApplicationType: this.props.applyType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
           appLineItems: this.state.dataSource.map(record => ({
@@ -337,7 +338,7 @@ class BillApproveDetail extends React.Component  {
     }, {
       title: '税收分类编码',
       dataIndex: 'taxCategoryCode',
-      width: 120,
+      width: 150,
       render: (text, record, index) => {
         return (
           <SearchAllColumns
@@ -354,7 +355,7 @@ class BillApproveDetail extends React.Component  {
     }, {
       title: '税收分类名称',
       dataIndex: 'taxCategoryName',
-      width: 120,
+      width: 150,
       render: (text, record, index) => {
         return (
           <Input
@@ -381,7 +382,7 @@ class BillApproveDetail extends React.Component  {
     }, {
       title: '优惠政策类型',
       dataIndex: 'prefPolicyType',
-      width: 100,
+      width: 130,
       render: (text, record, index) => {
         return (
           <Select
@@ -489,7 +490,7 @@ class BillApproveDetail extends React.Component  {
             columns={columns}
             pagination={false}
             dataSource={this.state.dataSource}
-            scroll={{ x: '1500px' }}
+            scroll={{ x: '1600px' }}
           />
           <Row gutter={40}>
             <Col span={24}>

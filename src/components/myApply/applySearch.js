@@ -214,16 +214,19 @@ export default class ApplySearchCon extends React.Component {
     return (
       <div>
         <ApplySearchConWithForm onQuery={this.handleChangeParam} loading={this.state.loading} />
-        <ApplyInfoModal
-          infoVisitable={this.state.infoVisitable}
-          closeClaim={this.closeModalClaim}
-          applyComfirm={this.applyComfirm}
-          applyReject={this.applyReject}
-          applyData={this.state.applyData}
-          applyInfoData={this.props.myApply.getMyApplyInfo}
-          billApplySave={this.props.billApplySave}
-          billSaveSuccess={billSaveSuccess}
-        />
+        {
+          this.state.infoVisitable ?
+            <ApplyInfoModal
+              infoVisitable={this.state.infoVisitable}
+              closeClaim={this.closeModalClaim}
+              applyComfirm={this.applyComfirm}
+              applyReject={this.applyReject}
+              applyData={this.state.applyData}
+              applyInfoData={this.props.myApply.getMyApplyInfo}
+              billApplySave={this.props.billApplySave}
+              billSaveSuccess={billSaveSuccess}
+            /> : null
+        }
         {
           this.state.noApplyInfoVisitable ?
             <NoApplyInfo
