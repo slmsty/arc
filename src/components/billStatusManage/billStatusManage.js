@@ -30,6 +30,7 @@ export default class BillStatusCon extends React.Component {
     fileDownDis: false,
     fileDownData: [],
     firstID: '',
+    sendLoading: false,
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -45,6 +46,15 @@ export default class BillStatusCon extends React.Component {
        this.setState({
          firstID: nextProps.billStatusManage.getBillStatusManageList.result[0].billingApplicationId,
        })
+     }
+     if(this.props.billStatusManage.sendResult !== nextProps.billStatusManage.sendResult) {
+       const msg = nextProps.billStatusManage.sendResult.applicationStatusResults[0].errorMessage
+       if(msg) {
+         message.error(msg)
+       } else {
+         message.success('发票申请信息传送成功')
+         this.setState({sendLoading: false})
+       }
      }
   }
   queryParam = {
@@ -101,7 +111,6 @@ export default class BillStatusCon extends React.Component {
         cancelDis: true,
       })
     }
-    console.log(selectedRows)
     this.setState({ selectedRowKeys, selectedRows }, () => {
       if (this.state.selectedRows.length > 0) {
         this.subSearch(this.state.selectedRows[0].billingApplicationId)
@@ -293,13 +302,18 @@ export default class BillStatusCon extends React.Component {
     }
     this.props.fileDown(params)
   }
+  sendInvoiceToTax = () => {
+    const application = this.state.selectedRows ? this.state.firstID : this.state.selectedRows[0].billingApplicationId
+    this.props.invoiceSendTax(application)
+    this.setState({sendLoading: true})
+  }
   render() {
     const { result, count, pageCount, pageSize }  = this.props.billStatusManage.getBillStatusManageList
     const billApproveResultColumns = [
       {
         title: '数据状态',
         dataIndex: 'status',
-        width: 100,
+        width: 120,
         fixed: 'left',
       },
       {
@@ -342,12 +356,6 @@ export default class BillStatusCon extends React.Component {
         dataIndex: 'taxIncludeAmount',
         width: 100,
         render: (text, record, index) => (text ? currency(text) : text),
-      },
-      {
-        title: '税率',
-        dataIndex: 'taxRate',
-        width: 100,
-        render: (text) => (`${text * 100}%`)
       },
       {
         title: '不含税金额',
@@ -444,7 +452,7 @@ export default class BillStatusCon extends React.Component {
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />
         <Button onClick={this.showGlDate}>传送AP</Button>
         <Button style={{marginLeft: '10px'}} onClick={this.cancelHandle} disabled={this.state.cancelDis}>撤销</Button>
-        <Button style={{marginLeft: '10px'}} type="primary" ghost>传送金税</Button>
+        <Button style={{marginLeft: '10px'}} loading={this.state.sendLoading} type="primary" ghost onClick={() => this.sendInvoiceToTax()}>传送金税</Button>
         <br />
         <br />
         <h3>开票申请</h3>
@@ -494,7 +502,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveResultColumns}
           size="small"
-          scroll={{ x: '1700px' }}
+          scroll={{ x: '1560px' }}
           loading={this.state.loading}
           pagination ={false}
           dataSource={this.props.billStatusManage.getBillStatusBillResultList}

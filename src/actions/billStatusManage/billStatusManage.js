@@ -105,3 +105,18 @@ export function fileDown(queryParam) {
   }
 }
 
+export function invoiceSendTax(applicationId) {
+  return {
+    [httpApi]: {
+      url: `/arc/application/invoice/sendtax`,
+      options: {
+        method: 'POST',
+        body: {
+          applicationId: applicationId,
+        },
+      },
+      types: ['INVOICE_SEND_TAX_SUCCESS'],
+    },
+  }
+}
+
