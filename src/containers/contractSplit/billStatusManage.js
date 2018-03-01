@@ -11,6 +11,7 @@ import { myApplyInfo } from '../../actions/myApply'
 const mapStateToProps = state => ({
   billStatusManage: state.billStatusManage,
   myApply: state.myApply,
+  currentUser: state.common.user,
 })
 const mapDispatchToProps = dispatch => (
   bindActionCreators({

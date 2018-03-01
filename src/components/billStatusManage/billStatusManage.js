@@ -42,7 +42,7 @@ export default class BillStatusCon extends React.Component {
      if (this.props.billStatusManage.cancelApproveRefresh !== nextProps.billStatusManage.cancelApproveRefresh) {
       this.handleQuery()
      }
-     if(nextProps.billStatusManage.getBillStatusManageList.result.length > 0) {
+     if(this.props.billStatusManage.getBillStatusManageList !== nextProps.billStatusManage.getBillStatusManageList && nextProps.billStatusManage.getBillStatusManageList.result.length > 0) {
        const result = nextProps.billStatusManage.getBillStatusManageList.result[0]
        this.setState({
          firstID: nextProps.billStatusManage.getBillStatusManageList.result[0].billingApplicationId,
@@ -532,8 +532,9 @@ export default class BillStatusCon extends React.Component {
               disableApprove={this.disableApprove}
               DetailList={this.props.billStatusManage.getBillStatusDetailList}
               applyData={this.state.selectedRows ? this.state.selectedRows : result}
+              currentUser={this.props.currentUser}
             />
-            : ''
+            : null
         }
         <NoApplyInfo
           infoVisitable={this.state.noApplyInfoVisitable}
