@@ -13,6 +13,7 @@ import MyDtatePicker from '../common/myDatePicker'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import currency from '../../util/currency'
 import percent from '../../util/percent'
+import _ from 'lodash'
 import './contract.less'
 import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select, message, InputNumber } from 'antd'
 
@@ -52,7 +53,7 @@ const EditableCell = ({onChange, column, value,disable}) => {
 class ContractSplitModal extends React.Component{
   constructor(props) {
     super(props)
-    const tableDeatail = props.tableDetail.slice(0)
+    const tableDeatail = _.cloneDeep(props.tableDetail.slice(0))
     const data = props.data[0]
     let countTaskCostDataList = {
       task1Cost: data.task1Cost ? data.task1Cost : 0,
@@ -82,6 +83,7 @@ class ContractSplitModal extends React.Component{
     })
     this.state = {
       dataSource: dataSource.slice(0),
+      oldDataSource:_.cloneDeep(dataSource.slice(0)),
       countCatalPrice: 0.00,
       rcontent: '',
       rcontentnum: 0,
@@ -107,7 +109,7 @@ class ContractSplitModal extends React.Component{
     })
   }
   handleChange = (data) => {
-    const newData = this.state.dataSource.slice(0)
+    const newData =this.state.dataSource.slice(0)
     if(this.props.data[0].collectionProject == 'Y' && data.columns==='contractCategory'){
       if(data.No !=="ARC_PRD_1" && data.No !=="ARC_PRD_1-K" ){
         message.error('集采项目只能拆分Task1')
@@ -192,7 +194,6 @@ class ContractSplitModal extends React.Component{
       return <ProductLine disabled={this.state.editFlag} onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record.product}  indexs={index} columns={column} />
     }
     if(column ==='contractCategory'){
-      console.log('textrender',text)
       const parentOrderListLineId = record.parentOrderListLineId ? record.parentOrderListLineId : ''
       let parentCode = ''
       if (parentOrderListLineId !== '') {
@@ -257,7 +258,6 @@ class ContractSplitModal extends React.Component{
     )
   }
   handleInputChange = (value, index, column) => {
-    console.log('changeVale',value)
     let newData = this.state.dataSource.slice(0)
     const contractAmount = parseFloat(this.props.data[0].contractAmount)
     if(column==='discount') {
@@ -281,9 +281,22 @@ class ContractSplitModal extends React.Component{
       dataSource: newData,
     })
   }
+  checkType = (string) => {
+    let value = 0
+    if(string){
+      if(typeof string ==='string' || typeof text ==='number'){
+        value = string ? string : 0
+      }else if(string.length > 0){
+        value = string[1] ? string[1] : 0
+      }
+    }
+    return value
+  }
   inputChange = (newData,index) => {
-    const contractTaxRate = newData[index].contractTaxRate && newData[index].contractTaxRate[1] ? percent(newData[index].contractTaxRate[1]) : '0'
-    const returnTaxRate = newData[index].returnTaxRate && newData[index].returnTaxRate[1] ? percent(newData[index].returnTaxRate[1]) : '0'
+
+    const contractTaxRate = this.checkType(newData[index].contractTaxRate)
+    const returnTaxRate = this.checkType(newData[index].returnTaxRate)
+
     const discount = newData[index].discount  ? newData[index].discount : 0
     const listPrice = newData[index].listPrice ? newData[index].listPrice : 0
     newData[index].discountedPrice = (parseFloat(listPrice) * (1 - parseFloat(discount) * 0.01)).toFixed(2) // 折后合同额根据目录价和折扣计算出来
@@ -316,7 +329,7 @@ class ContractSplitModal extends React.Component{
     )
   }
   handleAdd = (index, flag) => {
-    const newDataSource = this.state.dataSource.slice(0)
+    const newDataSource = this.state.dataSource
     const newData = {
       parentOrderListLineId: '',
       orderListLineId: '110'+new Date().getTime(),
@@ -368,7 +381,7 @@ class ContractSplitModal extends React.Component{
   }
   // 合同拆分删除数据
   handleMinus = (index) => {
-    const newData = this.state.dataSource.slice(0)
+    const newData = this.state.dataSource
     const parentId = newData[index].orderListLineId
     for(let i = 0, flag = true ; i < newData.length ; flag ? i++ : i) {
       if (newData[i] && newData[i].parentOrderListLineId === parentId) {
@@ -575,7 +588,7 @@ class ContractSplitModal extends React.Component{
   }
   handleReturn = () => {
     this.setState({
-      dataSource: this.props.tableDetail,
+      dataSource:_.cloneDeep(this.state.oldDataSource.slice(0)),
     },()=>{
       const constractData = this.props.data[0]
       this.props.form.setFieldsValue({
@@ -583,12 +596,12 @@ class ContractSplitModal extends React.Component{
         maintainBeginDate: constractData.maintainBeginDate,
         revenueCheckout: constractData['revenueCheckout'],
         projectBuNo: [constractData.projectBuNo,constractData.projectBuNoName],
-        task1Cost: constractData.task1tCost,
-        task3tCost: constractData.task3tCost,
-        task4tCost: constractData.task4tCost,
-        task5Cost: constractData.task5Cost,
-        task9Cost: constractData.task9Cost,
-        intercompanyCost: constractData.intercompanyCost,
+        task1Cost: constractData.task1tCost ? constractData.task1tCost : 0 ,
+        task3tCost: constractData.task3tCost ? constractData.task3tCost : 0,
+        task4tCost: constractData.task4tCost ? constractData.task4tCost : 0,
+        task5Cost: constractData.task5Cost ? constractData.task5Cost : 0,
+        task9Cost: constractData.task9Cost ? constractData.task9Cost : 0,
+        intercompanyCost: constractData.intercompanyCost ? constractData.intercompanyCost : 0,
         subcontractFee: constractData.subcontractFee,
       });
     })
@@ -601,13 +614,8 @@ class ContractSplitModal extends React.Component{
       message.error('获取链接地址失败')
     }
   }
-  test = (_this) => {
-
-  }
-
   render() {
-    const dataSource = this.state.dataSource.slice(0)
-    console.log('renderdataSource',dataSource)
+    const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractDatas = this.props.data
     const constractData = constractDatas[0]
     let countCatalPrice = 0 // 合计目录价 catalogue
@@ -634,7 +642,7 @@ class ContractSplitModal extends React.Component{
     const columns = [{
       title: 'Task操作',
       dataIndex: 'taskOpration',
-      width: 115,
+      width: 120,
       textAlign: 'center',
       fixed: 'left',
       render: (text, record, index) => (

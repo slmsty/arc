@@ -26,7 +26,6 @@ class ContractSplitCon extends React.Component {
     param.salesBuNo = param.salesBuNo && param.salesBuNo ? param.salesBuNo[0] : ''
     param.operator = param.operator && param.operator[1] ? param.operator[1] : ''
     delete param.signDate
-    console.log(param)
     this.props.onQuery(param)
   }
   render() {

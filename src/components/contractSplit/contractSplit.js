@@ -69,13 +69,18 @@ const columns = [{
 },
 ]
 export default class ApplySearchCon extends React.Component {
-  state = {
-    loading: false,
-    contarctSplitModal: false,
-    splitStatus: true,
-    selectedRowKeys: '',
-    selectedRows: '',
+  constructor(props){
+    super(props)
+    this.state = {
+      loading: false,
+      contarctSplitModal: false,
+      splitStatus: true,
+      selectedRowKeys: '',
+      selectedRows: '',
+      test:false,
+    }
   }
+
   componentWillMount() {
     const screenHeight = window.screen.height
     // 屏幕高-header高64-margin8-padding12-查询条件div147.5-按钮56-翻页160
@@ -193,8 +198,13 @@ export default class ApplySearchCon extends React.Component {
       contarctSplitModal: true,
     })
   }
+  testClose = () => {
+    this.setState({
+      test: false
+    })
+  }
+
   render() {
-    console.log('parent',this.state.selectedRows)
     const { selectedRowKeys } = this.state
     const rowSelection = {
       selectedRowKeys,
@@ -227,6 +237,7 @@ export default class ApplySearchCon extends React.Component {
               tableDetail={this.state.selectedRows[0].orderListLines ? this.state.selectedRows[0].orderListLines : []}
             /> : null
         }
+
         <Row>
           <Col span={24} style={{textAlign:'right'}}>
             共{this.props.contractSplitDara.getContractList.result.length}条记录
