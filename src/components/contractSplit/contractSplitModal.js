@@ -756,9 +756,9 @@ class ContractSplitModal extends React.Component{
             <Button key="submit" onClick={this.handleOk} style={{display:this.state.editFlag ? 'none' : 'inline-block'}}>
               保存
             </Button>,
-            {/*<Button onClick={this.handleReturn} style={{display:this.state.editFlag ? 'none' : 'inline-block'}}>
+            <Button onClick={this.handleReturn} style={{display:this.state.editFlag ? 'none' : 'none'}}>
               还原
-            </Button>,*/}
+            </Button>,
             <Button key="back" onClick={this.closeModal}>
               取消
             </Button>,
