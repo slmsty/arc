@@ -43,8 +43,10 @@ export default class BillStatusCon extends React.Component {
       this.handleQuery()
      }
      if(nextProps.billStatusManage.getBillStatusManageList.result.length > 0) {
+       const result = nextProps.billStatusManage.getBillStatusManageList.result[0]
        this.setState({
          firstID: nextProps.billStatusManage.getBillStatusManageList.result[0].billingApplicationId,
+         selectedRows: [result],
        })
      }
      if(this.props.billStatusManage.sendResult !== nextProps.billStatusManage.sendResult) {
@@ -122,7 +124,6 @@ export default class BillStatusCon extends React.Component {
     const param = {
       applicationId: billingApplicationId
     }
-    console.log(param)
     this.props.getBillStatusDetail(param)
     this.props.getBillStatusContractDetail(param)
     this.props.getBillStatusBillResult(param)
@@ -256,7 +257,6 @@ export default class BillStatusCon extends React.Component {
     })
   }
   disableApprove = (param) => {
-    console.log(param)
     this.props.disableApprove(param).then((res)=>{
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('作废成功')
@@ -295,6 +295,7 @@ export default class BillStatusCon extends React.Component {
       fileDownData: [],
     })
   }
+
   fileDown = (id, name) => {
     const params = {
       objectId: id,
@@ -302,11 +303,13 @@ export default class BillStatusCon extends React.Component {
     }
     this.props.fileDown(params)
   }
+  /* 传送金税 */
   sendInvoiceToTax = () => {
-    const application = this.state.selectedRows ? this.state.firstID : this.state.selectedRows[0].billingApplicationId
+    const application = this.state.selectedRows[0].billingApplicationId
     this.props.invoiceSendTax(application)
     this.setState({sendLoading: true})
   }
+
   render() {
     const { result, count, pageCount, pageSize }  = this.props.billStatusManage.getBillStatusManageList
     const billApproveResultColumns = [
@@ -451,8 +454,19 @@ export default class BillStatusCon extends React.Component {
       <div>
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />
         <Button onClick={this.showGlDate}>传送AP</Button>
-        <Button style={{marginLeft: '10px'}} onClick={this.cancelHandle} disabled={this.state.cancelDis}>撤销</Button>
-        <Button style={{marginLeft: '10px'}} loading={this.state.sendLoading} type="primary" ghost onClick={() => this.sendInvoiceToTax()}>传送金税</Button>
+        <Button
+          style={{marginLeft: '10px'}}
+          onClick={this.cancelHandle}
+          disabled={this.state.cancelDis}
+        >撤销</Button>
+        <Button
+          style={{marginLeft: '10px'}}
+          loading={this.state.sendLoading}
+          disabled={this.state.selectedRows.length > 0 ? this.state.selectedRows[0].status !== '开票失败' : true}
+          type="primary"
+          ghost
+          onClick={() => this.sendInvoiceToTax()}
+        >传送金税</Button>
         <br />
         <br />
         <h3>开票申请</h3>

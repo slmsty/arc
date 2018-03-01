@@ -7,7 +7,7 @@ import currency from '../../util/currency'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from '../billApplication/selectSearch'
 import moment from 'moment'
-import { Modal, Row, Col, Button, Input, Form, Table, message, Select,DatePicker } from 'antd'
+import { Modal, Row, Col, Button, Input, Form, Table, message, Select, DatePicker, InputNumber } from 'antd'
 import { detailColumns } from '../billApplication/billColumns'
 
 const { TextArea } = Input
@@ -171,7 +171,6 @@ class CancelDetail extends React.Component {
     }
     let dataSource = this.props.data
     let detailDatas = this.props.applyData[0]
-    console.log('detailDatas',detailDatas)
     const detailData = [{
       title: '购买方',
       customerName: detailDatas.customerName,
@@ -185,144 +184,135 @@ class CancelDetail extends React.Component {
       address: detailDatas.companyAddressPhone,
       bankAccount: detailDatas.companyBackAccount,
     }]
-    const columns = [{
-      title: '项目编码',
-      dataIndex: 'projectCode',
-      width: 180,
-      textAlign: 'center',
-      fixed: 'left',
-    }, {
-      title: '签约公司',
-      dataIndex: 'company',
-      width: 300,
-    }, {
-      title: '合同编码',
-      dataIndex: 'contractCode',
-      width: 200,
-    }, {
-      title: '付款条件',
-      dataIndex: 'paymentTerm',
-      width: 300,
-    }, {
-      title: '付款条款',
-      dataIndex: 'paymentName',
-      width: 100,
-    }, {
-      title: '付款阶段',
-      dataIndex: 'paymentPhrases',
-      width: 100,
-    }, {
-      title: '付款金额',
-      dataIndex: 'paymentAmount',
-      width: 150,
-      render: (text, record, index) => (text ? currency(text) : text),
-    }, {
-      title: 'Billed AR金额',
-      dataIndex: 'arAmount',
-      width: 150,
-      render: (text, record, index) => (text ? currency(text) : text),
-    }, {
-      title: '已开票金额',
-      dataIndex: 'invoiceAmount',
-      width: 100,
-      render: (text, record, index) => (text ? currency(text) : text),
-    }, {
-      title: '作废金额',
-      dataIndex: 'invalidAmount',
-      width: 150,
-      render: (text, record, index) => {
-        return(
-          <Input
-            defaultValue={text ? currency(text) : text}
-            onChange={()=>this.handleChange(index)}
+    const columns = [
+      {
+        title: '操作',
+        dataIndex: 'action',
+        width: 60,
+        fixed: 'left',
+        render: (text, record, index) => (
+          <div>
+            {
+              record.isParent === 1 ?
+                <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
+                : null
+            }
+            {
+              record.isParent === 0 ?
+                <Button type="primary" ghost onClick={() => this.handleDelete(record)}>-</Button>
+                : null
+            }
+          </div>
+        )
+      }, {
+        title: '组号',
+        dataIndex: 'groupNo',
+        width: 50,
+        fixed: 'left',
+      }, {
+        title: '开票内容',
+        dataIndex: 'billingContent',
+        width: 200,
+        render: (text, record, index) => (
+          <SelectSearch
+            url="/arc/billingApplication/billingContent/search"
+            columns={contentCols}
+            label="开票内容"
+            width="1000px"
+            idKey="billingRecordId"
+            valueKey="billingContentName"
+            value={['', this.state.dataSource[index]['billingContent']]}
+            onChange={(v) => this.handleChange(v, 'billingContent', index)}
           />
         )
-      },
-    },
-    ]
-    const contentsColumns = [{
-      title: '开票内容',
-      dataIndex: 'billingContent',
-      width: 150,
-      render: (text, record, index) => (
-        <SelectSearch
-          url="/arc/billingApplication/billingContent/search"
-          columns={contentCols}
-          label="开票内容"
-          idKey="billingRecordId"
-          valueKey="billingContentName"
-          value={['',this.state.contentData.length ? this.state.contentData[index]['billingContent'] : '']}
-          onChange={(v) => this.handleContentChange(v, 'billingContent', index)}
-        />
-      )
-    }, {
-      title: '规格型号',
-      dataIndex: 'specificationType',
-      width: 100,
-      render:(text,record,index)=>{
-        return(
-          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'specificationType')} /> : text
+      }, {
+        title: '规格型号',
+        dataIndex: 'specificationType',
+        width: 100,
+        render: (text, record, index) => (
+          <Input placeholder="规格型号" value={this.state.dataSource[index]['specificationType']} onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}/>
         )
-      },
-    }, {
-      title: '单位',
-      dataIndex: 'unit',
-      width: 100,
-      render:(text,record,index)=>{
-        return(
-          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'unit')} /> : text
+      }, {
+        title: '单位',
+        dataIndex: 'unit',
+        width: 80,
+        render: (text, record, index) => (
+          <Input placeholder="单位" value={this.state.dataSource[index]['unit']}  onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
         )
-      },
-    }, {
-      title: '数量',
-      dataIndex: 'quantity',
-      width: 100,
-      render:(text,record,index)=>{
-        return(
-          record.addFlag ? <Input defaultValue={1} onChange={(e)=>this.handleChangle(e,index,'quantity')} /> : text
+      }, {
+        title: '数量',
+        dataIndex: 'quantity',
+        width: 70,
+        render: (text, record, index) => (
+          <InputNumber
+            placeholder="数量"
+            defaultValue="1"
+            min={0}
+            value={this.state.dataSource[index]['quantity']}
+            onChange={(value) => this.handleChange(value, 'quantity', index)} />
         )
-      },
-    }, {
-      title: '单价',
-      dataIndex: 'unitPrice',
-      width: 100,
-      render:(text,record,index)=>{
-        return(
-          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'unitPrice')} /> : (text ? currency(text) : text)
+      }, {
+        title: '单价',
+        dataIndex: 'unitPrice',
+        width: 100,
+        render: (text, record, index) => (
+          <InputNumber
+            placeholder="单价"
+            min={0}
+            value={this.state.dataSource[index]['unitPrice']}
+            onChange={(value) => this.handleChange(value, 'unitPrice', index)}
+          />
         )
-      },
-    }, {
-      title: '金额',
-      dataIndex: 'billingAmount',
-      width: 100,
-      render:(text,record,index)=>{
-        return(
-          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'billingAmount')} /> : (text ? currency(text) : text)
+      }, {
+        title: '不含税金额',
+        dataIndex: 'billingAmountExcludeTax',
+        width: 100,
+        render: (text, record, index) => (
+          <InputNumber
+            placeholder="不含税金额"
+            min={0}
+            value={this.state.dataSource[index].billingAmountExcludeTax}
+            onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
         )
-      },
-    }, {
-      title: '税率',
-      dataIndex: 'billingTaxRate',
-      width: 100,
-      render:(text,record,index)=>{
-        return(
-          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'billingTaxRate')} /> : text
+      }, {
+        title: '含税金额',
+        dataIndex: 'billingAmount',
+        width: 100,
+        render: (text, record, index) => (
+          <InputNumber
+            placeholder="含税金额"
+            min={0}
+            defaultValue={record.billingAmount}
+            value={this.state.dataSource[index]['billingAmount']}
+            onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
         )
-      },
-    }, {
-      title: '税额',
-      dataIndex: 'billingTaxAmount',
-      width: 100,
-      render:(text,record,index)=>{
-        return(
-          record.addFlag ? <Input onChange={(e)=>this.handleChangle(e,index,'billingTaxAmount')} /> : (text ? currency(text) : text)
+      }, {
+        title: '税率',
+        dataIndex: 'billingTaxRate',
+        width: 100,
+        render: (text, record, index) => (
+          <SelectInvokeApi
+            typeCode="BILLING_APPLICATION"
+            paramCode="TAX_RATE"
+            placeholder="税率"
+            hasEmpty={false}
+            value={`${this.state.dataSource[index]['billingTaxRate']}`}
+            onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
+          />
         )
-      },
-    }, {
-      title: '组号',
-      dataIndex: 'groupNo',
-      width: 100,
-    }]
+      }, {
+        title: '税额',
+        dataIndex: 'billingTaxAmount',
+        width: 100,
+        render: (text, record, index) => (
+          <InputNumber
+            placeholder="税额"
+            min={0}
+            value={this.state.dataSource[index]['billingTaxAmount']}
+            onChange={(value) => this.handleChange(value, 'billingTaxAmount', index)}
+          />
+        )
+      }]
     const { selectedRowKeys } = this.state
     const rowSelection = {
       selectedRowKeys,
@@ -403,34 +393,31 @@ class CancelDetail extends React.Component {
                     scroll={{x: '750px'}}
                     dataSource={detailData}
                   />
-                  <br /><br />
-                  <Button onClick={()=>this.editContentLine('add')}>+</Button>&nbsp;&nbsp;
-                  <Button onClick={()=>this.editContentLine('del')}>-</Button>&nbsp;&nbsp;
-                  <Button onClick={this.inSameBill}>同一开票</Button>
+                  <div className="add-btns">
+                    <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
+                  </div>
                   <Table
-                    rowKey="receiptClaimId"
                     rowSelection={rowSelection}
-                    columns={contentsColumns}
-                    pagination={false}
+                    style={{marginBottom: '10px'}}
+                    rowKey="lineNo"
                     bordered
                     size="small"
-                    scroll={{x: '750px'}}
-                    dataSource={this.state.contentData.length ? this.state.contentData : this.props.DetailList}
+                    columns={columns}
+                    pagination={false}
+                    dataSource={this.state.dataSource}
+                    scroll={{ x: 1160 }}
                   />
                   <br /><br />
                   <div>
                     <span style={{display:'inline-block'}}>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</span>
                     <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea value={this.state.remark} onChange={(e)=>this.onTextAreaChange(e)} /></span>
-
                   </div>
                   <div style={{marginTop:'20px'}}>
                     <span style={{display:'inline-block'}}>开票要求：</span>
                     <span style={{display:'inline-block',verticalAlign:'text-top',width:'931px'}}><TextArea value={this.state.invoiceRequire} onChange={(e)=>this.onTextAreaRequireChange(e)} /></span>
-
                   </div>
                 </div>
-
-              : ''
+              : null
             }
           </Form>
         </Modal>

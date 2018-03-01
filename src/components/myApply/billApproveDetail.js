@@ -98,7 +98,6 @@ class BillApproveDetail extends React.Component  {
           total += (d.billingAmount ? d.billingAmount : 0)
         }
       })
-      console.log(total + value)
       //校验所有拆分子项的金额必须小于父级含税金额
       const childAmount = total + value
       dataSource[result.lineNo][col] = result.totalAmount - childAmount
