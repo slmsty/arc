@@ -112,7 +112,7 @@ class BillDetail extends React.Component  {
             开票日期: {billingDate}
           </Col>
           {
-            this.props.applyType === 'BILLING_RED' ?
+            this.props.applyType === 'BILLING_RED' || this.props.applyType === 'BILLING_INVALID' ?
               <Col span={8} key={2}>
                 是否收到发票: {receiptOutcome}
               </Col> : null
