@@ -44,7 +44,7 @@ class BillStatusManageWithFormCon extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="开票申请日期">
                 {getFieldDecorator('signDate', {
-                  initialValue: [moment(), moment()],
+                  initialValue: '',
                 })(<RangePicker
                   allowClear
                   format={dateFormat}

@@ -3,7 +3,7 @@ import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from '
 import SelectSearch from './selectSearch'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import moment from 'moment'
-import { normalTypes } from './billColumns'
+import { normalTypes, advanceTypes } from './billColumns'
 import { clientCols, comCols, proCols, invoiceCols } from './billColumns'
 const FormItem = Form.Item
 const Option = Select.Option
@@ -105,7 +105,7 @@ class BillUpdate extends React.Component {
                       url="/arc/billingApplication/company/search"
                       columns={comCols}
                       label="公司名称"
-                      idKey="billingComInfoId"
+                      idKey="comId"
                       valueKey="comName"
                     />
                   )}
@@ -205,6 +205,18 @@ class BillUpdate extends React.Component {
                   </Col>
               }
             </Row>
+            {
+              advanceTypes.includes(this.props.billType) && !this.props.isAdd ?
+                <Row gutter={30}>
+                  <Col span={12} key={1}>
+                    <FormItem {...formItemLayout} label="合同名称">
+                      {getFieldDecorator('contractName', {initialValue : record.contractName, rules: [{ required: true }]})(
+                        <Input placeholder="请输入合同名称"/>
+                      )}
+                    </FormItem>
+                  </Col>
+                </Row> : null
+            }
             {
               this.state.reasonId === 'other' ?
                 <Row gutter={30}>

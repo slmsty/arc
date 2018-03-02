@@ -38,7 +38,7 @@ const BreadcrumbContainer = withRouter((props) => {
   })
   const breadcrumbItems = [(
     <Breadcrumb.Item key="home">
-      <Link to="/">首页</Link>
+      <Link to="/">ARC.应收结算</Link>
     </Breadcrumb.Item>
   )].concat(extraBreadcrumbItems)
   return (

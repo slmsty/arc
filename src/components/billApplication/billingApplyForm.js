@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Row, Col, Button, Input, Icon, Select, DatePicker } from 'antd'
 import moment from 'moment'
 import SelectInvokeApi from '../common/selectInvokeApi'
+import SelectSbu from '../common/SelectSbu'
 import './billingApplication.less'
 import MultipleInput from '../common/multipleInput'
 
@@ -10,10 +11,15 @@ const Option = Select.Option
 const { RangePicker } = DatePicker
 
 class BillingApplyForm extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      expand: false,
+    }
+  }
   handleQuery = () => {
     // 验证通过后查询
     const values = this.props.form.getFieldsValue()
-    console.log(values)
     const param = {
       ...values,
       arDateStart: values.arDate ? values.arDate[0].format('YYYY-MM-DD') : '',
@@ -140,10 +146,54 @@ class BillingApplyForm extends React.Component {
                 }
               </FormItem>
             </Col>
+            <Col span={8} key={6}>
+              <FormItem {...formItemLayout} label="SBU">
+                {
+                  getFieldDecorator('SBU', {
+                    initialValue: ''
+                  })(
+                    <SelectSbu />
+                  )
+                }
+              </FormItem>
+            </Col>
           </Row>
+          {
+            this.state.expand ?
+              <Row gutter={40}>
+                <Col span={8} key={4}>
+                  <FormItem {...formItemLayout} label="区域">
+                    {getFieldDecorator('region', {
+                      initialValue: '',
+                    })(
+                      <Input
+                        placeholder="请输入区域"
+                      />
+                    )
+                    }
+                  </FormItem>
+                </Col>
+                <Col span={8} key={5}>
+                  <FormItem {...formItemLayout} label="省份">
+                    {
+                      getFieldDecorator('province', {
+                        initialValue: ''
+                      })(
+                        <Input
+                          placeholder="请输入省份"
+                        />
+                      )
+                    }
+                  </FormItem>
+                </Col>
+              </Row> : null
+          }
           <Row gutter={40}>
             <Col style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />查询</Button>
+              <a style={{ marginLeft: 8, fontSize: 12 }} onClick={() => {this.setState({expand: !this.state.expand})}}>
+                {this.state.expand ? '收起' : '展开'} <Icon type={this.state.expand ? 'up' : 'down'} />
+              </a>
             </Col>
           </Row>
         </Form>

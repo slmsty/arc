@@ -512,11 +512,8 @@ class BillDetail extends React.Component {
           className="ant-search-form"
         >
           <Row>
-            <Col span={4}>
-              <h2>合同OrderList信息</h2>
-            </Col>
-            <Col span={4}>
-              <button onClick={() => window.open(this.props.contractUrl[0])}>合同审批表及合同扫描件</button>
+            <Col span={14}>
+              <Button className="scan-document" type="primary" ghost onClick={() => window.open(this.props.contractUrl[0])}>合同审批表及合同扫描件</Button>
             </Col>
           </Row>
           <Row gutter={40}>
@@ -602,6 +599,7 @@ class BillDetail extends React.Component {
                       <Button>
                         <Icon type="upload" />点击上传
                       </Button>
+                      <span className="file-tip">说明：未大签项目需要上传合同附件</span>
                     </Upload>
                   )
                 }

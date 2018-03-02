@@ -285,6 +285,7 @@ export default class BillingApplication extends React.Component {
       contractItems,
     }
     this.props.billApplyEdit(param)
+    this.props.getContractUrl(this.state.selectedRows[0].contractId)
   }
 
   handleAddBill = () => {
@@ -315,7 +316,7 @@ export default class BillingApplication extends React.Component {
       return (
         <div>
           <Button type="primary" ghost onClick={() => this.handleAddBill()}>增加</Button>
-          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
+          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票</Button>
         </div>
       )
     } else if (redTypes.includes(type)) {
@@ -328,7 +329,7 @@ export default class BillingApplication extends React.Component {
       return (
         <div>
           <Button type="primary" ghost onClick={() => this.setState({otherAddVisible: true, isAdd: true})}>增加</Button>
-          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票编辑</Button>
+          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票</Button>
         </div>
       )
     }
@@ -349,12 +350,11 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
-    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave, billApplyCheck, currentUser } = this.props
+    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave, billApplyCheck, currentUser, contractUrl } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) ? 'checkbox' : 'radio',
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({selectedRows: selectedRows})
-        this.props.getUrl(selectedRows[0])
       }
     }
     const { isAdd, updateVisible, otherAddVisible } = this.state
@@ -384,6 +384,7 @@ export default class BillingApplication extends React.Component {
             billApplySave={billApplySave}
             billApplyCheck={billApplyCheck}
             currentUser={currentUser}
+            contractUrl={contractUrl}
           /> : null
         }
         {

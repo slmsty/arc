@@ -193,6 +193,19 @@ export const billApplyCheck = (params) => {
   }
 }
 
+// 获取审批表链接地址
+export function getContractUrl(contractId) {
+  return {
+    [httpApi]: {
+      url: `/arc/contract/split/contractUrl/${contractId}`,
+      options: {
+        method: 'GET',
+      },
+      types: ['GET_CONTRACT_URL_SUCCESS'],
+    },
+  }
+}
+
 export const hideDetailModal = () => (
   {type: 'HIDE_DETAIL_MODAL'}
 )

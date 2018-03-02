@@ -356,13 +356,22 @@ export default class BillStatusCon extends React.Component {
       },
       {
         title: '含税金额',
-        dataIndex: 'taxIncludeAmount',
+        dataIndex: 'taxAmount',
         width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
+        render: (text, record, index) => {
+          const taxAmount = parseFloat(record.taxExcludeAmount) + parseFloat(record.taxIncludeAmount)
+          return currency(taxAmount)
+        },
       },
       {
         title: '不含税金额',
         dataIndex: 'taxExcludeAmount',
+        width: 100,
+        render: (text, record, index) => (text ? currency(text) : text),
+      },
+      {
+        title: '税额',
+        dataIndex: 'taxIncludeAmount',
         width: 100,
         render: (text, record, index) => (text ? currency(text) : text),
       },
