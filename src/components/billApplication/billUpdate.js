@@ -1,7 +1,8 @@
 import React from 'react'
 import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from 'antd'
-import SelectSearch from './selectSearch'
+import SelectInvoice from '../common/SelectInvoice'
 import SelectInvokeApi from '../common/selectInvokeApi'
+import SelectSearch from './selectSearch'
 import moment from 'moment'
 import { normalTypes, advanceTypes } from './billColumns'
 import { clientCols, comCols, proCols, invoiceCols } from './billColumns'
@@ -181,7 +182,7 @@ class BillUpdate extends React.Component {
                       {
                         getFieldDecorator('billingOutcomeId',{
                           initialValue: [record.billingOutcomeId, record.outcomeInvoiceNumber],
-                        })(<SelectSearch
+                        })(<SelectInvoice
                           url="/arc/billingApplication/outcome/search"
                           columns={invoiceCols}
                           label="关联发票"

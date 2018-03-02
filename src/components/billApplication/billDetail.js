@@ -518,7 +518,7 @@ class BillDetail extends React.Component {
           </Row>
           <Row gutter={40}>
             <Col span={8} key={1}>
-              <FormItem {...formItemLayout} label="费用承担着">
+              <FormItem {...formItemLayout} label="费用承担者">
                 {getFieldDecorator('costBear')(
                   <SelectInvokeApi
                     typeCode="BILLING_APPLICATION"
