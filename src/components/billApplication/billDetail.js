@@ -123,6 +123,12 @@ class BillDetail extends React.Component {
   handleOk = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      this.state.dataSource.map(record => {
+        if(record.billingAmount <= 0) {
+          message.error('开票含税金额必须大于0')
+          err = true
+        }
+      })
       if (!err) {
         this.setState({loading: true})
         const { custInfo, comInfo } = this.props.detail
@@ -505,6 +511,14 @@ class BillDetail extends React.Component {
         <Form
           className="ant-search-form"
         >
+          <Row>
+            <Col span={4}>
+              <h2>合同OrderList信息</h2>
+            </Col>
+            <Col span={4}>
+              <button onClick={() => window.open(this.props.contractUrl[0])}>合同审批表及合同扫描件</button>
+            </Col>
+          </Row>
           <Row gutter={40}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="费用承担着">

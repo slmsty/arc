@@ -5,7 +5,6 @@ import './billApproveDetail.css'
 
 class BillDetail extends React.Component  {
   render() {
-    console.log(this.props)
     const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, receiptOutcome, fileName, filePath } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
@@ -88,7 +87,7 @@ class BillDetail extends React.Component  {
             columns={proColumns}
             bordered
             size="small"
-            scroll={{ x: '1480px' }}
+            scroll={{ x: '1570px' }}
             dataSource={contractList}
             pagination={false}
           />

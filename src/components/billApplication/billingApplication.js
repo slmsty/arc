@@ -113,11 +113,11 @@ export default class BillingApplication extends React.Component {
         width: 100,
       }, {
         title: '已开票金额',
-        dataIndex: 'alreadyBillingAmount',
+        dataIndex: 'outcomeAmount',
         width: 80,
       }, {
         title: '已申请金额',
-        dataIndex: 'applyIngAndBillingAmount',
+        dataIndex: 'applyIngAmount',
         width: 120,
       }, {
         title: '提前开票原因',
@@ -165,11 +165,11 @@ export default class BillingApplication extends React.Component {
         width: 270,
       }, {
         title: '已申请金额',
-        dataIndex: 'invoiceAmount',
+        dataIndex: 'applyIngAmount',
         width: 120,
       }, {
         title: '已开票金额',
-        dataIndex: 'billingAmount',
+        dataIndex: 'outcomeAmount',
         width: 120,
       }, {
         title: '项目编码',
@@ -224,11 +224,11 @@ export default class BillingApplication extends React.Component {
         width: 200
       }, {
         title: '已申请金额',
-        dataIndex: 'invoiceAmount',
+        dataIndex: 'applyIngAmount',
         width: 100,
       }, {
         title: '已开票金额',
-        dataIndex: 'billingAmount',
+        dataIndex: 'outcomeAmount',
         width: 100,
       }, {
         title: '项目编码',
@@ -354,6 +354,7 @@ export default class BillingApplication extends React.Component {
       type: normalTypes.includes(this.state.currentType) ? 'checkbox' : 'radio',
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({selectedRows: selectedRows})
+        this.props.getUrl(selectedRows[0])
       }
     }
     const { isAdd, updateVisible, otherAddVisible } = this.state

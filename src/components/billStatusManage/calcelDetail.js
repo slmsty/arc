@@ -29,12 +29,15 @@ class CancelDetail extends React.Component {
   state = {
     selectedRowKeys: '',
     selectedRows: '',
+    count: 1,
     disableDis: true,
     showNewApplayDis: true,
     contentData: [],
     invoiceRequire: '',
     remark: '',
     dataSource: [],
+    currentNo: 1,
+    totalAmount: 0,
   }
   componentWillMount() {
     let data = []
@@ -159,6 +162,7 @@ class CancelDetail extends React.Component {
 
   billingUnify = () => {
     let { selectedRows, currentNo, dataSource } = this.state
+    console.log(selectedRows, currentNo, dataSource)
     //判断是否存在不一致组号
     const groupNo = selectedRows[0].groupNo
     selectedRows.map(record => {
@@ -214,6 +218,16 @@ class CancelDetail extends React.Component {
       address: detailDatas.companyAddressPhone,
       bankAccount: detailDatas.companyBackAccount,
     }]
+    const rowSelection = {
+      type: 'checkbox',
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.setState({
+          selectedRows,
+          selectedRowKeys
+        })
+      },
+      selectedRowKeys: this.state.selectedRowKeys,
+    }
     const columns = [
       {
         title: '操作',
@@ -344,11 +358,6 @@ class CancelDetail extends React.Component {
         )
       }]
     const { selectedRowKeys } = this.state
-    const rowSelection = {
-      selectedRowKeys,
-      type: 'checkBox',
-      onChange: this.onSelectChange,
-    }
     const formItemLayout1 = {
       labelCol: { span: 3 },
       wrapperCol: { span: 21 },

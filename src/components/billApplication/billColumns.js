@@ -117,7 +117,7 @@ const proColumns = [{
 }, {
   title: '签约公司',
   dataIndex: 'company',
-  width: 180,
+  width: 240,
 }, {
   title: '合同编码',
   dataIndex: 'contractCode',
@@ -148,8 +148,12 @@ const proColumns = [{
   width: 80,
 }, {
   title: '已申请金额',
-  dataIndex: 'billingAmount',
-  width: 80,
+  dataIndex: 'applyIngAmount',
+  width: 100,
+}, {
+  title: '已开票金额',
+  dataIndex: 'outcomeAmount',
+  width: 100,
 }]
 
 const billDetailColumns = [{
