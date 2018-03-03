@@ -16,6 +16,7 @@ class BillApproveDetail extends React.Component  {
     const dataSource = props.serviceDetail.appLineList.map(detail => ({
       ...detail,
       isParent: 1,
+      quantity: detail.quantity ? detail.quantity : 1,
       lineNo: detail.lineNo - 1,
       totalAmount: detail.billingAmount ? detail.billingAmount : 0,
       })
@@ -273,7 +274,7 @@ class BillApproveDetail extends React.Component  {
       render: (text, record, index) => (
         <InputNumber
           placeholder="数量"
-          defaultValue={this.state.dataSource[index]['quantity'] ? this.state.dataSource[index]['quantity'] : 1}
+          defaultValue={this.state.dataSource[index]['quantity']}
           onChange={(value) => this.handleChange(value, 'quantity', index)} />
       )
     }, {
