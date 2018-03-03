@@ -35,7 +35,14 @@ class BillApproveDetail extends React.Component  {
 
   componentWillReceiveProps(nextProps) {
     if(this.props.applicationIds !== nextProps.applicationIds && nextProps.applicationIds.length > 0) {
-      console.log(nextProps.applicationIds)
+      const newSources = this.state.dataSource.map((record, index) => ({
+        ...record,
+        billingAppLineId: nextProps.applicationIds[index]
+      })
+      )
+      this.setState({
+        dataSource: newSources
+      })
     }
   }
 
