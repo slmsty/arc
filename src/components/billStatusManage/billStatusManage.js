@@ -495,7 +495,7 @@ export default class BillStatusCon extends React.Component {
         <h3>开票申请详情</h3>
         <br />
         <Table
-          rowKey="arBillingId"
+          rowKey="lineNo"
           bordered
           columns={billApproveInfoColumns}
           size="small"

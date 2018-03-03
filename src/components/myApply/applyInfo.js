@@ -162,6 +162,7 @@ class ApplyInfoModal extends React.Component {
                     isEdit={this.props.isEdit === 'Y' ? true : false}
                     applyType={applyInfoDatas.serviceType}
                     billApplySave={this.props.billApplySave}
+                    applicationIds={this.props.applicationIds}
                   />
                 </div>
                 : null

@@ -31,6 +31,13 @@ class BillApproveDetail extends React.Component  {
       totalAmount: 0,
     }
   }
+
+  componentWillReceiveProps(nextProps) {
+    if(this.props.applicationIds !== nextProps.applicationIds && nextProps.applicationIds.length > 0) {
+      console.log(nextProps.applicationIds)
+    }
+  }
+
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;
     const newData = {
@@ -41,7 +48,7 @@ class BillApproveDetail extends React.Component  {
       billingContent: '',
       specificationType: '',
       unit: '',
-      quantity: '',
+      quantity: 1,
       unitPrice: 0,
       noRateAmount: 0,
       billingAmount: 0,
@@ -174,7 +181,7 @@ class BillApproveDetail extends React.Component  {
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
-      labelCol: { span: 7 },
+      labelCol: { span: 8 },
       wrapperCol: { span: 12 },
     }
     const span3ItemLayout = {
@@ -266,7 +273,7 @@ class BillApproveDetail extends React.Component  {
       render: (text, record, index) => (
         <InputNumber
           placeholder="数量"
-          defaultValue="1"
+          defaultValue={this.state.dataSource[index]['quantity'] ? this.state.dataSource[index]['quantity'] : 1}
           onChange={(value) => this.handleChange(value, 'quantity', index)} />
       )
     }, {
@@ -396,6 +403,7 @@ class BillApproveDetail extends React.Component  {
         )
       }
     }]
+    const isReceiveInvoice = this.props.applyType === 'BILLING_RED' || this.props.applyType === 'BILLING_INVALID'
     return (
       <div>
         <Form
@@ -452,11 +460,11 @@ class BillApproveDetail extends React.Component  {
               </FormItem>
             </Col>
             {
-              this.props.applyType === 'BILLING_RED' || this.props.applyType === 'BILLING_INVALID' ?
-                <Col span={8} key={2}>
+              isReceiveInvoice ?
+                <Col span={8} key={3}>
                   <FormItem {...formItemLayout} label="是否收到发票">
                     {
-                      getFieldDecorator('receiptOutcome', {initialValue: '', rules: [{ required: true, message: '请选择是否收到发票!' }]})(
+                      getFieldDecorator('receiptOutcome', {initialValue: '', rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
                         <Select>
                           <Option value="Y">是</Option>
                           <Option value="N">否</Option>
@@ -515,7 +523,7 @@ class BillApproveDetail extends React.Component  {
           </Row>
           <Row gutter={40}>
             <Col span={24}>
-              附件: <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+              <span className="file-label">附件:</span> <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
             </Col>
           </Row>
           <div className="add-btns">
