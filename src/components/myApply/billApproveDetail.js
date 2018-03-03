@@ -153,9 +153,50 @@ class BillApproveDetail extends React.Component  {
     })
   }
 
+  fieldCheck = (value) => {
+    return value === '' || typeof value === 'undefined' || value === 0
+  }
+
   handleOk = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      this.state.dataSource.map((record, index) => {
+        if(this.fieldCheck(record.quantity)) {
+          message.error(`请填写第${index + 1}行的数量`)
+          err = true
+        } else if(this.fieldCheck(record.unitPrice)) {
+          message.error(`请填写第${index + 1}行的单价`)
+          err = true
+        } else if(this.fieldCheck(record.billingAmountExcludeTax)) {
+          message.error(`请填写第${index + 1}行的不含税金额`)
+          err = true
+        } else if(this.fieldCheck(record.billingAmount)) {
+          message.error(`请填写第${index + 1}行的含税金额`)
+          err = true
+        } else if(record.billingTaxRate === '') {
+          message.error(`请填写第${index + 1}行的税率`)
+          err = true
+        } else if(this.fieldCheck(record.billingTaxAmount)) {
+          message.error(`请填写第${index + 1}行的税额`)
+          err = true
+        } else if(this.fieldCheck(record.taxCategoryCode)) {
+          message.error(`请填写第${index + 1}行的税收分类编码`)
+          err = true
+        } else if(this.fieldCheck(record.taxCategoryName)) {
+          message.error(`请填写第${index + 1}行的税收分类名称`)
+          err = true
+        } else if(this.fieldCheck(record.prefPolicySign)) {
+          message.error(`请填写第${index + 1}行的优惠政策`)
+          err = true
+        } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
+          message.error(`请填写第${index + 1}行的优惠政策类型`)
+          err = true
+        }
+        if(err) {
+          return
+        }
+      })
+      console.log(err)
       if (!err) {
         const params = {
           ...values,
@@ -167,7 +208,6 @@ class BillApproveDetail extends React.Component  {
             lineNo: record.lineNo + 1,
           }))
         }
-        console.log(params)
         this.props.billApplySave(params)
       }
     });

@@ -356,12 +356,9 @@ export default class BillStatusCon extends React.Component {
       },
       {
         title: '含税金额',
-        dataIndex: 'taxAmount',
+        dataIndex: 'taxIncludeAmount',
         width: 100,
-        render: (text, record, index) => {
-          const taxAmount = parseFloat(record.taxExcludeAmount) + parseFloat(record.taxIncludeAmount)
-          return currency(taxAmount)
-        },
+        render: (text, record, index) => (text ? currency(text) : text),
       },
       {
         title: '不含税金额',
@@ -371,7 +368,7 @@ export default class BillStatusCon extends React.Component {
       },
       {
         title: '税额',
-        dataIndex: 'taxIncludeAmount',
+        dataIndex: 'taxAmount',
         width: 100,
         render: (text, record, index) => (text ? currency(text) : text),
       },
@@ -495,7 +492,7 @@ export default class BillStatusCon extends React.Component {
         <h3>开票申请详情</h3>
         <br />
         <Table
-          rowKey="lineNo"
+          rowKey="billingAppLineId"
           bordered
           columns={billApproveInfoColumns}
           size="small"

@@ -149,7 +149,7 @@ class BillingApplyForm extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="SBU">
                 {
-                  getFieldDecorator('SBU', {
+                  getFieldDecorator('sbuNo', {
                     initialValue: ''
                   })(
                     <SelectSbu />

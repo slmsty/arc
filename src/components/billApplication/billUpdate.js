@@ -207,7 +207,7 @@ class BillUpdate extends React.Component {
               }
             </Row>
             {
-              advanceTypes.includes(this.props.billType) && !this.props.isAdd ?
+              advanceTypes.includes(this.props.billType) ?
                 <Row gutter={30}>
                   <Col span={12} key={1}>
                     <FormItem {...formItemLayout} label="合同名称">

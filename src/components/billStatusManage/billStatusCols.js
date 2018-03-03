@@ -70,7 +70,7 @@ const billApproveInfoColumns = [
   {
     title: '开票行号',
     dataIndex: 'lineNo',
-    width: 100,
+    width: 70,
   }, {
     title: '开票内容',
     dataIndex: 'billingContent',
