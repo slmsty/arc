@@ -156,6 +156,7 @@ class BillDetail extends React.Component {
               billingApplicationType: this.props.billType,
             },
           }, (res) => {
+            this.setState({loading: false})
             const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
             if(resultCode === '000000') {
               if(isWarning === 'Y') {
@@ -163,14 +164,10 @@ class BillDetail extends React.Component {
                   title: '提示',
                   content: warningMessage,
                   onOk() {
-                    console.log(params)
                     _this.props.billApplySave({
                       ...params,
                       billingApplicationType,
                     })
-                  },
-                  onCancel() {
-                    _this.setState({loading: false})
                   },
                 })
               } else {
@@ -178,7 +175,6 @@ class BillDetail extends React.Component {
               }
             } else {
               message.error(resultMessage)
-              this.setState({loading: false})
               return
             }
           })
@@ -502,8 +498,8 @@ class BillDetail extends React.Component {
         visible={true}
         wrapClassName="vertical-center-modal"
         footer={[
-          <Button key="submit" type="primary" loading={this.state.loading} onClick={this.handleOk}>
-            {!this.state.loading ? <Icon type="check" /> : ''}开票
+          <Button key="submit" type="primary" loading={this.state.loading || this.props.isLoading} onClick={this.handleOk}>
+            {!(this.state.loading || this.props.isLoading) ? <Icon type="check" /> : ''}开票
           </Button>,
         ]}
         onCancel={() => this.props.onCancel()}

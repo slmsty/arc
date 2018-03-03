@@ -41,7 +41,6 @@ function billApplySave(state, action) {
   return {
     ...state,
     billSaveSuccess: true,
-    applicationIds: action.response.data,
   }
 }
 

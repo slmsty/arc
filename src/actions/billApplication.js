@@ -149,7 +149,7 @@ export const billApplySave = (params) => {
         method: 'POST',
         body: params,
       },
-      types: ['BILL_APPLY_SAVE_SUCCESS'],
+      types: ['BILL_APPLY_SAVE_SUCCESS', 'LOADING_REQUEST', 'BILL_APPLY_SAVE_FAILURE'],
     },
   }
 }

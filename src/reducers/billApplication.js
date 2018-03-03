@@ -18,6 +18,7 @@ const initState = {
   billSaveSuccess: false,
   redApplySuccess: false,
   contractUrl: '',
+  failureMsg: '',
 }
 
 function loadingRequest(state) {
@@ -96,7 +97,17 @@ function billApplySave(state, action) {
   return {
     ...state,
     billSaveSuccess: true,
+    isLoading: false,
     searchEditSuccess: false,
+  }
+}
+
+function billApplySaveFailure(state, action) {
+  return {
+    ...state,
+    isLoading: false,
+    failureMsg: action.response.resultMessage,
+    billSaveSuccess: false,
   }
 }
 
@@ -143,6 +154,7 @@ export default caseReducer(initState, {
   BILL_APPLY_EDIT_SUCCESS: billApplyEdit,
   BILL_CONTENT_SEARCH_SUCCESS: billContentSearch,
   BILL_APPLY_SAVE_SUCCESS: billApplySave,
+  BILL_APPLY_SAVE_FAILURE: billApplySaveFailure,
   BILL_RED_APPLY_SUCCESS: billRedApply,
   HIDE_DETAIL_MODAL: hideDetailModal,
   GET_CONTRACT_URL_SUCCESS: getContractUrl,

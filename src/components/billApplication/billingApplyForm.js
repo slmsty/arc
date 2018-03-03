@@ -120,7 +120,7 @@ class BillingApplyForm extends React.Component {
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="开票申请分类">
                 {getFieldDecorator('billingApplicationType', {
-                  initialValue: 'BILLING_NORMAL',
+                  initialValue: 'BILLING_CONTRACT',
                 })(
                   <SelectInvokeApi
                     typeCode="BILLING_APPLICATION"
