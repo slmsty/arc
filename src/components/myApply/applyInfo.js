@@ -10,11 +10,6 @@ const { TextArea } = Input
 
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 class ApplyInfoModal extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    if(this.props.billSaveSuccess != nextProps.billSaveSuccess && nextProps.billSaveSuccess) {
-      message.success('发票申请详情保存成功!')
-    }
-  }
   applyComfirm = () => {
     const applyComfirmQueryParam = {
       arcFlowId: this.props.applyData.arcFlowId,
@@ -162,7 +157,7 @@ class ApplyInfoModal extends React.Component {
                     isEdit={this.props.isEdit === 'Y' ? true : false}
                     applyType={applyInfoDatas.serviceType}
                     billApplySave={this.props.billApplySave}
-                    applicationIds={this.props.applicationIds}
+                    taskCode={applyInfoDatas.taskCode}
                   />
                 </div>
                 : null

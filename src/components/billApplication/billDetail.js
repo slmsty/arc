@@ -490,6 +490,7 @@ class BillDetail extends React.Component {
       },
       selectedRowKeys: this.state.selectedRowKeys,
     }
+    const contractScanUrl = this.props.contractUrl[0] ? this.props.contractUrl[0].url : ''
     return (
       <Modal
         title="发票编辑"
@@ -509,7 +510,12 @@ class BillDetail extends React.Component {
         >
           <Row>
             <Col span={14}>
-              <Button className="scan-document" type="primary" ghost onClick={() => window.open(this.props.contractUrl[0])}>合同审批表及合同扫描件</Button>
+              <Button
+                className="scan-document"
+                type="primary"
+                ghost
+                onClick={() => window.open(contractScanUrl)}
+              >合同审批表及合同扫描件</Button>
             </Col>
           </Row>
           <Row gutter={40}>

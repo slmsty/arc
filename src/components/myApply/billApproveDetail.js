@@ -3,6 +3,7 @@ import { Table, Form, message, Row, Col, Input, DatePicker, Button, InputNumber,
 import SelectInvokeApi from '../common/selectInvokeApi'
 import { proColumns, billDetailColumns, detailColumns, contentCols, taxCategoryCols, normalTypes, invoiceLineCols } from '../billApplication/billColumns'
 import SearchAllColumns from '../common/SearchAllColumns'
+import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment';
 import './billApproveDetail.css'
 const FormItem = Form.Item
@@ -30,19 +31,6 @@ class BillApproveDetail extends React.Component  {
       selectedRows: [],
       currentNo: 1,
       totalAmount: 0,
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if(this.props.applicationIds !== nextProps.applicationIds && nextProps.applicationIds.length > 0) {
-      const newSources = this.state.dataSource.map((record, index) => ({
-        ...record,
-        billingAppLineId: nextProps.applicationIds[index]
-      })
-      )
-      this.setState({
-        dataSource: newSources
-      })
     }
   }
 
@@ -203,7 +191,6 @@ class BillApproveDetail extends React.Component  {
           return
         }
       })
-      console.log(err)
       if (!err) {
         const params = {
           ...values,
@@ -215,7 +202,27 @@ class BillApproveDetail extends React.Component  {
             lineNo: record.lineNo + 1,
           }))
         }
-        this.props.billApplySave(params)
+        requestJsonFetch('/arc/billingApplication/workFlowEdit', {
+            method: 'POST',
+            body: params,
+          }, (res) => {
+            console.log(res)
+            const {resultCode, resultMessage, data} = res
+            if (resultCode === '000000') {
+              message.success('发票申请详情保存成功!')
+              const newSources = this.state.dataSource.map((record, index) => ({
+                  ...record,
+                  billingAppLineId: data[index]
+                })
+              )
+              this.setState({
+                dataSource: newSources
+              })
+            } else {
+              message.error(resultMessage)
+            }
+          }
+        )
       }
     });
   }
@@ -236,7 +243,8 @@ class BillApproveDetail extends React.Component  {
       labelCol: { span: 2 },
       wrapperCol: { span: 20 },
     }
-    const { billingType, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, fileName, filePath, receiptOutcome } = this.props.serviceDetail
+    const { billingType, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList,
+      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -515,7 +523,8 @@ class BillApproveDetail extends React.Component  {
                 <Col span={8} key={3}>
                   <FormItem {...formItemLayout} label="是否收到发票">
                     {
-                      getFieldDecorator('receiptOutcome', {initialValue: receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
+                      getFieldDecorator(this.props.taskCode === 'tax_vp' ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
+                        {initialValue: this.props.taskCode === 'tax_vp' ? receiptOutcomeTaxVp : receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
                         <Select>
                           <Option value="Y">是</Option>
                           <Option value="N">否</Option>
@@ -526,6 +535,18 @@ class BillApproveDetail extends React.Component  {
                 </Col> : null
             }
           </Row>
+          {
+            this.props.taskCode === 'tax_vp' ?
+              <Row gutter={40}>
+                <Col span={12} key={1}>
+                  <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
+                    {
+                      receiptOutcome === 'Y' ? '是' : '否'
+                    }
+                  </FormItem>
+                </Col>
+              </Row> : null
+          }
           <div style={{margin: '10px 0'}}>
             <Table
               rowKey="id"
