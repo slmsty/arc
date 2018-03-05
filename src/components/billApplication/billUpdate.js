@@ -18,37 +18,43 @@ class BillUpdate extends React.Component {
     }
   }
 
-  handleOk = () => {
-    const values = this.props.form.getFieldsValue()
-    /*this.props.form.setFields({
-      billedArDate: {
-        value: values.billedArDate,
-        errors: null
+  handleOk = (e) => {
+    e.preventDefault()
+    this.props.form.validateFields((err, values) => {
+      const projectNo = this.props.isProCodeEdit ? values.projectNo : values.projectNo[1]
+      if(projectNo.startsWith('V') && this.props.billType === 'BILLING_UN_CONTRACT_PROJECT') {
+        this.props.form.setFields({
+          projectNo: {
+            errors: [new Error('项目编码不能以V打头')]
+          }
+        })
+        err = true
       }
-    })*/
-    const { record, isAdd } = this.props;
-    const params = isAdd ? {
-      ...values,
-      billingApplicationType: this.props.billType,
-      comName: values.comName[1],
-      custName: values.custName[1],
-      projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
-      receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
-    } : {
-      ...values,
-      billingApplicationType: this.props.billType,
-      arBillingId: record.arBillingId,
-      contractItemId: record.contractItemId,
-      comId: values.comName[0],
-      comName: values.comName[1],
-      custId: values.custName[0],
-      custName: values.custName[1],
-      projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
-      receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
-      billingOutcomeId: normalTypes.includes(this.props.billType) && values.billingOutcomeId ? values.billingOutcomeId[0] : '',
-    }
-    console.log(params)
-    this.props.billAction(params)
+      if(!err) {
+        const { record, isAdd } = this.props;
+        const params = isAdd ? {
+          ...values,
+          billingApplicationType: this.props.billType,
+          comName: values.comName[1],
+          custName: values.custName[1],
+          projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
+          receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
+        } : {
+          ...values,
+          billingApplicationType: this.props.billType,
+          arBillingId: record.arBillingId,
+          contractItemId: record.contractItemId,
+          comId: values.comName[0],
+          comName: values.comName[1],
+          custId: values.custName[0],
+          custName: values.custName[1],
+          projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
+          receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
+          billingOutcomeId: normalTypes.includes(this.props.billType) && values.billingOutcomeId ? values.billingOutcomeId[0] : '',
+        }
+        this.props.billAction(params)
+      }
+    })
   }
 
   render() {
