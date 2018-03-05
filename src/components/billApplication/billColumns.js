@@ -272,6 +272,69 @@ const redFontCols = [
   }
 ]
 
+const invoiceLineCols = [{
+  title: '组号',
+  dataIndex: 'groupNo',
+  width: 50,
+  fixed: 'left',
+}, {
+  title: '开票内容',
+  dataIndex: 'billingContent',
+  width: 250,
+}, {
+  title: '规格型号',
+  dataIndex: 'specificationType',
+  width: 100,
+}, {
+  title: '单位',
+  dataIndex: 'unit',
+  width: 80,
+}, {
+  title: '数量',
+  dataIndex: 'quantity',
+  width: 70,
+}, {
+  title: '单价',
+  dataIndex: 'unitPrice',
+  width: 100,
+}, {
+  title: '不含税金额',
+  dataIndex: 'billingAmountExcludeTax',
+  width: 100,
+}, {
+  title: '含税金额',
+  dataIndex: 'billingAmount',
+  width: 100,
+}, {
+  title: '税率',
+  dataIndex: 'billingTaxRate',
+  width: 100,
+  render: (text) => (`${text * 100}%`)
+}, {
+  title: '税额',
+  dataIndex: 'billingTaxAmount',
+  width: 100,
+}, {
+  title: '税收分类编码',
+  dataIndex: 'taxCategoryCode',
+  width: 120,
+}, {
+  title: '税收分类名称',
+  dataIndex: 'taxCategoryName',
+  width: 120,
+}, {
+  title: '优惠政策',
+  dataIndex: 'prefPolicySign',
+  width: 100,
+  render: (text) => {
+    return text === '0' ? '否' : '是'
+  }
+}, {
+  title: '优惠政策类型',
+  dataIndex: 'prefPolicyType',
+  width: 100,
+}]
+
 const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
 const advanceTypes = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const redTypes = ['BILLING_RED', 'BILLING_RED_OTHER']
@@ -293,5 +356,6 @@ export {
   advanceTypes,
   redTypes,
   otherTypes,
+  invoiceLineCols,
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, Form, message, Row, Col, Input, DatePicker, Button, InputNumber, Icon, Select } from 'antd'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import { proColumns, billDetailColumns, detailColumns, contentCols, taxCategoryCols, normalTypes } from '../billApplication/billColumns'
+import { proColumns, billDetailColumns, detailColumns, contentCols, taxCategoryCols, normalTypes, invoiceLineCols } from '../billApplication/billColumns'
 import SearchAllColumns from '../common/SearchAllColumns'
 import moment from 'moment';
 import './billApproveDetail.css'
@@ -236,7 +236,7 @@ class BillApproveDetail extends React.Component  {
       labelCol: { span: 2 },
       wrapperCol: { span: 20 },
     }
-    const { billingType, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, fileName, filePath } = this.props.serviceDetail
+    const { billingType, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList, billingApplicantRemark, fileName, filePath, receiptOutcome } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -260,7 +260,8 @@ class BillApproveDetail extends React.Component  {
       },
       selectedRowKeys: this.state.selectedRowKeys,
     }
-    const columns = [{
+    const columns = [
+      {
       title: '操作',
       dataIndex: 'action',
       width: 60,
@@ -451,6 +452,7 @@ class BillApproveDetail extends React.Component  {
         )
       }
     }]
+    //是否红冲发票
     const isReceiveInvoice = this.props.applyType === 'BILLING_RED' || this.props.applyType === 'BILLING_INVALID'
     return (
       <div>
@@ -493,6 +495,7 @@ class BillApproveDetail extends React.Component  {
                       paramCode="BILLING_TYPE"
                       placeholder="开票类型"
                       hasEmpty
+                      disabled={isReceiveInvoice}
                     />
                   )
                 }
@@ -502,7 +505,7 @@ class BillApproveDetail extends React.Component  {
               <FormItem {...formItemLayout} label="开票日期">
                 {
                   getFieldDecorator('billingDate', {initialValue: moment(billingDate, dateFormat)})(
-                    <DatePicker format="YYYY-MM-DD"/>,
+                    <DatePicker format="YYYY-MM-DD" disabled={isReceiveInvoice}/>,
                   )
                 }
               </FormItem>
@@ -512,7 +515,7 @@ class BillApproveDetail extends React.Component  {
                 <Col span={8} key={3}>
                   <FormItem {...formItemLayout} label="是否收到发票">
                     {
-                      getFieldDecorator('receiptOutcome', {initialValue: '', rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
+                      getFieldDecorator('receiptOutcome', {initialValue: receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
                         <Select>
                           <Option value="Y">是</Option>
                           <Option value="N">否</Option>
@@ -533,16 +536,19 @@ class BillApproveDetail extends React.Component  {
               pagination={false}
             />
           </div>
-          <div className="add-btns">
-            <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
-          </div>
+          {
+            !isReceiveInvoice ?
+              <div className="add-btns">
+                <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
+              </div> : null
+          }
           <Table
             rowSelection={rowSelection}
             style={{marginBottom: '10px'}}
             rowKey={record => record.lineNo}
             bordered
             size="small"
-            columns={columns}
+            columns={isReceiveInvoice ? invoiceLineCols : columns}
             pagination={false}
             dataSource={this.state.dataSource}
             scroll={{ x: '1600px' }}
@@ -552,7 +558,7 @@ class BillApproveDetail extends React.Component  {
               <FormItem {...span3ItemLayout} label="备注">
                 {
                   getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 350, message: '备注不能超过350个字符!' }]})(
-                    <TextArea placeholder="备注" rows="2" />
+                    <TextArea placeholder="备注" rows="2" disabled={isReceiveInvoice} />
                   )
                 }
               </FormItem>
@@ -563,7 +569,7 @@ class BillApproveDetail extends React.Component  {
               <FormItem {...span3ItemLayout} label="开票要求">
                 {
                   getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票要求不能超过350个字符!' }]})(
-                    <TextArea placeholder="请输入开票要求" rows="2" />
+                    <TextArea placeholder="请输入开票要求" rows="2" disabled={isReceiveInvoice} />
                   )
                 }
               </FormItem>

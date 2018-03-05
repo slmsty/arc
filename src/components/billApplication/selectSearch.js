@@ -155,7 +155,6 @@ class SelectSearch extends React.Component {
           </Form>
 
           <Table
-            rowKey={this.props.idKey}
             columns={this.props.columns}
             rowSelection={rowSelection}
             bordered

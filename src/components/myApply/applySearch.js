@@ -211,7 +211,6 @@ export default class ApplySearchCon extends React.Component {
 
     }
     const { billSaveSuccess, applicationIds } = this.props.myApply
-    console.log(applicationIds)
     return (
       <div>
         <ApplySearchConWithForm onQuery={this.handleChangeParam} loading={this.state.loading} />

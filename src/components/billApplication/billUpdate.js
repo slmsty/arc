@@ -20,6 +20,12 @@ class BillUpdate extends React.Component {
 
   handleOk = () => {
     const values = this.props.form.getFieldsValue()
+    /*this.props.form.setFields({
+      billedArDate: {
+        value: values.billedArDate,
+        errors: null
+      }
+    })*/
     const { record, isAdd } = this.props;
     const params = isAdd ? {
       ...values,
@@ -211,7 +217,7 @@ class BillUpdate extends React.Component {
                 <Row gutter={30}>
                   <Col span={12} key={1}>
                     <FormItem {...formItemLayout} label="合同名称">
-                      {getFieldDecorator('contractName', {initialValue : record.contractName, rules: [{ required: true }]})(
+                      {getFieldDecorator('contractName', {initialValue : record.contractName, rules: [{ required: true, message: '请填写合同名称!' }]})(
                         <Input placeholder="请输入合同名称"/>
                       )}
                     </FormItem>
