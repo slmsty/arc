@@ -12,6 +12,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
   state = {
     showSelectFund: false,
     funds: [],
+    confirmLoading: false,
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.receiptInfo !== nextProps.receiptInfo) {
@@ -200,6 +201,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
       okType: 'danger',
       cancelText: '否',
       onOk() {
+        self.setState({confirmLoading: true})
         const claimItems = self.state.funds.map(fund => ({
           contractItemId: fund.contractItemId,
           claimAmount: fund.claimAmount,
@@ -215,6 +217,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         })
       },
     })
+    this.setState({confirmLoading: false})
   }
   handleCloseSelectFunds = (addFunds) => {
     if (addFunds && addFunds.length > 0) {
@@ -336,8 +339,8 @@ export default class ProjectReceiptClaimModal extends React.Component {
           visible={!!this.props.receiptInfo.receiptClaimId}
           onCancel={this.handleCloseClaim}
           footer={[
-            <Button key="submit" type="primary" onClick={this.handleSubmit}>
-              <Icon type="save" />保存
+            <Button key="submit" type="primary" loading={this.state.confirmLoading} onClick={this.handleSubmit}>
+              {!this.state.confirmLoading ? <Icon type="save" /> : null}保存
             </Button>,
           ]}
         >

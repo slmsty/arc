@@ -10,6 +10,8 @@ const mapStateToProps = state => ({
   receiptClaimList: state.projectReceiptClaim.receiptClaimList,
   receiptClaimListRefresh: state.projectReceiptClaim.receiptClaimListRefresh,
   amountTotals: state.projectReceiptClaim.amountTotals,
+  receiptSuccess: state.projectReceiptClaim.receiptSuccess,
+  receiptInfo: state.projectReceiptClaim.receiptInfo,
 })
 
 const mapDispatchToProps = dispatch => (
