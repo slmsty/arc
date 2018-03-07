@@ -140,7 +140,7 @@ class ApplyInfoModal extends React.Component {
             <hr style={{ borderTop: '1px solid #d9d9d9' }} />
             <br />
             {
-              applyInfoDatas.serviceType === 'badDebt' ?
+              applyInfoDatas.serviceType === 'BAD_DEBT' ?
                 <div>
                   <h2>坏账划销申请</h2>
                   <Table
