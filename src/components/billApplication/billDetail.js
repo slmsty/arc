@@ -46,6 +46,7 @@ class BillDetail extends React.Component {
       fileList: [],
       fileId: '',
       loading: false,
+      showDetail: true,
     }
   }
 
@@ -122,67 +123,80 @@ class BillDetail extends React.Component {
 
   handleOk = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      this.state.dataSource.map(record => {
-        if(record.billingAmount <= 0) {
-          message.error('开票含税金额必须大于0')
-          err = true
-        }
-      })
-      if (!err) {
-        this.setState({loading: true})
-        const { custInfo, comInfo } = this.props.detail
-        const appLineItems = this.state.dataSource.map(record => ({
-          ...record,
-          lineNo: record.lineNo + 1,
-        }))
-        const params = {
-          ...values,
-          billingCustInfoId: custInfo.billingCustInfoId,
-          billingComInfoId: comInfo.billingComInfoId,
-          billingApplicationType: this.props.billType,
-          billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
-          appLineItems: appLineItems,
-          objectId: this.state.fileId,
-          objectName: this.state.file.name,
-        }
-        const _this = this
-        //校验拆分金额是否大于含税金额，大于提示用户并更改开票类型为超额开票
-        if(normalTypes.includes(this.props.billType)) {
-          requestJsonFetch('/arc/billingApplication/apply/check', {
-            method: 'POST',
-            body: {
-              appLineItems: appLineItems,
-              billingApplicationType: this.props.billType,
-            },
-          }, (res) => {
-            this.setState({loading: false})
-            const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
-            if(resultCode === '000000') {
-              if(isWarning === 'Y') {
-                confirm({
-                  title: '提示',
-                  content: warningMessage,
-                  onOk() {
-                    _this.props.billApplySave({
-                      ...params,
-                      billingApplicationType,
-                    })
-                  },
-                })
-              } else {
-                this.props.billApplySave(params)
-              }
-            } else {
-              message.error(resultMessage)
-              return
-            }
-          })
-        } else {
-          this.props.billApplySave(params)
-        }
+    const { isRed, billingOutcomeId } = this.props
+    //红冲发票不重新开票
+    if(isRed && this.props.form.getFieldValue('isAgainInvoice') === 'false') {
+      const params = {
+        billingOutcomeId,
+        billingApplicationType: this.props.billType,
+        isAgainInvoice: 'false',
       }
-    });
+      this.props.billApplySave(params)
+    } else {
+      this.props.form.validateFields((err, values) => {
+        this.state.dataSource.map(record => {
+          if(record.billingAmount <= 0) {
+            message.error('开票含税金额必须大于0')
+            err = true
+          }
+        })
+        if (!err) {
+          this.setState({loading: true})
+          const { custInfo, comInfo } = this.props.detail
+          const appLineItems = this.state.dataSource.map(record => ({
+            ...record,
+            lineNo: record.lineNo + 1,
+          }))
+          const params = {
+            ...values,
+            billingOutcomeId,
+            billingCustInfoId: custInfo.billingCustInfoId,
+            billingComInfoId: comInfo.billingComInfoId,
+            billingApplicationType: this.props.billType,
+            billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
+            appLineItems: appLineItems,
+            objectId: this.state.fileId,
+            objectName: this.state.file.name,
+            isAgainInvoice: 'true',
+          }
+          const _this = this
+          //校验拆分金额是否大于含税金额，大于提示用户并更改开票类型为超额开票
+          if(normalTypes.includes(this.props.billType)) {
+            requestJsonFetch('/arc/billingApplication/apply/check', {
+              method: 'POST',
+              body: {
+                appLineItems: appLineItems,
+                billingApplicationType: this.props.billType,
+              },
+            }, (res) => {
+              this.setState({loading: false})
+              const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
+              if(resultCode === '000000') {
+                if(isWarning === 'Y') {
+                  confirm({
+                    title: '提示',
+                    content: warningMessage,
+                    onOk() {
+                      _this.props.billApplySave({
+                        ...params,
+                        billingApplicationType,
+                      })
+                    },
+                  })
+                } else {
+                  this.props.billApplySave(params)
+                }
+              } else {
+                message.error(resultMessage)
+                return
+              }
+            })
+          } else {
+            this.props.billApplySave(params)
+          }
+        }
+      });
+    }
   }
 
   handleChange = (value, col, index, record) => {
@@ -518,170 +532,192 @@ class BillDetail extends React.Component {
               >合同审批表及合同扫描件</Button>
             </Col>
           </Row>
-          <Row gutter={40}>
-            <Col span={8} key={1}>
-              <FormItem {...formItemLayout} label="费用承担者">
-                {getFieldDecorator('costBear')(
-                  <SelectInvokeApi
-                    typeCode="BILLING_APPLICATION"
-                    paramCode="COST_BEAR"
-                    placeholder="费用承担着"
-                    hasEmpty
+          {
+            this.props.isRed ?
+              <Row gutter={40}>
+                <Col span={8} key={1}>
+                  <FormItem {...formItemLayout} label="是否重新开票:">
+                    {getFieldDecorator('isAgainInvoice',{
+                      initialValue: 'true',
+                    })(
+                      <Select onChange={(v) => this.setState({showDetail: v === 'true' ? true : false })}>
+                        <Option value="true">是</Option>
+                        <Option value="false">否</Option>
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row> : null
+          }
+          {
+            this.state.showDetail ?
+              <div>
+                <Row gutter={40}>
+                  <Col span={8} key={1}>
+                    <FormItem {...formItemLayout} label="费用承担者">
+                      {getFieldDecorator('costBear')(
+                        <SelectInvokeApi
+                          typeCode="BILLING_APPLICATION"
+                          paramCode="COST_BEAR"
+                          placeholder="费用承担着"
+                          hasEmpty
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={8} key={2}>
+                    <FormItem {...formItemLayout} label="开票类型">
+                      {
+                        getFieldDecorator('billingType', {
+                          initialValue: '', rules: [{ required: true, message: '请选择开票类型!' }]
+                        })(
+                          <SelectInvokeApi
+                            typeCode="BILLING_APPLICATION"
+                            paramCode="BILLING_TYPE"
+                            placeholder="开票类型"
+                            hasEmpty
+                          />
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                  <Col span={8} key={3}>
+                    <FormItem {...formItemLayout} label="开票日期">
+                      {
+                        getFieldDecorator('billingDate', {initialValue: moment(), rules: [{ required: true, message: '请选择开票日期!' }]})(
+                          <DatePicker format="YYYY-MM-DD"/>,
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                </Row>
+                <div className="arc-info">
+                  <Table
+                    rowKey="id"
+                    size="small"
+                    bordered
+                    columns={detailColumns}
+                    dataSource={detailData}
+                    pagination={false}
                   />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={8} key={2}>
-              <FormItem {...formItemLayout} label="开票类型">
-                {
-                  getFieldDecorator('billingType', {
-                    initialValue: '', rules: [{ required: true, message: '请选择开票类型!' }]
-                  })(
-                    <SelectInvokeApi
-                      typeCode="BILLING_APPLICATION"
-                      paramCode="BILLING_TYPE"
-                      placeholder="开票类型"
-                      hasEmpty
-                    />
-                  )
-                }
-              </FormItem>
-            </Col>
-            <Col span={8} key={3}>
-              <FormItem {...formItemLayout} label="开票日期">
-                {
-                  getFieldDecorator('billingDate', {initialValue: moment(), rules: [{ required: true, message: '请选择开票日期!' }]})(
-                    <DatePicker format="YYYY-MM-DD"/>,
-                  )
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <div className="arc-info">
-            <Table
-              rowKey="id"
-              size="small"
-              bordered
-              columns={detailColumns}
-              dataSource={detailData}
-              pagination={false}
-            />
-          </div>
-          <div className="add-btns">
-            <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
-          </div>
-          <Table
-            rowSelection={rowSelection}
-            style={{marginBottom: '10px'}}
-            rowKey="lineNo"
-            bordered
-            size="small"
-            columns={columns}
-            pagination={false}
-            dataSource={this.state.dataSource}
-            scroll={{ x: 1160 }}
-          />
-          <Row gutter={40}>
-            <Col span={14}>
-              <FormItem {...formItemLayout1} label="发票备注">
-                {
-                  getFieldDecorator('billingApplicantRemark')(
-                    <TextArea placeholder="请输入发票备注" rows="2" />
-                  )
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={40}>
-            <Col span={14}>
-              <FormItem {...formItemLayout1} label="附件">
-                {
-                  getFieldDecorator('file')(
-                    <Upload {...props} fileList={this.state.fileList}>
-                      <Button>
-                        <Icon type="upload" />点击上传
-                      </Button>
-                      <span className="file-tip">说明：未大签项目需要上传合同附件</span>
-                    </Upload>
-                  )
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={40}>
-            <Col span={14}>
-              <FormItem {...formItemLayout1} label="开票要求">
-                {
-                  getFieldDecorator('billingApplicantRequest', {rules: [{max: 350, message: '开票要求不能超过350个字符!' }]})(
-                    <TextArea placeholder="请输入开票要求" rows="2" />
-                  )
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <h3 className="sent-info">寄件信息</h3>
-          <Row gutter={40}>
-            <Col span={8} key={1}>
-              <FormItem {...formItemLayout2} label="收件人">
-                {getFieldDecorator('expressReceiptName')(
-                  <Input placeholder="收件人"/>
-                )}
-              </FormItem>
-            </Col>
-            <Col span={8} key={2}>
-              <FormItem {...formItemLayout2} label="收件人公司">
-                {
-                  getFieldDecorator('expressReceiptCompany', {
-                    initialValue: ''
-                  })(
-                    <Input placeholder="收件人公司"/>
-                  )
-                }
-              </FormItem>
-            </Col>
-            <Col span={8} key={3}>
-              <FormItem {...formItemLayout2} label="收件人电话">
-                {
-                  getFieldDecorator('expressReceiptPhone')(
-                    <Input placeholder="收件人电话"/>,
-                  )
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={40}>
-            <Col span={8} key={1}>
-              <FormItem {...formItemLayout2} label="收件人城市">
-                {getFieldDecorator('expressReceiptCity')(
-                  <Input placeholder="收件人城市"/>
-                )}
-              </FormItem>
-            </Col>
-            <Col span={8} key={2}>
-              <FormItem {...formItemLayout2} label="收件人详细地址">
-                {
-                  getFieldDecorator('expressReceiptAddress', {
-                    initialValue: ''
-                  })(
-                    <Input placeholder="收件人详细地址"/>
-                  )
-                }
-              </FormItem>
-            </Col>
-          </Row>
-          <Row gutter={40}>
-            <Col span={8} key={1}>
-              <FormItem {...formItemLayout2} label="E-mail">
-                {getFieldDecorator('receiptEmail', {
-                  initialValue: this.props.currentUser.email, rules: [{
-                    type: 'email', message: '请输入正确的E-mail!',
-                  }, { required: true, message: '请填写E-mail!' }]
-                })(
-                  <Input placeholder="E-mail"/>
-                )}
-              </FormItem>
-            </Col>
-          </Row>
+                </div>
+                <div className="add-btns">
+                  <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
+                </div>
+                <Table
+                  rowSelection={rowSelection}
+                  style={{marginBottom: '10px'}}
+                  rowKey="lineNo"
+                  bordered
+                  size="small"
+                  columns={columns}
+                  pagination={false}
+                  dataSource={this.state.dataSource}
+                  scroll={{ x: 1160 }}
+                />
+                <Row gutter={40}>
+                  <Col span={14}>
+                    <FormItem {...formItemLayout1} label="发票备注">
+                      {
+                        getFieldDecorator('billingApplicantRemark')(
+                          <TextArea placeholder="请输入发票备注" rows="2" />
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row gutter={40}>
+                  <Col span={14}>
+                    <FormItem {...formItemLayout1} label="附件">
+                      {
+                        getFieldDecorator('file')(
+                          <Upload {...props} fileList={this.state.fileList}>
+                            <Button>
+                              <Icon type="upload" />点击上传
+                            </Button>
+                            <span className="file-tip">说明：未大签项目需要上传合同附件</span>
+                          </Upload>
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row gutter={40}>
+                  <Col span={14}>
+                    <FormItem {...formItemLayout1} label="开票要求">
+                      {
+                        getFieldDecorator('billingApplicantRequest', {rules: [{max: 350, message: '开票要求不能超过350个字符!' }]})(
+                          <TextArea placeholder="请输入开票要求" rows="2" />
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                </Row>
+                <h3 className="sent-info">寄件信息</h3>
+                <Row gutter={40}>
+                  <Col span={8} key={1}>
+                    <FormItem {...formItemLayout2} label="收件人">
+                      {getFieldDecorator('expressReceiptName')(
+                        <Input placeholder="收件人"/>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={8} key={2}>
+                    <FormItem {...formItemLayout2} label="收件人公司">
+                      {
+                        getFieldDecorator('expressReceiptCompany', {
+                          initialValue: ''
+                        })(
+                          <Input placeholder="收件人公司"/>
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                  <Col span={8} key={3}>
+                    <FormItem {...formItemLayout2} label="收件人电话">
+                      {
+                        getFieldDecorator('expressReceiptPhone')(
+                          <Input placeholder="收件人电话"/>,
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row gutter={40}>
+                  <Col span={8} key={1}>
+                    <FormItem {...formItemLayout2} label="收件人城市">
+                      {getFieldDecorator('expressReceiptCity')(
+                        <Input placeholder="收件人城市"/>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={8} key={2}>
+                    <FormItem {...formItemLayout2} label="收件人详细地址">
+                      {
+                        getFieldDecorator('expressReceiptAddress', {
+                          initialValue: ''
+                        })(
+                          <Input placeholder="收件人详细地址"/>
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row gutter={40}>
+                  <Col span={8} key={1}>
+                    <FormItem {...formItemLayout2} label="E-mail">
+                      {getFieldDecorator('receiptEmail', {
+                        initialValue: this.props.currentUser.email, rules: [{
+                          type: 'email', message: '请输入正确的E-mail!',
+                        }, { required: true, message: '请填写E-mail!' }]
+                      })(
+                        <Input placeholder="E-mail"/>
+                      )}
+                    </FormItem>
+                  </Col>
+                </Row>
+              </div> : null
+          }
           {
             this.props.billType === 'BILLING_EXCESS' ?
               <div className="arc-info">

@@ -4,26 +4,41 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from '../billApplication/selectSearch'
 import moment from 'moment'
 import { Modal, Row, Col, Button, Input, Form, Table, message, Select, DatePicker, InputNumber } from 'antd'
-import { detailColumns, contentDetailCols, normalTypes } from '../billApplication/billColumns'
+import { detailColumns } from '../billApplication/billColumns'
 import '../billApplication/billDetail.less'
+import { normalTypes } from '../billApplication/billColumns'
 const { TextArea } = Input
 const Option = Select.Option
 const FormItem = Form.Item
 
-class CancelDetail extends React.Component {
-  state = {
-    selectedRowKeys: '',
-    selectedRows: '',
-    count: 1,
-    disableDis: true,
-    showNewApplayDis: true,
-    contentData: [],
-    invoiceRequire: '',
-    remark: '',
-    dataSource: [],
-    currentNo: 1,
-    totalAmount: 0,
+const contentCols = [{
+  title: '内容名称',
+  dataIndex: 'billingContentName',
+  width: 200,
+}, {
+  title: '内容',
+  dataIndex: 'billingRecordId',
+  width: 200,
+}]
+
+class RedApplyDetail extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectedRowKeys: '',
+      selectedRows: '',
+      count: 1,
+      disableDis: true,
+      showApplyDetail: true,
+      contentData: [],
+      invoiceRequire: '',
+      remark: '',
+      dataSource: [],
+      currentNo: 1,
+      totalAmount: 0,
+    }
   }
+
   componentWillMount() {
     let data = []
     this.props.DetailList.map((item, index) => {
@@ -184,23 +199,23 @@ class CancelDetail extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
+    const { comInfo, custInfo, appLineItems } = this.props.redApplyDetail
     const formItemLayout = {
       labelCol: { span: 7 },
       wrapperCol: { span: 12 },
     }
-    let detailDatas = this.props.applyData[0]
     const detailData = [{
       title: '购买方',
-      customerName: detailDatas.customerName,
-      taxPayer: detailDatas.customerTaxIdentifyCode,
-      address: detailDatas.customerAddressPhone,
-      bankAccount: detailDatas.customerBackAccount,
+      customerName: custInfo.billingCustName,
+      taxPayer: custInfo.taxpayerIdentificationNumber,
+      address: custInfo.addressPhoneNumber,
+      bankAccount: custInfo.bankBankAccount,
     }, {
       title: '销售方',
-      customerName: detailDatas.companyName,
-      taxPayer: detailDatas.companyTaxIdentifyCode,
-      address: detailDatas.companyAddressPhone,
-      bankAccount: detailDatas.companyBackAccount,
+      customerName: comInfo.billingComName,
+      taxPayer: comInfo.taxpayerIdentificationNumber,
+      address: comInfo.addressPhoneNumber,
+      bankAccount: comInfo.bankBankAccount
     }]
     const rowSelection = {
       type: 'checkbox',
@@ -244,7 +259,7 @@ class CancelDetail extends React.Component {
         render: (text, record, index) => (
           <SelectSearch
             url="/arc/billingApplication/billingContent/search"
-            columns={contentDetailCols}
+            columns={contentCols}
             label="开票内容"
             width="1000px"
             idKey="billingRecordId"
@@ -353,10 +368,9 @@ class CancelDetail extends React.Component {
       <div>
         <Modal
           width={1024}
-          title="作废详情"
-          visible={this.props.visible}
+          title="发票红冲申请详情"
+          visible={}
           onCancel={this.props.onCancel}
-          onOk={this.props.onOk}
           footer={
             <div>
               <Button type="primary" ghost onClick={this.handleOk}>
@@ -372,7 +386,7 @@ class CancelDetail extends React.Component {
                   {getFieldDecorator('isAgainInvoice',{
                     initialValue: 'true',
                   })(
-                    <Select onChange={(v) => this.setState({showNewApplayDis: v === 'true' ? true : false })}>
+                    <Select onChange={(v) => this.setState({showApplyDetail: v === 'true' ? true : false })}>
                       <Option value="true">是</Option>
                       <Option value="false">否</Option>
                     </Select>
@@ -411,7 +425,7 @@ class CancelDetail extends React.Component {
             </Row>
             <br />
             {
-              this.state.showNewApplayDis ?
+              this.state.showApplyDetail ?
                 <div>
                   <Table
                     rowKey="receiptClaimId"
@@ -524,7 +538,7 @@ class CancelDetail extends React.Component {
                     </Col>
                   </Row>
                 </div>
-              : null
+                : null
             }
           </Form>
         </Modal>
@@ -533,6 +547,4 @@ class CancelDetail extends React.Component {
   }
 }
 
-const CancelModalWithForm = Form.create()(CancelDetail)
-
-export default CancelModalWithForm
+export default Form.create()(RedApplyDetail)

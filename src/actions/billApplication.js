@@ -240,7 +240,11 @@ export function searchContractBilling(params) {
     },
   }
 }
-
+/**
+ * 获取审核详情
+ * @param billingApplicationId
+ * @returns {{}}
+ */
 export function getApplicationDetail(billingApplicationId) {
   return {
     [httpApi]: {
@@ -255,3 +259,36 @@ export function getApplicationDetail(billingApplicationId) {
     },
   }
 }
+/**
+ * 查询红冲申请详细信息
+ * @param billingOutcomeId
+ * @returns {{}}
+ */
+export function getRedApplyDetail(billingOutcomeId) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/redApplyDetail`,
+      options: {
+        method: 'POST',
+        body: {
+          billingOutcomeId,
+        },
+      },
+      types: ['GET_RED_APPLY_DETAIL_SUCCESS'],
+    },
+  }
+}
+
+export function billApplicationRedApply(params) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/redApply`,
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_APPLICATION_RED_APPLY_SUCCESS'],
+    },
+  }
+}
+

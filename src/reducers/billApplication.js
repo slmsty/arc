@@ -34,6 +34,12 @@ const initState = {
       comInfo: {},
     },
   },
+  redApplyDetail: {
+    custInfo: {},
+    comInfo: {},
+    appLineItems: []
+  },
+  showRedApply: false,
 }
 
 function loadingRequest(state) {
@@ -147,6 +153,7 @@ function hideDetailModal(state) {
   return {
     ...state,
     searchEditSuccess: false,
+    showRedApply: false,
   }
 }
 
@@ -187,6 +194,23 @@ function getApplicationDetail(state, action) {
   }
 }
 
+function getRedApplyDetail(state, action) {
+  return {
+    ...state,
+    redApplyDetail: action.response,
+    showRedApply: true,
+  }
+}
+
+function billApplicationRedApply(state, action) {
+  return {
+    ...state,
+    redApplyDetail: action.response,
+    showRedApply: false,
+    billSaveSuccess: true,
+  }
+}
+
 export default caseReducer(initState, {
   LOADING_REQUEST: loadingRequest,
   INIT_DATA: initData,
@@ -207,4 +231,6 @@ export default caseReducer(initState, {
   GET_SEARCH_CONTRACT_BILLING_SUCCESS: getSearchContractBilling,
   SEARCH_LOADING_REQUEST: searchLoadingRequest,
   GET_APPLICATION_DETAIL_SUCCESS: getApplicationDetail,
+  GET_RED_APPLY_DETAIL_SUCCESS: getRedApplyDetail,
+  BILL_APPLICATION_RED_APPLY_SUCCESS: billApplicationRedApply,
 })

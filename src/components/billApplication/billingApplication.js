@@ -4,6 +4,7 @@ import BillDetail from './billDetail'
 import BillUpdate from './billUpdate'
 import OtherContractAdd from './otherContractAdd'
 import BigSignAudit from '../../containers/billApplication/bigSignAudit'
+import CalCelDetail from '../billStatusManage/calcelDetail'
 import { Table, Button, message } from 'antd'
 import { otherTypes, advanceTypes, redTypes, redFontCols, normalTypes } from './billColumns'
 import './billingApplication.less'
@@ -304,10 +305,10 @@ export default class BillingApplication extends React.Component {
       message.warn('请选择要红冲的记录!')
       return
     }
-    const params = {
-      billingOutcomeId: this.state.selectedRows[0].billingOutcomeId
-    }
-    this.props.billRedApply(params)
+    this.props.getRedApplyDetail(this.state.selectedRows[0].billingOutcomeId)
+    this.setState({
+      showRedApply: true,
+    })
   }
 
   searchContractBill = () => {
@@ -352,7 +353,7 @@ export default class BillingApplication extends React.Component {
     if(normalTypes.includes(this.state.currentType)){
       scroll = { x: 2170 }
     } else if (redTypes.includes(this.state.currentType)) {
-      scroll = { x: 1840 }
+      scroll = { x: 1800 }
     } else if (advanceTypes.includes(this.state.currentType)) {
       scroll = { x: 1640 }
     } else {
@@ -362,14 +363,15 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
-    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, editInfo, billApplySave, billApplyCheck, currentUser, contractUrl } = this.props
+    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract,
+      editInfo, billApplySave, billApplyCheck, currentUser, contractUrl, redApplyDetail, billApplicationRedApply } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) ? 'checkbox' : 'radio',
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({selectedRows: selectedRows})
       }
     }
-    const { isAdd, updateVisible, otherAddVisible } = this.state
+    const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply } = this.state
     return (
       <div>
         <BillingApplyForm
@@ -424,9 +426,24 @@ export default class BillingApplication extends React.Component {
             /> : null
         }
         {
-          this.state.showBillApprove ?
+          showBillApprove ?
             <BigSignAudit
               onCancel={() => this.setState({showBillApprove: false})}
+            /> : null
+        }
+        {
+          this.props.showRedApply ?
+            <BillDetail
+              onCancel={() => this.props.hideDetailModal()}
+              detail={redApplyDetail}
+              billType={this.state.currentType}
+              billApplySave={billApplicationRedApply}
+              billApplyCheck={billApplyCheck}
+              currentUser={currentUser}
+              contractUrl={contractUrl}
+              isLoading={isLoading}
+              isRed={redTypes.includes(this.state.currentType)}
+              billingOutcomeId={this.state.selectedRows[0].billingOutcomeId}
             /> : null
         }
       </div>

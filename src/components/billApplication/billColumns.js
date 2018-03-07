@@ -234,14 +234,14 @@ const redFontCols = [
     title: '开票税额',
     dataIndex: 'taxAmount',
     width: 100,
-  }, {
+  }, /*{
     title: '开票税率',
     dataIndex: 'taxRate',
     width: 80,
     render: (text) => {
       return `${text * 100}%`
     }
-  }, {
+  }, */{
     title: '项目编码',
     dataIndex: 'projectNo',
     width: 200,
@@ -256,7 +256,7 @@ const redFontCols = [
   }, {
     title: '客户名称',
     dataIndex: 'custName',
-    width: 200,
+    width: 250,
   }, {
     title: '付款条款',
     dataIndex: 'paymentName',
@@ -335,6 +335,16 @@ const invoiceLineCols = [{
   width: 100,
 }]
 
+const contentDetailCols = [{
+  title: '内容名称',
+  dataIndex: 'billingContentName',
+  width: 200,
+}, {
+  title: '内容',
+  dataIndex: 'billingRecordId',
+  width: 200,
+}]
+
 const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
 const advanceTypes = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const redTypes = ['BILLING_RED', 'BILLING_RED_OTHER']
@@ -357,5 +367,6 @@ export {
   redTypes,
   otherTypes,
   invoiceLineCols,
+  contentDetailCols,
 }
 
