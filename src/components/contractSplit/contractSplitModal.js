@@ -424,10 +424,10 @@ class ContractSplitModal extends React.Component{
       message.error('保修开始时间不能为空！')
       return
     }
-    if (param.relatedBuNo === '' || typeof param.relatedBuNo ==='undefined') {
+    /*if (param.relatedBuNo === '' || typeof param.relatedBuNo ==='undefined') {
       message.error('关联BU不能为空！')
       return
-    }
+    }*/
     if (param.revenueCheckout && param.revenueCheckout.length<=0 || typeof param.revenueCheckout ==='undefined') {
       message.error('收入结算方式不能为空！')
       return

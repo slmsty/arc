@@ -188,8 +188,10 @@ export default class ApplySearchCon extends React.Component {
     // 获取审批表url
     const contractId = this.state.selectedRows[0].contractId
     //const contractId = 201604296622
+    console.log('contractId',contractId)
     this.props.getUrl(contractId).then((res)=>{
       if (res && res.response && res.response.resultCode === '000000') {
+        console.log('res',res.response )
       } else {
         message.error('获取审批列表链接失败')
       }
