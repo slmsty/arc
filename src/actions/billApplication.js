@@ -209,3 +209,49 @@ export function getContractUrl(contractId) {
 export const hideDetailModal = () => (
   {type: 'HIDE_DETAIL_MODAL'}
 )
+
+// 开票申请发起流程
+export function billStartWorkFlow(params) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/startWorkFlow`,
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_START_WORK_FLOW_SUCCESS'],
+    },
+  }
+}
+/**
+ * 开票审核查询
+ * @param params
+ * @returns {{}}
+ */
+export function searchContractBilling(params) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/searchContractBillingNew`,
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['GET_SEARCH_CONTRACT_BILLING_SUCCESS', 'SEARCH_LOADING_REQUEST'],
+    },
+  }
+}
+
+export function getApplicationDetail(billingApplicationId) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/getApplicationDetail`,
+      options: {
+        method: 'POST',
+        body: {
+          billingApplicationId,
+        },
+      },
+      types: ['GET_APPLICATION_DETAIL_SUCCESS'],
+    },
+  }
+}

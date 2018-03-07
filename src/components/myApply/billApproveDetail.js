@@ -15,11 +15,11 @@ class BillApproveDetail extends React.Component  {
   constructor(props) {
     super(props)
     const dataSource = props.serviceDetail.appLineList.map(detail => ({
-      ...detail,
-      isParent: 1,
-      quantity: detail.quantity ? detail.quantity : 1,
-      lineNo: detail.lineNo - 1,
-      totalAmount: detail.billingAmount ? detail.billingAmount : 0,
+        ...detail,
+        isParent: 1,
+        quantity: detail.quantity ? detail.quantity : 1,
+        lineNo: detail.lineNo - 1,
+        totalAmount: detail.billingAmount ? detail.billingAmount : 0,
       })
     )
     this.state = {
@@ -31,6 +31,19 @@ class BillApproveDetail extends React.Component  {
       selectedRows: [],
       currentNo: 1,
       totalAmount: 0,
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if(this.props.serviceDetail !== nextProps.serviceDetail && nextProps.serviceDetail) {
+      const dataSource = nextProps.serviceDetail.appLineList.map(detail => ({
+          ...detail,
+          isParent: 1,
+          quantity: detail.quantity ? detail.quantity : 1,
+          lineNo: detail.lineNo - 1,
+          totalAmount: detail.billingAmount ? detail.billingAmount : 0,
+        })
+      )
+      this.setState({dataSource: dataSource})
     }
   }
 
@@ -244,7 +257,7 @@ class BillApproveDetail extends React.Component  {
       labelCol: { span: 2 },
       wrapperCol: { span: 20 },
     }
-    const { billingType, billingDate, billingApplicantRequest, appLineList, comInfo, custInfo, contractList, outcomeList,
+    const { billingType, billingDate, billingApplicantRequest, comInfo, custInfo, contractList, outcomeList,
       billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
@@ -534,6 +547,25 @@ class BillApproveDetail extends React.Component  {
                     }
                   </FormItem>
                 </Col> : null
+            }
+            {
+              this.props.isApprove ?
+              <Col span={8} key={3}>
+                <FormItem {...formItemLayout} label="开票流程">
+                  {
+                    getFieldDecorator('billFlow',
+                      {initialValue: 'BILLING_CONTRACT', rules: [{ required: this.props.isApprove, message: '请选择开票流程!' }]})(
+                      <SelectInvokeApi
+                        typeCode="TYPE_SELECT"
+                        paramCode="BILLING_APPLICATION_TYPE"
+                        placeholder="开票流程"
+                        onChange={(v) => this.props.setBillApplicationType(v)}
+                        hasEmpty={false}
+                      />
+                    )
+                  }
+                </FormItem>
+              </Col> : null
             }
           </Row>
           {

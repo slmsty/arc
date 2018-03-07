@@ -3,6 +3,7 @@ import BillingApplyForm from './billingApplyForm'
 import BillDetail from './billDetail'
 import BillUpdate from './billUpdate'
 import OtherContractAdd from './otherContractAdd'
+import BigSignAudit from '../../containers/billApplication/bigSignAudit'
 import { Table, Button, message } from 'antd'
 import { otherTypes, advanceTypes, redTypes, redFontCols, normalTypes } from './billColumns'
 import './billingApplication.less'
@@ -17,6 +18,7 @@ export default class BillingApplication extends React.Component {
       selectedRows: [],
       isAdd: false,
       currentRecord: {},
+      showBillApprove: false,
     }
   }
 
@@ -308,11 +310,19 @@ export default class BillingApplication extends React.Component {
     this.props.billRedApply(params)
   }
 
+  searchContractBill = () => {
+    this.setState({showBillApprove: true})
+    this.props.searchContractBilling()
+  }
+
   getBillBtns = () => {
     const type = this.state.currentType
     if (normalTypes.includes(type)) {
       return (
-        <Button type="primary" ghost onClick={() => this.handleBilling()}>开票</Button>
+        <div>
+          <Button type="primary" ghost onClick={() => this.handleBilling()}>开票</Button>
+          <Button type="primary" onClick={() => this.searchContractBill()}>开票审核</Button>
+        </div>
       )
     } else if (advanceTypes.includes(type)) {
       return (
@@ -411,6 +421,12 @@ export default class BillingApplication extends React.Component {
               onCancel={() => this.setState({otherAddVisible: false})}
               record={this.state.currentRecord}
               isAdd={isAdd}
+            /> : null
+        }
+        {
+          this.state.showBillApprove ?
+            <BigSignAudit
+              onCancel={() => this.setState({showBillApprove: false})}
             /> : null
         }
       </div>

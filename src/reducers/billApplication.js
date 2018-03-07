@@ -19,6 +19,21 @@ const initState = {
   redApplySuccess: false,
   contractUrl: '',
   failureMsg: '',
+  billContracts: [],
+  billStartSuccess: false,
+  searchLoading: false,
+  applicationInfo: {
+    applyPersonName: '',
+    applyPersonPhone: '',
+    applyPersonDept: '',
+    applyPersonEmail: '',
+    serviceTypeName: '',
+    serviceDetail: {
+      appLineList: [],
+      custInfo: {},
+      comInfo: {},
+    },
+  },
 }
 
 function loadingRequest(state) {
@@ -142,6 +157,36 @@ function getContractUrl(state, action) {
   }
 }
 
+function billStartWorkFlow(state, action) {
+  return {
+    ...state,
+    billStartSuccess: true,
+  }
+}
+
+function getSearchContractBilling(state, action) {
+  return {
+    ...state,
+    billContracts: action.response.data,
+    searchLoading: false,
+  }
+}
+
+function searchLoadingRequest(state, action) {
+  return {
+    ...state,
+    searchLoading: true,
+  }
+}
+
+function getApplicationDetail(state, action) {
+  return {
+    ...state,
+    applicationInfo: action.response,
+    billStartSuccess: false,
+  }
+}
+
 export default caseReducer(initState, {
   LOADING_REQUEST: loadingRequest,
   INIT_DATA: initData,
@@ -158,4 +203,8 @@ export default caseReducer(initState, {
   BILL_RED_APPLY_SUCCESS: billRedApply,
   HIDE_DETAIL_MODAL: hideDetailModal,
   GET_CONTRACT_URL_SUCCESS: getContractUrl,
+  BILL_START_WORK_FLOW_SUCCESS: billStartWorkFlow,
+  GET_SEARCH_CONTRACT_BILLING_SUCCESS: getSearchContractBilling,
+  SEARCH_LOADING_REQUEST: searchLoadingRequest,
+  GET_APPLICATION_DETAIL_SUCCESS: getApplicationDetail,
 })
