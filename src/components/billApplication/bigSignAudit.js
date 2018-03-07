@@ -17,9 +17,6 @@ const billApproveColumns = [
     title: '申请单编号',
     dataIndex: 'billingApplicationId',
     width: 150,
-    render: (text, record) => (
-      <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
-    ),
   }, {
     title: '开票公司',
     dataIndex: 'comName',
