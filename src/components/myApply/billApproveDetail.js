@@ -531,7 +531,35 @@ class BillApproveDetail extends React.Component  {
               pagination={false}
             />
           </div>
-          {isAgainInvoice === 'true' ?
+          {isAgainInvoice === 'false' && showEdit.includes(this.props.applyType) ?
+            <Row>
+              <Col span={8} key={3}>
+                <FormItem {...formItemLayout} label="是否收到发票">
+                  {
+                    getFieldDecorator('receiptOutcome',
+                      {initialValue: receiptOutcome, rules: [{ required: true, message: '请选择是否收到发票!' }]})(
+                      <Select>
+                        <Option value="Y">是</Option>
+                        <Option value="N">否</Option>
+                      </Select>
+                    )
+                  }
+                </FormItem>
+              </Col>
+              {
+                this.props.taskCode === 'tax_vp' ?
+                  <Row gutter={40}>
+                    <Col span={12} key={1}>
+                      <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
+                        {
+                          receiptOutcome === 'Y' ? '是' : '否'
+                        }
+                      </FormItem>
+                    </Col>
+                  </Row> : null
+              }
+            </Row>
+            :
             <div>
               <Row gutter={40}>
                 <Col span={8} key={1}>
@@ -676,34 +704,6 @@ class BillApproveDetail extends React.Component  {
                 </Col>
               </Row>
             </div>
-            :
-            <Row>
-              <Col span={8} key={3}>
-                <FormItem {...formItemLayout} label="是否收到发票">
-                  {
-                    getFieldDecorator('receiptOutcome',
-                      {initialValue: receiptOutcome, rules: [{ required: true, message: '请选择是否收到发票!' }]})(
-                      <Select>
-                        <Option value="Y">是</Option>
-                        <Option value="N">否</Option>
-                      </Select>
-                    )
-                  }
-                </FormItem>
-              </Col>
-              {
-                this.props.taskCode === 'tax_vp' ?
-                  <Row gutter={40}>
-                    <Col span={12} key={1}>
-                      <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
-                        {
-                          receiptOutcome === 'Y' ? '是' : '否'
-                        }
-                      </FormItem>
-                    </Col>
-                  </Row> : null
-              }
-            </Row>
           }
           <div className="add-btns">
             <Button
