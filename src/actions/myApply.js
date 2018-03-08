@@ -101,7 +101,7 @@ export function cancelApply(queryParam) {
   }
 }
 
-export function billApplySave(queryParam) {
+export function billApproveSave(queryParam) {
   return {
     [httpApi]: {
       url: '/arc/billingApplication/workFlowEdit',

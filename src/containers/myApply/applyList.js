@@ -5,7 +5,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import ApplaySearchCon from '../../components/myApply/applySearch'
-import { getMyApplyList, approveSubmit, approveReject, myApplyInfo, billApplySave } from '../../actions/myApply'
+import { getMyApplyList, approveSubmit, approveReject, myApplyInfo, billApproveSave } from '../../actions/myApply'
 import { fileDown } from '../../actions/billStatusManage/billStatusManage'
 
 
@@ -18,7 +18,7 @@ const mapDispatchToProps = dispatch => (
     approveSubmit,
     approveReject,
     myApplyInfo,
-    billApplySave,
+    billApproveSave,
     fileDown,
   }, dispatch)
 )

@@ -4,7 +4,6 @@ import BillDetail from './billDetail'
 import BillUpdate from './billUpdate'
 import OtherContractAdd from './otherContractAdd'
 import BigSignAudit from '../../containers/billApplication/bigSignAudit'
-import CalCelDetail from '../billStatusManage/calcelDetail'
 import { Table, Button, message } from 'antd'
 import { otherTypes, advanceTypes, redTypes, redFontCols, normalTypes } from './billColumns'
 import './billingApplication.less'
@@ -335,7 +334,7 @@ export default class BillingApplication extends React.Component {
     } else if (redTypes.includes(type)) {
       return (
         <div>
-          <Button type="primary" ghost onClick={() => this.billRedApply()}>红冲</Button>
+          <Button type="primary" ghost onClick={() => this.billRedApply()}>退票</Button>
         </div>
       )
     } else if (otherTypes.includes(type)) {
