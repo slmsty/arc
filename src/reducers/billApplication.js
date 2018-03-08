@@ -46,6 +46,7 @@ function loadingRequest(state) {
   return {
     ...state,
     isLoading: true,
+    failureMsg: '',
   }
 }
 
@@ -120,6 +121,7 @@ function billApplySave(state, action) {
     billSaveSuccess: true,
     isLoading: false,
     searchEditSuccess: false,
+    failureMsg: '',
   }
 }
 

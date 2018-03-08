@@ -154,7 +154,6 @@ class ApplyInfoModal extends React.Component {
                   <h2>{applyInfoDatas.serviceTypeName}详情</h2>
                   <BillApproveDetail
                     serviceDetail={applyInfoDatas.serviceDetail}
-                    isEdit={this.props.isEdit === 'Y' ? true : false}
                     applyType={applyInfoDatas.serviceType}
                     billApplySave={this.props.billApplySave}
                     taskCode={applyInfoDatas.taskCode}

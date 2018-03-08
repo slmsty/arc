@@ -26,6 +26,7 @@ import ContractSplit from './contractSplit/contractSplit'
 import BillStatusManage from './contractSplit/billStatusManage'
 import StatementSearch from './statementSearch/statementList'
 import BillingApplication from '../containers/billApplication/billApplication'
+import Login from '../components/login/login'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -129,6 +130,7 @@ class IndexContainer extends React.Component {
     return (
       <Router basename={process.env.PUBLIC_URL}>
         <div style={{ height: '100%' }}>
+          {/*<Route exact path="/login" component={Login} />*/}
           <Index {...this.props}>
             <Switch>
               {menuRoutes}

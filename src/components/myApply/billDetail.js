@@ -1,7 +1,24 @@
 import React from 'react'
 import { Table, Row, Col } from 'antd'
-import { proColumns, billDetailColumns, detailColumns, invoiceLineCols } from '../billApplication/billColumns'
+import { proColumns, billDetailColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
 import './billApproveDetail.css'
+const data = [{
+  title: '城建',
+  taxRate: '5%',
+  tax: '2021',
+}, {
+  title: '教育',
+  taxRate: '8%',
+  tax: '12000',
+}, {
+  title: '所得税',
+  taxRate: '10%',
+  tax: '3000',
+}, {
+  title: '合计',
+  taxRate: '20%',
+  tax: '21000',
+}]
 
 class BillDetail extends React.Component  {
   render() {
@@ -79,21 +96,41 @@ class BillDetail extends React.Component  {
           dataSource={appLineList}
           scroll={{ x: '1500px' }}
         />
-        <Row gutter={40}>
-          <Col span={24}>
-            备注: {billingApplicantRemark}
-          </Col>
-        </Row>
-        <Row gutter={40}>
-          <Col span={24}>
-            开票要求: {billingApplicantRequest}
-          </Col>
-        </Row>
-        <Row gutter={40}>
-          <Col span={24}>
-            附件: <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
-          </Col>
-        </Row>
+        {
+          this.props.applyType === 'BILLING_EXCESS' ?
+            <div className="arc-info">
+              <Table
+                style={{width: '50%'}}
+                rowKey="id"
+                size="small"
+                bordered
+                columns={totalColumns}
+                dataSource={data}
+                pagination={false}
+              />
+            </div> : null
+        }
+        <div style={{padding: '10px 0'}}>
+          <Row gutter={40}>
+            <Col span={24}>
+              备注: {billingApplicantRemark}
+            </Col>
+          </Row>
+        </div>
+        <div style={{padding: '10px 0'}}>
+          <Row gutter={40}>
+            <Col span={24}>
+              开票要求: {billingApplicantRequest}
+            </Col>
+          </Row>
+        </div>
+        <div style={{padding: '10px 0'}}>
+          <Row gutter={40}>
+            <Col span={24}>
+              附件: <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+            </Col>
+          </Row>
+        </div>
       </div>
     )
   }

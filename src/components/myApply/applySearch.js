@@ -152,26 +152,26 @@ export default class ApplySearchCon extends React.Component {
     const columns = [{
       title: '申请单编号',
       dataIndex: 'businessKey',
-      width: 120,
+      width: 100,
       render: (text, record) => (
         <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
       ),
     }, {
       title: '审批状态',
       dataIndex: 'statusName',
-      width: 100,
+      width: 80,
     }, {
       title: '申请单类型',
       dataIndex: 'modelName',
-      width: 120,
+      width: 150,
     }, {
       title: '申请信息',
       dataIndex: 'applyInfo',
-      width: 300,
+      width: 350,
     }, {
       title: '审批结果',
       dataIndex: 'approveType',
-      width: 150,
+      width: 100,
     }, {
       title: '审批意见',
       dataIndex: 'approveRemark',
@@ -196,7 +196,7 @@ export default class ApplySearchCon extends React.Component {
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
           {/* disabled={record.statusName === '审批中' ? 'false' : 'true'} */}
-          <Button disabled={record.statusName === '审批中' ? false : true} onClick={() => this.approveClick(record)}>审批</Button>
+          <Button type="primary" ghost disabled={record.statusName === '审批中' ? false : true} onClick={() => this.approveClick(record)}>审批</Button>
         </div>
       ),
     },
@@ -223,7 +223,7 @@ export default class ApplySearchCon extends React.Component {
               applyReject={this.applyReject}
               applyData={this.state.applyData}
               applyInfoData={this.props.myApply.getMyApplyInfo}
-              billApplySave={this.props.billApplySave}
+              billApplySave={this.props.billApproveSave}
               billSaveSuccess={billSaveSuccess}
               applicationIds={applicationIds}
             /> : null

@@ -38,7 +38,7 @@ export default class SelectRadioApi extends React.Component {
   render() {
     const options = this.props.options.length > 0 ? this.props.options :this.state.options
 
-    const optionDom = options ? options.map(option => <RadioButton style={{ marginRight: '10px', borderRadius: '4px',marginBottom:'2px' }} key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</RadioButton>) : null
+    const optionDom = options ? options.map(option => <RadioButton style={{ marginRight: '10px', borderRadius: '4px',marginBottom:'10px' }} key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</RadioButton>) : null
     return (
       <RadioGroup
         size="large" style={{ width: this.props.options.length ? '1000px' :'1000px' }}

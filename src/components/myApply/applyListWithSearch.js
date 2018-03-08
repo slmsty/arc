@@ -54,7 +54,7 @@ class ApplySearchCon extends React.Component {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
       labelCol: { span: 6 },
-      wrapperCol: { span: 18 },
+      wrapperCol: { span: 14 },
     }
     return (
       <div>
