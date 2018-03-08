@@ -91,7 +91,7 @@ export default class Index extends React.Component {
               <img src={headIcon} alt="" />
               <p>
                 欢迎您，<span>{accountName}</span><span>{orgName}</span>
-                <a target="_blank" rel="noopener noreferrer" href="https://xin.asiainfo.com/chat/G6ADE805AC1549359DDB3D803E18E442">问题反馈</a>
+                <a target="_blank" rel="noopener noreferrer" href="https://xin.asiainfo.com/chat/GC49401E5FD1446BAE1013B32D2F9B8E">问题反馈</a>
               </p>
             </div>
           </Header>
