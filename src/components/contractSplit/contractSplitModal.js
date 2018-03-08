@@ -92,6 +92,7 @@ class ContractSplitModal extends React.Component{
       editFlag: true,
       controactInfo: props.data[0],
       initInfo: null,
+      assessRatio:data.assessRatio
     }
   }
   getTableWidth = (colum)=> {
@@ -108,6 +109,44 @@ class ContractSplitModal extends React.Component{
       dataSource: newData,
     })
   }
+  // 目录价计算
+  calculateListPrice = (newData,data) => {
+    const dataInfos = this.props.data[0]
+    const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
+    const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
+    //let assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
+    let assessRatio = this.state.assessRatio ? parseFloat(this.state.assessRatio) : 0 // 考核比率
+    const incomeRatio =  parseFloat(parseFloat(solutionMaintain)/12 * 0.05)  // 收入比率
+    if(isNaN(assessRatio)){
+      assessRatio = 0
+    }
+    assessRatio = assessRatio/100 // 考核比率为百分数
+    let formula = 1
+    let formula2 = 1
+    if (assessRatio !== 0) {
+      if (data.No === 'ARC_PRD_7') {
+        formula = (1 + incomeRatio)
+        formula2 = (1 - assessRatio)
+        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+      }
+      if (data.No === 'ARC_PRD_7-K') {
+        formula = (1 + incomeRatio)
+        formula2 = assessRatio
+        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+      }
+      if (data.No === 'ARC_PRD_TASK_10') {
+        formula = (1 + incomeRatio)
+        formula2 = incomeRatio * (1 - assessRatio)
+        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+      }
+      if (data.No === 'ARC_PRD_TASK_10_K') {
+        formula = (1 + incomeRatio)
+        formula2 = incomeRatio * assessRatio
+        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+      }
+    }
+    return newData
+}
   handleChange = (data) => {
     const newData =this.state.dataSource.slice(0)
     if(this.props.data[0].collectionProject == 'Y' && data.columns==='contractCategory'){
@@ -131,39 +170,7 @@ class ContractSplitModal extends React.Component{
               item.contractCategory = ''
             }
           })
-          const dataInfos = this.props.data[0]
-          const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
-          const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
-          let assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
-          const incomeRatio =  parseFloat(parseFloat(solutionMaintain)/12 * 0.05)  // 收入比率
-          if(isNaN(assessRatio)){
-            assessRatio = 0
-          }
-          assessRatio = assessRatio/100 // 考核比率为百分数
-          let formula = 1
-          let formula2 = 1
-          if (assessRatio !== 0) {
-            if (data.No === 'ARC_PRD_7') {
-              formula = (1 + incomeRatio)
-              formula2 = (1 - assessRatio)
-              newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
-            }
-            if (data.No === 'ARC_PRD_7-K') {
-              formula = (1 + incomeRatio)
-              formula2 = assessRatio
-              newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
-            }
-            if (data.No === 'ARC_PRD_TASK_10') {
-              formula = (1 + incomeRatio)
-              formula2 = incomeRatio * (1 - assessRatio)
-              newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
-            }
-            if (data.No === 'ARC_PRD_TASK_10_K') {
-              formula = (1 + incomeRatio)
-              formula2 = incomeRatio * assessRatio
-              newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
-            }
-          }
+          this.calculateListPrice(newData,data)
         }
         newData[data.indexs][data.columns] = indexData
       }
@@ -468,7 +475,7 @@ class ContractSplitModal extends React.Component{
         return
       }
       if (!i.product || i.product.length <= 0) {
-        message.error('产品线不能为空！')
+        message.error('产品编码不能为空！')
         return
       }
       if (!i.revenueCheckout || typeof i.revenueCheckout === "undefined") {
@@ -543,6 +550,7 @@ class ContractSplitModal extends React.Component{
       postParams.contractInfo.splitedByName = this.props.user
     }
     postParams.contractInfo.projectBuNo = param.projectBuNo
+    postParams.contractInfo.assessRatio = this.state.assessRatio
     postParams.contractInfo.relatedBuNo = param.relatedBuNo
     postParams.contractInfo.relatedBuNoName = param.relatedBuNoName
     postParams.contractInfo.projectBuNoName = param.projectBuNoName
@@ -614,6 +622,57 @@ class ContractSplitModal extends React.Component{
       message.error('获取链接地址失败')
     }
   }
+  changeAssessRation = (value) =>{
+    this.setState({
+      assessRatio:value
+    })
+  }
+  blur = () => {
+    const NewData = []
+    const splitData = this.state.dataSource.slice(0)
+    const dataInfos = this.props.data[0]
+    const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
+    const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
+    //let assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
+    let assessRatio = this.state.assessRatio ? parseFloat(this.state.assessRatio) : 0 // 考核比率
+    const incomeRatio =  parseFloat(parseFloat(solutionMaintain)/12 * 0.05)  // 收入比率
+    if(isNaN(assessRatio)){
+      assessRatio = 0
+    }
+    assessRatio = assessRatio/100 // 考核比率为百分数
+    let formula = 1
+    let formula2 = 1
+    console.log('splitData',splitData)
+    for(let i = 0 ; i < splitData.length; i++) {
+      if (assessRatio !== 0) {
+        if (splitData[i].contractCategory === 'ARC_PRD_7') {
+          formula = (1 + incomeRatio)
+          formula2 = (1 - assessRatio)
+          splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        }
+        if (splitData[i].contractCategory === 'ARC_PRD_7-K') {
+          formula = (1 + incomeRatio)
+          formula2 = assessRatio
+          splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        }
+        if (splitData[i].contractCategory === 'ARC_PRD_TASK_10') {
+          formula = (1 + incomeRatio)
+          formula2 = incomeRatio * (1 - assessRatio)
+          splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        }
+        if (splitData[i].contractCategory === 'ARC_PRD_TASK_10_K') {
+          formula = (1 + incomeRatio)
+          formula2 = incomeRatio * assessRatio
+          splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        }
+        this.inputChange(splitData,i)
+    }
+    console.log('NewData',splitData)
+  }
+  this.setState({
+    dataSource:splitData
+  })
+}
   render() {
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractDatas = this.props.data
@@ -665,7 +724,7 @@ class ContractSplitModal extends React.Component{
       width: 200,
       render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractCategory',record),
     }, {
-      title: <span>产品线<em style={{ color: '#FF0000' }}>*</em></span>,
+      title: <span>产品编码<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'product',
       width: 200,
       render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'product',record),
@@ -955,9 +1014,10 @@ class ContractSplitModal extends React.Component{
                   考核比率：
                 </Col>
                 <Col span={3} className="contractRowBorderLeft">
-                  <div className="contractRowBorderNo">
-                    {constractData.assessRatio}
-                  </div>
+                  <InputNumber disabled={this.state.editFlag} style={{width:'100%'}} max="100" min="0" precision="2" value={this.state.assessRatio} onChange={this.changeAssessRation} onBlur={this.blur}/>
+                  {/*<div className="contractRowBorderNo">
+                    {this.state.assessRatio}
+                  </div>*/}
                 </Col>
               </Row>
               <br />
@@ -1054,7 +1114,7 @@ class ContractSplitModal extends React.Component{
 
                 </Col>
               </Row>
-              <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
+              {/*<Row className="text-css contractRowBorderLeft  contractRowBorderTop">
                 <Col span={5} className="contract-bg">
                   Task 3T cost(第三方软件成本)：
                 </Col>
@@ -1076,7 +1136,7 @@ class ContractSplitModal extends React.Component{
                     }
                   </FormItem>
                 </Col>
-              </Row>
+              </Row>*/}
               <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
                 <Col span={5} className="contract-bg">
                   Task 5 cost(外购硬件设备成本)：
@@ -1099,7 +1159,7 @@ class ContractSplitModal extends React.Component{
                   </FormItem>
                 </Col>
               </Row>
-              <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
+              {/*<Row className="text-css contractRowBorderLeft  contractRowBorderTop">
                 <Col span={5} className="contract-bg">
                   关联公司成本：
                 </Col>
@@ -1110,8 +1170,8 @@ class ContractSplitModal extends React.Component{
                     }
                   </FormItem>
                 </Col>
-              </Row>
-              <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
+              </Row>*/}
+              {/*<Row className="text-css contractRowBorderLeft  contractRowBorderTop">
                 <Col span={5} className="contract-bg">
                   关联分包费：
                 </Col>
@@ -1122,7 +1182,7 @@ class ContractSplitModal extends React.Component{
                     }
                   </FormItem>
                 </Col>
-              </Row>
+              </Row>*/}
               <Row className="text-css contractRowBorder">
                 <Col span={5} className="contract-bg">
                   合计：

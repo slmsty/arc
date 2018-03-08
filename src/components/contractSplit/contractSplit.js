@@ -225,9 +225,9 @@ export default class ApplySearchCon extends React.Component {
     return (
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />
-        <br /><br />
+        <div className="split"></div>
         <Button type="primary" onClick={this.showContractSplitInfo} disabled={this.state.selectedRowKeys.length>0 ? false : true}>合同拆分</Button>
-        <br /><br />
+        <div className="split"></div>
         {
           this.state.selectedRows && this.state.selectedRows[0] && this.state.contarctSplitModal ?
             <ContractSplitModal
