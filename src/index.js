@@ -36,7 +36,7 @@ function loader() {
   )
 }
 
-/*function bootstrap() {
+function bootstrap() {
   if (window.location.hash && window.location.hash.indexOf('access_token=') > -1) {
     window.sessionStorage.setItem('token', `bearer ${window.location.hash.split('access_token=')[1].split('&')[0]}`)
     window.history.pushState(null, '', window.localStorage.getItem('oldUrl'))
@@ -51,6 +51,6 @@ function loader() {
     // token不存在 去访问第三方授权网站 （注意：redirect_uri 需要和 后端设置的完全一样）
     window.location.href = `${process.env.REACT_APP_OAUTH2_SERVER}?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=all&redirect_uri=${window.location.origin}${process.env.PUBLIC_URL}`
   }
-}*/
+}
 
-export default loader()
+export default bootstrap()
