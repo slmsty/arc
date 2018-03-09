@@ -43,8 +43,8 @@ export default class BillingApplication extends React.Component {
       message.success('发票红冲成功!')
     } else if(this.props.billSaveSuccess !== nextProps.billSaveSuccess && nextProps.billSaveSuccess) {
       message.success('申请开票成功!')
+      this.getInitQuery()
     } else if(nextProps.failureMsg !== '') {
-      console.log(nextProps.failureMsg)
       message.error(nextProps.failureMsg)
     }
   }

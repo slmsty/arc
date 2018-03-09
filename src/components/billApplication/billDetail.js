@@ -134,9 +134,9 @@ class BillDetail extends React.Component {
       this.props.billApplySave(params)
     } else {
       this.props.form.validateFields((err, values) => {
-        this.state.dataSource.map(record => {
+        this.state.dataSource.map((record, index) => {
           if(record.billingAmount <= 0) {
-            message.error('开票含税金额必须大于0')
+            message.error(`第${index}行开票含税金额必须大于0`)
             err = true
           }
         })
@@ -508,7 +508,7 @@ class BillDetail extends React.Component {
     return (
       <Modal
         title="发票编辑"
-        width="1100px"
+        width="1200px"
         style={{ top: 20 }}
         visible={true}
         wrapClassName="vertical-center-modal"
@@ -602,7 +602,7 @@ class BillDetail extends React.Component {
                   />
                 </div>
                 <div className="add-btns">
-                  <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
+                  <Button type="primary" disabled={this.state.selectedRows.length === 0} style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
                 </div>
                 <Table
                   rowSelection={rowSelection}
