@@ -163,7 +163,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="预计回款日期">
                   {
                     getFieldDecorator('receiptReturnDate', {
-                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : '',}
+                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : moment(),}
                       )(<DatePicker format="YYYY-MM-DD"/>)
                   }
                 </FormItem>

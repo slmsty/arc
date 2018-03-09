@@ -137,6 +137,18 @@ export default class BillingApplication extends React.Component {
         dataIndex: 'advanceBillingRemark',
         width: 100,
       }, {
+        title: 'SBU',
+        dataIndex: 'sbuName',
+        width: 110,
+      }, {
+        title: '区域',
+        dataIndex: 'region',
+        width: 100,
+      }, {
+        title: '省份',
+        dataIndex: 'province',
+        width: 100,
+      }, {
         title: '操作',
         dataIndex: 'action',
         width: 80,
@@ -351,7 +363,7 @@ export default class BillingApplication extends React.Component {
   getScrollWidth() {
     let scroll = null
     if(normalTypes.includes(this.state.currentType)){
-      scroll = { x: 2170 }
+      scroll = { x: 2500 }
     } else if (redTypes.includes(this.state.currentType)) {
       scroll = { x: 1800 }
     } else if (advanceTypes.includes(this.state.currentType)) {

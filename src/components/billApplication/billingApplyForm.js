@@ -27,6 +27,7 @@ class BillingApplyForm extends React.Component {
       projectNos: values.projectNos ? values.projectNos : [],
       contractNos: values.contractNos ? values.contractNos : [],
       invoiceNumbers: values.invoiceNumbers ? values.invoiceNumbers : [],
+      sbuNo: values.sbuNo ? values.sbuNo[0] : '',
     }
     this.props.onQuery(param)
   }
