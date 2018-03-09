@@ -134,7 +134,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8} style={{ textAlign: 'right' }}>
               <FormItem {...formItemLayout} label="区域">
                 {
-                  getFieldDecorator('eara')(
+                  getFieldDecorator('region')(
                     <Input/>,
                   )
                 }
