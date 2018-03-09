@@ -21,7 +21,6 @@ class ApplySearchCon extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
-    console.log(param)
     this.props.onQuery(param)
   }
   handleRadioChange = (e) => {

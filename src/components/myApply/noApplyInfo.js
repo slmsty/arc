@@ -157,10 +157,6 @@ NoApplyInfo.propTypes = {
   applyReject: PropTypes.func,
   applyComfirm: PropTypes.func,
   infoVisitable: PropTypes.bool.isRequired,
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func.isRequired,
-    getFieldsValue: PropTypes.func.isRequired,
-  }).isRequired,
 }
 
 export default NoApplyInfo

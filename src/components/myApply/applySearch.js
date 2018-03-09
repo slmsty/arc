@@ -154,7 +154,7 @@ export default class ApplySearchCon extends React.Component {
       dataIndex: 'businessKey',
       width: 100,
       render: (text, record) => (
-        <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
+        <a href="javascript:void(0);" onClick={() => this.showApplyInfo(record)}>{text}</a>
       ),
     }, {
       title: '审批状态',
@@ -240,7 +240,7 @@ export default class ApplySearchCon extends React.Component {
         }
         <br /><br />
         <Table
-          rowKey="getMyApplyList"
+          rowKey="processInstanceId"
           pagination={pagination}
           bordered
           columns={columns}
