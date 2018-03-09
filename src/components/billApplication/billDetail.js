@@ -134,18 +134,29 @@ class BillDetail extends React.Component {
       this.props.billApplySave(params)
     } else {
       this.props.form.validateFields((err, values) => {
-        this.state.dataSource.map((record, index) => {
+        const groupNos = this.state.dataSource.filter(r => typeof r.groupNo !== 'undefined')
+        console.log(groupNos)
+        for(let i = 0; i< this.state.dataSource.length; i++) {
+          const record = this.state.dataSource[i]
           if(record.billingAmount <= 0) {
-            message.error(`第${index}行开票含税金额必须大于0`)
+            message.error(`第${i+1}行开票含税金额必须大于0`)
             err = true
+            break
           }
-        })
+          if(groupNos.length > 0 && typeof record.groupNo === 'undefined') {
+            message.error('第${i+1}行开票信息没有进行分组!')
+            err = true
+            break
+          }
+        }
+
         if (!err) {
           this.setState({loading: true})
           const { custInfo, comInfo } = this.props.detail
           const appLineItems = this.state.dataSource.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,
+            groupNo: groupNos.length > 0 ? record.groupNo : 1,
           }))
           const params = {
             ...values,
@@ -432,7 +443,7 @@ class BillDetail extends React.Component {
           onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
       )
     }, {
-      title: '含税金额',
+      title: '含税金额(*)',
       dataIndex: 'billingAmount',
       width: 100,
       render: (text, record, index) => (
