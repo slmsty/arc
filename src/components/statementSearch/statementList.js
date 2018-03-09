@@ -4,7 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import currency from '../../util/currency'
-import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns } from './statementColumns'
+import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns } from './statementColumns'
 import { Table, Row, Col, Form, Radio, DatePicker, Input, Icon } from 'antd'
 
 import StatementWithFrom from './statementWithFrom'
@@ -59,6 +59,11 @@ export default class StatementListIndex extends React.Component {
       return [width,totalContractContentColumns]
     } else if(type==='1006'){
       turnProColumns.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,turnProColumns]
+    }else if(type==='1007'){
+      constructSplitSearchColumns.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
       return [width,turnProColumns]

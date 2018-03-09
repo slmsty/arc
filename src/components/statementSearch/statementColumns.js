@@ -660,6 +660,92 @@ const turnProColumns = [{
     render: (text,rocord,index)=>(text ? currency(text) : currency(0))
   },
 ]
+// 合同拆分查询表
+const constructSplitSearchColumns = [{
+  title: '签约公司',
+  dataIndex: 'siginCommey',
+  width: 200,
+}, {
+  title: '签约日期',
+  dataIndex: 'sigeDate',
+  width: 200,
+}, {
+  title: '合同名称',
+  dataIndex: 'contractName',
+  width: 100,
+}, {
+  title: '合同编码',
+  dataIndex: 'contractNo',
+  width: 100,
+}, {
+  title: '立项BU',
+  dataIndex: 'productBU',
+  width: 80,
+},
+  {
+    title: '项目编码',
+    dataIndex: 'productNo',
+    width: 100,
+  },
+  {
+    title: '税率',
+    dataIndex: 'rate',
+    width: 100,
+  },
+  {
+    title: 'Task',
+    dataIndex: 'task',
+    width: 80,
+  },
+  {
+    title: '合同额',
+    dataIndex: 'constractMoney',
+    width: 100,
+    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+  },
+  {
+    title: 'Gross order',
+    dataIndex: 'grossOrder',
+    width: 80,
+    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+  },
+  {
+    title: '收入funding',
+    dataIndex: 'incomeFunding',
+    width: 80,
+  },
+  {
+    title: '结算方式',
+    dataIndex: 'jiesuanType',
+    width: 80,
+  },
+  {
+    title: '保修期开始时间',
+    dataIndex: 'proStart',
+    width: 80,
+  },
+  {
+    title: '软件解决方案保修期',
+    dataIndex: 'softRsult',
+    width: 80,
+  },
+  {
+    title: '服务器起始',
+    dataIndex: 'serverStart',
+    width: 80,
+  },
+  {
+    title: '服务器结束',
+    dataIndex: 'serverEnd',
+    width: 80,
+  },
+  {
+    title: '客户名称',
+    dataIndex: 'custorName',
+    width: 80,
+  },
+
+]
 
 
 
@@ -671,5 +757,6 @@ export {
   projectTotalCols,
   totalContractContentColumns,
   turnProColumns,
+  constructSplitSearchColumns,
 }
 
