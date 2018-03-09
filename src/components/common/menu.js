@@ -16,7 +16,11 @@ export default class MenuComponent extends React.Component {
             {childMenus}
           </SubMenu>
         )
+      }if(!menu.child){
+        const Menus =<Menu.Item key={menu.key}><Link to={menu.path} style={{fontSize:'16px'}}><i className={`iconfont ${menu.icon}`} />&nbsp;{menu.name}</Link></Menu.Item>
+        return Menus
       }
+
       return null
     }) : null
     return (

@@ -128,28 +128,28 @@ const common = {
       },
       {
         key: '4',
-        path: '/ContractSplit',
+        path: '/BillManage',
         name: '实际开票管理',
         icon: 'icon-shijikaipiaoguanli',
         component: 'HomeContainer',
         child: [
-          {
+          /*{
             key: '41',
-            path: '/ContractSplit/ContractSplit',
+            path: '/BillManage/ContractSplit',
             name: '合同拆分',
             icon: 'icon-BilledAR',
             component: 'ContractSplit',
-          },
+          },*/
           {
             key: '42',
-            path: '/ContractSplit/billingApplication',
+            path: '/BillManage/billingApplication',
             name: '开票申请',
             icon: 'icon-BilledAR',
             component: 'BillingApplication',
           },
           {
             key: '43',
-            path: '/ContractSplit/BillStatusManage',
+            path: '/BillManage/BillStatusManage',
             name: '开票状态管理',
             icon: 'icon-BilledAR',
             component: 'BillStatusManage',
@@ -174,11 +174,27 @@ const common = {
       },
       {
         key: '6',
-        path: '/statementSearch',
+        path: '/ContractSplit/ContractSplit',
+        name: '合同拆分',
+        icon: 'icon-BilledAR',
+        component: 'ContractSplit',
+        /*child: [
+          {
+            key: '51',
+            path: '/ContractSplit/ContractSplit',
+            name: '合同拆分',
+            icon: 'icon-BilledAR',
+            component: 'ContractSplit',
+          },
+        ],*/
+      },
+      {
+        key: '7',
+        path: '/statementSearch/statementList',
         name: '报表查询',
-        icon: 'icon-shijikaipiaoguanli',
-        component: 'HomeContainer',
-        child: [
+        icon: 'icon-BilledAR',
+        component: 'statementSearch',
+        /*child: [
           {
             key: '61',
             path: '/statementSearch/statementList',
@@ -186,7 +202,7 @@ const common = {
             icon: 'icon-BilledAR',
             component: 'statementSearch',
           },
-        ],
+        ],*/
       },
     ],
   } : {},
