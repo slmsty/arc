@@ -174,7 +174,7 @@ const common = {
       },
       {
         key: '6',
-        path: '/ContractSplit/ContractSplit',
+        path: '/contractSplit/contractSplit',
         name: '合同拆分',
         icon: 'icon-BilledAR',
         component: 'ContractSplit',
