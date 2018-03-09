@@ -1014,7 +1014,7 @@ class ContractSplitModal extends React.Component{
                   考核比率：
                 </Col>
                 <Col span={3} className="contractRowBorderLeft">
-                  <InputNumber disabled={this.state.editFlag} style={{width:'100%'}} max="100" min="0" precision="2" value={this.state.assessRatio} onChange={this.changeAssessRation} onBlur={this.blur}/>
+                  <InputNumber disabled={this.state.editFlag} style={{width:'100%'}} max="100" min="0" precision="2" defaultValue={this.state.assessRatio} onChange={this.changeAssessRation} onBlur={this.blur}/>
                   {/*<div className="contractRowBorderNo">
                     {this.state.assessRatio}
                   </div>*/}
