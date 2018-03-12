@@ -413,7 +413,9 @@ class ContractSplitModal extends React.Component{
         totalListPrice += !item || !item.listPrice ? 0 : parseFloat(item.listPrice) // 合计目录价
       }
     })
-    if(Math.abs(totalListPrice) > Math.abs(contractAmount)) {
+    console.log('totalListPrice',totalListPrice.toFixed(2))
+    console.log('contractAmount',contractAmount)
+    if(Math.abs(totalListPrice.toFixed(2)) > Math.abs(contractAmount)) {
       message.error('目录价之和不能大于合同总金额')
       return
     }
