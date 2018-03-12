@@ -12,7 +12,7 @@ export default class BillingApplication extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentType: 'BILLING_NORMAL',
+      currentType: 'BILLING_CONTRACT',
       updateVisible: false,
       otherAddVisible: false,
       selectedRows: [],
@@ -406,7 +406,7 @@ export default class BillingApplication extends React.Component {
           <BillDetail
             onCancel={() => this.props.hideDetailModal()}
             detail={editInfo}
-            billType={this.state.currentType}
+            billType={this.state.selectedRows[0].billingApplicationType}
             billApplySave={billApplySave}
             billApplyCheck={billApplyCheck}
             currentUser={currentUser}

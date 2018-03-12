@@ -394,14 +394,18 @@ export default class BillStatusCon extends React.Component {
     }, {
       title: '开票申请分类',
       dataIndex: 'applicationType',
-      width: 180,
+      width: 170,
     }, {
       title: '申请单编号',
       dataIndex: 'billingApplicationId',
-      width: 150,
+      width: 110,
       render: (text, record) => (
         <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
       ),
+    }, {
+        title: '退票票号',
+        dataIndex: 'backInvoiceNo',
+        width: 100,
     }, {
       title: '开票公司',
       dataIndex: 'companyName',
@@ -409,7 +413,7 @@ export default class BillStatusCon extends React.Component {
     }, {
       title: '开票要求',
       dataIndex: 'invoiceRequire',
-      width: 300,
+      width: 150,
     }, {
       title: '开票客户名称',
       dataIndex: 'customerName',
@@ -429,7 +433,7 @@ export default class BillStatusCon extends React.Component {
     }, {
       title: '备注',
       dataIndex: 'remark',
-      width: 300,
+      width: 250,
     }, {
       title: '创建提示',
       dataIndex: 'errorMessage',
@@ -483,7 +487,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveColumns}
           size="small"
-          scroll={{ x: '2200px' }}
+          scroll={{ x: '2000px' }}
           loading={this.state.loading}
           pagination={pagination}
           dataSource={result}
@@ -522,7 +526,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveResultColumns}
           size="small"
-          scroll={{ x: '1560px' }}
+          scroll={{ x: '1620px' }}
           loading={this.state.loading}
           pagination ={false}
           dataSource={this.props.billStatusManage.getBillStatusBillResultList}

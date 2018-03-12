@@ -105,6 +105,7 @@ class OtherContractAdd extends React.Component {
                       label="项目编码"
                       idKey="tempProjectNo"
                       valueKey="tempProjectNo"
+                      billType={this.props.billType}
                     />
                   )}
                 </FormItem>
