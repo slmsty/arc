@@ -279,12 +279,16 @@ class BillApproveDetail extends React.Component  {
       labelCol: { span: 8 },
       wrapperCol: { span: 12 },
     }
+    const formItemLayout1 = {
+      labelCol: { span: 12 },
+      wrapperCol: { span: 8 },
+    }
     const span3ItemLayout = {
       labelCol: { span: 2 },
       wrapperCol: { span: 20 },
     }
     const { billingType, billingDate, billingApplicantRequest, comInfo ={}, custInfo = {}, contractList, outcomeList,
-      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice } = this.props.serviceDetail
+      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -502,6 +506,7 @@ class BillApproveDetail extends React.Component  {
     }]
     //是否红冲发票
     const isReceiveInvoice = this.props.applyType === 'BILLING_RED' || this.props.applyType === 'BILLING_INVALID'
+    const showRedType = this.props.applyType === 'BILLING_RED' && this.props.taskCode === 'ar_finance_account'
     return (
       <div>
         <Form
@@ -532,7 +537,7 @@ class BillApproveDetail extends React.Component  {
             />
           </div>
           {isAgainInvoice === 'false' && showEdit.includes(this.props.applyType) ?
-            <Row>
+            <Row gutter={40}>
               <Col span={8} key={3}>
                 <FormItem {...formItemLayout} label="是否收到发票">
                   {
@@ -547,16 +552,33 @@ class BillApproveDetail extends React.Component  {
                 </FormItem>
               </Col>
               {
-                this.props.taskCode === 'tax_vp' ?
-                  <Row gutter={40}>
-                    <Col span={12} key={1}>
-                      <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
-                        {
-                          receiptOutcome === 'Y' ? '是' : '否'
-                        }
-                      </FormItem>
-                    </Col>
-                  </Row> : null
+                this.props.applyType === 'BILLING_RED' ?
+                  <Col span={8} key={1}>
+                    <FormItem {...formItemLayout} label="退票类型">
+                      {
+                        getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: true, message: '请选择退票类型!' }]})(
+                          <SelectInvokeApi
+                            typeCode="RED_TYPE_SELECT"
+                            paramCode="RED_OR_INVALID"
+                            placeholder="退票类型"
+                            hasEmpty
+                            disabled={this.props.taskCode === 'tax_auditor'}
+                          />
+                        )
+                      }
+                    </FormItem>
+                  </Col> : null
+              }
+              {
+                this.props.taskCode === 'tax_auditor' ?
+                  <Col span={8} key={1}>
+                    <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
+                      {
+                        receiptOutcome === 'Y' ? '是' : '否'
+                      }
+                    </FormItem>
+                  </Col>
+                 : null
               }
             </Row>
             :
@@ -592,8 +614,8 @@ class BillApproveDetail extends React.Component  {
                     <Col span={8} key={3}>
                       <FormItem {...formItemLayout} label="是否收到发票">
                         {
-                          getFieldDecorator(this.props.taskCode === 'tax_vp' ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
-                            {initialValue: this.props.taskCode === 'tax_vp' ? receiptOutcomeTaxVp : receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
+                          getFieldDecorator(this.props.taskCode === 'tax_auditor' ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
+                            {initialValue: this.props.taskCode === 'tax_auditor' ? receiptOutcomeTaxVp : receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
                             <Select>
                               <Option value="Y">是</Option>
                               <Option value="N">否</Option>
@@ -624,17 +646,37 @@ class BillApproveDetail extends React.Component  {
                 }
               </Row>
               {
-                this.props.taskCode === 'tax_vp' ?
+                showRedType ?
+                  <Row>
+                    <Col span={8} key={1}>
+                      <FormItem {...formItemLayout} label="退票类型">
+                        {
+                          getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: showRedType, message: '请选择退票类型!' }]})(
+                            <SelectInvokeApi
+                              typeCode="RED_TYPE_SELECT"
+                              paramCode="RED_OR_INVALID"
+                              placeholder="退票类型"
+                              hasEmpty
+                              disabled={this.props.taskCode === 'tax_auditor'}
+                            />
+                          )
+                        }
+                      </FormItem>
+                    </Col>
+                  </Row> : null
+              }
+              {
+                this.props.taskCode === 'tax_auditor' ?
                   <Row gutter={40}>
-                    <Col span={12} key={1}>
-                      <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
+                    <Col span={8} key={1}>
+                      <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                         {
                           receiptOutcome === 'Y' ? '是' : '否'
                         }
                       </FormItem>
                     </Col>
-                    <Col span={12} key={1}>
-                      <FormItem {...formItemLayout} label="退票类型">
+                    <Col span={8} key={2}>
+                      <FormItem {...formItemLayout1} label="退票类型">
                         {
                           receiptOutcome === 'Y' ? '是' : '否'
                         }

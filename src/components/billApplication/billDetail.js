@@ -5,7 +5,7 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
-import { contentCols, totalColumns, detailColumns, normalTypes } from './billColumns'
+import { contentCols, totalColumns, detailColumns, normalTypes, proColumns } from './billColumns'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -601,6 +601,18 @@ class BillDetail extends React.Component {
                     </FormItem>
                   </Col>
                 </Row>
+                <div className="arc-info">
+                  <Table
+                    rowKey="receiptClaimId"
+                    columns={proColumns}
+                    bordered
+                    size="small"
+                    scroll={{ x: '1570px' }}
+                    dataSource={[]}
+                    pagination={false}
+                  />
+                </div>
+
                 <div className="arc-info">
                   <Table
                     rowKey="id"
