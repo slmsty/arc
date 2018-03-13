@@ -314,7 +314,7 @@ export default class BillingApplication extends React.Component {
 
   billRedApply = () => {
     if(this.state.selectedRows.length === 0) {
-      message.warn('请选择要红冲的记录!')
+      message.warn('请选择要退票的记录!')
       return
     }
     this.props.getRedApplyDetail(this.state.selectedRows[0].billingOutcomeId)

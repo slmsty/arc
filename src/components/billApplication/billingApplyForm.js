@@ -24,8 +24,6 @@ class BillingApplyForm extends React.Component {
       ...values,
       arDateStart: values.arDate ? values.arDate[0].format('YYYY-MM-DD') : '',
       arDateEnd: values.arDate ? values.arDate[1].format('YYYY-MM-DD') : '',
-      projectNos: values.projectNos ? values.projectNos : [],
-      contractNos: values.contractNos ? values.contractNos : [],
       invoiceNumbers: values.invoiceNumbers ? values.invoiceNumbers : [],
       sbuNo: values.sbuNo ? values.sbuNo[0] : '',
     }
@@ -65,14 +63,12 @@ class BillingApplyForm extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={3}>
-              <FormItem {...formItemLayout} label="项目编码(多)">
+              <FormItem {...formItemLayout} label="项目编码">
                 {
-                  getFieldDecorator('projectNos',{
+                  getFieldDecorator('projectNo',{
                     initialValue: '',
                   })(
-                    <MultipleInput
-                      placeholder="多项目编码使用英文逗号间隔"
-                    />,
+                    <Input placeholder="项目编码"/>,
                   )
                 }
               </FormItem>
@@ -91,14 +87,12 @@ class BillingApplyForm extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={5}>
-              <FormItem {...formItemLayout} label="合同编码(多)">
+              <FormItem {...formItemLayout} label="合同编码">
                 {
-                  getFieldDecorator('contractNos',{
+                  getFieldDecorator('contractNo',{
                     initialValue: '',
                   })(
-                    <MultipleInput
-                      placeholder="多合同编码使用英文逗号间隔"
-                    />
+                    <Input placeholder="合同编码"/>,
                   )
                 }
               </FormItem>

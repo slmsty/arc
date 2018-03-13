@@ -135,7 +135,6 @@ class BillDetail extends React.Component {
     } else {
       this.props.form.validateFields((err, values) => {
         const groupNos = this.state.dataSource.filter(r => typeof r.groupNo !== 'undefined')
-        console.log(groupNos)
         for(let i = 0; i< this.state.dataSource.length; i++) {
           const record = this.state.dataSource[i]
           if(record.billingAmount <= 0) {
@@ -144,7 +143,7 @@ class BillDetail extends React.Component {
             break
           }
           if(groupNos.length > 0 && typeof record.groupNo === 'undefined') {
-            message.error('第${i+1}行开票信息没有进行分组!')
+            message.error(`第${i+1}行开票信息没有进行分组!`)
             err = true
             break
           }
@@ -443,7 +442,7 @@ class BillDetail extends React.Component {
           onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
       )
     }, {
-      title: '含税金额(*)',
+      title: <span>含税金额<b style={{color:'#FF0000'}}>(*)</b></span>,
       dataIndex: 'billingAmount',
       width: 100,
       render: (text, record, index) => (

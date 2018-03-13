@@ -633,6 +633,13 @@ class BillApproveDetail extends React.Component  {
                         }
                       </FormItem>
                     </Col>
+                    <Col span={12} key={1}>
+                      <FormItem {...formItemLayout} label="退票类型">
+                        {
+                          receiptOutcome === 'Y' ? '是' : '否'
+                        }
+                      </FormItem>
+                    </Col>
                   </Row> : null
               }
               <div style={{margin: '10px 0'}}>
