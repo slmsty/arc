@@ -26,7 +26,6 @@ class BillStatusManageWithFormCon extends React.Component {
     param.contractCode = param.contractCode && param.contractCode.length ? param.contractCode.join(',') : ''
     param.invoiceCode = param.invoiceCode && param.invoiceCode.length ? param.invoiceCode.join(',') : ''
     delete param.signDate
-    console.log(param)
     this.props.onQuery(param)
   }
   render() {

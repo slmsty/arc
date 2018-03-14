@@ -11,24 +11,6 @@ const FormItem = Form.Item
 const { TextArea } = Input
 const confirm = Modal.confirm
 
-const data = [{
-  title: '城建',
-  taxRate: '5%',
-  tax: '2021',
-}, {
-  title: '教育',
-  taxRate: '8%',
-  tax: '12000',
-}, {
-  title: '所得税',
-  taxRate: '10%',
-  tax: '3000',
-}, {
-  title: '合计',
-  taxRate: '20%',
-  tax: '21000',
-}]
-
 class BillDetail extends React.Component {
   constructor(props) {
     super(props)
@@ -513,6 +495,41 @@ class BillDetail extends React.Component {
       address: comInfo.addressPhoneNumber,
       bankAccount: comInfo.bankBankAccount
     }]
+    let rateData = []
+    if(this.props.billType === 'BILLING_EXCESS') {
+      let constructRate = 0, eduRate = 0, incomeRate = 0
+      const { constructionTaxRate, educationTaxRate, incomeTaxRate } = this.props.detail
+      console.log(this.state.dataSource)
+      this.state.dataSource.map(r => {
+        console.log(r.billingTaxRate)
+        if(r.billingTaxRate > 0) {
+          constructRate = parseFloat(constructRate + (r.billingTaxAmount * constructionTaxRate).toFixed(2))
+          eduRate = parseFloat(eduRate + (r.billingTaxAmount * educationTaxRate).toFixed(2))
+          incomeRate = incomeRate + 0
+        } else {
+          constructRate = constructRate + 0
+          eduRate = eduRate + 0
+          incomeRate = parseFloat(incomeRate + (r.billingAmountExcludeTax * incomeTaxRate).toFixed(2))
+        }
+      })
+      rateData = [{
+        title: '城建',
+        taxRate: `${constructionTaxRate * 100}%`,
+        tax: constructRate,
+      }, {
+        title: '教育',
+        taxRate: `${educationTaxRate * 100}%`,
+        tax: eduRate,
+      }, {
+        title: '所得税',
+        taxRate: `${incomeTaxRate * 100}%`,
+        tax: incomeRate,
+      }, {
+        title: '合计',
+        taxRate: '',
+        tax: constructRate + eduRate + incomeRate,
+      }]
+    }
     const rowSelection = {
       type: 'checkbox',
       onChange: (selectedRowKeys, selectedRows) => {
@@ -756,7 +773,7 @@ class BillDetail extends React.Component {
                   size="small"
                   bordered
                   columns={totalColumns}
-                  dataSource={data}
+                  dataSource={rateData}
                   pagination={false}
                 />
               </div> : null

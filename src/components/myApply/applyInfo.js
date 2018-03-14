@@ -10,11 +10,6 @@ const { TextArea } = Input
 
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 class ApplyInfoModal extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    if(this.props.applyInfoDatas !== nextProps.applyInfoDatas && nextProps.contractUrl === '') {
-      this.props.getContractUrl(nextProps.applyInfoDatas.contractId)
-    }
-  }
   applyComfirm = () => {
     const applyComfirmQueryParam = {
       arcFlowId: this.props.applyData.arcFlowId,

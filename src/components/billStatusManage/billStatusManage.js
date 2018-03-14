@@ -10,6 +10,7 @@ import GlDateModal from './../common/glDateModal'
 import FileDownModal from './fileDownMotal'
 import currency from '../../util/currency'
 import { billApproveItemColumns, billApproveInfoColumns } from './billStatusCols'
+const TO_TAX_TYPE = ['开票审批完成', '作废审批完成', '开票失败']
 
 export default class BillStatusCon extends React.Component {
   state = {
@@ -472,7 +473,7 @@ export default class BillStatusCon extends React.Component {
         <Button
           style={{marginLeft: '10px'}}
           loading={this.state.sendLoading}
-          disabled={this.state.selectedRows.length > 0 ? this.state.selectedRows[0].status !== '开票失败' : true}
+          disabled={this.state.selectedRows.length > 0 ? !TO_TAX_TYPE.includes(this.state.selectedRows[0].status) : true}
           type="primary"
           ghost
           onClick={() => this.sendInvoiceToTax()}
