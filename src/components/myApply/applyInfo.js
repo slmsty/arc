@@ -10,6 +10,11 @@ const { TextArea } = Input
 
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 class ApplyInfoModal extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    if(this.props.applyInfoDatas !== nextProps.applyInfoDatas && nextProps.contractUrl === '') {
+      this.props.getContractUrl(nextProps.applyInfoDatas.contractId)
+    }
+  }
   applyComfirm = () => {
     const applyComfirmQueryParam = {
       arcFlowId: this.props.applyData.arcFlowId,
@@ -117,6 +122,16 @@ class ApplyInfoModal extends React.Component {
           ]}
         >
           <Form>
+            <Row>
+              <Col span={14}>
+                <Button
+                  className="scan-document"
+                  type="primary"
+                  ghost
+                  onClick={() => window.open(this.props.contractUrl)}
+                >合同审批表及合同扫描件</Button>
+              </Col>
+            </Row>
             <h2>申请人信息</h2>
             <br />
             <Row>

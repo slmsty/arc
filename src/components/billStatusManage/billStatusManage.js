@@ -50,13 +50,13 @@ export default class BillStatusCon extends React.Component {
        })
      }
      if(this.props.billStatusManage.sendResult !== nextProps.billStatusManage.sendResult) {
-       const msg = nextProps.billStatusManage.sendResult.applicationStatusResults[0].errorMessage
-       if(msg) {
-         message.error(msg)
+       const result = nextProps.billStatusManage.sendResult.applicationStatusResults
+       if(result.length > 0) {
+         message.error(result[0].errorMessage)
        } else {
          message.success('发票申请信息传送成功')
-         this.setState({sendLoading: false})
        }
+       this.setState({sendLoading: false})
      }
   }
   queryParam = {

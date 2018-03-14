@@ -12,6 +12,7 @@ const initState = {
   editInfo: {
     custInfo: {},
     comInfo: {},
+    contractList: [],
     appLineItems: []
   },
   billContents: [],
@@ -100,11 +101,7 @@ function billApplyEdit(state, action) {
   return {
     ...state,
     searchEditSuccess: true,
-    editInfo: {
-      custInfo: action.response.custInfo,
-      comInfo: action.response.comInfo,
-      appLineItems: action.response.appLineItems,
-    },
+    editInfo: action.response,
   }
 }
 

@@ -490,7 +490,8 @@ class BillDetail extends React.Component {
       customRequest: this.customRequest,
       onChange: this.handleFileChange,
     };
-    const { custInfo, comInfo } = this.props.detail
+    const { custInfo, comInfo, contractList } = this.props.detail
+    console.log(contractList)
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -603,12 +604,11 @@ class BillDetail extends React.Component {
                 </Row>
                 <div className="arc-info">
                   <Table
-                    rowKey="receiptClaimId"
                     columns={proColumns}
                     bordered
                     size="small"
                     scroll={{ x: '1570px' }}
-                    dataSource={[]}
+                    dataSource={contractList}
                     pagination={false}
                   />
                 </div>
