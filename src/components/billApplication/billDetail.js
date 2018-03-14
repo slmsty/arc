@@ -337,6 +337,15 @@ class BillDetail extends React.Component {
     dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
   }
 
+  handleContractClick = () => {
+    if(this.props.contractUrl[0]){
+      window.open(this.props.contractUrl[0].url)
+    } else {
+      message.warn('暂无合同审批表及合同扫描件')
+      return
+    }
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -491,7 +500,6 @@ class BillDetail extends React.Component {
       onChange: this.handleFileChange,
     };
     const { custInfo, comInfo, contractList } = this.props.detail
-    console.log(contractList)
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -515,7 +523,6 @@ class BillDetail extends React.Component {
       },
       selectedRowKeys: this.state.selectedRowKeys,
     }
-    const contractScanUrl = this.props.contractUrl[0] ? this.props.contractUrl[0].url : ''
     return (
       <Modal
         title="发票编辑"
@@ -539,7 +546,7 @@ class BillDetail extends React.Component {
                 className="scan-document"
                 type="primary"
                 ghost
-                onClick={() => window.open(contractScanUrl)}
+                onClick={() => this.handleContractClick()}
               >合同审批表及合同扫描件</Button>
             </Col>
           </Row>

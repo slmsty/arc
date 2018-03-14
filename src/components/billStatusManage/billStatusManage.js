@@ -404,7 +404,7 @@ export default class BillStatusCon extends React.Component {
       ),
     }, {
         title: '退票票号',
-        dataIndex: 'backInvoiceNo',
+        dataIndex: 'invoiceNum',
         width: 100,
     }, {
       title: '开票公司',
