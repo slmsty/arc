@@ -10,21 +10,20 @@ const { TextArea } = Input
 
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 class ApplyInfoModal extends React.Component {
-  applyComfirm = () => {
-    const applyComfirmQueryParam = {
-      arcFlowId: this.props.applyData.arcFlowId,
-      processInstanceId: this.props.applyData.processInstanceId,
-      businessKey: this.props.applyData.businessKey,
-      taskId: this.props.applyData.taskId,
-      approveType: '',
-      approveRemark: '',
-    }
-    const param = this.props.form.getFieldsValue()
-    param.approveRemark = param.approveRemark ? this.trim(param.approveRemark) : param.approveRemark
-    param.approveType = 'agree'
-    applyComfirmQueryParam.approveRemark = param.approveRemark
-    applyComfirmQueryParam.approveType = param.approveType
-    this.props.applyComfirm(applyComfirmQueryParam)
+  applyConfirm = () => {
+    this.props.form.validateFields((err, values) => {
+      if(!err) {
+        const params = {
+          arcFlowId: this.props.applyData.arcFlowId,
+          processInstanceId: this.props.applyData.processInstanceId,
+          businessKey: this.props.applyData.businessKey,
+          taskId: this.props.applyData.taskId,
+          approveType: 'agree',
+          approveRemark: this.trim(values.approveRemark),
+        }
+        this.props.applyComfirm(params)
+      }
+    })
   }
   applyReject = () => {
     const applyRejectQueryParam = {
@@ -35,7 +34,6 @@ class ApplyInfoModal extends React.Component {
       approveType: '',
       approveRemark: '',
     }
-    // console.log(applyRejectQueryParam)
     const param = this.props.form.getFieldsValue()
     param.approveRemark = param.approveRemark ? this.trim(param.approveRemark) : param.approveRemark
     param.approveType = 'cancel'
@@ -44,7 +42,7 @@ class ApplyInfoModal extends React.Component {
     this.props.applyReject(applyRejectQueryParam)
   }
   trim = (str) => {
-    return str.replace(/(^\s*)|(\s*$)/g, '')
+    return str ? str.replace(/(^\s*)|(\s*$)/g, '') : ''
   }
   render() {
     const applyInfoDatas = this.props.applyInfoData
@@ -111,7 +109,7 @@ class ApplyInfoModal extends React.Component {
             <Button type="primary" key="reset" onClick={this.applyReject}>
               驳回
             </Button>,
-            <Button key="submit" type="primary" onClick={this.applyComfirm}>
+            <Button key="submit" type="primary" onClick={this.applyConfirm}>
               同意
             </Button>
           ]}
@@ -167,6 +165,7 @@ class ApplyInfoModal extends React.Component {
                     applyType={applyInfoDatas.serviceType}
                     billApplySave={this.props.billApplySave}
                     taskCode={applyInfoDatas.taskCode}
+                    form={this.props.form}
                   />
                 </div>
                 : null

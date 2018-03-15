@@ -509,9 +509,9 @@ class BillApproveDetail extends React.Component  {
     const showRedType = this.props.applyType === 'BILLING_RED' && this.props.taskCode === 'ar_finance_account'
     return (
       <div>
-        <Form
+        {/*<Form
           className="ant-search-form"
-        >
+        >*/}
           <div className="infoPanel">
             <h1>项目信息</h1>
             <Table
@@ -538,7 +538,7 @@ class BillApproveDetail extends React.Component  {
           </div>
           {isAgainInvoice === 'false' && showEdit.includes(this.props.applyType) ?
             <Row gutter={40}>
-              <Col span={8} key={3}>
+              <Col span={8}>
                 <FormItem {...formItemLayout} label="是否收到发票">
                   {
                     getFieldDecorator('receiptOutcome',
@@ -553,7 +553,7 @@ class BillApproveDetail extends React.Component  {
               </Col>
               {
                 this.props.applyType === 'BILLING_RED' ?
-                  <Col span={8} key={1}>
+                  <Col span={8}>
                     <FormItem {...formItemLayout} label="退票类型">
                       {
                         getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: true, message: '请选择退票类型!' }]})(
@@ -571,7 +571,7 @@ class BillApproveDetail extends React.Component  {
               }
               {
                 this.props.taskCode === 'tax_auditor' ?
-                  <Col span={8} key={1}>
+                  <Col span={8}>
                     <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
                       {
                         receiptOutcome === 'Y' ? '是' : '否'
@@ -584,7 +584,7 @@ class BillApproveDetail extends React.Component  {
             :
             <div>
               <Row gutter={40}>
-                <Col span={8} key={2}>
+                <Col span={8}>
                   <FormItem {...formItemLayout} label="开票类型">
                     {
                       getFieldDecorator('billingType', {
@@ -600,18 +600,18 @@ class BillApproveDetail extends React.Component  {
                     }
                   </FormItem>
                 </Col>
-                <Col span={8} key={3}>
+                <Col span={8}>
                   <FormItem {...formItemLayout} label="开票日期">
                     {
                       getFieldDecorator('billingDate', {initialValue: moment(billingDate, dateFormat)})(
-                        <DatePicker format="YYYY-MM-DD" />,
+                        <DatePicker format="YYYY-MM-DD"/>,
                       )
                     }
                   </FormItem>
                 </Col>
                 {
                   isReceiveInvoice ?
-                    <Col span={8} key={3}>
+                    <Col span={8}>
                       <FormItem {...formItemLayout} label="是否收到发票">
                         {
                           getFieldDecorator(this.props.taskCode === 'tax_auditor' ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
@@ -627,7 +627,7 @@ class BillApproveDetail extends React.Component  {
                 }
                 {
                   this.props.isApprove ?
-                    <Col span={8} key={3}>
+                    <Col span={8}>
                       <FormItem {...formItemLayout} label="开票流程">
                         {
                           getFieldDecorator('billFlow',
@@ -648,7 +648,7 @@ class BillApproveDetail extends React.Component  {
               {
                 showRedType ?
                   <Row>
-                    <Col span={8} key={1}>
+                    <Col span={8}>
                       <FormItem {...formItemLayout} label="退票类型">
                         {
                           getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: showRedType, message: '请选择退票类型!' }]})(
@@ -667,7 +667,7 @@ class BillApproveDetail extends React.Component  {
               }
               {
                 <Row gutter={40}>
-                  <Col span={8} key={1}>
+                  <Col span={8}>
                     <FormItem {...formItemLayout} label="费用承担者">
                       {costBearName}
                     </FormItem>
@@ -675,14 +675,14 @@ class BillApproveDetail extends React.Component  {
                   {
                     this.props.taskCode === 'tax_auditor' ?
                       <div>
-                        <Col span={8} key={2}>
+                        <Col span={8}>
                           <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                             {
                               receiptOutcome === 'Y' ? '是' : '否'
                             }
                           </FormItem>
                         </Col>
-                        <Col span={8} key={3}>
+                        <Col span={8}>
                           <FormItem {...formItemLayout1} label="退票类型">
                             {
                               receiptOutcome === 'Y' ? '是' : '否'
@@ -769,10 +769,11 @@ class BillApproveDetail extends React.Component  {
               <Icon type="check" />保存修改
             </Button>
           </div>
-        </Form>
+        {/*</Form>*/}
       </div>
     )
   }
 }
 
-export default Form.create()(BillApproveDetail)
+//export default Form.create()(BillApproveDetail)
+export default BillApproveDetail

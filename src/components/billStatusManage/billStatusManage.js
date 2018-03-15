@@ -155,7 +155,6 @@ export default class BillStatusCon extends React.Component {
          noApplyInfoVisitable: true,
          noApplyInfoData: record,
         })
-        console.log(res)
         this.props.getContractUrl(res.response.data.serviceDetail.contractId)
       }
     })

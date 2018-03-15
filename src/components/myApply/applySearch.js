@@ -76,7 +76,6 @@ export default class ApplySearchCon extends React.Component {
           infoVisitable: true,
           applyData: record,
         })
-        console.log(res.response.data.serviceDetail.contractId)
         this.props.getContractUrl(res.response.data.serviceDetail.contractId)
       } else {
         message.error(res.response.resultMessage)
@@ -96,8 +95,6 @@ export default class ApplySearchCon extends React.Component {
       })
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('审批成功')
-      } else {
-        message.error(res.response.resultMessage)
       }
     })
   }
@@ -114,8 +111,6 @@ export default class ApplySearchCon extends React.Component {
       })
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('驳回成功')
-      } else {
-        message.error(res.response.resultMessage)
       }
     })
   }
@@ -259,15 +254,4 @@ export default class ApplySearchCon extends React.Component {
       </div>
     )
   }
-}
-ApplySearchCon.propTypes = {
-  getMyApplyList: PropTypes.func.isRequired,
-  approveSubmit: PropTypes.func.isRequired,
-  approveReject: PropTypes.func.isRequired,
-  myApplyInfo: PropTypes.func.isRequired,
-  myApply: PropTypes.shape({
-    myapplyListRefresh: PropTypes.number.isRequired,
-    getMyApplyList: PropTypes.object.isRequired,
-    getMyApplyInfo: PropTypes.object.isRequired,
-  }).isRequired,
 }
