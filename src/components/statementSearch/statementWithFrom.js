@@ -79,19 +79,36 @@ class StatementListCom extends React.Component {
     infoVisitable: false,
     loading: false,
     applyData: '',
-    stateType: '',
+    stateType: '100',
   }
   // 查询接口
-  queryParms = () => {
-    const param = this.props.form.getFieldsValue()
+  queryParms = (statement) => {
+    const params = this.props.form.getFieldsValue()
+    const param = {}
+    if(statement ==='receipt_claim'){
+      param.projectNo = params.projectNo
+      param.custName = params.custName ? params.custName[1] : ''
+      //param.receiptDate = params.receiptDate
+      param.receiptDateStart = params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : ''
+      param.receiptDateEnd = params.receiptDate && params.receiptDate.length ? params.receiptDate[1].format(dateFormat) : ''
+      param.receiptCurrency = params.receiptCurrency
+      param.claimAmountMin = params.claimAmountMin
+      param.claimAmountMax = params.claimAmountMax
+      param.signCompany = params.signCompany
+      param.paymentName = params.paymentName
+      param.contractName = params.contractName
+      param.contractNo = params.contractNo
+      this.props.queryParms(param)
+    }
     console.log(param)
+    this.props.form.resetFields()
+
   }
   handleRadioChange = (e) => {
     this.setState({
       stateType:e.target.value,
     })
     this.props.showCols(e.target.value)
-    this.props.form.resetFields()
   }
 
   render() {
@@ -134,7 +151,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="项目编码(多)">
                   {
-                    getFieldDecorator('projectIds')(
+                    getFieldDecorator('projectNo')(
                       <MultipleInput
                         placeholder="多项目编码使用英文逗号间隔"
                       />,
@@ -144,14 +161,14 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="客户名称">
-                  {getFieldDecorator('custId')(
+                  {getFieldDecorator('custName')(
                     <SelectCustomerWithForm />,
                   )}
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="收款日期">
-                  {getFieldDecorator('reciptDate', {
+                  {getFieldDecorator('receiptDate', {
                     initialValue: [moment('2017-08-01'), moment()],
                   })(<RangePicker
                     allowClear
@@ -176,20 +193,20 @@ class StatementListCom extends React.Component {
                 <Row>
                   <Col span={14}>
                     <FormItem {...formItemLayout} label="收款金额" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
-                      {getFieldDecorator('receiptAmountFrom')(<Input />)}
+                      {getFieldDecorator('claimAmountMin')(<Input />)}
                     </FormItem>
                   </Col>
                   <Col span={2}><div style={{ textAlign: 'center' }}>～</div></Col>
                   <Col span={8}>
                     <FormItem {...formItemLayout} wrapperCol={{ span: 24 }}>
-                      {getFieldDecorator('receiptAmountTo')(<Input />)}
+                      {getFieldDecorator('claimAmountMax')(<Input />)}
                     </FormItem>
                   </Col>
                 </Row>
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="收款编码">
-                  {getFieldDecorator('receiptId')(
+                  {getFieldDecorator('receiptNo')(
                     <Input
                       placeholder="请输入收款编码"
                     />,
@@ -239,7 +256,7 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
-                <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search" />查询</Button>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('receipt_claim')}><Icon type="search" />查询</Button>
               </Col>
             </Row>
           </div>

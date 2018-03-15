@@ -8,6 +8,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import SelectSbu from '../common/SelectSbu'
 import ContractType from '../common/contractType'
+import ContractType1 from '../common/contractType1'
 import ProductLine from '../common/productLine'
 import MyDtatePicker from '../common/myDatePicker'
 import SelectInvokeApi from '../common/selectInvokeApi'
@@ -148,6 +149,7 @@ class ContractSplitModal extends React.Component{
     return newData
 }
   handleChange = (data) => {
+    console.log('data',data)
     const newData =this.state.dataSource.slice(0)
     if(this.props.data[0].collectionProject == 'Y' && data.columns==='contractCategory'){
       if(data.No !=="ARC_PRD_1" && data.No !=="ARC_PRD_1-K" ){
@@ -158,7 +160,8 @@ class ContractSplitModal extends React.Component{
     }
 
     if(data){
-      const indexData = data.No && data.Name ? [data.No,data.Name] : ''
+      //const indexData = data.No && data.Name ? [data.No,data.Name] : ''
+      const indexData = [data.No,data.Name]
 
       if(data.columns){
         if(data.columns === 'contractCategory'){
@@ -197,8 +200,21 @@ class ContractSplitModal extends React.Component{
     })
   }
   renderColumns = (text, index, column,record) => {
+
     if(column=="product"){
-      return <ProductLine disabled={this.state.editFlag} onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record.product}  indexs={index} columns={column} />
+      console.log('record[column]',record[column])
+      console.log('text',text)
+      return ( <ContractType1
+        type='product'
+        keywords={this.props.data[0].projectNo}
+        hasEmpty
+        onChange={this.handleChange}
+        value={text}
+        indexs={index}
+        columns={column}
+        disabled={this.state.editFlag}
+      />)
+      //return <ProductLine disabled={this.state.editFlag} onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record.product}  indexs={index} columns={column} />
     }
     if(column ==='contractCategory'){
       const parentOrderListLineId = record.parentOrderListLineId ? record.parentOrderListLineId : ''
@@ -211,12 +227,12 @@ class ContractSplitModal extends React.Component{
       }
 
       return(
-        <ContractType
-          parentCode={parentCode}
+        <ContractType1
+          //parentCode={parentCode}
+          keywords={this.props.data[0].projectNo}
           hasEmpty
           onChange={this.handleChange}
-          value={record[column]}
-          text={text ? text : ''}
+          value={text}
           indexs={index}
           columns={column}
           disabled={this.state.editFlag}
@@ -413,8 +429,8 @@ class ContractSplitModal extends React.Component{
         totalListPrice += !item || !item.listPrice ? 0 : parseFloat(item.listPrice) // 合计目录价
       }
     })
-    console.log('totalListPrice',totalListPrice.toFixed(2))
-    console.log('contractAmount',contractAmount)
+    //console.log('totalListPrice',totalListPrice.toFixed(2))
+    //console.log('contractAmount',contractAmount)
     if(Math.abs(totalListPrice.toFixed(2)) > Math.abs(contractAmount)) {
       message.error('目录价之和不能大于合同总金额')
       return
@@ -476,7 +492,11 @@ class ContractSplitModal extends React.Component{
         message.error('合同类型不能为空！')
         return
       }
-      if (!i.product || i.product.length <= 0) {
+      /*if (!i.product || i.product.length <= 0) {
+        message.error('产品编码不能为空！')
+        return
+      }*/
+      if (i.product==='') {
         message.error('产品编码不能为空！')
         return
       }
@@ -551,6 +571,7 @@ class ContractSplitModal extends React.Component{
     if(!postParams.contractInfo.splitedByName){
       postParams.contractInfo.splitedByName = this.props.user
     }
+    postParams.contractInfo.recalculate = param.recalculate
     postParams.contractInfo.projectBuNo = param.projectBuNo
     postParams.contractInfo.assessRatio = this.state.assessRatio
     postParams.contractInfo.relatedBuNo = param.relatedBuNo
@@ -559,13 +580,15 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.revenueCheckout = revenueCheckout
     postParams.contractInfo.maintainBeginDate = param.maintainBeginDate
     postParams.contractInfo.splitedRemark = this.state.rcontent
-    postParams.contractInfo.task1tCost = param.task1tCost
+    postParams.contractInfo.task1Cost = param.task1Cost
     postParams.contractInfo.task3tCost = param.task3tCost
     postParams.contractInfo.task4tCost = param.task4tCost
     postParams.contractInfo.task5Cost = param.task5Cost
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
+
+
 
     this.props.saveInfo(postParams)
     this.closeModal()
@@ -606,7 +629,7 @@ class ContractSplitModal extends React.Component{
         maintainBeginDate: constractData.maintainBeginDate,
         revenueCheckout: constractData['revenueCheckout'],
         projectBuNo: [constractData.projectBuNo,constractData.projectBuNoName],
-        task1Cost: constractData.task1tCost ? constractData.task1tCost : 0 ,
+        task1Cost: constractData.task1Cost ? constractData.task1Cost : 0 ,
         task3tCost: constractData.task3tCost ? constractData.task3tCost : 0,
         task4tCost: constractData.task4tCost ? constractData.task4tCost : 0,
         task5Cost: constractData.task5Cost ? constractData.task5Cost : 0,
@@ -679,6 +702,7 @@ class ContractSplitModal extends React.Component{
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractDatas = this.props.data
     const constractData = constractDatas[0]
+    console.log('constractData.task1Cost',constractData.task1Cost)
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
     let countsalePeo = 0 // 合同不含税额
@@ -1053,12 +1077,31 @@ class ContractSplitModal extends React.Component{
                 </Col>
               </Row>
               <Row className="text-css contractRowBorder">
-                <Col span={4} className="contract-bg ">
+                <Col span={3} className="contract-bg ">
                   是否集采项目：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft">
+                <Col span={1} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     {constractData.collectionProject === 'Y'  ? '是' : '否'}
+                  </div>
+                </Col>
+                <Col span={3} className="contractRowBorderLeft contract-bg ">
+                  是否复算项目：
+                </Col>
+                <Col span={2} className="contractRowBorderLeft">
+                  <div className="contractRowBorderNo">
+                    {/*{constractData.collectionProject === 'Y'  ? '是' : '否'}*/}
+                    <FormItem>
+                      {
+                        getFieldDecorator('recalculate',{initialValue:constractData.recalculate ? constractData.recalculate : 'N'},)(
+                          <Select style={{border:'none'}} disabled={this.state.editFlag}>
+                            <Option value="Y">是</Option>
+                            <Option value="N">否</Option>
+                          </Select>
+                        )
+                      }
+                    </FormItem>
+
                   </div>
                 </Col>
                 <Col span={3} className="contractRowBorderLeft contract-bg">
@@ -1108,9 +1151,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={19} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>
                     {
-                      getFieldDecorator('task1Cost',{
-                        initialValue:constractData.task1tCost ? currency(constractData.task1tCost) : 0
-                      },)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task1Cost')} disabled={this.state.editFlag} />)
+                      getFieldDecorator('task1Cost',{initialValue:constractData.task1Cost ? currency(constractData.task1Cost) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task1Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
 
@@ -1197,7 +1238,7 @@ class ContractSplitModal extends React.Component{
               <br />
               <h2>拆分备注</h2>
               <br />
-              <TextArea disabled={this.state.editFlag} rows={4} defaultValue={constractData.subcontractFee}  value={this.state.rcontent} onChange={this.onTextAreaChange} placeholder="根据实际情况录入，且不超过150字符" />
+              <TextArea disabled={this.state.editFlag} rows={4} defaultValue={constractData.splitedRemark}  value={this.state.rcontent} onChange={this.onTextAreaChange} placeholder="根据实际情况录入，且不超过150字符" />
               <br />
               <br />
               <h2>Order</h2>

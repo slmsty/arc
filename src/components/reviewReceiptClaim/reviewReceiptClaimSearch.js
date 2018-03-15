@@ -27,6 +27,7 @@ class ReviewReceiptClaimSearch extends React.Component {
     param.custId = param.custId && param.custId.length ? param.custId[0] : null
     param.receiptDateStart = param.receiptDate && param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
     param.receiptDateEnd = param.receiptDate && param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
+
     param.statusDateStart = param.statusDate && param.statusDate.length ? param.statusDate[0].format(dateFormat) : ''
     param.statusDateEnd = param.statusDate && param.statusDate.length ? param.statusDate[1].format(dateFormat) : ''
     delete param.receiptDate

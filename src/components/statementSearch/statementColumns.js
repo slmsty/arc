@@ -7,52 +7,52 @@ const reciptMoneyInfoCols = [{
 }, {
   title: '项目编号',
   dataIndex: 'projectNo',
-  width: 250,
+  width: 150,
 }, {
   title: '节点',
-  dataIndex: 'node',
+  dataIndex: 'projectNode',
   width: 100,
 }, {
   title: '付款百分比',
-  dataIndex: 'payParam',
+  dataIndex: 'paymentPercent',
   width: 100,
 },
   {
     title: '付款条款',
-    dataIndex: 'payParamItem',
+    dataIndex: 'paymentName',
     width: 100,
   }, {
     title: '收款币种',
-    dataIndex: 'currency',
+    dataIndex: 'receiptCurrency',
     width: 80,
   }, {
     title: '应收金额',
-    dataIndex: 'shouldReciptMoney',
+    dataIndex: 'billedArAmount',
     width: 100,
     render: (text,rocord,index)=>(text ? currency(text) : currency(0))
   }, {
     title: '收款日期',
-    dataIndex: 'recipDate',
-    width: 120,
+    dataIndex: 'receiptDate',
+    width: 80,
   },
   {
     title: '收款编号',
-    dataIndex: 'recipNo',
+    dataIndex: 'receiptNo',
     width: 120,
   }, {
     title: '收款金额',
-    dataIndex: 'reciptMoney',
+    dataIndex: 'claimAmount',
     width: 100,
     render: (text,rocord,index)=>(text ? currency(text) : currency(0))
   }, {
     title: '合同编号',
     dataIndex: 'contractNo',
-    width: 120,
+    width: 200,
   },
   {
     title: '合同名称',
     dataIndex: 'contractName',
-    width: 120,
+    width: 300,
   },
   {
     title: '项目经理',
@@ -61,17 +61,17 @@ const reciptMoneyInfoCols = [{
   },
   {
     title: '销售经理',
-    dataIndex: 'saleManager',
+    dataIndex: 'salesManager',
     width: 80,
   },
   {
     title: '立项部门',
-    dataIndex: 'projectBU',
+    dataIndex: 'deptId',
     width: 80,
   },
   {
     title: '已开票金额',
-    dataIndex: 'billedMoney',
+    dataIndex: 'taxIncludeAmount',
     width: 100,
     render: (text,rocord,index)=>(text ? currency(text) : currency(0))
   },

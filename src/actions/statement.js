@@ -5,7 +5,7 @@ import { httpApi } from '../http/reduxRequestMiddleware'
 export function getStatementList(queryParam) {
   return {
     [httpApi]: {
-      url: '/arc/workFlow/myTask',
+      url: '/arc/report/receipt_claim/list',
       options: {
         method: 'POST',
         body: queryParam,
