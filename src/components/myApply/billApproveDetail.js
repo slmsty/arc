@@ -288,7 +288,7 @@ class BillApproveDetail extends React.Component  {
       wrapperCol: { span: 20 },
     }
     const { billingType, billingDate, billingApplicantRequest, comInfo ={}, custInfo = {}, contractList, outcomeList,
-      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid } = this.props.serviceDetail
+      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -584,7 +584,7 @@ class BillApproveDetail extends React.Component  {
             :
             <div>
               <Row gutter={40}>
-                <Col span={8} key={1}>
+                <Col span={8} key={2}>
                   <FormItem {...formItemLayout} label="开票类型">
                     {
                       getFieldDecorator('billingType', {
@@ -600,7 +600,7 @@ class BillApproveDetail extends React.Component  {
                     }
                   </FormItem>
                 </Col>
-                <Col span={8} key={2}>
+                <Col span={8} key={3}>
                   <FormItem {...formItemLayout} label="开票日期">
                     {
                       getFieldDecorator('billingDate', {initialValue: moment(billingDate, dateFormat)})(
@@ -666,23 +666,32 @@ class BillApproveDetail extends React.Component  {
                   </Row> : null
               }
               {
-                this.props.taskCode === 'tax_auditor' ?
-                  <Row gutter={40}>
-                    <Col span={8} key={1}>
-                      <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
-                        {
-                          receiptOutcome === 'Y' ? '是' : '否'
-                        }
-                      </FormItem>
-                    </Col>
-                    <Col span={8} key={2}>
-                      <FormItem {...formItemLayout1} label="退票类型">
-                        {
-                          receiptOutcome === 'Y' ? '是' : '否'
-                        }
-                      </FormItem>
-                    </Col>
-                  </Row> : null
+                <Row gutter={40}>
+                  <Col span={8} key={1}>
+                    <FormItem {...formItemLayout} label="费用承担者">
+                      {costBearName}
+                    </FormItem>
+                  </Col>
+                  {
+                    this.props.taskCode === 'tax_auditor' ?
+                      <div>
+                        <Col span={8} key={2}>
+                          <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
+                            {
+                              receiptOutcome === 'Y' ? '是' : '否'
+                            }
+                          </FormItem>
+                        </Col>
+                        <Col span={8} key={3}>
+                          <FormItem {...formItemLayout1} label="退票类型">
+                            {
+                              receiptOutcome === 'Y' ? '是' : '否'
+                            }
+                          </FormItem>
+                        </Col>
+                      </div> : null
+                  }
+                </Row>
               }
               <div style={{margin: '10px 0'}}>
                 <Table
@@ -694,12 +703,9 @@ class BillApproveDetail extends React.Component  {
                   pagination={false}
                 />
               </div>
-              {
-                !isReceiveInvoice ?
-                  <div className="add-btns">
-                    <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
-                  </div> : null
-              }
+              <div className="add-btns">
+                <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
+              </div>
               <Table
                 rowSelection={rowSelection}
                 style={{marginBottom: '10px'}}

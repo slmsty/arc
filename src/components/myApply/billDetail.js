@@ -25,7 +25,7 @@ const data = [{
 class BillDetail extends React.Component  {
   render() {
     const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo = {}, custInfo = {},
-      contractList, outcomeList, billingApplicantRemark, receiptOutcome, fileName, filePath, isAgainInvoice } = this.props.serviceDetail
+      contractList, outcomeList, billingApplicantRemark, receiptOutcome, fileName, filePath, isAgainInvoice, costBearName } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -88,9 +88,12 @@ class BillDetail extends React.Component  {
             <div>
               <Row gutter={40}>
                 <Col span={8} key={1}>
-                  开票类型 :{billingTypeName}
+                  费用承担者 :{costBearName}
                 </Col>
                 <Col span={8} key={2}>
+                  开票类型 :{billingTypeName}
+                </Col>
+                <Col span={8} key={3}>
                   开票日期: {billingDate}
                 </Col>
                 {
