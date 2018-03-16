@@ -554,6 +554,7 @@ export default class BillStatusCon extends React.Component {
           applyData={this.state.noApplyInfoData}
           applyInfoData={this.props.myApply.getMyApplyInfo}
           fileDown={this.props.fileDown}
+          contractUrl={this.props.contractUrl}
         />
         {/* 弹出传送ARglDatemodal */}
         <GlDateModal
