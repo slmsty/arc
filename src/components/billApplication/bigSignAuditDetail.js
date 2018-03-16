@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Row, Col, Table, Modal, Icon } from 'antd'
+import { Button, Row, Col, Table, Modal, Icon, Form } from 'antd'
 import BillApproveDetail from '../myApply/billApproveDetail'
 import './bigSignAuditDetail.less'
 
@@ -16,13 +16,16 @@ class BigSignAuditDetail extends React.Component {
   }
 
   billStartWorkFlow = (billingApplicationId) => {
-    console.log(this.state.billType)
-    const params = {
-      billingApplicationId,
-      billingApplicationType: this.state.billType,
-    }
-    this.props.billStartWorkFlow(params)
-    this.props.onCancel()
+    this.props.form.validateFields((err, values) => {
+      if(!err) {
+        const params = {
+          billingApplicationId,
+          billingApplicationType: this.state.billType,
+        }
+        this.props.billStartWorkFlow(params)
+        this.props.onCancel()
+      }
+    })
   }
 
   setBillApplicationType = (type) => {
@@ -55,30 +58,33 @@ class BigSignAuditDetail extends React.Component {
           </Button>,
         ]}
       >
-        <div>
-          <h3 className="bill-title">申请人信息</h3>
-          <Row gutter={30}>
-            <Col span={3}>申请人: </Col><Col span={9}>{applyPersonName}</Col>
-            <Col span={3}>申请人部门:</Col><Col span={9}>{applyPersonDept}</Col>
-          </Row>
-          <Row gutter={30}>
-            <Col span={3}>联系电话:</Col><Col span={9}>{applyPersonPhone}</Col>
-            <Col span={3}>邮箱地址:</Col><Col span={9}>{applyPersonEmail}</Col>
-          </Row>
-        </div>
-        <div>
-          <h3 className="bill-title">{serviceTypeName}详情</h3>
-          <BillApproveDetail
-            serviceDetail={serviceDetail}
-            applyType={serviceTypeName}
-            billApplySave={this.props.billApplySave}
-            isApprove={true}
-            setBillApplicationType={this.setBillApplicationType}
-          />
-        </div>
+        <Form>
+          <div>
+            <h3 className="bill-title">申请人信息</h3>
+            <Row gutter={30}>
+              <Col span={3}>申请人: </Col><Col span={9}>{applyPersonName}</Col>
+              <Col span={3}>申请人部门:</Col><Col span={9}>{applyPersonDept}</Col>
+            </Row>
+            <Row gutter={30}>
+              <Col span={3}>联系电话:</Col><Col span={9}>{applyPersonPhone}</Col>
+              <Col span={3}>邮箱地址:</Col><Col span={9}>{applyPersonEmail}</Col>
+            </Row>
+          </div>
+          <div>
+            <h3 className="bill-title">{serviceTypeName}详情</h3>
+            <BillApproveDetail
+              serviceDetail={serviceDetail}
+              applyType={serviceTypeName}
+              billApplySave={this.props.billApplySave}
+              isApprove={true}
+              setBillApplicationType={this.setBillApplicationType}
+              form={this.props.form}
+            />
+          </div>
+        </Form>
       </Modal>
     )
   }
 }
 
-export default BigSignAuditDetail
+export default Form.create()(BigSignAuditDetail)
