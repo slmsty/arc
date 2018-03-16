@@ -10,7 +10,7 @@ const FormItem = Form.Item
 const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
 const Option = Select.Option
-const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
+const showReceive = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
 const data = [{
   title: '城建',
   taxRate: '5%',
@@ -505,7 +505,7 @@ class BillApproveDetail extends React.Component  {
       }
     }]
     //是否红冲发票
-    const isReceiveInvoice = this.props.applyType === 'BILLING_RED' || this.props.applyType === 'BILLING_INVALID'
+    const isReceiveInvoice = showReceive.includes(this.props.applyType)
     const showRedType = this.props.applyType === 'BILLING_RED' && this.props.taskCode === 'ar_finance_account'
     return (
       <div>
@@ -536,7 +536,7 @@ class BillApproveDetail extends React.Component  {
               pagination={false}
             />
           </div>
-          {isAgainInvoice === 'false' && showEdit.includes(this.props.applyType) ?
+          {isAgainInvoice === 'false' && showReceive.includes(this.props.applyType) ?
             <Row gutter={40}>
               <Col span={8}>
                 <FormItem {...formItemLayout} label="是否收到发票">
