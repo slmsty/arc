@@ -149,15 +149,14 @@ class ContractSplitModal extends React.Component{
     return newData
 }
   handleChange = (data) => {
-    console.log('data',data)
     const newData =this.state.dataSource.slice(0)
-    if(this.props.data[0].collectionProject == 'Y' && data.columns==='contractCategory'){
+    /*if(this.props.data[0].collectionProject == 'Y' && data.columns==='contractCategory'){
       if(data.No !=="ARC_PRD_1" && data.No !=="ARC_PRD_1-K" ){
         message.error('集采项目只能拆分Task1')
         newData[data.indexs]['contractCategory'] = ''
         return
       }
-    }
+    }*/
 
     if(data){
       //const indexData = data.No && data.Name ? [data.No,data.Name] : ''

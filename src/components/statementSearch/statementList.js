@@ -4,8 +4,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import currency from '../../util/currency'
+//import Excel from 'exceljs'
 import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns } from './statementColumns'
 import { Table, Row, Col, Form, Radio, DatePicker, Input, Icon } from 'antd'
+
 
 import StatementWithFrom from './statementWithFrom'
 export default class StatementListIndex extends React.Component {
@@ -22,6 +24,11 @@ export default class StatementListIndex extends React.Component {
       pageNo: 1,
       pageSize: 10,
     },
+  }
+  excel = () => {
+    //var workbook = new Excel.Workbook();
+
+    //console.log('excel')
   }
 
   handleQuery(){
@@ -125,7 +132,7 @@ export default class StatementListIndex extends React.Component {
     }
     return (
       <div>
-        <StatementWithFrom showCols={this.showCols} queryParms={this.queryParms}/>
+        <StatementWithFrom showCols={this.showCols} queryParms={this.queryParms} excel={this.excel}/>
         <Row  style={{ lineHeight: '28px' }}>
           <Col span={24} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             {

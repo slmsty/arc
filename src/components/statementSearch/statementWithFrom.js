@@ -81,6 +81,9 @@ class StatementListCom extends React.Component {
     applyData: '',
     stateType: '100',
   }
+  excel = (type)=>{
+    this.props.excel()
+  }
   // 查询接口
   queryParms = (statement) => {
     const params = this.props.form.getFieldsValue()
@@ -257,6 +260,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('receipt_claim')}><Icon type="search" />查询</Button>
+                <Button type="primary" key="search1" onClick={()=>this.excel('receipt_claim')}><Icon type="search" />导出EXCEL</Button>
               </Col>
             </Row>
           </div>
