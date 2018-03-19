@@ -13,6 +13,7 @@ const mapStateToProps = state => ({
   billStatusManage: state.billStatusManage,
   myApply: state.myApply,
   currentUser: state.common.user,
+  authority: state.common.menu,
 })
 const mapDispatchToProps = dispatch => (
   bindActionCreators({

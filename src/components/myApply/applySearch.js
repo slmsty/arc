@@ -2,7 +2,6 @@
  * Created by liangshuang on 17/12/1.
  */
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Button, Table, message } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
 import ApplyInfoModal from './applyInfo'

@@ -308,8 +308,14 @@ class BillDetail extends React.Component {
     if (info.file.status === 'removed') {
       this.setState({
         fileList: info.fileList,
+        fileId: '',
+        file: {},
       })
     }
+  }
+
+  handleFileRemove = (file) => {
+    console.log(file)
   }
 
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
@@ -480,6 +486,7 @@ class BillDetail extends React.Component {
       beforeUpload: this.beforeUpload,
       customRequest: this.customRequest,
       onChange: this.handleFileChange,
+      onRemove: this.handleFileRemove,
     };
     const { custInfo, comInfo, contractList } = this.props.detail
     const detailData = [{
@@ -499,7 +506,6 @@ class BillDetail extends React.Component {
     if(this.props.billType === 'BILLING_EXCESS') {
       let constructRate = 0, eduRate = 0, incomeRate = 0
       const { constructionTaxRate, educationTaxRate, incomeTaxRate } = this.props.detail
-      console.log(this.state.dataSource)
       this.state.dataSource.map(r => {
         console.log(r.billingTaxRate)
         if(r.billingTaxRate > 0) {
