@@ -610,7 +610,7 @@ class BillApproveDetail extends React.Component  {
                   </FormItem>
                 </Col>
                 {
-                  isReceiveInvoice ?
+                  isReceiveInvoice && (this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account') ?
                     <Col span={8}>
                       <FormItem {...formItemLayout} label="是否收到发票">
                         {
@@ -646,9 +646,6 @@ class BillApproveDetail extends React.Component  {
                 }
               </Row>
               {
-
-              }
-              {
                 <Row gutter={40}>
                   <Col span={8}>
                     <FormItem {...formItemLayout} label="费用承担者">
@@ -656,7 +653,7 @@ class BillApproveDetail extends React.Component  {
                     </FormItem>
                   </Col>
                   {
-                    this.props.taskCode === 'tax_auditor' ?
+                    this.props.taskCode === 'tax_auditor' && isReceiveInvoice ?
                       <Col span={8}>
                         <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                           {

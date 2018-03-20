@@ -82,7 +82,7 @@ class SelectSbu extends React.Component {
     if (response.resultCode === '000000') {
       this.setState({
         pageNo: response.pageInfo.pageNo,
-        total: response.pageInfo.pageCount,
+        total: response.pageInfo.count,
         customerList: response.pageInfo.result,
         firstLoad: false,
       })

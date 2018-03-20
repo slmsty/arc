@@ -118,7 +118,7 @@ class BillStatusManageWithFormCon extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={4}>
+            <Col span={8}>
               <FormItem {...formItemLayout} label="申请人">
                 {getFieldDecorator('accountId', {
                   initialValue: '',
@@ -132,6 +132,21 @@ class BillStatusManageWithFormCon extends React.Component {
                     showSearch={false}
                   />
                 )}
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="开票申请分类">
+                {getFieldDecorator('applicationType', {
+                  initialValue: 'BILLING_CONTRACT',
+                })(
+                  <SelectInvokeApi
+                    typeCode="BILLING_APPLICATION"
+                    paramCode="BILLING_APPLICATION_TYPE"
+                    placeholder="开票申请分类"
+                    hasEmpty={false}
+                  />
+                )
+                }
               </FormItem>
             </Col>
           </Row>
