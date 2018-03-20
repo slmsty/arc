@@ -646,24 +646,7 @@ class BillApproveDetail extends React.Component  {
                 }
               </Row>
               {
-                showRedType ?
-                  <Row>
-                    <Col span={8}>
-                      <FormItem {...formItemLayout} label="退票类型">
-                        {
-                          getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: showRedType, message: '请选择退票类型!' }]})(
-                            <SelectInvokeApi
-                              typeCode="RED_TYPE_SELECT"
-                              paramCode="RED_OR_INVALID"
-                              placeholder="退票类型"
-                              hasEmpty
-                              disabled={this.props.taskCode === 'tax_auditor'}
-                            />
-                          )
-                        }
-                      </FormItem>
-                    </Col>
-                  </Row> : null
+
               }
               {
                 <Row gutter={40}>
@@ -674,22 +657,31 @@ class BillApproveDetail extends React.Component  {
                   </Col>
                   {
                     this.props.taskCode === 'tax_auditor' ?
-                      <div>
-                        <Col span={8}>
-                          <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
-                            {
-                              receiptOutcome === 'Y' ? '是' : '否'
-                            }
-                          </FormItem>
-                        </Col>
-                        <Col span={8}>
-                          <FormItem {...formItemLayout1} label="退票类型">
-                            {
-                              receiptOutcome === 'Y' ? '是' : '否'
-                            }
-                          </FormItem>
-                        </Col>
-                      </div> : null
+                      <Col span={8}>
+                        <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
+                          {
+                            receiptOutcome === 'Y' ? '是' : '否'
+                          }
+                        </FormItem>
+                      </Col> : null
+                  }
+                  {
+                    showRedType ?
+                      <Col span={8}>
+                        <FormItem {...formItemLayout} label="退票类型">
+                          {
+                            getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: showRedType, message: '请选择退票类型!' }]})(
+                              <SelectInvokeApi
+                                typeCode="RED_TYPE_SELECT"
+                                paramCode="RED_OR_INVALID"
+                                placeholder="退票类型"
+                                hasEmpty
+                                disabled={this.props.taskCode === 'tax_auditor'}
+                              />
+                            )
+                          }
+                        </FormItem>
+                      </Col> : null
                   }
                 </Row>
               }

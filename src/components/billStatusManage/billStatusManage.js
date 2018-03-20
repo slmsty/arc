@@ -405,9 +405,13 @@ export default class BillStatusCon extends React.Component {
         <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
       ),
     }, {
-        title: '退票票号',
-        dataIndex: 'invoiceNum',
-        width: 100,
+      title: '申请人',
+      dataIndex: 'applicantName',
+      width: 120,
+    }, {
+      title: '退票票号',
+      dataIndex: 'invoiceNum',
+      width: 100,
     }, {
       title: '开票公司',
       dataIndex: 'companyName',
@@ -489,7 +493,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveColumns}
           size="small"
-          scroll={{ x: '2000px' }}
+          scroll={{ x: '2100px' }}
           loading={this.state.loading}
           pagination={pagination}
           dataSource={result}
