@@ -80,6 +80,8 @@ class SelectSbu extends React.Component {
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
+      console.log('response',response)
+      console.log('response.pageInfo.pageCount',response.pageInfo.pageCount)
       this.setState({
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.count,
@@ -105,6 +107,12 @@ class SelectSbu extends React.Component {
       hideDefaultSelections: true,
       selectedRowKeys,
       onChange: this.onSelectChange,
+    }
+    const pagination = {
+      current: this.state.pageNo,
+      onChange: this.handleChangePage,
+      total: this.state.total,
+      size: 'small',
     }
     const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
@@ -153,7 +161,6 @@ class SelectSbu extends React.Component {
           </Form>
 
           <Table
-            rowKey="sbuNo"
             columns={this.columns}
             rowSelection={rowSelection}
             bordered
@@ -163,12 +170,7 @@ class SelectSbu extends React.Component {
             locale={{
               emptyText: this.state.firstLoad ? '' : '没有符合条件的SBU',
             }}
-            pagination={{
-              current: this.state.pageNo,
-              onChange: this.handleChangePage,
-              total: this.state.total,
-              size: 'small',
-            }}
+            pagination={pagination}
           />
         </Modal>
       </div>

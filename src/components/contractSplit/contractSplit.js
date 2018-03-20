@@ -19,10 +19,12 @@ const columns = [{
   title: '合同内部编码',
   dataIndex: 'internalNo',
   width: 100,
+  render: (text, record, index) => (<a  href="javascript:;" onClick={()=>this.showModals(record)}>{text}</a>),
 }, {
   title: '项目编码',
   dataIndex: 'projectNo',
   width: 100,
+  render: (text, record, index) => (<a  href="javascript:;" onClick={()=>this.showModals(record)}>{text}</a>),
 }, {
   title: '合同名称',
   dataIndex: 'contractName',
@@ -153,13 +155,27 @@ export default class ApplySearchCon extends React.Component {
     this.props.saveContractSplitInfo(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
-        this.closeModalClaim()
+        this.closeSaveModal()
       } else {
         message.error('保存失败')
       }
     })
 
   }
+  closeSaveModal = () => {
+    this.setState({
+      contarctSplitModal: true,
+      applyData: '',
+      selectedRowKeys: '',
+      selectedRows: '',
+    })
+  }
+  showModals = (record) =>{
+    this.setState({
+      selectedRows:record,
+    })
+    this.showContractSplitInfo(record.contractId)
+}
   /*
    function closeModalClaim
    关闭详情modal
@@ -176,22 +192,19 @@ export default class ApplySearchCon extends React.Component {
   /*
    function contractSplitInfo
    */
-  showContractSplitInfo = () => {
-    if(this.state.selectedRowKeys.length>1){
+  showContractSplitInfo = (contractId) => {
+    /*if(this.state.selectedRowKeys.length>1){
       message.error('一次只能对一条数据进行拆分')
       return
     }
     if(this.state.selectedRowKeys.length==0){
       message.error('请选择需要拆分的数据')
       return
-    }
+    }*/
     // 获取审批表url
-    const contractId = this.state.selectedRows[0].contractId
     //const contractId = 201604296622
-    console.log('contractId',contractId)
     this.props.getUrl(contractId).then((res)=>{
       if (res && res.response && res.response.resultCode === '000000') {
-        console.log('res',res.response )
       } else {
         message.error('获取审批列表链接失败')
       }
@@ -207,6 +220,68 @@ export default class ApplySearchCon extends React.Component {
   }
 
   render() {
+    const columns = [{
+      title: '拆分状态',
+      dataIndex: 'status',
+      width: 80,
+      textAlign: 'center',
+      fixed: 'left',
+      render: (text, record, index) => (text=='N' ? "未拆分合同" : "已拆分合同"),
+    }, {
+      title: '合同内部编码',
+      dataIndex: 'internalNo',
+      width: 100,
+      render: (text, record, index) => (<a  href="javascript:;" onClick={()=>this.showModals(record)}>{text}</a>),
+    }, {
+      title: '项目编码',
+      dataIndex: 'projectNo',
+      width: 100,
+      render: (text, record, index) => (<a  href="javascript:;" onClick={()=>this.showModals(record)}>{text}</a>),
+    }, {
+      title: '合同名称',
+      dataIndex: 'contractName',
+      width: 600,
+    }, {
+      title: '合同编码',
+      dataIndex: 'contractNo',
+      width: 200,
+    }, {
+      title: '合同金额',
+      dataIndex: 'contractAmount',
+      width: 100,
+      render: (text, record, index) => (text ? currency(text) : 0),
+    }, {
+      title: '签约日期',
+      dataIndex: 'contractDate',
+      width: 90,
+    }, {
+      title: 'Sale签约BU',
+      dataIndex: 'salesBuNo',
+      width: 100,
+      render:(text,record,index)=>(text ? (record.salesBuNoName ? `${text}:${record.salesBuNoName}` : text) : ''),
+    }, {
+      title: '立项BU',
+      dataIndex: 'projectBuNo',
+      width: 80,
+      render:(text,record,index)=>(text ? (record.projectBuNoName ? `${text}:${record.projectBuNoName}` : text) : ''),
+    }, {
+      title: '销售人员',
+      dataIndex: 'salesPerson',
+      width: 80,
+    }, {
+      title: '合同生效日',
+      dataIndex: 'contractActiveDate',
+      width: 100,
+    }, {
+      title: '合同种类',
+      dataIndex: 'contractType',
+      width: 120,
+    }, {
+      title: '币种',
+      dataIndex: 'contractCurrency',
+      width: 50,
+    },
+    ]
     const { selectedRowKeys } = this.state
     const rowSelection = {
       selectedRowKeys,
@@ -226,17 +301,17 @@ export default class ApplySearchCon extends React.Component {
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />
         <div className="split"></div>
-        <Button type="primary" onClick={this.showContractSplitInfo} disabled={this.state.selectedRowKeys.length>0 ? false : true}>合同拆分</Button>
-        <div className="split"></div>
+        {/*<Button type="primary" onClick={this.showContractSplitInfo} disabled={this.state.selectedRowKeys.length>0 ? false : true}>合同拆分</Button>
+        <div className="split"></div>*/}
         {
-          this.state.selectedRows && this.state.selectedRows[0] && this.state.contarctSplitModal ?
+          this.state.contarctSplitModal ?
             <ContractSplitModal
               closeModal={this.closeModalClaim}
               saveInfo={this.saveContractSplitInfo}
               data={this.state.selectedRows}
               user={this.props.user.accountName}
               contractUrl={this.props.contractSplitDara.getUrl}
-              tableDetail={this.state.selectedRows[0].orderListLines ? this.state.selectedRows[0].orderListLines : []}
+              tableDetail={this.state.selectedRows.orderListLines ? this.state.selectedRows.orderListLines : []}
             /> : null
         }
 

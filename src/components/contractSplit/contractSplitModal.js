@@ -55,7 +55,7 @@ class ContractSplitModal extends React.Component{
   constructor(props) {
     super(props)
     const tableDeatail = _.cloneDeep(props.tableDetail.slice(0))
-    const data = props.data[0]
+    const data = props.data
     let countTaskCostDataList = {
       task1Cost: data.task1Cost ? data.task1Cost : 0,
       task3tCost: data.task3tCost ? data.task3tCost : 0,
@@ -91,7 +91,7 @@ class ContractSplitModal extends React.Component{
       countTaskCost: 0.00,
       countTaskCostData: countTaskCostDataList,
       editFlag: true,
-      controactInfo: props.data[0],
+      controactInfo: props.data,
       initInfo: null,
       assessRatio:data.assessRatio
     }
@@ -112,7 +112,7 @@ class ContractSplitModal extends React.Component{
   }
   // 目录价计算
   calculateListPrice = (newData,data) => {
-    const dataInfos = this.props.data[0]
+    const dataInfos = this.props.data
     const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
     const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
     //let assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
@@ -214,7 +214,7 @@ class ContractSplitModal extends React.Component{
     let selectData = []
     selectData = data.split('&')
     const newData = this.state.dataSource.slice(0)
-    newData[selectData[1]][selectData[2]] = selectData[0]
+    newData[selectData[1]][selectData[2]] = selectData
     this.setState({
       dataSource: newData,
     })
@@ -222,11 +222,9 @@ class ContractSplitModal extends React.Component{
   renderColumns = (text, index, column,record) => {
 
     if(column=="product"){
-      console.log('record[column]',record[column])
-      console.log('text',text)
       return ( <ContractType1
         type='product'
-        keywords={this.props.data[0].projectNo}
+        keywords={this.props.data.projectNo}
         hasEmpty
         onChange={this.handleChange}
         value={text}
@@ -249,7 +247,7 @@ class ContractSplitModal extends React.Component{
       return(
         <ContractType1
           //parentCode={parentCode}
-          keywords={this.props.data[0].projectNo}
+          keywords={this.props.data.projectNo}
           hasEmpty
           onChange={this.handleChange}
           value={text}
@@ -302,7 +300,7 @@ class ContractSplitModal extends React.Component{
   }
   handleInputChange = (value, index, column) => {
     let newData = this.state.dataSource.slice(0)
-    const contractAmount = parseFloat(this.props.data[0].contractAmount)
+    const contractAmount = parseFloat(this.props.data.contractAmount)
     if(column==='discount') {
       if(parseFloat(value) < 0){
         message.error('折扣不能为负数')
@@ -333,7 +331,7 @@ class ContractSplitModal extends React.Component{
         value = string[1] ? string[1] : 0
       }
     }
-    return value
+    return parseFloat(value)/100
   }
   inputChange = (newData,index) => {
 
@@ -347,7 +345,9 @@ class ContractSplitModal extends React.Component{
     newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
     newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate)) * (parseFloat(returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
     newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxInclude)/(1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
-
+  console.log('contractAmountTaxExclude',newData[index].contractAmountTaxExclude )
+    console.log('contractAmountTaxInclude',newData[index].contractAmountTaxInclude )
+    console.log('contractTaxRate',1 + parseFloat(contractTaxRate) )
     return newData
   }
   onTextAreaChange = (event) => {
@@ -442,7 +442,7 @@ class ContractSplitModal extends React.Component{
   // 拆分保存接口
   handleOk = () => {
     const coutnData = this.state.dataSource.slice(0)
-    const contractAmount = parseFloat(this.props.data[0].contractAmount)
+    const contractAmount = parseFloat(this.props.data.contractAmount)
     let totalListPrice = 0
     coutnData.map((item) => {
       if (!item.parentOrderListLineId || item.parentOrderListLineId === '') {
@@ -581,13 +581,13 @@ class ContractSplitModal extends React.Component{
          }
        })
      }
-    if(this.props.data[0].orderListLines){
-      delete this.props.data[0].orderListLines
+    if(this.props.data.orderListLines){
+      delete this.props.data.orderListLines
     }
     // 拼接保存参数
     const postParams = {}
     postParams.splitListInfo = newLisfInfo
-    postParams.contractInfo = this.props.data[0]
+    postParams.contractInfo = this.props.data
     if(!postParams.contractInfo.splitedByName){
       postParams.contractInfo.splitedByName = this.props.user
     }
@@ -607,11 +607,9 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
-
-
-
+    console.log('postParams',postParams)
     this.props.saveInfo(postParams)
-    this.closeModal()
+
   }
   closeModal = () => {
     this.setState({
@@ -643,7 +641,7 @@ class ContractSplitModal extends React.Component{
     this.setState({
       dataSource:_.cloneDeep(this.state.oldDataSource.slice(0)),
     },()=>{
-      const constractData = this.props.data[0]
+      const constractData = this.props.data
       this.props.form.setFieldsValue({
         relatedBuNo: [constractData.relatedBuNo,constractData.relatedBuNoName],
         maintainBeginDate: constractData.maintainBeginDate,
@@ -675,7 +673,7 @@ class ContractSplitModal extends React.Component{
   blur = () => {
     const NewData = []
     const splitData = this.state.dataSource.slice(0)
-    const dataInfos = this.props.data[0]
+    const dataInfos = this.props.data
     const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
     const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
     //let assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
@@ -720,8 +718,7 @@ class ContractSplitModal extends React.Component{
 }
   render() {
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
-    const constractDatas = this.props.data
-    const constractData = constractDatas[0]
+    const constractData = this.props.data
     console.log('constractData.task1Cost',constractData.task1Cost)
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
@@ -747,7 +744,7 @@ class ContractSplitModal extends React.Component{
     const columns = [{
       title: 'Task操作',
       dataIndex: 'taskOpration',
-      width: 120,
+      width: 75,
       textAlign: 'center',
       fixed: 'left',
       render: (text, record, index) => (
@@ -759,7 +756,7 @@ class ContractSplitModal extends React.Component{
               </div>
               :
               <div>
-                <Button disabled={this.state.editFlag} onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;
+                {/*<Button disabled={this.state.editFlag} onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;*/}
                 <Button disabled={this.state.editFlag} onClick={() => this.handleMinus(index)}>－</Button>
               </div>
           )
@@ -1060,7 +1057,17 @@ class ContractSplitModal extends React.Component{
                   考核比率：
                 </Col>
                 <Col span={3} className="contractRowBorderLeft">
-                  <InputNumber disabled={this.state.editFlag} style={{width:'100%'}} max="100" min="0" precision="2" defaultValue={this.state.assessRatio} onChange={this.changeAssessRation} onBlur={this.blur}/>
+                  <InputNumber
+                    disabled={this.state.editFlag}
+                    style={{width:'100%'}}
+                    max="100"
+                    min="0"
+                    precision="2"
+                    defaultValue={constractData.status==='Y'? this.state.assessRatio : ''}
+                    onChange={this.changeAssessRation}
+                    formatter={value => `${value}%`}
+                    parser={value => value.replace('%', '')}
+                    onBlur={this.blur}/>
                   {/*<div className="contractRowBorderNo">
                     {this.state.assessRatio}
                   </div>*/}
