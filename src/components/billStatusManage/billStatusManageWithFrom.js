@@ -80,7 +80,7 @@ class BillStatusManageWithFormCon extends React.Component {
                     typeCode="BILLING_APPLICATION_STATUS"
                     paramCode="STATUS"
                     placeholder="数据状态"
-                    hasEmpty
+                    hasAll
                   />
                 )}
               </FormItem>

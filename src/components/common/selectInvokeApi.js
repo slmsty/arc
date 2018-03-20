@@ -22,6 +22,9 @@ export default class SelectInvokeApi extends React.Component {
       if (this.props.hasEmpty) {
         options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
       }
+      if(this.props.hasAll) {
+        options.unshift({ paramValue: 'all', paramValueDesc: '全部' })
+      }
       this.setState({
         options,
       })
@@ -56,4 +59,5 @@ SelectInvokeApi.propTypes = {
   value: PropTypes.string,
   initialValue: PropTypes.string,
   hasEmpty: PropTypes.bool,
+  hasAll: PropTypes.bool,
 }
