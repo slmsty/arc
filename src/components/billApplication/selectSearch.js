@@ -25,7 +25,7 @@ class SelectSearch extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.defaultQueryParam) {
+    if (this.props.defaultQueryParam || !this.props.showSearch) {
       this.handleQuery()
     }
   }
@@ -36,7 +36,7 @@ class SelectSearch extends React.Component {
 
   handleOk = () => {
     if (this.state.selectedRows.length === 0) {
-      message.error('请选择的记录')
+      message.error('请选择记录')
       return
     }
     const selectedRow = this.state.selectedRows[0]
@@ -62,20 +62,35 @@ class SelectSearch extends React.Component {
   }
 
   handleQueryFetch= (pageNo) => {
-    const keywords = this.props.form.getFieldValue('keywords')
-    const param = {
-      method: 'POST',
-      body: {
-        pageInfo: {
-          pageNo: pageNo || 1,
-          pageSize: this.state.pageSize,
+    if(this.props.showSearch) {
+      const keywords = this.props.form.getFieldValue('keywords')
+      const param = {
+        method: 'POST',
+        body: {
+          pageInfo: {
+            pageNo: pageNo || 1,
+            pageSize: this.state.pageSize,
+          },
+          keywords,
+          billingApplicationType: this.props.billType,
         },
-        keywords,
-        billingApplicationType: this.props.billType,
-      },
+      }
+      this.setState({ loading: true })
+      requestJsonFetch(this.props.url, param, this.handleCallback)
+    } else {
+      this.setState({ loading: true })
+      requestJsonFetch(
+        this.props.url, {
+          method: 'GET'
+        }, (res) => {
+          if(res.resultCode === '000000') {
+            this.setState({
+              dataSource: res.data,
+              loading: false,
+            })
+          }
+        })
     }
-    this.setState({ loading: true })
-    requestJsonFetch(this.props.url, param, this.handleCallback)
   }
 
   handleCallback = (response) => {
@@ -131,29 +146,31 @@ class SelectSearch extends React.Component {
             </Button>,
           ]}
         >
-          <Form
-            className="ant-search-form"
-          >
-            <Row>
-              <Col span={16} key={1}>
-                <FormItem {...formItemLayout} label={this.props.label}>
-                  {getFieldDecorator('keywords', {
-                    initialValue: this.props.defaultQueryParam,
-                  })(
-                    <Input
-                      onPressEnter={this.handleQuery}
-                      placeholder="请输入关键字"
-                    />,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={1} key={2} />
-              <Col span={7} key={3}>
-                <Button type="primary" icon="search" htmlType="submit" onClick={this.handleQuery}>查询</Button>
-              </Col>
-            </Row>
-          </Form>
-
+          {
+            this.props.showSearch ?
+              <Form
+                className="ant-search-form"
+              >
+                <Row>
+                  <Col span={16} key={1}>
+                    <FormItem {...formItemLayout} label={this.props.label}>
+                      {getFieldDecorator('keywords', {
+                        initialValue: this.props.defaultQueryParam,
+                      })(
+                        <Input
+                          onPressEnter={this.handleQuery}
+                          placeholder="请输入关键字"
+                        />,
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={1} key={2} />
+                  <Col span={7} key={3}>
+                    <Button type="primary" icon="search" htmlType="submit" onClick={this.handleQuery}>查询</Button>
+                  </Col>
+                </Row>
+              </Form> : null
+          }
           <Table
             columns={this.props.columns}
             rowSelection={rowSelection}

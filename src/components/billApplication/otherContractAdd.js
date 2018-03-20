@@ -73,6 +73,7 @@ class OtherContractAdd extends React.Component {
                       label="公司名称"
                       idKey="billingComInfoId"
                       valueKey="comName"
+                      showSearch={true}
                     />
                   )}
                 </FormItem>
@@ -90,6 +91,7 @@ class OtherContractAdd extends React.Component {
                         idKey="custId"
                         valueKey="custName"
                         width='800px'
+                        showSearch={true}
                       />)
                   }
                 </FormItem>
@@ -106,6 +108,7 @@ class OtherContractAdd extends React.Component {
                       idKey="tempProjectNo"
                       valueKey="tempProjectNo"
                       billType={this.props.billType}
+                      showSearch={true}
                     />
                   )}
                 </FormItem>

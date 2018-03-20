@@ -120,6 +120,7 @@ class BillUpdate extends React.Component {
                       label="公司名称"
                       idKey="comId"
                       valueKey="comName"
+                      showSearch={true}
                     />
                   )}
                 </FormItem>
@@ -136,6 +137,7 @@ class BillUpdate extends React.Component {
                         label="客户名称"
                         idKey="custId"
                         valueKey="custName"
+                        showSearch={true}
                     />)
                   }
                 </FormItem>
@@ -183,6 +185,7 @@ class BillUpdate extends React.Component {
                         idKey="tempProjectNo"
                         valueKey="tempProjectNo"
                         billType={this.props.billType}
+                        showSearch={true}
                       />
                   )}
                 </FormItem>

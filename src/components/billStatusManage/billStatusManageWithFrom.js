@@ -7,16 +7,24 @@ import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import MultipleInput from '../common/multipleInput'
-import SelectSbu from '../common/SelectSbu'
+import SelectSearch from '../billApplication/selectSearch'
 
 const FormItem = Form.Item
 const { RangePicker } = DatePicker
 const Option = Select.Option
 const dateFormat = 'YYYY-MM-DD'
-
+const applyColumns = [{
+    title: '申请人',
+    dataIndex: 'accountName',
+    width: 100,
+  },
+  {
+    title: '申请人编码',
+    dataIndex: 'accountId',
+    width: 100,
+}]
 class BillStatusManageWithFormCon extends React.Component {
-  state = {
-  }
+
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
@@ -25,6 +33,7 @@ class BillStatusManageWithFormCon extends React.Component {
     param.projectCode = param.projectCode && param.projectCode.length ? param.projectCode.join(',') : ''
     param.contractCode = param.contractCode && param.contractCode.length ? param.contractCode.join(',') : ''
     param.invoiceCode = param.invoiceCode && param.invoiceCode.length ? param.invoiceCode.join(',') : ''
+    param.accountId = param.accountId[0]
     delete param.signDate
     this.props.onQuery(param)
   }
@@ -105,6 +114,24 @@ class BillStatusManageWithFormCon extends React.Component {
                     />,
                   )
                 }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={8} key={4}>
+              <FormItem {...formItemLayout} label="申请人">
+                {getFieldDecorator('accountId', {
+                  initialValue: '',
+                })(
+                  <SelectSearch
+                    url="/arc/application/invoice/operator"
+                    columns={applyColumns}
+                    label="申请人"
+                    idKey="accountId"
+                    valueKey="accountName"
+                    showSearch={false}
+                  />
+                )}
               </FormItem>
             </Col>
           </Row>

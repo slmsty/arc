@@ -251,6 +251,7 @@ class CancelDetail extends React.Component {
             valueKey="billingContentName"
             value={['', this.state.dataSource[index]['billingContent']]}
             onChange={(v) => this.handleChange(v, 'billingContent', index)}
+            showSearch={true}
           />
         )
       }, {
