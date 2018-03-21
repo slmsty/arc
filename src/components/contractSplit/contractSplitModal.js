@@ -94,7 +94,7 @@ class ContractSplitModal extends React.Component{
       controactInfo: props.data,
       initInfo: null,
       assessRatio:data.assessRatio,
-      selectCountType:data.revenueCheckout
+      selectCountType:data.revenueCheckout ? data.revenueCheckout : []
     }
   }
   getTableWidth = (colum)=> {

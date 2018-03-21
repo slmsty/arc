@@ -28,6 +28,7 @@ import BillStatusManage from './BillManage/billStatusManage'
 import StatementSearch from './statementSearch/statementList'
 import BillingApplication from '../containers/billApplication/billApplication'
 import Login from '../containers/login/login'
+import MyApply from '../containers/myApply/myApplay'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -108,6 +109,9 @@ class IndexContainer extends React.Component {
     }
     if (component === 'statementSearch') {
       return StatementSearch
+    }
+    if(component === 'myApplyContainer'){
+      return MyApply
     }
   }
   getMenuRoutes = (menus) => {

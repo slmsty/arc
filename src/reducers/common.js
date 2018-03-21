@@ -170,6 +170,13 @@ const common = {
             icon: 'icon-BilledAR',
             component: 'applyListContainer',
           },
+          {
+            key: '52',
+            path: '/myApply/myApply',
+            name: '我的审批',
+            icon: 'icon-BilledAR',
+            component: 'myApplyContainer',
+          },
         ],
       },
       {
