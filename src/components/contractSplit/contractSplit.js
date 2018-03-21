@@ -12,17 +12,19 @@ const columns = [{
   title: '拆分状态',
   dataIndex: 'status',
   width: 80,
-  textAlign: 'center',
   fixed: 'left',
+  textAlign: 'center',
   render: (text, record, index) => (text=='N' ? "未拆分合同" : "已拆分合同"),
 }, {
   title: '合同内部编码',
   dataIndex: 'internalNo',
+  fixed: 'left',
   width: 100,
   render: (text, record, index) => (<a  href="javascript:;" onClick={()=>this.showModals(record)}>{text}</a>),
 }, {
   title: '项目编码',
   dataIndex: 'projectNo',
+  fixed: 'left',
   width: 100,
   render: (text, record, index) => (<a  href="javascript:;" onClick={()=>this.showModals(record)}>{text}</a>),
 }, {

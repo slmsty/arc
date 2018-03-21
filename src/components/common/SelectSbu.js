@@ -80,8 +80,6 @@ class SelectSbu extends React.Component {
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
-      console.log('response',response)
-      console.log('response.pageInfo.pageCount',response.pageInfo.pageCount)
       this.setState({
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.count,

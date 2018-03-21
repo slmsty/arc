@@ -683,34 +683,36 @@ class ContractSplitModal extends React.Component{
       assessRatio = 0
     }
     assessRatio = assessRatio/100 // 考核比率为百分数
-    let formula = 1
-    let formula2 = 1
-    console.log('splitData',splitData)
+
     for(let i = 0 ; i < splitData.length; i++) {
-      if (assessRatio !== 0) {
-        if (splitData[i].contractCategory === 'ARC_PRD_7') {
-          formula = (1 + incomeRatio)
-          formula2 = (1 - assessRatio)
-          splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
-        }
-        if (splitData[i].contractCategory === 'ARC_PRD_7-K') {
-          formula = (1 + incomeRatio)
-          formula2 = assessRatio
-          splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
-        }
-        if (splitData[i].contractCategory === 'ARC_PRD_TASK_10') {
-          formula = (1 + incomeRatio)
-          formula2 = incomeRatio * (1 - assessRatio)
-          splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
-        }
-        if (splitData[i].contractCategory === 'ARC_PRD_TASK_10_K') {
-          formula = (1 + incomeRatio)
-          formula2 = incomeRatio * assessRatio
-          splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
-        }
-        this.inputChange(splitData,i)
-    }
-    console.log('NewData',splitData)
+      let formula = 1
+      let formula2 = 1
+      if (splitData[i].contractCategory === '7') {
+        formula = (1 + incomeRatio)
+        formula2 = (1 - assessRatio)
+        splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+      }
+      if (splitData[i].contractCategory === '7-K') {
+        formula = (1 + incomeRatio)
+        formula2 = assessRatio
+        splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+      }
+      if (splitData[i].contractCategory === '10S') {
+        formula = (1 + incomeRatio)
+        formula2 = incomeRatio * (1 - assessRatio)
+        splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+      }
+      if (splitData[i].contractCategory === '10S-K') {
+        formula = (1 + incomeRatio)
+        formula2 = incomeRatio * assessRatio
+        splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        /*console.log('incomeRatio',incomeRatio)
+         console.log('assessRatio',assessRatio)
+         console.log('formula',formula)
+         console.log('formula2',formula2)
+         console.log('splitData[i].listPrice',splitData[i].listPrice)*/
+      }
+      this.inputChange(splitData,i)
   }
   this.setState({
     dataSource:splitData
@@ -719,7 +721,6 @@ class ContractSplitModal extends React.Component{
   render() {
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractData = this.props.data
-    console.log('constractData.task1Cost',constractData.task1Cost)
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
     let countsalePeo = 0 // 合同不含税额
@@ -846,6 +847,7 @@ class ContractSplitModal extends React.Component{
     return (
       <div>
         <Modal
+          wrapClassName="modal"
           width={1024}
           maskClosable={false}
           title="合同拆分"

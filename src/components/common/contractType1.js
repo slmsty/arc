@@ -86,6 +86,7 @@ const testOption = [
   },
 
 ]
+
 export default class SelectInvokeApi extends React.Component {
   state = {
     options: [],
@@ -219,7 +220,7 @@ export default class SelectInvokeApi extends React.Component {
      parentCodeVal = parentCode[0]
      }
     const options = this.state.options.slice(0)
-
+    console.log('options',options)
     let optionDoms = []
     if(parentCodeVal){
       let optionParentDoms = options.filter(o=>o.paramValue === parentCodeVal)
