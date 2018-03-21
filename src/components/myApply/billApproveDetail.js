@@ -195,6 +195,9 @@ class BillApproveDetail extends React.Component  {
           if(this.fieldCheck(record.quantity)) {
             message.error(`请填写第${index + 1}行的数量`)
             err = true
+          } else if(isTaxAndFinance && this.fieldCheck(record.billingContent)) {
+            message.error(`请填写第${index + 1}行的开票内容`)
+            err = true
           } else if(this.fieldCheck(record.unitPrice)) {
             message.error(`请填写第${index + 1}行的单价`)
             err = true
@@ -216,10 +219,10 @@ class BillApproveDetail extends React.Component  {
           } else if(isTaxAndFinance && this.fieldCheck(record.taxCategoryName)) {
             message.error(`请填写第${index + 1}行的税收分类名称`)
             err = true
-          } else if(this.fieldCheck(record.prefPolicySign)) {
+          } else if(isTaxAndFinance && this.fieldCheck(record.prefPolicySign)) {
             message.error(`请填写第${index + 1}行的优惠政策`)
             err = true
-          } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
+          } else if(isTaxAndFinance && record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
             message.error(`请填写第${index + 1}行的优惠政策类型`)
             err = true
           }
