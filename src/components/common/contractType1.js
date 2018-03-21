@@ -112,6 +112,9 @@ export default class SelectInvokeApi extends React.Component {
     const {value,type} = this.props
     let  paramValueDesc = ''
     if(type==='product'){
+      if(!value && value != 0){
+        return options[1] ? options[1].paramValue : value
+      }
       return value
     }
     if(value){
@@ -220,7 +223,6 @@ export default class SelectInvokeApi extends React.Component {
      parentCodeVal = parentCode[0]
      }
     const options = this.state.options.slice(0)
-    console.log('options',options)
     let optionDoms = []
     if(parentCodeVal){
       let optionParentDoms = options.filter(o=>o.paramValue === parentCodeVal)

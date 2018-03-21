@@ -93,7 +93,8 @@ class ContractSplitModal extends React.Component{
       editFlag: true,
       controactInfo: props.data,
       initInfo: null,
-      assessRatio:data.assessRatio
+      assessRatio:data.assessRatio,
+      selectCountType:data.revenueCheckout
     }
   }
   getTableWidth = (colum)=> {
@@ -212,11 +213,20 @@ class ContractSplitModal extends React.Component{
   }
   handleSelectChange = (data) => {
     let selectData = []
+    let newSelectCountType = []
     selectData = data.split('&')
     const newData = this.state.dataSource.slice(0)
-    newData[selectData[1]][selectData[2]] = selectData
+    let oldSelectData = newData[selectData[1]][selectData[2]]
+    newData[selectData[1]][selectData[2]] = selectData[0]
+    newData.forEach(item=>{
+      if(item.revenueCheckout){
+        newSelectCountType.push(item.revenueCheckout)
+      }
+    })
+    let selectDatas = [...new Set([...newSelectCountType])]
     this.setState({
       dataSource: newData,
+      selectCountType:selectDatas
     })
   }
   renderColumns = (text, index, column,record) => {
@@ -345,9 +355,6 @@ class ContractSplitModal extends React.Component{
     newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
     newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate)) * (parseFloat(returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
     newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxInclude)/(1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
-  console.log('contractAmountTaxExclude',newData[index].contractAmountTaxExclude )
-    console.log('contractAmountTaxInclude',newData[index].contractAmountTaxInclude )
-    console.log('contractTaxRate',1 + parseFloat(contractTaxRate) )
     return newData
   }
   onTextAreaChange = (event) => {
@@ -418,8 +425,12 @@ class ContractSplitModal extends React.Component{
     if (flag === '1') {
       newDataSource.splice(-1, 0, newData)
     }
+    let selectCountType = this.state.selectCountType
+    selectCountType.push('POC')
+    let newselectCountType = [...new Set(selectCountType)]
     this.setState({
       dataSource: newDataSource,
+      selectCountType:newselectCountType,
     })
   }
   // 合同拆分删除数据
@@ -435,8 +446,16 @@ class ContractSplitModal extends React.Component{
       }
     }
     newData.splice(index,1)
+    let newSelectCountType = []
+    newData.forEach(item=>{
+      if(item.revenueCheckout){
+        newSelectCountType.push(item.revenueCheckout)
+      }
+    })
+    let selectDatas = [...new Set([...newSelectCountType])]
     this.setState({
       dataSource: newData,
+      selectCountType:selectDatas
     })
   }
   // 拆分保存接口
@@ -449,8 +468,6 @@ class ContractSplitModal extends React.Component{
         totalListPrice += !item || !item.listPrice ? 0 : parseFloat(item.listPrice) // 合计目录价
       }
     })
-    //console.log('totalListPrice',totalListPrice.toFixed(2))
-    //console.log('contractAmount',contractAmount)
     if(Math.abs(totalListPrice.toFixed(2)) > Math.abs(contractAmount)) {
       message.error('目录价之和不能大于合同总金额')
       return
@@ -538,7 +555,7 @@ class ContractSplitModal extends React.Component{
       }
 
       let contractCategory = ''
-      let product = ''
+      let product = i.product
       let returnTaxRate = ''
       let contractTaxRate = ''
       if(typeof i.contractCategory ==='string'){
@@ -548,9 +565,10 @@ class ContractSplitModal extends React.Component{
       }
       if(typeof i.product ==='string' || typeof i.product ==='number'){
         product = i.product
-      }else if (i.product.length > 0) {
-        product = i.product[1]
       }
+     /* if (i.product.length > 0) {
+        product = i.product[1]
+      }*/
       if(typeof i.returnTaxRate ==='string' || typeof i.returnTaxRate ==='number'){
         returnTaxRate = i.returnTaxRate
       }else if (i.returnTaxRate.length > 0) {
@@ -719,6 +737,8 @@ class ContractSplitModal extends React.Component{
   })
 }
   render() {
+    console.log('tableDeatail',this.props.data)
+    console.log('selectCountType',this.state.selectCountType)
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractData = this.props.data
     let countCatalPrice = 0 // 合计目录价 catalogue
@@ -1045,7 +1065,8 @@ class ContractSplitModal extends React.Component{
                 <Col span={7} className="contractRowBorderLeft" style={{ textAlign: 'left',paddingLeft: '2px'}}>
                   <FormItem>
                     {getFieldDecorator('revenueCheckout', {
-                      initialValue: constractData['revenueCheckout'],
+                      /*initialValue: constractData['revenueCheckout'] ? constractData['revenueCheckout']: this.state.selectCountType,*/
+                      initialValue: this.state.selectCountType,
                     })(
                       <Checkbox.Group disabled={this.state.editFlag}>
                         <Checkbox value="POC">POC</Checkbox>
