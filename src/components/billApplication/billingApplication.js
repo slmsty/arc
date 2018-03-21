@@ -427,7 +427,7 @@ export default class BillingApplication extends React.Component {
           updateVisible ?
             <BillUpdate
               visible={updateVisible}
-              onCancel={() => this.setState({updateVisible: false})}
+              onCancel={() => this.setState({updateVisible: false, currentRecord: {}})}
               billAction={isAdd ? addBillUnContract : updateBillInfo}
               record={this.state.currentRecord}
               isAdd={isAdd}
@@ -441,7 +441,7 @@ export default class BillingApplication extends React.Component {
               addAction={isAdd ? addOtherContract : updateBillInfo}
               billType={this.state.currentType}
               visible={otherAddVisible}
-              onCancel={() => this.setState({otherAddVisible: false})}
+              onCancel={() => this.setState({otherAddVisible: false, currentRecord: {}})}
               record={this.state.currentRecord}
               isAdd={isAdd}
             /> : null

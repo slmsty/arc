@@ -699,9 +699,12 @@ class BillApproveDetail extends React.Component  {
                   pagination={false}
                 />
               </div>
-              <div className="add-btns">
-                <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
-              </div>
+              {
+                this.props.taskCode === 'ar_admin' || this.props.taskCode === 'ar_finance_account' ?
+                  <div className="add-btns">
+                    <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
+                  </div> : null
+              }
               <Table
                 rowSelection={rowSelection}
                 style={{marginBottom: '10px'}}

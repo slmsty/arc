@@ -231,7 +231,7 @@ function showFailure(state, action) {
 }
 
 function showError(state, action) {
-  return { ...state, error: { message: action.error.statusText, timeTick: new Date().getTime() } }
+  return { ...state, error: { message: action.error.statusText || '系统错误，请联系系统管理员', timeTick: new Date().getTime() } }
 }
 
 export default caseReducer(common, {
