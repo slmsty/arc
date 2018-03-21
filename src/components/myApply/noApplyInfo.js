@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Row, Col, Button, Input, Form, Table } from 'antd'
+import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillDetail from './billDetail'
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -78,7 +78,14 @@ class NoApplyInfo extends React.Component {
                   className="scan-document"
                   type="primary"
                   ghost
-                  onClick={() => window.open(this.props.contractUrl)}
+                  onClick={() => {
+                    if(this.props.contractUrl[0]){
+                      window.open(this.props.contractUrl[0].url)
+                    } else {
+                      message.warn('暂无合同审批表及合同扫描件')
+                      return
+                    }
+                  }}
                 >合同审批表及合同扫描件</Button>
               </Col>
             </Row>

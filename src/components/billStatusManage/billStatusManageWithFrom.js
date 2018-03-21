@@ -144,6 +144,7 @@ class BillStatusManageWithFormCon extends React.Component {
                     paramCode="BILLING_APPLICATION_TYPE"
                     placeholder="开票申请分类"
                     hasEmpty={false}
+                    hasAll
                   />
                 )
                 }

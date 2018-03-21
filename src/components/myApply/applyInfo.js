@@ -22,9 +22,6 @@ class ApplyInfoModal extends React.Component {
           approveRemark: this.trim(values.approveRemark),
         }
         this.props.applyComfirm(params)
-      } else {
-        message.error('请先保存信息后在提交审核!')
-        return
       }
     })
   }
@@ -124,7 +121,14 @@ class ApplyInfoModal extends React.Component {
                   className="scan-document"
                   type="primary"
                   ghost
-                  onClick={() => window.open(this.props.contractUrl)}
+                  onClick={() => {
+                    if(this.props.contractUrl[0]){
+                      window.open(this.props.contractUrl[0].url)
+                    } else {
+                      message.warn('暂无合同审批表及合同扫描件')
+                      return
+                    }
+                  }}
                 >合同审批表及合同扫描件</Button>
               </Col>
             </Row>
