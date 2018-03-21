@@ -233,11 +233,13 @@ export default class ApplySearchCon extends React.Component {
       title: '合同内部编码',
       dataIndex: 'internalNo',
       width: 100,
+      fixed: 'left',
       render: (text, record, index) => (<a  href="javascript:;" onClick={()=>this.showModals(record)}>{text}</a>),
     }, {
       title: '项目编码',
       dataIndex: 'projectNo',
       width: 100,
+      fixed: 'left',
       render: (text, record, index) => (<a  href="javascript:;" onClick={()=>this.showModals(record)}>{text}</a>),
     }, {
       title: '合同名称',
