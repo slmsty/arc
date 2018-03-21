@@ -53,11 +53,11 @@ class ContractSplitCon extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={2}>
-              <FormItem {...formItemLayout} label="项目编码(多)">
+              <FormItem {...formItemLayout} label="项目编码">
                 {
                   getFieldDecorator('projectNos')(
-                    <MultipleInput
-                      placeholder="多项目编码使用英文逗号间隔"
+                    <Input
+                      placeholder="项目编码"
                     />,
                   )
                 }
@@ -110,11 +110,11 @@ class ContractSplitCon extends React.Component {
           </Row>
           <Row gutter={40}>
             <Col span={8} key={7}>
-              <FormItem {...formItemLayout} label="合同编码(多)">
+              <FormItem {...formItemLayout} label="合同编码">
                 {
                   getFieldDecorator('contractNos')(
-                    <MultipleInput
-                      placeholder="多合同编码使用英文逗号间隔"
+                    <Input
+                      placeholder="合同编码"
                     />,
                   )
                 }

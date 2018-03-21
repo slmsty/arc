@@ -8,7 +8,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import MyApplyCon from '../../components/myApply/myApply'
-import { getMyApplyList, approveSubmit, approveReject, myApplyInfo, billApproveSave } from '../../actions/myApply'
+import { getMyApplyList, approveSubmit, approveReject, myApplyInfo, billApproveSave, cancelApply } from '../../actions/myApply'
+
 import { fileDown } from '../../actions/billStatusManage/billStatusManage'
 import { getContractUrl } from '../../actions/billApplication'
 
@@ -25,6 +26,7 @@ const mapDispatchToProps = dispatch => (
     billApproveSave,
     fileDown,
     getContractUrl,
+    cancelApply,
   }, dispatch)
 )
 // eslint-disable-next-line react/prefer-stateless-function

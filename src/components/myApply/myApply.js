@@ -5,10 +5,12 @@
  * Created by liangshuang on 17/12/1.
  */
 import React from 'react'
-import { Button, Table, message } from 'antd'
+import { Button, Table, message, Modal } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
 import ApplyInfoModal from './applyInfo'
 import NoApplyInfo from './noApplyInfo'
+import MyApplyEdit from './myApplyEdit'
+const confirm = Modal.confirm;
 
 export default class MyApplyCon extends React.Component {
   state = {
@@ -17,6 +19,7 @@ export default class MyApplyCon extends React.Component {
     applyData: '',
     noApplyInfoVisitable: false,
     noApplyInfoData: '',
+    MyApplyEditVisitable:false
   }
   componentDidMount() {
     this.handleQuery()
@@ -75,7 +78,7 @@ export default class MyApplyCon extends React.Component {
     this.props.myApplyInfo(paramsData).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         this.setState({
-          infoVisitable: true,
+          MyApplyEditVisitable: true,
           applyData: record,
         })
         this.props.getContractUrl(res.response.data.serviceDetail.contractId)
@@ -92,7 +95,7 @@ export default class MyApplyCon extends React.Component {
     this.props.approveSubmit(param).then((res) => {
       this.setState({
         loading: false,
-        infoVisitable: false,
+        MyApplyEditVisitable: false,
         applyData: '',
       })
       if (res && res.response && res.response.resultCode === '000000') {
@@ -108,7 +111,7 @@ export default class MyApplyCon extends React.Component {
     this.props.approveReject(param).then((res) => {
       this.setState({
         loading: false,
-        infoVisitable: false,
+        MyApplyEditVisitable: false,
         applyData: '',
       })
       if (res && res.response && res.response.resultCode === '000000') {
@@ -146,6 +149,28 @@ export default class MyApplyCon extends React.Component {
     this.setState({
       noApplyInfoVisitable: false,
       noApplyInfoData: '',
+    })
+  }
+  // 撤销
+  cancelItem = (record) => {
+    const that = this
+    Modal.confirm({
+      title: '操作确认',
+      content: `您确认要将所选择的数据撤销吗`,
+      okText: '是',
+      cancelText: '否',
+      onOk() {
+        const changeParam = {
+          businessKey: record.businessKey,
+        }
+        that.props.cancelApply(changeParam).then((res)=>{
+          if (res && res.response && res.response.resultCode === '000000') {
+            message.success('撤销成功')
+          } else {
+            message.error(res.response.resultMessage)
+          }
+        })
+      },
     })
   }
   render() {
@@ -196,7 +221,8 @@ export default class MyApplyCon extends React.Component {
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
           {/* disabled={record.statusName === '审批中' ? 'false' : 'true'} */}
-          <Button type="primary" ghost disabled={record.statusName === '审批中' ? false : true} onClick={() => this.approveClick(record)}>审批</Button>
+          <Button type="primary" ghost style={{display:record.statusName === '审批中' ? 'block' : 'none' }} onClick={() => this.cancelItem(record)}>撤销</Button>
+          <Button type="primary" ghost style={{display:record.statusName === '驳回' ? 'block' : 'none' }} onClick={() => this.approveClick(record)}>编辑</Button>
         </div>
       ),
     },
@@ -215,9 +241,9 @@ export default class MyApplyCon extends React.Component {
       <div>
         <ApplySearchConWithForm type="myApply" onQuery={this.handleChangeParam} loading={this.state.loading} />
         {
-          this.state.infoVisitable ?
-            <ApplyInfoModal
-              infoVisitable={this.state.infoVisitable}
+          this.state.MyApplyEditVisitable ?
+            <MyApplyEdit
+              infoVisitable={this.state.MyApplyEditVisitable}
               closeClaim={this.closeModalClaim}
               applyComfirm={this.applyComfirm}
               applyReject={this.applyReject}
