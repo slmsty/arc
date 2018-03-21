@@ -188,6 +188,7 @@ class BillApproveDetail extends React.Component  {
   handleOk = (e) => {
     e.preventDefault();
     const { isAgainInvoice } = this.props.serviceDetail
+    const isTaxAndFinance = this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account'
     this.props.form.validateFields((err, values) => {
       if(isAgainInvoice !== 'false') {
         this.state.dataSource.map((record, index) => {
@@ -200,19 +201,19 @@ class BillApproveDetail extends React.Component  {
           } else if(this.fieldCheck(record.billingAmountExcludeTax)) {
             message.error(`请填写第${index + 1}行的不含税金额`)
             err = true
-          } else if(record.billingAmount === '' || typeof record.billingAmount === 'undefined') {
+          } else if(this.fieldCheck(record.billingAmount)) {
             message.error(`请填写第${index + 1}行的含税金额`)
             err = true
           } else if(record.billingTaxRate === '') {
             message.error(`请填写第${index + 1}行的税率`)
             err = true
-          } else if(this.fieldCheck(record.billingTaxAmount)) {
+          } else if(record.billingTaxAmount === '' || typeof record.billingTaxAmount === 'undefined') {
             message.error(`请填写第${index + 1}行的税额`)
             err = true
-          } else if(this.fieldCheck(record.taxCategoryCode)) {
+          } else if(isTaxAndFinance && this.fieldCheck(record.taxCategoryCode)) {
             message.error(`请填写第${index + 1}行的税收分类编码`)
             err = true
-          } else if(this.fieldCheck(record.taxCategoryName)) {
+          } else if(isTaxAndFinance && this.fieldCheck(record.taxCategoryName)) {
             message.error(`请填写第${index + 1}行的税收分类名称`)
             err = true
           } else if(this.fieldCheck(record.prefPolicySign)) {

@@ -129,7 +129,7 @@ class BillStatusManageWithFormCon extends React.Component {
                     label="申请人"
                     idKey="accountId"
                     valueKey="accountName"
-                    showSearch={false}
+                    showSearch={true}
                   />
                 )}
               </FormItem>

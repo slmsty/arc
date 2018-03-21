@@ -75,7 +75,7 @@ class SelectSearch extends React.Component {
           billingApplicationType: this.props.billType,
         },
       }
-      this.setState({ loading: true })
+      //this.setState({ loading: true })
       requestJsonFetch(this.props.url, param, this.handleCallback)
     } else {
       this.setState({ loading: true })
@@ -94,15 +94,19 @@ class SelectSearch extends React.Component {
   }
 
   handleCallback = (response) => {
+    console.log(response)
     if (response.resultCode === '000000') {
-      this.setState({
-        pageNo: response.pageInfo.pageNo,
-        total: response.pageInfo.count,
-        dataSource: response.pageInfo.result,
-        firstLoad: false,
-      })
+      this.setState(this.props.label === '申请人' ? {
+        dataSource: response.data,
+        loading: false,
+        } : {
+          pageNo: response.pageInfo.pageNo,
+          total: response.pageInfo.count,
+          dataSource: response.pageInfo.result,
+          firstLoad: false,
+          loading: false,
+        })
     }
-    this.setState({ loading: false })
   }
 
   handleEmitEmpty = () => {
@@ -181,7 +185,7 @@ class SelectSearch extends React.Component {
             locale={{
               emptyText: this.state.firstLoad ? '' : '没有符合条件的记录',
             }}
-            pagination={{
+            pagination={this.props.label === '申请人' ? false :{
               current: this.state.pageNo,
               onChange: this.handleChangePage,
               total: this.state.total,

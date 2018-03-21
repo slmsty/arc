@@ -72,7 +72,7 @@ class BigSignAudit extends React.Component {
 
   render() {
     const rowSelection = {
-      type: 'checkbox',
+      type: 'radio',
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({
           selectedRows,
