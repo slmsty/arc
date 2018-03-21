@@ -5,7 +5,7 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
-import { contentCols, totalColumns, detailColumns, normalTypes, proColumns } from './billColumns'
+import { contentCols, totalColumns, detailColumns, normalTypes, proApplyColumns } from './billColumns'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -508,7 +508,6 @@ class BillDetail extends React.Component {
       let constructRate = 0, eduRate = 0, incomeRate = 0
       const { constructionTaxRate, educationTaxRate, incomeTaxRate } = this.props.detail
       this.state.dataSource.map(r => {
-        console.log(r.billingTaxRate)
         if(r.billingTaxRate > 0) {
           constructRate = parseFloat(constructRate + (r.billingTaxAmount * constructionTaxRate).toFixed(2))
           eduRate = parseFloat(eduRate + (r.billingTaxAmount * educationTaxRate).toFixed(2))
@@ -635,7 +634,7 @@ class BillDetail extends React.Component {
                 </Row>
                 <div className="arc-info">
                   <Table
-                    columns={proColumns}
+                    columns={proApplyColumns}
                     bordered
                     size="small"
                     scroll={{ x: '1570px' }}

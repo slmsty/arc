@@ -66,9 +66,13 @@ function getBillClients(state, action) {
 }
 
 function billApplySearch(state, action) {
+  const responseList = action.response.data.map((record, index) => ({
+    key: index,
+    ...record,
+  }))
   return {
     ...state,
-    billList: action.response.data,
+    billList: responseList,
     isLoading: false,
     billSaveSuccess: false,
     updateSuccess: false,

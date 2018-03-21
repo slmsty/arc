@@ -200,7 +200,7 @@ class BillApproveDetail extends React.Component  {
           } else if(this.fieldCheck(record.billingAmountExcludeTax)) {
             message.error(`请填写第${index + 1}行的不含税金额`)
             err = true
-          } else if(this.fieldCheck(record.billingAmount)) {
+          } else if(record.billingAmount === '' || typeof record.billingAmount === 'undefined') {
             message.error(`请填写第${index + 1}行的含税金额`)
             err = true
           } else if(record.billingTaxRate === '') {
@@ -506,7 +506,7 @@ class BillApproveDetail extends React.Component  {
     }]
     //是否红冲发票
     const isReceiveInvoice = showReceive.includes(this.props.applyType)
-    const showRedType = this.props.applyType === 'BILLING_RED' && this.props.taskCode === 'ar_finance_account'
+    const isTaxAndFinance = this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account'
     return (
       <div>
         {/*<Form
@@ -536,21 +536,24 @@ class BillApproveDetail extends React.Component  {
               pagination={false}
             />
           </div>
-          {isAgainInvoice === 'false' && showReceive.includes(this.props.applyType) ?
+          {isAgainInvoice === 'false' && isTaxAndFinance  ?
             <Row gutter={40}>
-              <Col span={8}>
-                <FormItem {...formItemLayout} label="是否收到发票">
-                  {
-                    getFieldDecorator('receiptOutcome',
-                      {initialValue: receiptOutcome, rules: [{ required: true, message: '请选择是否收到发票!' }]})(
-                      <Select>
-                        <Option value="Y">是</Option>
-                        <Option value="N">否</Option>
-                      </Select>
-                    )
-                  }
-                </FormItem>
-              </Col>
+              {
+                showReceive.includes(this.props.applyType) ?
+                  <Col span={8}>
+                    <FormItem {...formItemLayout} label="是否收到发票">
+                      {
+                        getFieldDecorator('receiptOutcome',
+                          {initialValue: receiptOutcome, rules: [{ required: true, message: '请选择是否收到发票!' }]})(
+                          <Select>
+                            <Option value="Y">是</Option>
+                            <Option value="N">否</Option>
+                          </Select>
+                        )
+                      }
+                    </FormItem>
+                  </Col> : null
+              }
               {
                 this.props.applyType === 'BILLING_RED' ?
                   <Col span={8}>
@@ -610,7 +613,7 @@ class BillApproveDetail extends React.Component  {
                   </FormItem>
                 </Col>
                 {
-                  isReceiveInvoice && (this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account') ?
+                  isReceiveInvoice && isTaxAndFinance ?
                     <Col span={8}>
                       <FormItem {...formItemLayout} label="是否收到发票">
                         {
@@ -663,11 +666,11 @@ class BillApproveDetail extends React.Component  {
                       </Col> : null
                   }
                   {
-                    showRedType ?
+                    this.props.applyType === 'BILLING_RED' && isTaxAndFinance ?
                       <Col span={8}>
                         <FormItem {...formItemLayout} label="退票类型">
                           {
-                            getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: showRedType, message: '请选择退票类型!' }]})(
+                            getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isTaxAndFinance, message: '请选择退票类型!' }]})(
                               <SelectInvokeApi
                                 typeCode="RED_TYPE_SELECT"
                                 paramCode="RED_OR_INVALID"

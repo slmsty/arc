@@ -11,6 +11,7 @@ import FileDownModal from './fileDownMotal'
 import currency from '../../util/currency'
 import { billApproveItemColumns, billApproveInfoColumns } from './billStatusCols'
 const TO_TAX_TYPE = ['开票审批完成', '作废审批完成', '开票失败']
+const CANCEL_TYPE = ['开票审批中', '作废审批中']
 
 export default class BillStatusCon extends React.Component {
   state = {
@@ -204,15 +205,12 @@ export default class BillStatusCon extends React.Component {
       glData: param,
     }
     let title = ''
-    let msgtitle = <div><p style={{display: 'inline-block',width:'100px'}}>id</p><p style={{display: 'inline-block',width:'190px'}}>msg</p></div>
     this.props.sendAP(sendApParam).then((res)=>{
       title = res.response.data.description
       let data = res.response.data.applicationStatusResults
-      //let data = res.response.data.applicationStatusResults = [ { "applicationId":"18010500003", "errorMessage":"状态不为作废审批中,不允许撤销!" }, { "applicationId":"18010500004", "errorMessage":"" } ]
       let msg = data.map((item)=>{
         return <div><p style={{display: 'inline-block',width:'100px'}}>{item.applicationId}</p><p style={{display: 'inline-block',width:'190px'}}>{item.errorMessage}</p></div>
       })
-      console.log(res.response)
       if (res && res.response && res.response.resultCode === '000000') {
       } else {
       }
@@ -226,7 +224,6 @@ export default class BillStatusCon extends React.Component {
     })
   }
   showGlDate = () => {
-    console.log(this.state.billResultSelectedRowKeys)
     if (this.state.selectedRowKeys.length === 0) {
       message.error('请选择要传送AP的数据')
       return
@@ -452,7 +449,7 @@ export default class BillStatusCon extends React.Component {
       type: 'radio',
       onChange: this.onSelectChange,
       getCheckboxProps: record => ({
-        defaultChecked:record.billingApplicationId == firstID
+        defaultChecked:selectedRowKeys.length > 0 ? '' : record.billingApplicationId == firstID
       })
     }
     const pagination = {
@@ -469,11 +466,13 @@ export default class BillStatusCon extends React.Component {
     return (
       <div>
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />
-        <Button onClick={this.showGlDate}>传送AP</Button>
+        <Button onClick={this.showGlDate} type="primary" ghost>传送AP</Button>
         <Button
+          type="primary"
+          ghost
           style={{marginLeft: '10px'}}
           onClick={this.cancelHandle}
-          disabled={this.state.cancelDis}
+          disabled={this.state.selectedRows.length > 0 ? !CANCEL_TYPE.includes(this.state.selectedRows[0].status) : true}
         >撤销</Button>
         <Button
           style={{marginLeft: '10px'}}

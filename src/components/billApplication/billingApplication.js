@@ -16,6 +16,7 @@ export default class BillingApplication extends React.Component {
       updateVisible: false,
       otherAddVisible: false,
       selectedRows: [],
+      selectedRowKeys: [],
       isAdd: false,
       currentRecord: {},
       showBillApprove: false,
@@ -37,6 +38,7 @@ export default class BillingApplication extends React.Component {
         updateVisible: false,
         otherAddVisible: false,
         currentRecord: {},
+        selectedRowKeys: [0]
       })
       this.getInitQuery()
     } else if(this.props.redApplySuccess != nextProps.redApplySuccess && nextProps.redApplySuccess) {
@@ -381,7 +383,14 @@ export default class BillingApplication extends React.Component {
       type: normalTypes.includes(this.state.currentType) ? 'checkbox' : 'radio',
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({selectedRows: selectedRows})
-      }
+      },
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.setState({
+          selectedRows,
+          selectedRowKeys
+        })
+      },
+      selectedRowKeys: this.state.selectedRowKeys,
     }
     const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply } = this.state
     return (
@@ -395,7 +404,7 @@ export default class BillingApplication extends React.Component {
         </div>
         <Table
           loading={isLoading}
-          rowKey={record => record.arBillingId ? record.arBillingId : record.billingOutcomeId}
+          rowKey={record => record.key}
           rowSelection={rowSelection}
           bordered
           columns={this.getApplyColumns()}

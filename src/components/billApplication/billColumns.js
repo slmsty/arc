@@ -156,6 +156,52 @@ const proColumns = [{
   width: 100,
 }]
 
+const proApplyColumns = [{
+  title: '项目编码',
+  dataIndex: 'projectCode',
+  width: 120,
+}, {
+  title: '签约公司',
+  dataIndex: 'company',
+  width: 240,
+}, {
+  title: '合同编码',
+  dataIndex: 'contractCode',
+  width: 300,
+}, {
+  title: '提前开票原因',
+  dataIndex: 'preInvoiceReason',
+  width: 300,
+}, {
+  title: '预计回款日期',
+  dataIndex: 'receiptReturnDate',
+  width: 150,
+}, {
+  title: '付款条件',
+  dataIndex: 'paymentTerm',
+  width: 200,
+}, {
+  title: '付款条款',
+  dataIndex: 'paymentName',
+  width: 150,
+}, {
+  title: '付款阶段',
+  dataIndex: 'paymentPhrases',
+  width: 150,
+}, {
+  title: '付款金额',
+  dataIndex: 'paymentAmount',
+  width: 80,
+}, {
+  title: '已申请金额',
+  dataIndex: 'applyIngAmount',
+  width: 100,
+}, {
+  title: '已开票金额',
+  dataIndex: 'outcomeAmount',
+  width: 100,
+}]
+
 const billDetailColumns = [{
   title: '发票号码',
   dataIndex: 'invoiceNumber',
@@ -368,5 +414,6 @@ export {
   otherTypes,
   invoiceLineCols,
   contentDetailCols,
+  proApplyColumns,
 }
 
