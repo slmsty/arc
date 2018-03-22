@@ -149,7 +149,10 @@ class BillApproveDetail extends React.Component  {
       dataSource[index][col] = value
       const { billingAmountExcludeTax } = this.state.dataSource[index]
       dataSource[index]['unitPrice'] = (billingAmountExcludeTax / (value ? value : 1)).toFixed(2)
-    }  else {
+    } else if (col === 'prefPolicySign') {
+      dataSource[index][col] = value
+      dataSource[index]['prefPolicyType'] = ''
+    } else {
       dataSource[index][col] = value
     }
     this.setState({
@@ -196,6 +199,9 @@ class BillApproveDetail extends React.Component  {
               err = true
             } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
               message.error(`请填写第${index + 1}行的税率`)
+              err = true
+            } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
+              message.error(`请填写第${index + 1}行的优惠政策类型`)
               err = true
             }
           } else if(isTaxAndFinance) {
@@ -257,6 +263,7 @@ class BillApproveDetail extends React.Component  {
               this.setState({
                 dataSource: newSources
               })
+              this.props.setFormValidate(true)
             } else {
               message.error(resultMessage)
             }

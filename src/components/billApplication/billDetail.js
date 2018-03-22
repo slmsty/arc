@@ -613,9 +613,10 @@ class BillDetail extends React.Component {
                 <Col span={8} key={1}>
                   <FormItem {...formItemLayout} label="是否重新开票:">
                     {getFieldDecorator('isAgainInvoice',{
-                      initialValue: 'true',
+                      initialValue: '', rules: [{ required: this.props.isRed, message: '请选择是否重新开票' }]
                     })(
                       <Select onChange={(v) => this.setState({showDetail: v === 'true' ? true : false })}>
+                        <Option value="">-请选择-</Option>
                         <Option value="true">是</Option>
                         <Option value="false">否</Option>
                       </Select>
@@ -804,7 +805,18 @@ class BillDetail extends React.Component {
                     </FormItem>
                   </Col>
                 </Row>
-              </div> : null
+              </div>
+              :
+              <div className="arc-info">
+                <Table
+                  columns={proApplyColumns}
+                  bordered
+                  size="small"
+                  scroll={{ x: '1570px' }}
+                  dataSource={contractList}
+                  pagination={false}
+                />
+              </div>
           }
           {
             this.props.billType === 'BILLING_EXCESS' ?

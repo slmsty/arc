@@ -10,8 +10,25 @@ const { TextArea } = Input
 
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 class ApplyInfoModal extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      formValidate: false,
+    }
+  }
+
+  setFormValidate = (v) => {
+    this.setState({
+      formValidate: v
+    })
+  }
+
   applyConfirm = () => {
     this.props.form.validateFields((err, values) => {
+      if(!this.state.formValidate) {
+        message.error('请先点击【保存修改】按钮，保存修改信息')
+        return
+      }
       if(!err) {
         const params = {
           arcFlowId: this.props.applyData.arcFlowId,
@@ -173,6 +190,7 @@ class ApplyInfoModal extends React.Component {
                     billApplySave={this.props.billApplySave}
                     taskCode={applyInfoDatas.taskCode}
                     form={this.props.form}
+                    setFormValidate={this.setFormValidate}
                   />
                 </div>
                 : null

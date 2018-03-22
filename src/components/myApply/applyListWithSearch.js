@@ -71,6 +71,11 @@ class ApplySearchCon extends React.Component {
                 {getFieldDecorator('applyPersonKeyword')(<Input placeholder="姓名／工号／NT" onPressEnter={this.handleQuery} />)}
               </FormItem>
             </Col>
+            <Col span={8} key={3} style={{display:this.props.type==='myApply' ? 'none' : 'block'}}>
+              <FormItem {...formItemLayout} label="项目编码">
+                {getFieldDecorator('projectNo')(<Input placeholder="项目编码" onPressEnter={this.handleQuery} />)}
+              </FormItem>
+            </Col>
           </Row>
           <Row gutter={40}>
             <Col span={8} key={3}>
