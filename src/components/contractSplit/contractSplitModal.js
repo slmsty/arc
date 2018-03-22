@@ -626,6 +626,9 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
     console.log('postParams',postParams)
+    this.setState({
+      editFlag:true,
+    })
     this.props.saveInfo(postParams)
 
   }
