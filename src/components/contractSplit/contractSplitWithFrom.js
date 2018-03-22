@@ -58,6 +58,7 @@ class ContractSplitCon extends React.Component {
                   getFieldDecorator('projectNo')(
                     <Input
                       placeholder="项目编码"
+                      onPressEnter={this.handleQuery}
                     />,
                   )
                 }
@@ -115,6 +116,7 @@ class ContractSplitCon extends React.Component {
                   getFieldDecorator('contractNo')(
                     <Input
                       placeholder="合同编码"
+                      onPressEnter={this.handleQuery}
                     />,
                   )
                 }
