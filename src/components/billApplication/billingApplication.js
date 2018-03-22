@@ -25,7 +25,6 @@ export default class BillingApplication extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props.billList !== nextProps.billList && nextProps.billList) {
-      console.log(nextProps.billList)
       this.setState({
         selectedRows: nextProps.billList.slice(0, 1),
         selectedRowKeys: [0],
@@ -54,6 +53,7 @@ export default class BillingApplication extends React.Component {
       message.success('申请开票成功!')
       this.getInitQuery()
     } else if(nextProps.failureMsg !== '') {
+      console.log(nextProps.failureMsg)
       message.error(nextProps.failureMsg)
     }
   }

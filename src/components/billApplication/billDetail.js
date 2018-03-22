@@ -16,7 +16,6 @@ const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
 class BillDetail extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props.billType)
     this.state = {
       dataSource: [],
       count: 1,
@@ -178,21 +177,40 @@ class BillDetail extends React.Component {
               this.setState({loading: false})
               const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
               if(resultCode === '000000') {
+                let isError = false
                 if(isWarning === 'Y') {
-                  //当转为其他事项开票时，费用承担者变为可编辑状态
-                  if(billingApplicationType === 'BILLING_EXCESS') {
-                    this.setState({
-                      isCostBearEdit: true,
-                    })
-                  }
                   confirm({
                     title: '提示',
                     content: warningMessage,
                     onOk() {
-                      _this.props.billApplySave({
-                        ...params,
-                        billingApplicationType,
-                      })
+                      if(billingApplicationType === 'BILLING_EXCESS') {
+                        if(typeof values.billingApplicantRequest === 'undefined' || values.billingApplicantRequest === '') {
+                          _this.props.form.setFields({
+                            billingApplicantRequest: {
+                              errors: [new Error('已转为其他事项开票，请填写开票原因')]
+                            }
+                          })
+                          isError = true
+                        }
+                        if(typeof values.costBear === 'undefined' || values.costBear === '') {
+                          _this.props.form.setFields({
+                            costBear: {
+                              value: '',
+                              errors: [new Error('已转为其他事项开票，请填费用承担者')]
+                            }
+                          })
+                          _this.setState({
+                            isCostBearEdit: true,
+                          })
+                          isError = true
+                        }
+                      }
+                      if(!isError) {
+                        _this.props.billApplySave({
+                          ...params,
+                          billingApplicationType,
+                        })
+                      }
                     },
                   })
                 } else {
@@ -519,6 +537,7 @@ class BillDetail extends React.Component {
       bankAccount: comInfo.bankBankAccount
     }]
     let rateData = []
+    //其他事项开票
     if(this.props.billType === 'BILLING_EXCESS') {
       let constructRate = 0, eduRate = 0, incomeRate = 0
       const { constructionTaxRate, educationTaxRate, incomeTaxRate } = this.props.detail
@@ -611,7 +630,9 @@ class BillDetail extends React.Component {
                 <Row gutter={40}>
                   <Col span={8} key={1}>
                     <FormItem {...formItemLayout} label="费用承担者">
-                      {getFieldDecorator('costBear')(
+                      {getFieldDecorator('costBear', {
+                        initialValue: '', rules: [{ required: this.state.isCostBearEdit, message: '请选择费用承担着!' }]
+                      })(
                         <SelectInvokeApi
                           typeCode="BILLING_APPLICATION"
                           paramCode="COST_BEAR"

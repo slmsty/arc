@@ -11,23 +11,18 @@ const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
 const Option = Select.Option
 const showReceive = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
-const data = [{
-  title: '城建',
-  taxRate: '5%',
-  tax: '2021',
-}, {
-  title: '教育',
-  taxRate: '8%',
-  tax: '12000',
-}, {
-  title: '所得税',
-  taxRate: '10%',
-  tax: '3000',
-}, {
-  title: '合计',
-  taxRate: '20%',
-  tax: '21000',
-}]
+const formItemLayout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 12 },
+}
+const formItemLayout1 = {
+  labelCol: { span: 12 },
+  wrapperCol: { span: 8 },
+}
+const span3ItemLayout = {
+  labelCol: { span: 2 },
+  wrapperCol: { span: 20 },
+}
 
 class BillApproveDetail extends React.Component  {
   constructor(props) {
@@ -279,20 +274,17 @@ class BillApproveDetail extends React.Component  {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const formItemLayout = {
-      labelCol: { span: 8 },
-      wrapperCol: { span: 12 },
-    }
-    const formItemLayout1 = {
-      labelCol: { span: 12 },
-      wrapperCol: { span: 8 },
-    }
-    const span3ItemLayout = {
-      labelCol: { span: 2 },
-      wrapperCol: { span: 20 },
-    }
     const { billingType, billingDate, billingApplicantRequest, comInfo ={}, custInfo = {}, contractList, outcomeList,
-      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName } = this.props.serviceDetail
+      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName, taskCode } = this.props.serviceDetail
+    //是否红冲发票
+    const isReceiveInvoice = showReceive.includes(this.props.applyType)
+    //AR管理员
+    const isArAdmin = taskCode === 'ar_admin'
+    //AR财务会计
+    const isArFinanceAccount = taskCode === 'ar_finance_account'
+    //税务审核人
+    const isTaxAuditor = taskCode === 'tax_auditor'
+    const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -508,47 +500,116 @@ class BillApproveDetail extends React.Component  {
         )
       }
     }]
-    //是否红冲发票
-    const isReceiveInvoice = showReceive.includes(this.props.applyType)
-    const isTaxAndFinance = this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account'
+
     return (
       <div>
-        {/*<Form
-          className="ant-search-form"
-        >*/}
-          <div className="infoPanel">
-            <h1>项目信息</h1>
-            <Table
-              rowKey="receiptClaimId"
-              columns={proColumns}
-              bordered
-              size="small"
-              scroll={{ x: '1480px' }}
-              dataSource={contractList}
-              pagination={false}
-            />
-          </div>
-          <div className="infoPanel">
-            <h1>开票结果详情</h1>
-            <Table
-              rowKey="receiptClaimId"
-              columns={billDetailColumns}
-              bordered
-              size="small"
-              scroll={{ x: '1580px' }}
-              dataSource={outcomeList}
-              pagination={false}
-            />
-          </div>
-          {isAgainInvoice === 'false' && isTaxAndFinance  ?
+        <div className="infoPanel">
+          <h1>项目信息</h1>
+          <Table
+            rowKey="receiptClaimId"
+            columns={proColumns}
+            bordered
+            size="small"
+            scroll={{ x: '1480px' }}
+            dataSource={contractList}
+            pagination={false}
+          />
+        </div>
+        <div className="infoPanel">
+          <h1>开票结果详情</h1>
+          <Table
+            rowKey="receiptClaimId"
+            columns={billDetailColumns}
+            bordered
+            size="small"
+            scroll={{ x: '1580px' }}
+            dataSource={outcomeList}
+            pagination={false}
+          />
+        </div>
+        {isAgainInvoice === 'false' && isArFinanceAccount && isTaxAuditor  ?
+          <Row gutter={40}>
+            {
+              showReceive.includes(this.props.applyType) ?
+                <Col span={8}>
+                  <FormItem {...formItemLayout} label="是否收到发票">
+                    {
+                      getFieldDecorator('receiptOutcome',
+                        {initialValue: receiptOutcome, rules: [{ required: true, message: '请选择是否收到发票!' }]})(
+                        <Select>
+                          <Option value="Y">是</Option>
+                          <Option value="N">否</Option>
+                        </Select>
+                      )
+                    }
+                  </FormItem>
+                </Col> : null
+            }
+            {
+              this.props.applyType === 'BILLING_RED' ?
+                <Col span={8}>
+                  <FormItem {...formItemLayout} label="退票类型">
+                    {
+                      getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: true, message: '请选择退票类型!' }]})(
+                        <SelectInvokeApi
+                          typeCode="RED_TYPE_SELECT"
+                          paramCode="RED_OR_INVALID"
+                          placeholder="退票类型"
+                          hasEmpty
+                          disabled={this.props.taskCode === 'tax_auditor'}
+                        />
+                      )
+                    }
+                  </FormItem>
+                </Col> : null
+            }
+            {
+              this.props.taskCode === 'tax_auditor' ?
+                <Col span={8}>
+                  <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
+                    {
+                      receiptOutcome === 'Y' ? '是' : '否'
+                    }
+                  </FormItem>
+                </Col>
+               : null
+            }
+          </Row>
+          :
+          <div>
             <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayout} label="开票类型">
+                  {
+                    getFieldDecorator('billingType', {
+                      initialValue: billingType
+                    })(
+                      <SelectInvokeApi
+                        typeCode="BILLING_APPLICATION"
+                        paramCode="BILLING_TYPE"
+                        placeholder="开票类型"
+                        hasEmpty
+                      />
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayout} label="开票日期">
+                  {
+                    getFieldDecorator('billingDate', {initialValue: moment(billingDate, dateFormat)})(
+                      <DatePicker format="YYYY-MM-DD"/>,
+                    )
+                  }
+                </FormItem>
+              </Col>
               {
-                showReceive.includes(this.props.applyType) ?
+                isReceiveInvoice && isTaxAndFinance ?
                   <Col span={8}>
                     <FormItem {...formItemLayout} label="是否收到发票">
                       {
-                        getFieldDecorator('receiptOutcome',
-                          {initialValue: receiptOutcome, rules: [{ required: true, message: '请选择是否收到发票!' }]})(
+                        getFieldDecorator(this.props.taskCode === 'tax_auditor' ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
+                          {initialValue: this.props.taskCode === 'tax_auditor' ? receiptOutcomeTaxVp : receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
                           <Select>
                             <Option value="Y">是</Option>
                             <Option value="N">否</Option>
@@ -559,92 +620,54 @@ class BillApproveDetail extends React.Component  {
                   </Col> : null
               }
               {
-                this.props.applyType === 'BILLING_RED' ?
+                this.props.isApprove ?
                   <Col span={8}>
-                    <FormItem {...formItemLayout} label="退票类型">
+                    <FormItem {...formItemLayout} label="开票流程">
                       {
-                        getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: true, message: '请选择退票类型!' }]})(
+                        getFieldDecorator('billFlow',
+                          {initialValue: 'BILLING_CONTRACT', rules: [{ required: this.props.isApprove, message: '请选择开票流程!' }]})(
                           <SelectInvokeApi
-                            typeCode="RED_TYPE_SELECT"
-                            paramCode="RED_OR_INVALID"
-                            placeholder="退票类型"
-                            hasEmpty
-                            disabled={this.props.taskCode === 'tax_auditor'}
+                            typeCode="TYPE_SELECT"
+                            paramCode="BILLING_APPLICATION_TYPE"
+                            placeholder="开票流程"
+                            onChange={(v) => this.props.setBillApplicationType(v)}
+                            hasEmpty={false}
                           />
                         )
                       }
                     </FormItem>
                   </Col> : null
               }
-              {
-                this.props.taskCode === 'tax_auditor' ?
-                  <Col span={8}>
-                    <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
-                      {
-                        receiptOutcome === 'Y' ? '是' : '否'
-                      }
-                    </FormItem>
-                  </Col>
-                 : null
-              }
             </Row>
-            :
-            <div>
+            {
               <Row gutter={40}>
                 <Col span={8}>
-                  <FormItem {...formItemLayout} label="开票类型">
-                    {
-                      getFieldDecorator('billingType', {
-                        initialValue: billingType
-                      })(
-                        <SelectInvokeApi
-                          typeCode="BILLING_APPLICATION"
-                          paramCode="BILLING_TYPE"
-                          placeholder="开票类型"
-                          hasEmpty
-                        />
-                      )
-                    }
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem {...formItemLayout} label="开票日期">
-                    {
-                      getFieldDecorator('billingDate', {initialValue: moment(billingDate, dateFormat)})(
-                        <DatePicker format="YYYY-MM-DD"/>,
-                      )
-                    }
+                  <FormItem {...formItemLayout} label="费用承担者">
+                    {costBearName}
                   </FormItem>
                 </Col>
                 {
-                  isReceiveInvoice && isTaxAndFinance ?
+                  this.props.taskCode === 'tax_auditor' && isReceiveInvoice ?
                     <Col span={8}>
-                      <FormItem {...formItemLayout} label="是否收到发票">
+                      <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                         {
-                          getFieldDecorator(this.props.taskCode === 'tax_auditor' ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
-                            {initialValue: this.props.taskCode === 'tax_auditor' ? receiptOutcomeTaxVp : receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
-                            <Select>
-                              <Option value="Y">是</Option>
-                              <Option value="N">否</Option>
-                            </Select>
-                          )
+                          receiptOutcome === 'Y' ? '是' : '否'
                         }
                       </FormItem>
                     </Col> : null
                 }
                 {
-                  this.props.isApprove ?
+                  this.props.applyType === 'BILLING_RED' && isTaxAndFinance ?
                     <Col span={8}>
-                      <FormItem {...formItemLayout} label="开票流程">
+                      <FormItem {...formItemLayout} label="退票类型">
                         {
-                          getFieldDecorator('billFlow',
-                            {initialValue: 'BILLING_CONTRACT', rules: [{ required: this.props.isApprove, message: '请选择开票流程!' }]})(
+                          getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isTaxAndFinance, message: '请选择退票类型!' }]})(
                             <SelectInvokeApi
-                              typeCode="TYPE_SELECT"
-                              paramCode="BILLING_APPLICATION_TYPE"
-                              placeholder="开票流程"
-                              onChange={(v) => this.props.setBillApplicationType(v)}
-                              hasEmpty={false}
+                              typeCode="RED_TYPE_SELECT"
+                              paramCode="RED_OR_INVALID"
+                              placeholder="退票类型"
+                              hasEmpty
+                              disabled={this.props.taskCode === 'tax_auditor'}
                             />
                           )
                         }
@@ -652,123 +675,86 @@ class BillApproveDetail extends React.Component  {
                     </Col> : null
                 }
               </Row>
-              {
-                <Row gutter={40}>
-                  <Col span={8}>
-                    <FormItem {...formItemLayout} label="费用承担者">
-                      {costBearName}
-                    </FormItem>
-                  </Col>
-                  {
-                    this.props.taskCode === 'tax_auditor' && isReceiveInvoice ?
-                      <Col span={8}>
-                        <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
-                          {
-                            receiptOutcome === 'Y' ? '是' : '否'
-                          }
-                        </FormItem>
-                      </Col> : null
-                  }
-                  {
-                    this.props.applyType === 'BILLING_RED' && isTaxAndFinance ?
-                      <Col span={8}>
-                        <FormItem {...formItemLayout} label="退票类型">
-                          {
-                            getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isTaxAndFinance, message: '请选择退票类型!' }]})(
-                              <SelectInvokeApi
-                                typeCode="RED_TYPE_SELECT"
-                                paramCode="RED_OR_INVALID"
-                                placeholder="退票类型"
-                                hasEmpty
-                                disabled={this.props.taskCode === 'tax_auditor'}
-                              />
-                            )
-                          }
-                        </FormItem>
-                      </Col> : null
-                  }
-                </Row>
-              }
-              <div style={{margin: '10px 0'}}>
-                <Table
-                  rowKey="id"
-                  size="small"
-                  bordered
-                  columns={detailColumns}
-                  dataSource={detailData}
-                  pagination={false}
-                />
-              </div>
-              {
-                this.props.taskCode === 'ar_admin' || this.props.taskCode === 'ar_finance_account' ?
-                  <div className="add-btns">
-                    <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
-                  </div> : null
-              }
+            }
+            <div style={{margin: '10px 0'}}>
               <Table
-                rowSelection={rowSelection}
-                style={{marginBottom: '10px'}}
-                rowKey={record => record.lineNo}
-                bordered
+                rowKey="id"
                 size="small"
-                columns={columns}
+                bordered
+                columns={detailColumns}
+                dataSource={detailData}
                 pagination={false}
-                dataSource={this.state.dataSource}
-                scroll={{ x: '1600px' }}
               />
-              {
-                this.props.applyType === 'BILLING_EXCESS' ?
-                  <div className="arc-info">
-                    <Table
-                      style={{width: '50%'}}
-                      rowKey="id"
-                      size="small"
-                      bordered
-                      columns={totalColumns}
-                      dataSource={data}
-                      pagination={false}
-                    />
-                  </div> : null
-              }
-              <Row gutter={40}>
-                <Col span={24}>
-                  <FormItem {...span3ItemLayout} label="备注">
-                    {
-                      getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 350, message: '备注不能超过350个字符!' }]})(
-                        <TextArea placeholder="备注" rows="2" />
-                      )
-                    }
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row gutter={40}>
-                <Col span={24}>
-                  <FormItem {...span3ItemLayout} label="开票要求">
-                    {
-                      getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票要求不能超过350个字符!' }]})(
-                        <TextArea placeholder="请输入开票要求" rows="2" />
-                      )
-                    }
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row gutter={40}>
-                <Col span={24}>
-                  <span className="file-label">附件:</span> <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
-                </Col>
-              </Row>
             </div>
-          }
-          <div className="add-btns">
-            <Button
-              type="primary"
-              style={{marginLeft: '5px'}}
-              ghost
-              onClick={(e) => this.handleOk(e)}>
-              <Icon type="check" />保存修改
-            </Button>
+            {
+              this.props.taskCode === 'ar_admin' || this.props.taskCode === 'ar_finance_account' ?
+                <div className="add-btns">
+                  <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
+                </div> : null
+            }
+            <Table
+              rowSelection={rowSelection}
+              style={{marginBottom: '10px'}}
+              rowKey={record => record.lineNo}
+              bordered
+              size="small"
+              columns={columns}
+              pagination={false}
+              dataSource={this.state.dataSource}
+              scroll={{ x: '1600px' }}
+            />
+            {
+              this.props.applyType === 'BILLING_EXCESS' ?
+                <div className="arc-info">
+                  <Table
+                    style={{width: '50%'}}
+                    rowKey="id"
+                    size="small"
+                    bordered
+                    columns={totalColumns}
+                    dataSource={[]}
+                    pagination={false}
+                  />
+                </div> : null
+            }
+            <Row gutter={40}>
+              <Col span={24}>
+                <FormItem {...span3ItemLayout} label="备注">
+                  {
+                    getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 350, message: '备注不能超过350个字符!' }]})(
+                      <TextArea placeholder="备注" rows="2" />
+                    )
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={24}>
+                <FormItem {...span3ItemLayout} label="开票要求">
+                  {
+                    getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票要求不能超过350个字符!' }]})(
+                      <TextArea placeholder="请输入开票要求" rows="2" />
+                    )
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={24}>
+                <span className="file-label">附件:</span> <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+              </Col>
+            </Row>
           </div>
-        {/*</Form>*/}
+        }
+        <div className="add-btns">
+          <Button
+            type="primary"
+            style={{marginLeft: '5px'}}
+            ghost
+            onClick={(e) => this.handleOk(e)}>
+            <Icon type="check" />保存修改
+          </Button>
+        </div>
       </div>
     )
   }

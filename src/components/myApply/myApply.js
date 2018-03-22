@@ -1,13 +1,9 @@
 /**
  * Created by liangshuang on 18/3/21.
  */
-/**
- * Created by liangshuang on 17/12/1.
- */
 import React from 'react'
 import { Button, Table, message, Modal } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
-import ApplyInfoModal from './applyInfo'
 import NoApplyInfo from './noApplyInfo'
 import MyApplyEdit from './myApplyEdit'
 const confirm = Modal.confirm;
