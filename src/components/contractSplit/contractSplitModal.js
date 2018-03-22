@@ -16,6 +16,7 @@ import currency from '../../util/currency'
 import percent from '../../util/percent'
 import _ from 'lodash'
 import './contract.less'
+import '../billApplication/billDetail.less'
 import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select, message, InputNumber } from 'antd'
 
 const FormItem = Form.Item
@@ -898,7 +899,20 @@ class ContractSplitModal extends React.Component{
                   <h2>合同OrderList信息</h2>
                 </Col>
                 <Col span={4}>
-                  <button onClick={()=>this.goDetail(this.props.contractUrl[0] ? this.props.contractUrl[0].url : '')}>合同审批表及合同扫描件</button>
+                  {/*<button className="scan-document" type="primary" onClick={()=>this.goDetail(this.props.contractUrl[0] ? this.props.contractUrl[0].url : '')}>合同审批表及合同扫描件</button>*/}
+                  <Button
+                    className="scan-document"
+                    type="primary"
+                    ghost
+                    onClick={() => {
+                      if(this.props.contractUrl[0]){
+                        window.open(this.props.contractUrl[0].url)
+                      } else {
+                        message.warn('暂无合同审批表及合同扫描件')
+                        return
+                      }
+                    }}
+                  >合同审批表及合同扫描件</Button>
                 </Col>
               </Row>
               <br />
