@@ -34,11 +34,13 @@ export default class BillingApplication extends React.Component {
       this.getInitQuery()
     } else if(this.props.addSuccess !== nextProps.addSuccess && nextProps.addSuccess) {
       message.success('申请信息添加成功!')
+      console.log(nextProps)
       this.setState({
         updateVisible: false,
         otherAddVisible: false,
         currentRecord: {},
-        selectedRowKeys: [0]
+        selectedRowKeys: [0],
+        selectedRows: nextProps.billList.slice(0, 1),
       })
       this.getInitQuery()
     } else if(this.props.redApplySuccess != nextProps.redApplySuccess && nextProps.redApplySuccess) {
@@ -381,9 +383,6 @@ export default class BillingApplication extends React.Component {
       editInfo, billApplySave, billApplyCheck, currentUser, contractUrl, redApplyDetail, billApplicationRedApply } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) ? 'checkbox' : 'radio',
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.setState({selectedRows: selectedRows})
-      },
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({
           selectedRows,
