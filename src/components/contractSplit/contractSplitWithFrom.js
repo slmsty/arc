@@ -143,8 +143,24 @@ class ContractSplitCon extends React.Component {
               </FormItem>
             </Col>
           </Row>
-          <Row>
-            <Col span={24} style={{ textAlign: 'right' }}>
+          <Row gutter={40}>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="是否复算项目">
+                {getFieldDecorator('复选', {
+                  initialValue: 'ALL',
+                })(
+                  <Select
+                    placeholder="请选择拆分状态"
+                    onChange={this.handleChange}
+                  >
+                    <Option value="ALL">全部</Option>
+                    <Option value="Y">是</Option>
+                    <Option value="N">否</Option>
+                  </Select>,
+                )}
+              </FormItem>
+            </Col>
+            <Col span={16} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
