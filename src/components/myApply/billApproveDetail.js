@@ -187,39 +187,40 @@ class BillApproveDetail extends React.Component  {
     this.props.form.validateFields((err, values) => {
       if(isAgainInvoice !== 'false') {
         this.state.dataSource.map((record, index) => {
-          if(this.fieldCheck(record.quantity)) {
-            message.error(`请填写第${index + 1}行的数量`)
-            err = true
-          } else if(isTaxAndFinance && this.fieldCheck(record.billingContent)) {
-            message.error(`请填写第${index + 1}行的开票内容`)
-            err = true
-          } else if(this.fieldCheck(record.unitPrice)) {
-            message.error(`请填写第${index + 1}行的单价`)
-            err = true
-          } else if(this.fieldCheck(record.billingAmountExcludeTax)) {
-            message.error(`请填写第${index + 1}行的不含税金额`)
-            err = true
-          } else if(this.fieldCheck(record.billingAmount)) {
-            message.error(`请填写第${index + 1}行的含税金额`)
-            err = true
-          } else if(record.billingTaxRate === '') {
-            message.error(`请填写第${index + 1}行的税率`)
-            err = true
-          } else if(record.billingTaxAmount === '' || typeof record.billingTaxAmount === 'undefined') {
-            message.error(`请填写第${index + 1}行的税额`)
-            err = true
-          } else if(isTaxAndFinance && this.fieldCheck(record.taxCategoryCode)) {
-            message.error(`请填写第${index + 1}行的税收分类编码`)
-            err = true
-          } else if(isTaxAndFinance && this.fieldCheck(record.taxCategoryName)) {
-            message.error(`请填写第${index + 1}行的税收分类名称`)
-            err = true
-          } else if(isTaxAndFinance && this.fieldCheck(record.prefPolicySign)) {
-            message.error(`请填写第${index + 1}行的优惠政策`)
-            err = true
-          } else if(isTaxAndFinance && record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
-            message.error(`请填写第${index + 1}行的优惠政策类型`)
-            err = true
+          if(this.props.taskCode === 'ar_admin') {
+            if(this.fieldCheck(record.quantity)) {
+              message.error(`请填写第${index + 1}行的数量`)
+              err = true
+            } else if(this.fieldCheck(record.billingAmount)) {
+              message.error(`请填写第${index + 1}行的含税金额`)
+              err = true
+            } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
+              message.error(`请填写第${index + 1}行的税率`)
+              err = true
+            }
+          } else if(isTaxAndFinance) {
+            if(this.fieldCheck(record.billingContent)) {
+              message.error(`请填写第${index + 1}行的开票内容`)
+              err = true
+            } else if(this.fieldCheck(record.quantity)) {
+              message.error(`请填写第${index + 1}行的数量`)
+              err = true
+            } else if(this.fieldCheck(record.billingAmount)) {
+              message.error(`请填写第${index + 1}行的含税金额`)
+              err = true
+            } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
+              message.error(`请填写第${index + 1}行的税率`)
+              err = true
+            } else if(this.fieldCheck(record.taxCategoryCode)) {
+              message.error(`请填写第${index + 1}行的税收分类编码`)
+              err = true
+            } else if(this.fieldCheck(record.prefPolicySign)) {
+              message.error(`请填写第${index + 1}行的优惠政策`)
+              err = true
+            } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
+              message.error(`请填写第${index + 1}行的优惠政策类型`)
+              err = true
+            }
           }
           if(err) {
             return
@@ -284,7 +285,6 @@ class BillApproveDetail extends React.Component  {
     const isArFinanceAccount = taskCode === 'ar_finance_account'
     //税务审核人
     const isTaxAuditor = taskCode === 'tax_auditor'
-    const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -474,9 +474,9 @@ class BillApproveDetail extends React.Component  {
       render: (text, record, index) => {
         return (
           <Select
+            defaultValue="0"
             value={this.state.dataSource[index]['prefPolicySign']}
             onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
-            <Option value="">-请选择-</Option>
             <Option value="1">是</Option>
             <Option value="0">否</Option>
           </Select>
@@ -491,6 +491,7 @@ class BillApproveDetail extends React.Component  {
           <Select
             value={this.state.dataSource[index]['prefPolicyType']}
             onChange={(v) => this.handleChange(v, 'prefPolicyType', index)}
+            disabled={this.state.dataSource[index]['prefPolicySign'] === '0'}
           >
             <Option value="">-请选择-</Option>
             <Option value="超税负3%即征即退">超税负3%即征即退</Option>
@@ -604,7 +605,7 @@ class BillApproveDetail extends React.Component  {
                 </FormItem>
               </Col>
               {
-                isReceiveInvoice && isTaxAndFinance ?
+                isReceiveInvoice && isArFinanceAccount && isTaxAuditor ?
                   <Col span={8}>
                     <FormItem {...formItemLayout} label="是否收到发票">
                       {
@@ -657,11 +658,11 @@ class BillApproveDetail extends React.Component  {
                     </Col> : null
                 }
                 {
-                  this.props.applyType === 'BILLING_RED' && isTaxAndFinance ?
+                  this.props.applyType === 'BILLING_RED' && isArFinanceAccount && isTaxAuditor ?
                     <Col span={8}>
                       <FormItem {...formItemLayout} label="退票类型">
                         {
-                          getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isTaxAndFinance, message: '请选择退票类型!' }]})(
+                          getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount && isTaxAuditor, message: '请选择退票类型!' }]})(
                             <SelectInvokeApi
                               typeCode="RED_TYPE_SELECT"
                               paramCode="RED_OR_INVALID"
