@@ -30,7 +30,7 @@ class BillDetail extends React.Component {
       fileList: [],
       fileId: '',
       loading: false,
-      showDetail: true,
+      showDetail: '',
       isCostBearEdit: props.billType === 'BILLING_EXCESS',
     }
   }
@@ -626,7 +626,7 @@ class BillDetail extends React.Component {
               </Row> : null
           }
           {
-            this.state.showDetail ?
+            (this.props.isRed && this.state.showDetail) || !this.props.isRed ?
               <div>
                 <Row gutter={40}>
                   <Col span={8} key={1}>
@@ -806,7 +806,11 @@ class BillDetail extends React.Component {
                   </Col>
                 </Row>
               </div>
-              :
+              : null
+
+          }
+          {
+            this.state.showDetail === false && this.props.isRed ?
               <div className="arc-info">
                 <Table
                   columns={proApplyColumns}
@@ -816,7 +820,7 @@ class BillDetail extends React.Component {
                   dataSource={contractList}
                   pagination={false}
                 />
-              </div>
+              </div> : null
           }
           {
             this.props.billType === 'BILLING_EXCESS' ?
