@@ -94,7 +94,6 @@ class SelectSearch extends React.Component {
   }
 
   handleCallback = (response) => {
-    console.log(response)
     if (response.resultCode === '000000') {
       this.setState(this.props.label === '申请人' ? {
         dataSource: response.data,

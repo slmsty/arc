@@ -10,10 +10,13 @@ const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
 const confirm = Modal.confirm
+const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER']
+const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
 
 class BillDetail extends React.Component {
   constructor(props) {
     super(props)
+    console.log(props.billType)
     this.state = {
       dataSource: [],
       count: 1,
@@ -29,6 +32,7 @@ class BillDetail extends React.Component {
       fileId: '',
       loading: false,
       showDetail: true,
+      isCostBearEdit: props.billType === 'BILLING_EXCESS',
     }
   }
 
@@ -124,6 +128,16 @@ class BillDetail extends React.Component {
             err = true
             break
           }
+          if(record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined') {
+            message.error(`第${i+1}行开票税率不能为空!`)
+            err = true
+            break
+          }
+          if(record.quantity === '' || typeof record.quantity === 'undefined' || record.quantity === 0) {
+            message.error(`第${i+1}行开票数量不能为空或者为0!`)
+            err = true
+            break
+          }
           if(groupNos.length > 0 && typeof record.groupNo === 'undefined') {
             message.error(`第${i+1}行开票信息没有进行分组!`)
             err = true
@@ -165,6 +179,12 @@ class BillDetail extends React.Component {
               const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
               if(resultCode === '000000') {
                 if(isWarning === 'Y') {
+                  //当转为其他事项开票时，费用承担者变为可编辑状态
+                  if(billingApplicationType === 'BILLING_EXCESS') {
+                    this.setState({
+                      isCostBearEdit: true,
+                    })
+                  }
                   confirm({
                     title: '提示',
                     content: warningMessage,
@@ -312,10 +332,6 @@ class BillDetail extends React.Component {
         file: {},
       })
     }
-  }
-
-  handleFileRemove = (file) => {
-    console.log(file)
   }
 
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
@@ -487,7 +503,6 @@ class BillDetail extends React.Component {
       beforeUpload: this.beforeUpload,
       customRequest: this.customRequest,
       onChange: this.handleFileChange,
-      onRemove: this.handleFileRemove,
     };
     const { custInfo, comInfo, contractList } = this.props.detail
     const detailData = [{
@@ -602,6 +617,7 @@ class BillDetail extends React.Component {
                           paramCode="COST_BEAR"
                           placeholder="费用承担着"
                           hasEmpty
+                          disabled={!this.state.isCostBearEdit}
                         />
                       )}
                     </FormItem>
@@ -682,7 +698,7 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="附件">
                       {
-                        getFieldDecorator('file')(
+                        getFieldDecorator('file', { rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件!' }] })(
                           <Upload {...props} fileList={this.state.fileList}>
                             <Button>
                               <Icon type="upload" />点击上传
@@ -698,7 +714,10 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="开票要求">
                       {
-                        getFieldDecorator('billingApplicantRequest', {rules: [{max: 350, message: '开票要求不能超过350个字符!' }]})(
+                        getFieldDecorator('billingApplicantRequest', {rules: [
+                          { required: requirementType.includes(this.props.billType), message: this.props.billType === 'BILLING_RED' ? '请在此处填写退票原因!' : '请填写开票原因' },
+                          { max: 350, message: '开票要求不能超过350个字符!' }
+                        ]})(
                           <TextArea placeholder="请输入开票要求" rows="2" />
                         )
                       }
@@ -717,9 +736,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={2}>
                     <FormItem {...formItemLayout2} label="收件人公司">
                       {
-                        getFieldDecorator('expressReceiptCompany', {
-                          initialValue: ''
-                        })(
+                        getFieldDecorator('expressReceiptCompany')(
                           <Input placeholder="收件人公司"/>
                         )
                       }
@@ -746,9 +763,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={2}>
                     <FormItem {...formItemLayout2} label="收件人详细地址">
                       {
-                        getFieldDecorator('expressReceiptAddress', {
-                          initialValue: ''
-                        })(
+                        getFieldDecorator('expressReceiptAddress')(
                           <Input placeholder="收件人详细地址"/>
                         )
                       }

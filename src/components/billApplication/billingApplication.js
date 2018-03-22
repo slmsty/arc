@@ -24,6 +24,13 @@ export default class BillingApplication extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if(this.props.billList !== nextProps.billList && nextProps.billList) {
+      console.log(nextProps.billList)
+      this.setState({
+        selectedRows: nextProps.billList.slice(0, 1),
+        selectedRowKeys: [0],
+      })
+    }
     if(this.props.updateSuccess !== nextProps.updateSuccess && nextProps.updateSuccess) {
       message.success('申请信息修改成功!')
       this.setState({
@@ -34,13 +41,11 @@ export default class BillingApplication extends React.Component {
       this.getInitQuery()
     } else if(this.props.addSuccess !== nextProps.addSuccess && nextProps.addSuccess) {
       message.success('申请信息添加成功!')
-      console.log(nextProps)
       this.setState({
         updateVisible: false,
         otherAddVisible: false,
         currentRecord: {},
         selectedRowKeys: [0],
-        selectedRows: nextProps.billList.slice(0, 1),
       })
       this.getInitQuery()
     } else if(this.props.redApplySuccess != nextProps.redApplySuccess && nextProps.redApplySuccess) {

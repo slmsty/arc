@@ -150,6 +150,16 @@ class BillStatusManageWithFormCon extends React.Component {
                 }
               </FormItem>
             </Col>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="申请单编号">
+                {getFieldDecorator('applicationId', {
+                  initialValue: '',
+                })(
+                  <Input placeholder="申请单编号"/>
+                )
+                }
+              </FormItem>
+            </Col>
           </Row>
           <Row gutter={40}>
             <Col span={24} style={{ textAlign: 'right' }}>
