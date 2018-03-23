@@ -4,25 +4,28 @@ import { proColumns, billDetailColumns, detailColumns, invoiceLineCols, totalCol
 import './billApproveDetail.css'
 const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
 
-const data = [{
-  title: '城建',
-  taxRate: '5%',
-  tax: '2021',
-}, {
-  title: '教育',
-  taxRate: '8%',
-  tax: '12000',
-}, {
-  title: '所得税',
-  taxRate: '10%',
-  tax: '3000',
-}, {
-  title: '合计',
-  taxRate: '20%',
-  tax: '21000',
-}]
 
 class BillDetail extends React.Component  {
+  getTaxData = () => {
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totaxTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    return [{
+      title: '城建',
+      taxRate: constructionTax,
+      tax: constructionTaxAmount,
+    }, {
+      title: '教育',
+      taxRate: educationTax,
+      tax: educationTaxAmount,
+    }, {
+      title: '所得税',
+      taxRate: incomeTax,
+      tax: incomeTaxAmount,
+    }, {
+      title: '合计',
+      taxRate: '',
+      tax: totaxTaxAmount,
+    }]
+  }
   render() {
     const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo = {}, custInfo = {},
       contractList, outcomeList, billingApplicantRemark, receiptOutcome, fileName, filePath, isAgainInvoice, costBearName } = this.props.serviceDetail
@@ -127,12 +130,12 @@ class BillDetail extends React.Component  {
                 this.props.applyType === 'BILLING_EXCESS' ?
                   <div className="arc-info">
                     <Table
-                      style={{width: '50%'}}
+                      style={{width: '70%'}}
                       rowKey="id"
                       size="small"
                       bordered
                       columns={totalColumns}
-                      dataSource={data}
+                      dataSource={this.getTaxData()}
                       pagination={false}
                     />
                   </div> : null

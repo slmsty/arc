@@ -5,7 +5,7 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
-import { contentCols, totalColumns, detailColumns, normalTypes, proApplyColumns } from './billColumns'
+import { contentCols, totalColumns, detailColumns, normalTypes, proApplyColumns, billDetailColumns } from './billColumns'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -32,6 +32,11 @@ class BillDetail extends React.Component {
       loading: false,
       showDetail: '',
       isCostBearEdit: props.billType === 'BILLING_EXCESS',
+      showWarning: false,
+      warningData: {
+        arcBillingTaxInfo: {},
+      },
+      submitParams: {},
     }
   }
 
@@ -111,12 +116,19 @@ class BillDetail extends React.Component {
     const { isRed, billingOutcomeId } = this.props
     //红冲发票不重新开票
     if(isRed && this.props.form.getFieldValue('isAgainInvoice') === 'false') {
-      const params = {
-        billingOutcomeId,
-        billingApplicationType: this.props.billType,
-        isAgainInvoice: 'false',
-      }
-      this.props.billApplySave(params)
+      this.props.form.validateFields((err, values) => {
+        if(!err) {
+          const params = {
+            billingOutcomeId,
+            billingApplicationType: this.props.billType,
+            objectId: this.state.fileId,
+            objectName: this.state.file.name,
+            billingApplicantRequest: values.billingApplicantRequest,
+            isAgainInvoice: 'false',
+          }
+          this.props.billApplySave(params)
+        }
+      })
     } else {
       this.props.form.validateFields((err, values) => {
         const groupNos = this.state.dataSource.filter(r => typeof r.groupNo !== 'undefined')
@@ -174,44 +186,16 @@ class BillDetail extends React.Component {
                 billingApplicationType: this.props.billType,
               },
             }, (res) => {
-              this.setState({loading: false})
-              const { resultCode, resultMessage, isWarning, warningMessage, billingApplicationType } = res
+              this.setState({
+                loading: false,
+              })
+              const { resultCode, resultMessage, isWarning } = res
               if(resultCode === '000000') {
-                let isError = false
-                if(isWarning === 'Y') {
-                  confirm({
-                    title: '提示',
-                    content: warningMessage,
-                    onOk() {
-                      if(billingApplicationType === 'BILLING_EXCESS') {
-                        if(typeof values.billingApplicantRequest === 'undefined' || values.billingApplicantRequest === '') {
-                          _this.props.form.setFields({
-                            billingApplicantRequest: {
-                              errors: [new Error('已转为其他事项开票，请填写开票原因')]
-                            }
-                          })
-                          isError = true
-                        }
-                        if(typeof values.costBear === 'undefined' || values.costBear === '') {
-                          _this.props.form.setFields({
-                            costBear: {
-                              value: '',
-                              errors: [new Error('已转为其他事项开票，请填费用承担者')]
-                            }
-                          })
-                          _this.setState({
-                            isCostBearEdit: true,
-                          })
-                          isError = true
-                        }
-                      }
-                      if(!isError) {
-                        _this.props.billApplySave({
-                          ...params,
-                          billingApplicationType,
-                        })
-                      }
-                    },
+                if(isWarning === 'Y' || this.props.billType === 'BILLING_EXCESS') {
+                  this.setState({
+                    showWarning: true,
+                    warningData: res,
+                    submitParams: params,
                   })
                 } else {
                   this.props.billApplySave(params)
@@ -226,6 +210,43 @@ class BillDetail extends React.Component {
           }
         }
       });
+    }
+  }
+
+  handleWarningOk = () => {
+    this.setState({
+      showWarning: false,
+    })
+    let isError = false
+    const values = this.props.form.getFieldsValue()
+    const { billingApplicationType } = this.state.warningData
+    if(billingApplicationType === 'BILLING_EXCESS') {
+      if(typeof values.billingApplicantRequest === 'undefined' || values.billingApplicantRequest === '') {
+        this.props.form.setFields({
+          billingApplicantRequest: {
+            errors: [new Error('已转为其他事项开票，请填写开票原因')]
+          }
+        })
+        isError = true
+      }
+      if(typeof values.costBear === 'undefined' || values.costBear === '') {
+        this.props.form.setFields({
+          costBear: {
+            value: '',
+            errors: [new Error('已转为其他事项开票，请填费用承担者')]
+          }
+        })
+        this.setState({
+          isCostBearEdit: true,
+        })
+        isError = true
+      }
+    }
+    if(!isError) {
+      this.props.billApplySave({
+        ...this.state.submitParams,
+        billingApplicationType,
+      })
     }
   }
 
@@ -366,6 +387,27 @@ class BillDetail extends React.Component {
       message.warn('暂无合同审批表及合同扫描件')
       return
     }
+  }
+
+  getWarningTableData = () => {
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totaxTaxAmount } = this.state.warningData.arcBillingTaxInfo
+    return [{
+      title: '城建',
+      taxRate: constructionTax,
+      tax: constructionTaxAmount,
+    }, {
+      title: '教育',
+      taxRate: educationTax,
+      tax: educationTaxAmount,
+    }, {
+      title: '所得税',
+      taxRate: incomeTax,
+      tax: incomeTaxAmount,
+    }, {
+      title: '合计',
+      taxRate: '',
+      tax: totaxTaxAmount,
+    }]
   }
 
   render() {
@@ -536,40 +578,6 @@ class BillDetail extends React.Component {
       address: comInfo.addressPhoneNumber,
       bankAccount: comInfo.bankBankAccount
     }]
-    let rateData = []
-    //其他事项开票
-    if(this.props.billType === 'BILLING_EXCESS') {
-      let constructRate = 0, eduRate = 0, incomeRate = 0
-      const { constructionTaxRate, educationTaxRate, incomeTaxRate } = this.props.detail
-      this.state.dataSource.map(r => {
-        if(r.billingTaxRate > 0) {
-          constructRate = parseFloat(constructRate + (r.billingTaxAmount * constructionTaxRate).toFixed(2))
-          eduRate = parseFloat(eduRate + (r.billingTaxAmount * educationTaxRate).toFixed(2))
-          incomeRate = incomeRate + 0
-        } else {
-          constructRate = constructRate + 0
-          eduRate = eduRate + 0
-          incomeRate = parseFloat(incomeRate + (r.billingAmountExcludeTax * incomeTaxRate).toFixed(2))
-        }
-      })
-      rateData = [{
-        title: '城建',
-        taxRate: `${constructionTaxRate * 100}%`,
-        tax: constructRate,
-      }, {
-        title: '教育',
-        taxRate: `${educationTaxRate * 100}%`,
-        tax: eduRate,
-      }, {
-        title: '所得税',
-        taxRate: `${incomeTaxRate * 100}%`,
-        tax: incomeRate,
-      }, {
-        title: '合计',
-        taxRate: '',
-        tax: constructRate + eduRate + incomeRate,
-      }]
-    }
     const rowSelection = {
       type: 'checkbox',
       onChange: (selectedRowKeys, selectedRows) => {
@@ -810,7 +818,8 @@ class BillDetail extends React.Component {
           }
           {
             this.state.showDetail === false && this.props.isRed ?
-              <div className="arc-info">
+              <div className="infoPanel">
+                <h1>项目信息</h1>
                 <Table
                   columns={proApplyColumns}
                   bordered
@@ -819,21 +828,73 @@ class BillDetail extends React.Component {
                   dataSource={contractList}
                   pagination={false}
                 />
+                <div className="infoPanel">
+                  <h1>开票结果详情</h1>
+                  <Table
+                    rowKey="receiptClaimId"
+                    columns={billDetailColumns}
+                    bordered
+                    size="small"
+                    scroll={{ x: '1580px' }}
+                    dataSource={[]}
+                    pagination={false}
+                  />
+                </div>
+                <Row gutter={40}>
+                  <Col span={14}>
+                    <FormItem {...formItemLayout1} label="附件">
+                      {
+                        getFieldDecorator('file', { rules: [{ required: this.state.showDetail === false && this.props.isRed, message: '请上传附件!' }] })(
+                          <Upload {...props} fileList={this.state.fileList}>
+                            <Button>
+                              <Icon type="upload" />点击上传
+                            </Button>
+                          </Upload>
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row gutter={40}>
+                  <Col span={14}>
+                    <FormItem {...formItemLayout1} label="开票要求">
+                      {
+                        getFieldDecorator('billingApplicantRequest', {rules: [
+                          { required: this.state.showDetail === false && this.props.isRed, message: '请填写开票要求' },
+                          { max: 350, message: '开票要求不能超过350个字符!' }
+                        ]})(
+                          <TextArea placeholder="请输入开票要求" rows="2" />
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                </Row>
               </div> : null
           }
           {
-            this.props.billType === 'BILLING_EXCESS' ?
-              <div className="arc-info">
-                <Table
-                  style={{width: '50%'}}
-                  rowKey="id"
-                  size="small"
-                  bordered
-                  columns={totalColumns}
-                  dataSource={rateData}
-                  pagination={false}
-                />
-              </div> : null
+            this.state.showWarning ?
+              <Modal
+                title="提示"
+                visible={this.state.showWarning}
+                onOk={() => this.handleWarningOk()}
+                onCancel={() => this.setState({showWarning: false})}
+              >
+                {
+                  this.state.warningData.isWarning === 'Y' ?
+                    <p>{this.state.warningData.warningMessage}</p> : ''
+                }
+                <p className="tips">提示：以下数据将计入项目成本/部门费用</p>
+                <div className="arc-info">
+                  <Table
+                    rowKey="id"
+                    size="small"
+                    bordered
+                    columns={totalColumns}
+                    dataSource={this.getWarningTableData()}
+                    pagination={false}
+                  />
+                </div>
+              </Modal> : null
           }
         </Form>
       </Modal>

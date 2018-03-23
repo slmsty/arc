@@ -280,6 +280,27 @@ class BillApproveDetail extends React.Component  {
     dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
   }
 
+  getTaxData = () => {
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totaxTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    return [{
+      title: '城建',
+      taxRate: constructionTax,
+      tax: constructionTaxAmount,
+    }, {
+      title: '教育',
+      taxRate: educationTax,
+      tax: educationTaxAmount,
+    }, {
+      title: '所得税',
+      taxRate: incomeTax,
+      tax: incomeTaxAmount,
+    }, {
+      title: '合计',
+      taxRate: '',
+      tax: totaxTaxAmount,
+    }]
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form
     const { billingType, billingDate, billingApplicantRequest, comInfo ={}, custInfo = {}, contractList, outcomeList,
@@ -719,12 +740,12 @@ class BillApproveDetail extends React.Component  {
               this.props.applyType === 'BILLING_EXCESS' ?
                 <div className="arc-info">
                   <Table
-                    style={{width: '50%'}}
+                    style={{width: '70%'}}
                     rowKey="id"
                     size="small"
                     bordered
                     columns={totalColumns}
-                    dataSource={[]}
+                    dataSource={this.getTaxData()}
                     pagination={false}
                   />
                 </div> : null
