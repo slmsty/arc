@@ -556,10 +556,10 @@ class BillApproveDetail extends React.Component  {
             pagination={false}
           />
         </div>
-        {isAgainInvoice === 'false' && (isArFinanceAccount || isTaxAuditor)  ?
+        {isAgainInvoice === 'false' && (isArAdmin || isArFinanceAccount || isTaxAuditor)  ?
           <Row gutter={40}>
             {
-              showReceive.includes(this.props.applyType) ?
+              showReceive.includes(this.props.applyType) && !isArAdmin ?
                 <Col span={8}>
                   <FormItem {...formItemLayout} label="是否收到发票">
                     {
@@ -575,7 +575,7 @@ class BillApproveDetail extends React.Component  {
                 </Col> : null
             }
             {
-              this.props.applyType === 'BILLING_RED' ?
+              this.props.applyType === 'BILLING_RED' && !isArAdmin ?
                 <Col span={8}>
                   <FormItem {...formItemLayout} label="退票类型">
                     {
@@ -777,17 +777,17 @@ class BillApproveDetail extends React.Component  {
                 <span className="file-label">附件:</span> <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
               </Col>
             </Row>
+            <div className="add-btns">
+              <Button
+                type="primary"
+                style={{marginLeft: '5px'}}
+                ghost
+                onClick={(e) => this.handleOk(e)}>
+                <Icon type="check" />保存修改
+              </Button>
+            </div>
           </div>
         }
-        <div className="add-btns">
-          <Button
-            type="primary"
-            style={{marginLeft: '5px'}}
-            ghost
-            onClick={(e) => this.handleOk(e)}>
-            <Icon type="check" />保存修改
-          </Button>
-        </div>
       </div>
     )
   }

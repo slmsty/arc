@@ -5,6 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillApproveDetail from './billApproveDetail'
+import UrlModalCom from '../common/getUrlModal'
 const FormItem = Form.Item
 const { TextArea } = Input
 
@@ -14,6 +15,7 @@ class ApplyInfoModal extends React.Component {
     super(props)
     this.state = {
       formValidate: false,
+      showContractLink: false,
     }
   }
 
@@ -25,10 +27,10 @@ class ApplyInfoModal extends React.Component {
 
   applyConfirm = () => {
     this.props.form.validateFields((err, values) => {
-      if(!this.state.formValidate) {
+      /*if(!this.state.formValidate) {
         message.error('请先点击【保存修改】按钮，保存修改信息')
         return
-      }
+      }*/
       if(!err) {
         const params = {
           arcFlowId: this.props.applyData.arcFlowId,
@@ -138,14 +140,7 @@ class ApplyInfoModal extends React.Component {
                   className="scan-document"
                   type="primary"
                   ghost
-                  onClick={() => {
-                    if(this.props.contractUrl[0]){
-                      window.open(this.props.contractUrl[0].url)
-                    } else {
-                      message.warn('暂无合同审批表及合同扫描件')
-                      return
-                    }
-                  }}
+                  onClick={() => this.setState({showContractLink: true})}
                 >合同审批表及合同扫描件</Button>
               </Col>
             </Row>
@@ -239,6 +234,14 @@ class ApplyInfoModal extends React.Component {
               </Col>
             </Row>
           </Form>
+          {
+            this.state.showContractLink ?
+              <UrlModalCom
+                closeModal={() => this.setState({showContractLink: false}) }
+                contractUrl={this.props.contractUrl}
+              /> : null
+          }
+
         </Modal>
       </div>
     )

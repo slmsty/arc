@@ -9,16 +9,14 @@ import PropTypes from 'prop-types'
 import { Table, Button, message, Modal, Form, Row, Col, DatePicker } from 'antd'
 class UrlModalCom extends React.Component {
   render() {
-    console.log(this.props.contractUrl)
-    return (<div>
-      {/* 弹出传送ARglDatemodal */}
+    return (
       <Modal
         width={600}
         visible={true}
         onOk={this.props.closeModal}
         onCancel={this.props.closeModal}
         title=""
-        footer={null}
+        footer={false}
       >
         <h3>{`该合同有${this.props.contractUrl.length}条审批记录:`}</h3>
         <ul style={{minHeight:'150px',marginTop:'20px'}}>
@@ -29,7 +27,7 @@ class UrlModalCom extends React.Component {
           })}
         </ul>
       </Modal>
-    </div>)
+    )
   }
 }
 

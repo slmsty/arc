@@ -5,11 +5,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillDetail from './billDetail'
+import UrlModalCom from '../common/getUrlModal'
 const FormItem = Form.Item
 const { TextArea } = Input
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 
 class NoApplyInfo extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      showContractLink: false,
+    }
+  }
   render() {
     const applyInfoDatas = this.props.applyInfoData
     const columns = [{
@@ -78,14 +85,7 @@ class NoApplyInfo extends React.Component {
                   className="scan-document"
                   type="primary"
                   ghost
-                  onClick={() => {
-                    if(this.props.contractUrl[0]){
-                      window.open(this.props.contractUrl[0].url)
-                    } else {
-                      message.warn('暂无合同审批表及合同扫描件')
-                      return
-                    }
-                  }}
+                  onClick={() => this.setState({showContractLink: true})}
                 >合同审批表及合同扫描件</Button>
               </Col>
             </Row>
@@ -164,6 +164,13 @@ class NoApplyInfo extends React.Component {
               }) : ''
             }
             <br />
+            {
+              this.state.showContractLink ?
+                <UrlModalCom
+                  closeModal={() => this.setState({showContractLink: false}) }
+                  contractUrl={this.props.contractUrl}
+                /> : null
+            }
         </Modal>
       </div>
     )

@@ -4,10 +4,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SelectRadioApi from '../common/selectRadioApi'
-import SelectInvokeApi from '../common/selectInvokeApi'
 import requestJsonFetch from '../../http/requestJsonFecth'
-import { Form, Row, Col, Button, Input, Icon, Radio } from 'antd'
-
+import { Form, Row, Col, Button, Input, Icon, Radio, DatePicker } from 'antd'
+import moment from 'moment';
+const { RangePicker } = DatePicker
 const FormItem = Form.Item
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
@@ -21,7 +21,12 @@ class ApplySearchCon extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
-    this.props.onQuery(param)
+    const params = {
+      ...param,
+      beginDate: param.applyDate ? param.applyDate[0].format('YYYY-MM-DD') : '',
+      endDate: param.applyDate ? param.applyDate[1].format('YYYY-MM-DD') : '',
+    }
+    this.props.onQuery(params)
   }
   handleRadioChange = (e) => {
     this.setState({
@@ -108,14 +113,9 @@ class ApplySearchCon extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="申请时间">
                 {getFieldDecorator('applyDate', {
-                  initialValue: 'ALL',
+                  initialValue: [moment(), moment()],
                 })(
-                  <RadioGroup size="large" style={{ width: '330px' }}>
-                    <RadioButton value="ALL" style={{ borderRadius: '4px' }}>全部</RadioButton>
-                    <RadioButton value="WEEK" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一周</RadioButton>
-                    <RadioButton value="MONTH" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一个月</RadioButton>
-                    <RadioButton value="YEAR" style={{ marginLeft: '10px', borderRadius: '4px' }}>近一年</RadioButton>
-                  </RadioGroup>
+                  <RangePicker />
                 )}
               </FormItem>
             </Col>

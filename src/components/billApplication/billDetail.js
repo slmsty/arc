@@ -6,6 +6,7 @@ import SelectSearch from './selectSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
 import { contentCols, totalColumns, detailColumns, normalTypes, proApplyColumns, billDetailColumns } from './billColumns'
+import UrlModalCom from '../common/getUrlModal'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -37,6 +38,7 @@ class BillDetail extends React.Component {
         arcBillingTaxInfo: {},
       },
       submitParams: {},
+      showContractLink: false,
     }
   }
 
@@ -380,15 +382,6 @@ class BillDetail extends React.Component {
     dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
   }
 
-  handleContractClick = () => {
-    if(this.props.contractUrl[0]){
-      window.open(this.props.contractUrl[0].url)
-    } else {
-      message.warn('暂无合同审批表及合同扫描件')
-      return
-    }
-  }
-
   getWarningTableData = () => {
     const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totaxTaxAmount } = this.state.warningData.arcBillingTaxInfo
     return [{
@@ -611,7 +604,7 @@ class BillDetail extends React.Component {
                 className="scan-document"
                 type="primary"
                 ghost
-                onClick={() => this.handleContractClick()}
+                onClick={() => this.setState({ showContractLink: true })}
               >合同审批表及合同扫描件</Button>
             </Col>
           </Row>
@@ -829,7 +822,7 @@ class BillDetail extends React.Component {
                   pagination={false}
                 />
                 <div className="infoPanel">
-                  <h1>开票结果详情</h1>
+                  <h1>退票详情</h1>
                   <Table
                     rowKey="receiptClaimId"
                     columns={billDetailColumns}
@@ -895,6 +888,13 @@ class BillDetail extends React.Component {
                   />
                 </div>
               </Modal> : null
+          }
+          {
+            this.state.showContractLink ?
+              <UrlModalCom
+                closeModal={() => this.setState({showContractLink: false}) }
+                contractUrl={this.props.contractUrl}
+              /> : null
           }
         </Form>
       </Modal>

@@ -18,7 +18,7 @@ const initState = {
   billContents: [],
   billSaveSuccess: false,
   redApplySuccess: false,
-  contractUrl: '',
+  contractUrl: [],
   failureMsg: '',
   billContracts: [],
   billStartSuccess: false,
