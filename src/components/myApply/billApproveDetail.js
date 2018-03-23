@@ -283,15 +283,15 @@ class BillApproveDetail extends React.Component  {
   render() {
     const { getFieldDecorator } = this.props.form
     const { billingType, billingDate, billingApplicantRequest, comInfo ={}, custInfo = {}, contractList, outcomeList,
-      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName, taskCode } = this.props.serviceDetail
+      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName } = this.props.serviceDetail
     //是否红冲发票
     const isReceiveInvoice = showReceive.includes(this.props.applyType)
     //AR管理员
-    const isArAdmin = taskCode === 'ar_admin'
+    const isArAdmin = this.props.taskCode === 'ar_admin'
     //AR财务会计
-    const isArFinanceAccount = taskCode === 'ar_finance_account'
+    const isArFinanceAccount = this.props.taskCode === 'ar_finance_account'
     //税务审核人
-    const isTaxAuditor = taskCode === 'tax_auditor'
+    const isTaxAuditor = this.props.taskCode === 'tax_auditor'
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -535,7 +535,7 @@ class BillApproveDetail extends React.Component  {
             pagination={false}
           />
         </div>
-        {isAgainInvoice === 'false' && isArFinanceAccount && isTaxAuditor  ?
+        {isAgainInvoice === 'false' && (isArFinanceAccount || isTaxAuditor)  ?
           <Row gutter={40}>
             {
               showReceive.includes(this.props.applyType) ?
@@ -612,7 +612,7 @@ class BillApproveDetail extends React.Component  {
                 </FormItem>
               </Col>
               {
-                isReceiveInvoice && isArFinanceAccount && isTaxAuditor ?
+                isReceiveInvoice && (isArFinanceAccount || isTaxAuditor) ?
                   <Col span={8}>
                     <FormItem {...formItemLayout} label="是否收到发票">
                       {
@@ -649,11 +649,14 @@ class BillApproveDetail extends React.Component  {
             </Row>
             {
               <Row gutter={40}>
-                <Col span={8}>
-                  <FormItem {...formItemLayout} label="费用承担者">
-                    {costBearName}
-                  </FormItem>
-                </Col>
+                {
+                  this.props.applyType === 'BILLING_EXCESS' ?
+                    <Col span={8}>
+                      <FormItem {...formItemLayout} label="费用承担者">
+                        {costBearName}
+                      </FormItem>
+                    </Col> : null
+                }
                 {
                   this.props.taskCode === 'tax_auditor' && isReceiveInvoice ?
                     <Col span={8}>
@@ -665,11 +668,12 @@ class BillApproveDetail extends React.Component  {
                     </Col> : null
                 }
                 {
-                  this.props.applyType === 'BILLING_RED' && isArFinanceAccount && isTaxAuditor ?
+                  this.props.applyType === 'BILLING_RED' && (isArFinanceAccount || isTaxAuditor) ?
                     <Col span={8}>
                       <FormItem {...formItemLayout} label="退票类型">
                         {
-                          getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount && isTaxAuditor, message: '请选择退票类型!' }]})(
+                          getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid,
+                            rules: [{ required: this.props.applyType === 'BILLING_RED' && (isArFinanceAccount || isTaxAuditor), message: '请选择退票类型!' }]})(
                             <SelectInvokeApi
                               typeCode="RED_TYPE_SELECT"
                               paramCode="RED_OR_INVALID"
@@ -695,7 +699,7 @@ class BillApproveDetail extends React.Component  {
               />
             </div>
             {
-              this.props.taskCode === 'ar_admin' || this.props.taskCode === 'ar_finance_account' ?
+              isArAdmin || isArFinanceAccount ?
                 <div className="add-btns">
                   <Button type="primary" style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
                 </div> : null
