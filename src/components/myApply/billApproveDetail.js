@@ -558,7 +558,7 @@ class BillApproveDetail extends React.Component  {
                 <Col span={8}>
                   <FormItem {...formItemLayout} label="退票类型">
                     {
-                      getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: true, message: '请选择退票类型!' }]})(
+                      getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount , message: '请选择退票类型!' }]})(
                         <SelectInvokeApi
                           typeCode="RED_TYPE_SELECT"
                           paramCode="RED_OR_INVALID"
@@ -673,7 +673,7 @@ class BillApproveDetail extends React.Component  {
                       <FormItem {...formItemLayout} label="退票类型">
                         {
                           getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid,
-                            rules: [{ required: this.props.applyType === 'BILLING_RED' && (isArFinanceAccount || isTaxAuditor), message: '请选择退票类型!' }]})(
+                            rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount, message: '请选择退票类型!' }]})(
                             <SelectInvokeApi
                               typeCode="RED_TYPE_SELECT"
                               paramCode="RED_OR_INVALID"
