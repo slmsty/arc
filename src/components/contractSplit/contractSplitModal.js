@@ -550,6 +550,10 @@ class ContractSplitModal extends React.Component{
         message.error('目录价不能为空！')
         return
       }
+      if(i.listPrice === 0){
+        message.error('目录价不能为 0！')
+        return
+      }
       if (i.discount === '' || typeof i.discount === "undefined") {
         message.error('折扣不能为空！')
         return
