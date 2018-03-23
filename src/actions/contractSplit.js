@@ -50,3 +50,29 @@ export function getUrl(queryParam) {
     },
   }
 }
+// 传送ERP
+export function sendERP(queryParam) {
+  return {
+    [httpApi]: {
+      url: "arc/contract/split/senderp",
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['SENDERP_SUCCESS'],
+    },
+  }
+}
+// 传送ERP查询接口
+export function sendERPQuery(queryParam) {
+  return {
+    [httpApi]: {
+      url: "arc/contract/split/senderp",
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['SENDERP_QUERY_SUCCESS'],
+    },
+  }
+}

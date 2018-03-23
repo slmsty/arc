@@ -10,6 +10,8 @@ const contactSplitData = {
     result: [],
   },
   getUrl: {},
+  sendErp:{},
+  sendERPQuery:{},
   myContractRefresh: new Date().getTime(),
 }
 
@@ -22,9 +24,17 @@ function saveContractSplitInfo(state) {
 function getUrl(state, action) {
   return { ...state, getUrl: action.response.result }
 }
+function sendErp(state, action) {
+  return { ...state, sendErp: action.response.result }
+}
+function sendERPQuery(state, action) {
+  return { ...state, sendERPQuery: action.response.result }
+}
 
 export default caseReducer(contactSplitData, {
   GET_CONTRACT_LIST_SUCCESS: getContractList,
   SAVE_CONTRACTSPLITINFO_SUCCESS: saveContractSplitInfo,
   GET_URL_SUCCESS:getUrl,
+  SENDERP_SUCCESS:sendErp,
+  SENDERP_QUERY_SUCCESS:sendERPQuery,
 })

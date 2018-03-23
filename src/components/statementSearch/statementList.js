@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import currency from '../../util/currency'
 //import Excel from 'exceljs'
 import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns } from './statementColumns'
+
 import { Table, Row, Col, Form, Radio, DatePicker, Input, Icon } from 'antd'
 
 

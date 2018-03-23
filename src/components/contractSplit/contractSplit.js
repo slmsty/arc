@@ -7,6 +7,7 @@ import { Button, Table, message, Row, Col } from 'antd'
 import ContractSplitWithFrom from './contractSplitWithFrom'
 import ContractSplitModal  from './contractSplitModal'
 import currency from '../../util/currency'
+import ERPModals from "./ERPModal";
 
 const columns = [{
   title: '拆分状态',
@@ -82,6 +83,7 @@ export default class ApplySearchCon extends React.Component {
       selectedRowKeys: '',
       selectedRows: '',
       test:false,
+      ERPModal:false,
     }
   }
 
@@ -218,6 +220,29 @@ export default class ApplySearchCon extends React.Component {
       test: false
     })
   }
+  showERPModal = () => {
+    console.log(8)
+    this.setState({
+      ERPModal: true
+    })
+  }
+  closeERPModal = () => {
+    this.setState({
+      ERPModal: false
+    })
+  }
+  // 传送ERP
+  queryParmsErp = (parmas) => {
+    //console.log(params)
+    return
+    this.props.sendERP(parmas)
+  }
+  // 传送ERP查询接口
+  sendERPQuery = (parmas) => {
+    //console.log(params)
+    return
+    this.props.sendERPQuery(parmas)
+  }
 
   render() {
     const columns = [{
@@ -283,6 +308,11 @@ export default class ApplySearchCon extends React.Component {
       dataIndex: 'contractCurrency',
       width: 50,
     },
+      {
+        title: '是否复算项目',
+        dataIndex: 'recalculate',
+        width: 100,
+      },
     ]
     const { selectedRowKeys } = this.state
     const rowSelection = {
@@ -317,6 +347,7 @@ export default class ApplySearchCon extends React.Component {
             /> : null
         }
 
+        <Button type='primary' onClick={this.showERPModal}>传送ERP</Button>
         <Row>
           <Col span={24} style={{textAlign:'right'}}>
             共{this.props.contractSplitDara.getContractList.result.length}条记录
@@ -324,7 +355,6 @@ export default class ApplySearchCon extends React.Component {
         </Row>
         <Table
           rowKey="contractId"
-          rowSelection={rowSelection}
           pagination={false}
           bordered
           columns={columns}
@@ -333,6 +363,10 @@ export default class ApplySearchCon extends React.Component {
           loading={this.state.loading}
           dataSource={this.props.contractSplitDara.getContractList.result}
         />
+        {this.state.ERPModal ?
+          <ERPModals sendERPQuery={this.sendERPQuery} queryParms = {this.queryParmsErp} closeERPModal = {this.closeERPModal}/>
+          : null
+        }
       </div>
     )
   }

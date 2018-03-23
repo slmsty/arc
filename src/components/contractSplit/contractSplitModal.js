@@ -14,6 +14,7 @@ import MyDtatePicker from '../common/myDatePicker'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import currency from '../../util/currency'
 import percent from '../../util/percent'
+import GetUrlModal from '../common/getUrlModal'
 import _ from 'lodash'
 import './contract.less'
 import '../billApplication/billDetail.less'
@@ -95,7 +96,8 @@ class ContractSplitModal extends React.Component{
       controactInfo: props.data,
       initInfo: null,
       assessRatio:data.assessRatio,
-      selectCountType:data.revenueCheckout ? data.revenueCheckout : []
+      selectCountType:data.revenueCheckout ? data.revenueCheckout : [],
+      openUrlModal:false,
     }
   }
   getTableWidth = (colum)=> {
@@ -688,6 +690,7 @@ class ContractSplitModal extends React.Component{
     })
 
   }
+
   goDetail = (url) => {
     if(url){
       window.open(url)
@@ -748,9 +751,12 @@ class ContractSplitModal extends React.Component{
     dataSource:splitData
   })
 }
+  closeUrlModal = () => {
+    this.setState({
+      openUrlModal:false
+    })
+  }
   render() {
-    console.log('tableDeatail',this.props.data)
-    console.log('selectCountType',this.state.selectCountType)
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractData = this.props.data
     let countCatalPrice = 0 // 合计目录价 catalogue
@@ -913,8 +919,10 @@ class ContractSplitModal extends React.Component{
                     type="primary"
                     ghost
                     onClick={() => {
-                      if(this.props.contractUrl[0]){
-                        window.open(this.props.contractUrl[0].url)
+                      if(this.props.contractUrl.length>0){
+                        this.setState({
+                          openUrlModal:true
+                        })
                       } else {
                         message.warn('暂无合同审批表及合同扫描件')
                         return
@@ -1342,6 +1350,14 @@ class ContractSplitModal extends React.Component{
             </Form>
           </div>
         </Modal>
+        {this.state.openUrlModal ?
+          <GetUrlModal
+            closeModal={this.closeUrlModal}
+            contractUrl={this.props.contractUrl}
+          />
+          : null
+        }
+
       </div>
     )
   }
