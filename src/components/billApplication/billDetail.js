@@ -628,6 +628,26 @@ class BillDetail extends React.Component {
           {
             (this.props.isRed && this.state.showDetail) || !this.props.isRed ?
               <div>
+                <div className="arc-info">
+                  <Table
+                    columns={proApplyColumns}
+                    bordered
+                    size="small"
+                    scroll={{ x: '1570px' }}
+                    dataSource={contractList}
+                    pagination={false}
+                  />
+                </div>
+                <div className="arc-info">
+                  <Table
+                    rowKey="id"
+                    size="small"
+                    bordered
+                    columns={detailColumns}
+                    dataSource={detailData}
+                    pagination={false}
+                  />
+                </div>
                 <Row gutter={40}>
                   <Col span={8} key={1}>
                     <FormItem {...formItemLayout} label="费用承担者">
@@ -670,27 +690,6 @@ class BillDetail extends React.Component {
                     </FormItem>
                   </Col>
                 </Row>
-                <div className="arc-info">
-                  <Table
-                    columns={proApplyColumns}
-                    bordered
-                    size="small"
-                    scroll={{ x: '1570px' }}
-                    dataSource={contractList}
-                    pagination={false}
-                  />
-                </div>
-
-                <div className="arc-info">
-                  <Table
-                    rowKey="id"
-                    size="small"
-                    bordered
-                    columns={detailColumns}
-                    dataSource={detailData}
-                    pagination={false}
-                  />
-                </div>
                 <div className="add-btns">
                   <Button type="primary" disabled={this.state.selectedRows.length === 0} style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
                 </div>

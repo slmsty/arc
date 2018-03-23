@@ -104,7 +104,6 @@ class BillUpdate extends React.Component {
                         paramCode="LOSE_TYPE"
                         placeholder="请选择丢失类型"
                         hasEmpty
-                        onChange={(value) => this.setState({reasonId: value})}
                       />)
                   }
                 </FormItem>
