@@ -564,7 +564,7 @@ class BillDetail extends React.Component {
       customRequest: this.customRequest,
       onChange: this.handleFileChange,
     };
-    const { custInfo, comInfo, contractList } = this.props.detail
+    const { custInfo, comInfo, contractList, outcomeList } = this.props.detail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -836,7 +836,7 @@ class BillDetail extends React.Component {
                     bordered
                     size="small"
                     scroll={{ x: '1580px' }}
-                    dataSource={[]}
+                    dataSource={outcomeList}
                     pagination={false}
                   />
                 </div>
