@@ -436,7 +436,7 @@ export default class BillingApplication extends React.Component {
               billAction={isAdd ? addBillUnContract : updateBillInfo}
               record={this.state.currentRecord}
               isAdd={isAdd}
-              billType={this.state.currentType}
+              billType={this.state.currentRecord.billingApplicationType}
               isProCodeEdit={normalTypes.includes(this.state.currentType) || this.state.currentType === 'BILLING_UN_CONTRACT_PROJECT'}
             /> : null
         }
