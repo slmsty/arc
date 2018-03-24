@@ -47,6 +47,7 @@ class BillDetail extends React.Component {
     this.props.detail.appLineItems.map((item, index) => {
       data.push({
         lineNo: index,
+        groupNo: 1,
         isParent: 1,
         arBillingId: item.arBillingId,
         contractItemId: item.contractItemId,
@@ -69,6 +70,7 @@ class BillDetail extends React.Component {
     let { count, dataSource } = this.state;
     const newData = {
       lineNo: count,
+      groupNo: 1,
       isParent: 0,
       arBillingId,
       contractItemId,
@@ -304,26 +306,20 @@ class BillDetail extends React.Component {
 
   billingUnify = () => {
     let { selectedRows, currentNo, dataSource } = this.state
-    //判断是否存在不一致组号
-    /*const sourceNo = dataSource.map(r => r.groupNo)/!*.reduce((max, c) => Math.max(max, c), -Infinity)*!/
-    const selectNo = selectedRows.map(s => s.groupNo)
-    dataSource.map((r, index) => {
-
-    })
-    console.log(maxNo)*/
     const groupNo = selectedRows[0].groupNo
+    if(dataSource.length ===  selectedRows.length) {
+      currentNo = 0
+    } else {
+      const selectNos = selectedRows.map(r => r.groupNo)
+      const groupNos = dataSource.filter(d => !selectNos.includes(d.groupNo)).map( r => r.groupNo)
+      currentNo = groupNos.length === 0 ? 1 : Math.max(...groupNos)
+    }
     selectedRows.map(record => {
-      if(dataSource[record.lineNo]['groupNo'] !== groupNo || dataSource[record.lineNo]['groupNo'] === 1) {
-        currentNo = 1
-      }
-    })
-    selectedRows.map((record, index) => {
-      dataSource[record.lineNo]['groupNo'] = currentNo
+      dataSource[record.lineNo]['groupNo'] = currentNo + 1
     })
     this.setState({
       dataSource: dataSource,
       selectedRowKeys: [],
-      currentNo: currentNo + 1,
     })
   }
 
