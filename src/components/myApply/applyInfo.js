@@ -6,9 +6,10 @@ import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillApproveDetail from './billApproveDetail'
 import UrlModalCom from '../common/getUrlModal'
+import BillDetail from './billDetail'
 const FormItem = Form.Item
 const { TextArea } = Input
-
+const EDIT_ROLE_TYPE = ['ar_admin', 'ar_finance_account', 'tax_auditor']
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 class ApplyInfoModal extends React.Component {
   constructor(props) {
@@ -179,14 +180,23 @@ class ApplyInfoModal extends React.Component {
               BILL_APPLY_TYPE.includes(applyInfoDatas.serviceType) ?
                 <div>
                   <h2>{applyInfoDatas.serviceTypeName}详情</h2>
-                  <BillApproveDetail
-                    serviceDetail={applyInfoDatas.serviceDetail}
-                    applyType={applyInfoDatas.serviceType}
-                    billApplySave={this.props.billApplySave}
-                    taskCode={applyInfoDatas.taskCode}
-                    form={this.props.form}
-                    setFormValidate={this.setFormValidate}
-                  />
+                  {
+                    EDIT_ROLE_TYPE.includes(applyInfoDatas.taskCode) ?
+                      <BillApproveDetail
+                        serviceDetail={applyInfoDatas.serviceDetail}
+                        applyType={applyInfoDatas.serviceType}
+                        billApplySave={this.props.billApplySave}
+                        taskCode={applyInfoDatas.taskCode}
+                        form={this.props.form}
+                        setFormValidate={this.setFormValidate}
+                        fileDown={this.props.fileDown}
+                      /> :
+                      <BillDetail
+                        serviceDetail={applyInfoDatas.serviceDetail}
+                        applyType={applyInfoDatas.serviceType}
+                        fileDown={this.props.fileDown}
+                      />
+                  }
                 </div>
                 : null
             }

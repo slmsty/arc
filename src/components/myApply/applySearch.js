@@ -225,6 +225,7 @@ export default class ApplySearchCon extends React.Component {
               applicationIds={applicationIds}
               getContractUrl={this.props.getContractUrl}
               contractUrl={this.props.contractUrl}
+              fileDown={this.props.fileDown}
             /> : null
         }
         {

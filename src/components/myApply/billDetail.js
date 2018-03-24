@@ -90,9 +90,12 @@ class BillDetail extends React.Component  {
             :
             <div>
               <Row gutter={40}>
-                <Col span={8} key={1}>
-                  费用承担者 :{costBearName}
-                </Col>
+                {
+                  this.props.applyType === 'BILLING_EXCESS' ?
+                    <Col span={8} key={1}>
+                      费用承担者 :{costBearName}
+                    </Col> : null
+                }
                 <Col span={8} key={2}>
                   开票类型 :{billingTypeName}
                 </Col>
