@@ -83,7 +83,7 @@ class BillStatusManageWithFormCon extends React.Component {
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="数据状态">
                 {getFieldDecorator('status', {
-                  initialValue: 'BILLING_OK',
+                  initialValue: '',
                 })(
                   <SelectInvokeApi
                     typeCode="BILLING_APPLICATION_STATUS"
@@ -137,7 +137,7 @@ class BillStatusManageWithFormCon extends React.Component {
             <Col span={8}>
               <FormItem {...formItemLayout} label="开票申请分类">
                 {getFieldDecorator('applicationType', {
-                  initialValue: 'BILLING_CONTRACT',
+                  initialValue: '',
                 })(
                   <SelectInvokeApi
                     typeCode="BILLING_APPLICATION"
