@@ -42,9 +42,10 @@ class BillDetail extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let data = []
-    this.props.detail.appLineItems.map((item, index) => {
+    const items = this.props.type === 'myApply' ? this.props.detail.appLineList : this.props.detail.appLineItems
+    items.map((item, index) => {
       data.push({
         lineNo: index,
         groupNo: 1,
@@ -139,22 +140,22 @@ class BillDetail extends React.Component {
         for(let i = 0; i< this.state.dataSource.length; i++) {
           const record = this.state.dataSource[i]
           if(record.billingAmount <= 0) {
-            message.error(`第${i+1}行开票含税金额必须大于0`)
+            message.error(`第${i+1}行【开票含税金额】必须大于0`)
             err = true
             break
           }
           if(record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined') {
-            message.error(`第${i+1}行开票税率不能为空!`)
+            message.error(`第${i+1}行【开票税率】不能为空!`)
             err = true
             break
           }
           if(record.quantity === '' || typeof record.quantity === 'undefined' || record.quantity === 0) {
-            message.error(`第${i+1}行开票数量不能为空或者为0!`)
+            message.error(`第${i+1}行【开票数量】不能为空或者为0!`)
             err = true
             break
           }
           if(groupNos.length > 0 && typeof record.groupNo === 'undefined') {
-            message.error(`第${i+1}行开票信息没有进行分组!`)
+            message.error(`第${i+1}行【开票信息】没有进行分组!`)
             err = true
             break
           }
@@ -205,7 +206,7 @@ class BillDetail extends React.Component {
                   this.props.billApplySave(params)
                 }
               } else {
-                message.error(resultMessage)
+                message.error(resultMessage, 5)
                 return
               }
             })

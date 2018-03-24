@@ -77,7 +77,7 @@ export default class ApplySearchCon extends React.Component {
         })
         this.props.getContractUrl(res.response.data.serviceDetail.contractId)
       } else {
-        message.error(res.response.resultMessage)
+        message.error(res.response.resultMessage, 5)
       }
     })
   }

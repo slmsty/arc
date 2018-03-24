@@ -28,10 +28,6 @@ class ApplyInfoModal extends React.Component {
 
   applyConfirm = () => {
     this.props.form.validateFields((err, values) => {
-      /*if(!this.state.formValidate) {
-        message.error('请先点击【保存修改】按钮，保存修改信息')
-        return
-      }*/
       if(!err) {
         const params = {
           arcFlowId: this.props.applyData.arcFlowId,

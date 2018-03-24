@@ -3,6 +3,7 @@ import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from '
 import SelectInvoice from '../common/SelectInvoice'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
+import InputSearch from './inputSearch'
 import moment from 'moment'
 import { normalTypes, advanceTypes } from './billColumns'
 import { clientCols, comCols, proCols, invoiceCols } from './billColumns'
@@ -177,7 +178,7 @@ class BillUpdate extends React.Component {
                     this.props.isProCodeEdit ?
                       <Input disabled={this.props.billType === 'BILLING_UN_CONTRACT_PROJECT'? false : true}/>
                       :
-                      <SelectSearch
+                      <InputSearch
                         url="/arc/billingApplication/projectNo/search"
                         columns={proCols}
                         label="项目编码"

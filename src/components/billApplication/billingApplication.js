@@ -53,7 +53,6 @@ export default class BillingApplication extends React.Component {
       message.success('申请开票成功!')
       this.getInitQuery()
     } else if(nextProps.failureMsg !== '') {
-      console.log(nextProps.failureMsg)
       message.error(nextProps.failureMsg)
     }
   }
@@ -415,16 +414,18 @@ export default class BillingApplication extends React.Component {
           dataSource={billList}
           scroll={this.getScrollWidth()}
         />
-        {this.props.searchEditSuccess ?
+        {this.props.searchEditSuccess || this.props.showRedApply ?
           <BillDetail
             onCancel={() => this.props.hideDetailModal()}
-            detail={editInfo}
+            detail={redTypes.includes(this.state.currentType) ? redApplyDetail : editInfo}
             billType={this.state.selectedRows[0].billingApplicationType}
-            billApplySave={billApplySave}
+            billApplySave={redTypes.includes(this.state.currentType) ? billApplicationRedApply : billApplySave}
             billApplyCheck={billApplyCheck}
             currentUser={currentUser}
             contractUrl={contractUrl}
             isLoading={isLoading}
+            isRed={redTypes.includes(this.state.currentType)}
+            billingOutcomeId={this.state.selectedRows[0].billingOutcomeId}
           /> : null
         }
         {
@@ -456,7 +457,7 @@ export default class BillingApplication extends React.Component {
               onCancel={() => this.setState({showBillApprove: false})}
             /> : null
         }
-        {
+        {/*{
           this.props.showRedApply ?
             <BillDetail
               onCancel={() => this.props.hideDetailModal()}
@@ -470,7 +471,7 @@ export default class BillingApplication extends React.Component {
               isRed={redTypes.includes(this.state.currentType)}
               billingOutcomeId={this.state.selectedRows[0].billingOutcomeId}
             /> : null
-        }
+        }*/}
       </div>
     )
   }

@@ -52,7 +52,7 @@ class IndexContainer extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.error !== nextProps.error) {
-      message.error(nextProps.error.message)
+      message.error(nextProps.error.message, 5)
     }
   }
   getMenuComponent = (component) => {

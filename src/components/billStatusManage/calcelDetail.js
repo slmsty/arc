@@ -29,6 +29,7 @@ class CancelDetail extends React.Component {
     this.props.DetailList.map((item, index) => {
       data.push({
         lineNo: index,
+        groupNo: item.groupNo ? item.groupNo : 1,
         isParent: 1,
         arBillingId: item.arBillingId,
         contractItemId: item.contractItemId,
@@ -52,6 +53,7 @@ class CancelDetail extends React.Component {
     const newData = {
       lineNo: count,
       isParent: 0,
+      groupNo: 1,
       arBillingId,
       contractItemId,
       billingContent: '',

@@ -6,6 +6,8 @@ import { Button, Table, message, Modal } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
 import NoApplyInfo from './noApplyInfo'
 import MyApplyEdit from './myApplyEdit'
+import BillDetail from '../billApplication/billDetail'
+import { redTypes } from '../billApplication/billColumns'
 const confirm = Modal.confirm;
 
 export default class MyApplyCon extends React.Component {
@@ -15,7 +17,7 @@ export default class MyApplyCon extends React.Component {
     applyData: '',
     noApplyInfoVisitable: false,
     noApplyInfoData: '',
-    MyApplyEditVisitable:false
+    editVisitable:false
   }
   componentDidMount() {
     this.handleQuery()
@@ -74,7 +76,7 @@ export default class MyApplyCon extends React.Component {
     this.props.myApplyInfo(paramsData).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         this.setState({
-          MyApplyEditVisitable: true,
+          editVisitable: true,
           applyData: record,
         })
         this.props.getContractUrl(res.response.data.serviceDetail.contractId)
@@ -91,7 +93,7 @@ export default class MyApplyCon extends React.Component {
     this.props.approveSubmit(param).then((res) => {
       this.setState({
         loading: false,
-        MyApplyEditVisitable: false,
+        editVisitable: false,
         applyData: '',
       })
       if (res && res.response && res.response.resultCode === '000000') {
@@ -107,7 +109,7 @@ export default class MyApplyCon extends React.Component {
     this.props.approveReject(param).then((res) => {
       this.setState({
         loading: false,
-        MyApplyEditVisitable: false,
+        editVisitable: false,
         applyData: '',
       })
       if (res && res.response && res.response.resultCode === '000000') {
@@ -232,24 +234,34 @@ export default class MyApplyCon extends React.Component {
       onShowSizeChange: this.handleChangeSize,
 
     }
-    const { billSaveSuccess, applicationIds } = this.props.myApply
+    const { billApplySave, billApplyCheck, currentUser, contractUrl, myApply } = this.props
+    const { serviceDetail, serviceType} = myApply.getMyApplyInfo
+    const isBackBill = redTypes.includes(serviceType)
     return (
       <div>
         <ApplySearchConWithForm type="myApply" onQuery={this.handleChangeParam} loading={this.state.loading} />
         {
-          this.state.MyApplyEditVisitable ?
+          /*this.state.editVisitable ?
             <MyApplyEdit
-              infoVisitable={this.state.MyApplyEditVisitable}
-              closeClaim={this.closeModalClaim}
-              applyComfirm={this.applyComfirm}
-              applyReject={this.applyReject}
+              infoVisitable={this.state.editVisitable}
+              closeModal={() => this.setState({editVisitable: false})}
               applyData={this.state.applyData}
               applyInfoData={this.props.myApply.getMyApplyInfo}
               billApplySave={this.props.billApproveSave}
               billSaveSuccess={billSaveSuccess}
               applicationIds={applicationIds}
-              getContractUrl={this.props.getContractUrl}
-              contractUrl={this.props.contractUrl}
+            /> : null*/
+          this.state.editVisitable ?
+            <BillDetail
+              onCancel={() => this.setState({editVisitable: false})}
+              detail={serviceDetail}
+              billType={serviceType}
+              billApplySave={billApplySave}
+              billApplyCheck={billApplyCheck}
+              currentUser={currentUser}
+              contractUrl={contractUrl}
+              isRed={isBackBill}
+              type="myApply"
             /> : null
         }
         {

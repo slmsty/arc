@@ -65,6 +65,7 @@ class BillApproveDetail extends React.Component  {
     let { count, dataSource } = this.state;
     const newData = {
       lineNo: count,
+      groupNo: 1,
       isParent: 0,
       arBillingId,
       contractItemId,
@@ -265,7 +266,7 @@ class BillApproveDetail extends React.Component  {
               })
               this.props.setFormValidate(true)
             } else {
-              message.error(resultMessage)
+              message.error(resultMessage, 5)
             }
           }
         )
