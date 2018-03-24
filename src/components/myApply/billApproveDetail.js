@@ -777,17 +777,17 @@ class BillApproveDetail extends React.Component  {
                 <span className="file-label">附件:</span> <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
               </Col>
             </Row>
-            <div className="add-btns">
-              <Button
-                type="primary"
-                style={{marginLeft: '5px'}}
-                ghost
-                onClick={(e) => this.handleOk(e)}>
-                <Icon type="check" />保存修改
-              </Button>
-            </div>
           </div>
         }
+        <div className="add-btns">
+          <Button
+            type="primary"
+            style={{marginLeft: '5px'}}
+            ghost
+            onClick={(e) => this.handleOk(e)}>
+            <Icon type="check" />保存修改
+          </Button>
+        </div>
       </div>
     )
   }

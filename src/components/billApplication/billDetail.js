@@ -305,6 +305,12 @@ class BillDetail extends React.Component {
   billingUnify = () => {
     let { selectedRows, currentNo, dataSource } = this.state
     //判断是否存在不一致组号
+    /*const sourceNo = dataSource.map(r => r.groupNo)/!*.reduce((max, c) => Math.max(max, c), -Infinity)*!/
+    const selectNo = selectedRows.map(s => s.groupNo)
+    dataSource.map((r, index) => {
+
+    })
+    console.log(maxNo)*/
     const groupNo = selectedRows[0].groupNo
     selectedRows.map(record => {
       if(dataSource[record.lineNo]['groupNo'] !== groupNo || dataSource[record.lineNo]['groupNo'] === 1) {
@@ -807,7 +813,6 @@ class BillDetail extends React.Component {
                 </Row>
               </div>
               : null
-
           }
           {
             this.state.showDetail === false && this.props.isRed ?

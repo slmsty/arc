@@ -21,10 +21,11 @@ class ApplySearchCon extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
+    console.log(param.applyDate)
     const params = {
       ...param,
-      beginDate: param.applyDate ? param.applyDate[0].format('YYYY-MM-DD') : '',
-      endDate: param.applyDate ? param.applyDate[1].format('YYYY-MM-DD') : '',
+      beginDate: param.applyDate.length > 0 ? param.applyDate[0].format('YYYY-MM-DD') : '',
+      endDate: param.applyDate.length > 0 ? param.applyDate[1].format('YYYY-MM-DD') : '',
     }
     this.props.onQuery(params)
   }
@@ -113,7 +114,7 @@ class ApplySearchCon extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="申请时间">
                 {getFieldDecorator('applyDate', {
-                  initialValue: [moment(), moment()],
+                  initialValue: [],
                 })(
                   <RangePicker />
                 )}
