@@ -38,7 +38,7 @@ let tableData = [{
   returnTaxRevenue: 0,
   grossOrder: 0,
   serviceStartDate: 0,
-  serviceEndDate: 0,
+  serviceEndData: 0,
 }]
 
 const EditableCell = ({onChange, column, value,disable}) => {
@@ -98,6 +98,7 @@ class ContractSplitModal extends React.Component{
       assessRatio:data.assessRatio,
       selectCountType:data.revenueCheckout ? data.revenueCheckout : [],
       openUrlModal:false,
+      deleteData:[]
     }
   }
   getTableWidth = (colum)=> {
@@ -110,6 +111,7 @@ class ContractSplitModal extends React.Component{
   selectDateChange = (data) => {
     const newData = this.state.dataSource.slice(0)
     newData[data.indexs][data.columns] = data.dateString
+   // newData[data.indexs].opsStatus = 'modify'
     this.setState({
       dataSource: newData,
     })
@@ -200,6 +202,7 @@ class ContractSplitModal extends React.Component{
           this.calculateListPrice(newData,data)
         }
         newData[data.indexs][data.columns] = indexData
+       // newData[data.indexs].opsStatus = 'modify' //把数据的操作类型改为修改
       }
       this.inputChange(newData,[data.indexs])
       this.setState({
@@ -330,6 +333,7 @@ class ContractSplitModal extends React.Component{
 
     }
     newData[index][column] = value
+    //newData[index].opsStatus = 'modify'
     newData = this.inputChange(newData,index)
     this.setState({
       dataSource: newData,
@@ -385,7 +389,7 @@ class ContractSplitModal extends React.Component{
     const newDataSource = this.state.dataSource
     const newData = {
       parentOrderListLineId: '',
-      orderListLineId: '110'+new Date().getTime(),
+      opsStatus:'add',
       subRow: false,
       discount: 0,
       returnTaxRate: 0,
@@ -397,7 +401,7 @@ class ContractSplitModal extends React.Component{
       taskOpration: 'addSub',
       parentKey: index,
       parentOrderListLineId: subParentOrderListLineId,
-      orderListLineId: '110'+new Date().getTime(),
+      opsStatus:'add',
       subRow: true,
       discount: 0,
       returnTaxRate: 0,
@@ -439,7 +443,11 @@ class ContractSplitModal extends React.Component{
   // 合同拆分删除数据
   handleMinus = (index) => {
     const newData = this.state.dataSource
+    const deleteData = this.state.deleteData.slice(0)
     const parentId = newData[index].orderListLineId
+    const obj = {orderListId:newData[index].orderListId,opsStatus:'delete'}
+    deleteData.push(obj)
+    console.log('deleteData',deleteData)
     for(let i = 0, flag = true ; i < newData.length ; flag ? i++ : i) {
       if (newData[i] && newData[i].parentOrderListLineId === parentId) {
         newData.splice(i,1)
@@ -458,7 +466,8 @@ class ContractSplitModal extends React.Component{
     let selectDatas = [...new Set([...newSelectCountType])]
     this.setState({
       dataSource: newData,
-      selectCountType:selectDatas
+      selectCountType:selectDatas,
+      deleteData:deleteData
     })
   }
   // 拆分保存接口
@@ -613,6 +622,19 @@ class ContractSplitModal extends React.Component{
     if(this.props.data.orderListLines){
       delete this.props.data.orderListLines
     }
+    const deleteData = this.state.deleteData
+    const oldTableData = this.props.tableDetail.slice(0)
+    console.log('oldTableData',oldTableData)
+    newLisfInfo.filter(i=>i.orderListId != '').map((item)=>{
+      for(let i =0;i<oldTableData.length;i++){
+        if(oldTableData[i].orderListId ===item.orderListId){
+          item.opsStatus = "modify"
+        }
+      }
+    })
+    newLisfInfo.push(...deleteData)
+    console.log('deleteData',deleteData)
+    console.log('newLisfInfo',newLisfInfo)
     // 拼接保存参数
     const postParams = {}
     postParams.splitListInfo = newLisfInfo
