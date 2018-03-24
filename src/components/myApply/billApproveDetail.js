@@ -563,7 +563,7 @@ class BillApproveDetail extends React.Component  {
                 <Col span={8}>
                   <FormItem {...formItemLayout} label="是否收到发票">
                     {
-                      getFieldDecorator('receiptOutcome',
+                      getFieldDecorator(isTaxAuditor ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
                         {initialValue: receiptOutcome, rules: [{ required: true, message: '请选择是否收到发票!' }]})(
                         <Select>
                           <Option value="Y">是</Option>
