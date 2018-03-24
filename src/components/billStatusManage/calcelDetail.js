@@ -151,8 +151,8 @@ class CancelDetail extends React.Component {
     if(dataSource.length ===  selectedRows.length) {
       currentNo = 0
     } else {
-      const selectNos = selectedRows.map(r => r.groupNo)
-      const groupNos = dataSource.filter(d => !selectNos.includes(d.groupNo)).map( r => r.groupNo)
+      const selectNos = selectedRows.map(r => r.lineNo)
+      const groupNos = dataSource.filter(d => !selectNos.includes(d.lineNo)).map( r => r.groupNo)
       currentNo = groupNos.length === 0 ? 1 : Math.max(...groupNos)
     }
     selectedRows.map(record => {
