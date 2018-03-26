@@ -147,7 +147,7 @@ class ContractSplitCon extends React.Component {
             <Col span={8}>
               <FormItem {...formItemLayout} label="是否复算项目">
                 {getFieldDecorator('recalculate', {
-                  initialValue: 'Y',
+                  initialValue: '',
                 })(
                   <Select
                     placeholder="请选择拆分状态"
