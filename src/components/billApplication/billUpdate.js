@@ -214,7 +214,7 @@ class BillUpdate extends React.Component {
               }
             </Row>
             {
-              this.props.billType === 'BILLING_UN_CONTRACT_PROJECT' || this.props.billType === 'BILLING_UN_CONTRACT_UN_PROJECT' ?
+              this.props.billType === 'BILLING_UN_CONTRACT_PROJECT' || this.props.billType === 'BILLING_UN_CONTRACT_UN_PROJECT' || this.props.billType === 'BILLING_UN_CONTRACT' ?
                 <Row gutter={30}>
                   <Col span={12} key={1}>
                     <FormItem {...formItemLayout} label="合同名称">
