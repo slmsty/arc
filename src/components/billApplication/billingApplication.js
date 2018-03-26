@@ -436,7 +436,7 @@ export default class BillingApplication extends React.Component {
               billAction={isAdd ? addBillUnContract : updateBillInfo}
               record={this.state.currentRecord}
               isAdd={isAdd}
-              billType={this.state.currentRecord.billingApplicationType}
+              billType={isAdd ? this.state.currentType : this.state.currentRecord.billingApplicationType}
               isProCodeEdit={normalTypes.includes(this.state.currentType) || this.state.currentType === 'BILLING_UN_CONTRACT_PROJECT'}
             /> : null
         }
@@ -444,7 +444,7 @@ export default class BillingApplication extends React.Component {
           otherAddVisible ?
             <OtherContractAdd
               addAction={isAdd ? addOtherContract : updateBillInfo}
-              billType={this.state.currentType}
+              billType={isAdd ? this.state.currentType : this.state.currentRecord.billingApplicationType}
               visible={otherAddVisible}
               onCancel={() => this.setState({otherAddVisible: false, currentRecord: {}})}
               record={this.state.currentRecord}
@@ -457,21 +457,6 @@ export default class BillingApplication extends React.Component {
               onCancel={() => this.setState({showBillApprove: false})}
             /> : null
         }
-        {/*{
-          this.props.showRedApply ?
-            <BillDetail
-              onCancel={() => this.props.hideDetailModal()}
-              detail={redApplyDetail}
-              billType={this.state.currentType}
-              billApplySave={billApplicationRedApply}
-              billApplyCheck={billApplyCheck}
-              currentUser={currentUser}
-              contractUrl={contractUrl}
-              isLoading={isLoading}
-              isRed={redTypes.includes(this.state.currentType)}
-              billingOutcomeId={this.state.selectedRows[0].billingOutcomeId}
-            /> : null
-        }*/}
       </div>
     )
   }

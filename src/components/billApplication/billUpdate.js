@@ -22,15 +22,6 @@ class BillUpdate extends React.Component {
   handleOk = (e) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      const projectNo = this.props.isProCodeEdit ? values.projectNo : values.projectNo[1]
-      if(projectNo.startsWith('V') && this.props.billType === 'BILLING_UN_CONTRACT_PROJECT') {
-        this.props.form.setFields({
-          projectNo: {
-            errors: [new Error('项目编码不能以V打头')]
-          }
-        })
-        err = true
-      }
       if(!err) {
         const { record, isAdd } = this.props;
         const params = isAdd ? {
@@ -65,6 +56,7 @@ class BillUpdate extends React.Component {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
     }
+    console.log(this.props.billType)
     return (
       <div>
         <Modal
@@ -222,7 +214,7 @@ class BillUpdate extends React.Component {
               }
             </Row>
             {
-              advanceTypes.includes(this.props.billType) ?
+              this.props.billType === 'BILLING_UN_CONTRACT_PROJECT' || this.props.billType === 'BILLING_UN_CONTRACT_UN_PROJECT' ?
                 <Row gutter={30}>
                   <Col span={12} key={1}>
                     <FormItem {...formItemLayout} label="合同名称">
