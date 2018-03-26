@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Row, Col, Table, Modal, Icon, message } from 'antd'
 import BigSignAuditDetail from './bigSignAuditDetail'
+import BigSignAuditForm from './bigSignAuditForm'
 
 const billApproveColumns = [
   {
@@ -90,7 +91,8 @@ class BigSignAudit extends React.Component {
         wrapClassName="vertical-center-modal"
         onCancel={() => this.props.onCancel()}
       >
-        <div style={{marginBottom: '10px'}}>
+        <BigSignAuditForm />
+        <div style={{margin: '10px 0',}}>
           <Button type="primary" ghost onClick={() => this.getBillInfo()}>编辑</Button>
         </div>
         <Table

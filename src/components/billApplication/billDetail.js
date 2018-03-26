@@ -593,7 +593,7 @@ class BillDetail extends React.Component {
         wrapClassName="vertical-center-modal"
         footer={[
           <Button key="submit" type="primary" loading={this.state.loading || this.props.isLoading} onClick={this.handleOk}>
-            {!(this.state.loading || this.props.isLoading) ? <Icon type="check" /> : ''}开票
+            {!(this.state.loading || this.props.isLoading) ? <Icon type="check" /> : ''}申请
           </Button>,
         ]}
         onCancel={() => this.props.onCancel()}
