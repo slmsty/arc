@@ -153,6 +153,9 @@ const common = {
             name: '开票状态管理',
             icon: 'icon-BilledAR',
             component: 'BillStatusManage',
+            child:[{component: "billingStatusSendAp", key: "521", name: "开票传送ap", path: "billingStatusSendAp"},
+              {component: "billingStatusCancel", key: "522", name: "开票状态撤销", path: "billingStatusCancel"},
+            ]
           },
         ],
       },

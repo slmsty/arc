@@ -48,7 +48,7 @@ class BillDetail extends React.Component {
     items.map((item, index) => {
       data.push({
         lineNo: index,
-        groupNo: 1,
+        groupNo: item.groupNo ? parseInt(item.groupNo) : 1,
         isParent: 1,
         arBillingId: item.arBillingId,
         contractItemId: item.contractItemId,
@@ -118,13 +118,13 @@ class BillDetail extends React.Component {
 
   handleOk = (e) => {
     e.preventDefault();
-    const { isRed, billingOutcomeId } = this.props
+    const { isRed, billingOutcomeIds } = this.props
     //红冲发票不重新开票
     if(isRed && this.props.form.getFieldValue('isAgainInvoice') === 'false') {
       this.props.form.validateFields((err, values) => {
         if(!err) {
           const params = {
-            billingOutcomeId,
+            billingOutcomeIds,
             billingApplicationType: this.props.billType,
             objectId: this.state.fileId,
             objectName: this.state.file.name,
@@ -171,7 +171,7 @@ class BillDetail extends React.Component {
           }))
           const params = {
             ...values,
-            billingOutcomeId,
+            billingOutcomeIds,
             billingCustInfoId: custInfo.billingCustInfoId,
             billingComInfoId: comInfo.billingComInfoId,
             billingApplicationType: this.props.billType,

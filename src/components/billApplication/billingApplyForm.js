@@ -28,6 +28,7 @@ class BillingApplyForm extends React.Component {
       sbuNo: values.sbuNo ? values.sbuNo[0] : '',
     }
     this.props.onQuery(param)
+    this.props.setQueryParams(param)
   }
 
   handleChange = (value) => {

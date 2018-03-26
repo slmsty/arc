@@ -20,6 +20,17 @@ export default class BillingApplication extends React.Component {
       isAdd: false,
       currentRecord: {},
       showBillApprove: false,
+      queryParam: {
+        arDateStart: '',
+        arDateEnd: '',
+        companyName: '',
+        custName: '',
+        projectNos: [],
+        contractNos: [],
+        invoiceNumbers: [],
+        paymentName: '',
+        billingApplicationType: 'BILLING_CONTRACT',
+      },
     }
   }
 
@@ -58,18 +69,13 @@ export default class BillingApplication extends React.Component {
   }
 
   getInitQuery = () => {
-    const params = {
-      arDateStart: '',
-      arDateEnd: '',
-      companyName: '',
-      custName: '',
-      projectNos: [],
-      contractNos: [],
-      invoiceNumbers: [],
-      paymentName: '',
-      billingApplicationType: this.state.currentType,
-    }
-    this.props.billApplySearch(params)
+    this.props.billApplySearch(this.state.queryParam)
+  }
+
+  setQueryParams = (param) => {
+    this.setState({
+      queryParam: param,
+    })
   }
 
   getApplyChange = (value) => {
@@ -113,7 +119,7 @@ export default class BillingApplication extends React.Component {
         dataIndex: 'paymentTerm',
         width: 100,
       }, {
-        title: '付款条款',
+        title: '款项名称',
         dataIndex: 'paymentName',
         width: 100,
       }, {
@@ -325,9 +331,14 @@ export default class BillingApplication extends React.Component {
       message.warn('请选择要退票的记录!')
       return
     }
-    this.props.getRedApplyDetail(this.state.selectedRows[0].billingOutcomeId)
-    this.setState({
-      showRedApply: true,
+    this.props.getRedApplyDetail(this.state.selectedRows.map(s => s.billingOutcomeId)).then(res => {
+      const { resultCode } = res.response
+      console.log(resultCode)
+      if(resultCode === '000000') {
+        this.setState({
+          showRedApply: true,
+        })
+      }
     })
   }
 
@@ -386,7 +397,7 @@ export default class BillingApplication extends React.Component {
     const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract,
       editInfo, billApplySave, billApplyCheck, currentUser, contractUrl, redApplyDetail, billApplicationRedApply } = this.props
     const rowSelection = {
-      type: normalTypes.includes(this.state.currentType) ? 'checkbox' : 'radio',
+      type: normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType)? 'checkbox' : 'radio',
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({
           selectedRows,
@@ -401,6 +412,7 @@ export default class BillingApplication extends React.Component {
         <BillingApplyForm
           getApplyChange={value => this.getApplyChange(value)}
           onQuery={this.props.billApplySearch}
+          setQueryParams={this.setQueryParams}
         />
         <div className="form-btns">
           {this.getBillBtns()}
@@ -425,7 +437,7 @@ export default class BillingApplication extends React.Component {
             contractUrl={contractUrl}
             isLoading={isLoading}
             isRed={redTypes.includes(this.state.currentType)}
-            billingOutcomeId={this.state.selectedRows[0].billingOutcomeId}
+            billingOutcomeIds={this.state.selectedRows.map(s => s.billingOutcomeId)}
           /> : null
         }
         {
