@@ -135,7 +135,7 @@ const proColumns = [{
   dataIndex: 'paymentTerm',
   width: 200,
 }, {
-  title: '付款条款',
+  title: '款项名称',
   dataIndex: 'paymentName',
   width: 150,
 }, {
@@ -143,7 +143,7 @@ const proColumns = [{
   dataIndex: 'paymentPhrases',
   width: 150,
 }, {
-  title: '付款金额',
+  title: '款项金额',
   dataIndex: 'paymentAmount',
   width: 80,
 }, {
@@ -181,7 +181,7 @@ const proApplyColumns = [{
   dataIndex: 'paymentTerm',
   width: 200,
 }, {
-  title: '付款条款',
+  title: '款项名称',
   dataIndex: 'paymentName',
   width: 150,
 }, {
@@ -189,7 +189,7 @@ const proApplyColumns = [{
   dataIndex: 'paymentPhrases',
   width: 150,
 }, {
-  title: '付款金额',
+  title: '款项金额',
   dataIndex: 'paymentAmount',
   width: 80,
 }, {
@@ -304,7 +304,7 @@ const redFontCols = [
     dataIndex: 'custName',
     width: 250,
   }, {
-    title: '付款条款',
+    title: '款项名称',
     dataIndex: 'paymentName',
     width: 150,
   }, {
@@ -312,7 +312,7 @@ const redFontCols = [
     dataIndex: 'paymentPhrases',
     width: 150,
   }, {
-    title: '付款金额',
+    title: '款项金额',
     dataIndex: 'billedArAmount',
     width: 120,
   }

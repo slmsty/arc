@@ -17,17 +17,19 @@ class ApplyInfoModal extends React.Component {
     this.state = {
       formValidate: false,
       showContractLink: false,
+      approveData: [],
     }
   }
 
   setFormValidate = (v) => {
     this.setState({
-      formValidate: v
+      approveData: v
     })
   }
 
   applyConfirm = () => {
     this.props.form.validateFields((err, values) => {
+      console.log(values, this.state.approveData)
       if(!err) {
         const params = {
           arcFlowId: this.props.applyData.arcFlowId,
@@ -82,7 +84,7 @@ class ApplyInfoModal extends React.Component {
       dataIndex: 'contractName',
       width: 300,
     }, {
-      title: '付款条款',
+      title: '款项名称',
       dataIndex: 'paymentName',
       width: 100,
     }, {

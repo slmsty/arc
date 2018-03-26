@@ -31,7 +31,7 @@ const billApproveItemColumns = [
     width: 100,
   },
   {
-    title: '付款条款',
+    title: '款项名称',
     dataIndex: 'paymentName',
     width: 100,
   },
@@ -41,7 +41,7 @@ const billApproveItemColumns = [
     width: 100,
   },
   {
-    title: '付款金额',
+    title: '款项金额',
     dataIndex: 'paymentAmount',
     width: 100,
     render: (text, record, index) => (text ? currency(text) : text),

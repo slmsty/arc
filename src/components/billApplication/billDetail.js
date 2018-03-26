@@ -194,9 +194,48 @@ class BillDetail extends React.Component {
               this.setState({
                 loading: false,
               })
-              const { resultCode, resultMessage, isWarning } = res
+              const { resultCode, resultMessage, isWarning, billingApplicationType } = res
               if(resultCode === '000000') {
-                if(isWarning === 'Y' || this.props.billType === 'BILLING_EXCESS') {
+                //判断是否转为其他事项开票
+                if(isWarning === 'Y') {
+                  let isError = false
+                  if(billingApplicationType === 'BILLING_EXCESS') {
+                    if(typeof values.billingApplicantRequest === 'undefined' || values.billingApplicantRequest === '') {
+                      this.props.form.setFields({
+                        billingApplicantRequest: {
+                          errors: [new Error('已转为其他事项开票，请填写开票原因')]
+                        }
+                      })
+                      isError = true
+                    }
+                    if(typeof values.costBear === 'undefined' || values.costBear === '') {
+                      this.props.form.setFields({
+                        costBear: {
+                          value: '',
+                          errors: [new Error('已转为其他事项开票，请填费用承担者')]
+                        }
+                      })
+                      this.setState({
+                        isCostBearEdit: true,
+                      })
+                      isError = true
+                    }
+                    if(!isError) {
+                      this.setState({
+                        showWarning: true,
+                        warningData: res,
+                        submitParams: params,
+                      })
+                    }
+                  } else {
+                    this.setState({
+                      showWarning: true,
+                      warningData: res,
+                      submitParams: params,
+                    })
+                  }
+                  //校验其他事项两个必填项
+                } else if(this.props.billType === 'BILLING_EXCESS') {
                   this.setState({
                     showWarning: true,
                     warningData: res,
@@ -206,7 +245,10 @@ class BillDetail extends React.Component {
                   this.props.billApplySave(params)
                 }
               } else {
-                message.error(resultMessage, 5)
+                this.setState({
+                  loading: false,
+                })
+                message.error(resultMessage || '系统错误，请联系系统管理员', 5)
                 return
               }
             })
@@ -222,37 +264,11 @@ class BillDetail extends React.Component {
     this.setState({
       showWarning: false,
     })
-    let isError = false
-    const values = this.props.form.getFieldsValue()
     const { billingApplicationType } = this.state.warningData
-    if(billingApplicationType === 'BILLING_EXCESS') {
-      if(typeof values.billingApplicantRequest === 'undefined' || values.billingApplicantRequest === '') {
-        this.props.form.setFields({
-          billingApplicantRequest: {
-            errors: [new Error('已转为其他事项开票，请填写开票原因')]
-          }
-        })
-        isError = true
-      }
-      if(typeof values.costBear === 'undefined' || values.costBear === '') {
-        this.props.form.setFields({
-          costBear: {
-            value: '',
-            errors: [new Error('已转为其他事项开票，请填费用承担者')]
-          }
-        })
-        this.setState({
-          isCostBearEdit: true,
-        })
-        isError = true
-      }
-    }
-    if(!isError) {
-      this.props.billApplySave({
-        ...this.state.submitParams,
-        billingApplicationType,
-      })
-    }
+    this.props.billApplySave({
+      ...this.state.submitParams,
+      billingApplicationType,
+    })
   }
 
   handleChange = (value, col, index, record) => {

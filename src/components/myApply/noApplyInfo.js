@@ -38,7 +38,7 @@ class NoApplyInfo extends React.Component {
       dataIndex: 'contractName',
       width: 300,
     }, {
-      title: '付款条款',
+      title: '款项名称',
       dataIndex: 'paymentName',
       width: 100,
     }, {

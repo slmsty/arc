@@ -159,6 +159,9 @@ class BillApproveDetail extends React.Component  {
     this.setState({
       dataSource: dataSource
     })
+    if(this.props.setFormValidate) {
+      this.props.setFormValidate(dataSource)
+    }
   }
 
   billingUnify = () => {
@@ -264,7 +267,6 @@ class BillApproveDetail extends React.Component  {
               this.setState({
                 dataSource: newSources
               })
-              this.props.setFormValidate(true)
             } else {
               message.error(resultMessage, 5)
             }
