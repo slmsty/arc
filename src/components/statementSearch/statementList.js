@@ -32,15 +32,22 @@ export default class StatementListIndex extends React.Component {
     //console.log('excel')
   }
 
-  handleQuery(){
-    this.props.getStatementList(this.queryParam)
+  handleQuery(type){
+    if(type==='receipt_claim'){
+      this.props.getStatementList(this.queryParam)
+    }
+    if(type==='contract_search'){
+      this.props.getContractStatementList(this.queryParam)
+    }
   }
   // 查询接口
-  queryParms = (param) => {
+  /*param:传递参数
+  type：报表类型*/
+  queryParms = (param,type) => {
     this.queryParam = { ...this.queryParam, ...param }
     console.log('this.queryParam',this.queryParam)
     //this.props.getStatementList(this.queryParam)
-    this.handleQuery()
+    this.handleQuery(type)
 
   }
   // 获取展示列
@@ -87,7 +94,7 @@ export default class StatementListIndex extends React.Component {
       constructSplitSearchColumns.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
-      return [width,turnProColumns]
+      return [width,constructSplitSearchColumns]
     } else {
       reciptMoneyInfoCols.map((item,idnex)=>{
         width += parseFloat(item.width)
@@ -122,6 +129,13 @@ export default class StatementListIndex extends React.Component {
       total = this.props.statement.getStatementList.count
       pageSize = this.props.statement.getStatementList.pageSize
       claimAmountTotal = currency(this.props.statement.getStatementList.claimAmountTotal)
+    }
+    if(type==='1007'){
+      dataSources.dataSource = this.props.statement.getContractStatementList.result
+      current = this.props.statement.getContractStatementList.pageNo
+      total = this.props.statement.getContractStatementList.count
+      pageSize = this.props.statement.getContractStatementList.pageSize
+      claimAmountTotal = currency(this.props.statement.getContractStatementList.claimAmountTotal)
     }
     const pagination = {
       current: current,

@@ -88,11 +88,11 @@ class StatementListCom extends React.Component {
   queryParms = (statement) => {
     const params = this.props.form.getFieldsValue()
     const param = {}
+      //收款信息查询表
     if(statement ==='receipt_claim'){
       param.projectNo = params.projectNo
-      param.custName = params.custName ? params.custName[1] : ''
-      //param.receiptDate = params.receiptDate
-      param.receiptDateStart = params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : ''
+      param.contractNo = params.contractNo
+      param.signDateStart = params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : ''
       param.receiptDateEnd = params.receiptDate && params.receiptDate.length ? params.receiptDate[1].format(dateFormat) : ''
       param.receiptCurrency = params.receiptCurrency
       param.claimAmountMin = params.claimAmountMin
@@ -101,7 +101,20 @@ class StatementListCom extends React.Component {
       param.paymentName = params.paymentName
       param.contractName = params.contractName
       param.contractNo = params.contractNo
-      this.props.queryParms(param)
+      this.props.queryParms(param,'receipt_claim')
+    }
+    //合同拆分查询表
+    if(statement==='contract_search'){
+      param.projectNo = params.projectNo
+      param.custName = params.custName ? params.custName[1] : ''
+      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.contractName = params.contractName
+      param.buId = params.buId
+      param.collectionProject = params.collectionProject
+      param.isOrderList = params.isOrderList
+      param.companyId = params.companyId
+      this.props.queryParms(param,'contract_search')
     }
     console.log(param)
     this.props.form.resetFields()
@@ -260,7 +273,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('receipt_claim')}><Icon type="search" />查询</Button>
-                <Button type="primary" key="search1" onClick={()=>this.excel('receipt_claim')}><Icon type="search" />导出EXCEL</Button>
+                {/*<Button type="primary" key="search1" onClick={()=>this.excel('receipt_claim')}><Icon type="search" />导出EXCEL</Button>*/}
               </Col>
             </Row>
           </div>
@@ -767,7 +780,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="项目编码(多)">
                   {
-                    getFieldDecorator('projectIds')(
+                    getFieldDecorator('projectNo')(
                       <MultipleInput
                         placeholder="多项目编码使用英文逗号间隔"
                       />,
@@ -811,14 +824,14 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="立项BU">
                   {
-                    getFieldDecorator('projectBuNo')(<SelectSbu keyName="contract"/>)
+                    getFieldDecorator('buId')(<SelectSbu keyName="contract"/>)
                   }
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="是否采集项目">
                   {
-                    getFieldDecorator('isProdect',{
+                    getFieldDecorator('collectionProject',{
                       initialValue:'all'
                     })(
                       <Select>
@@ -831,11 +844,11 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
             </Row>
-              <Row>
+              <Row gutter={40}>
                 <Col span={8}>
                   <FormItem {...formItemLayoutChild} label="是否拆分">
                     {
-                      getFieldDecorator('isSplit',{
+                      getFieldDecorator('isOrderList',{
                         initialValue:'all'
                       })(
                         <Select>
@@ -849,7 +862,7 @@ class StatementListCom extends React.Component {
                 </Col>
                 <Col span={8}>
                   <FormItem {...formItemLayoutChild} label="签约公司">
-                    {getFieldDecorator('signCompany')(
+                    {getFieldDecorator('companyId')(
                       <Input
                         placeholder="请输入签约公司"
                       />,
@@ -857,7 +870,7 @@ class StatementListCom extends React.Component {
                   </FormItem>
                 </Col>
                 <Col span={8} style={{ textAlign: 'right' }}>
-                  <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search" />查询</Button>
+                  <Button type="primary" key="search" onClick={()=>this.queryParms('contract_search')}><Icon type="search" />查询</Button>
                   <Button style={{marginLeft:'10px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>
                 </Col>
               </Row>

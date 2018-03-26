@@ -445,7 +445,7 @@ class ContractSplitModal extends React.Component{
     const newData = this.state.dataSource
     const deleteData = this.state.deleteData.slice(0)
     const parentId = newData[index].orderListLineId
-    const obj = {orderListId:newData[index].orderListId,opsStatus:'delete'}
+    const obj = {orderListLineId:parentId,orderListId:newData[index].orderListId,opsStatus:'delete'}
     deleteData.push(obj)
     console.log('deleteData',deleteData)
     for(let i = 0, flag = true ; i < newData.length ; flag ? i++ : i) {

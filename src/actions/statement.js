@@ -14,5 +14,18 @@ export function getStatementList(queryParam) {
     },
   }
 }
+//合同拆分查询表
+export function getContractStatementList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/contract_split/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_CONTRACT_STATEMENT_LISTT_SUCCESS'],
+    },
+  }
+}
 
 
