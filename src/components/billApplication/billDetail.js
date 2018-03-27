@@ -643,6 +643,32 @@ class BillDetail extends React.Component {
                     )}
                   </FormItem>
                 </Col>
+                <Col span={8} key={2}>
+                  <FormItem {...formItemLayout} label="发票是否丢失">
+                    {getFieldDecorator('isLose', {initialValue: '', rules: [{ required: false, message: '请选择丢失情况!' }]} )(
+                      <Select>
+                        <Option value="">请选择</Option>
+                        <Option value="Y">是</Option>
+                        <Option value="N">否</Option>
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={8} key={3}>
+                  <FormItem {...formItemLayout} label="丢失类型">
+                    {
+                      getFieldDecorator('loseType',{
+                        initialValue: '', rules: [{ required: false, message: '请选择丢失类型!' }]
+                      })(
+                        <SelectInvokeApi
+                          typeCode="BILLING_APPLICATION"
+                          paramCode="LOSE_TYPE"
+                          placeholder="请选择丢失类型"
+                          hasEmpty
+                        />)
+                    }
+                  </FormItem>
+                </Col>
               </Row> : null
           }
           {

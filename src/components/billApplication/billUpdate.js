@@ -56,7 +56,6 @@ class BillUpdate extends React.Component {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
     }
-    console.log(this.props.billType)
     return (
       <div>
         <Modal
@@ -74,34 +73,6 @@ class BillUpdate extends React.Component {
           <Form
             className="ant-search-form"
           >
-            <Row gutter={30}>
-              <Col span={12} key={1}>
-                <FormItem {...formItemLayout} label="发票是否丢失">
-                  {getFieldDecorator('isLose', {initialValue: record.isLose, rules: [{ required: false, message: '请选择丢失情况!' }]} )(
-                    <Select>
-                      <Option value="">请选择</Option>
-                      <Option value="Y">是</Option>
-                      <Option value="N">否</Option>
-                    </Select>
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={12} key={2}>
-                <FormItem {...formItemLayout} label="丢失类型">
-                  {
-                    getFieldDecorator('loseType',{
-                      initialValue: record.loseType, rules: [{ required: false, message: '请选择丢失类型!' }]
-                    })(
-                      <SelectInvokeApi
-                        typeCode="BILLING_APPLICATION"
-                        paramCode="LOSE_TYPE"
-                        placeholder="请选择丢失类型"
-                        hasEmpty
-                      />)
-                  }
-                </FormItem>
-              </Col>
-            </Row>
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
