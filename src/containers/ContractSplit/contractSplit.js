@@ -6,10 +6,12 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import ContractSplit from '../../components/contractSplit/contractSplit'
 import { getContractList, saveContractSplitInfo, getUrl,sendERP,sendERPQuery } from '../../actions/contractSplit'
+import { getContractStatementList } from '../../actions/statement'
 
 const mapStateToProps = state => ({
   contractSplitDara: state.contractSplitDara,
   user: state.common.user,
+  statement: state.statement,
 })
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
@@ -18,6 +20,7 @@ const mapDispatchToProps = dispatch => (
     getUrl,
     sendERP,
     sendERPQuery,
+    getContractStatementList
   }, dispatch)
 )
 // eslint-disable-next-line react/prefer-stateless-function

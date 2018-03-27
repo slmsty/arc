@@ -625,9 +625,9 @@ class ContractSplitModal extends React.Component{
     const deleteData = this.state.deleteData
     const oldTableData = this.props.tableDetail.slice(0)
     console.log('oldTableData',oldTableData)
-    newLisfInfo.filter(i=>i.orderListId != '').map((item)=>{
+    newLisfInfo.filter(i=>i.orderListLineId != '').map((item)=>{
       for(let i =0;i<oldTableData.length;i++){
-        if(oldTableData[i].orderListId ===item.orderListId){
+        if(oldTableData[i].orderListLineId ===item.orderListLineId){
           item.opsStatus = "modify"
         }
       }
@@ -662,8 +662,7 @@ class ContractSplitModal extends React.Component{
     this.setState({
       editFlag:true,
     })
-    this.props.saveInfo(postParams)
-
+    this.props.saveInfo(postParams,this.props.data.projectNo)
   }
   closeModal = () => {
     this.setState({

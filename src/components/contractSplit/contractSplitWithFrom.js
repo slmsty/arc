@@ -16,6 +16,7 @@ const dateFormat = 'YYYY-MM-DD'
 
 class ContractSplitCon extends React.Component {
   state = {
+    showRecaule:false,
   }
   handleQuery = () => {
     // 验证通过后查询
@@ -27,6 +28,17 @@ class ContractSplitCon extends React.Component {
     param.operator = param.operator && param.operator[1] ? param.operator[1] : ''
     delete param.signDate
     this.props.onQuery(param)
+  }
+  handleChange = (e) => {
+    if(e==='Y'){
+      this.setState({
+        showRecaule:true,
+      })
+    }else{
+      this.setState({
+        showRecaule:false,
+      })
+    }
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -144,10 +156,10 @@ class ContractSplitCon extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8}>
+            <Col span={8} style={{display:this.state.showRecaule ? 'block' : 'none'}}>
               <FormItem {...formItemLayout} label="是否复算项目">
                 {getFieldDecorator('recalculate', {
-                  initialValue: '',
+                  initialValue: ' ',
                 })(
                   <Select
                     placeholder="请选择拆分状态"
@@ -160,7 +172,7 @@ class ContractSplitCon extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={16} style={{ textAlign: 'right' }}>
+            <Col span={this.state.showRecaule ? '16' : '24'} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>

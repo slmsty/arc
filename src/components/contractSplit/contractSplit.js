@@ -84,6 +84,7 @@ export default class ApplySearchCon extends React.Component {
       selectedRows: '',
       test:false,
       ERPModal:false,
+      sendErpDataSource:[]
     }
   }
 
@@ -98,6 +99,7 @@ export default class ApplySearchCon extends React.Component {
       this.handleQuery()
     }
   }
+
   componentDidMount() {
     // this.handleQuery()
   }
@@ -112,6 +114,7 @@ export default class ApplySearchCon extends React.Component {
     status: '',
     operator: '',
   }
+
   handleQuery = () => {
     this.setState({
       loading: true,
@@ -153,11 +156,14 @@ export default class ApplySearchCon extends React.Component {
       selectedRows:selectedRows,
     })
   }
-  saveContractSplitInfo = (param) => {
+  saveContractSplitInfo = (param,projectNo) => {
     this.props.saveContractSplitInfo(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
-
+        this.setState({
+          selectedRows: '',
+        })
+        //this.getInfo(projectNo)
       } else {
         message.error('保存失败')
       }
@@ -221,7 +227,6 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   showERPModal = () => {
-    console.log(8)
     this.setState({
       ERPModal: true
     })
@@ -233,15 +238,31 @@ export default class ApplySearchCon extends React.Component {
   }
   // 传送ERP
   queryParmsErp = (parmas) => {
-    //console.log(params)
-    return
     this.props.sendERP(parmas)
   }
   // 传送ERP查询接口
   sendERPQuery = (parmas) => {
-    //console.log(params)
-    return
-    this.props.sendERPQuery(parmas)
+    this.props.getContractStatementList(parmas).then((res)=>{
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          sendErpDataSource:res.response.pageInfo
+        })
+      } else {
+        message.error('获取审批列表链接失败')
+      }
+    })
+  }
+  //重新获取去数据
+  getInfo = (projectNo) => {
+    const queryParam = {}
+    queryParam.projectNo = projectNo
+    queryParam.status = 'Y'
+    this.props.getContractList(queryParam).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        console.log(res.response.pageInfo.result[0])
+        this.showModals(res.response.pageInfo.result[0])
+      }
+    })
   }
 
   render() {
@@ -338,6 +359,7 @@ export default class ApplySearchCon extends React.Component {
         {
           this.state.contarctSplitModal ?
             <ContractSplitModal
+              getInfo = {this.getInfo}
               closeModal={this.closeModalClaim}
               saveInfo={this.saveContractSplitInfo}
               data={this.state.selectedRows}
@@ -364,7 +386,12 @@ export default class ApplySearchCon extends React.Component {
           dataSource={this.props.contractSplitDara.getContractList.result}
         />
         {this.state.ERPModal ?
-          <ERPModals sendERPQuery={this.sendERPQuery} queryParms = {this.queryParmsErp} closeERPModal = {this.closeERPModal}/>
+          <ERPModals
+            sendERPQuery={this.sendERPQuery}
+            queryParms = {this.queryParmsErp}
+            closeERPModal = {this.closeERPModal}
+            dataSource = {this.state.sendErpDataSource}
+          />
           : null
         }
       </div>

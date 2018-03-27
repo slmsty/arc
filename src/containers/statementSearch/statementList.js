@@ -6,6 +6,7 @@ import { getStatementList,getContractStatementList } from '../../actions/stateme
 
 const mapStateToProps = state => ({
   statement: state.statement,
+
 })
 
 const mapDispatchToProps = dispatch => (

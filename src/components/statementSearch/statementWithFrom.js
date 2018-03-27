@@ -101,6 +101,7 @@ class StatementListCom extends React.Component {
       param.paymentName = params.paymentName
       param.contractName = params.contractName
       param.contractNo = params.contractNo
+      param.isReport = 'Y'
       this.props.queryParms(param,'receipt_claim')
     }
     //合同拆分查询表
@@ -778,22 +779,22 @@ class StatementListCom extends React.Component {
           <div style={{ display: this.state.stateType === '1007' ? 'block' : 'none' }}>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="项目编码(多)">
+                <FormItem {...formItemLayoutChild} label="项目编码">
                   {
                     getFieldDecorator('projectNo')(
-                      <MultipleInput
-                        placeholder="多项目编码使用英文逗号间隔"
+                      <Input
+                        placeholder="项目编码"
                       />,
                     )
                   }
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="合同编码(多)">
+                <FormItem {...formItemLayoutChild} label="合同编码">
                   {
                     getFieldDecorator('contractNo')(
-                      <MultipleInput
-                        placeholder="多合同编码使用英文逗号间隔"
+                      <Input
+                        placeholder="合同编码"
                       />,
                     )
                   }
@@ -813,7 +814,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="签约日期">
                   {getFieldDecorator('signDate', {
-                    initialValue: [moment('2017-08-01'), moment()],
+                    //initialValue: [moment('2017-08-01'), moment()],
                   })(<RangePicker
                     allowClear
                     format={dateFormat}
@@ -832,10 +833,10 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="是否采集项目">
                   {
                     getFieldDecorator('collectionProject',{
-                      initialValue:'all'
+                      initialValue:'ALL'
                     })(
                       <Select>
-                        <Option value="all">全部</Option>
+                        <Option value="ALL">全部</Option>
                         <Option value="Y">是</Option>
                         <Option value="N">否</Option>
                       </Select>
@@ -849,10 +850,10 @@ class StatementListCom extends React.Component {
                   <FormItem {...formItemLayoutChild} label="是否拆分">
                     {
                       getFieldDecorator('isOrderList',{
-                        initialValue:'all'
+                        initialValue:'ALL'
                       })(
                         <Select>
-                          <Option value="all">全部</Option>
+                          <Option value="ALL">全部</Option>
                           <Option value="Y">是</Option>
                           <Option value="N">否</Option>
                         </Select>

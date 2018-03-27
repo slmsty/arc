@@ -25,9 +25,14 @@ class ERPWithFrom extends React.Component {
   }
 
   // 查询接口
-  queryParms = (statement) => {
+  queryParms = () => {
     const params = this.props.form.getFieldsValue()
-      this.props.queryParms(params)
+    params.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+    params.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+    params.buId = params.buId ? params.buId[0] : ''
+    params.isReport = 'N'
+    delete params.signDate
+    this.props.queryParms(params)
   }
   handleRadioChange = (e) => {
     this.setState({
@@ -55,22 +60,22 @@ class ERPWithFrom extends React.Component {
           <div>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="项目编码(多)">
+                <FormItem {...formItemLayoutChild} label="项目编码">
                   {
-                    getFieldDecorator('projectIds')(
-                      <MultipleInput
-                        placeholder="多项目编码使用英文逗号间隔"
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="请输入项目编码"
                       />,
                     )
                   }
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="合同编码(多)">
+                <FormItem {...formItemLayoutChild} label="合同编码">
                   {
                     getFieldDecorator('contractNo')(
-                      <MultipleInput
-                        placeholder="多合同编码使用英文逗号间隔"
+                      <Input
+                        placeholder="请输入合同编码"
                       />,
                     )
                   }
@@ -90,7 +95,7 @@ class ERPWithFrom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="签约日期">
                   {getFieldDecorator('signDate', {
-                    initialValue: [moment('2017-08-01'), moment()],
+                    //initialValue: [moment('2017-08-01'), moment()],
                   })(<RangePicker
                     allowClear
                     format={dateFormat}
@@ -101,7 +106,7 @@ class ERPWithFrom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="立项BU">
                   {
-                    getFieldDecorator('projectBuNo')(<SelectSbu keyName="contract"/>)
+                    getFieldDecorator('buId')(<SelectSbu keyName="contract"/>)
                   }
                 </FormItem>
               </Col>
@@ -109,10 +114,10 @@ class ERPWithFrom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="是否采集项目">
                   {
                     getFieldDecorator('isProdect',{
-                      initialValue:'all'
+                      initialValue:'ALL'
                     })(
                       <Select>
-                        <Option value="all">全部</Option>
+                        <Option value="ALL">全部</Option>
                         <Option value="Y">是</Option>
                         <Option value="N">否</Option>
                       </Select>
@@ -121,17 +126,18 @@ class ERPWithFrom extends React.Component {
                 </FormItem>
               </Col>
             </Row>
-              <Row>
+              <Row gutter={40}>
                 <Col span={8}>
-                  <FormItem {...formItemLayoutChild} label="是否拆分">
+                  <FormItem {...formItemLayoutChild} label="传ERP状态">
                     {
-                      getFieldDecorator('isSplit',{
-                        initialValue:'all'
+                      getFieldDecorator('erpStatus',{
+                        initialValue:'ALL'
                       })(
                         <Select>
-                          <Option value="all">全部</Option>
-                          <Option value="Y">是</Option>
-                          <Option value="N">否</Option>
+                          <Option value="ALL">全部</Option>
+                          <Option value="UNCOMPLETE">未传送</Option>
+                          <Option value="ERROR">失败</Option>
+                          <Option value="SUCCESS">成功</Option>
                         </Select>
                       )
                     }
