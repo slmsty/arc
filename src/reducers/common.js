@@ -176,7 +176,7 @@ const common = {
           {
             key: '52',
             path: '/myApply/myApply',
-            name: '我的审批',
+            name: '我的申请',
             icon: 'icon-BilledAR',
             component: 'myApplyContainer',
           },

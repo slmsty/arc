@@ -11,6 +11,7 @@ const myApplyInfoData = {
   myapplyListRefresh: new Date().getTime(),
   billSaveSuccess: false,
   applicationIds: [],
+  myApplyPage: [],
 }
 
 function getMyApplyList(state, action) {
@@ -44,6 +45,13 @@ function billApplySave(state, action) {
     applicationIds: action.response.data,
   }
 }
+function myApplyList(state, action) {
+  return {
+    ...state,
+    myApplyPage: action.response.pageInfo,
+    billSaveSuccess: false,
+  }
+}
 
 export default caseReducer(myApplyInfoData, {
   GET_MYAPPLY_LIST_SUCCESS: getMyApplyList,
@@ -55,4 +63,5 @@ export default caseReducer(myApplyInfoData, {
   BILLSTATUSSENDERP_SUCCESS: BillStatusSendErp,
   UNDOERP_SUCCESS: cancelApply,
   BILL_APPLY_SAVE_SUCCESS: billApplySave,
+  MY_APPLY_LIST_SUCCESS: myApplyList,
 })

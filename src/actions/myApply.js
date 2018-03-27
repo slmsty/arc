@@ -113,3 +113,20 @@ export function billApproveSave(queryParam) {
     },
   }
 }
+/**
+ * 我的申请列表
+ * @param queryParam
+ * @returns {{}}
+ */
+export function myApplyList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/workFlow/myApply',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['MY_APPLY_LIST_SUCCESS'],
+    },
+  }
+}

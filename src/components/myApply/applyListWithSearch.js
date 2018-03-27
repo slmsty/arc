@@ -21,7 +21,6 @@ class ApplySearchCon extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
-    console.log(param.applyDate)
     const params = {
       ...param,
       beginDate: param.applyDate.length > 0 ? param.applyDate[0].format('YYYY-MM-DD') : '',
@@ -128,7 +127,7 @@ class ApplySearchCon extends React.Component {
                   initialValue: 'approve',
                 })(
                   <RadioGroup size="large" style={{ width: '330px' }}>
-                    <RadioButton value="ALL" style={{ borderRadius: '4px' }}>全部</RadioButton>
+                    <RadioButton value="" style={{ borderRadius: '4px' }}>全部</RadioButton>
                     <RadioButton value="approve" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批中</RadioButton>
                     <RadioButton value="finish" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批完成</RadioButton>
                     <RadioButton value="reject" style={{ marginLeft: '10px', borderRadius: '4px' }}>驳回</RadioButton>

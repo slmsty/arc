@@ -48,6 +48,7 @@ class BillDetail extends React.Component {
     items.map((item, index) => {
       data.push({
         lineNo: index,
+        billingAppLineId: item.billingAppLineId ? item.billingAppLineId : '',
         groupNo: item.groupNo ? parseInt(item.groupNo) : 1,
         isParent: 1,
         arBillingId: item.arBillingId,
@@ -118,7 +119,7 @@ class BillDetail extends React.Component {
 
   handleOk = (e) => {
     e.preventDefault();
-    const { isRed, billingOutcomeIds } = this.props
+    const { isRed, billingOutcomeIds, type, detail } = this.props
     //红冲发票不重新开票
     if(isRed && this.props.form.getFieldValue('isAgainInvoice') === 'false') {
       this.props.form.validateFields((err, values) => {
@@ -180,8 +181,9 @@ class BillDetail extends React.Component {
             objectId: this.state.fileId,
             objectName: this.state.file.name,
             isAgainInvoice: 'true',
+            billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
+            startWorkFlow: type === 'myApply' ? 'Y' : '',
           }
-          const _this = this
           //校验拆分金额是否大于含税金额，大于提示用户并更改开票类型为超额开票
           if(normalTypes.includes(this.props.billType)) {
             requestJsonFetch('/arc/billingApplication/apply/check', {

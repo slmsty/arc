@@ -9,7 +9,7 @@ import { normalTypes, advanceTypes } from './billColumns'
 import { clientCols, comCols, proCols, invoiceCols } from './billColumns'
 const FormItem = Form.Item
 const Option = Select.Option
-
+const needSelectType = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 
 class BillUpdate extends React.Component {
   constructor(props){
@@ -51,10 +51,10 @@ class BillUpdate extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { record, isAdd, visible } = this.props
+    const { record, isAdd, visible, billType } = this.props
     const formItemLayout = {
-      labelCol: { span: 7 },
-      wrapperCol: { span: 17 },
+      labelCol: { span: 8 },
+      wrapperCol: { span: 16 },
     }
     return (
       <div>
@@ -111,7 +111,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="提前开票原因">
                   {
                     getFieldDecorator('advanceBillingReason',{
-                      initialValue: record.advanceBillingReason,
+                      initialValue: record.advanceBillingReason, rules: [{ required: needSelectType.includes(billType), message: '提前开票原因!' }]
                     })(
                       <SelectInvokeApi
                         typeCode="BILLING_APPLICATION"
@@ -128,7 +128,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="预计回款日期">
                   {
                     getFieldDecorator('receiptReturnDate', {
-                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : moment(),}
+                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : moment(), rules: [{ required: needSelectType.includes(billType), message: '提前开票原因!' }]}
                       )(<DatePicker format="YYYY-MM-DD"/>)
                   }
                 </FormItem>

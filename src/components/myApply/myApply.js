@@ -19,14 +19,19 @@ export default class MyApplyCon extends React.Component {
     noApplyInfoData: '',
     editVisitable:false
   }
+
   componentDidMount() {
     this.handleQuery()
   }
+
   componentWillReceiveProps(nextProps) {
-    if (this.props.myApply.myapplyListRefresh !== nextProps.myApply.myapplyListRefresh) {
+    if(this.props.billSaveSuccess !== nextProps.billSaveSuccess && nextProps.billSaveSuccess) {
+      message.success('申请成功，已重新发起审批流程')
+      this.setState({editVisitable: false})
       this.handleQuery()
     }
   }
+
   queryParam = {
     pageInfo: {
       pageNo: 1,
@@ -34,14 +39,14 @@ export default class MyApplyCon extends React.Component {
     },
     businessKey: '',
     applyPersonKeyword: '',
-    applyDate: 'ALL',
+    applyDate: '',
     status: 'approve',
   }
   handleQuery = () => {
     this.setState({
       loading: true,
     })
-    this.props.getMyApplyList(this.queryParam).then((res) => {
+    this.props.myApplyList(this.queryParam).then((res) => {
       this.setState({
         loading: false,
       })
@@ -85,48 +90,7 @@ export default class MyApplyCon extends React.Component {
       }
     })
   }
-  /*
-   function applyComfirm
-   审批同意
-   */
-  applyComfirm = (param) => {
-    this.props.approveSubmit(param).then((res) => {
-      this.setState({
-        loading: false,
-        editVisitable: false,
-        applyData: '',
-      })
-      if (res && res.response && res.response.resultCode === '000000') {
-        message.success('审批成功')
-      }
-    })
-  }
-  /*
-   function applyReject
-   审批驳回
-   */
-  applyReject = (param) => {
-    this.props.approveReject(param).then((res) => {
-      this.setState({
-        loading: false,
-        editVisitable: false,
-        applyData: '',
-      })
-      if (res && res.response && res.response.resultCode === '000000') {
-        message.success('驳回成功')
-      }
-    })
-  }
-  /*
-   function closeModalClaim
-   关闭详情modal
-   */
-  closeModalClaim = () => {
-    this.setState({
-      infoVisitable: false,
-      applyData: '',
-    })
-  }
+
   showApplyInfo = (record) => {
     const paramsData = {}
     paramsData.arcFlowId = record.arcFlowId
@@ -164,6 +128,7 @@ export default class MyApplyCon extends React.Component {
         that.props.cancelApply(changeParam).then((res)=>{
           if (res && res.response && res.response.resultCode === '000000') {
             message.success('撤销成功')
+            that.handleQuery()
           } else {
             message.error(res.response.resultMessage)
           }
@@ -218,7 +183,6 @@ export default class MyApplyCon extends React.Component {
       fixed: 'right',
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
-          {/* disabled={record.statusName === '审批中' ? 'false' : 'true'} */}
           <Button type="primary" ghost style={{display:record.statusName === '审批中' ? 'block' : 'none' }} onClick={() => this.cancelItem(record)}>撤销</Button>
           <Button type="primary" ghost style={{display:record.statusName === '驳回' ? 'block' : 'none' }} onClick={() => this.approveClick(record)}>编辑</Button>
         </div>
@@ -226,37 +190,30 @@ export default class MyApplyCon extends React.Component {
     },
     ]
     const pagination = {
-      current: this.props.myApply.getMyApplyList.pageNo,
-      total: this.props.myApply.getMyApplyList.count,
-      pageSize: this.props.myApply.getMyApplyList.pageSize,
+      current: this.props.myApplyPage.pageNo,
+      total: this.props.myApplyPage.count,
+      pageSize: this.props.myApplyPage.pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
-
     }
-    const { billApplySave, billApplyCheck, currentUser, contractUrl, myApply } = this.props
-    const { serviceDetail, serviceType} = myApply.getMyApplyInfo
+    const { billApplySave, billApplyCheck, currentUser, contractUrl, myApplyPage, myApplyDetail, billApproveSave } = this.props
+    const { serviceDetail, serviceType} = myApplyDetail
     const isBackBill = redTypes.includes(serviceType)
     return (
       <div>
-        <ApplySearchConWithForm type="myApply" onQuery={this.handleChangeParam} loading={this.state.loading} />
+        <ApplySearchConWithForm
+          type="myApply"
+          onQuery={this.handleChangeParam}
+          loading={this.state.loading}
+        />
         {
-          /*this.state.editVisitable ?
-            <MyApplyEdit
-              infoVisitable={this.state.editVisitable}
-              closeModal={() => this.setState({editVisitable: false})}
-              applyData={this.state.applyData}
-              applyInfoData={this.props.myApply.getMyApplyInfo}
-              billApplySave={this.props.billApproveSave}
-              billSaveSuccess={billSaveSuccess}
-              applicationIds={applicationIds}
-            /> : null*/
           this.state.editVisitable ?
             <BillDetail
               onCancel={() => this.setState({editVisitable: false})}
               detail={serviceDetail}
               billType={serviceType}
-              billApplySave={billApplySave}
+              billApplySave={billApproveSave}
               billApplyCheck={billApplyCheck}
               currentUser={currentUser}
               contractUrl={contractUrl}
@@ -270,7 +227,7 @@ export default class MyApplyCon extends React.Component {
               infoVisitable={this.state.noApplyInfoVisitable}
               closeClaim={this.NoApplycloseModalClaim}
               applyData={this.state.noApplyInfoData}
-              applyInfoData={this.props.myApply.getMyApplyInfo}
+              applyInfoData={myApplyDetail}
               fileDown={this.props.fileDown}
               getContractUrl={this.props.getContractUrl}
               contractUrl={this.props.contractUrl}
@@ -285,7 +242,7 @@ export default class MyApplyCon extends React.Component {
           size="small"
           scroll={{ x: '1610px' }}
           loading={this.state.loading}
-          dataSource={this.props.myApply.getMyApplyList.result}
+          dataSource={myApplyPage.result}
         />
       </div>
     )
