@@ -126,11 +126,12 @@ class ApplySearchCon extends React.Component {
                 {getFieldDecorator('status', {
                   initialValue: 'approve',
                 })(
-                  <RadioGroup size="large" style={{ width: '330px' }}>
+                  <RadioGroup size="large" style={{ width: '400px' }}>
                     <RadioButton value="" style={{ borderRadius: '4px' }}>全部</RadioButton>
                     <RadioButton value="approve" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批中</RadioButton>
                     <RadioButton value="finish" style={{ marginLeft: '10px', borderRadius: '4px' }}>审批完成</RadioButton>
                     <RadioButton value="reject" style={{ marginLeft: '10px', borderRadius: '4px' }}>驳回</RadioButton>
+                    <RadioButton value="cancel" style={{ marginLeft: '10px', borderRadius: '4px' }}>撤销</RadioButton>
                   </RadioGroup>
                 )}
               </FormItem>

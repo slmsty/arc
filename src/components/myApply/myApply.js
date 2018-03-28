@@ -85,8 +85,6 @@ export default class MyApplyCon extends React.Component {
           applyData: record,
         })
         this.props.getContractUrl(res.response.data.serviceDetail.contractId)
-      } else {
-        message.error(res.response.resultMessage)
       }
     })
   }
@@ -184,7 +182,7 @@ export default class MyApplyCon extends React.Component {
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
           <Button type="primary" ghost style={{display:record.statusName === '审批中' ? 'block' : 'none' }} onClick={() => this.cancelItem(record)}>撤销</Button>
-          <Button type="primary" ghost style={{display:record.statusName === '驳回' ? 'block' : 'none' }} onClick={() => this.approveClick(record)}>编辑</Button>
+          <Button type="primary" ghost style={{display:record.statusName === '驳回' || record.statusName === '撤销' ? 'block' : 'none' }} onClick={() => this.approveClick(record)}>编辑</Button>
         </div>
       ),
     },

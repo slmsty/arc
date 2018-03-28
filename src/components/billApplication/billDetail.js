@@ -146,18 +146,13 @@ class BillDetail extends React.Component {
             err = true
             break
           }
-          if(record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined') {
+          if(this.state.isRequireRate && (record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined')) {
             message.error(`第${i+1}行【开票税率】不能为空!`)
             err = true
             break
           }
           if(record.quantity === '' || typeof record.quantity === 'undefined' || record.quantity === 0) {
             message.error(`第${i+1}行【开票数量】不能为空或者为0!`)
-            err = true
-            break
-          }
-          if(groupNos.length > 0 && typeof record.groupNo === 'undefined') {
-            message.error(`第${i+1}行【开票信息】没有进行分组!`)
             err = true
             break
           }
@@ -476,6 +471,16 @@ class BillDetail extends React.Component {
             onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
         )
       }, {
+        title: <span>税率<b style={{color:'#FF0000'}}>*</b></span>,
+        dataIndex: 'billingTaxRate',
+        width: 100,
+        render: (text, record, index) => (
+          <Input
+            disabled={!this.state.isRequireRate}
+            onChange={(e) => this.handleChange(e.target.value, 'billingTaxRate', index, record)}
+          />
+        )
+      }, {
         title: '税额',
         dataIndex: 'billingTaxAmount',
         width: 100,
@@ -554,22 +559,6 @@ class BillDetail extends React.Component {
           onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
       )
     }*/]
-    let rateColumns = [...columns]
-    rateColumns.splice(2, 0, {
-      title: <span>税率<b style={{color:'#FF0000'}}>*</b></span>,
-      dataIndex: 'billingTaxRate',
-      width: 100,
-      render: (text, record, index) => (
-        <SelectInvokeApi
-          typeCode="BILLING_APPLICATION"
-          paramCode="TAX_RATE"
-          placeholder="税率"
-          hasEmpty={false}
-          value={`${this.state.dataSource[index]['billingTaxRate']}`}
-          onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
-        />
-      )
-    })
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
       headers: {
@@ -763,7 +752,7 @@ class BillDetail extends React.Component {
                   rowKey="lineNo"
                   bordered
                   size="small"
-                  columns={this.state.isRequireRate ? rateColumns : columns }
+                  columns={columns}
                   pagination={false}
                   dataSource={this.state.dataSource}
                   /*scroll={{ x: 1160 }}*/
