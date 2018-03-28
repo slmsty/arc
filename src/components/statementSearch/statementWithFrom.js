@@ -101,6 +101,10 @@ class StatementListCom extends React.Component {
       param.paymentName = params.paymentName
       param.contractName = params.contractName
       param.isReport = 'Y'
+      param.pageInfo =  {
+        pageNo: 1,
+        pageSize: 10,
+      },
       this.props.queryParms(param,'receipt_claim')
     }
     //合同拆分查询表
@@ -116,6 +120,10 @@ class StatementListCom extends React.Component {
       param.companyId = params.companyId
       param.contractNo = params.contractNo
       param.isReport = 'Y'
+      param.pageInfo =  {
+        pageNo: 1,
+          pageSize: 10,
+      },
       this.props.queryParms(param,'contract_search')
     }
     this.props.form.resetFields()
@@ -148,7 +156,7 @@ class StatementListCom extends React.Component {
             <Col span={24} key={1}>
               <FormItem {...formItemLayout} label="报表类型">
                 {getFieldDecorator('statementType', {
-                  initialValue: 'receiptInfoReport',
+                  initialValue: this.props.currencyType,
                 })(
                   <SelectRadioApi
                     typeCode="STATEMENT"

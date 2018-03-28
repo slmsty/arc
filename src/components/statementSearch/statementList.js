@@ -35,16 +35,23 @@ export default class StatementListIndex extends React.Component {
   handleQuery(type){
     if(type==='receipt_claim'){
       this.props.getStatementList(this.queryParam)
+      this.setState({
+        currencyType: 'receiptInfoReport',
+      })
+
     }
     if(type==='contract_search'){
       this.props.getContractStatementList(this.queryParam)
+      this.setState({
+        currencyType: 'contractSplitReport',
+      })
     }
   }
   // 查询接口
   /*param:传递参数
   type：报表类型*/
   queryParms = (param,type) => {
-    this.queryParam = { ...this.queryParam, ...param }
+    //this.queryParam = { ...this.queryParam, ...param }
     this.handleQuery(type)
 
   }
@@ -145,7 +152,7 @@ export default class StatementListIndex extends React.Component {
     }
     return (
       <div>
-        <StatementWithFrom showCols={this.showCols} queryParms={this.queryParms} excel={this.excel}/>
+        <StatementWithFrom showCols={this.showCols} queryParms={this.queryParms} excel={this.excel} currencyType = {this.state.currencyType}/>
         <Row  style={{ lineHeight: '28px' }}>
           <Col span={24} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
             {
