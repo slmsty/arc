@@ -114,7 +114,18 @@ export default class ApplySearchCon extends React.Component {
     status: '',
     operator: '',
   }
-
+   /* sendERPQueryParam = {
+    signDateStart:'',
+    signDateEnd:'',
+    buId:'',
+    isReport:'N',
+    projectNo:'',
+    contractNo:'',
+    contractName:'',
+    isProdect:'ALL',
+    erpStatus:'ALL',
+    signCompany:'',
+  }*/
   handleQuery = () => {
     this.setState({
       loading: true,
@@ -130,7 +141,7 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   // 获取tablewidth
-  getTableWidth = () => {
+  getTableWidth = (columns) => {
     let width = 0
     columns.map((item,index)=>{
       width += parseFloat(item.width)
@@ -156,12 +167,18 @@ export default class ApplySearchCon extends React.Component {
       selectedRows:selectedRows,
     })
   }
-  saveContractSplitInfo = (param,projectNo) => {
+ /* saveContractSplitInfo = (param,projectNo) => {
     this.props.saveContractSplitInfo(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
+        const data = res.response.result[0]
+        console.log('data',data)
+        data.orderListLines.map((item)=>{
+          item.opsStatus = "modify"
+         })
+        console.log('data1',data)
         this.setState({
-          selectedRows: '',
+          selectedRows:data
         })
         //this.getInfo(projectNo)
       } else {
@@ -169,7 +186,7 @@ export default class ApplySearchCon extends React.Component {
       }
     })
 
-  }
+  }*/
   closeSaveModal = () => {
     this.setState({
       contarctSplitModal: true,
@@ -179,6 +196,9 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   showModals = (record) =>{
+    record.orderListLines.map(item=>{
+      item.opsStatus = 'modify'
+    })
     this.setState({
       selectedRows:record,
     })
@@ -237,9 +257,14 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   // 传送ERP
-  queryParmsErp = (parmas) => {
-    this.props.sendERP(parmas)
-  }
+ /* queryParmsErp = (parmas) => {
+    this.props.sendERP(parmas).then((res)=>{
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.success(res.response.data.description)
+      } else {
+      }
+    })
+  }*/
   // 传送ERP查询接口
   sendERPQuery = (parmas) => {
     this.props.getContractStatementList(parmas).then((res)=>{
@@ -361,7 +386,7 @@ export default class ApplySearchCon extends React.Component {
             <ContractSplitModal
               getInfo = {this.getInfo}
               closeModal={this.closeModalClaim}
-              saveInfo={this.saveContractSplitInfo}
+              saveInfo={this.props.saveContractSplitInfo}
               data={this.state.selectedRows}
               user={this.props.user.accountName}
               contractUrl={this.props.contractSplitDara.getUrl}
@@ -381,14 +406,14 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="middle"
-          scroll={{ x: this.getTableWidth(), y: this.state.tableHeight }}
+          scroll={{ x: this.getTableWidth(columns), y: this.state.tableHeight }}
           loading={this.state.loading}
           dataSource={this.props.contractSplitDara.getContractList.result}
         />
         {this.state.ERPModal ?
           <ERPModals
             sendERPQuery={this.sendERPQuery}
-            queryParms = {this.queryParmsErp}
+            sendERPParms = {this.props.sendERP}
             closeERPModal = {this.closeERPModal}
             dataSource = {this.state.sendErpDataSource}
           />

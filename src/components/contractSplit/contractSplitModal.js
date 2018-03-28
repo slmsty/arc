@@ -56,7 +56,7 @@ const EditableCell = ({onChange, column, value,disable}) => {
 class ContractSplitModal extends React.Component{
   constructor(props) {
     super(props)
-    const tableDeatail = _.cloneDeep(props.tableDetail.slice(0))
+    const tableDeatail = _.cloneDeep(props.data.orderListLines)
     const data = props.data
     let countTaskCostDataList = {
       task1Cost: data.task1Cost ? data.task1Cost : 0,
@@ -447,7 +447,6 @@ class ContractSplitModal extends React.Component{
     const parentId = newData[index].orderListLineId
     const obj = {orderListLineId:parentId,orderListId:newData[index].orderListId,opsStatus:'delete'}
     deleteData.push(obj)
-    console.log('deleteData',deleteData)
     for(let i = 0, flag = true ; i < newData.length ; flag ? i++ : i) {
       if (newData[i] && newData[i].parentOrderListLineId === parentId) {
         newData.splice(i,1)
@@ -623,18 +622,8 @@ class ContractSplitModal extends React.Component{
       delete this.props.data.orderListLines
     }
     const deleteData = this.state.deleteData
-    const oldTableData = this.props.tableDetail.slice(0)
-    console.log('oldTableData',oldTableData)
-    newLisfInfo.filter(i=>i.orderListLineId != '').map((item)=>{
-      for(let i =0;i<oldTableData.length;i++){
-        if(oldTableData[i].orderListLineId ===item.orderListLineId){
-          item.opsStatus = "modify"
-        }
-      }
-    })
+    const oldTableData = this.props.data.orderListLines
     newLisfInfo.push(...deleteData)
-    console.log('deleteData',deleteData)
-    console.log('newLisfInfo',newLisfInfo)
     // 拼接保存参数
     const postParams = {}
     postParams.splitListInfo = newLisfInfo
@@ -658,11 +647,44 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
-    console.log('postParams',postParams)
-    this.setState({
-      editFlag:true,
+
+    this.props.saveInfo(postParams).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.success('保存成功')
+        this.setState({
+          editFlag:true,
+          deleteData:[],
+        })
+        const data = res.response.result[0]
+
+        const dataSource = data.orderListLines.concat({
+          taskOpration: '合计',
+          contractCategory: 0,
+          product: 0,
+          revenueCheckout: 0,
+          listPrice: 0,
+          discount: 0,
+          discountedPrice: 0,
+          contractAmountTaxInclude: 0,
+          contractTaxRate: 0,
+          contractAmountTaxExclude: 0,
+          returnTaxRate: 0,
+          returnTaxRevenue: 0,
+          grossOrder: 0,
+          serviceStartDate: 0,
+          serviceEndDate: 0,
+        })
+
+        dataSource.map((item)=>{
+          item.opsStatus = "modify"
+        })
+        this.setState({
+          dataSource:dataSource
+        })
+      } else {
+        message.error('保存失败')
+      }
     })
-    this.props.saveInfo(postParams,this.props.data.projectNo)
   }
   closeModal = () => {
     this.setState({
@@ -760,11 +782,6 @@ class ContractSplitModal extends React.Component{
         formula = (1 + incomeRatio)
         formula2 = incomeRatio * assessRatio
         splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
-        /*console.log('incomeRatio',incomeRatio)
-         console.log('assessRatio',assessRatio)
-         console.log('formula',formula)
-         console.log('formula2',formula2)
-         console.log('splitData[i].listPrice',splitData[i].listPrice)*/
       }
       this.inputChange(splitData,i)
   }

@@ -8,16 +8,27 @@ import React from 'react'
 import ErpFrom from './ERPWithFrom'
 import currency from '../../util/currency'
 //import { constructSplitSearchColumns } from '../statementSearch/statementColumns'
-import { Table,Modal,Button } from 'antd'
+import { Table,Modal,Button,message } from 'antd'
 
 class ERPModal extends React.Component{
   constructor(props) {
     super(props)
     this.state = {
-
+      selectedRows:[],
+      loading:false,
     }
   }
   queryParam = {
+    signDateStart:'',
+    signDateEnd:'',
+    buId:'',
+    isReport:'N',
+    projectNo:'',
+    contractNo:'',
+    contractName:'',
+    isProdect:'ALL',
+    erpStatus:'ALL',
+    signCompany:'',
     pageInfo: {
       pageNo: 1,
       pageSize: 10,
@@ -37,8 +48,24 @@ class ERPModal extends React.Component{
   }
   // 传送ERP接口
   sendERP = () => {
-    console.log(this.state.selectedRows)
+    this.setState({
+      loading:true,
+    })
+    const selectedRows = this.state.selectedRows
+    const pastData = selectedRows.map(item=>item.orderId)
+    const param = {}
+    param.orderIdLists = pastData
+    this.props.sendERPParms(param).then((res)=>{
+      this.setState({
+        loading:false,
+      })
+      if (res && res.response && res.response.resultCode === '000000') {
+        message.success(res.response.data.description)
+      } else {
+      }
+    })
     //this.props.queryParms(param)
+    this.props.sendERPQuery(this.queryParam)
   }
   // 页码修改
   handleChangePage = (page) => {
@@ -55,7 +82,7 @@ class ERPModal extends React.Component{
     this.setState({ selectedRowKeys, selectedRows })
   }
   render() {
-    console.log('this.props.dataSource.count',this.props.dataSource.count)
+    console.log('this.state.selectedRows',this.state.selectedRows)
     const constructSplitSearchColumns = [
       {
         title: '合同编码',
@@ -159,11 +186,11 @@ class ERPModal extends React.Component{
           visible={true}
           onOk={this.props.closeERPModal}
           onCancel={this.props.closeERPModal}
-          title=""
+          title="传送ERP"
           footer={null}
         >
           <ErpFrom queryParms={this.queryParms}/>
-          <Button type="primary" onClick={this.sendERP}>传送ERP</Button>
+          <Button type="primary" onClick={this.sendERP} disabled={this.state.selectedRows.length ? false :true}>传送ERP</Button>
           <div className="split"></div>
           <Table
             rowSelection={rowSelection}
@@ -172,7 +199,7 @@ class ERPModal extends React.Component{
             columns={constructSplitSearchColumns}
             size="middle"
             scroll={{ x: this.getTableWidth(constructSplitSearchColumns),y:'200px' }}
-            /*loading={this.state.loading}*/
+            loading={this.state.loading}
             dataSource={this.props.dataSource.result}
           />
         </Modal>

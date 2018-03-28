@@ -159,11 +159,10 @@ class ContractSplitCon extends React.Component {
             <Col span={8} style={{display:this.state.showRecaule ? 'block' : 'none'}}>
               <FormItem {...formItemLayout} label="是否复算项目">
                 {getFieldDecorator('recalculate', {
-                  initialValue: ' ',
+                  initialValue: '',
                 })(
                   <Select
                     placeholder="请选择拆分状态"
-                    onChange={this.handleChange}
                   >
                     <Option value="">全部</Option>
                     <Option value="Y">是</Option>
