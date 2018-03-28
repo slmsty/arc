@@ -79,7 +79,7 @@ class StatementListCom extends React.Component {
     infoVisitable: false,
     loading: false,
     applyData: '',
-    stateType: '100',
+    stateType: 'receiptInfoReport',
   }
   excel = (type)=>{
     this.props.excel()
@@ -100,7 +100,6 @@ class StatementListCom extends React.Component {
       param.signCompany = params.signCompany
       param.paymentName = params.paymentName
       param.contractName = params.contractName
-      param.contractNo = params.contractNo
       param.isReport = 'Y'
       this.props.queryParms(param,'receipt_claim')
     }
@@ -115,6 +114,8 @@ class StatementListCom extends React.Component {
       param.collectionProject = params.collectionProject
       param.isOrderList = params.isOrderList
       param.companyId = params.companyId
+      param.contractNo = params.contractNo
+      param.isReport = 'Y'
       this.props.queryParms(param,'contract_search')
     }
     this.props.form.resetFields()
@@ -147,13 +148,14 @@ class StatementListCom extends React.Component {
             <Col span={24} key={1}>
               <FormItem {...formItemLayout} label="报表类型">
                 {getFieldDecorator('statementType', {
-                  initialValue: '100',
+                  initialValue: 'receiptInfoReport',
                 })(
                   <SelectRadioApi
-                    typeCode="WORK_FLOW"
+                    typeCode="STATEMENT"
                     paramCode="APPLY_TYPE"
                     onChange={(e)=>this.handleRadioChange(e)}
-                    options={testoptions}
+                    options=''
+                    selected = {this.state.stateType}
                   />
                 )}
               </FormItem>
@@ -163,14 +165,14 @@ class StatementListCom extends React.Component {
           收款信息查询表
           start-------------------
           */}
-          <div style={{ display: this.state.stateType === '100' ? 'block' : 'none' }}>
+          <div style={{ display: this.state.stateType === 'receiptInfoReport' ? 'block' : 'none' }}>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="项目编码(多)">
+                <FormItem {...formItemLayoutChild} label="项目编码">
                   {
                     getFieldDecorator('projectNo')(
                       <MultipleInput
-                        placeholder="多项目编码使用英文逗号间隔"
+                        placeholder="项目编码"
                       />,
                     )
                   }
@@ -186,7 +188,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="收款日期">
                   {getFieldDecorator('receiptDate', {
-                    initialValue: [moment('2017-08-01'), moment()],
+                    //initialValue: [moment('2017-08-01'), moment()],
                   })(<RangePicker
                     allowClear
                     format={dateFormat}
@@ -286,14 +288,14 @@ class StatementListCom extends React.Component {
            发票信息查询表
            start-------------------
            */}
-          <div style={{ display: this.state.stateType === '1001' ? 'block' : 'none' }}>
+          <div style={{ display: this.state.stateType === 'outcomeInfoReport' ? 'block' : 'none' }}>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="项目编码(多)">
+                <FormItem {...formItemLayoutChild} label="项目编码">
                   {
-                    getFieldDecorator('projectIds')(
+                    getFieldDecorator('projectNo')(
                       <MultipleInput
-                        placeholder="多项目编码使用英文逗号间隔"
+                        placeholder="项目编码"
                       />,
                     )
                   }
@@ -309,7 +311,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="开票日期">
                   {getFieldDecorator('billedDate', {
-                    initialValue: [moment('2017-08-01'), moment()],
+                    //initialValue: [moment('2017-08-01'), moment()],
                   })(<RangePicker
                     allowClear
                     format={dateFormat}
@@ -408,14 +410,14 @@ class StatementListCom extends React.Component {
            发票及收款信息查询表
            start-------------------
            */}
-          <div style={{ display: this.state.stateType === '1002' ? 'block' : 'none' }}>
+          <div style={{ display: this.state.stateType === 'outcomeReceiptInfoReport' ? 'block' : 'none' }}>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="项目编码(多)">
+                <FormItem {...formItemLayoutChild} label="项目编码">
                   {
-                    getFieldDecorator('projectIds')(
+                    getFieldDecorator('projectNo')(
                       <MultipleInput
-                        placeholder="多项目编码使用英文逗号间隔"
+                        placeholder="项目编码"
                       />,
                     )
                   }
@@ -431,7 +433,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="收款截止日期">
                   {getFieldDecorator('billedDate', {
-                    initialValue: moment(),
+                    //initialValue: moment(),
                   })(
                     <DatePicker
                       format={dateFormat}
@@ -485,14 +487,14 @@ class StatementListCom extends React.Component {
            应收账款询证函报表
            start-------------------
            */}
-          <div style={{ display: this.state.stateType === '1003' ? 'block' : 'none' }}>
+          <div style={{ display: this.state.stateType === 'receiptAccountReport' ? 'block' : 'none' }}>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="项目编码(多)">
+                <FormItem {...formItemLayoutChild} label="项目编码">
                   {
-                    getFieldDecorator('projectIds')(
-                      <MultipleInput
-                        placeholder="多项目编码使用英文逗号间隔"
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="项目编码"
                       />,
                     )
                   }
@@ -508,7 +510,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="收款截止日期">
                   {getFieldDecorator('billedDate', {
-                    initialValue: moment(),
+                    //initialValue: moment(),
                   })(
                     <DatePicker
                       format={dateFormat}
@@ -562,14 +564,14 @@ class StatementListCom extends React.Component {
            项目综合信息查询报表
            start-------------------
            */}
-          <div style={{ display: this.state.stateType === '1004' ? 'block' : 'none' }}>
+          <div style={{ display: this.state.stateType === 'projectInfoReport' ? 'block' : 'none' }}>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="项目编码(多)">
+                <FormItem {...formItemLayoutChild} label="项目编码">
                   {
-                    getFieldDecorator('projectIds')(
-                      <MultipleInput
-                        placeholder="多项目编码使用英文逗号间隔"
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="项目编码"
                       />,
                     )
                   }
@@ -627,25 +629,25 @@ class StatementListCom extends React.Component {
            整体合同内容查询
            start-------------------
            */}
-          <div style={{ display: this.state.stateType === '1005' ? 'block' : 'none' }}>
+          <div style={{ display: this.state.stateType === 'contractInfoReport' ? 'block' : 'none' }}>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="项目编码(多)">
+                <FormItem {...formItemLayoutChild} label="项目编码">
                   {
-                    getFieldDecorator('projectIds')(
-                      <MultipleInput
-                        placeholder="多项目编码使用英文逗号间隔"
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="项目编码"
                       />,
                     )
                   }
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="合同编码(多)">
+                <FormItem {...formItemLayoutChild} label="合同编码">
                   {
                     getFieldDecorator('contractNo')(
-                      <MultipleInput
-                        placeholder="多合同编码使用英文逗号间隔"
+                      <Input
+                        placeholder="合同编码"
                       />,
                     )
                   }
@@ -665,7 +667,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="签约日期">
                   {getFieldDecorator('signDate', {
-                    initialValue: [moment('2017-08-01'), moment()],
+                    //initialValue: [moment('2017-08-01'), moment()],
                   })(<RangePicker
                     allowClear
                     format={dateFormat}
@@ -717,14 +719,14 @@ class StatementListCom extends React.Component {
            转包项目表
            start-------------------
            */}
-          <div style={{ display: this.state.stateType === '1006' ? 'block' : 'none' }}>
+          <div style={{ display: this.state.stateType === 'outProjectInfoReport' ? 'block' : 'none' }}>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="项目编码(多)">
+                <FormItem {...formItemLayoutChild} label="项目编码">
                   {
-                    getFieldDecorator('projectIds')(
-                      <MultipleInput
-                        placeholder="多项目编码使用英文逗号间隔"
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="项目编码"
                       />,
                     )
                   }
@@ -733,7 +735,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="截止日期">
                   {getFieldDecorator('billedDate', {
-                    initialValue: moment(),
+                    //initialValue: moment(),
                   })(
                     <DatePicker
                       format={dateFormat}
@@ -753,11 +755,11 @@ class StatementListCom extends React.Component {
             </Row>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="合同编码(多)">
+                <FormItem {...formItemLayoutChild} label="合同编码">
                   {
                     getFieldDecorator('contractNo')(
-                      <MultipleInput
-                        placeholder="多合同编码使用英文逗号间隔"
+                      <Input
+                        placeholder="合同编码"
                       />,
                     )
                   }
@@ -776,7 +778,7 @@ class StatementListCom extends React.Component {
            合同拆分查询表
            start-------------------
            */}
-          <div style={{ display: this.state.stateType === '1007' ? 'block' : 'none' }}>
+          <div style={{ display: this.state.stateType === 'contractSplitReport' ? 'block' : 'none' }}>
             <Row gutter={40}>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="项目编码">
@@ -872,7 +874,7 @@ class StatementListCom extends React.Component {
                 </Col>
                 <Col span={8} style={{ textAlign: 'right' }}>
                   <Button type="primary" key="search" onClick={()=>this.queryParms('contract_search')}><Icon type="search" />查询</Button>
-                  <Button style={{marginLeft:'10px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>
+                  {/*<Button style={{marginLeft:'10px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>*/}
                 </Col>
               </Row>
 

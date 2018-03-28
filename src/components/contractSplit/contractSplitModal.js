@@ -445,17 +445,23 @@ class ContractSplitModal extends React.Component{
     const newData = this.state.dataSource
     const deleteData = this.state.deleteData.slice(0)
     const parentId = newData[index].orderListLineId
-    const obj = {orderListLineId:parentId,orderListId:newData[index].orderListId,opsStatus:'delete'}
-    deleteData.push(obj)
-    for(let i = 0, flag = true ; i < newData.length ; flag ? i++ : i) {
+    if(parentId){
+      const obj = {orderListLineId:parentId,orderListId:newData[index].orderListId,opsStatus:'delete'}
+      deleteData.push(obj)
+    }
+
+    /*for(let i = 0, flag = true ; i < newData.length ; flag ? i++ : i) {
       if (newData[i] && newData[i].parentOrderListLineId === parentId) {
         newData.splice(i,1)
         flag = false
       }else {
         flag = true
       }
-    }
+    }*/
+    console.log('newData1',newData)
+    console.log('index',index)
     newData.splice(index,1)
+    console.log('newData2',newData)
     let newSelectCountType = []
     newData.forEach(item=>{
       if(item.revenueCheckout){
@@ -513,7 +519,9 @@ class ContractSplitModal extends React.Component{
       message.error('立项BU不能为空！')
       return
     }
+    console.log('dataSource1',this.state.dataSource)
     const splitListInfo = this.state.dataSource.slice(0,-1)
+    console.log('splitListInfo2',splitListInfo)
     if (splitListInfo.length <=0) {
       message.error('请对数据进行拆分！')
       return

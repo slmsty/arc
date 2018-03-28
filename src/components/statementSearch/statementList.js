@@ -16,7 +16,7 @@ export default class StatementListIndex extends React.Component {
     infoVisitable: false,
     loading: false,
     applyData: '',
-    currencyType: '100',
+    currencyType: 'receiptInfoReport',
   }
   componentDidMount(){
   }
@@ -45,7 +45,6 @@ export default class StatementListIndex extends React.Component {
   type：报表类型*/
   queryParms = (param,type) => {
     this.queryParam = { ...this.queryParam, ...param }
-    //this.props.getStatementList(this.queryParam)
     this.handleQuery(type)
 
   }
@@ -53,43 +52,43 @@ export default class StatementListIndex extends React.Component {
   getApplyColumns = () =>{
     let width = 0
     const type = this.state.currencyType
-    if(type==='100'){
+    if(type==='receiptInfoReport'){
       //  获取宽度width
       reciptMoneyInfoCols.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
       return [width,reciptMoneyInfoCols,'收款汇总金额']
-    } else if(type==='1001'){
+    } else if(type==='outcomeInfoReport'){
       billInfocomCols.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
       return [width,billInfocomCols,'发票汇总金额']
-    } else if(type==='1002'){
+    } else if(type==='outcomeReceiptInfoReport'){
       billAndReciptMoneyCols.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
       return [width,billAndReciptMoneyCols,'收款汇总金额','发票汇总金额']
-    } else if(type==='1003'){
+    } else if(type==='receiptAccountReport'){
       shouldReciptCols.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
       return [width,shouldReciptCols]
-    } else if(type==='1004'){
+    } else if(type==='projectInfoReport'){
       projectTotalCols.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
       return [width,projectTotalCols,'收款汇总金额','发票汇总金额']
-    } else if(type==='1005'){
+    } else if(type==='contractInfoReport'){
       totalContractContentColumns.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
       return [width,totalContractContentColumns]
-    } else if(type==='1006'){
+    } else if(type==='outProjectInfoReport'){
       turnProColumns.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
       return [width,turnProColumns]
-    }else if(type==='1007'){
+    }else if(type==='contractSplitReport'){
       constructSplitSearchColumns.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
@@ -122,14 +121,14 @@ export default class StatementListIndex extends React.Component {
     const dataSources = {}
     let [current,total,pageSize,claimAmountTotal] = [0,0,0,'']
     const type = this.state.currencyType
-    if(type==='100'){
+    if(type==='receiptInfoReport'){
       dataSources.dataSource = this.props.statement.getStatementList.result
       current = this.props.statement.getStatementList.pageNo
       total = this.props.statement.getStatementList.count
       pageSize = this.props.statement.getStatementList.pageSize
       claimAmountTotal = currency(this.props.statement.getStatementList.claimAmountTotal)
     }
-    if(type==='1007'){
+    if(type==='contractSplitReport'){
       dataSources.dataSource = this.props.statement.getContractStatementList.result
       current = this.props.statement.getContractStatementList.pageNo
       total = this.props.statement.getContractStatementList.count

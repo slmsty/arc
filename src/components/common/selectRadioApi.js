@@ -16,6 +16,9 @@ export default class SelectRadioApi extends React.Component {
     if (this.props.typeCode && this.props.paramCode) {
       requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
     }
+    if(this.props.typeCode === 'STATEMENT'){
+      requestJsonFetch(`/arc/report/getReportTypeList`, { method: 'get' }, this.handleCallback)
+    }
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
@@ -37,7 +40,6 @@ export default class SelectRadioApi extends React.Component {
   }
   render() {
     const options = this.props.options.length > 0 ? this.props.options :this.state.options
-
     const optionDom = options ? options.map(option => <RadioButton style={{ marginRight: '10px', borderRadius: '4px',marginBottom:'10px' }} key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</RadioButton>) : null
     return (
       <RadioGroup
