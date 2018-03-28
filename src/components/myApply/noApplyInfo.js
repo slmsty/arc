@@ -143,7 +143,7 @@ class NoApplyInfo extends React.Component {
                     <br />
                     <Row>
                       <Col style={{ textAlign: 'left' }} span={3}>{item.taskName}：</Col>
-                      <Col span={5}>{item.assigneeName}</Col>
+                      <Col span={5}>{item.assigneeName} ({item.statusName})</Col>
                       <Col style={{ textAlign: 'right' }} span={3}>审批结果：</Col>
                       <Col span={4}>{item.approveType}</Col>
                       <Col style={{ textAlign: 'right' }} span={3}>审批时间：</Col>

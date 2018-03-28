@@ -39,6 +39,7 @@ class BillDetail extends React.Component {
       },
       submitParams: {},
       showContractLink: false,
+      isRequireRate: false,
     }
   }
 
@@ -458,12 +459,50 @@ class BillDetail extends React.Component {
           }
         </div>
       )
-    }, {
+    }, /*{
       title: '组号',
       dataIndex: 'groupNo',
       width: 50,
       fixed: 'left',
-    }, {
+    },*/ {
+        title: <span>含税金额<b style={{color:'#FF0000'}}>*</b></span>,
+        dataIndex: 'billingAmount',
+        width: 100,
+        render: (text, record, index) => (
+          <InputNumber
+            placeholder="含税金额"
+            min={0}
+            defaultValue={record.billingAmount}
+            value={this.state.dataSource[index]['billingAmount']}
+            onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
+        )
+      }, this.state.isRequireRate ? {
+        title: <span>税率<b style={{color:'#FF0000'}}>*</b></span>,
+        dataIndex: 'billingTaxRate',
+        width: 100,
+        render: (text, record, index) => (
+          <SelectInvokeApi
+            typeCode="BILLING_APPLICATION"
+            paramCode="TAX_RATE"
+            placeholder="税率"
+            hasEmpty={false}
+            value={`${this.state.dataSource[index]['billingTaxRate']}`}
+            onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
+          />
+        )
+      } : {width: 0}, {
+        title: '税额',
+        dataIndex: 'billingTaxAmount',
+        width: 100,
+        render: (text, record, index) => (
+          <InputNumber
+            placeholder="税额"
+            min={0}
+            value={this.state.dataSource[index]['billingTaxAmount']}
+            onChange={(value) => this.handleChange(value, 'billingTaxAmount', index)}
+          />
+        )
+      }, {
       title: '开票内容',
       dataIndex: 'billingContent',
       width: 200,
@@ -506,7 +545,7 @@ class BillDetail extends React.Component {
           value={this.state.dataSource[index]['quantity']}
           onChange={(value) => this.handleChange(value, 'quantity', index)} />
       )
-    }, {
+    }, /*{
       title: '单价',
       dataIndex: 'unitPrice',
       width: 100,
@@ -529,45 +568,7 @@ class BillDetail extends React.Component {
           value={this.state.dataSource[index].billingAmountExcludeTax}
           onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
       )
-    }, {
-      title: <span>含税金额<b style={{color:'#FF0000'}}>*</b></span>,
-      dataIndex: 'billingAmount',
-      width: 100,
-      render: (text, record, index) => (
-        <InputNumber
-          placeholder="含税金额"
-          min={0}
-          defaultValue={record.billingAmount}
-          value={this.state.dataSource[index]['billingAmount']}
-          onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
-      )
-    }, {
-      title: <span>税率<b style={{color:'#FF0000'}}>*</b></span>,
-      dataIndex: 'billingTaxRate',
-      width: 100,
-      render: (text, record, index) => (
-        <SelectInvokeApi
-          typeCode="BILLING_APPLICATION"
-          paramCode="TAX_RATE"
-          placeholder="税率"
-          hasEmpty={false}
-          value={`${this.state.dataSource[index]['billingTaxRate']}`}
-          onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
-        />
-      )
-    }, {
-      title: '税额',
-      dataIndex: 'billingTaxAmount',
-      width: 100,
-      render: (text, record, index) => (
-        <InputNumber
-          placeholder="税额"
-          min={0}
-          value={this.state.dataSource[index]['billingTaxAmount']}
-          onChange={(value) => this.handleChange(value, 'billingTaxAmount', index)}
-        />
-      )
-    }]
+    }*/]
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
       headers: {
@@ -738,9 +739,24 @@ class BillDetail extends React.Component {
                     </FormItem>
                   </Col>
                 </Row>
-                <div className="add-btns">
+                <Row>
+                  <Col span={8} key={3}>
+                    <FormItem {...formItemLayout} label="是否对税率要求">
+                      {
+                        getFieldDecorator('rateRequire', {initialValue: '', rules: [{ required: true, message: '请选择是否对税率要求!' }]})(
+                          <Select onChange={(v) => this.setState({isRequireRate: v === 'Y'})}>
+                            <Option value="">请选择</Option>
+                            <Option value="Y">是</Option>
+                            <Option value="N">否</Option>
+                          </Select>,
+                        )
+                      }
+                    </FormItem>
+                  </Col>
+                </Row>
+                {/*<div className="add-btns">
                   <Button type="primary" disabled={this.state.selectedRows.length === 0} style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
-                </div>
+                </div>*/}
                 <Table
                   rowSelection={rowSelection}
                   style={{marginBottom: '10px'}}

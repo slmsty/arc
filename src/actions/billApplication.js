@@ -278,7 +278,11 @@ export function getRedApplyDetail(billingOutcomeIds) {
     },
   }
 }
-
+/**
+ * 退票申请
+ * @param params
+ * @returns {{}}
+ */
 export function billApplicationRedApply(params) {
   return {
     [httpApi]: {
@@ -288,6 +292,18 @@ export function billApplicationRedApply(params) {
         body: params,
       },
       types: ['BILL_APPLICATION_RED_APPLY_SUCCESS'],
+    },
+  }
+}
+
+export function getContractTaxRate(contractId) {
+  return {
+    [httpApi]: {
+      url: `/arc/contract/split/taxRate/${contractId}`,
+      options: {
+        method: 'GET',
+      },
+      types: ['GET_CONTRACT_TAX_RATE'],
     },
   }
 }

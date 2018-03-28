@@ -41,6 +41,7 @@ const initState = {
     appLineItems: []
   },
   showRedApply: false,
+  contractRate: '',
 }
 
 function loadingRequest(state) {
@@ -214,6 +215,13 @@ function billApplicationRedApply(state, action) {
   }
 }
 
+function getContractTaxRate(state, action) {
+  return {
+    ...state,
+    contractRate: action.response.result.contractTaxRate,
+  }
+}
+
 export default caseReducer(initState, {
   LOADING_REQUEST: loadingRequest,
   INIT_DATA: initData,
@@ -236,4 +244,5 @@ export default caseReducer(initState, {
   GET_APPLICATION_DETAIL_SUCCESS: getApplicationDetail,
   GET_RED_APPLY_DETAIL_SUCCESS: getRedApplyDetail,
   BILL_APPLICATION_RED_APPLY_SUCCESS: billApplicationRedApply,
+  GET_CONTRACT_TAX_RATE: getContractTaxRate,
 })

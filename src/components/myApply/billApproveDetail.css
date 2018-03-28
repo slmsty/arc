@@ -12,3 +12,15 @@
 .file-label {
   margin-left: 48px;
 }
+
+.agree-btn {
+  position: fixed;
+  bottom: 34px;
+  right: 480px;
+}
+
+.reject-btn {
+  position: fixed;
+  bottom: 34px;
+  right: 560px;
+}
