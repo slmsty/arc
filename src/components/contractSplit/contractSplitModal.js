@@ -56,7 +56,7 @@ const EditableCell = ({onChange, column, value,disable}) => {
 class ContractSplitModal extends React.Component{
   constructor(props) {
     super(props)
-    const tableDeatail = _.cloneDeep(props.data.orderListLines)
+    const tableDeatail = _.cloneDeep(props.tableDetail)
     const data = props.data
     let countTaskCostDataList = {
       task1Cost: data.task1Cost ? data.task1Cost : 0,

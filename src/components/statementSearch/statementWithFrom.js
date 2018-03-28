@@ -117,10 +117,10 @@ class StatementListCom extends React.Component {
       param.companyId = params.companyId
       this.props.queryParms(param,'contract_search')
     }
-    console.log(param)
     this.props.form.resetFields()
 
   }
+  // 根据value来展示不用的表单查询
   handleRadioChange = (e) => {
     this.setState({
       stateType:e.target.value,

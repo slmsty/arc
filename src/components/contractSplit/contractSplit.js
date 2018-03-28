@@ -196,9 +196,11 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   showModals = (record) =>{
-    record.orderListLines.map(item=>{
-      item.opsStatus = 'modify'
-    })
+    if(record.orderListLines){
+      record.orderListLines.map(item=>{
+        item.opsStatus = 'modify'
+      })
+    }
     this.setState({
       selectedRows:record,
     })
@@ -422,12 +424,4 @@ export default class ApplySearchCon extends React.Component {
       </div>
     )
   }
-}
-ApplySearchCon.propTypes = {
-  getContractList: PropTypes.func.isRequired,
-  saveContractSplitInfo: PropTypes.func.isRequired,
-  contactSplitData: PropTypes.shape({
-    myContractRefresh: PropTypes.number.isRequired,
-    getContractList:PropTypes.object.isRequired,
-  }).isRequired,
 }

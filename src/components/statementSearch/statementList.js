@@ -45,7 +45,6 @@ export default class StatementListIndex extends React.Component {
   type：报表类型*/
   queryParms = (param,type) => {
     this.queryParam = { ...this.queryParam, ...param }
-    console.log('this.queryParam',this.queryParam)
     //this.props.getStatementList(this.queryParam)
     this.handleQuery(type)
 

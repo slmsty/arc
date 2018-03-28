@@ -180,13 +180,6 @@ class ContractSplitCon extends React.Component {
     )
   }
 }
-ContractSplitCon.propTypes = {
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func.isRequired,
-    getFieldsValue: PropTypes.func.isRequired,
-  }).isRequired,
-  onQuery: PropTypes.func.isRequired,
-}
 const ContractSplitConWithForm = Form.create()(ContractSplitCon)
 
 export default ContractSplitConWithForm
