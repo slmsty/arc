@@ -476,21 +476,7 @@ class BillDetail extends React.Component {
             value={this.state.dataSource[index]['billingAmount']}
             onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
         )
-      }, this.state.isRequireRate ? {
-        title: <span>税率<b style={{color:'#FF0000'}}>*</b></span>,
-        dataIndex: 'billingTaxRate',
-        width: 100,
-        render: (text, record, index) => (
-          <SelectInvokeApi
-            typeCode="BILLING_APPLICATION"
-            paramCode="TAX_RATE"
-            placeholder="税率"
-            hasEmpty={false}
-            value={`${this.state.dataSource[index]['billingTaxRate']}`}
-            onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
-          />
-        )
-      } : {width: 0}, {
+      }, {
         title: '税额',
         dataIndex: 'billingTaxAmount',
         width: 100,
@@ -569,6 +555,21 @@ class BillDetail extends React.Component {
           onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
       )
     }*/]
+    const rateColumns = columns.splice(2, 0, {
+      title: <span>税率<b style={{color:'#FF0000'}}>*</b></span>,
+      dataIndex: 'billingTaxRate',
+      width: 100,
+      render: (text, record, index) => (
+        <SelectInvokeApi
+          typeCode="BILLING_APPLICATION"
+          paramCode="TAX_RATE"
+          placeholder="税率"
+          hasEmpty={false}
+          value={`${this.state.dataSource[index]['billingTaxRate']}`}
+          onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
+        />
+      )
+    })
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
       headers: {
@@ -763,7 +764,7 @@ class BillDetail extends React.Component {
                   rowKey="lineNo"
                   bordered
                   size="small"
-                  columns={columns}
+                  columns={this.state.isRequireRate ? rateColumns : columns }
                   pagination={false}
                   dataSource={this.state.dataSource}
                   scroll={{ x: 1160 }}
