@@ -315,8 +315,10 @@ export default class BillingApplication extends React.Component {
       billingApplicationType: this.state.currentType,
       contractItems,
     }
+    const contractId = this.state.selectedRows ? this.state.selectedRows[0].contractId : ''
     this.props.billApplyEdit(param)
-    this.props.getContractUrl(this.state.selectedRows[0].contractId)
+    this.props.getContractUrl(contractId)
+    this.props.getContractTaxRate(contractId)
   }
 
   handleAddBill = () => {
@@ -333,7 +335,6 @@ export default class BillingApplication extends React.Component {
     }
     this.props.getRedApplyDetail(this.state.selectedRows.map(s => s.billingOutcomeId)).then(res => {
       const { resultCode } = res.response
-      console.log(resultCode)
       if(resultCode === '000000') {
         this.setState({
           showRedApply: true,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload, message, Icon, InputNumber } from 'antd'
+import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload, message, Icon, InputNumber, Checkbox } from 'antd'
 import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
@@ -439,12 +439,11 @@ class BillDetail extends React.Component {
       labelCol: { span: 7 },
       wrapperCol: { span: 16 },
     }
-    const columns = [
+    let columns = [
       {
       title: '操作',
       dataIndex: 'action',
       width: 60,
-      fixed: 'left',
       render: (text, record, index) => (
         <div>
           {
@@ -555,7 +554,8 @@ class BillDetail extends React.Component {
           onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
       )
     }*/]
-    const rateColumns = columns.splice(2, 0, {
+    let rateColumns = [...columns]
+    rateColumns.splice(2, 0, {
       title: <span>税率<b style={{color:'#FF0000'}}>*</b></span>,
       dataIndex: 'billingTaxRate',
       width: 100,
@@ -745,11 +745,10 @@ class BillDetail extends React.Component {
                     <FormItem {...formItemLayout} label="是否对税率要求">
                       {
                         getFieldDecorator('rateRequire', {initialValue: '', rules: [{ required: true, message: '请选择是否对税率要求!' }]})(
-                          <Select onChange={(v) => this.setState({isRequireRate: v === 'Y'})}>
-                            <Option value="">请选择</Option>
-                            <Option value="Y">是</Option>
-                            <Option value="N">否</Option>
-                          </Select>,
+                          <Checkbox
+                            onChange={(e) => {this.setState({isRequireRate: e.target.checked})}}
+                          >
+                          </Checkbox>
                         )
                       }
                     </FormItem>
@@ -767,7 +766,7 @@ class BillDetail extends React.Component {
                   columns={this.state.isRequireRate ? rateColumns : columns }
                   pagination={false}
                   dataSource={this.state.dataSource}
-                  scroll={{ x: 1160 }}
+                  /*scroll={{ x: 1160 }}*/
                 />
                 <Row gutter={40}>
                   <Col span={14}>
