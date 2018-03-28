@@ -89,7 +89,7 @@ class StatementListCom extends React.Component {
     const params = this.props.form.getFieldsValue()
     const param = {}
       //收款信息查询表
-    if(statement ==='receipt_claim'){
+    if(statement ==='receiptInfoReport'){
       param.projectNo = params.projectNo
       param.contractNo = params.contractNo
       param.signDateStart = params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : ''
@@ -105,10 +105,10 @@ class StatementListCom extends React.Component {
         pageNo: 1,
         pageSize: 10,
       },
-      this.props.queryParms(param,'receipt_claim')
+      this.props.queryParms(param,'receiptInfoReport')
     }
     //合同拆分查询表
-    if(statement==='contract_search'){
+    if(statement==='contractSplitReport'){
       param.projectNo = params.projectNo
       param.custName = params.custName ? params.custName[1] : ''
       param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
@@ -124,9 +124,9 @@ class StatementListCom extends React.Component {
         pageNo: 1,
           pageSize: 10,
       },
-      this.props.queryParms(param,'contract_search')
+      this.props.queryParms(param,'contractSplitReport')
     }
-    this.props.form.resetFields()
+    //this.props.form.resetFields()
 
   }
   // 根据value来展示不用的表单查询
@@ -272,18 +272,18 @@ class StatementListCom extends React.Component {
             </Row>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="合同编码(多)">
+                <FormItem {...formItemLayoutChild} label="合同编码">
                   {
                     getFieldDecorator('contractNo')(
-                      <MultipleInput
-                        placeholder="多合同编码使用英文逗号间隔"
+                      <Input
+                        placeholder="合同编码"
                       />,
                     )
                   }
                 </FormItem>
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
-                <Button type="primary" key="search" onClick={()=>this.queryParms('receipt_claim')}><Icon type="search" />查询</Button>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('receiptInfoReport')}><Icon type="search" />查询</Button>
                 {/*<Button type="primary" key="search1" onClick={()=>this.excel('receipt_claim')}><Icon type="search" />导出EXCEL</Button>*/}
               </Col>
             </Row>
@@ -395,11 +395,11 @@ class StatementListCom extends React.Component {
             </Row>
             <Row gutter={40}>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="合同编码(多)">
+                <FormItem {...formItemLayoutChild} label="合同编码">
                   {
                     getFieldDecorator('contractNo')(
-                      <MultipleInput
-                        placeholder="多合同编码使用英文逗号间隔"
+                      <Input
+                        placeholder="合同编码"
                       />,
                     )
                   }
@@ -470,11 +470,11 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="合同编码(多)">
+                <FormItem {...formItemLayoutChild} label="合同编码">
                   {
                     getFieldDecorator('contractNo')(
-                      <MultipleInput
-                        placeholder="多合同编码使用英文逗号间隔"
+                      <Input
+                        placeholder="合同编码"
                       />,
                     )
                   }
@@ -547,11 +547,11 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="合同编码(多)">
+                <FormItem {...formItemLayoutChild} label="合同编码">
                   {
                     getFieldDecorator('contractNo')(
                       <MultipleInput
-                        placeholder="多合同编码使用英文逗号间隔"
+                        placeholder="合同编码"
                       />,
                     )
                   }
@@ -614,11 +614,11 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="合同编码(多)">
+                <FormItem {...formItemLayoutChild} label="合同编码">
                   {
                     getFieldDecorator('contractNo')(
-                      <MultipleInput
-                        placeholder="多合同编码使用英文逗号间隔"
+                      <Input
+                        placeholder="合同编码"
                       />,
                     )
                   }
@@ -881,7 +881,7 @@ class StatementListCom extends React.Component {
                   </FormItem>
                 </Col>
                 <Col span={8} style={{ textAlign: 'right' }}>
-                  <Button type="primary" key="search" onClick={()=>this.queryParms('contract_search')}><Icon type="search" />查询</Button>
+                  <Button type="primary" key="search" onClick={()=>this.queryParms('contractSplitReport')}><Icon type="search" />查询</Button>
                   {/*<Button style={{marginLeft:'10px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>*/}
                 </Col>
               </Row>

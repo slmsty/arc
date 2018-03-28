@@ -16,7 +16,7 @@ export default class StatementListIndex extends React.Component {
     infoVisitable: false,
     loading: false,
     applyData: '',
-    currencyType: 'receiptInfoReport',
+    currencyType: '',
   }
   componentDidMount(){
   }
@@ -33,14 +33,15 @@ export default class StatementListIndex extends React.Component {
   }
 
   handleQuery(type){
-    if(type==='receipt_claim'){
+    if(type==='receiptInfoReport'){
       this.props.getStatementList(this.queryParam)
       this.setState({
         currencyType: 'receiptInfoReport',
       })
 
     }
-    if(type==='contract_search'){
+    if(type==='contractSplitReport'){
+      console.log('this.queryParam',this.queryParam)
       this.props.getContractStatementList(this.queryParam)
       this.setState({
         currencyType: 'contractSplitReport',
@@ -51,6 +52,9 @@ export default class StatementListIndex extends React.Component {
   /*param:传递参数
   type：报表类型*/
   queryParms = (param,type) => {
+    this.setState({
+      currencyType:type,
+    })
     //this.queryParam = { ...this.queryParam, ...param }
     this.handleQuery(type)
 
@@ -117,12 +121,17 @@ export default class StatementListIndex extends React.Component {
   handleChangeSize = (current, size) => {
     this.queryParam.pageInfo.pageNo = current
     this.queryParam.pageInfo.pageSize = size
-    this.handleQuery()
+    const currencyType = this.state.currencyType
+    console.log(currencyType)
+    this.handleQuery(currencyType)
   }
   // 页码修改
   handleChangePage = (page) => {
+    console.log('page',page)
     this.queryParam.pageInfo.pageNo = page
-    this.handleQuery()
+    const currencyType = this.state.currencyType
+    console.log(currencyType)
+    this.handleQuery(currencyType)
   }
   render() {
     const dataSources = {}

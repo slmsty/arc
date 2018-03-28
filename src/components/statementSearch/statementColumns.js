@@ -691,11 +691,13 @@ const constructSplitSearchColumns = [{
     title: '合同税率',
     dataIndex: 'contractTaxRate',
     width: 70,
+    render: (text,rocord,index)=>(text ? (text*100).toFixed(0)+'%' : 0)
   },
   {
     title: '退税率',
     dataIndex: 'returnTaxRate',
     width: 70,
+    render: (text,rocord,index)=>(text ? (text*100).toFixed(0)+'%' : 0)
   },
   {
     title: 'Task',
