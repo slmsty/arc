@@ -79,7 +79,7 @@ class StatementListCom extends React.Component {
     infoVisitable: false,
     loading: false,
     applyData: '',
-    stateType: 'receiptInfoReport',
+    stateType: '',
   }
   excel = (type)=>{
     this.props.excel()
@@ -101,29 +101,21 @@ class StatementListCom extends React.Component {
       param.paymentName = params.paymentName
       param.contractName = params.contractName
       param.isReport = 'Y'
-      param.pageInfo =  {
-        pageNo: 1,
-        pageSize: 10,
-      },
       this.props.queryParms(param,'receiptInfoReport')
     }
     //合同拆分查询表
     if(statement==='contractSplitReport'){
       param.projectNo = params.projectNo
-      param.custName = params.custName ? params.custName[1] : ''
+     // param.custName = params.custName ? params.custName[1] : ''
       param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
       param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
       param.contractName = params.contractName
-      param.buId = params.buId
+      param.buId = params.buId ? params.buId[0] : ''
       param.collectionProject = params.collectionProject
-      param.isOrderList = params.isOrderList
+      param.isProdect = params.isProdect
       param.companyId = params.companyId
       param.contractNo = params.contractNo
       param.isReport = 'Y'
-      param.pageInfo =  {
-        pageNo: 1,
-          pageSize: 10,
-      },
       this.props.queryParms(param,'contractSplitReport')
     }
     //this.props.form.resetFields()
@@ -859,7 +851,7 @@ class StatementListCom extends React.Component {
                 <Col span={8}>
                   <FormItem {...formItemLayoutChild} label="是否拆分">
                     {
-                      getFieldDecorator('isOrderList',{
+                      getFieldDecorator('isProdect',{
                         initialValue:'ALL'
                       })(
                         <Select>

@@ -25,6 +25,7 @@ export default class StatementListIndex extends React.Component {
       pageNo: 1,
       pageSize: 10,
     },
+    contractSplit:{}
   }
   excel = () => {
     //var workbook = new Excel.Workbook();
@@ -55,7 +56,9 @@ export default class StatementListIndex extends React.Component {
     this.setState({
       currencyType:type,
     })
-    //this.queryParam = { ...this.queryParam, ...param }
+    const contractSplit = {}
+    contractSplit.contractSplit = param
+    this.queryParam = { ...this.queryParam,...contractSplit}
     this.handleQuery(type)
 
   }
@@ -162,30 +165,36 @@ export default class StatementListIndex extends React.Component {
     return (
       <div>
         <StatementWithFrom showCols={this.showCols} queryParms={this.queryParms} excel={this.excel} currencyType = {this.state.currencyType}/>
-        <Row  style={{ lineHeight: '28px' }}>
-          <Col span={24} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
-            {
-              this.getApplyColumns()[2] ?
-                <div>
-                  <span>{this.getApplyColumns()[2]}：</span><span className="primary-color" style={{ color: '#F4A034' }}>{claimAmountTotal}</span>
-                  {this.getApplyColumns()[3] ?
-                    <span><span>{this.getApplyColumns()[3]}：</span> < span className = "primary-color" style={{ color: '#F4A034' }}></span></span>
-                    :''
-                  }
-                </div>
-                : ''
-            }
 
-          </Col>
-        </Row>
-        <Table
-          columns={this.getApplyColumns()[1]}
-          bordered
-          size="middle"
-          scroll={{ x: this.getApplyColumns()[0] }}
-          dataSource={dataSources.dataSource}
-          pagination={pagination}
-        />
+        {type ?
+          <div>
+            <Row  style={{ lineHeight: '28px' }}>
+              <Col span={24} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
+                {
+                  this.getApplyColumns()[2] ?
+                    <div>
+                      <span>{this.getApplyColumns()[2]}：</span><span className="primary-color" style={{ color: '#F4A034' }}>{claimAmountTotal}</span>
+                      {this.getApplyColumns()[3] ?
+                        <span><span>{this.getApplyColumns()[3]}：</span> < span className = "primary-color" style={{ color: '#F4A034' }}></span></span>
+                        :''
+                      }
+                    </div>
+                    : ''
+                }
+
+              </Col>
+            </Row>
+            <Table
+              columns={this.getApplyColumns()[1]}
+              bordered
+              size="middle"
+              scroll={{ x: this.getApplyColumns()[0] }}
+              dataSource={dataSources.dataSource}
+              pagination={pagination}
+            />
+          </div>
+        : null}
+
       </div>
     )
   }

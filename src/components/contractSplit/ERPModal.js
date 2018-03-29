@@ -19,16 +19,18 @@ class ERPModal extends React.Component{
     }
   }
   queryParam = {
-    signDateStart:'',
-    signDateEnd:'',
-    buId:'',
-    isReport:'N',
-    projectNo:'',
-    contractNo:'',
-    contractName:'',
-    isProdect:'ALL',
-    erpStatus:'ALL',
-    signCompany:'',
+    contractSplit:{
+      signDateStart:'',
+      signDateEnd:'',
+      buId:'',
+      isReport:'N',
+      projectNo:'',
+      contractNo:'',
+      contractName:'',
+      isProdect:'ALL',
+      erpStatus:'ALL',
+      signCompany:'',
+    },
     pageInfo: {
       pageNo: 1,
       pageSize: 10,
@@ -43,7 +45,9 @@ class ERPModal extends React.Component{
   }
   // 查询接口
   queryParms = (param) => {
-    this.queryParam = {...this.queryParam,...param}
+    const contractSplit = {}
+    contractSplit.contractSplit = param
+    this.queryParam = {...this.queryParam,...contractSplit}
     this.props.sendERPQuery(this.queryParam)
   }
   // 传送ERP接口
@@ -61,11 +65,12 @@ class ERPModal extends React.Component{
       })
       if (res && res.response && res.response.resultCode === '000000') {
         message.success(res.response.data.description)
+        this.props.sendERPQuery(this.queryParam)
       } else {
       }
     })
     //this.props.queryParms(param)
-    this.props.sendERPQuery(this.queryParam)
+
   }
   // 页码修改
   handleChangePage = (page) => {
@@ -82,7 +87,6 @@ class ERPModal extends React.Component{
     this.setState({ selectedRowKeys, selectedRows })
   }
   render() {
-    console.log('this.state.selectedRows',this.state.selectedRows)
     const constructSplitSearchColumns = [
       {
         title: '合同编码',
@@ -104,7 +108,7 @@ class ERPModal extends React.Component{
       {
         title: '错误原因',
         dataIndex: 'erpResult',
-        width: 100,
+        width: 300,
       },
       {
       title: '合同名称',
@@ -120,11 +124,13 @@ class ERPModal extends React.Component{
         title: '合同税率',
         dataIndex: 'contractTaxRate',
         width: 70,
+        render: (text,rocord,index)=>(text ? (text*100).toFixed(0)+'%' : 0)
       },
       {
         title: '退税率',
         dataIndex: 'returnTaxRate',
         width: 70,
+        render: (text,rocord,index)=>(text ? (text*100).toFixed(0)+'%' : 0)
       },
       {
         title: 'Task',
@@ -160,7 +166,7 @@ class ERPModal extends React.Component{
       {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 80,
+        width: 200,
       },
 
     ]

@@ -21,7 +21,7 @@ class ERPWithFrom extends React.Component {
     infoVisitable: false,
     loading: false,
     applyData: '',
-    stateType: '100',
+    stateType: '',
   }
 
   // 查询接口

@@ -679,8 +679,8 @@ const constructSplitSearchColumns = [{
   width: 150,
 }, {
   title: '立项BU',
-  dataIndex: 'BUid',
-  width: 80,
+  dataIndex: 'bu',
+  width: 150,
 },
   {
     title: '项目编码',
@@ -744,7 +744,7 @@ const constructSplitSearchColumns = [{
   {
     title: '客户名称',
     dataIndex: 'custName',
-    width: 80,
+    width: 150,
   },
 
 ]
