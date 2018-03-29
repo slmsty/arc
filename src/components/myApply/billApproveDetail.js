@@ -46,6 +46,9 @@ class BillApproveDetail extends React.Component  {
       currentNo: 1,
       totalAmount: 0,
     }
+    if(this.props.setFormValidate) {
+      this.props.setFormValidate(dataSource)
+    }
   }
   componentWillReceiveProps(nextProps) {
     if(this.props.serviceDetail !== nextProps.serviceDetail && nextProps.serviceDetail) {
@@ -782,15 +785,18 @@ class BillApproveDetail extends React.Component  {
             </Row>
           </div>
         }
-        <div className="add-btns">
-          <Button
-            type="primary"
-            style={{marginLeft: '5px'}}
-            ghost
-            onClick={(e) => this.handleOk(e)}>
-            <Icon type="check" />保存修改
-          </Button>
-        </div>
+        {
+          !isArAdmin ?
+            <div className="add-btns">
+              <Button
+                type="primary"
+                style={{marginLeft: '5px'}}
+                ghost
+                onClick={(e) => this.handleOk(e)}>
+                <Icon type="check" />保存修改
+              </Button>
+            </div> : null
+        }
       </div>
     )
   }

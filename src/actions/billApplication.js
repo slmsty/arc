@@ -295,7 +295,11 @@ export function billApplicationRedApply(params) {
     },
   }
 }
-
+/**
+ * 获取合同税率
+ * @param contractId
+ * @returns {{}}
+ */
 export function getContractTaxRate(contractId) {
   return {
     [httpApi]: {
@@ -304,6 +308,23 @@ export function getContractTaxRate(contractId) {
         method: 'GET',
       },
       types: ['GET_CONTRACT_TAX_RATE'],
+    },
+  }
+}
+/**
+ * 其他事项开票获取税率
+ * @param params
+ * @returns {{}}
+ */
+export function getTaxInfo(params) {
+  return {
+    [httpApi]: {
+      url: 'arc/billingApplication/getTaxInfo',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['GET_TAX_INFO'],
     },
   }
 }

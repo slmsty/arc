@@ -395,7 +395,7 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
-    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract,
+    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, getTaxInfo,
       editInfo, billApplySave, billApplyCheck, currentUser, contractUrl, redApplyDetail, billApplicationRedApply } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType)? 'checkbox' : 'radio',
@@ -433,7 +433,7 @@ export default class BillingApplication extends React.Component {
             detail={redTypes.includes(this.state.currentType) ? redApplyDetail : editInfo}
             billType={this.state.selectedRows[0].billingApplicationType}
             billApplySave={redTypes.includes(this.state.currentType) ? billApplicationRedApply : billApplySave}
-            billApplyCheck={billApplyCheck}
+            getTaxInfo={getTaxInfo}
             currentUser={currentUser}
             contractUrl={contractUrl}
             isLoading={isLoading}

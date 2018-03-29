@@ -37,7 +37,6 @@ class ApplyInfoModal extends React.Component {
 
   applyConfirm = () => {
     this.props.form.validateFields((err, values) => {
-      console.log(values, this.state.approveData)
       if(!err) {
         const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
         const isAgainInvoice = serviceDetail.isAgainInvoice
@@ -85,42 +84,41 @@ class ApplyInfoModal extends React.Component {
             if(err) {
               return
             }
-            const params = isAgainInvoice !== 'false' ? {
-              ...values,
-              billingApplicationId: serviceDetail.billingApplicationId,
-              billingApplicationType: serviceType,
-              billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
-              appLineItems: this.state.approveData.map(record => ({
-                ...record,
-                lineNo: record.lineNo + 1,
-              }))
-            } : {
-              ...values,
-              billingApplicationId: serviceDetail.billingApplicationId,
-              billingApplicationType: serviceType,
-            }
-            requestJsonFetch('/arc/billingApplication/workFlowEdit', {
-              method: 'POST',
-              body: params,
-            }, (res) => {
-              const {resultCode, resultMessage, data} = res
-              if (resultCode === '000000') {
-                const params = {
-                  arcFlowId: this.props.applyData.arcFlowId,
-                  processInstanceId: this.props.applyData.processInstanceId,
-                  businessKey: this.props.applyData.businessKey,
-                  taskId: this.props.applyData.taskId,
-                  approveType: 'agree',
-                  approveRemark: this.trim(values.approveRemark),
-                }
-                this.props.applyComfirm(params)
-              } else {
-                message.error(resultMessage, 5)
-              }
-            })
           })
         }
-
+        const params = isAgainInvoice !== 'false' ? {
+          ...values,
+          billingApplicationId: serviceDetail.billingApplicationId,
+          billingApplicationType: serviceType,
+          billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
+          appLineItems: this.state.approveData.map(record => ({
+            ...record,
+            lineNo: record.lineNo + 1,
+          }))
+        } : {
+          ...values,
+          billingApplicationId: serviceDetail.billingApplicationId,
+          billingApplicationType: serviceType,
+        }
+        requestJsonFetch('/arc/billingApplication/workFlowEdit', {
+          method: 'POST',
+          body: params,
+        }, (res) => {
+          const {resultCode, resultMessage, data} = res
+          if (resultCode === '000000') {
+            const params = {
+              arcFlowId: this.props.applyData.arcFlowId,
+              processInstanceId: this.props.applyData.processInstanceId,
+              businessKey: this.props.applyData.businessKey,
+              taskId: this.props.applyData.taskId,
+              approveType: 'agree',
+              approveRemark: this.trim(values.approveRemark),
+            }
+            this.props.applyComfirm(params)
+          } else {
+            message.error(resultMessage, 5)
+          }
+        })
       }
     })
   }

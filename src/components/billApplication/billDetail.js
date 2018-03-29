@@ -34,9 +34,7 @@ class BillDetail extends React.Component {
       showDetail: '',
       isCostBearEdit: props.billType === 'BILLING_EXCESS',
       showWarning: false,
-      warningData: {
-        arcBillingTaxInfo: {},
-      },
+      taxData: {},
       submitParams: {},
       showContractLink: false,
       isRequireRate: false,
@@ -173,7 +171,7 @@ class BillDetail extends React.Component {
             billingOutcomeIds,
             billingCustInfoId: custInfo.billingCustInfoId,
             billingComInfoId: comInfo.billingComInfoId,
-            billingApplicationType: this.props.billType,
+            billingApplicationType: this.state.isRequireRate ? this.props.billType : 'BILLING_EXCESS',
             billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
             appLineItems: appLineItems,
             objectId: this.state.fileId,
@@ -182,74 +180,17 @@ class BillDetail extends React.Component {
             billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
           }
-          //校验拆分金额是否大于含税金额，大于提示用户并更改开票类型为超额开票
-          if(normalTypes.includes(this.props.billType)) {
-            requestJsonFetch('/arc/billingApplication/apply/check', {
-              method: 'POST',
-              body: {
-                appLineItems: appLineItems,
-                billingApplicationType: this.props.billType,
-              },
-            }, (res) => {
-              this.setState({
-                loading: false,
-              })
-              const { resultCode, resultMessage, isWarning, billingApplicationType } = res
-              if(resultCode === '000000') {
-                //判断是否转为其他事项开票
-                if(isWarning === 'Y') {
-                  let isError = false
-                  if(billingApplicationType === 'BILLING_EXCESS') {
-                    if(typeof values.billingApplicantRequest === 'undefined' || values.billingApplicantRequest === '') {
-                      this.props.form.setFields({
-                        billingApplicantRequest: {
-                          errors: [new Error('已转为其他事项开票，请填写开票原因')]
-                        }
-                      })
-                      isError = true
-                    }
-                    if(typeof values.costBear === 'undefined' || values.costBear === '') {
-                      this.props.form.setFields({
-                        costBear: {
-                          value: '',
-                          errors: [new Error('已转为其他事项开票，请填费用承担者')]
-                        }
-                      })
-                      this.setState({
-                        isCostBearEdit: true,
-                      })
-                      isError = true
-                    }
-                    if(!isError) {
-                      this.setState({
-                        showWarning: true,
-                        warningData: res,
-                        submitParams: params,
-                      })
-                    }
-                  } else {
-                    this.setState({
-                      showWarning: true,
-                      warningData: res,
-                      submitParams: params,
-                    })
-                  }
-                  //校验其他事项两个必填项
-                } else if(this.props.billType === 'BILLING_EXCESS') {
-                  this.setState({
-                    showWarning: true,
-                    warningData: res,
-                    submitParams: params,
-                  })
-                } else {
-                  this.props.billApplySave(params)
-                }
-              } else {
+          if(this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate) {
+            const checkParams = {
+              appLineItems: appLineItems,
+            }
+            this.props.getTaxInfo(checkParams).then(res => {
+              if(res && res.response && res.response.resultCode === '000000') {
                 this.setState({
-                  loading: false,
+                  showWarning: true,
+                  taxData: res.response.arcBillingTaxInfo,
+                  submitParams: params,
                 })
-                message.error(resultMessage || '系统错误，请联系系统管理员', 5)
-                return
               }
             })
           } else {
@@ -264,11 +205,7 @@ class BillDetail extends React.Component {
     this.setState({
       showWarning: false,
     })
-    const { billingApplicationType } = this.state.warningData
-    this.props.billApplySave({
-      ...this.state.submitParams,
-      billingApplicationType,
-    })
+    this.props.billApplySave(this.state.submitParams)
   }
 
   handleChange = (value, col, index, record) => {
@@ -478,7 +415,7 @@ class BillDetail extends React.Component {
         width: 100,
         render: (text, record, index) => (
           <Input
-            disabled={!this.state.isRequireRate}
+            disabled={!this.state.isRequireRate && normalTypes.includes(this.props.billType)}
             onChange={(e) => this.handleChange(e.target.value, 'billingTaxRate', index, record)}
           />
         )
@@ -571,7 +508,7 @@ class BillDetail extends React.Component {
       customRequest: this.customRequest,
       onChange: this.handleFileChange,
     };
-    const { custInfo, comInfo, contractList, outcomeList } = this.props.detail
+    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate, billingApplicantRemark, taxRateRequest } = this.props.detail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -694,7 +631,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={1}>
                     <FormItem {...formItemLayout} label="费用承担者">
                       {getFieldDecorator('costBear', {
-                        initialValue: '', rules: [{ required: this.state.isCostBearEdit, message: '请选择费用承担着!' }]
+                        initialValue: costBear, rules: [{ required: this.props.billType === 'BILLING_EXCESS', message: '请选择费用承担着!' }]
                       })(
                         <SelectInvokeApi
                           typeCode="BILLING_APPLICATION"
@@ -710,7 +647,7 @@ class BillDetail extends React.Component {
                     <FormItem {...formItemLayout} label="开票类型">
                       {
                         getFieldDecorator('billingType', {
-                          initialValue: '', rules: [{ required: true, message: '请选择开票类型!' }]
+                          initialValue: billingType, rules: [{ required: true, message: '请选择开票类型!' }]
                         })(
                           <SelectInvokeApi
                             typeCode="BILLING_APPLICATION"
@@ -725,30 +662,30 @@ class BillDetail extends React.Component {
                   <Col span={8} key={3}>
                     <FormItem {...formItemLayout} label="开票日期">
                       {
-                        getFieldDecorator('billingDate', {initialValue: moment(), rules: [{ required: true, message: '请选择开票日期!' }]})(
+                        getFieldDecorator('billingDate', {initialValue: moment(billingDate), rules: [{ required: true, message: '请选择开票日期!' }]})(
                           <DatePicker format="YYYY-MM-DD"/>,
                         )
                       }
                     </FormItem>
                   </Col>
                 </Row>
-                <Row>
-                  <Col span={8} key={3}>
-                    <FormItem {...formItemLayout} label="是否对税率要求">
-                      {
-                        getFieldDecorator('rateRequire', {initialValue: '', rules: [{ required: true, message: '请选择是否对税率要求!' }]})(
-                          <Checkbox
-                            onChange={(e) => {this.setState({isRequireRate: e.target.checked})}}
-                          >
-                          </Checkbox>
-                        )
-                      }
-                    </FormItem>
-                  </Col>
-                </Row>
-                {/*<div className="add-btns">
-                  <Button type="primary" disabled={this.state.selectedRows.length === 0} style={{marginLeft: '5px'}} ghost onClick={() => this.billingUnify()}>统一开票</Button>
-                </div>*/}
+                {
+                  normalTypes.includes(this.props.billType) ?
+                    <Row>
+                      <Col span={8} key={3}>
+                        <FormItem {...formItemLayout} label="是否对税率要求">
+                          {
+                            getFieldDecorator('taxRateRequest', {initialValue: taxRateRequest})(
+                              <Checkbox
+                                onChange={(e) => {this.setState({isRequireRate: e.target.checked})}}
+                              >
+                              </Checkbox>
+                            )
+                          }
+                        </FormItem>
+                      </Col>
+                    </Row> : null
+                }
                 <Table
                   rowSelection={rowSelection}
                   style={{marginBottom: '10px'}}
@@ -764,7 +701,7 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="发票备注">
                       {
-                        getFieldDecorator('billingApplicantRemark')(
+                        getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark})(
                           <TextArea placeholder="请输入发票备注" rows="2" />
                         )
                       }
@@ -775,7 +712,7 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="附件">
                       {
-                        getFieldDecorator('file', { rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件!' }] })(
+                        getFieldDecorator('file', {initialValue: '', rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件!' }] })(
                           <Upload {...props} fileList={this.state.fileList}>
                             <Button>
                               <Icon type="upload" />点击上传
@@ -791,7 +728,7 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="开票要求">
                       {
-                        getFieldDecorator('billingApplicantRequest', {rules: [
+                        getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [
                           { required: requirementType.includes(this.props.billType), message: this.props.billType === 'BILLING_RED' ? '请在此处填写退票原因!' : '请填写开票原因' },
                           { max: 350, message: '开票要求不能超过350个字符!' }
                         ]})(
@@ -926,10 +863,6 @@ class BillDetail extends React.Component {
                 onOk={() => this.handleWarningOk()}
                 onCancel={() => this.setState({showWarning: false})}
               >
-                {
-                  this.state.warningData.isWarning === 'Y' ?
-                    <p>{this.state.warningData.warningMessage}</p> : ''
-                }
                 <p className="tips">提示：以下数据将计入项目成本/部门费用</p>
                 <div className="arc-info">
                   <Table
