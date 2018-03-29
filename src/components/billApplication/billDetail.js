@@ -40,6 +40,7 @@ class BillDetail extends React.Component {
       submitParams: {},
       showContractLink: false,
       isRequireRate: false,
+      isLost: false,
     }
   }
 
@@ -57,6 +58,7 @@ class BillDetail extends React.Component {
         billingContent: '',
         specificationType: '',
         unit: '',
+        billingTaxRate: item.billingTaxRate ? item.billingTaxRate : 0,
         quantity: 1,
         unitPrice: item.billingAmount ? item.billingAmount : 0,
         billingAmountExcludeTax: item.billingAmount ? item.billingAmount : 0,
@@ -638,8 +640,8 @@ class BillDetail extends React.Component {
                 </Col>
                 <Col span={8} key={2}>
                   <FormItem {...formItemLayout} label="发票是否丢失">
-                    {getFieldDecorator('isLose', {initialValue: '', rules: [{ required: false, message: '请选择丢失情况!' }]} )(
-                      <Select>
+                    {getFieldDecorator('isLose', {initialValue: '', rules: [{ required: true, message: '请选择丢失情况!' }]} )(
+                      <Select onChange={(v) => this.setState({isLost: v === 'Y'})}>
                         <Option value="">请选择</Option>
                         <Option value="Y">是</Option>
                         <Option value="N">否</Option>
@@ -658,6 +660,7 @@ class BillDetail extends React.Component {
                           paramCode="LOSE_TYPE"
                           placeholder="请选择丢失类型"
                           hasEmpty
+                          disabled={!this.state.isLost}
                         />)
                     }
                   </FormItem>

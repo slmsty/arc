@@ -58,7 +58,7 @@ class ApplySearchCon extends React.Component {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
       labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
+      wrapperCol: { span: 18 },
     }
     return (
       <div>
@@ -136,7 +136,9 @@ class ApplySearchCon extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={16} style={{ textAlign: 'right' }}>
+          </Row>
+          <Row>
+            <Col span={24} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery} disabled={this.props.loading}><Icon type="search" />查询</Button>
             </Col>
           </Row>

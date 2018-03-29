@@ -168,17 +168,17 @@ const common = {
         child: [
           {
             key: '51',
-            path: '/myApply/applyList',
-            name: '审批列表',
-            icon: 'icon-BilledAR',
-            component: 'applyListContainer',
-          },
-          {
-            key: '52',
             path: '/myApply/myApply',
             name: '我的申请',
             icon: 'icon-BilledAR',
             component: 'myApplyContainer',
+          },
+          {
+            key: '52',
+            path: '/myApply/applyList',
+            name: '审批列表',
+            icon: 'icon-BilledAR',
+            component: 'applyListContainer',
           },
         ],
       },
