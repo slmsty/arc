@@ -196,11 +196,11 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   showModals = (record) =>{
-    if(record.orderListLines){
+    /*if(record.orderListLines){
       record.orderListLines.map(item=>{
         item.opsStatus = 'modify'
       })
-    }
+    }*/
     this.setState({
       selectedRows:record,
     })

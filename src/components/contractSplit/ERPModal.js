@@ -116,7 +116,7 @@ class ERPModal extends React.Component{
       width: 400,
     },  {
       title: '立项BU',
-      dataIndex: 'BUid',
+      dataIndex: 'bu',
       width: 80,
     },
 

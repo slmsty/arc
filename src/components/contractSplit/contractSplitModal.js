@@ -110,6 +110,16 @@ class ContractSplitModal extends React.Component{
   }
   selectDateChange = (data) => {
     const newData = this.state.dataSource.slice(0)
+    if(newData[data.indexs].orderListLineId){
+      if(this.props.tableDetail[data.indexs][data.columns] !=data.dateString){
+
+        newData[data.indexs].opsStatus = 'modify' //把数据的操作类型改为修改
+      }else{
+        newData[data.indexs].opsStatus = 'none' //把数据的操作类型改为修改
+      }
+      console.log('this.props.tableDetail[data.indexs][data.columns]',this.props.tableDetail[data.indexs][data.columns])
+      console.log('data.dateString',data.dateString)
+    }
     newData[data.indexs][data.columns] = data.dateString
    // newData[data.indexs].opsStatus = 'modify'
     this.setState({
@@ -201,8 +211,17 @@ class ContractSplitModal extends React.Component{
           })
           this.calculateListPrice(newData,data)
         }
+        if(newData[data.indexs].orderListLineId){
+          if(this.props.tableDetail[data.indexs][data.columns] !=indexData[0]){
+            newData[data.indexs].opsStatus = 'modify' //把数据的操作类型改为修改
+          }else{
+            newData[data.indexs].opsStatus = 'none' //把数据的操作类型改为修改
+          }
+          console.log('this.props.tableDetail[data.indexs][data.columns]',this.props.tableDetail[data.indexs][data.columns])
+          console.log('indexData[0]',indexData[0])
+
+        }
         newData[data.indexs][data.columns] = indexData
-       // newData[data.indexs].opsStatus = 'modify' //把数据的操作类型改为修改
       }
       this.inputChange(newData,[data.indexs])
       this.setState({
@@ -222,7 +241,16 @@ class ContractSplitModal extends React.Component{
     let newSelectCountType = []
     selectData = data.split('&')
     const newData = this.state.dataSource.slice(0)
-    let oldSelectData = newData[selectData[1]][selectData[2]]
+    if(newData[selectData[1]].orderListLineId){
+      if(this.props.tableDetail[selectData[1]][selectData[2]] !=selectData[0]){
+        newData[selectData[1]].opsStatus = 'modify' //把数据的操作类型改为修改
+      }else{
+        newData[selectData[1]].opsStatus = 'none' //把数据的操作类型改为修改
+      }
+      console.log('this.props.tableDetail[index][column]',this.props.tableDetail[selectData[1]][selectData[2]])
+      console.log('selectData[0]',selectData[0])
+
+    }
     newData[selectData[1]][selectData[2]] = selectData[0]
     newData.forEach(item=>{
       if(item.revenueCheckout){
@@ -330,6 +358,16 @@ class ContractSplitModal extends React.Component{
         message.error('合同总金额为正数，目录价不能为负数')
         return
       }
+
+    }
+    if(newData[index].orderListLineId){
+      if(this.props.tableDetail[index][column] !=value){
+        newData[index].opsStatus = 'modify' //把数据的操作类型改为修改
+      }else{
+        newData[index].opsStatus = 'none' //把数据的操作类型改为修改
+      }
+      console.log('this.props.tableDetail[index][column]',this.props.tableDetail[index][column])
+      console.log('value',value)
 
     }
     newData[index][column] = value
@@ -458,10 +496,7 @@ class ContractSplitModal extends React.Component{
         flag = true
       }
     }*/
-    console.log('newData1',newData)
-    console.log('index',index)
     newData.splice(index,1)
-    console.log('newData2',newData)
     let newSelectCountType = []
     newData.forEach(item=>{
       if(item.revenueCheckout){
@@ -485,22 +520,35 @@ class ContractSplitModal extends React.Component{
         totalListPrice += !item || !item.listPrice ? 0 : parseFloat(item.listPrice) // 合计目录价
       }
     })
-    /*if(Math.abs(totalListPrice.toFixed(2)) > Math.abs(contractAmount)) {
-     message.error('目录价之和不能大于合同总金额')
-     return
-     }*/
-
     if(this.props.data.collectionProject ==='Y'){
       if(Math.abs(totalListPrice.toFixed(2)) > Math.abs(contractAmount)) {
         message.error('目录价之和不能大于合同总金额')
         return
       }
-
     }else{
-      if(Math.abs(totalListPrice.toFixed(2)) != Math.abs(contractAmount)) {
-        message.error('目录价之和与合同总金额不相等')
-        return
-      }
+      if(Math.abs(totalListPrice) != Math.abs(contractAmount)) {
+        // 如果合同目录价之和与合同总金额差一分钱，则在保存时，将差异的一分钱合到最后一条上
+        if ((Math.abs(totalListPrice) - Math.abs(contractAmount)).toFixed(2) === "0.01") {
+          if(totalListPrice >contractAmount){
+            coutnData[coutnData.length - 2].listPrice = coutnData[coutnData.length - 2].listPrice - 0.01
+          }
+          if(totalListPrice < contractAmount){
+            coutnData[coutnData.length - 2].listPrice = coutnData[coutnData.length - 2].listPrice + 0.01
+          }
+
+          if (coutnData[coutnData.length - 2].orderListLineId) {
+            coutnData[coutnData.length - 2].opsStatus = 'modify'
+          }
+          this.inputChange(coutnData, coutnData.length - 2)
+
+          this.setState({
+            dataSource: coutnData
+          })
+        } else {
+          message.error('目录价之和与合同总金额不相等')
+          return
+        }
+    }
     }
 
 
@@ -529,9 +577,7 @@ class ContractSplitModal extends React.Component{
       message.error('立项BU不能为空！')
       return
     }
-    console.log('dataSource1',this.state.dataSource)
-    const splitListInfo = this.state.dataSource.slice(0,-1)
-    console.log('splitListInfo2',splitListInfo)
+    const splitListInfo = coutnData.slice(0,-1)
     if (splitListInfo.length <=0) {
       message.error('请对数据进行拆分！')
       return
@@ -636,11 +682,21 @@ class ContractSplitModal extends React.Component{
          }
        })
      }
-    if(this.props.data.orderListLines){
+
+
+    /*if(this.props.data.orderListLines){
       delete this.props.data.orderListLines
-    }
+    }*/
+
+    /*for(let i = 0; i < oldTableData.length; i++ ){
+      for(let j = 0 ; j < newLisfInfo.length; j++) {
+        if(oldTableData[i].orderListLineId === newLisfInfo[j].orderListLineId && (JSON.stringify(oldTableData[i]) != JSON.stringify(newLisfInfo[j]))){
+          newLisfInfo[j].opsStatus = 'modify'
+        }
+      }
+    }*/
     const deleteData = this.state.deleteData
-    const oldTableData = this.props.data.orderListLines
+
     newLisfInfo.push(...deleteData)
     // 拼接保存参数
     const postParams = {}
@@ -665,6 +721,7 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
+    console.log('postParams',postParams)
 
     this.props.saveInfo(postParams).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
@@ -675,7 +732,7 @@ class ContractSplitModal extends React.Component{
         })
         const data = res.response.result[0]
 
-        const dataSource = data.orderListLines.concat({
+        const dataSource = _.cloneDeep(data.orderListLines).concat({
           taskOpration: '合计',
           contractCategory: 0,
           product: 0,
@@ -693,9 +750,9 @@ class ContractSplitModal extends React.Component{
           serviceEndDate: 0,
         })
 
-        dataSource.map((item)=>{
+        /*dataSource.map((item)=>{
           item.opsStatus = "modify"
-        })
+        })*/
         this.setState({
           dataSource:dataSource
         })
@@ -719,10 +776,20 @@ class ContractSplitModal extends React.Component{
     }
   }
   handleTaskCostChange = (v,flag) =>{
-    const countValueData = this.state.countTaskCostData
+    const countValueData = this.state.countTaskCostData;
+    const {collectionProject,contractAmount} = this.props.data;
+    const dataSource = this.state.dataSource;
+    if(flag === 'task1Cost' && collectionProject==='Y'){
+      dataSource.map(item=>{
+        if(item.taskOpration != '合计') {
+          item.listPrice = parseFloat(contractAmount-v)
+        }
+      })
+    }
     countValueData[flag] = v
     this.setState({
       countTaskCostData:countValueData,
+      dataSource:dataSource,
     })
   }
   handleEdit = () => {
@@ -1284,10 +1351,10 @@ class ContractSplitModal extends React.Component{
               <h2>外购成本预算</h2>
               <br />
               <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
-                <Col span={5} className="contract-bg">
-                  Task 1 cost(成本)：
+                <Col span={6} className="contract-bg">
+                  TASK1 COST（不含税成本）：
                 </Col>
-                <Col span={19} className="contractRowBorderLeft contractRowBorderRight">
+                <Col span={18} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>
                     {
                       getFieldDecorator('task1Cost',{initialValue:constractData.task1Cost ? currency(constractData.task1Cost) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task1Cost')} disabled={this.state.editFlag} />)
@@ -1320,20 +1387,20 @@ class ContractSplitModal extends React.Component{
                 </Col>
               </Row>*/}
               <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
-                <Col span={5} className="contract-bg">
-                  Task 5 cost(外购硬件设备成本)：
+                <Col span={6} className="contract-bg">
+                  Task 5 cost(外购硬件设备不含税成本):
                 </Col>
-                <Col span={5} className="contractRowBorderLeft">
+                <Col span={4} className="contractRowBorderLeft">
                   <FormItem>
                     {
                       getFieldDecorator('task5Cost',{initialValue:constractData.task5Cost ? currency(constractData.task5Cost) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task5Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contract-bg">
-                  Task 9 cost(外购支持服务成本)：
+                <Col span={6} className="contractRowBorderLeft contract-bg">
+                  Task 9 cost(外购支持服务不含税成本):
                 </Col>
-                <Col span={9} className="contractRowBorderLeft contractRowBorderRight">
+                <Col span={8} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>
                     {
                       getFieldDecorator('task9Cost',{initialValue:constractData.task9Cost ? currency(constractData.task9Cost) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task9Cost')} disabled={this.state.editFlag} />)
@@ -1366,10 +1433,10 @@ class ContractSplitModal extends React.Component{
                 </Col>
               </Row>*/}
               <Row className="text-css contractRowBorder">
-                <Col span={5} className="contract-bg">
+                <Col span={6} className="contract-bg">
                   合计：
                 </Col>
-                <Col span={19} className="contractRowBorderLeft">
+                <Col span={18} className="contractRowBorderLeft">
                   <Input className="contractRowBorderNo" value={currency(countTaskCost)} />
                 </Col>
               </Row>

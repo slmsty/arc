@@ -746,7 +746,21 @@ const constructSplitSearchColumns = [{
     dataIndex: 'custName',
     width: 150,
   },
-
+  {
+    title: '是否集采',
+    dataIndex: 'isRecipt',
+    width: 80,
+  },
+  {
+    title: '是否拆分',
+    dataIndex: 'isSplit',
+    width: 80,
+  },
+  {
+    title: '备注',
+    dataIndex: 'remark',
+    width: 80,
+  },
 ]
 
 

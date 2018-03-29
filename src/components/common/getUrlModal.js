@@ -22,7 +22,7 @@ class UrlModalCom extends React.Component {
         <ul style={{minHeight:'150px',marginTop:'20px'}}>
           {this.props.contractUrl.map(item=>{
             return(
-              <li><a href={item.url}>{item.contractName}</a></li>
+              <li><a href={item.url} target="_blank">{item.contractName}</a></li>
             )
           })}
         </ul>
