@@ -9,17 +9,16 @@ const FormItem = Form.Item
 class BigSignAuditForm extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      expand: false,
-    }
   }
   handleQuery = () => {
     // 验证通过后查询
     const values = this.props.form.getFieldsValue()
-    const param = {
+    const params = {
       ...values,
+      sbuNo: values.sbuNo[0],
     }
-    this.props.onQuery(param)
+    this.props.onQuery(params)
+    this.props.setParams(params)
   }
 
   handleChange = (value) => {
@@ -40,7 +39,7 @@ class BigSignAuditForm extends React.Component {
           <Row gutter={10}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="申请单编号">
-                {getFieldDecorator('applyNo')(
+                {getFieldDecorator('billingApplicationId')(
                   <Input placeholder="请输入申请单编号"/>
                 )}
               </FormItem>
@@ -83,7 +82,7 @@ class BigSignAuditForm extends React.Component {
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="区域">
                 {
-                  getFieldDecorator('region',{
+                  getFieldDecorator('projectRegion',{
                     initialValue: '',
                   })(
                     <Input placeholder="请输入区域"/>,

@@ -345,7 +345,6 @@ export default class BillingApplication extends React.Component {
 
   searchContractBill = () => {
     this.setState({showBillApprove: true})
-    this.props.searchContractBilling()
   }
 
   getBillBtns = () => {

@@ -56,13 +56,25 @@ class BigSignAudit extends React.Component {
       loading: false,
       selectedRows: [],
       showApproveDetail: false,
+      params: {
+        billingApplicationId: '',
+        projectNo: '',
+        contractNo: '',
+        sbuNo: '',
+        projectRegion: '',
+        province: '',
+      }
     }
+  }
+
+  componentDidMount() {
+    this.props.searchContractBilling(this.state.params)
   }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.billStartSuccess && this.props.billStartSuccess !== nextProps.billStartSuccess) {
       message.success('发起审核流程成功!')
-      this.props.searchContractBilling()
+      this.props.searchContractBilling(this.state.params)
     }
   }
 
@@ -91,7 +103,10 @@ class BigSignAudit extends React.Component {
         wrapClassName="vertical-center-modal"
         onCancel={() => this.props.onCancel()}
       >
-        <BigSignAuditForm />
+        <BigSignAuditForm
+          onQuery={this.props.searchContractBilling}
+          setParams={(p) => this.setState({params: p})}
+        />
         <div style={{margin: '10px 0',}}>
           <Button type="primary" ghost onClick={() => this.getBillInfo()}>编辑</Button>
         </div>
