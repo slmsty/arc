@@ -319,7 +319,7 @@ export function getContractTaxRate(contractId) {
 export function getTaxInfo(params) {
   return {
     [httpApi]: {
-      url: 'arc/billingApplication/getTaxInfo',
+      url: '/arc/billingApplication/getTaxInfo',
       options: {
         method: 'POST',
         body: params,
