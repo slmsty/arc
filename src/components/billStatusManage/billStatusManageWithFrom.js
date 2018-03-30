@@ -140,7 +140,7 @@ class BillStatusManageWithFormCon extends React.Component {
                   initialValue: '',
                 })(
                   <SelectInvokeApi
-                    typeCode="BILLING_APPLICATION"
+                    typeCode="BILLING_APPLICATION_STATUS"
                     paramCode="BILLING_APPLICATION_TYPE"
                     placeholder="开票申请分类"
                     hasEmpty={false}
