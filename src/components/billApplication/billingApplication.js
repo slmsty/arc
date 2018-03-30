@@ -4,9 +4,10 @@ import BillDetail from './billDetail'
 import BillUpdate from './billUpdate'
 import OtherContractAdd from './otherContractAdd'
 import BigSignAudit from '../../containers/billApplication/bigSignAudit'
-import { Table, Button, message } from 'antd'
+import { Table, Button, message, Modal } from 'antd'
 import { otherTypes, advanceTypes, redTypes, redFontCols, normalTypes } from './billColumns'
 import './billingApplication.less'
+const confirm = Modal.confirm
 
 export default class BillingApplication extends React.Component {
   constructor(props) {
@@ -140,7 +141,7 @@ export default class BillingApplication extends React.Component {
         width: 120,
       }, {
         title: '可申请金额',
-        dataIndex: 'invoiceNumber',
+        dataIndex: 'applyUseAmount',
         width: 100,
       }, {
         title: '提前开票原因',
@@ -308,6 +309,29 @@ export default class BillingApplication extends React.Component {
       message.warn('请选择要开票的记录!')
       return
     }
+    const _this = this
+    if(normalTypes.includes(this.state.currentType)) {
+      let content = ''
+      this.state.selectedRows.map(s => {
+        if(s.applyUseAmount > 0) {
+          content += `项目编码【${s.projectNo}】的款项已申请${s.applyIngAmount}元发票，还可正常申请${s.applyUseAmount}元，是否继续申请?\n`
+        } else {
+          content += `项目编码【${s.projectNo}】已开票申请完成，是否再次申请?`
+        }
+      })
+      confirm({
+        title: '提示',
+        content: content,
+        onOk() {
+          _this.billingSubmit()
+        }
+      })
+    } else {
+      this.billingSubmit()
+    }
+  }
+
+  billingSubmit = () => {
     let contractItems = []
     this.state.selectedRows.map(b => {
       contractItems.push({
@@ -322,7 +346,6 @@ export default class BillingApplication extends React.Component {
     const contractId = this.state.selectedRows ? this.state.selectedRows[0].contractId : ''
     this.props.billApplyEdit(param)
     this.props.getContractUrl(contractId)
-    this.props.getContractTaxRate(contractId)
   }
 
   handleAddBill = () => {
@@ -386,7 +409,7 @@ export default class BillingApplication extends React.Component {
   getScrollWidth() {
     let scroll = null
     if(normalTypes.includes(this.state.currentType)){
-      scroll = { x: 2500 }
+      scroll = { x: 2760 }
     } else if (redTypes.includes(this.state.currentType)) {
       scroll = { x: 1800 }
     } else if (advanceTypes.includes(this.state.currentType)) {

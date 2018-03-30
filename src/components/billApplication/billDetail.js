@@ -10,7 +10,6 @@ import UrlModalCom from '../common/getUrlModal'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
-const confirm = Modal.confirm
 const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER']
 const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
 
