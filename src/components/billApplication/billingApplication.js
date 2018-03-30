@@ -102,14 +102,14 @@ export default class BillingApplication extends React.Component {
         title: '签约公司',
         dataIndex: 'comName',
         width: 220,
-      },  {
+      }, {
         title: '合同编码',
         dataIndex: 'contractNo',
         width: 260,
       }, {
-        title: '发票号',
-        dataIndex: 'invoiceNumber',
-        width: 100,
+        title: '合同名称',
+        dataIndex: 'contractName',
+        width: 260,
       }, {
         title: '客户名称',
         dataIndex: 'custName',
@@ -138,6 +138,10 @@ export default class BillingApplication extends React.Component {
         title: '已申请金额',
         dataIndex: 'applyIngAmount',
         width: 120,
+      }, {
+        title: '可申请金额',
+        dataIndex: 'invoiceNumber',
+        width: 100,
       }, {
         title: '提前开票原因',
         dataIndex: 'advanceBillingReasonName',

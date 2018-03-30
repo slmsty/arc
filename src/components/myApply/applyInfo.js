@@ -203,10 +203,10 @@ class ApplyInfoModal extends React.Component {
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           footer={[
-            <Button className="reject-btn" type="primary" key="reset" onClick={this.applyReject}>
+            <Button type="primary" key="reset" onClick={this.applyReject}>
               驳回
             </Button>,
-            <Button className="agree-btn" key="submit" type="primary" onClick={this.applyConfirm}>
+            <Button key="submit" type="primary" onClick={this.applyConfirm}>
               同意
             </Button>
           ]}
