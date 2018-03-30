@@ -786,7 +786,7 @@ class BillApproveDetail extends React.Component  {
           </div>
         }
         {
-          !isArAdmin ?
+          !(isArAdmin && isAgainInvoice === 'false') ?
             <div className="add-btns">
               <Button
                 type="primary"

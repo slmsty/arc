@@ -19,6 +19,18 @@ const billApproveColumns = [
     dataIndex: 'billingApplicationId',
     width: 150,
   }, {
+    title: '项目编码',
+    dataIndex: 'projectNo',
+    width: 120,
+  }, {
+    title: '合同编码',
+    dataIndex: 'contractNo',
+    width: 120,
+  }, {
+    title: '申请金额',
+    dataIndex: 'applyAmount',
+    width: 100,
+  }, {
     title: '开票公司',
     dataIndex: 'comName',
     width: 300,
@@ -120,7 +132,7 @@ class BigSignAudit extends React.Component {
           columns={billApproveColumns}
           pagination={false}
           dataSource={billContracts}
-          scroll={{ x: 2000 }}
+          scroll={{ x: 2450 }}
         />
         {
           this.state.showApproveDetail ?

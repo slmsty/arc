@@ -410,7 +410,7 @@ class BillDetail extends React.Component {
             onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
         )
       }, {
-        title: <span>税率<b style={{color:'#FF0000'}}>*</b></span>,
+        title: '税率',
         dataIndex: 'billingTaxRate',
         width: 100,
         render: (text, record, index) => (
