@@ -12,6 +12,7 @@ const contactSplitData = {
   getUrl: {},
   sendErp:{},
   sendERPQuery:{},
+  getProductNo:[],
   myContractRefresh: new Date().getTime(),
 }
 
@@ -30,6 +31,10 @@ function sendErp(state, action) {
 function sendERPQuery(state, action) {
   return { ...state, sendERPQuery: action.response.result }
 }
+function getProductNo(state, action) {
+  return { ...state, getProductNo: action.response.pageInfo.result }
+}
+
 
 export default caseReducer(contactSplitData, {
   GET_CONTRACT_LIST_SUCCESS: getContractList,
@@ -37,4 +42,5 @@ export default caseReducer(contactSplitData, {
   GET_URL_SUCCESS:getUrl,
   SENDERP_SUCCESS:sendErp,
   SENDERP_QUERY_SUCCESS:sendERPQuery,
+  GETPRODUCTNO_SUCCESS:getProductNo,
 })

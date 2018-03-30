@@ -10,6 +10,7 @@ import SelectSbu from '../common/SelectSbu'
 import ContractType from '../common/contractType'
 import ContractType1 from '../common/contractType1'
 import ProductLine from '../common/productLine'
+import ProductNo from '../common/productNo'
 import MyDtatePicker from '../common/myDatePicker'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import currency from '../../util/currency'
@@ -98,8 +99,22 @@ class ContractSplitModal extends React.Component{
       assessRatio:data.assessRatio,
       selectCountType:data.revenueCheckout ? data.revenueCheckout : [],
       openUrlModal:false,
-      deleteData:[]
+      deleteData:[],
+      productNoData:[],
+
     }
+  }
+  componentDidMount() {
+   // 获取产品编码数据
+    const params = {}
+    params.keywords = this.props.data.projectNo
+    this.props.getProductNo(params).then((res)=>{
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          productNoData:res.response.pageInfo.result,
+        })
+      }
+    })
   }
   getTableWidth = (colum)=> {
     let width = 0
@@ -247,9 +262,6 @@ class ContractSplitModal extends React.Component{
       }else{
         newData[selectData[1]].opsStatus = 'none' //把数据的操作类型改为修改
       }
-      console.log('this.props.tableDetail[index][column]',this.props.tableDetail[selectData[1]][selectData[2]])
-      console.log('selectData[0]',selectData[0])
-
     }
     newData[selectData[1]][selectData[2]] = selectData[0]
     newData.forEach(item=>{
@@ -264,22 +276,26 @@ class ContractSplitModal extends React.Component{
     })
   }
   renderColumns = (text, index, column,record) => {
-
     if(column=="product"){
-      return ( <ContractType1
-        type='product'
-        keywords={this.props.data.projectNo}
+      // 如果产品编码为空，则取第一个数据为默认值
+      if(!text && text != 0) {
+        text = this.props.productNoData.length && this.props.productNoData[0].productNo ? this.props.productNoData[0].productNo : '0'
+        this.handleChange({No:text,Name:text,indexs:index,columns:column})
+      }
+      return ( <ProductNo
+        placeholder="产品编码"
         hasEmpty
         onChange={this.handleChange}
+        options = {this.state.productNoData}
         value={text}
         indexs={index}
         columns={column}
         disabled={this.state.editFlag}
       />)
-      //return <ProductLine disabled={this.state.editFlag} onCancel={()=>this.canCel(index,column)} text={text ? text : ''} onChange={this.handleChange} valueName={record['productName'] ? record['productName'] : ''} value={record.product}  indexs={index} columns={column} />
     }
     if(column ==='contractCategory'){
-      const parentOrderListLineId = record.parentOrderListLineId ? record.parentOrderListLineId : ''
+
+      /*const parentOrderListLineId = record.parentOrderListLineId ? record.parentOrderListLineId : ''
       let parentCode = ''
       if (parentOrderListLineId !== '') {
         const dataSource = this.state.dataSource.slice(0)
@@ -287,12 +303,12 @@ class ContractSplitModal extends React.Component{
         parentContractCategory = dataSource.filter(o=> o.orderListLineId && o.orderListLineId === parentOrderListLineId)
         parentCode = parentContractCategory && parentContractCategory[0].contractCategory ? parentContractCategory[0].contractCategory : ''
       }
-
+*/
       return(
         <ContractType1
-          //parentCode={parentCode}
-          keywords={this.props.data.projectNo}
+          placeholder="合同类型"
           hasEmpty
+          options = {this.state.productNoData}
           onChange={this.handleChange}
           value={text}
           indexs={index}
@@ -425,6 +441,7 @@ class ContractSplitModal extends React.Component{
   }
   handleAdd = (index, flag) => {
     const newDataSource = this.state.dataSource
+    const listPrice = _.cloneDeep(this.props.data.contractAmount);
     const newData = {
       parentOrderListLineId: '',
       opsStatus:'add',
@@ -432,6 +449,7 @@ class ContractSplitModal extends React.Component{
       discount: 0,
       returnTaxRate: 0,
       revenueCheckout: "POC",
+      listPrice:listPrice,
 
     }
     const subParentOrderListLineId = newDataSource.length && newDataSource[index].orderListLineId ? newDataSource[index].orderListLineId : ''
@@ -513,6 +531,7 @@ class ContractSplitModal extends React.Component{
   // 拆分保存接口
   handleOk = () => {
     const coutnData = this.state.dataSource.slice(0)
+    console.log('coutnData',coutnData)
     const contractAmount = parseFloat(this.props.data.contractAmount)
     let totalListPrice = 0
     coutnData.map((item) => {
@@ -526,13 +545,12 @@ class ContractSplitModal extends React.Component{
         return
       }
     }else{
-      if(Math.abs(totalListPrice) != Math.abs(contractAmount)) {
+      if(totalListPrice != contractAmount) {
         // 如果合同目录价之和与合同总金额差一分钱，则在保存时，将差异的一分钱合到最后一条上
-        if ((Math.abs(totalListPrice) - Math.abs(contractAmount)).toFixed(2) === "0.01") {
+        if ((Math.abs(totalListPrice - contractAmount)).toFixed(2) === "0.01") {
           if(totalListPrice >contractAmount){
             coutnData[coutnData.length - 2].listPrice = coutnData[coutnData.length - 2].listPrice - 0.01
-          }
-          if(totalListPrice < contractAmount){
+          } else if(totalListPrice < contractAmount){
             coutnData[coutnData.length - 2].listPrice = coutnData[coutnData.length - 2].listPrice + 0.01
           }
 
@@ -603,7 +621,9 @@ class ContractSplitModal extends React.Component{
 
     const newLisfInfo = []
     let j = 1
+    console.log('splitListInfo',splitListInfo)
     for(let i of splitListInfo) {
+      console.log('i.product',i.product)
       if (!i.contractCategory || i.contractCategory.length <=0) {
         message.error('合同类型不能为空！')
         return
@@ -612,7 +632,7 @@ class ContractSplitModal extends React.Component{
         message.error('产品编码不能为空！')
         return
       }*/
-      if (i.product==='') {
+      if (i.product==='' && i.product === 'undefined') {
         message.error('产品编码不能为空！')
         return
       }
@@ -649,9 +669,9 @@ class ContractSplitModal extends React.Component{
       if(typeof i.product ==='string' || typeof i.product ==='number'){
         product = i.product
       }
-     /* if (i.product.length > 0) {
-        product = i.product[1]
-      }*/
+      if(Array.isArray(i.product)){
+        product = i.product[0]
+      }
       if(typeof i.returnTaxRate ==='string' || typeof i.returnTaxRate ==='number'){
         returnTaxRate = i.returnTaxRate
       }else if (i.returnTaxRate.length > 0) {
@@ -881,6 +901,7 @@ class ContractSplitModal extends React.Component{
   }
   render() {
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
+    console.log('dataSource',dataSource)
     const constractData = this.props.data
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
@@ -1352,7 +1373,7 @@ class ContractSplitModal extends React.Component{
               <br />
               <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
                 <Col span={6} className="contract-bg">
-                  TASK1 COST（不含税成本）：
+                  Task 1 cost(含税成本):
                 </Col>
                 <Col span={18} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>

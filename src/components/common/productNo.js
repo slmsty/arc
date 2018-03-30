@@ -2,14 +2,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Select } from 'antd'
-
-import requestJsonFetch from '../../http/requestJsonFecth'
-
 const Option = Select.Option
 
 export default class SelectInvokeApi extends React.Component {
   state = {
-    options: [],
+    options: [0],
     selectValue: '',
     flag: true,
   }
@@ -32,8 +29,8 @@ export default class SelectInvokeApi extends React.Component {
     const options = this.state.options.slice(0)
     let name = ''
     for (let i = 0; i < options.length; i++) {
-      if (options[i].optionsValue == value ) {
-        name = options[i].paramValueDesc
+      if (options[i].productNo == value ) {
+        name = options[i].productNo
         break;
       }
     }
@@ -49,17 +46,15 @@ export default class SelectInvokeApi extends React.Component {
       })
     }
   }
-  render(){
+  render() {
     // 去重
-    const options = [... new Set(this.state.options)];
-    const optionsDom = options ? options.map(option => {
-      return <Option
-        key={option.paramValue ? option.paramValueDesc : 'no_select'}
-        value={option.paramValue}>
-        {option.paramValue ==='all' ? '' :option.paramValue}
-        ({option.paramValueDesc})
-      </Option>
-    }) : null
+    const optionData = this.state.options;
+    const productNoData = [];
+    optionData.map(item=>{
+      productNoData.push(item.productNo ? item.productNo : 0)
+    })
+    const productNo = [... new Set(productNoData)];
+    const optionsDom = productNo ? productNo.map(option => <Option key={!option && option != 0 ? 'no_select' : option } value={option}>{option}</Option>) : null
     return (
       <Select
         style={{zIndex:'0'}}

@@ -293,6 +293,7 @@ export default class ApplySearchCon extends React.Component {
   }
 
   render() {
+    console.log('product',this.props.contractSplitDara.getProductNo)
     const columns = [{
       title: '拆分状态',
       dataIndex: 'status',
@@ -392,6 +393,8 @@ export default class ApplySearchCon extends React.Component {
               data={this.state.selectedRows}
               user={this.props.user.accountName}
               contractUrl={this.props.contractSplitDara.getUrl}
+              getProductNo = {this.props.getProductNo} //获取产品编码数据
+              productNoData = {this.props.contractSplitDara.getProductNo ? this.props.contractSplitDara.getProductNo : []}
               tableDetail={this.state.selectedRows.orderListLines ? this.state.selectedRows.orderListLines : []}
             /> : null
         }

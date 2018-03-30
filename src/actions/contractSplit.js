@@ -76,3 +76,16 @@ export function sendERPQuery(queryParam) {
     },
   }
 }
+// 获取产品编码数据
+export function getProductNo(queryParam) {
+  return {
+    [httpApi]: {
+      url: "/arc/common/task/prd/list",
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GETPRODUCTNO_SUCCESS'],
+    },
+  }
+}
