@@ -56,13 +56,12 @@ class BillDetail extends React.Component {
         billingContent: '',
         specificationType: '',
         unit: '',
-        billingTaxRate: item.billingTaxRate ? item.billingTaxRate : 0,
         quantity: 1,
         unitPrice: item.billingAmount ? item.billingAmount : 0,
         billingAmountExcludeTax: item.billingAmount ? item.billingAmount : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
         totalAmount: item.billingAmount ? item.billingAmount : 0,
-        billingTaxRate: 0,
+        billingTaxRate: item.billingTaxRate ? item.billingTaxRate : 0,
         billingTaxAmount: 0,
       })
     })
@@ -417,6 +416,8 @@ class BillDetail extends React.Component {
           <Input
             disabled={!this.state.isRequireRate && normalTypes.includes(this.props.billType)}
             onChange={(e) => this.handleChange(e.target.value, 'billingTaxRate', index, record)}
+            defaultValue={record.billingTaxRate}
+            value={this.state.dataSource[index]['billingTaxRate']}
           />
         )
       }, {
