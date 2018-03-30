@@ -664,11 +664,11 @@ const turnProColumns = [{
 const constructSplitSearchColumns = [{
   title: '签约公司',
   dataIndex: 'signCompany',
-  width: 220,
+  width: 200,
 }, {
   title: '签约日期',
   dataIndex: 'signDate',
-  width: 120,
+  width: 80,
 }, {
   title: '合同名称',
   dataIndex: 'contractName',
@@ -680,12 +680,12 @@ const constructSplitSearchColumns = [{
 }, {
   title: '立项BU',
   dataIndex: 'bu',
-  width: 150,
+  width: 120,
 },
   {
     title: '项目编码',
     dataIndex: 'projectNo',
-    width: 120,
+    width: 100,
   },
   {
     title: '合同税率',
@@ -696,13 +696,13 @@ const constructSplitSearchColumns = [{
   {
     title: '退税率',
     dataIndex: 'returnTaxRate',
-    width: 70,
+    width: 60,
     render: (text,rocord,index)=>(text ? (text*100).toFixed(0)+'%' : 0)
   },
   {
     title: 'Task',
     dataIndex: 'contractCategory',
-    width: 120,
+    width: 50,
   },
   {
     title: '合同额',
@@ -719,17 +719,17 @@ const constructSplitSearchColumns = [{
   {
     title: '结算方式',
     dataIndex: 'revenueCheckout',
-    width: 100,
+    width: 70,
   },
   {
     title: '保修期开始时间',
     dataIndex: 'maintainStartDate',
-    width: 120,
+    width: 110,
   },
   {
     title: '软件解决方案保修期',
     dataIndex: 'solutionMaintain',
-    width: 150,
+    width: 140,
   },
   {
     title: '服务器起始',

@@ -167,26 +167,6 @@ export default class ApplySearchCon extends React.Component {
       selectedRows:selectedRows,
     })
   }
- /* saveContractSplitInfo = (param,projectNo) => {
-    this.props.saveContractSplitInfo(param).then((res) => {
-      if (res && res.response && res.response.resultCode === '000000') {
-        message.success('保存成功')
-        const data = res.response.result[0]
-        console.log('data',data)
-        data.orderListLines.map((item)=>{
-          item.opsStatus = "modify"
-         })
-        console.log('data1',data)
-        this.setState({
-          selectedRows:data
-        })
-        //this.getInfo(projectNo)
-      } else {
-        message.error('保存失败')
-      }
-    })
-
-  }*/
   closeSaveModal = () => {
     this.setState({
       contarctSplitModal: true,
@@ -196,11 +176,6 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   showModals = (record) =>{
-    /*if(record.orderListLines){
-      record.orderListLines.map(item=>{
-        item.opsStatus = 'modify'
-      })
-    }*/
     this.setState({
       selectedRows:record,
     })
@@ -223,14 +198,6 @@ export default class ApplySearchCon extends React.Component {
    function contractSplitInfo
    */
   showContractSplitInfo = (contractId) => {
-    /*if(this.state.selectedRowKeys.length>1){
-      message.error('一次只能对一条数据进行拆分')
-      return
-    }
-    if(this.state.selectedRowKeys.length==0){
-      message.error('请选择需要拆分的数据')
-      return
-    }*/
     // 获取审批表url
     //const contractId = 201604296622
     this.props.getUrl(contractId).then((res)=>{
@@ -293,7 +260,6 @@ export default class ApplySearchCon extends React.Component {
   }
 
   render() {
-    console.log('product',this.props.contractSplitDara.getProductNo)
     const columns = [{
       title: '拆分状态',
       dataIndex: 'status',

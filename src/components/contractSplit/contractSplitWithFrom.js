@@ -56,7 +56,7 @@ class ContractSplitCon extends React.Component {
               <FormItem {...formItemLayout} label="签约日期">
                 {getFieldDecorator('signDate', {
                   // initialValue: [moment().subtract(1, 'month'), moment()],
-                  initialValue: [moment('2017-08-01'), moment()],
+                  //initialValue: [moment('2017-08-01'), moment()],
                 })(<RangePicker
                   allowClear
                   format={dateFormat}
