@@ -81,10 +81,10 @@ class ApplyInfoModal extends React.Component {
                 err = true
               }
             }
-            if(err) {
-              return
-            }
           })
+        }
+        if(err) {
+          return
         }
         const params = isAgainInvoice !== 'false' ? {
           ...values,
