@@ -5,7 +5,7 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
-import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols } from './billColumns'
+import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols } from './billColumns'
 import UrlModalCom from '../common/getUrlModal'
 const Option = Select.Option
 const FormItem = Form.Item
@@ -518,6 +518,7 @@ class BillDetail extends React.Component {
       dataIndex: 'customerName',
       width: 150,
       render: (text, record, index) => (
+        index === 0 ?
         <SelectSearch
           url="/arc/billingApplication/custom/search"
           columns={clientCols}
@@ -525,9 +526,20 @@ class BillDetail extends React.Component {
           idKey="billingCustInfoId"
           valueKey="custName"
           showSearch={true}
-          value={index === 0 ? this.state.custInfo : this.state.comInfo}
-          onChange={(v) => this.setState(index === 0 ? {custInfo: v} : {comInfo: v})}
-        />)
+          value={this.state.custInfo}
+          onChange={(v) => this.setState({custInfo: v})}
+        /> :
+        <SelectSearch
+          url="/arc/billingApplication/company/search"
+          columns={comCols}
+          label="公司名称"
+          idKey="billingComInfoId"
+          valueKey="comName"
+          showSearch={true}
+          value={this.state.comInfo}
+          onChange={(v) => this.setState({comInfo: v})}
+        />
+      )
     }, {
       title: '纳税人识别码',
       dataIndex: 'taxPayer',
