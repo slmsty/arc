@@ -29,6 +29,7 @@ import StatementSearch from './statementSearch/statementList'
 import BillingApplication from '../containers/billApplication/billApplication'
 import Login from '../containers/login/login'
 import MyApply from '../containers/myApply/myApplay'
+import MailConfig from '../containers/system/mailConfig'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -58,61 +59,46 @@ class IndexContainer extends React.Component {
   getMenuComponent = (component) => {
     if (component === 'HomeContainer') {
       return HomeContainer
-    }
-    if (component === 'ProjectReceiptClaimContainer') {
+    } else if (component === 'ProjectReceiptClaimContainer') {
       return ProjectReceiptClaimContainer
-    }
-    if (component === 'NoProjectReceiptClaimContainer') {
+    } else if (component === 'NoProjectReceiptClaimContainer') {
       return NoProjectReceiptClaimContainer
-    }
-    if (component === 'CBSTurnoverWholenessConfirm') {
+    } else if (component === 'CBSTurnoverWholenessConfirm') {
       return CBSTurnoverWholenessConfirm
-    }
-    if (component === 'ManualEntryBankTurnover') {
+    } else if (component === 'ManualEntryBankTurnover') {
       return ManualEntryBankTurnover
-    }
-    if (component === 'ReviewReceiptClaimContainer') {
+    } else if (component === 'ReviewReceiptClaimContainer') {
       return ReviewReceiptClaimContainer
-    }
-    if (component === 'CustomerBankLinkContainer') {
+    } else if (component === 'CustomerBankLinkContainer') {
       return CustomerBankLinkContainer
-    }
-    if (component === 'BatchImport') {
+    } else if (component === 'BatchImport') {
       return BatchImport
-    }
-    if (component === 'ContractChangeContainer') {
+    } else if (component === 'ContractChangeContainer') {
       return ContractChangeContainer
-    }
-    if (component === 'BilledARApprove') {
+    } else if (component === 'BilledARApprove') {
       return BilledARApprove
-    }
-    if (component === 'BilledARConfirm') {
+    } else if (component === 'BilledARConfirm') {
       return BilledARConfirm
-    }
-    if (component === 'BadDebtsApply') {
+    } else if (component === 'BadDebtsApply') {
       return BadDebtsApply
-    }
-    if (component === 'BadDebtsStatus') {
+    } else if (component === 'BadDebtsStatus') {
       return BadDebtsStatus
-    }
-    if (component === 'applyListContainer') {
+    } else if (component === 'applyListContainer') {
       return ApplyListContainer
-    }
-    if (component === 'ContractSplit') {
+    } else if (component === 'ContractSplit') {
       return ContractSplit
-    }
-    if (component === 'BillingApplication') {
+    } else if (component === 'BillingApplication') {
       return BillingApplication
-    }
-    if (component === 'BillStatusManage') {
+    } else if (component === 'BillStatusManage') {
       return BillStatusManage
-    }
-    if (component === 'statementSearch') {
+    } else if (component === 'statementSearch') {
       return StatementSearch
-    }
-    if(component === 'myApplyContainer'){
+    } else if(component === 'myApplyContainer'){
       return MyApply
+    } else if(component === 'mailConfig'){
+      return MailConfig
     }
+
   }
   getMenuRoutes = (menus) => {
     if (menus && menus.length > 0) {

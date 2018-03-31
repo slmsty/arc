@@ -214,6 +214,21 @@ const common = {
           },
         ],*/
       },
+      {
+        key: '8',
+        path: '/system',
+        name: '系统管理',
+        icon: 'icon-system',
+        child: [
+         {
+           key: '61',
+           path: '/system/mailConfig',
+           name: '邮件配置',
+           icon: 'icon-mail',
+           component: 'mailConfig',
+         },
+         ],
+      },
     ],
   } : {},
 }

@@ -19,6 +19,7 @@ import contractSplitDara from './constractSplit'
 import billApplication from './billApplication'
 import billStatusManage from './billStatusManage/billStatusManage'
 import statement from './statement'
+import system from './system'
 
 export default combineReducers({
   common,
@@ -40,5 +41,6 @@ export default combineReducers({
   billApplication,
   billStatusManage,
   statement,
+  system,
   routing: routerReducer, // 整合路由
 })
