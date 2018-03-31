@@ -5,17 +5,29 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
-import { contentCols, totalColumns, detailColumns, normalTypes, proApplyColumns, billDetailColumns } from './billColumns'
+import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols } from './billColumns'
 import UrlModalCom from '../common/getUrlModal'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
 const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER']
 const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
-
+const formItemLayout = {
+  labelCol: { span: 7 },
+  wrapperCol: { span: 12 },
+}
+const formItemLayout1 = {
+  labelCol: { span: 3 },
+  wrapperCol: { span: 21 },
+}
+const formItemLayout2 = {
+  labelCol: { span: 7 },
+  wrapperCol: { span: 16 },
+}
 class BillDetail extends React.Component {
   constructor(props) {
     super(props)
+    const { custInfo, comInfo } = props.detail
     this.state = {
       dataSource: [],
       count: 1,
@@ -38,6 +50,8 @@ class BillDetail extends React.Component {
       showContractLink: false,
       isRequireRate: false,
       isLost: false,
+      custInfo: [custInfo.billingCustInfoId, custInfo.billingCustName],
+      comInfo: [comInfo.billingComInfoId, comInfo.billingComName]
     }
   }
 
@@ -52,16 +66,16 @@ class BillDetail extends React.Component {
         isParent: 1,
         arBillingId: item.arBillingId,
         contractItemId: item.contractItemId,
-        billingContent: '',
-        specificationType: '',
-        unit: '',
-        quantity: 1,
+        billingContent: item.billingContent ? item.billingContent : '',
+        specificationType: item.specificationType ? item.specificationType : '',
+        unit: item.unit ? item.unit : '',
+        quantity: item.quantity ? item.quantity : 1,
         unitPrice: item.billingAmount ? item.billingAmount : 0,
         billingAmountExcludeTax: item.billingAmount ? item.billingAmount : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
         totalAmount: item.billingAmount ? item.billingAmount : 0,
         billingTaxRate: item.billingTaxRate ? item.billingTaxRate : 0,
-        billingTaxAmount: 0,
+        billingTaxAmount: item.billingTaxAmount ? item.billingTaxAmount : 0,
       })
     })
     this.setState({ dataSource: data, count: data.length })
@@ -158,7 +172,6 @@ class BillDetail extends React.Component {
 
         if (!err) {
           this.setState({loading: true})
-          const { custInfo, comInfo } = this.props.detail
           const appLineItems = this.state.dataSource.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,
@@ -167,8 +180,8 @@ class BillDetail extends React.Component {
           const params = {
             ...values,
             billingOutcomeIds,
-            billingCustInfoId: custInfo.billingCustInfoId,
-            billingComInfoId: comInfo.billingComInfoId,
+            billingCustInfoId: this.state.custInfo[0],
+            billingComInfoId: this.state.comInfo[0],
             billingApplicationType: this.state.isRequireRate ? 'BILLING_EXCESS' : this.props.billType,
             billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
             appLineItems: appLineItems,
@@ -360,19 +373,8 @@ class BillDetail extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const formItemLayout = {
-      labelCol: { span: 7 },
-      wrapperCol: { span: 12 },
-    }
-    const formItemLayout1 = {
-      labelCol: { span: 3 },
-      wrapperCol: { span: 21 },
-    }
-    const formItemLayout2 = {
-      labelCol: { span: 7 },
-      wrapperCol: { span: 16 },
-    }
-    let columns = [
+    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate, billingApplicantRemark, taxRateRequest } = this.props.detail
+    const columns = [
       {
       title: '操作',
       dataIndex: 'action',
@@ -391,12 +393,7 @@ class BillDetail extends React.Component {
           }
         </div>
       )
-    }, /*{
-      title: '组号',
-      dataIndex: 'groupNo',
-      width: 50,
-      fixed: 'left',
-    },*/ {
+    }, {
         title: <span>含税金额<b style={{color:'#FF0000'}}>*</b></span>,
         dataIndex: 'billingAmount',
         width: 100,
@@ -478,30 +475,7 @@ class BillDetail extends React.Component {
           value={this.state.dataSource[index]['quantity']}
           onChange={(value) => this.handleChange(value, 'quantity', index)} />
       )
-    }, /*{
-      title: '单价',
-      dataIndex: 'unitPrice',
-      width: 100,
-      render: (text, record, index) => (
-        <InputNumber
-          placeholder="单价"
-          min={0}
-          value={this.state.dataSource[index]['unitPrice']}
-          onChange={(value) => this.handleChange(value, 'unitPrice', index)}
-        />
-      )
-    }, {
-      title: '不含税金额',
-      dataIndex: 'billingAmountExcludeTax',
-      width: 100,
-      render: (text, record, index) => (
-        <InputNumber
-          placeholder="不含税金额"
-          min={0}
-          value={this.state.dataSource[index].billingAmountExcludeTax}
-          onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
-      )
-    }*/]
+    }]
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
       headers: {
@@ -512,7 +486,6 @@ class BillDetail extends React.Component {
       customRequest: this.customRequest,
       onChange: this.handleFileChange,
     };
-    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate, billingApplicantRemark, taxRateRequest } = this.props.detail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -536,6 +509,38 @@ class BillDetail extends React.Component {
       },
       selectedRowKeys: this.state.selectedRowKeys,
     }
+    const detailColumns = [{
+      title: '',
+      dataIndex: 'title',
+      width: 50,
+    }, {
+      title: '客户名称',
+      dataIndex: 'customerName',
+      width: 150,
+      render: (text, record, index) => (
+        <SelectSearch
+          url="/arc/billingApplication/custom/search"
+          columns={clientCols}
+          label="客户名称"
+          idKey="billingCustInfoId"
+          valueKey="custName"
+          showSearch={true}
+          value={index === 0 ? this.state.custInfo : this.state.comInfo}
+          onChange={(v) => this.setState(index === 0 ? {custInfo: v} : {comInfo: v})}
+        />)
+    }, {
+      title: '纳税人识别码',
+      dataIndex: 'taxPayer',
+      width: 100,
+    }, {
+      title: '地址电话',
+      dataIndex: 'address',
+      width: 200,
+    }, {
+      title: '开户行及账号',
+      dataIndex: 'bankAccount',
+      width: 180,
+    }]
     return (
       <Modal
         title="发票编辑"
