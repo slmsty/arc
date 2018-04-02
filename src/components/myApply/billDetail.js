@@ -28,7 +28,7 @@ class BillDetail extends React.Component  {
   }
   render() {
     const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo = {}, custInfo = {},
-      contractList, outcomeList, billingApplicantRemark, receiptOutcome, fileName, filePath, isAgainInvoice, costBearName } = this.props.serviceDetail
+      contractList, outcomeList, billingApplicantRemark, receiptOutcome, receiptOutcomeTaxVp, fileName, filePath, isAgainInvoice, costBearName } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -42,10 +42,7 @@ class BillDetail extends React.Component  {
       address: comInfo.addressPhoneNumber,
       bankAccount: comInfo.bankBankAccount
     }]
-    const formItemLayout = {
-      labelCol: { span: 8 },
-      wrapperCol: { span: 12 },
-    }
+    const receiveTax = receiptOutcome ? receiptOutcome : receiptOutcomeTaxVp
     return (
       <div>
         <div className="infoPanel">
@@ -75,13 +72,13 @@ class BillDetail extends React.Component  {
         {
           isAgainInvoice === 'false' && showEdit.includes(this.props.applyType) ?
             <Row>
-              <Col span={12} key={3}>
-                是否收到发票: {receiptOutcome === 'Y' ? '是' : '否'}
+              <Col span={12}>
+                是否收到发票: {receiveTax === 'Y' ? '是' : '否'}
               </Col>
               {
                 this.props.taskCode === 'tax_vp' ?
                   <Row gutter={40}>
-                    <Col span={12} key={1}>
+                    <Col span={12}>
                       AR财务会计是否收到发票: {receiptOutcome === 'Y' ? '是' : '否'}
                     </Col>
                   </Row> : null
@@ -92,20 +89,20 @@ class BillDetail extends React.Component  {
               <Row gutter={40}>
                 {
                   this.props.applyType === 'BILLING_EXCESS' ?
-                    <Col span={8} key={1}>
+                    <Col span={8}>
                       费用承担者 :{costBearName}
                     </Col> : null
                 }
-                <Col span={8} key={2}>
+                <Col span={8} >
                   开票类型 :{billingTypeName}
                 </Col>
-                <Col span={8} key={3}>
+                <Col span={8}>
                   开票日期: {billingDate}
                 </Col>
                 {
-                  this.props.applyType === 'BILLING_RED' || this.props.applyType === 'BILLING_INVALID' ?
-                    <Col span={8} key={2}>
-                      是否收到发票: {receiptOutcome}
+                  showEdit.includes(this.props.applyType) ?
+                    <Col span={8}>
+                      是否收到发票: {receiveTax === 'Y' ? '是' : '否'}
                     </Col> : null
                 }
               </Row>
