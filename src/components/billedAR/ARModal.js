@@ -30,6 +30,7 @@ class ARModal extends Component{
     })
   }
   handleBillDateChange = (date, string) => {
+    console.log(date,string)
     this.props.form.setFieldsValue({
       reportDate:date,
     })
@@ -55,6 +56,24 @@ class ARModal extends Component{
           }
         })
       }
+      /* if(!values.glDate){
+        console.log(3)
+        isError = true
+        this.props.form.setFields({
+          glDate: {
+            value: values.glDate,
+            errors: [new Error('必须选择GL日期')]
+          }
+        })
+      }else{
+        console.log(4)
+        this.props.form.setFields({
+          glDate: {
+            value: values.glDate,
+            errors: null
+          }
+        })
+      } */
 
       if(isShow){
         if(!values.reportDate){
@@ -73,7 +92,9 @@ class ARModal extends Component{
             }
           })
         }
+        console.log(values.assessTaxIncludedAmount)
         if(values.assessTaxIncludedAmount === ''){
+          console.log(values.assessTaxIncludedAmount)
           isError = true
           this.props.form.setFields({
             assessTaxIncludedAmount: {
@@ -143,33 +164,32 @@ class ARModal extends Component{
         visible={visible}
         onCancel={this.onCancel}
         onOk={this.onOk}>
-        <Form>
-          <FormItem label="Billed AR日期">
+          <Form>
+            <FormItem label="Billed AR日期">
+              {
+                getFieldDecorator('billedArDate', {
+                  initialValue: o.billedArDate ? moment(o.billedArDate) : moment(o.arDate)
+                })(
+                  <DatePicker onChange={this.handleBillDateChange} />
+                )
+              }
+            </FormItem>
+            {/*<FormItem label="GL日期">
+              {
+                getFieldDecorator('glDate', {
+                  initialValue: o.glDate ? moment(o.glDate) : (this.state.glDate ? moment(this.state.glDate).endOf('month') : null)
+                })(
+                  <DatePicker />
+                )
+              }
+            </FormItem>*/}
             {
-              getFieldDecorator('billedArDate', {
-                initialValue: o.arDate ? moment(o.arDate) : null
-              })(
-                <DatePicker onChange={this.handleBillDateChange} />
-              )
-            }
-          </FormItem>
-          {/*<FormItem label="GL日期">
-           {
-           getFieldDecorator('glDate', {
-           initialValue: o.glDate ? moment(o.glDate) : (this.state.glDate ? moment(this.state.glDate).endOf('month') : null)
-           })(
-           <DatePicker />
-           )
-           }
-           </FormItem>*/}
-          {
-            isShow
+              isShow
               ?
               <FormItem label="报告日期">
                 {
                   getFieldDecorator('reportDate', {
-                    //initialValue: o.reportDate ? moment(o.reportDate) : null
-                    initialValue: o.arDate ? moment(o.arDate) : null
+                    initialValue: o.reportDate ? moment(o.reportDate) : moment(o.arDate)
                   })(
                     <DatePicker
                       onChange={this.handleDateChange}
@@ -179,9 +199,9 @@ class ARModal extends Component{
               </FormItem>
               :
               null
-          }
-          {
-            isShow
+            }
+            {
+              isShow
               ?
               <FormItem label="考核含税金额">
                 {
@@ -196,15 +216,15 @@ class ARModal extends Component{
               </FormItem>
               :
               null
-          }
-          <FormItem label="备注">
-            {
-              getFieldDecorator('arAccountantApproveMessage', {initialValue: o.arAccountantApproveMessage})(
-                <TextArea rows={4} />
-              )
             }
-          </FormItem>
-        </Form>
+            <FormItem label="备注">
+              {
+                getFieldDecorator('arAccountantApproveMessage', {initialValue: o.arAccountantApproveMessage})(
+                  <TextArea rows={4} />
+                )
+              }
+            </FormItem>
+          </Form>
       </Modal>
     )
   }
