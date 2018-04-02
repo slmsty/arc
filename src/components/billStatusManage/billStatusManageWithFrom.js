@@ -7,16 +7,24 @@ import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import MultipleInput from '../common/multipleInput'
-import SelectSbu from '../common/SelectSbu'
+import SelectSearch from '../billApplication/selectSearch'
 
 const FormItem = Form.Item
 const { RangePicker } = DatePicker
 const Option = Select.Option
 const dateFormat = 'YYYY-MM-DD'
-
+const applyColumns = [{
+    title: '申请人',
+    dataIndex: 'accountName',
+    width: 100,
+  },
+  {
+    title: '申请人编码',
+    dataIndex: 'accountId',
+    width: 100,
+}]
 class BillStatusManageWithFormCon extends React.Component {
-  state = {
-  }
+
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
@@ -25,8 +33,8 @@ class BillStatusManageWithFormCon extends React.Component {
     param.projectCode = param.projectCode && param.projectCode.length ? param.projectCode.join(',') : ''
     param.contractCode = param.contractCode && param.contractCode.length ? param.contractCode.join(',') : ''
     param.invoiceCode = param.invoiceCode && param.invoiceCode.length ? param.invoiceCode.join(',') : ''
+    param.accountId = param.accountId[0]
     delete param.signDate
-    console.log(param)
     this.props.onQuery(param)
   }
   render() {
@@ -42,10 +50,9 @@ class BillStatusManageWithFormCon extends React.Component {
         >
           <Row gutter={40}>
             <Col span={8} key={1}>
-              <FormItem {...formItemLayout} label="收款日期">
+              <FormItem {...formItemLayout} label="开票申请日期">
                 {getFieldDecorator('signDate', {
-                  // initialValue: [moment().subtract(1, 'month'), moment()],
-                  initialValue: [moment('2017-08-01'), moment()],
+                  initialValue: '',
                 })(<RangePicker
                   allowClear
                   format={dateFormat}
@@ -76,13 +83,13 @@ class BillStatusManageWithFormCon extends React.Component {
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="数据状态">
                 {getFieldDecorator('status', {
-                  initialValue: 'BILLING_OK',
+                  initialValue: '',
                 })(
                   <SelectInvokeApi
                     typeCode="BILLING_APPLICATION_STATUS"
                     paramCode="STATUS"
                     placeholder="数据状态"
-                    hasEmpty
+                    hasAll
                   />
                 )}
               </FormItem>
@@ -106,6 +113,50 @@ class BillStatusManageWithFormCon extends React.Component {
                       placeholder="多发票号使用英文逗号间隔"
                     />,
                   )
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="申请人">
+                {getFieldDecorator('accountId', {
+                  initialValue: '',
+                })(
+                  <SelectSearch
+                    url="/arc/application/invoice/operator"
+                    columns={applyColumns}
+                    label="申请人"
+                    idKey="accountId"
+                    valueKey="accountName"
+                    showSearch={true}
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="开票申请分类">
+                {getFieldDecorator('applicationType', {
+                  initialValue: '',
+                })(
+                  <SelectInvokeApi
+                    typeCode="BILLING_APPLICATION_STATUS"
+                    paramCode="BILLING_APPLICATION_TYPE"
+                    placeholder="开票申请分类"
+                    hasEmpty={false}
+                    hasAll
+                  />
+                )
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="申请单编号">
+                {getFieldDecorator('applicationId', {
+                  initialValue: '',
+                })(
+                  <Input placeholder="申请单编号"/>
+                )
                 }
               </FormItem>
             </Col>

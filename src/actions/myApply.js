@@ -101,7 +101,7 @@ export function cancelApply(queryParam) {
   }
 }
 
-export function billApplySave(queryParam) {
+export function billApproveSave(queryParam) {
   return {
     [httpApi]: {
       url: '/arc/billingApplication/workFlowEdit',
@@ -110,6 +110,23 @@ export function billApplySave(queryParam) {
         body: queryParam,
       },
       types: ['BILL_APPLY_SAVE_SUCCESS'],
+    },
+  }
+}
+/**
+ * 我的申请列表
+ * @param queryParam
+ * @returns {{}}
+ */
+export function myApplyList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/workFlow/myApply',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['MY_APPLY_LIST_SUCCESS'],
     },
   }
 }

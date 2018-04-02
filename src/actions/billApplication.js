@@ -149,7 +149,7 @@ export const billApplySave = (params) => {
         method: 'POST',
         body: params,
       },
-      types: ['BILL_APPLY_SAVE_SUCCESS'],
+      types: ['BILL_APPLY_SAVE_SUCCESS', 'LOADING_REQUEST', 'BILL_APPLY_SAVE_FAILURE'],
     },
   }
 }
@@ -192,3 +192,140 @@ export const billApplyCheck = (params) => {
     },
   }
 }
+
+// 获取审批表链接地址
+export function getContractUrl(contractId) {
+  return {
+    [httpApi]: {
+      url: `/arc/contract/split/contractUrl/${contractId}`,
+      options: {
+        method: 'GET',
+      },
+      types: ['GET_CONTRACT_URL_SUCCESS'],
+    },
+  }
+}
+
+export const hideDetailModal = () => (
+  {type: 'HIDE_DETAIL_MODAL'}
+)
+
+// 开票申请发起流程
+export function billStartWorkFlow(params) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/startWorkFlow`,
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_START_WORK_FLOW_SUCCESS'],
+    },
+  }
+}
+/**
+ * 开票审核查询
+ * @param params
+ * @returns {{}}
+ */
+export function searchContractBilling(params) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/searchContractBillingNew`,
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['GET_SEARCH_CONTRACT_BILLING_SUCCESS', 'SEARCH_LOADING_REQUEST'],
+    },
+  }
+}
+/**
+ * 获取审核详情
+ * @param billingApplicationId
+ * @returns {{}}
+ */
+export function getApplicationDetail(billingApplicationId) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/getApplicationDetail`,
+      options: {
+        method: 'POST',
+        body: {
+          billingApplicationId,
+        },
+      },
+      types: ['GET_APPLICATION_DETAIL_SUCCESS'],
+    },
+  }
+}
+/**
+ * 查询红冲申请详细信息
+ * @param billingOutcomeId
+ * @returns {{}}
+ */
+export function getRedApplyDetail(billingOutcomeIds) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/redApplyDetail`,
+      options: {
+        method: 'POST',
+        body: {
+          billingOutcomeIds,
+        },
+      },
+      types: ['GET_RED_APPLY_DETAIL_SUCCESS'],
+    },
+  }
+}
+/**
+ * 退票申请
+ * @param params
+ * @returns {{}}
+ */
+export function billApplicationRedApply(params) {
+  return {
+    [httpApi]: {
+      url: `/arc/billingApplication/redApply`,
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['BILL_APPLICATION_RED_APPLY_SUCCESS'],
+    },
+  }
+}
+/**
+ * 获取合同税率
+ * @param contractId
+ * @returns {{}}
+ */
+export function getContractTaxRate(contractId) {
+  return {
+    [httpApi]: {
+      url: `/arc/contract/split/taxRate/${contractId}`,
+      options: {
+        method: 'GET',
+      },
+      types: ['GET_CONTRACT_TAX_RATE'],
+    },
+  }
+}
+/**
+ * 其他事项开票获取税率
+ * @param params
+ * @returns {{}}
+ */
+export function getTaxInfo(params) {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/getTaxInfo',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['GET_TAX_INFO'],
+    },
+  }
+}
+

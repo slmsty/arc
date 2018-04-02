@@ -3,13 +3,20 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Row, Col, Button, Input, Form, Table } from 'antd'
+import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillDetail from './billDetail'
+import UrlModalCom from '../common/getUrlModal'
 const FormItem = Form.Item
 const { TextArea } = Input
-const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER']
+const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 
 class NoApplyInfo extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      showContractLink: false,
+    }
+  }
   render() {
     const applyInfoDatas = this.props.applyInfoData
     const columns = [{
@@ -31,7 +38,7 @@ class NoApplyInfo extends React.Component {
       dataIndex: 'contractName',
       width: 300,
     }, {
-      title: '付款条款',
+      title: '款项名称',
       dataIndex: 'paymentName',
       width: 100,
     }, {
@@ -72,6 +79,16 @@ class NoApplyInfo extends React.Component {
           onCancel={this.props.closeClaim}
           onOk={this.props.closeClaim}
         >
+            <Row>
+              <Col span={14}>
+                <Button
+                  className="scan-document"
+                  type="primary"
+                  ghost
+                  onClick={() => this.setState({showContractLink: true})}
+                >合同审批表及合同扫描件</Button>
+              </Col>
+            </Row>
             <h2>申请人信息</h2>
             <br />
             <Row>
@@ -111,6 +128,7 @@ class NoApplyInfo extends React.Component {
                   <BillDetail
                     serviceDetail={applyInfoDatas.serviceDetail}
                     applyType={applyInfoDatas.serviceType}
+                    fileDown={this.props.fileDown}
                   />
                 </div>
                 : null
@@ -125,7 +143,7 @@ class NoApplyInfo extends React.Component {
                     <br />
                     <Row>
                       <Col style={{ textAlign: 'left' }} span={3}>{item.taskName}：</Col>
-                      <Col span={5}>{item.assigneeName}</Col>
+                      <Col span={5}>{item.assigneeName} ({item.statusName})</Col>
                       <Col style={{ textAlign: 'right' }} span={3}>审批结果：</Col>
                       <Col span={4}>{item.approveType}</Col>
                       <Col style={{ textAlign: 'right' }} span={3}>审批时间：</Col>
@@ -146,6 +164,13 @@ class NoApplyInfo extends React.Component {
               }) : ''
             }
             <br />
+            {
+              this.state.showContractLink ?
+                <UrlModalCom
+                  closeModal={() => this.setState({showContractLink: false}) }
+                  contractUrl={this.props.contractUrl}
+                /> : null
+            }
         </Modal>
       </div>
     )
@@ -156,10 +181,6 @@ NoApplyInfo.propTypes = {
   applyReject: PropTypes.func,
   applyComfirm: PropTypes.func,
   infoVisitable: PropTypes.bool.isRequired,
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func.isRequired,
-    getFieldsValue: PropTypes.func.isRequired,
-  }).isRequired,
 }
 
 export default NoApplyInfo

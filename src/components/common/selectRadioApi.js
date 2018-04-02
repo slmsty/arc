@@ -8,7 +8,6 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 const Option = Select.Option
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
-
 export default class SelectRadioApi extends React.Component {
   state = {
     options: [],
@@ -16,6 +15,9 @@ export default class SelectRadioApi extends React.Component {
   componentDidMount() {
     if (this.props.typeCode && this.props.paramCode) {
       requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
+    }
+    if(this.props.typeCode === 'STATEMENT'){
+      requestJsonFetch(`/arc/report/getReportTypeList`, { method: 'get' }, this.handleCallback)
     }
   }
   handleCallback = (response) => {
@@ -37,11 +39,11 @@ export default class SelectRadioApi extends React.Component {
     }
   }
   render() {
-    const options = this.props.options.length>0 ? this.props.options :this.state.options
-    const optionDom = options ? options.map(option => <RadioButton style={{ marginRight: '10px', borderRadius: '4px' }} key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</RadioButton>) : null
+    const options = this.props.options.length > 0 ? this.props.options :this.state.options
+    const optionDom = options ? options.map(option => <RadioButton style={{ marginRight: '10px', borderRadius: '4px',marginBottom:'10px' }} key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</RadioButton>) : null
     return (
       <RadioGroup
-        size="large" style={{ width: this.props.options.length ? '1000px' :'330px' }}
+        size="large" style={{ width: this.props.options.length ? '1000px' :'1000px' }}
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
         value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : 'all')}

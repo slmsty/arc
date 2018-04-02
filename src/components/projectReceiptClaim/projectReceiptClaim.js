@@ -22,6 +22,9 @@ export default class ProjectReceiptClaim extends React.Component {
     if (this.props.receiptClaimListRefresh !== nextProps.receiptClaimListRefresh) {
       this.handleQuery()
     }
+    if (this.props.receiptSuccess !== nextProps.receiptSuccess && nextProps.receiptSuccess) {
+      message.success('项目认款成功!')
+    }
   }
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys })
@@ -319,7 +322,10 @@ export default class ProjectReceiptClaim extends React.Component {
             onShowSizeChange: this.handleChangeSize,
           }}
         />
-        <ProjectReceiptClaimModal />
+        {
+          !!this.props.receiptInfo.receiptClaimId ?
+            <ProjectReceiptClaimModal /> : null
+        }
       </div>
     )
   }

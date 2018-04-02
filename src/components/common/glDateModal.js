@@ -35,7 +35,7 @@ class DateModalCom extends React.Component {
         >
           <Row gutter={40}>
             <Col span={16} key={1}>
-              <FormItem {...formItemLayout} label="收款日期">
+              <FormItem {...formItemLayout} label="GL日期">
                 {getFieldDecorator('glDate', {
                   initialValue: moment().subtract(1, 'day'),
                 })(<DatePicker

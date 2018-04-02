@@ -4,7 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SelectSbu from '../common/SelectSbu'
-import ContractType from '../common/contractType'
+import ContractType from '../common/contractType1'
 import MyDtatePicker from '../common/myDatePicker'
 import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select } from 'antd'
 

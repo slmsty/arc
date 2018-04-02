@@ -2,7 +2,7 @@
 import React from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Layout, Icon, Breadcrumb } from 'antd'
+import { Layout, Icon, Breadcrumb, Menu, Dropdown } from 'antd'
 import MenuComponent from './common/menu'
 import './index.less'
 
@@ -38,7 +38,7 @@ const BreadcrumbContainer = withRouter((props) => {
   })
   const breadcrumbItems = [(
     <Breadcrumb.Item key="home">
-      <Link to="/">首页</Link>
+      <Link to="/">ARC.应收结算</Link>
     </Breadcrumb.Item>
   )].concat(extraBreadcrumbItems)
   return (
@@ -89,7 +89,10 @@ export default class Index extends React.Component {
             />
             <div className="user">
               <img src={headIcon} alt="" />
-              <p>欢迎您，<span>{accountName}</span><span>{orgName}</span></p>
+              <p>
+                欢迎您，<span>{accountName}</span><span>{orgName}</span>
+                <a target="_blank" rel="noopener noreferrer" href="https://xin.asiainfo.com/chat/GC49401E5FD1446BAE1013B32D2F9B8E">问题反馈</a>
+              </p>
             </div>
           </Header>
           <Content style={{ margin: '8px 8px', padding: 12, background: '#fff' }}>

@@ -2,7 +2,6 @@
  * Created by liangshuang on 17/12/1.
  */
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Button, Table, message } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
 import ApplyInfoModal from './applyInfo'
@@ -76,8 +75,9 @@ export default class ApplySearchCon extends React.Component {
           infoVisitable: true,
           applyData: record,
         })
+        this.props.getContractUrl(res.response.data.serviceDetail.contractId)
       } else {
-        message.error(res.response.resultMessage)
+        message.error(res.response.resultMessage, 5)
       }
     })
   }
@@ -94,8 +94,6 @@ export default class ApplySearchCon extends React.Component {
       })
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('审批成功')
-      } else {
-        message.error(res.response.resultMessage)
       }
     })
   }
@@ -112,8 +110,6 @@ export default class ApplySearchCon extends React.Component {
       })
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('驳回成功')
-      } else {
-        message.error(res.response.resultMessage)
       }
     })
   }
@@ -139,6 +135,7 @@ export default class ApplySearchCon extends React.Component {
           noApplyInfoVisitable: true,
           noApplyInfoData: record,
         })
+        this.props.getContractUrl(res.response.data.serviceDetail.contractId)
       }
     })
   }
@@ -152,38 +149,26 @@ export default class ApplySearchCon extends React.Component {
     const columns = [{
       title: '申请单编号',
       dataIndex: 'businessKey',
-      width: 150,
+      width: 100,
       render: (text, record) => (
-        <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
+        <a href="javascript:void(0);" onClick={() => this.showApplyInfo(record)}>{text}</a>
       ),
     }, {
       title: '审批状态',
       dataIndex: 'statusName',
-      width: 100,
+      width: 80,
     }, {
       title: '申请单类型',
       dataIndex: 'modelName',
-      width: 120,
-    },/* {
-      title: '项目编码',
-      dataIndex: 'productId',
-      width: 200,
+      width: 150,
     }, {
-      title: '合同编码',
-      dataIndex: 'constractId',
-      width: 200,
-    }, {
-      title: '合同名称',
-      dataIndex: 'constractName',
-      width: 300,
-    },*/ {
       title: '申请信息',
       dataIndex: 'applyInfo',
-      width: 250,
+      width: 350,
     }, {
       title: '审批结果',
       dataIndex: 'approveType',
-      width: 150,
+      width: 100,
     }, {
       title: '审批意见',
       dataIndex: 'approveRemark',
@@ -195,11 +180,11 @@ export default class ApplySearchCon extends React.Component {
     }, {
       title: '申请时间',
       dataIndex: 'applyDate',
-      width: 160,
+      width: 140,
     }, {
       title: '审批时间',
       dataIndex: 'approveDate',
-      width: 150,
+      width: 140,
     }, {
       title: '操作',
       dataIndex: 'opration',
@@ -208,7 +193,7 @@ export default class ApplySearchCon extends React.Component {
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
           {/* disabled={record.statusName === '审批中' ? 'false' : 'true'} */}
-          <Button disabled={record.statusName === '审批中' ? false : true} onClick={() => this.approveClick(record)}>审批</Button>
+          <Button type="primary" ghost disabled={record.statusName === '审批中' ? false : true} onClick={() => this.approveClick(record)}>审批</Button>
         </div>
       ),
     },
@@ -222,20 +207,27 @@ export default class ApplySearchCon extends React.Component {
       onShowSizeChange: this.handleChangeSize,
 
     }
-    const { billSaveSuccess } = this.props.myApply
+    const { billSaveSuccess, applicationIds } = this.props.myApply
     return (
       <div>
         <ApplySearchConWithForm onQuery={this.handleChangeParam} loading={this.state.loading} />
-        <ApplyInfoModal
-          infoVisitable={this.state.infoVisitable}
-          closeClaim={this.closeModalClaim}
-          applyComfirm={this.applyComfirm}
-          applyReject={this.applyReject}
-          applyData={this.state.applyData}
-          applyInfoData={this.props.myApply.getMyApplyInfo}
-          billApplySave={this.props.billApplySave}
-          billSaveSuccess={billSaveSuccess}
-        />
+        {
+          this.state.infoVisitable ?
+            <ApplyInfoModal
+              infoVisitable={this.state.infoVisitable}
+              closeClaim={this.closeModalClaim}
+              applyComfirm={this.applyComfirm}
+              applyReject={this.applyReject}
+              applyData={this.state.applyData}
+              applyInfoData={this.props.myApply.getMyApplyInfo}
+              billApplySave={this.props.billApproveSave}
+              billSaveSuccess={billSaveSuccess}
+              applicationIds={applicationIds}
+              getContractUrl={this.props.getContractUrl}
+              contractUrl={this.props.contractUrl}
+              fileDown={this.props.fileDown}
+            /> : null
+        }
         {
           this.state.noApplyInfoVisitable ?
             <NoApplyInfo
@@ -243,11 +235,14 @@ export default class ApplySearchCon extends React.Component {
               closeClaim={this.NoApplycloseModalClaim}
               applyData={this.state.noApplyInfoData}
               applyInfoData={this.props.myApply.getMyApplyInfo}
+              fileDown={this.props.fileDown}
+              getContractUrl={this.props.getContractUrl}
+              contractUrl={this.props.contractUrl}
             /> : null
         }
         <br /><br />
         <Table
-          rowKey="getMyApplyList"
+          rowKey="processInstanceId"
           pagination={pagination}
           bordered
           columns={columns}
@@ -259,15 +254,4 @@ export default class ApplySearchCon extends React.Component {
       </div>
     )
   }
-}
-ApplySearchCon.propTypes = {
-  getMyApplyList: PropTypes.func.isRequired,
-  approveSubmit: PropTypes.func.isRequired,
-  approveReject: PropTypes.func.isRequired,
-  myApplyInfo: PropTypes.func.isRequired,
-  myApply: PropTypes.shape({
-    myapplyListRefresh: PropTypes.number.isRequired,
-    getMyApplyList: PropTypes.object.isRequired,
-    getMyApplyInfo: PropTypes.object.isRequired,
-  }).isRequired,
 }

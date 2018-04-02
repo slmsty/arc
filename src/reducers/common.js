@@ -128,31 +128,34 @@ const common = {
       },
       {
         key: '4',
-        path: '/ContractSplit',
+        path: '/BillManage',
         name: '实际开票管理',
         icon: 'icon-shijikaipiaoguanli',
         component: 'HomeContainer',
         child: [
-          {
+          /*{
             key: '41',
-            path: '/ContractSplit/ContractSplit',
+            path: '/BillManage/ContractSplit',
             name: '合同拆分',
             icon: 'icon-BilledAR',
             component: 'ContractSplit',
-          },
+          },*/
           {
             key: '42',
-            path: '/ContractSplit/billingApplication',
+            path: '/BillManage/billingApplication',
             name: '开票申请',
             icon: 'icon-BilledAR',
             component: 'BillingApplication',
           },
           {
             key: '43',
-            path: '/ContractSplit/BillStatusManage',
+            path: '/BillManage/BillStatusManage',
             name: '开票状态管理',
             icon: 'icon-BilledAR',
             component: 'BillStatusManage',
+            child:[{component: "billingStatusSendAp", key: "521", name: "开票传送ap", path: "billingStatusSendAp"},
+              {component: "billingStatusCancel", key: "522", name: "开票状态撤销", path: "billingStatusCancel"},
+            ]
           },
         ],
       },
@@ -165,6 +168,13 @@ const common = {
         child: [
           {
             key: '51',
+            path: '/myApply/myApply',
+            name: '我的申请',
+            icon: 'icon-BilledAR',
+            component: 'myApplyContainer',
+          },
+          {
+            key: '52',
             path: '/myApply/applyList',
             name: '审批列表',
             icon: 'icon-BilledAR',
@@ -174,11 +184,27 @@ const common = {
       },
       {
         key: '6',
-        path: '/statementSearch',
+        path: '/ContractSplit',
+        name: '合同拆分',
+        icon: 'icon-BilledAR',
+        component: 'ContractSplit',
+        /*child: [
+          {
+            key: '51',
+            path: '/ContractSplit/ContractSplit',
+            name: '合同拆分',
+            icon: 'icon-BilledAR',
+            component: 'ContractSplit',
+          },
+        ],*/
+      },
+      {
+        key: '7',
+        path: '/statementSearch/statementList',
         name: '报表查询',
-        icon: 'icon-shijikaipiaoguanli',
-        component: 'HomeContainer',
-        child: [
+        icon: 'icon-BilledAR',
+        component: 'statementSearch',
+        /*child: [
           {
             key: '61',
             path: '/statementSearch/statementList',
@@ -186,7 +212,22 @@ const common = {
             icon: 'icon-BilledAR',
             component: 'statementSearch',
           },
-        ],
+        ],*/
+      },
+      {
+        key: '8',
+        path: '/system',
+        name: '系统管理',
+        icon: 'icon-system',
+        child: [
+         {
+           key: '61',
+           path: '/system/mailConfig',
+           name: '邮件配置',
+           icon: 'icon-mail',
+           component: 'mailConfig',
+         },
+         ],
       },
     ],
   } : {},
@@ -208,7 +249,7 @@ function showFailure(state, action) {
 }
 
 function showError(state, action) {
-  return { ...state, error: { message: action.error.statusText, timeTick: new Date().getTime() } }
+  return { ...state, error: { message: action.error.statusText || '系统错误，请联系系统管理员', timeTick: new Date().getTime() } }
 }
 
 export default caseReducer(common, {

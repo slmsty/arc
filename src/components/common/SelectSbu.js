@@ -82,7 +82,7 @@ class SelectSbu extends React.Component {
     if (response.resultCode === '000000') {
       this.setState({
         pageNo: response.pageInfo.pageNo,
-        total: response.pageInfo.pageCount,
+        total: response.pageInfo.count,
         customerList: response.pageInfo.result,
         firstLoad: false,
       })
@@ -106,12 +106,18 @@ class SelectSbu extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
+    const pagination = {
+      current: this.state.pageNo,
+      onChange: this.handleChangePage,
+      total: this.state.total,
+      size: 'small',
+    }
     const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
           placeholder="SBU"
-          value={this.props.keyName==='contract' && this.props.value && this.props.value[1] !== undefined ? `${this.props.value[0]}:${this.props.value[1]}` : (this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : '')}
+          value={this.props.keyName==='contract' && this.props.value && this.props.value[0] !== undefined ? (this.props.value[1]!== undefined ? `${this.props.value[0]}:${this.props.value[1]}` :this.props.value[0]) : (this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : '')}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
           disabled={this.props.disabled}
@@ -140,6 +146,7 @@ class SelectSbu extends React.Component {
                     <Input
                       onPressEnter={this.handleQuery}
                       placeholder="请输入SBU关键字"
+
                     />,
                   )}
                 </FormItem>
@@ -152,7 +159,6 @@ class SelectSbu extends React.Component {
           </Form>
 
           <Table
-            rowKey="sbuNo"
             columns={this.columns}
             rowSelection={rowSelection}
             bordered
@@ -162,12 +168,7 @@ class SelectSbu extends React.Component {
             locale={{
               emptyText: this.state.firstLoad ? '' : '没有符合条件的SBU',
             }}
-            pagination={{
-              current: this.state.pageNo,
-              onChange: this.handleChangePage,
-              total: this.state.total,
-              size: 'small',
-            }}
+            pagination={pagination}
           />
         </Modal>
       </div>

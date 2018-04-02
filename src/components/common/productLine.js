@@ -65,7 +65,7 @@ class ProductLine extends React.Component {
     })
     this.setState({
       inputValue: this.state.selectedRows[0].proName,
-      flag: false,
+      flag: true,
     })
     this.handleCancel()
   }

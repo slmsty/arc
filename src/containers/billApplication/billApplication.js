@@ -4,11 +4,14 @@ import BillingApplication from '../../components/billApplication/billingApplicat
 import * as actions from '../../actions/billApplication'
 
 const mapStateToProps = state => ({
-  ...state.billApplication
+  ...state.billApplication,
+  currentUser: state.common.user,
 })
 
-const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators(actions, dispatch)
-})
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    ...actions,
+  }, dispatch)
+)
 
 export default connect(mapStateToProps, mapDispatchToProps)(BillingApplication)

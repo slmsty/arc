@@ -17,7 +17,7 @@ class FileDownModal extends React.Component {
       message.error('文件ID或文件名不能为空！')
       return
     }
-    this.props.fileDown(fileId,fileName)
+    this.props.fileDown(fileId, fileName)
   }
   render() {
     let dataSource = this.props.data
@@ -34,7 +34,7 @@ class FileDownModal extends React.Component {
         >
           <div style={{textAlign: 'center',marginBottom:'20px'}}>
             <span style={{display:'inline-block'}}>发票文本：</span>
-            <div style={{display:'inline-block'}}><a href="javascript:;" onClick={()=>this.fileDown(dataSource[1],dataSource[0])}>{dataSource[0]}</a></div>
+            <div style={{display:'inline-block'}}><a href="javascript:;" onClick={()=>this.fileDown(dataSource[0],dataSource[1])}>{dataSource[1]}</a></div>
           </div>
         </Modal>
       </div>

@@ -17,12 +17,21 @@ const billApproveItemColumns = [
     width: 300,
   },
   {
+    title: '提前开票原因',
+    dataIndex: 'preInvoiceReason',
+    width: 300,
+  }, {
+    title: '预计回款日期',
+    dataIndex: 'preReceiveDate',
+    width: 150,
+  },
+  {
     title: '付款条件',
     dataIndex: 'paymentTerm',
     width: 100,
   },
   {
-    title: '付款条款',
+    title: '款项名称',
     dataIndex: 'paymentName',
     width: 100,
   },
@@ -32,7 +41,7 @@ const billApproveItemColumns = [
     width: 100,
   },
   {
-    title: '付款金额',
+    title: '款项金额',
     dataIndex: 'paymentAmount',
     width: 100,
     render: (text, record, index) => (text ? currency(text) : text),
@@ -40,6 +49,12 @@ const billApproveItemColumns = [
   {
     title: 'Billed AR金额',
     dataIndex: 'arAmount',
+    width: 100,
+    render: (text, record, index) => (text ? currency(text) : text),
+  },
+  {
+    title: '已申请金额',
+    dataIndex: 'billingAmount',
     width: 100,
     render: (text, record, index) => (text ? currency(text) : text),
   },
@@ -55,7 +70,7 @@ const billApproveInfoColumns = [
   {
     title: '开票行号',
     dataIndex: 'lineNo',
-    width: 100,
+    width: 70,
   }, {
     title: '开票内容',
     dataIndex: 'billingContent',
@@ -98,6 +113,7 @@ const billApproveInfoColumns = [
     title: '开票税率',
     dataIndex: 'billingTaxRate',
     width: 100,
+    render: (text) => (`${text * 100}%`)
   },
   {
     title: '开票税额',

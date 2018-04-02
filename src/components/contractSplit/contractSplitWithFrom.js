@@ -16,6 +16,7 @@ const dateFormat = 'YYYY-MM-DD'
 
 class ContractSplitCon extends React.Component {
   state = {
+    showRecaule:false,
   }
   handleQuery = () => {
     // 验证通过后查询
@@ -26,8 +27,18 @@ class ContractSplitCon extends React.Component {
     param.salesBuNo = param.salesBuNo && param.salesBuNo ? param.salesBuNo[0] : ''
     param.operator = param.operator && param.operator[1] ? param.operator[1] : ''
     delete param.signDate
-    console.log(param)
     this.props.onQuery(param)
+  }
+  handleChange = (e) => {
+    if(e==='Y'){
+      this.setState({
+        showRecaule:true,
+      })
+    }else{
+      this.setState({
+        showRecaule:false,
+      })
+    }
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -45,7 +56,7 @@ class ContractSplitCon extends React.Component {
               <FormItem {...formItemLayout} label="签约日期">
                 {getFieldDecorator('signDate', {
                   // initialValue: [moment().subtract(1, 'month'), moment()],
-                  initialValue: [moment('2017-08-01'), moment()],
+                  //initialValue: [moment('2017-08-01'), moment()],
                 })(<RangePicker
                   allowClear
                   format={dateFormat}
@@ -54,11 +65,12 @@ class ContractSplitCon extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={2}>
-              <FormItem {...formItemLayout} label="项目编码(多)">
+              <FormItem {...formItemLayout} label="项目编码">
                 {
-                  getFieldDecorator('projectNos')(
-                    <MultipleInput
-                      placeholder="多项目编码使用英文逗号间隔"
+                  getFieldDecorator('projectNo')(
+                    <Input
+                      placeholder="项目编码"
+                      onPressEnter={this.handleQuery}
                     />,
                   )
                 }
@@ -111,11 +123,12 @@ class ContractSplitCon extends React.Component {
           </Row>
           <Row gutter={40}>
             <Col span={8} key={7}>
-              <FormItem {...formItemLayout} label="合同编码(多)">
+              <FormItem {...formItemLayout} label="合同编码">
                 {
-                  getFieldDecorator('contractNos')(
-                    <MultipleInput
-                      placeholder="多合同编码使用英文逗号间隔"
+                  getFieldDecorator('contractNo')(
+                    <Input
+                      placeholder="合同编码"
+                      onPressEnter={this.handleQuery}
                     />,
                   )
                 }
@@ -133,6 +146,32 @@ class ContractSplitCon extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} style={{ textAlign: 'right' }}>
+              <FormItem {...formItemLayout} label="区域">
+                {
+                  getFieldDecorator('region')(
+                    <Input/>,
+                  )
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={8} style={{display:this.state.showRecaule ? 'block' : 'none'}}>
+              <FormItem {...formItemLayout} label="是否复算项目">
+                {getFieldDecorator('recalculate', {
+                  initialValue: '',
+                })(
+                  <Select
+                    placeholder="请选择拆分状态"
+                  >
+                    <Option value="">全部</Option>
+                    <Option value="Y">是</Option>
+                    <Option value="N">否</Option>
+                  </Select>,
+                )}
+              </FormItem>
+            </Col>
+            <Col span={this.state.showRecaule ? '16' : '24'} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
             </Col>
           </Row>
@@ -140,13 +179,6 @@ class ContractSplitCon extends React.Component {
       </div>
     )
   }
-}
-ContractSplitCon.propTypes = {
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func.isRequired,
-    getFieldsValue: PropTypes.func.isRequired,
-  }).isRequired,
-  onQuery: PropTypes.func.isRequired,
 }
 const ContractSplitConWithForm = Form.create()(ContractSplitCon)
 

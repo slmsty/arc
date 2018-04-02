@@ -119,6 +119,7 @@ class SearchAllColumns extends React.Component {
         />
         <Modal
           title="选择"
+          width={this.props.width ? this.props.width : "600px"}
           style={{ top: 20}}
           visible={visible}
           wrapClassName="vertical-center-modal"
@@ -170,6 +171,10 @@ class SearchAllColumns extends React.Component {
               size: 'small',
             }}
           />
+          {
+            this.props.label === '开票内容' ?
+              <p style={{color: 'red'}}>提示：若未找到{this.props.label}, 请联系税务同事添加!</p> : null
+          }
         </Modal>
       </div>
     )

@@ -18,6 +18,7 @@ const billStatusManageData = {
   ,
   getFileDownList: {},
   cancelApproveRefresh: new Date().getTime(),
+  sendResult: {},
 }
 
 function getBillStatusList(state, action) {
@@ -47,6 +48,12 @@ function fileDown(state, action) {
     ...state
   }
 }
+function invoiceSendTax(state, action) {
+  return {
+    ...state,
+    sendResult: action.response.data,
+  }
+}
 export default caseReducer(billStatusManageData, {
   GET_BILLSTATUS_LIST_SUCCESS: getBillStatusList,
   GET_BILLSTATUS_DETAIL_LIST_SUCCESS: getBillStatusDetail,
@@ -56,4 +63,5 @@ export default caseReducer(billStatusManageData, {
   DISSABLE_APPROVE_SUCCESS: disableApprove,
   SEND_AP_SUCCESS: sendAP,
   FILE_DOWN_SUCCESS: fileDown,
+  INVOICE_SEND_TAX_SUCCESS: invoiceSendTax,
 })

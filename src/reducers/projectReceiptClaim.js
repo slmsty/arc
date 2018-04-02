@@ -18,6 +18,7 @@ const projectReceiptClaim = {
     result: [],
   },
   getPhaseCompleted: new Date().getTime(),
+  receiptSuccess: false,
 }
 
 function getReceiptList(state, action) {
@@ -29,7 +30,7 @@ function getPhaseList(state, action) {
 }
 
 function getReceiptInfo(state, action) {
-  return { ...state, receiptInfo: action.response.data[0] }
+  return { ...state, receiptInfo: action.response.data[0], receiptSuccess: false }
 }
 
 function rejectSuccess(state) {
@@ -46,7 +47,7 @@ function emailClaim(state) {
   return { ...state, receiptClaimListRefresh: new Date().getTime() }
 }
 function submitSuccess(state) {
-  return { ...state, receiptInfo: {}, receiptClaimListRefresh: new Date().getTime() }
+  return { ...state, receiptInfo: {}, receiptClaimListRefresh: new Date().getTime(), receiptSuccess: true }
 }
 
 function closeClaim(state) {
