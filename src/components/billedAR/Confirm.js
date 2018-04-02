@@ -564,12 +564,15 @@ class Confirm extends Component{
             total: count
           }}
           scroll={{ x: 4580, y: this.state.tableHeight }} />
-          <ARModal
-            visible={this.state.visible}
-            onCancel={this.Cancel}
-            onOk={this.OK}
-            o={this.state.o}
-           />
+          {
+            this.state.visible ?
+              <ARModal
+                visible={this.state.visible}
+                onCancel={this.Cancel}
+                onOk={this.OK}
+                o={this.state.o}
+              /> : null
+          }
           <Modal
             visible={this.state.isSend}
             onOk={this.closeSend}
