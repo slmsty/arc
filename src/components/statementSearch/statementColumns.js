@@ -748,12 +748,12 @@ const constructSplitSearchColumns = [{
   },
   {
     title: '是否集采',
-    dataIndex: 'isRecipt',
+    dataIndex: 'collectionProject',
     width: 80,
   },
   {
     title: '是否拆分',
-    dataIndex: 'isSplit',
+    dataIndex: 'isProdect',
     width: 80,
   },
   {
