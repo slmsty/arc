@@ -940,7 +940,7 @@ class ContractSplitModal extends React.Component{
           visible={true}
           onCancel={this.closeModal}
           footer={[
-            <Button onClick={this.handleEdit} style={{display:this.state.editFlag ? 'inline-block' : 'none'}}>
+            <Button onClick={this.handleEdit} style={{display:this.state.editFlag ? 'inline-block' : 'none'}} disabled={!this.props.isShowEditBtn}>
               编辑
             </Button>,
             <Button  key="submit" onClick={this.handleOk} style={{display:this.state.editFlag ? 'none' : 'inline-block'}}>

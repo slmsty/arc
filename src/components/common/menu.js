@@ -5,14 +5,14 @@ import PropTypes from 'prop-types'
 import { Menu } from 'antd'
 
 const SubMenu = Menu.SubMenu
-//sessionStorage.setItem('permissionBtns', childMenu.child)
+
 export default class MenuComponent extends React.Component {
   render() {
     const menus = this.props.menu ? this.props.menu.map((menu) => {
       if (menu.child && menu.child.length > 0) {
         const childMenus = menu.child.map(childMenu => (
           <Menu.Item key={childMenu.key}>
-            <Link to={childMenu.path} onClick={() => sessionStorage.setItem('roleButtons', childMenu.child)}>
+            <Link to={childMenu.path} onClick={() => sessionStorage.setItem('roleButtons', JSON.stringify(childMenu.child))}>
               <i className={`iconfont ${childMenu.icon}`} />&nbsp;{childMenu.name}</Link>
           </Menu.Item>)
         )
