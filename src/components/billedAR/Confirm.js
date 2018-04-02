@@ -251,10 +251,10 @@ class Confirm extends Component{
     this.setState({
       rowKeys: rowKeys,
       rows: rows,
-      editDis: !(rows.length===1 && rows.every(o=>o.status==='10'||o.status==='20'||o.status==='21'||o.status==='30'||o.status==='32')),
-      rejectDis: !(rows.length>0 && rows.every(o=>o.status==='20'||o.status==='30')),
-      approvalDis: !(rows.length>0 && rows.every(o=>o.status==='20')),
-      sendDis: !(rows.length>0 && rows.every(o=>o.status==='30' || o.status==='32')),
+      editDis: !(rows.length===1 && rows.every(o=>o.status==='NEW'||o.status==='ACCOUNT_CONFIRMING'||o.status==='CONFIRM_NEEDLESS'||o.status==='PA_PUSHING'||o.status==='PA_PUSH_ERROR')),
+      rejectDis: !(rows.length>0 && rows.every(o=>o.status==='ACCOUNT_CONFIRMING'||o.status==='PA_PUSHING')),
+      approvalDis: !(rows.length>0 && rows.every(o=>o.status==='ACCOUNT_CONFIRMING')),
+      sendDis: !(rows.length>0 && rows.every(o=>o.status==='PA_PUSHING' || o.status==='PA_PUSH_ERROR')),
     })
   }
 
@@ -266,7 +266,7 @@ class Confirm extends Component{
   }
 
   Cancel = ()=>{
-    this.setState({visible: false})
+    this.setState({visible: false, o: {}})
   }
 
   OK = ()=>{
@@ -515,7 +515,7 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="数据状态" {...layout}>
                 {
-                  getFieldDecorator('status', {initialValue: '20'})(<SelectInvokeApi
+                  getFieldDecorator('status', {initialValue: 'ACCOUNT_CONFIRMING'})(<SelectInvokeApi
                     typeCode="BILLED_AR"
                     paramCode="STATUS"
                     placeholder="数据状态"
