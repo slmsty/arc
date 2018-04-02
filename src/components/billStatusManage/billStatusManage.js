@@ -463,25 +463,39 @@ export default class BillStatusCon extends React.Component {
       type: 'checkBox',
       onChange: this.onBillResultSelectChange,
     }
+    const buttonList = JSON.parse(sessionStorage.getItem('roleButtons')).map(r => r.path)
     return (
       <div>
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />
-        <Button onClick={this.showGlDate} type="primary" ghost>传送AP</Button>
-        <Button
-          type="primary"
-          ghost
-          style={{marginLeft: '10px'}}
-          onClick={this.cancelHandle}
-          disabled={this.state.selectedRows.length > 0 ? !CANCEL_TYPE.includes(this.state.selectedRows[0].status) : true}
-        >撤销</Button>
-        <Button
-          style={{marginLeft: '10px'}}
-          loading={this.state.sendLoading}
-          disabled={this.state.selectedRows.length > 0 ? !TO_TAX_TYPE.includes(this.state.selectedRows[0].status) : true}
-          type="primary"
-          ghost
-          onClick={() => this.sendInvoiceToTax()}
-        >传送金税</Button>
+        {
+          buttonList.includes('billingStatusSendAp') ?
+          <Button
+            onClick={this.showGlDate}
+            type="primary"
+            ghost
+          >传送AP</Button> : null
+        }
+        {
+          buttonList.includes('billingStatusCancel') ?
+            <Button
+              type="primary"
+              ghost
+              style={{marginLeft: '10px'}}
+              onClick={this.cancelHandle}
+              disabled={this.state.selectedRows.length > 0 ? !CANCEL_TYPE.includes(this.state.selectedRows[0].status) : true}
+            >撤销</Button> : null
+        }
+        {
+          buttonList.includes('billingStatusSendTax') ?
+            <Button
+              style={{marginLeft: '10px'}}
+              loading={this.state.sendLoading}
+              disabled={this.state.selectedRows.length > 0 ? !TO_TAX_TYPE.includes(this.state.selectedRows[0].status) : true}
+              type="primary"
+              ghost
+              onClick={() => this.sendInvoiceToTax()}
+            >传送金税</Button> : null
+        }
         <br />
         <br />
         <h3>开票申请</h3>

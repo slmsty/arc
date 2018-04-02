@@ -556,7 +556,7 @@ class Status extends Component{
         span: 16
       }
     }
-
+    const buttonList = JSON.parse(sessionStorage.getItem('roleButtons')).map(r => r.path)
     return (
       <div className="badDebtsStatus">
         {loading ? <Spin size="large" style={{position:'absolute',left:'50%', top:'50%', zIndex:1000}} /> : null}
@@ -639,9 +639,19 @@ class Status extends Component{
         <br/>
         <Row>
           <Col span={24}>
-            <Button onClick={this.bdReturn} style={{ marginRight: '20px' }} disabled={this.state.returnDis}>划销退回</Button>
-            <Button onClick={this.sendErp} type="primary" disabled={this.state.erpDis} style={{ marginRight: '20px' }}>传送ERP</Button>
-            <Button onClick={this.unDoErp} type="primary" disabled={this.state.unDoDis}>撤销</Button>
+            {
+              buttonList.includes('badDebtBack') ?
+                <Button onClick={this.bdReturn} style={{ marginRight: '20px' }} disabled={this.state.returnDis}>划销退回</Button> : null
+            }
+            {
+              buttonList.includes('badDebtSendErp') ?
+                <Button onClick={this.sendErp} type="primary" disabled={this.state.erpDis} style={{ marginRight: '20px' }}>传送ERP</Button> : null
+            }
+            {
+              buttonList.includes('badDebtCancel') ?
+                <Button onClick={this.unDoErp} type="primary" disabled={this.state.unDoDis}>撤销</Button> : null
+            }
+
           </Col>
         </Row>
         <br />

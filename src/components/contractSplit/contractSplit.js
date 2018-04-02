@@ -344,12 +344,12 @@ export default class ApplySearchCon extends React.Component {
       onShowSizeChange: this.handleChangeSize,
 
     }
+    const buttonList = JSON.parse(sessionStorage.getItem('roleButtons')).map(r => r.path)
+
     return (
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />
         <div className="split"></div>
-        {/*<Button type="primary" onClick={this.showContractSplitInfo} disabled={this.state.selectedRowKeys.length>0 ? false : true}>合同拆分</Button>
-        <div className="split"></div>*/}
         {
           this.state.contarctSplitModal ?
             <ContractSplitModal
@@ -362,10 +362,13 @@ export default class ApplySearchCon extends React.Component {
               getProductNo = {this.props.getProductNo} //获取产品编码数据
               productNoData = {this.props.contractSplitDara.getProductNo ? this.props.contractSplitDara.getProductNo : []}
               tableDetail={this.state.selectedRows.orderListLines ? this.state.selectedRows.orderListLines : []}
+              isShowEditBtn={buttonList.includes('splitEdit')}
             /> : null
         }
-
-        <Button type='primary' onClick={this.showERPModal}>传送ERP</Button>
+        {
+          buttonList.includes('splitSendErp') ?
+            <Button type='primary' onClick={this.showERPModal}>传送ERP</Button> : null
+        }
         <Row>
           <Col span={24} style={{textAlign:'right'}}>
             共{this.props.contractSplitDara.getContractList.result.length}条记录
