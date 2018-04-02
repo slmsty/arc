@@ -105,7 +105,6 @@ class ARModal extends Component{
         } else {
           const { paymentAmount } = this.props.o
           let formField = null
-          console.log(paymentAmount)
           if(paymentAmount > 0 && (values.assessTaxIncludedAmount > paymentAmount || values.assessTaxIncludedAmount < 0)) {
             formField = {
               assessTaxIncludedAmount: {
@@ -169,7 +168,7 @@ class ARModal extends Component{
             <FormItem label="Billed AR日期">
               {
                 getFieldDecorator('billedArDate', {
-                  initialValue: o.arDate ? moment(o.arDate) : null
+                  initialValue: o.billedArDate ? moment(o.billedArDate) : moment(o.arDate)
                 })(
                   <DatePicker onChange={this.handleBillDateChange} />
                 )
@@ -190,8 +189,7 @@ class ARModal extends Component{
               <FormItem label="报告日期">
                 {
                   getFieldDecorator('reportDate', {
-                    //initialValue: o.reportDate ? moment(o.reportDate) : null
-                    initialValue: o.arDate ? moment(o.arDate) : null
+                    initialValue: o.reportDate ? moment(o.reportDate) : moment(o.arDate)
                   })(
                     <DatePicker
                       onChange={this.handleDateChange}

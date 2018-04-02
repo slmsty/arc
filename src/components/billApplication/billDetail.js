@@ -51,7 +51,8 @@ class BillDetail extends React.Component {
       isRequireRate: false,
       isLost: false,
       custInfo: [custInfo.billingCustInfoId, custInfo.billingCustName],
-      comInfo: [comInfo.billingComInfoId, comInfo.billingComName]
+      comInfo: [comInfo.billingComInfoId, comInfo.billingComName],
+      proItems: [],
     }
   }
 
@@ -78,7 +79,19 @@ class BillDetail extends React.Component {
         billingTaxAmount: item.billingTaxAmount ? item.billingTaxAmount : 0,
       })
     })
-    this.setState({ dataSource: data, count: data.length })
+    let proItems = []
+    this.props.detail.contractList.map((record) => {
+      proItems.push({
+        arBillingId: record.arBillingId,
+        advanceBillingReason: record.advanceBillingReason,
+        receiptReturnDate: record.receiptReturnDate,
+      })
+    })
+    this.setState({
+      dataSource: data,
+      count: data.length,
+      proItems: proItems
+    })
   }
 
   handleAdd = (lineNo, arBillingId, contractItemId) => {
@@ -185,6 +198,7 @@ class BillDetail extends React.Component {
             billingApplicationType: this.state.isRequireRate ? 'BILLING_EXCESS' : this.props.billType,
             billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
             appLineItems: appLineItems,
+            arBillingItems: this.state.proItems,
             objectId: this.state.fileId,
             objectName: this.state.file.name,
             isAgainInvoice: 'true',
@@ -371,29 +385,74 @@ class BillDetail extends React.Component {
     }]
   }
 
-  render() {
-    const { getFieldDecorator } = this.props.form
-    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate, billingApplicantRemark, taxRateRequest } = this.props.detail
-    const columns = [
-      {
-      title: '操作',
-      dataIndex: 'action',
-      width: 60,
+  getCustInfoColumns = () => {
+    return [{
+      title: '',
+      dataIndex: 'title',
+      width: 50,
+    }, {
+      title: '客户名称',
+      dataIndex: 'customerName',
+      width: 150,
       render: (text, record, index) => (
-        <div>
-          {
-            record.isParent === 1 ?
-            <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
-            : null
-          }
-          {
-            record.isParent === 0 ?
-              <Button type="primary" ghost onClick={() => this.handleDelete(record)}>-</Button>
-              : null
-          }
-        </div>
+        index === 0 ?
+          <SelectSearch
+            url="/arc/billingApplication/custom/search"
+            columns={clientCols}
+            label="客户名称"
+            idKey="billingCustInfoId"
+            valueKey="custName"
+            showSearch={true}
+            value={this.state.custInfo}
+            onChange={(v) => this.setState({custInfo: v})}
+          /> :
+          <SelectSearch
+            url="/arc/billingApplication/company/search"
+            columns={comCols}
+            label="公司名称"
+            idKey="billingComInfoId"
+            valueKey="comName"
+            showSearch={true}
+            value={this.state.comInfo}
+            onChange={(v) => this.setState({comInfo: v})}
+          />
       )
     }, {
+      title: '纳税人识别码',
+      dataIndex: 'taxPayer',
+      width: 100,
+    }, {
+      title: '地址电话',
+      dataIndex: 'address',
+      width: 200,
+    }, {
+      title: '开户行及账号',
+      dataIndex: 'bankAccount',
+      width: 180,
+    }]
+  }
+
+  getEditColumns = () => {
+    return [
+      {
+        title: '操作',
+        dataIndex: 'action',
+        width: 60,
+        render: (text, record, index) => (
+          <div>
+            {
+              record.isParent === 1 ?
+                <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
+                : null
+            }
+            {
+              record.isParent === 0 ?
+                <Button type="primary" ghost onClick={() => this.handleDelete(record)}>-</Button>
+                : null
+            }
+          </div>
+        )
+      }, {
         title: <span>含税金额<b style={{color:'#FF0000'}}>*</b></span>,
         dataIndex: 'billingAmount',
         width: 100,
@@ -433,49 +492,131 @@ class BillDetail extends React.Component {
           />
         )
       }, {
-      title: '开票内容',
-      dataIndex: 'billingContent',
+        title: '开票内容',
+        dataIndex: 'billingContent',
+        width: 200,
+        render: (text, record, index) => (
+          <SelectSearch
+            url="/arc/billingApplication/billingContent/search"
+            columns={contentCols}
+            label="开票内容"
+            width="1000px"
+            idKey="billingRecordId"
+            valueKey="billingContentName"
+            value={['', this.state.dataSource[index]['billingContent']]}
+            onChange={(v) => this.handleChange(v, 'billingContent', index)}
+            showSearch={true}
+          />
+        )
+      }, {
+        title: '规格型号',
+        dataIndex: 'specificationType',
+        width: 100,
+        render: (text, record, index) => (
+          <Input placeholder="规格型号" value={this.state.dataSource[index]['specificationType']} onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}/>
+        )
+      }, {
+        title: '单位',
+        dataIndex: 'unit',
+        width: 80,
+        render: (text, record, index) => (
+          <Input placeholder="单位" value={this.state.dataSource[index]['unit']}  onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
+        )
+      }, {
+        title: '数量',
+        dataIndex: 'quantity',
+        width: 70,
+        render: (text, record, index) => (
+          <InputNumber
+            placeholder="数量"
+            defaultValue="1"
+            min={0}
+            value={this.state.dataSource[index]['quantity']}
+            onChange={(value) => this.handleChange(value, 'quantity', index)} />
+        )
+      }]
+  }
+
+  proItemChange = (index, columns, value) => {
+    let proData = this.state.proItems
+    if(columns === 'receiptReturnDate') {
+      proData[index][columns] = value ? value.format('YYYY-MM-DD') : ''
+    } else {
+      proData[index][columns] = value
+    }
+    this.setState({proItems: proData})
+  }
+
+  getProInfoColumns = () => {
+    const isAdvance = this.props.billType === 'BILLING_CONTRACT' || this.props.billType === 'BILLING_UN_CONTRACT_PROJECT'
+    return [{
+      title: '项目编码',
+      dataIndex: 'projectCode',
+      width: 120,
+    }, {
+      title: '签约公司',
+      dataIndex: 'company',
+      width: 240,
+    }, {
+      title: '合同编码',
+      dataIndex: 'contractCode',
+      width: 300,
+    }, {
+      title: '提前开票原因',
+      dataIndex: 'advanceBillingReason',
+      width: 300,
+      render: (text, record, index) => (
+        isAdvance ?
+          <SelectInvokeApi
+            typeCode="BILLING_APPLICATION"
+            paramCode="ADVANCE_BILLING_REASON"
+            placeholder="提前开票原因"
+            hasEmpty
+            value={this.state.proItems.length > 0 ? this.state.proItems[index]['advanceBillingReason'] : ''}
+            onChange={(value) => this.proItemChange(index, 'advanceBillingReason', value)}
+          /> : text
+      )
+    }, {
+      title: '预计回款日期',
+      dataIndex: 'receiptReturnDate',
+      width: 150,
+      render: (text, record, index) => (
+        isAdvance ?
+          <DatePicker
+            value={this.state.proItems.length > 0 ? moment(this.state.proItems[index]['receiptReturnDate']) : ''}
+            onChange={(value) => this.proItemChange(index, 'receiptReturnDate', value)}
+          /> : text
+      )
+    }, {
+      title: '付款条件',
+      dataIndex: 'paymentTerm',
       width: 200,
-      render: (text, record, index) => (
-        <SelectSearch
-          url="/arc/billingApplication/billingContent/search"
-          columns={contentCols}
-          label="开票内容"
-          width="1000px"
-          idKey="billingRecordId"
-          valueKey="billingContentName"
-          value={['', this.state.dataSource[index]['billingContent']]}
-          onChange={(v) => this.handleChange(v, 'billingContent', index)}
-          showSearch={true}
-        />
-      )
     }, {
-      title: '规格型号',
-      dataIndex: 'specificationType',
-      width: 100,
-      render: (text, record, index) => (
-        <Input placeholder="规格型号" value={this.state.dataSource[index]['specificationType']} onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}/>
-      )
+      title: '款项名称',
+      dataIndex: 'paymentName',
+      width: 150,
     }, {
-      title: '单位',
-      dataIndex: 'unit',
+      title: '付款阶段',
+      dataIndex: 'paymentPhrases',
+      width: 150,
+    }, {
+      title: '款项金额',
+      dataIndex: 'paymentAmount',
       width: 80,
-      render: (text, record, index) => (
-        <Input placeholder="单位" value={this.state.dataSource[index]['unit']}  onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
-      )
     }, {
-      title: '数量',
-      dataIndex: 'quantity',
-      width: 70,
-      render: (text, record, index) => (
-        <InputNumber
-          placeholder="数量"
-          defaultValue="1"
-          min={0}
-          value={this.state.dataSource[index]['quantity']}
-          onChange={(value) => this.handleChange(value, 'quantity', index)} />
-      )
+      title: '已申请金额',
+      dataIndex: 'applyIngAmount',
+      width: 100,
+    }, {
+      title: '已开票金额',
+      dataIndex: 'outcomeAmount',
+      width: 100,
     }]
+  }
+
+  render() {
+    const { getFieldDecorator } = this.props.form
+    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate, billingApplicantRemark, taxRateRequest } = this.props.detail
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
       headers: {
@@ -509,50 +650,6 @@ class BillDetail extends React.Component {
       },
       selectedRowKeys: this.state.selectedRowKeys,
     }
-    const detailColumns = [{
-      title: '',
-      dataIndex: 'title',
-      width: 50,
-    }, {
-      title: '客户名称',
-      dataIndex: 'customerName',
-      width: 150,
-      render: (text, record, index) => (
-        index === 0 ?
-        <SelectSearch
-          url="/arc/billingApplication/custom/search"
-          columns={clientCols}
-          label="客户名称"
-          idKey="billingCustInfoId"
-          valueKey="custName"
-          showSearch={true}
-          value={this.state.custInfo}
-          onChange={(v) => this.setState({custInfo: v})}
-        /> :
-        <SelectSearch
-          url="/arc/billingApplication/company/search"
-          columns={comCols}
-          label="公司名称"
-          idKey="billingComInfoId"
-          valueKey="comName"
-          showSearch={true}
-          value={this.state.comInfo}
-          onChange={(v) => this.setState({comInfo: v})}
-        />
-      )
-    }, {
-      title: '纳税人识别码',
-      dataIndex: 'taxPayer',
-      width: 100,
-    }, {
-      title: '地址电话',
-      dataIndex: 'address',
-      width: 200,
-    }, {
-      title: '开户行及账号',
-      dataIndex: 'bankAccount',
-      width: 180,
-    }]
     return (
       <Modal
         title="发票编辑"
@@ -630,7 +727,7 @@ class BillDetail extends React.Component {
               <div>
                 <div className="arc-info">
                   <Table
-                    columns={proApplyColumns}
+                    columns={this.getProInfoColumns()}
                     bordered
                     size="small"
                     scroll={{ x: '1570px' }}
@@ -643,7 +740,7 @@ class BillDetail extends React.Component {
                     rowKey="id"
                     size="small"
                     bordered
-                    columns={detailColumns}
+                    columns={this.getCustInfoColumns()}
                     dataSource={detailData}
                     pagination={false}
                   />
@@ -713,10 +810,9 @@ class BillDetail extends React.Component {
                   rowKey="lineNo"
                   bordered
                   size="small"
-                  columns={columns}
+                  columns={this.getEditColumns()}
                   pagination={false}
                   dataSource={this.state.dataSource}
-                  /*scroll={{ x: 1160 }}*/
                 />
                 <Row gutter={40}>
                   <Col span={14}>
