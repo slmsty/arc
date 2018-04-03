@@ -1,13 +1,13 @@
 import React from 'react'
 import { Table, Row, Col } from 'antd'
-import { proColumns, billDetailColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
+import { proColumns, billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
 import './billApproveDetail.css'
 const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
 
 
 class BillDetail extends React.Component  {
   getTaxData = () => {
-    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totaxTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totaTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
     return [{
       title: '城建',
       taxRate: constructionTax,
@@ -23,7 +23,7 @@ class BillDetail extends React.Component  {
     }, {
       title: '合计',
       taxRate: '',
-      tax: totaxTaxAmount,
+      tax: totaTaxAmount,
     }]
   }
   render() {
@@ -49,7 +49,7 @@ class BillDetail extends React.Component  {
           <h1>项目信息</h1>
           <Table
             rowKey="receiptClaimId"
-            columns={proColumns}
+            columns={proApplyColumns}
             bordered
             size="small"
             scroll={{ x: '1570px' }}

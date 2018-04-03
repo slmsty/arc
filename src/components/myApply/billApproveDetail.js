@@ -287,7 +287,7 @@ class BillApproveDetail extends React.Component  {
   }
 
   getTaxData = () => {
-    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totaxTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totalTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
     return [{
       title: '城建',
       taxRate: constructionTax,
@@ -303,7 +303,7 @@ class BillApproveDetail extends React.Component  {
     }, {
       title: '合计',
       taxRate: '',
-      tax: totaxTaxAmount,
+      tax: totalTaxAmount,
     }]
   }
 

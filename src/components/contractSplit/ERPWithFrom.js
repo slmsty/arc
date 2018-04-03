@@ -136,8 +136,11 @@ class ERPWithFrom extends React.Component {
                         <Select>
                           <Option value="ALL">全部</Option>
                           <Option value="UNCOMPLETE">未传送</Option>
-                          <Option value="ERROR">失败</Option>
-                          <Option value="SUCCESS">成功</Option>
+                          <Option value="PROCESSING">PA处理中</Option>
+                          <Option value="PROCESSED">已传送PA</Option>
+                          <Option value="ERROR">传送PA失败</Option>
+
+                          {/*<Option value="SUCCESS">成功</Option>*/}
                         </Select>
                       )
                     }
