@@ -190,6 +190,7 @@ class ERPModal extends React.Component{
     ]
     const { selectedRowKeys } = this.state
     const rowSelection = {
+      hideDefaultSelections:true,
       selectedRowKeys,
       type: 'checkBox',
       onChange: this.onSelectChange,
