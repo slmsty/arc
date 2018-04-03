@@ -128,7 +128,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="预计回款日期">
                   {
                     getFieldDecorator('receiptReturnDate', {
-                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : moment(), rules: [{ required: needSelectType.includes(billType), message: '提前开票原因!' }]}
+                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : moment(), rules: [{ required: needSelectType.includes(billType), message: '请选择预计回款日期!' }]}
                       )(<DatePicker format="YYYY-MM-DD"/>)
                   }
                 </FormItem>
@@ -201,7 +201,7 @@ class BillUpdate extends React.Component {
                 <Row gutter={30}>
                   <Col span={12} key={1}>
                     <FormItem {...formItemLayout} label="提前开票备注">
-                      {getFieldDecorator('advanceBillingRemark', {rules: [{ required: this.state.reasonId === 'other', message: '请选择项目编码!' }]})(
+                      {getFieldDecorator('advanceBillingRemark', {rules: [{ required: this.state.reasonId === 'other', message: '请填写提前开票备注!' }]})(
                         <Input placeholder="提前开票备注"/>
                       )}
                     </FormItem>
