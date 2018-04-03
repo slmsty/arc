@@ -84,7 +84,7 @@ class BillDetail extends React.Component {
       proItems.push({
         arBillingId: record.arBillingId,
         advanceBillingReason: record.advanceBillingReason,
-        receiptReturnDate: record.receiptReturnDate,
+        receiptReturnDate: moment(record.receiptReturnDate),
       })
     })
     this.setState({
@@ -539,8 +539,9 @@ class BillDetail extends React.Component {
 
   proItemChange = (index, columns, value) => {
     let proData = this.state.proItems
+    console.log(value)
     if(columns === 'receiptReturnDate') {
-      proData[index][columns] = value ? value.format('YYYY-MM-DD') : ''
+      proData[index][columns] = value ? moment(value) : ''
     } else {
       proData[index][columns] = value
     }
@@ -584,8 +585,8 @@ class BillDetail extends React.Component {
       render: (text, record, index) => (
         isAdvance ?
           <DatePicker
-            value={this.state.proItems.length > 0 ? moment(this.state.proItems[index]['receiptReturnDate']) : ''}
-            onChange={(value) => this.proItemChange(index, 'receiptReturnDate', value)}
+            value={this.state.proItems.length > 0 ? this.state.proItems[index]['receiptReturnDate'] : ''}
+            onChange={(value, str) => this.proItemChange(index, 'receiptReturnDate', str)}
           /> : text
       )
     }, {

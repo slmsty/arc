@@ -15,7 +15,7 @@ class BillUpdate extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      reasonId: ''
+      reasonId: props.record.advanceBillingReason
     }
   }
 
@@ -197,11 +197,12 @@ class BillUpdate extends React.Component {
                 </Row> : null
             }
             {
-              this.state.reasonId === 'other' ?
+              //fix 后端接口添加reasonId
+              this.state.reasonId === 'other' || this.state.reasonId === '其它' ?
                 <Row gutter={30}>
                   <Col span={12} key={1}>
                     <FormItem {...formItemLayout} label="提前开票备注">
-                      {getFieldDecorator('advanceBillingRemark', {rules: [{ required: this.state.reasonId === 'other', message: '请填写提前开票备注!' }]})(
+                      {getFieldDecorator('advanceBillingRemark', {initialValue : record.advanceBillingRemark, rules: [{ required: this.state.reasonId === 'other', message: '请填写提前开票备注!' }]})(
                         <Input placeholder="提前开票备注"/>
                       )}
                     </FormItem>
