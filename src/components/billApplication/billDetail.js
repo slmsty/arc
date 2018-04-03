@@ -548,7 +548,8 @@ class BillDetail extends React.Component {
   }
 
   getProInfoColumns = () => {
-    const isAdvance = this.props.billType === 'BILLING_CONTRACT' || this.props.billType === 'BILLING_UN_CONTRACT_PROJECT'
+    const { billType } = this.props
+    const isAdvance = billType === 'BILLING_CONTRACT' || billType === 'BILLING_UN_CONTRACT_PROJECT' || billType === 'BILLING_UN_CONTRACT_PROJECT'
     return [{
       title: '项目编码',
       dataIndex: 'projectCode',

@@ -145,7 +145,7 @@ class BillUpdate extends React.Component {
                         url="/arc/billingApplication/projectNo/search"
                         columns={proCols}
                         label="项目编码"
-                        idKey="tempProjectNo"
+                        idKey="tempProjectId"
                         valueKey="tempProjectNo"
                         billType={this.props.billType}
                         showSearch={true}

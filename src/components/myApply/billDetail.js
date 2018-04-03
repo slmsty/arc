@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table, Row, Col } from 'antd'
-import { proColumns, billDetailColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
+import { proColumns, billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
 import './billApproveDetail.css'
 const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
 
@@ -49,7 +49,7 @@ class BillDetail extends React.Component  {
           <h1>项目信息</h1>
           <Table
             rowKey="receiptClaimId"
-            columns={proColumns}
+            columns={proApplyColumns}
             bordered
             size="small"
             scroll={{ x: '1570px' }}

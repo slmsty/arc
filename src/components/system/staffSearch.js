@@ -99,7 +99,6 @@ class StaffSearch extends React.Component {
 
   render() {
     const { visible } = this.state
-    console.log(this.props.value)
     const formItemLayout = {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
