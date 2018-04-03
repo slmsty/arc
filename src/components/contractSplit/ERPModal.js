@@ -194,7 +194,7 @@ class ERPModal extends React.Component{
       type: 'checkBox',
       onChange: this.onSelectChange,
       getCheckboxProps: record => ({
-        disabled: record.erpStatus === '传送成功' || record.erpStatus === '已处理' || record.erpStatus === '处理中'
+        disabled: record.erpStatus === '传送成功' || record.erpStatus === '已传送PA' || record.erpStatus === 'PA处理中'
       }),
     }
     const pagination = {
