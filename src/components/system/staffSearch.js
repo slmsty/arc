@@ -22,14 +22,6 @@ class StaffSearch extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(this.props.value.length === 0 && this.props.value !== nextProps.value) {
-      this.setState({
-        selectEmail: nextProps.value
-      })
-    }
-  }
-
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
@@ -107,6 +99,7 @@ class StaffSearch extends React.Component {
 
   render() {
     const { visible } = this.state
+    console.log(this.props.value)
     const formItemLayout = {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
@@ -124,7 +117,7 @@ class StaffSearch extends React.Component {
         <Select
           mode="tags"
           style={{width: '500px'}}
-          value={this.state.selectEmail}
+          value={this.props.value}
           placeholder={this.props.placeholder}
           dropdownStyle={{ display: 'none' }}
           onChange={this.handleChange}
