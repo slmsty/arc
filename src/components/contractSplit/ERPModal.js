@@ -121,7 +121,7 @@ class ERPModal extends React.Component{
       {
         title: '传ERP状态',
         dataIndex: 'erpStatus',
-        width: 80,
+        width: 100,
       },
       {
         title: '错误原因',
