@@ -7,6 +7,7 @@
 import React from 'react'
 import ErpFrom from './ERPWithFrom'
 import currency from '../../util/currency'
+import ShowSendMsg from './showTransferNotice'
 //import { constructSplitSearchColumns } from '../statementSearch/statementColumns'
 import { Table,Modal,Button,message } from 'antd'
 
@@ -16,6 +17,7 @@ class ERPModal extends React.Component{
     this.state = {
       selectedRows:[],
       loading:false,
+      showSendMsg:false,
     }
   }
   queryParam = {
@@ -43,12 +45,16 @@ class ERPModal extends React.Component{
     })
     return width
   }
+  handleQuery = () => {
+    console.log('this.queryParam',this.queryParam)
+    this.props.sendERPQuery(this.queryParam)
+  }
   // 查询接口
   queryParms = (param) => {
     const contractSplit = {}
     contractSplit.contractSplit = param
     this.queryParam = {...this.queryParam,...contractSplit}
-    this.props.sendERPQuery(this.queryParam)
+    this.handleQuery()
   }
   // 传送ERP接口
   sendERP = () => {
@@ -56,15 +62,19 @@ class ERPModal extends React.Component{
       loading:true,
     })
     const selectedRows = this.state.selectedRows
-    const pastData = selectedRows.map(item=>item.orderId)
+    const pastData = selectedRows.map(item=>item.orderLineId)
     const param = {}
-    param.orderIdLists = pastData
+    param.orderLineIdList = pastData
     this.props.sendERPParms(param).then((res)=>{
       this.setState({
         loading:false,
       })
       if (res && res.response && res.response.resultCode === '000000') {
-        message.success(res.response.data.description)
+        this.setState({
+          showSendMsg:true,
+          sendInfo:res.response.data,
+        })
+        //message.success(res.response.data.description)
         this.props.sendERPQuery(this.queryParam)
       } else {
       }
@@ -75,17 +85,25 @@ class ERPModal extends React.Component{
   // 页码修改
   handleChangePage = (page) => {
     this.queryParam.pageInfo.pageNo = page
-    this.queryParms()
+    this.handleQuery()
   }
   // 每页显示修改
   handleChangeSize = (current, size) => {
     this.queryParam.pageInfo.pageNo = current
     this.queryParam.pageInfo.pageSize = size
-    this.queryParms()
+    this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
+  showTranNotice = () => {
+    this.setState({
+      showSendMsg:false,
+      selectedRows:[],
+      selectedRowKeys:[]
+    })
+  }
+
   render() {
     const constructSplitSearchColumns = [
       {
@@ -175,6 +193,9 @@ class ERPModal extends React.Component{
       selectedRowKeys,
       type: 'checkBox',
       onChange: this.onSelectChange,
+      getCheckboxProps: record => ({
+        disabled: record.erpStatus === '传送成功' || record.erpStatus === '已处理' || record.erpStatus === '处理中'
+      }),
     }
     const pagination = {
       current: this.props.dataSource.pageNo,
@@ -209,6 +230,12 @@ class ERPModal extends React.Component{
             dataSource={this.props.dataSource.result}
           />
         </Modal>
+        { this.state.showSendMsg ?
+          <ShowSendMsg
+          showtrNotice = {this.state.showSendMsg}
+          showTranNotice = {this.showTranNotice}
+          sendInfo = {this.state.sendInfo}
+          /> : null }
 
       </div>
     )
