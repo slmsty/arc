@@ -145,7 +145,7 @@ export default class BillingApplication extends React.Component {
         width: 100,
       }, {
         title: '提前开票原因',
-        dataIndex: 'advanceBillingReasonName',
+        dataIndex: 'advanceBillingReason',
         width: 130,
       }, {
         title: '预计回款日期',
