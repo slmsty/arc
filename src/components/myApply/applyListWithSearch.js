@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 import SelectRadioApi from '../common/selectRadioApi'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import { Form, Row, Col, Button, Input, Icon, Radio, DatePicker } from 'antd'
-import moment from 'moment';
 const { RangePicker } = DatePicker
 const FormItem = Form.Item
 const RadioButton = Radio.Button

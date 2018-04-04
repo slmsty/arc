@@ -34,7 +34,7 @@
     "react-scripts": "^1.0.11"
   },
   "scripts": {
-    "start": "cross-env PORT=8080 NODE_ENV=develop_local REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xin-sandbox.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xin-sandbox.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=/ react-app-rewired start",
+    "start": "cross-env PORT=8080 NODE_ENV=develop_local REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xin-sandbox.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xin-sandbox.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=/webapps/arc-web react-app-rewired start",
     "build-dev": "cross-env NODE_ENV=develop_server REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xin-sandbox.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xin-sandbox.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=/webapps/arc-web react-app-rewired build",
     "build-test": "cross-env NODE_ENV=production REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://xin-sandbox.asiainfo.com:16020/api/ REACT_APP_OAUTH2_SERVER=https://xin-sandbox.asiainfo.com:14450/oauth2/server/authorize PUBLIC_URL=/webapps/arc-web react-app-rewired build",
     "build": "cross-env NODE_ENV=production REACT_APP_CLIENT_ID=5fb02d57b5ee4945a89313b56dcb5c55 REACT_APP_GATEWAY=https://karagw-inner.asiainfo.com/api/ REACT_APP_OAUTH2_SERVER=https://karagw-inner.asiainfo.com/oauth2/server/authorize PUBLIC_URL=/webapps/arc-web react-app-rewired build",
