@@ -164,8 +164,8 @@ class Approve extends Component{
     this.setState({
       rowKeys: rowKeys,
       rows: rows,
-      rejectDis: !(rows.length>0 && rows.every(o=>o.status==='10'||o.status==='20'||o.status==='30')),
-      confirmDis: !(rows.length>0 && rows.every(o=>o.status==='10'))
+      rejectDis: !(rows.length>0 && rows.every(o=>o.status==='NEW'||o.status==='ACCOUNT_CONFIRMING'||o.status==='PA_PUSHING')),
+      confirmDis: !(rows.length>0 && rows.every(o=>o.status==='NEW'))
     })
   }
 
