@@ -84,7 +84,7 @@ const common = {
         key: '2',
         path: '/billedAR',
         name: 'Billed AR管理',
-        icon: 'icon-BilledAR',
+        icon: 'icon-billedarguanli',
         component: 'HomeContainer',
         child: [
           {
@@ -130,28 +130,21 @@ const common = {
         key: '4',
         path: '/BillManage',
         name: '实际开票管理',
-        icon: 'icon-shijikaipiaoguanli',
+        icon: 'icon-kaipiaoguanli',
         component: 'HomeContainer',
         child: [
-          /*{
-            key: '41',
-            path: '/BillManage/ContractSplit',
-            name: '合同拆分',
-            icon: 'icon-BilledAR',
-            component: 'ContractSplit',
-          },*/
           {
-            key: '42',
+            key: '41',
             path: '/BillManage/billingApplication',
             name: '开票申请',
-            icon: 'icon-BilledAR',
+            icon: 'icon-kaipiaoshenqing',
             component: 'BillingApplication',
           },
           {
-            key: '43',
+            key: '42',
             path: '/BillManage/BillStatusManage',
             name: '开票状态管理',
-            icon: 'icon-BilledAR',
+            icon: 'icon-kaipiaozhuangtai',
             component: 'BillStatusManage',
             child:[{component: "billingStatusSendAp", key: "521", name: "开票传送ap", path: "billingStatusSendAp"},
               {component: "billingStatusCancel", key: "522", name: "开票状态撤销", path: "billingStatusCancel"},
@@ -163,21 +156,21 @@ const common = {
         key: '5',
         path: '/myApply',
         name: '我的审批',
-        icon: 'icon-shijikaipiaoguanli',
+        icon: 'icon-shenpixiangguan',
         component: 'HomeContainer',
         child: [
           {
             key: '51',
             path: '/myApply/myApply',
             name: '我的申请',
-            icon: 'icon-BilledAR',
+            icon: 'icon-wodeshenpi',
             component: 'myApplyContainer',
           },
           {
             key: '52',
             path: '/myApply/applyList',
             name: '审批列表',
-            icon: 'icon-BilledAR',
+            icon: 'icon-shenpiliebiao',
             component: 'applyListContainer',
           },
         ],
@@ -186,17 +179,17 @@ const common = {
         key: '6',
         path: '/ContractSplit',
         name: '合同拆分',
-        icon: 'icon-BilledAR',
+        icon: 'icon-hetongchaifen',
         component: 'ContractSplit',
-        /*child: [
+        child: [
           {
-            key: '51',
+            key: '61',
             path: '/ContractSplit/ContractSplit',
             name: '合同拆分',
-            icon: 'icon-BilledAR',
+            icon: 'icon-hetongchaifen',
             component: 'ContractSplit',
           },
-        ],*/
+        ],
       },
       {
         key: '7',
@@ -204,27 +197,27 @@ const common = {
         name: '报表查询',
         icon: 'icon-BilledAR',
         component: 'statementSearch',
-        /*child: [
+        child: [
           {
-            key: '61',
+            key: '71',
             path: '/statementSearch/statementList',
             name: '报表',
             icon: 'icon-BilledAR',
             component: 'statementSearch',
           },
-        ],*/
+        ],
       },
       {
         key: '8',
         path: '/system',
         name: '系统管理',
-        icon: 'icon-system',
+        icon: 'icon-xitongguanli',
         child: [
          {
-           key: '61',
+           key: '81',
            path: '/system/mailConfig',
            name: '邮件配置',
-           icon: 'icon-mail',
+           icon: 'icon-youjianpeizhi',
            component: 'mailConfig',
          },
          ],

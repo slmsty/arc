@@ -342,10 +342,9 @@ export default class ApplySearchCon extends React.Component {
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
-
     }
-    const roleButtons = JSON.parse(sessionStorage.getItem('roleButtons'))
-    const buttonList = roleButtons ? roleButtons.map(r => r.path) : []
+    const roleButtons = sessionStorage.getItem('roleButtons')
+    const buttonList = typeof roleButtons === 'undefined' ? JSON.parse(roleButtons).map(r => r.path) : []
     return (
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />
