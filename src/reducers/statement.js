@@ -1,4 +1,5 @@
 import caseReducer from './caseReducer'
+import { saveAs } from './../util/downFile'
 
 const myStateInfoData = {
   getStatementList: {
@@ -6,7 +7,6 @@ const myStateInfoData = {
     count: 0,
     result: [],
   },
-  getExcel:{},
   getContractStatementList: {
     pageNo: 1,
     count: 0,
@@ -20,12 +20,15 @@ function getStatementList(state, action) {
 function getContractStatementList(state, action) {
   return { ...state, getContractStatementList: action.response.pageInfo }
 }
-function getExcel(state, action) {
-  return { ...state, getExcel: action.response.pageInfo }
+function fileDown(state, action) {
+  saveAs(action.files.blob, action.fileName)
+  return {
+    ...state
+  }
 }
 
 export default caseReducer(myStateInfoData, {
   GET_STATEMENT_LISTT_SUCCESS: getStatementList,
   GET_CONTRACT_STATEMENT_LISTT_SUCCESS:getContractStatementList,
-  GET_EXCEL_SUCCESS:getExcel,
+  GET_EXCEL_SUCCESS:fileDown,
 })
