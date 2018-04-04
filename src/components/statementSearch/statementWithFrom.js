@@ -80,13 +80,19 @@ class StatementListCom extends React.Component {
     loading: false,
     applyData: '',
     stateType: '',
+    excelDis:false,
+    param:{}
   }
-  excel = (type)=>{
-    this.props.excel()
+  excel = ()=>{
+    this.props.excel(this.state.param)
   }
   // 查询接口
   queryParms = (statement) => {
     const params = this.props.form.getFieldsValue()
+    this.setState({
+      param:{},
+      excelDis:true,
+    })
     const param = {}
       //收款信息查询表
     if(statement ==='receiptInfoReport'){
@@ -101,12 +107,14 @@ class StatementListCom extends React.Component {
       param.paymentName = params.paymentName
       param.contractName = params.contractName
       param.isReport = 'Y'
+      this.setState({
+        param
+      })
       this.props.queryParms(param,'receiptInfoReport')
     }
     //合同拆分查询表
     if(statement==='contractSplitReport'){
       param.projectNo = params.projectNo
-     // param.custName = params.custName ? params.custName[1] : ''
       param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
       param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
       param.contractName = params.contractName
@@ -116,6 +124,9 @@ class StatementListCom extends React.Component {
       param.signCompany = params.signCompany
       param.contractNo = params.contractNo
       param.isReport = 'Y'
+      this.setState({
+        param
+      })
       this.props.queryParms(param,'contractSplitReport')
     }
     //this.props.form.resetFields()
@@ -874,7 +885,7 @@ class StatementListCom extends React.Component {
                 </Col>
                 <Col span={8} style={{ textAlign: 'right' }}>
                   <Button type="primary" key="search" onClick={()=>this.queryParms('contractSplitReport')}><Icon type="search" />查询</Button>
-                  {/*<Button style={{marginLeft:'10px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>*/}
+                  <Button disabled={this.state.excelDis ? false : true} style={{marginLeft:'10px'}} type="primary" onClick={this.excel}>导出Excel</Button>
                 </Col>
               </Row>
 

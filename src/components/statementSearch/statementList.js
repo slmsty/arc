@@ -27,7 +27,11 @@ export default class StatementListIndex extends React.Component {
     },
     contractSplit:{}
   }
-  excel = () => {
+  excel = (param) => {
+    let params = {}
+    params.contractSplit = param
+    console.log('params',params)
+    this.props.getExcel(param)
     //var workbook = new Excel.Workbook();
 
     //console.log('excel')
@@ -130,7 +134,6 @@ export default class StatementListIndex extends React.Component {
   }
   // 页码修改
   handleChangePage = (page) => {
-    console.log('page',page)
     this.queryParam.pageInfo.pageNo = page
     const currencyType = this.state.currencyType
     console.log(currencyType)

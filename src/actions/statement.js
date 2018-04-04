@@ -27,5 +27,17 @@ export function getContractStatementList(queryParam) {
     },
   }
 }
-
+// 导出excel
+export function getExcel(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/contract_split/excel',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_EXCEL_SUCCESS'],
+    },
+  }
+}
 
