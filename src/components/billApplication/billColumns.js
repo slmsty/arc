@@ -313,7 +313,7 @@ const redFontCols = [
     width: 150,
   }, {
     title: '款项金额',
-    dataIndex: 'billedArAmount',
+    dataIndex: 'paymentAmount',
     width: 120,
   }
 ]

@@ -1,14 +1,10 @@
-/**
- * Created by liangshuang on 18/3/21.
- */
+
 import React from 'react'
 import { Button, Table, message, Modal } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
 import NoApplyInfo from './noApplyInfo'
-import MyApplyEdit from './myApplyEdit'
 import BillDetail from '../billApplication/billDetail'
 import { redTypes } from '../billApplication/billColumns'
-const confirm = Modal.confirm;
 
 export default class MyApplyCon extends React.Component {
   state = {
@@ -195,7 +191,7 @@ export default class MyApplyCon extends React.Component {
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
     }
-    const { billApplySave, billApplyCheck, currentUser, contractUrl, myApplyPage, myApplyDetail, billApproveSave } = this.props
+    const { billApplyCheck, currentUser, contractUrl, myApplyPage, myApplyDetail, billApproveSave } = this.props
     const { serviceDetail, serviceType} = myApplyDetail
     const isBackBill = redTypes.includes(serviceType)
     return (

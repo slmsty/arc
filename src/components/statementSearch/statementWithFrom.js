@@ -113,7 +113,7 @@ class StatementListCom extends React.Component {
       param.buId = params.buId ? params.buId[0] : ''
       param.collectionProject = params.collectionProject
       param.isProdect = params.isProdect
-      param.companyId = params.companyId
+      param.signCompany = params.signCompany
       param.contractNo = params.contractNo
       param.isReport = 'Y'
       this.props.queryParms(param,'contractSplitReport')
@@ -865,7 +865,7 @@ class StatementListCom extends React.Component {
                 </Col>
                 <Col span={8}>
                   <FormItem {...formItemLayoutChild} label="签约公司">
-                    {getFieldDecorator('companyId')(
+                    {getFieldDecorator('signCompany')(
                       <Input
                         placeholder="请输入签约公司"
                       />,

@@ -5,10 +5,9 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import InputSearch from './inputSearch'
 import moment from 'moment'
-import { normalTypes, advanceTypes } from './billColumns'
+import { normalTypes } from './billColumns'
 import { clientCols, comCols, proCols, invoiceCols } from './billColumns'
 const FormItem = Form.Item
-const Option = Select.Option
 const needSelectType = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 
 class BillUpdate extends React.Component {
