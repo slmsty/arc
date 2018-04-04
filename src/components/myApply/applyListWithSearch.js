@@ -90,6 +90,7 @@ class ApplySearchCon extends React.Component {
                     paramCode="APPLY_TYPE"
                     onChange={(e)=>this.handleRadioChange(e)}
                     options={[]}
+                    hasEmpty
                   />
                 )}
               </FormItem>

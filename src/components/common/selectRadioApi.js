@@ -24,7 +24,7 @@ export default class SelectRadioApi extends React.Component {
     if (response.resultCode === '000000') {
       const options = response.data
       if (this.props.hasEmpty) {
-        options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
+        options.unshift({ paramValue: '', paramValueDesc: '全部' })
       }
       this.setState({
         options,
@@ -32,7 +32,7 @@ export default class SelectRadioApi extends React.Component {
     }
   }
   handleChange = (value) => {
-    if (value === 'all') {
+    if (value === '') {
       this.props.onChange('')
     } else {
       this.props.onChange(value)
@@ -46,7 +46,7 @@ export default class SelectRadioApi extends React.Component {
         size="large" style={{ width: this.props.options.length ? '1000px' :'1000px' }}
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
-        value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : 'all')}
+        value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : '')}
         disabled={this.props.disabled}
       >
         {optionDom}
