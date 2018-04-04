@@ -166,8 +166,6 @@ class Approve extends Component{
       rows: rows,
       rejectDis: !(rows.length>0 && rows.every(o=>o.status==='NEW'||o.status==='ACCOUNT_CONFIRMING'||o.status==='PA_PUSHING')),
       confirmDis: !(rows.length>0 && rows.every(o=>o.status==='NEW'))
-     /* rejectDis:!(rows.length>0),
-      confirmDis:!(rows.length>0),*/
     })
   }
 
