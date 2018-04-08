@@ -220,6 +220,20 @@ const common = {
            icon: 'icon-youjianpeizhi',
            component: 'mailConfig',
          },
+          {
+            key: '82',
+            path: '/system/taxInfo',
+            name: '客户纳税信息',
+            icon: 'icon-xitongguanli',
+            component: 'customerTaxInfo',
+          },
+          {
+            key: '83',
+            path: '/system/content',
+            name: '客户开票内容及税收分类编码',
+            icon: 'icon-xitongguanli',
+            component: 'customerContent',
+          },
          ],
       },
     ],
@@ -231,9 +245,9 @@ function getUserInfo(state, action) {
 }
 
 function getPermission(state, action) {
-  /*if (process.env.NODE_ENV === 'develop_local') {
+  if (process.env.NODE_ENV === 'develop_local') {
     return state
-  }*/
+  }
   return { ...state, permission: action.response.results }
 }
 

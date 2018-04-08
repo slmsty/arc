@@ -30,6 +30,8 @@ import BillingApplication from '../containers/billApplication/billApplication'
 import Login from '../containers/login/login'
 import MyApply from '../containers/myApply/myApplay'
 import MailConfig from '../containers/system/mailConfig'
+import CustomerTaxInfo from '../containers/system/customerTaxInfo'
+import CustomerContent from '../containers/system/customerContent'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -97,8 +99,11 @@ class IndexContainer extends React.Component {
       return MyApply
     } else if(component === 'mailConfig'){
       return MailConfig
+    } else if(component === 'customerTaxInfo') {
+      return CustomerTaxInfo
+    } else if(component === 'customerContent') {
+      return CustomerContent
     }
-
   }
   getMenuRoutes = (menus) => {
     if (menus && menus.length > 0) {

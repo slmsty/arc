@@ -8,6 +8,7 @@ const system = {
     receiptArrivalCc: [],
   },
   saveSuccess: false,
+  taxInfos: [],
 }
 
 function getMailConfig(state, action) {
