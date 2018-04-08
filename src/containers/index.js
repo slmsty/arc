@@ -122,10 +122,11 @@ class IndexContainer extends React.Component {
       <Router basename={process.env.PUBLIC_URL}>
         <div style={{ height: '100%' }}>
           <Switch>
-            <Route exact path="/login" component={Login} />
             <Index {...this.props}>
+              <Switch>
                 {menuRoutes}
-                {/*<Route component={NoMatch} />*/}
+                <Route component={NoMatch} />
+              </Switch>
             </Index>
           </Switch>
         </div>
