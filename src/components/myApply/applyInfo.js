@@ -314,7 +314,7 @@ class ApplyInfoModal extends React.Component {
             <Row>
               <Col style={{ textAlign: 'left' }} span={24}>
                 <FormItem>
-                  {getFieldDecorator('approveRemark')(
+                  {getFieldDecorator('approveRemark', {rules: [{ max: 25, message: '审批意见不能超过25个中文!' }]})(
                     <TextArea rows={5} placeholder="请输入审批意见"></TextArea>
                   )}
                 </FormItem>
