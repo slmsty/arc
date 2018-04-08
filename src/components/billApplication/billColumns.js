@@ -124,11 +124,11 @@ const proColumns = [{
   width: 300,
 }, {
   title: '提前开票原因',
-  dataIndex: 'preInvoiceReason',
+  dataIndex: 'advanceBillingReason',
   width: 300,
 }, {
   title: '预计回款日期',
-  dataIndex: 'preReceiveDate',
+  dataIndex: 'receiptReturnDate',
   width: 150,
 }, {
   title: '付款条件',
