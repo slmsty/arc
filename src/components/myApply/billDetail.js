@@ -150,7 +150,7 @@ class BillDetail extends React.Component  {
               <div style={{padding: '10px 0'}}>
                 <Row gutter={40}>
                   <Col span={24}>
-                    开票要求: {billingApplicantRequest}
+                    开票原因及要求: {billingApplicantRequest}
                   </Col>
                 </Row>
               </div>
