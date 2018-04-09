@@ -244,7 +244,7 @@ class BillApproveDetail extends React.Component  {
         const params = isAgainInvoice !== 'false' ? {
           ...values,
           billingApplicationId: this.props.serviceDetail.billingApplicationId,
-          billingApplicationType: this.props.applyType,
+          billingApplicationType: values.billFlow ? values.billFlow : this.props.applyType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
           appLineItems: this.state.dataSource.map(record => ({
             ...record,

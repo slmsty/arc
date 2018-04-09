@@ -110,11 +110,11 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '合同名称',
         dataIndex: 'contractName',
-        width: 260,
+        width: 300,
       }, {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 220,
+        width: 260,
       }, {
         title: '付款条件',
         dataIndex: 'paymentTerm',
@@ -409,7 +409,7 @@ export default class BillingApplication extends React.Component {
   getScrollWidth() {
     let scroll = null
     if(normalTypes.includes(this.state.currentType)){
-      scroll = { x: 2760 }
+      scroll = { x: 2850 }
     } else if (redTypes.includes(this.state.currentType)) {
       scroll = { x: 1800 }
     } else if (advanceTypes.includes(this.state.currentType)) {

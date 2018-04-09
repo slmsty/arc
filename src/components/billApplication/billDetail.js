@@ -7,6 +7,7 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
 import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols } from './billColumns'
 import UrlModalCom from '../common/getUrlModal'
+import MultipleInput from '../common/multipleInput'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -204,6 +205,7 @@ class BillDetail extends React.Component {
             isAgainInvoice: 'true',
             billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
+            receiptEmail: values.receiptEmail.join(','),
           }
           if(this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate) {
             const checkParams = {
@@ -576,7 +578,7 @@ class BillDetail extends React.Component {
             hasEmpty
             value={this.state.proItems.length > 0 ? this.state.proItems[index]['advanceBillingReason'] : ''}
             onChange={(value) => this.proItemChange(index, 'advanceBillingReason', value)}
-          /> : text
+          /> : record.advanceBillingReasonName
       )
     }, {
       title: '预计回款日期',
@@ -904,14 +906,14 @@ class BillDetail extends React.Component {
                   </Col>
                 </Row>
                 <Row gutter={40}>
-                  <Col span={8} key={1}>
-                    <FormItem {...formItemLayout2} label="E-mail">
+                  <Col span={14} key={1}>
+                    <FormItem {...formItemLayout1} label="E-mail">
                       {getFieldDecorator('receiptEmail', {
-                        initialValue: this.props.currentUser.email, rules: [{
-                          type: 'email', message: '请输入正确的E-mail!',
-                        }, { required: true, message: '请填写E-mail!' }]
+                        initialValue: this.props.currentUser.email, rules: [{ required: true, message: '请填写E-mail!' }]
                       })(
-                        <Input placeholder="E-mail"/>
+                        <MultipleInput
+                          placeholder="填写多个E-mail请用英文逗号分隔"
+                        />
                       )}
                     </FormItem>
                   </Col>
