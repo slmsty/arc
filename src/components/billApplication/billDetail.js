@@ -11,7 +11,7 @@ import MultipleInput from '../common/multipleInput'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
-const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER']
+const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER']
 const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
 const formItemLayout = {
   labelCol: { span: 7 },
@@ -829,7 +829,7 @@ class BillDetail extends React.Component {
                             <Button>
                               <Icon type="upload" />点击上传
                             </Button>
-                            <span className="file-tip">说明：未大签项目需要上传合同附件</span>
+                            <span className="file-tip">说明：未大签、其他开票项目需要上传合同附件</span>
                           </Upload>
                         )
                       }
