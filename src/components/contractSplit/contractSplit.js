@@ -328,6 +328,11 @@ export default class ApplySearchCon extends React.Component {
         dataIndex: 'recalculate',
         width: 100,
       },
+      {
+        title: '合同拆分操作人',
+        dataIndex: 'splitMan',
+        width: 110,
+      },
     ]
     const { selectedRowKeys } = this.state
     const rowSelection = {
