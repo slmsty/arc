@@ -1,6 +1,7 @@
 import React from 'react'
-import { Button, Row, Col, Table, Modal, Icon, Form } from 'antd'
+import { Button, Row, Col, Table, Modal, Icon, Form, message } from 'antd'
 import BillApproveDetail from '../myApply/billApproveDetail'
+import requestJsonFetch from '../../http/requestJsonFecth'
 import './bigSignAuditDetail.less'
 
 class BigSignAuditDetail extends React.Component {
@@ -12,18 +13,46 @@ class BigSignAuditDetail extends React.Component {
       selectedRows: [],
       showApproveDetail: false,
       billType: 'BILLING_CONTRACT',
+      approveData: [],
     }
+  }
+
+  setFormValidate = (v) => {
+    this.setState({
+      approveData: v
+    })
   }
 
   billStartWorkFlow = (billingApplicationId) => {
     this.props.form.validateFields((err, values) => {
       if(!err) {
+        const { serviceType, serviceDetail } = this.props.applicationInfo
         const params = {
+          ...values,
           billingApplicationId,
-          billingApplicationType: this.state.billType,
+          billingApplicationType: values.billFlow ? values.billFlow : serviceType,
+          billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
+          appLineItems: this.state.approveData.map(record => ({
+            ...record,
+            lineNo: record.lineNo + 1,
+          }))
         }
-        this.props.billStartWorkFlow(params)
-        this.props.onCancel()
+        requestJsonFetch('/arc/billingApplication/workFlowEdit', {
+          method: 'POST',
+          body: params,
+        }, (res) => {
+          const {resultCode, resultMessage } = res
+          if (resultCode === '000000') {
+            const params = {
+              billingApplicationId,
+              billingApplicationType: this.state.billType,
+            }
+            this.props.billStartWorkFlow(params)
+            this.props.onCancel()
+          } else {
+            message.error(resultMessage, 5)
+          }
+        })
       }
     })
   }
@@ -43,6 +72,7 @@ class BigSignAuditDetail extends React.Component {
         })
       },
     }
+
     const { applyPersonName, applyPersonPhone, applyPersonDept, applyPersonEmail, serviceType, serviceTypeName, serviceDetail } = this.props.applicationInfo
     return (
       <Modal
@@ -79,6 +109,7 @@ class BigSignAuditDetail extends React.Component {
               isApprove={true}
               setBillApplicationType={this.setBillApplicationType}
               form={this.props.form}
+              setFormValidate={this.setFormValidate}
             />
           </div>
         </Form>

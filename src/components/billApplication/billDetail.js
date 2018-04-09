@@ -205,6 +205,7 @@ class BillDetail extends React.Component {
             isAgainInvoice: 'true',
             billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
+            receiptEmail: values.receiptEmail ? values.receiptEmail.join(',') : '',
           }
           if(this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate) {
             const checkParams = {
@@ -901,7 +902,7 @@ class BillDetail extends React.Component {
                       {getFieldDecorator('receiptEmail', {
                         initialValue: this.props.currentUser.email, rules: [{ required: true, message: '请填写E-mail!' }]
                       })(
-                        <Input placeholder="填写多个E-mail请用英文逗号分隔" />
+                        <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" />
                       )}
                     </FormItem>
                   </Col>
