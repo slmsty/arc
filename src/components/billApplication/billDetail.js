@@ -72,8 +72,8 @@ class BillDetail extends React.Component {
         specificationType: item.specificationType ? item.specificationType : '',
         unit: item.unit ? item.unit : '',
         quantity: item.quantity ? item.quantity : 1,
-        unitPrice: item.billingAmount ? item.billingAmount : 0,
-        billingAmountExcludeTax: item.billingAmount ? item.billingAmount : 0,
+        unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
+        billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
         totalAmount: item.billingAmount ? item.billingAmount : 0,
         billingTaxRate: item.billingTaxRate ? item.billingTaxRate : 0,
@@ -205,7 +205,7 @@ class BillDetail extends React.Component {
             isAgainInvoice: 'true',
             billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
-            receiptEmail: values.receiptEmail ? values.receiptEmail.join(',') : '',
+            receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
           }
           if(this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate) {
             const checkParams = {
@@ -532,7 +532,6 @@ class BillDetail extends React.Component {
 
   proItemChange = (index, columns, value) => {
     let proData = this.state.proItems
-    console.log(value)
     if(columns === 'receiptReturnDate') {
       proData[index][columns] = value ? moment(value) : ''
     } else {
@@ -900,7 +899,7 @@ class BillDetail extends React.Component {
                   <Col span={14} key={1}>
                     <FormItem {...formItemLayout1} label="E-mail">
                       {getFieldDecorator('receiptEmail', {
-                        initialValue: this.props.currentUser.email, rules: [{ required: true, message: '请填写E-mail!' }]
+                        initialValue: [this.props.currentUser.email], rules: [{ required: true, message: '请填写E-mail!' }]
                       })(
                         <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" />
                       )}

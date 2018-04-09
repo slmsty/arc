@@ -81,6 +81,9 @@ const totalColumns = [
     title: '税率',
     dataIndex: 'taxRate',
     width: 150,
+    render: (text, record) => {
+      return record.taxRate ? `${parseInt((record.taxRate) * 100)}%` : ''
+    }
   }, {
     title: '税额',
     dataIndex: 'tax',

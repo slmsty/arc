@@ -7,7 +7,7 @@ const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
 
 class BillDetail extends React.Component  {
   getTaxData = () => {
-    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totaTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totalTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
     return [{
       title: '城建',
       taxRate: constructionTax,
@@ -23,7 +23,7 @@ class BillDetail extends React.Component  {
     }, {
       title: '合计',
       taxRate: '',
-      tax: totaTaxAmount,
+      tax: totalTaxAmount,
     }]
   }
   render() {

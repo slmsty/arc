@@ -4,7 +4,7 @@ import { Select } from 'antd'
 
 export default class MultipleInput extends React.Component {
   state = {
-    values: this.props.value ? [this.props.value] : [],
+    values: this.props.value ? this.props.value : [],
   }
   textTemp = ''
   handleChange = (values) => {
@@ -25,7 +25,6 @@ export default class MultipleInput extends React.Component {
     }
   }
   render() {
-    console.log(this.props.value)
     return (
       <Select
         mode="tags"
