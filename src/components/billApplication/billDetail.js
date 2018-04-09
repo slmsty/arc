@@ -205,7 +205,6 @@ class BillDetail extends React.Component {
             isAgainInvoice: 'true',
             billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
-            receiptEmail: values.receiptEmail.join(','),
           }
           if(this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate) {
             const checkParams = {
@@ -251,15 +250,6 @@ class BillDetail extends React.Component {
       })
       //校验所有拆分子项的金额必须小于父级含税金额
       const childAmount = total + value
-      /*if(normalTypes.includes(this.props.billType) && childAmount >= result.totalAmount) {
-        message.error('拆分子项的金额合计必须小于拆分前含税金额')
-        return false
-      } else {
-        if(result.totalAmount !== 0 && record.isParent!== 1 && childAmount >= result.totalAmount) {
-          message.error('拆分子项的金额合计必须小于拆分前含税金额')
-          return false
-        }
-      }*/
       dataSource[result.lineNo][col] = result.totalAmount - childAmount
       const parent = this.state.dataSource[result.lineNo]
       this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
@@ -911,9 +901,7 @@ class BillDetail extends React.Component {
                       {getFieldDecorator('receiptEmail', {
                         initialValue: this.props.currentUser.email, rules: [{ required: true, message: '请填写E-mail!' }]
                       })(
-                        <MultipleInput
-                          placeholder="填写多个E-mail请用英文逗号分隔"
-                        />
+                        <Input placeholder="填写多个E-mail请用英文逗号分隔" />
                       )}
                     </FormItem>
                   </Col>
