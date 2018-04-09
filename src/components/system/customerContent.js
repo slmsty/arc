@@ -69,9 +69,7 @@ class CustomerTaxInfo extends React.Component {
                 )}
               </FormItem>
             </Col>
-          </Row>
-          <Row gutter={40}>
-            <Col style={{ textAlign: 'right' }}>
+            <Col span={8} key={2} style={{ textAlign: 'left' }}>
               <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />查询</Button>
             </Col>
           </Row>

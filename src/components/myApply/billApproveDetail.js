@@ -20,7 +20,7 @@ const formItemLayout1 = {
   wrapperCol: { span: 8 },
 }
 const span3ItemLayout = {
-  labelCol: { span: 2 },
+  labelCol: { span: 3 },
   wrapperCol: { span: 20 },
 }
 
@@ -319,6 +319,8 @@ class BillApproveDetail extends React.Component  {
     const isArFinanceAccount = this.props.taskCode === 'ar_finance_account'
     //税务审核人
     const isTaxAuditor = this.props.taskCode === 'tax_auditor'
+    //项目经理
+    const isProManager = this.props.taskCode === 'project_manager'
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -591,7 +593,7 @@ class BillApproveDetail extends React.Component  {
                           paramCode="RED_OR_INVALID"
                           placeholder="退票类型"
                           hasEmpty
-                          disabled={this.props.taskCode === 'tax_auditor'}
+                          disabled={isTaxAuditor}
                         />
                       )
                     }
@@ -599,7 +601,7 @@ class BillApproveDetail extends React.Component  {
                 </Col> : null
             }
             {
-              this.props.taskCode === 'tax_auditor' ?
+              isTaxAuditor ?
                 <Col span={8}>
                   <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
                     {
@@ -643,8 +645,8 @@ class BillApproveDetail extends React.Component  {
                   <Col span={8}>
                     <FormItem {...formItemLayout} label="是否收到发票">
                       {
-                        getFieldDecorator(this.props.taskCode === 'tax_auditor' ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
-                          {initialValue: this.props.taskCode === 'tax_auditor' ? receiptOutcomeTaxVp : receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
+                        getFieldDecorator(isTaxAuditor ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
+                          {initialValue: isTaxAuditor ? receiptOutcomeTaxVp : receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
                           <Select>
                             <Option value="Y">是</Option>
                             <Option value="N">否</Option>
@@ -680,12 +682,23 @@ class BillApproveDetail extends React.Component  {
                   this.props.applyType === 'BILLING_EXCESS' ?
                     <Col span={8}>
                       <FormItem {...formItemLayout} label="费用承担者">
-                        {costBearName}
+                        {
+                          getFieldDecorator('costBear')(
+                            //项目经理可以修改费用承担者
+                            isProManager ?
+                              <SelectInvokeApi
+                                typeCode="BILLING_APPLICATION"
+                                paramCode="COST_BEAR"
+                                placeholder="费用承担着"
+                                hasEmpty
+                              /> : costBearName
+                          )
+                        }
                       </FormItem>
                     </Col> : null
                 }
                 {
-                  this.props.taskCode === 'tax_auditor' && isReceiveInvoice ?
+                  isTaxAuditor && isReceiveInvoice ?
                     <Col span={8}>
                       <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                         {
@@ -706,7 +719,7 @@ class BillApproveDetail extends React.Component  {
                               paramCode="RED_OR_INVALID"
                               placeholder="退票类型"
                               hasEmpty
-                              disabled={this.props.taskCode === 'tax_auditor'}
+                              disabled={isTaxAuditor}
                             />
                           )
                         }
@@ -802,5 +815,4 @@ class BillApproveDetail extends React.Component  {
   }
 }
 
-//export default Form.create()(BillApproveDetail)
 export default BillApproveDetail

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table, Row, Col } from 'antd'
-import { proColumns, billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
+import { billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
 import './billApproveDetail.css'
 const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
 

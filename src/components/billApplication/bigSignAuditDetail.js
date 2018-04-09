@@ -43,7 +43,7 @@ class BigSignAuditDetail extends React.Component {
         })
       },
     }
-    const { applyPersonName, applyPersonPhone, applyPersonDept, applyPersonEmail, serviceTypeName, serviceDetail } = this.props.applicationInfo
+    const { applyPersonName, applyPersonPhone, applyPersonDept, applyPersonEmail, serviceType, serviceTypeName, serviceDetail } = this.props.applicationInfo
     return (
       <Modal
         title="审核详情"
@@ -74,7 +74,7 @@ class BigSignAuditDetail extends React.Component {
             <h3 className="bill-title">{serviceTypeName}详情</h3>
             <BillApproveDetail
               serviceDetail={serviceDetail}
-              applyType={serviceTypeName}
+              applyType={serviceType}
               billApplySave={this.props.billApplySave}
               isApprove={true}
               setBillApplicationType={this.setBillApplicationType}

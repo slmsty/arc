@@ -17,8 +17,8 @@ const formItemLayout = {
   wrapperCol: { span: 12 },
 }
 const formItemLayout1 = {
-  labelCol: { span: 3 },
-  wrapperCol: { span: 21 },
+  labelCol: { span: 4 },
+  wrapperCol: { span: 20 },
 }
 const formItemLayout2 = {
   labelCol: { span: 7 },
