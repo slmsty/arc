@@ -36,12 +36,6 @@ export default class BillingApplication extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    /*if(this.props.billList !== nextProps.billList && nextProps.billList) {
-      this.setState({
-        selectedRows: nextProps.billList.slice(0, 1),
-        selectedRowKeys: [0],
-      })
-    }*/
     if(this.props.updateSuccess !== nextProps.updateSuccess && nextProps.updateSuccess) {
       message.success('申请信息修改成功!')
       this.setState({
@@ -56,7 +50,6 @@ export default class BillingApplication extends React.Component {
         updateVisible: false,
         otherAddVisible: false,
         currentRecord: {},
-        //selectedRowKeys: [0],
       })
       this.getInitQuery()
     } else if(this.props.redApplySuccess != nextProps.redApplySuccess && nextProps.redApplySuccess) {

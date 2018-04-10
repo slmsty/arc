@@ -310,7 +310,7 @@ class BillApproveDetail extends React.Component  {
   render() {
     const { getFieldDecorator } = this.props.form
     const { billingType, billingDate, billingApplicantRequest, comInfo ={}, custInfo = {}, contractList, outcomeList,
-      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName } = this.props.serviceDetail
+      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName, costBear } = this.props.serviceDetail
     //是否红冲发票
     const isReceiveInvoice = showReceive.includes(this.props.applyType)
     //AR管理员
@@ -615,6 +615,25 @@ class BillApproveDetail extends React.Component  {
           :
           <div>
             <Row gutter={40}>
+              {
+                this.props.applyType === 'BILLING_EXCESS' ?
+                  <Col span={8}>
+                    <FormItem {...formItemLayout} label="费用承担者">
+                      {
+                        isProManager ?
+                        getFieldDecorator('costBear',{initialValue: costBear, rules: [{ required: isProManager, message: '请选择费用承担者!' }]})(
+                          //项目经理可以修改费用承担者
+                            <SelectInvokeApi
+                              typeCode="BILLING_APPLICATION"
+                              paramCode="COST_BEAR"
+                              placeholder="费用承担着"
+                              hasEmpty
+                            /> 
+                        ): costBearName
+                      }
+                    </FormItem>
+                  </Col> : null
+              }
               <Col span={8}>
                 <FormItem {...formItemLayout} label="开票类型">
                   {
@@ -626,6 +645,7 @@ class BillApproveDetail extends React.Component  {
                         paramCode="BILLING_TYPE"
                         placeholder="开票类型"
                         hasEmpty
+                        disabled={isProManager}
                       />
                     )
                   }
@@ -635,7 +655,7 @@ class BillApproveDetail extends React.Component  {
                 <FormItem {...formItemLayout} label="开票日期">
                   {
                     getFieldDecorator('billingDate', {initialValue: moment(billingDate, dateFormat)})(
-                      <DatePicker format="YYYY-MM-DD"/>,
+                      <DatePicker format="YYYY-MM-DD" disabled={isProManager}/>,
                     )
                   }
                 </FormItem>
@@ -678,25 +698,6 @@ class BillApproveDetail extends React.Component  {
             </Row>
             {
               <Row gutter={40}>
-                {
-                  this.props.applyType === 'BILLING_EXCESS' ?
-                    <Col span={8}>
-                      <FormItem {...formItemLayout} label="费用承担者">
-                        {
-                          getFieldDecorator('costBear')(
-                            //项目经理可以修改费用承担者
-                            isProManager ?
-                              <SelectInvokeApi
-                                typeCode="BILLING_APPLICATION"
-                                paramCode="COST_BEAR"
-                                placeholder="费用承担着"
-                                hasEmpty
-                              /> : costBearName
-                          )
-                        }
-                      </FormItem>
-                    </Col> : null
-                }
                 {
                   isTaxAuditor && isReceiveInvoice ?
                     <Col span={8}>
@@ -750,7 +751,7 @@ class BillApproveDetail extends React.Component  {
               rowKey={record => record.lineNo}
               bordered
               size="small"
-              columns={columns}
+              columns={isProManager ? invoiceLineCols : columns}
               pagination={false}
               dataSource={this.state.dataSource}
               scroll={{ x: '1600px' }}
@@ -770,30 +771,32 @@ class BillApproveDetail extends React.Component  {
                 </div> : null
             }
             <Row gutter={40}>
-              <Col span={24}>
+              <Col span={19}>
                 <FormItem {...span3ItemLayout} label="备注">
-                  {
+                  {!isProManager ?
                     getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 350, message: '备注不能超过350个字符!' }]})(
                       <TextArea placeholder="备注" rows="2" />
-                    )
+                    ) : billingApplicantRemark
                   }
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={40}>
-              <Col span={24}>
+              <Col span={19}>
                 <FormItem {...span3ItemLayout} label="开票原因及要求">
-                  {
+                  {!isProManager ?
                     getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票原因及要求不能超过350个字符!' }]})(
                       <TextArea placeholder="请输入开票原因及要求" rows="2" />
-                    )
+                    ) : billingApplicantRequest
                   }
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={40}>
-              <Col span={24}>
-                <span className="file-label">附件:</span> <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+              <Col span={19}>
+                <FormItem {...span3ItemLayout} label="附件">
+                  <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+                </FormItem>
               </Col>
             </Row>
           </div>

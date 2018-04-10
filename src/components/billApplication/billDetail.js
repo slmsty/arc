@@ -55,6 +55,7 @@ class BillDetail extends React.Component {
       comInfo: [comInfo.billingComInfoId, comInfo.billingComName],
       proItems: [],
     }
+    this.isAdvance = props.billType === 'BILLING_CONTRACT' || props.billType === 'BILLING_UN_CONTRACT_PROJECT' || props.billType === 'BILLING_UN_CONTRACT_PROJECT'
   }
 
   componentDidMount() {
@@ -181,6 +182,20 @@ class BillDetail extends React.Component {
             message.error(`第${i+1}行【开票数量】不能为空或者为0!`)
             err = true
             break
+          }
+        }
+        if(this.isAdvance) {
+          for(let i = 0; i< this.state.proItems.length; i++) {
+            const r  = this.state.proItems[i]
+            if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
+              message.error('【提前开票原因】不能为空!')
+              err = true
+              break
+            } else if (r.receiptReturnDate === '' || typeof r.receiptReturnDate === 'undefined') {
+              message.error('【预计回款日期】不能为空!')
+              err = true
+              break
+            }
           }
         }
 
