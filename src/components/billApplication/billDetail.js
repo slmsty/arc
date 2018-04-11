@@ -373,7 +373,7 @@ class BillDetail extends React.Component {
   }
 
   getWarningTableData = () => {
-    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totalTaxAmount } = this.state.taxData
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, addTaxAmount, totalTaxAmount } = this.state.taxData
     return [{
       title: '城建',
       taxRate: constructionTax,
@@ -386,6 +386,10 @@ class BillDetail extends React.Component {
       title: '所得税',
       taxRate: incomeTax,
       tax: incomeTaxAmount,
+    }, {
+      title: '增值税',
+      taxRate: '',
+      tax: addTaxAmount,
     }, {
       title: '合计',
       taxRate: '',
