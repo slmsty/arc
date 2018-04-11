@@ -30,8 +30,7 @@ export default class StatementListIndex extends React.Component {
   excel = (param) => {
     let params = {}
     params.contractSplit = param
-    console.log('params',params)
-    this.props.getExcel(param)
+    this.props.getExcel(params)
     //var workbook = new Excel.Workbook();
 
     //console.log('excel')

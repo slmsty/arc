@@ -21,6 +21,7 @@ function getContractStatementList(state, action) {
   return { ...state, getContractStatementList: action.response.pageInfo }
 }
 function fileDown(state, action) {
+  console.log('action',action)
   saveAs(action.files.blob, action.fileName)
   return {
     ...state
