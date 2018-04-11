@@ -332,6 +332,7 @@ export default class BillingApplication extends React.Component {
       contractItems.push({
         arBillingId: b.arBillingId,
         contractItemId: b.contractItemId,
+        fundId: b.fundId,
       })
     })
     const param = {

@@ -35,6 +35,7 @@ class BillUpdate extends React.Component {
           billingApplicationType: this.props.billType,
           arBillingId: record.arBillingId,
           contractItemId: record.contractItemId,
+          fundId: record.fundId,
           comId: values.comName[0],
           comName: values.comName[1],
           custId: values.custName[0],
