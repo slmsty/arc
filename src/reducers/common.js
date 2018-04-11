@@ -146,8 +146,8 @@ const common = {
             name: '开票状态管理',
             icon: 'icon-kaipiaozhuangtai',
             component: 'BillStatusManage',
-            child:[{component: "billingStatusSendAp", key: "521", name: "开票传送ap", path: "billingStatusSendAp"},
-              {component: "billingStatusCancel", key: "522", name: "开票状态撤销", path: "billingStatusCancel"},
+            child:[{component: "billingStatusSendAp", key: "421", name: "传送ap", path: "billingStatusSendAp"},
+              {component: "billingStatusCancel", key: "422", name: "撤销", path: "billingStatusCancel"},
             ]
           },
         ],
