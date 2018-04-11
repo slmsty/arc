@@ -22,7 +22,7 @@ function getContractStatementList(state, action) {
 }
 function fileDown(state, action) {
   console.log('action',action)
-  saveAs(action.files.blob, action.fileName)
+  saveAs(action.files.blob, "Report.xlsx")
   return {
     ...state
   }

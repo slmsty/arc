@@ -31,9 +31,6 @@ export default class StatementListIndex extends React.Component {
     let params = {}
     params.contractSplit = param
     this.props.getExcel(params)
-    //var workbook = new Excel.Workbook();
-
-    //console.log('excel')
   }
 
   handleQuery(type){

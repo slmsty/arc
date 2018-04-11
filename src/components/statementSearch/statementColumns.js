@@ -702,7 +702,7 @@ const constructSplitSearchColumns = [{
   {
     title: 'Task',
     dataIndex: 'contractCategory',
-    width: 50,
+    width: 100,
   },
   {
     title: '合同额',
@@ -714,6 +714,12 @@ const constructSplitSearchColumns = [{
     title: 'Gross order',
     dataIndex: 'grossOrder',
     width: 100,
+    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+  },
+  {
+    title: ' Gross Order含退税额',
+    dataIndex: 'grossOrderIncludeRetRate',
+    width: 120,
     render: (text,rocord,index)=>(text ? currency(text) : currency(0))
   },
   {

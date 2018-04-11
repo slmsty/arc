@@ -36,6 +36,7 @@ export function getExcel(queryParam) {
         method: 'POST',
         body: queryParam,
       },
+      acceptType: 'blob',
       types: ['GET_EXCEL_SUCCESS'],
     },
   }
