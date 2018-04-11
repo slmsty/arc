@@ -188,6 +188,9 @@ const common = {
             name: '合同拆分',
             icon: 'icon-hetongchaifen',
             component: 'ContractSplit',
+            child:[{component: "splitSendErp", key: "411", name: "传送erp", path: "splitSendErp"},
+              {component: "splitEdit", key: "412", name: "拆分编辑", path: "splitEdit"},
+            ]
           },
         ],
       },

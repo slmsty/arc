@@ -557,7 +557,7 @@ class Status extends Component{
       }
     }
     const roleButtons = sessionStorage.getItem('roleButtons')
-    const buttonList = typeof roleButtons === 'undefined' ? JSON.parse(roleButtons).map(r => r.path) : []
+    const buttonList = typeof roleButtons === 'undefined' || roleButtons === 'undefined' ? JSON.parse(roleButtons).map(r => r.path) : []
     return (
       <div className="badDebtsStatus">
         {loading ? <Spin size="large" style={{position:'absolute',left:'50%', top:'50%', zIndex:1000}} /> : null}

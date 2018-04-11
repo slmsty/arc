@@ -464,7 +464,7 @@ export default class BillStatusCon extends React.Component {
       onChange: this.onBillResultSelectChange,
     }
     const roleButtons = sessionStorage.getItem('roleButtons')
-    const buttonList = typeof roleButtons === 'undefined' ? JSON.parse(roleButtons).map(r => r.path) : []
+    const buttonList = typeof roleButtons === 'undefined' || roleButtons === 'undefined' ? JSON.parse(roleButtons).map(r => r.path) : []
     return (
       <div>
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />

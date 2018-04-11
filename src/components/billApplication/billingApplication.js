@@ -92,7 +92,7 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '项目编码',
         dataIndex: 'projectNo',
-        width: 150,
+        width: 120,
         fixed: 'left',
       }, {
         title: '签约公司',
@@ -105,7 +105,7 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '合同名称',
         dataIndex: 'contractName',
-        width: 300,
+        width: 330,
       }, {
         title: '客户名称',
         dataIndex: 'custName',

@@ -628,7 +628,7 @@ class BillApproveDetail extends React.Component  {
                               paramCode="COST_BEAR"
                               placeholder="费用承担着"
                               hasEmpty
-                            /> 
+                            />
                         ): costBearName
                       }
                     </FormItem>
