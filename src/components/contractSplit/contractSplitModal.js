@@ -1384,13 +1384,13 @@ class ContractSplitModal extends React.Component{
                   Net Order(Legal)：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
-                  <Input className="contractRowBorderNo" value={currency(countGrossOrder)} disabled />
+                  <Input className="contractRowBorderNo" value={currency((countGrossOrder - this.state.countTaskCostData["task5Cost"]).toFixed(2) )} disabled />
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
                   Net Order（Management)：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
-                  <Input name="" className="contractRowBorderNo" value={currency(countGrossOrder)} disabled />
+                  <Input name="" className="contractRowBorderNo" value={currency((countGrossOrder - (this.state.countTaskCostData["task5Cost"] + this.state.countTaskCostData["task9Cost"])).toFixed(2) )} disabled />
                 </Col>
               </Row>
               <br />

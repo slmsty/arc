@@ -27,6 +27,45 @@ export function getContractStatementList(queryParam) {
     },
   }
 }
+//发票明细表
+export function getInvoiceDetailList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/invoice_detail/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_INVOICE_DETAIL_LISTT_SUCCESS'],
+    },
+  }
+}
+//发票汇总表
+export function getOutcomeDetailReportList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/billing_month/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_OUTCOME_DETAIL_LISTT_SUCCESS'],
+    },
+  }
+}
+//未大签提前开票数据补充
+export function getUnContractOutcomeDataAddList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/unsigned_billing/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_UNCONTRACTOUTCOMNE_DETAIL_LISTT_SUCCESS'],
+    },
+  }
+}
 // 导出excel
 export function getExcel(queryParam) {
   return {

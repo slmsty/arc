@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import StatementListCom from '../../components/statementSearch/statementList'
-import { getStatementList,getContractStatementList,getExcel } from '../../actions/statement'
+import { getStatementList,getContractStatementList,getExcel,getInvoiceDetailList,getOutcomeDetailReportList,getUnContractOutcomeDataAddList } from '../../actions/statement'
 
 const mapStateToProps = state => ({
   statement: state.statement,
@@ -14,6 +14,9 @@ const mapDispatchToProps = dispatch => (
     getStatementList,
     getContractStatementList,
     getExcel,
+    getInvoiceDetailList,
+    getOutcomeDetailReportList,
+    getUnContractOutcomeDataAddList
   }, dispatch)
 )
 

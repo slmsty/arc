@@ -5,7 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import currency from '../../util/currency'
 //import Excel from 'exceljs'
-import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns } from './statementColumns'
+import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns,billInfoCols,outcomeTotalReportCols,unContractOutcomeDataAddCols } from './statementColumns'
 
 import { Table, Row, Col, Form, Radio, DatePicker, Input, Icon } from 'antd'
 
@@ -17,6 +17,7 @@ export default class StatementListIndex extends React.Component {
     loading: false,
     applyData: '',
     currencyType: '',
+    loading:false,
   }
   componentDidMount(){
   }
@@ -25,7 +26,6 @@ export default class StatementListIndex extends React.Component {
       pageNo: 1,
       pageSize: 10,
     },
-    contractSplit:{}
   }
   excel = (param) => {
     let params = {}
@@ -34,20 +34,47 @@ export default class StatementListIndex extends React.Component {
   }
 
   handleQuery(type){
+    this.setState({
+      loading:true
+    })
     if(type==='receiptInfoReport'){
-      this.props.getStatementList(this.queryParam)
-      this.setState({
-        currencyType: 'receiptInfoReport',
+      this.props.getStatementList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
       })
-
     }
     if(type==='contractSplitReport'){
-      console.log('this.queryParam',this.queryParam)
-      this.props.getContractStatementList(this.queryParam)
-      this.setState({
-        currencyType: 'contractSplitReport',
+      this.props.getContractStatementList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
       })
     }
+    if(type==='outcomeDetailReport'){
+      this.props.getInvoiceDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='outcomeTotalReport'){
+      this.props.getOutcomeDetailReportList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='unContractOutcomeDataAdd'){
+      this.props.getUnContractOutcomeDataAddList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    this.setState({
+      currencyType: type,
+    })
   }
   // 查询接口
   /*param:传递参数
@@ -56,9 +83,31 @@ export default class StatementListIndex extends React.Component {
     this.setState({
       currencyType:type,
     })
-    const contractSplit = {}
-    contractSplit.contractSplit = param
-    this.queryParam = { ...this.queryParam,...contractSplit}
+    if(type==='receiptInfoReport'){
+      let contractSplit = {}
+      contractSplit.contractSplit = param
+      this.queryParam = { ...this.queryParam,...contractSplit}
+    }
+    if(type==='contractSplitReport'){
+      let contractSplit = {}
+      contractSplit.contractSplit = param
+      this.queryParam = { ...this.queryParam,...contractSplit}
+    }
+    if(type==='outcomeDetailReport'){
+      let invoiceDetail = {}
+      invoiceDetail.invoiceDetail = param
+      this.queryParam = { ...this.queryParam,...invoiceDetail}
+    }
+    if(type==='outcomeTotalReport'){
+      let billingMonth = {}
+      billingMonth.billingMonth = param
+      this.queryParam = { ...this.queryParam,...billingMonth}
+    }
+    if(type==='unContractOutcomeDataAdd'){
+      let unsignedBilling = {}
+      unsignedBilling.unsignedBilling = param
+      this.queryParam = { ...this.queryParam,...unsignedBilling}
+    }
     this.handleQuery(type)
 
   }
@@ -71,12 +120,12 @@ export default class StatementListIndex extends React.Component {
       reciptMoneyInfoCols.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
-      return [width,reciptMoneyInfoCols,'收款汇总金额']
+      return [width,reciptMoneyInfoCols,'收款汇总金额','']
     } else if(type==='outcomeInfoReport'){
       billInfocomCols.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
-      return [width,billInfocomCols,'发票汇总金额']
+      return [width,billInfocomCols,'发票汇总金额','']
     } else if(type==='outcomeReceiptInfoReport'){
       billAndReciptMoneyCols.map((item,idnex)=>{
         width += parseFloat(item.width)
@@ -91,7 +140,7 @@ export default class StatementListIndex extends React.Component {
       projectTotalCols.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
-      return [width,projectTotalCols,'收款汇总金额','发票汇总金额']
+      return [width,projectTotalCols,'收款汇总金额','发票汇总金额','']
     } else if(type==='contractInfoReport'){
       totalContractContentColumns.map((item,idnex)=>{
         width += parseFloat(item.width)
@@ -101,21 +150,33 @@ export default class StatementListIndex extends React.Component {
       turnProColumns.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
-      return [width,turnProColumns]
+      return [width,turnProColumns,'','']
     }else if(type==='contractSplitReport'){
       constructSplitSearchColumns.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
-      return [width,constructSplitSearchColumns]
-    } else {
-      reciptMoneyInfoCols.map((item,idnex)=>{
+      return [width,constructSplitSearchColumns,'','']
+    } else if(type==='outcomeDetailReport') {
+      billInfoCols.map((item,idnex)=>{
         width += parseFloat(item.width)
       })
-      return [width,reciptMoneyInfoCols,'收款汇总金额']
+      return [width,billInfoCols,'','']
+    } else if(type==='outcomeTotalReport') {
+      outcomeTotalReportCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,outcomeTotalReportCols,'','']
+    }
+    else if(type==='unContractOutcomeDataAdd') {
+      unContractOutcomeDataAddCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,unContractOutcomeDataAddCols,'','']
     }
   }
   // 展示查询列表回调方法
   showCols = (type) => {
+    const currencyType = this.state.currencyType;
     this.setState({
       currencyType: type,
     })
@@ -125,17 +186,16 @@ export default class StatementListIndex extends React.Component {
     this.queryParam.pageInfo.pageNo = current
     this.queryParam.pageInfo.pageSize = size
     const currencyType = this.state.currencyType
-    console.log(currencyType)
     this.handleQuery(currencyType)
   }
   // 页码修改
   handleChangePage = (page) => {
     this.queryParam.pageInfo.pageNo = page
     const currencyType = this.state.currencyType
-    console.log(currencyType)
     this.handleQuery(currencyType)
   }
   render() {
+
     const dataSources = {}
     let [current,total,pageSize,claimAmountTotal] = [0,0,0,'']
     const type = this.state.currencyType
@@ -147,11 +207,33 @@ export default class StatementListIndex extends React.Component {
       claimAmountTotal = currency(this.props.statement.getStatementList.claimAmountTotal)
     }
     if(type==='contractSplitReport'){
+
       dataSources.dataSource = this.props.statement.getContractStatementList.result
       current = this.props.statement.getContractStatementList.pageNo
       total = this.props.statement.getContractStatementList.count
       pageSize = this.props.statement.getContractStatementList.pageSize
       claimAmountTotal = currency(this.props.statement.getContractStatementList.claimAmountTotal)
+    }
+    if(type==='outcomeDetailReport'){
+
+      dataSources.dataSource = this.props.statement.getInvoiceDetailList.result
+      current = this.props.statement.getInvoiceDetailList.pageNo
+      total = this.props.statement.getInvoiceDetailList.count
+      pageSize = this.props.statement.getInvoiceDetailList.pageSize
+    }
+    if(type==='outcomeTotalReport'){
+
+      dataSources.dataSource = this.props.statement.getOutcomeDetailReportList.result
+      current = this.props.statement.getOutcomeDetailReportList.pageNo
+      total = this.props.statement.getOutcomeDetailReportList.count
+      pageSize = this.props.statement.getOutcomeDetailReportList.pageSize
+    }
+    if(type==='unContractOutcomeDataAdd'){
+
+      dataSources.dataSource = this.props.statement.getUnSignList.result
+      current = this.props.statement.getUnSignList.pageNo
+      total = this.props.statement.getUnSignList.count
+      pageSize = this.props.statement.getUnSignList.pageSize
     }
     const pagination = {
       current: current,
@@ -190,6 +272,7 @@ export default class StatementListIndex extends React.Component {
               scroll={{ x: this.getApplyColumns()[0] }}
               dataSource={dataSources.dataSource}
               pagination={pagination}
+              loading={this.state.loading}
             />
           </div>
         : null}

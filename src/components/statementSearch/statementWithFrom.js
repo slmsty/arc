@@ -88,14 +88,15 @@ class StatementListCom extends React.Component {
   }
   // 查询接口
   queryParms = (statement) => {
+    console.log('statement',statement)
     const params = this.props.form.getFieldsValue()
     this.setState({
       param:{},
       excelDis:true,
     })
-    const param = {}
       //收款信息查询表
     if(statement ==='receiptInfoReport'){
+      let param = {}
       param.projectNo = params.projectNo
       param.contractNo = params.contractNo
       param.signDateStart = params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : ''
@@ -114,6 +115,7 @@ class StatementListCom extends React.Component {
     }
     //合同拆分查询表
     if(statement==='contractSplitReport'){
+      let param = {}
       param.projectNo = params.projectNo
       param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
       param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
@@ -129,11 +131,57 @@ class StatementListCom extends React.Component {
       })
       this.props.queryParms(param,'contractSplitReport')
     }
-    //this.props.form.resetFields()
+    // 发票明细表
+    if(statement==='outcomeDetailReport'){
+      let param = {}
+      param.projectNo = params.projectNo
+      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
+      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
+      param.contractName = params.contractName
+      param.invoiceNumber = params.invoiceNumber
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.custName = params.custName
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'outcomeDetailReport')
+    }
 
+    // 发票汇总表
+    if(statement==='outcomeTotalReport'){
+      let param = {}
+      param.projectNo = params.projectNo
+      param.projectDept = params.projectDept
+      param.projectBu = params.projectBu ? params.projectBu[0] : ''
+      param.billingMonth = params.billingMonth.format("YYYY-MM")
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'outcomeTotalReport')
+    }
+    // 未大签提前开票数据补充表
+    if(statement==='unContractOutcomeDataAdd'){
+      let param = {}
+      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
+      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
+      param.projectNo = params.projectNo
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.custName = params.custName
+      param.invoiceNumber = params.invoiceNumber
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'unContractOutcomeDataAdd')
+    }
+    //this.props.form.resetFields()
   }
+
   // 根据value来展示不用的表单查询
   handleRadioChange = (e) => {
+    // 如果切换了表，则清空查询数据
+    this.props.form.resetFields()
     this.setState({
       stateType:e.target.value,
     })
@@ -182,7 +230,7 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="项目编码">
                   {
                     getFieldDecorator('projectNo')(
-                      <MultipleInput
+                      <Input
                         placeholder="项目编码"
                       />,
                     )
@@ -891,9 +939,210 @@ class StatementListCom extends React.Component {
 
           </div>
           {/*
-           转包项目表
+           合同拆分查询表
            end-------------------
            */}
+           {/*发票明细表*/}
+          <div style={{ display: this.state.stateType === 'outcomeDetailReport' ? 'block' : 'none' }}>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="项目编码">
+                  {
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="项目编码"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="合同编码">
+                  {
+                    getFieldDecorator('contractNo')(
+                      <Input
+                        placeholder="合同编码"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="合同名称">
+                  {getFieldDecorator('contractName')(
+                    <Input
+                      placeholder="请输入合同名称"
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="客户名称">
+                  {getFieldDecorator('custName')(
+                    <Input
+                      placeholder="请输入客户名称"
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="开票日期">
+                  {getFieldDecorator('billingDate', {
+                    //initialValue: [moment('2017-08-01'), moment()],
+                  })(<RangePicker
+                    allowClear
+                    format={dateFormat}
+                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                  />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="发票号">
+                  {
+                    getFieldDecorator('invoiceNumber')(
+                      <Input
+                      placeholder="请输入发票号"
+                    />,)
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={24} style={{ textAlign: 'right' }}>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeDetailReport')}><Icon type="search" />查询</Button>
+              </Col>
+            </Row>
+
+          </div>
+
+          {/*发票汇总表*/}
+          <div style={{ display: this.state.stateType === 'outcomeTotalReport' ? 'block' : 'none' }}>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="项目编码">
+                  {
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="项目编码"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="立项部门">
+                  {
+                    getFieldDecorator('projectDept')(
+                      <Input
+                        placeholder="立项部门"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="立项BU">
+                  {
+                    getFieldDecorator('projectBu')(<SelectSbu keyName="contract"/>)
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="开票月份">
+                  {getFieldDecorator('billingMonth', {
+                    initialValue: moment(),
+                  })(
+                    <DatePicker
+                      format={"YYYY-MM"}
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={16} style={{ textAlign: 'right' }}>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeTotalReport')}><Icon type="search" />查询</Button>
+              </Col>
+            </Row>
+
+          </div>
+          {/*未大签提前开票数据补充表*/}
+          <div style={{ display: this.state.stateType === 'unContractOutcomeDataAdd' ? 'block' : 'none' }}>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="开票日期">
+                  {getFieldDecorator('billingDate', {
+                    //initialValue: [moment('2017-08-01'), moment()],
+                  })(<RangePicker
+                    allowClear
+                    format={dateFormat}
+                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                  />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="项目编码">
+                  {
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="项目编码"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="合同编码">
+                  {getFieldDecorator('contractNo')(
+                    <Input
+                      placeholder="请输入立项BU"
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="合同名称">
+                  {
+                    getFieldDecorator('contractName')(
+                      <Input
+                        placeholder="合同名称"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="客户名称">
+                  {
+                    getFieldDecorator('custName')(
+                      <Input
+                        placeholder="客户名称"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="发票号">
+                  {getFieldDecorator('invoiceNumber')(
+                    <Input
+                      placeholder="发票号"
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={24} style={{ textAlign: 'right' }}>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('unContractOutcomeDataAdd')}><Icon type="search" />查询</Button>
+              </Col>
+            </Row>
+
+          </div>
         </Form>
       </div>
     )
