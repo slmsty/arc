@@ -27,6 +27,16 @@ const myStateInfoData = {
     count: 0,
     result: [],
   },
+  getProductOrderDetailList: {
+    pageNo: 1,
+    count: 0,
+    result: [],
+  },
+  getProductOrderTotalList: {
+    pageNo: 1,
+    count: 0,
+    result: [],
+  },
 
 }
 
@@ -45,6 +55,12 @@ function getOutcomeDetailReportList(state, action) {
 function getUnContractOutcomeDataAddList(state, action) {
   return { ...state, getUnSignList: action.response.pageInfo }
 }
+function getProductOrderDetailList(state, action) {
+  return { ...state, getProductOrderDetailList: action.response.pageInfo }
+}
+function getProductOrderTotalList(state, action) {
+  return { ...state, getProductOrderTotalList: action.response.pageInfo }
+}
 function fileDown(state, action) {
   console.log('action',action)
   saveAs(action.files.blob, "Report.xlsx")
@@ -60,4 +76,6 @@ export default caseReducer(myStateInfoData, {
   GET_INVOICE_DETAIL_LISTT_SUCCESS:getInvoiceDetailList,
   GET_OUTCOME_DETAIL_LISTT_SUCCESS:getOutcomeDetailReportList,
   GET_UNCONTRACTOUTCOMNE_DETAIL_LISTT_SUCCESS:getUnContractOutcomeDataAddList,
+  GET_PRODUCT_ORDER_DETAIL_LISTT_SUCCESS:getProductOrderDetailList,
+  GET_PRODUCT_ORDER_TOTAL_LISTT_SUCCESS:getProductOrderTotalList,
 })

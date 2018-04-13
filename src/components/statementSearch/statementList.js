@@ -5,7 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import currency from '../../util/currency'
 //import Excel from 'exceljs'
-import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns,billInfoCols,outcomeTotalReportCols,unContractOutcomeDataAddCols } from './statementColumns'
+import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns,billInfoCols,outcomeTotalReportCols,unContractOutcomeDataAddCols,productOrderDetailCols,productOrderTotalCols } from './statementColumns'
 
 import { Table, Row, Col, Form, Radio, DatePicker, Input, Icon } from 'antd'
 
@@ -72,6 +72,20 @@ export default class StatementListIndex extends React.Component {
         })
       })
     }
+    if(type==='projectOrderDetailReport'){
+      this.props.getProductOrderDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='projectOrderTotalReport'){
+      this.props.getProductOrderTotalList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
     this.setState({
       currencyType: type,
     })
@@ -107,6 +121,17 @@ export default class StatementListIndex extends React.Component {
       let unsignedBilling = {}
       unsignedBilling.unsignedBilling = param
       this.queryParam = { ...this.queryParam,...unsignedBilling}
+    }
+
+    if(type==='projectOrderDetailReport'){
+      let projectOrder = {}
+      projectOrder.projectOrder = param
+      this.queryParam = { ...this.queryParam,...projectOrder}
+    }
+    if(type==='projectOrderTotalReport'){
+      let orderSummarize = {}
+      orderSummarize.orderSummarize = param
+      this.queryParam = { ...this.queryParam,...orderSummarize}
     }
     this.handleQuery(type)
 
@@ -173,6 +198,18 @@ export default class StatementListIndex extends React.Component {
       })
       return [width,unContractOutcomeDataAddCols,'','']
     }
+    else if(type==='projectOrderDetailReport') {
+      productOrderDetailCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,productOrderDetailCols,'','']
+    }
+    else if(type==='projectOrderTotalReport') {
+      productOrderTotalCols.map((item,idnex)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,productOrderTotalCols,'','']
+    }
   }
   // 展示查询列表回调方法
   showCols = (type) => {
@@ -200,40 +237,55 @@ export default class StatementListIndex extends React.Component {
     let [current,total,pageSize,claimAmountTotal] = [0,0,0,'']
     const type = this.state.currencyType
     if(type==='receiptInfoReport'){
-      dataSources.dataSource = this.props.statement.getStatementList.result
-      current = this.props.statement.getStatementList.pageNo
-      total = this.props.statement.getStatementList.count
-      pageSize = this.props.statement.getStatementList.pageSize
-      claimAmountTotal = currency(this.props.statement.getStatementList.claimAmountTotal)
+      const getStatementList = this.props.statement.getStatementList;
+      dataSources.dataSource = getStatementList.result
+      current = getStatementList.pageNo
+      total = getStatementList.count
+      pageSize = getStatementList.pageSize
+      claimAmountTotal = currency(getStatementList.claimAmountTotal)
     }
     if(type==='contractSplitReport'){
-
-      dataSources.dataSource = this.props.statement.getContractStatementList.result
-      current = this.props.statement.getContractStatementList.pageNo
-      total = this.props.statement.getContractStatementList.count
-      pageSize = this.props.statement.getContractStatementList.pageSize
-      claimAmountTotal = currency(this.props.statement.getContractStatementList.claimAmountTotal)
+      const getContractStatementList = this.props.statement.getContractStatementList;
+      dataSources.dataSource = getContractStatementList.result
+      current = getContractStatementList.pageNo
+      total = getContractStatementList.count
+      pageSize = getContractStatementList.pageSize
+      claimAmountTotal = currency(getContractStatementList.claimAmountTotal)
     }
     if(type==='outcomeDetailReport'){
-
-      dataSources.dataSource = this.props.statement.getInvoiceDetailList.result
-      current = this.props.statement.getInvoiceDetailList.pageNo
-      total = this.props.statement.getInvoiceDetailList.count
-      pageSize = this.props.statement.getInvoiceDetailList.pageSize
+      const getInvoiceDetailList = this.props.statement.getInvoiceDetailList;
+      dataSources.dataSource = getInvoiceDetailList.result
+      current = getInvoiceDetailList.pageNo
+      total = getInvoiceDetailList.count
+      pageSize = getInvoiceDetailList.pageSize
     }
     if(type==='outcomeTotalReport'){
-
-      dataSources.dataSource = this.props.statement.getOutcomeDetailReportList.result
-      current = this.props.statement.getOutcomeDetailReportList.pageNo
-      total = this.props.statement.getOutcomeDetailReportList.count
-      pageSize = this.props.statement.getOutcomeDetailReportList.pageSize
+      const getOutcomeDetailReportList = this.props.statement.getOutcomeDetailReportList;
+      dataSources.dataSource = getOutcomeDetailReportList.result
+      current = getOutcomeDetailReportList.pageNo
+      total = getOutcomeDetailReportList.count
+      pageSize = getOutcomeDetailReportList.pageSize
     }
     if(type==='unContractOutcomeDataAdd'){
-
-      dataSources.dataSource = this.props.statement.getUnSignList.result
-      current = this.props.statement.getUnSignList.pageNo
-      total = this.props.statement.getUnSignList.count
-      pageSize = this.props.statement.getUnSignList.pageSize
+      const getUnSignList = this.props.statement.getUnSignList;
+      dataSources.dataSource = getUnSignList.result
+      current = getUnSignList.pageNo
+      total = getUnSignList.count
+      pageSize = getUnSignList.pageSize
+    }
+    if(type==='projectOrderDetailReport'){
+      const getProductOrderDetailList = this.props.statement.getProductOrderDetailList;
+      dataSources.dataSource = getProductOrderDetailList.result
+      current = getProductOrderDetailList.pageNo
+      total = getProductOrderDetailList.count
+      pageSize = getProductOrderDetailList.pageSize
+    }
+    if(type==='projectOrderTotalReport'){
+      const getProductOrderTotalList = this.props.statement.getProductOrderTotalList;
+      dataSources.dataSource = getProductOrderTotalList.result
+      current = getProductOrderTotalList.pageNo
+      total = getProductOrderTotalList.count
+      pageSize = getProductOrderTotalList.pageSize
     }
     const pagination = {
       current: current,
