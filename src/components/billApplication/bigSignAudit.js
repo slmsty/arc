@@ -91,8 +91,11 @@ class BigSignAudit extends React.Component {
   }
 
   getBillInfo = () => {
-    this.setState({showApproveDetail: true})
-    this.props.getApplicationDetail(this.state.selectedRows[0].billingApplicationId)
+    this.props.getApplicationDetail(this.state.selectedRows[0].billingApplicationId).then(res => {
+      if(res && res.response && res.response.resultCode === '000000') {
+        this.setState({showApproveDetail: true})
+      }
+    })
   }
 
   render() {
@@ -120,7 +123,7 @@ class BigSignAudit extends React.Component {
           setParams={(p) => this.setState({params: p})}
         />
         <div style={{margin: '10px 0',}}>
-          <Button type="primary" ghost onClick={() => this.getBillInfo()}>编辑</Button>
+          <Button type="primary" ghost onClick={() => this.getBillInfo()} disabled={this.state.selectedRows.length === 0}>编辑</Button>
         </div>
         <Table
           loading={searchLoading}

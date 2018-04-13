@@ -47,7 +47,6 @@ const middleware = (requestJson, catchError) => store => next => (action) => {
     requestCompletedType = 'HTTP_REQUEST_COMPLETED',
   ] = types
   next(actionWith({ type: requestType }))
-  console.log('acceptType',acceptType)
   if (acceptType === 'blob') {
     return requestJson(url, options, acceptType)
       .then(response => response.blob().then(blob => next(actionWith({

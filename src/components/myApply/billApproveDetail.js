@@ -50,19 +50,6 @@ class BillApproveDetail extends React.Component  {
       this.props.setFormValidate(dataSource)
     }
   }
-  componentWillReceiveProps(nextProps) {
-    if(this.props.serviceDetail !== nextProps.serviceDetail && nextProps.serviceDetail) {
-      const dataSource = nextProps.serviceDetail.appLineList.map(detail => ({
-          ...detail,
-          isParent: 1,
-          quantity: detail.quantity ? detail.quantity : 1,
-          lineNo: detail.lineNo - 1,
-          totalAmount: detail.billingAmount ? detail.billingAmount : 0,
-        })
-      )
-      this.setState({dataSource: dataSource})
-    }
-  }
 
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;

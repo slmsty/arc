@@ -18,6 +18,7 @@ class BigSignAuditDetail extends React.Component {
   }
 
   setFormValidate = (v) => {
+    console.log(v)
     this.setState({
       approveData: v
     })
