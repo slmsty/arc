@@ -974,11 +974,11 @@ class BillDetail extends React.Component {
                 </Row>
                 <Row gutter={40}>
                   <Col span={14}>
-                    <FormItem {...formItemLayout1} label="开票要求">
+                    <FormItem {...formItemLayout1} label="开票原因及要求">
                       {
                         getFieldDecorator('billingApplicantRequest', {rules: [
-                          { required: this.state.showDetail === false && this.props.isRed, message: '请填写开票要求' },
-                          { max: 350, message: '开票要求不能超过350个字符!' }
+                          { required: this.state.showDetail === false && this.props.isRed, message: '请填写开票原因及要求' },
+                          { max: 350, message: '开票原因及要求不能超过350个字符!' }
                         ]})(
                           <TextArea placeholder="请输入开票要求" rows="2" />
                         )

@@ -1,15 +1,18 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import CustomerContent from '../../components/system/customerContent'
-import * as actions from '../../actions/system'
+import { queryInvoiceTaxInfo, saveInvoiceTaxInfo } from '../../actions/system'
 
 const mapStateToProps = state => ({
-  ...state.system,
+  taxPageInfo: state.system.taxPageInfo,
+  isLoading: state.system.isLoading,
+  saveSuccess: state.system.saveSuccess,
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    ...actions,
+    queryInvoiceTaxInfo,
+    saveInvoiceTaxInfo,
   }, dispatch)
 )
 

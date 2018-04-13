@@ -32,4 +32,75 @@ export function saveMailConfig(params) {
   }
 }
 
+/**
+ * 查询客户纳税信息
+ * @param params
+ * @returns {{}}
+ */
+export function queryCustTaxInfo(params) {
+  return {
+    [httpApi]: {
+      url: '/arc/sysManage/queryCustTaxInfoConfig',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['QUERY_CUST_TAX_INFO_SUCCESS', 'LOADING_REQUEST'],
+    },
+  }
+}
+
+/**
+ * 保存客户纳税信息
+ * @param params
+ * @returns {{}}
+ */
+export function saveCustTaxInfo(params) {
+  return {
+    [httpApi]: {
+      url: '/arc/sysManage/saveCustTaxInfoConfig',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['SAVE_CUST_TAX_INFO_SUCCESS'],
+    },
+  }
+}
+
+/**
+ * 查询客户开票内容及税收分类
+ * @param params
+ * @returns {{}}
+ */
+export function queryInvoiceTaxInfo(params) {
+  return {
+    [httpApi]: {
+      url: '/arc/sysManage/queryInvoiceTaxInfoConfig',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['QUERY_INVOICE_TAX_INFO_SUCCESS', 'LOADING_REQUEST'],
+    },
+  }
+}
+
+/**
+ * 保存客户开票内容
+ * @param params
+ * @returns {{}}
+ */
+export function saveInvoiceTaxInfo(params) {
+  return {
+    [httpApi]: {
+      url: '/arc/sysManage/saveInvoiceTaxInfoConfig',
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['SAVE_INVOICE_TAX_INFO_SUCCESS'],
+    },
+  }
+}
 

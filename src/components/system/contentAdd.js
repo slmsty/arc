@@ -13,30 +13,25 @@ class ContentAdd extends React.Component {
 
   handleOk = (e) => {
     e.preventDefault();
-    const { isAdd, record } = this.props
+    const { billingRecordId } = this.props.record
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const params = isAdd ? {
+        const params = billingRecordId ? {
           ...values,
-          billingApplicationType: this.props.billType,
-          custName: values.custName[1],
-          comName: values.comName[1],
-          projectNo: values.projectNo[1],
+          billingRecordId,
+          actionType: 'EDIT',
         } : {
           ...values,
-          billingApplicationType: this.props.billType,
-          arBillingId: record.arBillingId,
-          custName: values.custName[1],
-          comName: values.comName[1],
-          projectNo: values.projectNo[1],
+          actionType: 'NEW',
         }
-        this.props.addAction(params)
+        this.props.saveInvoiceTaxInfo(params)
       }
     });
   }
 
   render() {
     const { getFieldDecorator } = this.props.form
+    const { billingContentCode, billingContentName, taxCategoryCode, prefPolicySign, zeroTaxSign, taxCategoryVersion, taxIncludeAmount, status } = this.props.record
     const formItemLayout = {
       labelCol: { span: 9 },
       wrapperCol: { span: 15 },
@@ -60,70 +55,77 @@ class ContentAdd extends React.Component {
           >
             <Row gutter={30}>
               <Col span={12} key={1}>
-                <FormItem {...formItemLayout} label="开票内容名称">
-                  {getFieldDecorator('billContent', {initialValue: '', rules: [{ required: true, message: '请填写开票内容名称!' }]})(
+                <FormItem {...formItemLayout} label="开票内容编码">
+                  {getFieldDecorator('billingContentCode', {initialValue: billingContentCode, rules: [{ required: true, message: '请填写开票内容编码!' }]})(
                     <Input />
                   )}
                 </FormItem>
               </Col>
               <Col span={12} key={2}>
+                <FormItem {...formItemLayout} label="开票内容名称">
+                  {getFieldDecorator('billingContentName', {initialValue: billingContentName, rules: [{ required: true, message: '请填写开票内容名称!' }]})(
+                    <Input />
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={30}>
+              <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="税收分类编码">
                   {
-                    getFieldDecorator('taxCode',{
-                      initialValue: '', rules: [{ required: true, message: '请填写税收分类编码!' }]
+                    getFieldDecorator('taxCategoryCode',{
+                      initialValue: taxCategoryCode, rules: [{ required: true, message: '请填写税收分类编码!' }]
                     })(<Input placeholder="税收分类编码"/>)
                   }
                 </FormItem>
               </Col>
+              <Col span={12} key={2}>
+                <FormItem {...formItemLayout} label="优惠政策标识">
+                  {getFieldDecorator('prefPolicySign', {initialValue: prefPolicySign || '', rules: [{ required: true, message: '请选择优惠政策标识!' }]})(
+                    <Select>
+                      <Option value="">-请选择-</Option>
+                      <Option value="Y">使用</Option>
+                      <Option value="N">不使用</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
             </Row>
             <Row gutter={30}>
               <Col span={12} key={1}>
-                <FormItem {...formItemLayout} label="优惠政策标识">
-                  {getFieldDecorator('policyLogo', {initialValue: '', rules: [{ required: true, message: '请选择优惠政策标识!' }]})(
+                <FormItem {...formItemLayout} label="零税率标识">
+                  {getFieldDecorator('zeroTaxSign', { initialValue : zeroTaxSign || '', rules: [{ required: true, message: '请选择是否有效!' }]})(
                     <Select>
                       <Option value="">-请选择-</Option>
-                      <Option value="1">使用</Option>
-                      <Option value="0">不使用</Option>
+                      <Option value="Y">使用</Option>
+                      <Option value="N">不使用</Option>
                     </Select>
                   )}
                 </FormItem>
               </Col>
               <Col span={12} key={2}>
-                <FormItem {...formItemLayout} label="零税率标识">
-                  {getFieldDecorator('zeroTax', { initialValue : '', rules: [{ required: true, message: '请选择是否有效!' }]})(
-                    <Select>
-                      <Option value="">-请选择-</Option>
-                      <Option value="1">使用</Option>
-                      <Option value="0">不使用</Option>
-                    </Select>
+                <FormItem {...formItemLayout} label="税收分类版本号">
+                  {getFieldDecorator('taxCategoryVersion', {initialValue: taxCategoryVersion, rules: [{ required: true, message: '请填写税收分类版本号!' }]})(
+                    <Input />
                   )}
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={30}>
-              <Col span={12} key={1}>
-                <FormItem {...formItemLayout} label="税收分类版本号">
-                  {getFieldDecorator('versionNo', {initialValue: '', rules: [{ required: true, message: '请填写税收分类版本号!' }]})(
-                    <Input />
-                  )}
-                </FormItem>
-              </Col>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="扣除额">
-                  {getFieldDecorator('account', {initialValue: '', rules: [{ required: true, message: '请填写开户行及账号!' }]})(
+                  {getFieldDecorator('taxIncludeAmount', {initialValue: taxIncludeAmount, rules: [{ required: true, message: '请填写开户行及账号!' }]})(
                     <Input />
                   )}
                 </FormItem>
               </Col>
-            </Row>
-            <Row gutter={30}>
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="是否有效">
-                  {getFieldDecorator('isValid', { initialValue : '', rules: [{ required: true, message: '请选择是否有效!' }]})(
+                  {getFieldDecorator('status', { initialValue : status || '', rules: [{ required: true, message: '请选择是否有效!' }]})(
                     <Select>
                       <Option value="">-请选择-</Option>
-                      <Option value="1">是</Option>
-                      <Option value="0">否</Option>
+                      <Option value="Y">是</Option>
+                      <Option value="N">否</Option>
                     </Select>
                   )}
                 </FormItem>

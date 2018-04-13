@@ -1,46 +1,10 @@
 import React from 'react'
 import { Table, Button, Form, Row, Col, Input, Icon } from 'antd'
-import TaxInfoAdd from './taxInfoAdd'
+import ContentAdd from './contentAdd'
+import {message} from "antd/lib/index";
 
 const FormItem = Form.Item
-const columns = [
-  {
-    title: '开票内容编码',
-    dataIndex: 'custName',
-    width: 300,
-  }, {
-    title: '开票客户名称',
-    dataIndex: 'billCustName',
-    width: 300,
-  }, {
-    title: '纳税人识别码',
-    dataIndex: 'taxCode',
-    width: 150,
-  }, {
-    title: '优惠政策标识',
-    dataIndex: 'address',
-    width: 200,
-  }, {
-    title: '零税率标识',
-    dataIndex: 'account',
-    width: 200,
-  }, {
-    title: '税收分类编码版本号',
-    dataIndex: 'status',
-    width: 150,
-  }, {
-    title: '扣除额',
-    dataIndex: 'status',
-    width: 150,
-  }, {
-    title: '操作',
-    dataIndex: 'status',
-    width: 100,
-    render: () => {
-      return <a>修改</a>
-    }
-  },
-]
+
 const formItemLayout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 14 },
@@ -50,12 +14,115 @@ class CustomerTaxInfo extends React.Component {
     super(props)
     this.state = {
       showAdd: false,
+      record: {},
     }
   }
 
+  componentWillReceiveProps(nextPorps) {
+    if(this.props.saveSuccess !== nextPorps.saveSuccess && nextPorps.saveSuccess) {
+      message.success('客户纳税信息保存成功')
+      this.setState({
+        showAdd: false,
+      })
+      this.handleQuery()
+    }
+  }
+
+  componentDidMount() {
+    this.handleQuery()
+  }
+
+  handleQuery = () => {
+    const value = this.props.form.getFieldValue('billingContentName')
+    const params = {
+      billingContentName: value,
+      pageInfo:{
+        pageNo: 1,
+        pageSize: 10
+      },
+    }
+    this.props.queryInvoiceTaxInfo(params)
+  }
+
+  handleEdit = (record) => {
+    this.setState({
+      record,
+      showAdd: true,
+    })
+  }
+
+  getTableColumns = () => {
+    const columns = [
+      {
+        title: '开票内容编码',
+        dataIndex: 'billingContentCode',
+        width: 300,
+      }, {
+        title: '开票客户名称',
+        dataIndex: 'billingContentName',
+        width: 350,
+      }, {
+        title: '纳税人识别码',
+        dataIndex: 'taxCategoryCode',
+        width: 150,
+      }, {
+        title: '优惠政策标识',
+        dataIndex: 'prefPolicySign',
+        width: 100,
+        render: (text) => {
+          return text === 'Y' ? '使用' : '不使用'
+        }
+      }, {
+        title: '零税率标识',
+        dataIndex: 'zeroTaxSign',
+        width: 100,
+        render: (text) => {
+          return text === 'Y' ? '使用' : '不使用'
+        }
+      }, {
+        title: '税收分类编码版本号',
+        dataIndex: 'taxCategoryVersion',
+        width: 150,
+      }, {
+        title: '扣除额',
+        dataIndex: 'taxIncludeAmount',
+        width: 150,
+      }, {
+        title: '状态',
+        dataIndex: 'status',
+        width: 80,
+        render: (text) => {
+          return text === 'Y' ? '是' : '否'
+        }
+      }, {
+        title: '操作',
+        dataIndex: '',
+        width: 80,
+        render: (text, record) => {
+          return <a onClick={() => this.handleEdit(record)}>修改</a>
+        }
+      },
+    ]
+    return columns
+  }
+
   render() {
-    const { isLoading, result=[] } = this.props
+    const { isLoading, taxPageInfo } = this.props
+    const { pageNo, result, count} = taxPageInfo
     const { getFieldDecorator } = this.props.form
+    const pagination = {
+      total: count,
+      pageNo,
+      onChange: () => {
+        this.props.queryInvoiceTaxInfo({
+          custInfoName: this.props.form.getFieldValue('billingContentName'),
+          pageInfo:{
+            pageNo,
+            pageSize: 10
+          },
+        })
+      }
+    }
     return (
       <div>
         <Form
@@ -64,7 +131,7 @@ class CustomerTaxInfo extends React.Component {
           <Row gutter={10}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="开票内容名称">
-                {getFieldDecorator('billContent')(
+                {getFieldDecorator('billingContentName')(
                   <Input placeholder="开票内容名称"/>
                 )}
               </FormItem>
@@ -81,12 +148,15 @@ class CustomerTaxInfo extends React.Component {
           loading={isLoading}
           rowKey={record => record.key}
           bordered
-          columns={columns}
+          columns={this.getTableColumns()}
           dataSource={result}
+          pagination={pagination}
         />
-        <TaxInfoAdd
+        <ContentAdd
           visible={this.state.showAdd}
           onCancel={() => this.setState({showAdd: false})}
+          saveInvoiceTaxInfo={this.props.saveInvoiceTaxInfo}
+          record={this.state.record}
         />
       </div>
     )
