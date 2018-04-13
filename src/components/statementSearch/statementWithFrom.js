@@ -8,6 +8,7 @@ import moment from 'moment'
 import MultipleInput from '../common/multipleInput'
 import SelectRadioApi from  '../common/selectRadioApi'
 import SelectSbu from '../common/SelectSbu'
+import SelectOperator from '../common/selectOperator'
 import SelectCustomerWithForm from '../common/selectCustomer'
 
 const FormItem = Form.Item
@@ -174,6 +175,41 @@ class StatementListCom extends React.Component {
         param
       })
       this.props.queryParms(param,'unContractOutcomeDataAdd')
+    }
+    // 项目Order明细表
+    if(statement==='projectOrderDetailReport'){
+      let param = {}
+      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.projectNo = params.projectNo
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.signCompany = params.signCompany
+      param.salesBu = params.salesBu && params.salesBu.length ? params.salesBu[0] : ''
+
+      param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
+      param.projectManager = params.projectManager
+      param.orderPerson = params.orderPerson
+      param.currency = params.currency
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'projectOrderDetailReport')
+    }
+    // 项目Order汇总表
+    if(statement==='projectOrderTotalReport'){
+      let param = {}
+      param.startTime = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.endTime = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.signCompany = params.signCompany
+      param.buType = params.buType && params.buType.length ? params.buType[0] : ''
+
+      param.bu = params.bu && params.bu.length ? params.bu[0] : ''
+
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'projectOrderTotalReport')
     }
     //this.props.form.resetFields()
   }
@@ -1139,6 +1175,166 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('unContractOutcomeDataAdd')}><Icon type="search" />查询</Button>
+              </Col>
+            </Row>
+
+          </div>
+          {/*项目Order明细表*/}
+          <div style={{ display: this.state.stateType === 'projectOrderDetailReport' ? 'block' : 'none' }}>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="签约日期">
+                  {getFieldDecorator('signDate', {
+                    //initialValue: [moment('2017-08-01'), moment()],
+                  })(<RangePicker
+                    allowClear
+                    format={dateFormat}
+                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                  />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="项目编码">
+                  {
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="项目编码"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="签约公司">
+                  {getFieldDecorator('signCompany')(
+                    <Input
+                      placeholder="签约公司"
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="Sales签约BU">
+                  {
+                    getFieldDecorator('salesBu')(<SelectSbu keyName="contract"/>)
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="合同名称">
+                  {
+                    getFieldDecorator('contractName')(
+                      <Input
+                        placeholder="合同名称"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="立项BU">
+                  {
+                    getFieldDecorator('projectBu')(<SelectSbu keyName="contract"/>)
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="合同编码">
+                  {
+                    getFieldDecorator('contractNo')(
+                      <Input
+                        placeholder="合同编码"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="项目经理">
+                  {
+                    getFieldDecorator('projectManager')(
+                      <Input
+                        placeholder="项目经理"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="拆分负责人">
+                  {
+                    getFieldDecorator('orderPerson')(
+                      <SelectOperator
+                        placeholder="请输入拆分操作人"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="币种">
+                  {getFieldDecorator('currency')(
+                    <Select>
+                      <Option value="USD">USD</Option>
+                      <Option value="CNY">CNY</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={16} style={{ textAlign: 'right' }}>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('projectOrderDetailReport')}><Icon type="search" />查询</Button>
+              </Col>
+            </Row>
+
+          </div>
+
+          {/*项目Order汇总表*/}
+          <div style={{ display: this.state.stateType === 'projectOrderTotalReport' ? 'block' : 'none' }}>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="日期">
+                  {getFieldDecorator('signDate', {
+                    //initialValue: [moment('2017-08-01'), moment()],
+                  })(<RangePicker
+                    allowClear
+                    format={dateFormat}
+                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                  />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="BU类型">
+                  {
+                    getFieldDecorator('buType')(<SelectSbu keyName="contract"/>)
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="BU">
+                  {
+                    getFieldDecorator('bu')(<SelectSbu keyName="contract"/>)
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="签约公司">
+                  {getFieldDecorator('signCompany')(
+                    <Input
+                      placeholder="签约公司"
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={16} style={{ textAlign: 'right' }}>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('projectOrderTotalReport')}><Icon type="search" />查询</Button>
               </Col>
             </Row>
 

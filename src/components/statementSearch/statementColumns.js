@@ -933,16 +933,19 @@ const unContractOutcomeDataAddCols = [
     title:'含税金额',
     dataIndex: 'billingTaxRate',
     width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title:'除税金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title:'销项税',
     dataIndex: 'tax',
     width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title:'备注',
@@ -954,6 +957,78 @@ const unContractOutcomeDataAddCols = [
     dataIndex: 'billingTaxRate',
     width: 100,
   }
+]
+
+// 项目order明细
+const productOrderDetailCols = [
+  {
+    title:'合同名称',
+    dataIndex:'contractName',
+    width:200,
+  },
+  {
+    title:'签约日期',
+    dataIndex:'signDate',
+    width:120,
+  },
+  {
+    title:'签约公司',
+    dataIndex:'signCompany',
+    width:200,
+  },
+  {
+    title:'合同编码',
+    dataIndex:'contractNo',
+    width:100,
+  },
+  {
+    title:'立项BU',
+    dataIndex:'projectBu',
+    width:100,
+  },
+]
+
+// 项目Order汇总
+const productOrderTotalCols = [
+  {
+    title:'序号',
+    dataIndex:'projectBu',
+    width:50,
+  },
+  {
+    title:'立项BU',
+    dataIndex:'projectBu',
+    width:100,
+  },
+  {
+    title:'年度／季度／月度',
+    dataIndex:'time',
+    width:100,
+  },
+  {
+    title:'税前合同额',
+    dataIndex:'contractAmount',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'Gross Order',
+    dataIndex:'grossOrder',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'Net Order(L)',
+    dataIndex:'netOrderL',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'Net Order(M)',
+    dataIndex:'netOrderM',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
 ]
 
 
@@ -969,5 +1044,7 @@ export {
   billInfoCols,
   outcomeTotalReportCols,
   unContractOutcomeDataAddCols,
+  productOrderTotalCols,
+  productOrderDetailCols
 }
 

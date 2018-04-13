@@ -351,7 +351,8 @@ class ContractSplitModal extends React.Component{
     newData[index].contractAmountTaxInclude = (parseFloat(listPrice) * (1 - parseFloat(discount) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
     newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
     newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate)) * (parseFloat(returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
-    newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxInclude)/(1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
+    //newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxInclude)/(1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
+    newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxExclude) + parseFloat(newData[index].returnTaxRevenue)).toFixed(2)  //Gross Order = 合同不含税金额+退税额
     return newData
   }
   onTextAreaChange = (event) => {

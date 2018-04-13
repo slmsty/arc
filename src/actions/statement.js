@@ -66,6 +66,32 @@ export function getUnContractOutcomeDataAddList(queryParam) {
     },
   }
 }
+// 项目Order汇总
+export function getProductOrderTotalList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/order_summarize/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_PRODUCT_ORDER_TOTAL_LISTT_SUCCESS'],
+    },
+  }
+}
+// 项目Order明细
+export function getProductOrderDetailList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/project_order/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_PRODUCT_ORDER_DETAIL_LISTT_SUCCESS'],
+    },
+  }
+}
 // 导出excel
 export function getExcel(queryParam) {
   return {
