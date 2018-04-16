@@ -931,13 +931,13 @@ const unContractOutcomeDataAddCols = [
   },
   {
     title:'含税金额',
-    dataIndex: 'billingTaxRate',
+    dataIndex: 'taxIncludeAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title:'除税金额',
-    dataIndex: 'taxIncludeAmount',
+    dataIndex: 'taxExcludeAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
@@ -991,11 +991,6 @@ const productOrderDetailCols = [
 // 项目Order汇总
 const productOrderTotalCols = [
   {
-    title:'序号',
-    dataIndex:'projectBu',
-    width:50,
-  },
-  {
     title:'立项BU',
     dataIndex:'projectBu',
     width:100,
@@ -1003,7 +998,7 @@ const productOrderTotalCols = [
   {
     title:'年度／季度／月度',
     dataIndex:'time',
-    width:100,
+    width:80,
   },
   {
     title:'税前合同额',
