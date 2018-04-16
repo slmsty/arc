@@ -39,6 +39,7 @@ function queryCustTaxInfo(state, action) {
     ...state,
     pageInfo: action.response.pageInfo,
     isLoading: false,
+    saveSuccess: false,
   }
 }
 
@@ -54,6 +55,7 @@ function queryInvoiceTaxInfo(state, action) {
     ...state,
     taxPageInfo: action.response.pageInfo,
     isLoading: false,
+    saveSuccess: false,
   }
 }
 

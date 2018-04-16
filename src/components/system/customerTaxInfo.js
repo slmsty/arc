@@ -137,12 +137,15 @@ class CustomerTaxInfo extends React.Component {
           dataSource={result}
           pagination={pagination}
         />
-        <TaxInfoAdd
-          visible={this.state.showAdd}
-          onCancel={() => this.setState({showAdd: false})}
-          saveCustTaxInfo={saveCustTaxInfo}
-          record={this.state.record}
-        />
+        {
+          this.state.showAdd ?
+            <TaxInfoAdd
+              visible={this.state.showAdd}
+              onCancel={() => this.setState({showAdd: false, record: {}})}
+              saveCustTaxInfo={saveCustTaxInfo}
+              record={this.state.record}
+            /> : null
+        }
       </div>
     )
   }

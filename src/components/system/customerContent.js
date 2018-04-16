@@ -58,7 +58,7 @@ class CustomerTaxInfo extends React.Component {
         dataIndex: 'billingContentCode',
         width: 300,
       }, {
-        title: '开票客户名称',
+        title: '开票内容名称',
         dataIndex: 'billingContentName',
         width: 350,
       }, {
@@ -152,12 +152,15 @@ class CustomerTaxInfo extends React.Component {
           dataSource={result}
           pagination={pagination}
         />
-        <ContentAdd
-          visible={this.state.showAdd}
-          onCancel={() => this.setState({showAdd: false})}
-          saveInvoiceTaxInfo={this.props.saveInvoiceTaxInfo}
-          record={this.state.record}
-        />
+        {
+          this.state.showAdd ?
+            <ContentAdd
+              visible={this.state.showAdd}
+              onCancel={() => this.setState({showAdd: false, record: {}})}
+              saveInvoiceTaxInfo={this.props.saveInvoiceTaxInfo}
+              record={this.state.record}
+            /> : null
+        }
       </div>
     )
   }
