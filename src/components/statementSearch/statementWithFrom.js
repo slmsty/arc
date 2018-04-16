@@ -186,10 +186,8 @@ class StatementListCom extends React.Component {
       param.contractName = params.contractName
       param.signCompany = params.signCompany
       param.salesBu = params.salesBu && params.salesBu.length ? params.salesBu[0] : ''
-
       param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
       param.projectManager = params.projectManager
-      param.orderPerson = params.orderPerson
       param.currency = params.currency
       this.setState({
         param
@@ -202,7 +200,7 @@ class StatementListCom extends React.Component {
       param.startTime = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
       param.endTime = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
       param.signCompany = params.signCompany
-      param.buType = params.buType && params.buType.length ? params.buType[0] : ''
+      param.buType = params.buType
 
       param.bu = params.bu && params.bu.length ? params.bu[0] : ''
 
@@ -1265,29 +1263,19 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="拆分负责人">
-                  {
-                    getFieldDecorator('orderPerson')(
-                      <SelectOperator
-                        placeholder="请输入拆分操作人"
-                      />,
-                    )
-                  }
-                </FormItem>
-              </Col>
-            </Row>
-            <Row gutter={40}>
-              <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency')(
                     <Select>
-                      <Option value="USD">USD</Option>
-                      <Option value="CNY">CNY</Option>
+                      <Option value="ORIGINAL">原币</Option>
+                      <Option value="USD">美元</Option>
                     </Select>
                   )}
                 </FormItem>
               </Col>
-              <Col span={16} style={{ textAlign: 'right' }}>
+            </Row>
+            <Row gutter={40}>
+
+              <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('projectOrderDetailReport')}><Icon type="search" />查询</Button>
               </Col>
             </Row>
@@ -1310,9 +1298,12 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="BU类型">
-                  {
-                    getFieldDecorator('buType')(<SelectSbu keyName="contract"/>)
-                  }
+                  {getFieldDecorator('buType')(
+                    <Select>
+                      <Option value="PROJECT">立项BU</Option>
+                      <Option value="SALES">销售BU</Option>
+                    </Select>
+                  )}
                 </FormItem>
               </Col>
               <Col span={8}>
