@@ -631,7 +631,8 @@ class BillDetail extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate, billingApplicantRemark, taxRateRequest } = this.props.detail
+    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
+      billingApplicantRemark, taxRateRequest, fileName, filePath } = this.props.detail
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
       headers: {
@@ -961,13 +962,16 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="附件">
                       {
-                        getFieldDecorator('file', { rules: [{ required: this.state.showDetail === false && this.props.isRed, message: '请上传附件!' }] })(
-                          <Upload {...props} fileList={this.state.fileList}>
-                            <Button>
-                              <Icon type="upload" />点击上传
-                            </Button>
-                          </Upload>
-                        )
+                        filePath ?
+                          <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+                          :
+                          getFieldDecorator('file', { rules: [{ required: this.state.showDetail === false && this.props.isRed, message: '请上传附件!' }] })(
+                            <Upload {...props} fileList={this.state.fileList}>
+                              <Button>
+                                <Icon type="upload" />点击上传
+                              </Button>
+                            </Upload>
+                          )
                       }
                     </FormItem>
                   </Col>
@@ -976,7 +980,7 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="开票原因及要求">
                       {
-                        getFieldDecorator('billingApplicantRequest', {rules: [
+                        getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [
                           { required: this.state.showDetail === false && this.props.isRed, message: '请填写开票原因及要求' },
                           { max: 350, message: '开票原因及要求不能超过350个字符!' }
                         ]})(
