@@ -248,9 +248,9 @@ function getUserInfo(state, action) {
 }
 
 function getPermission(state, action) {
-  if (process.env.NODE_ENV === 'develop_local') {
+  /*if (process.env.NODE_ENV === 'develop_local') {
     return state
-  }
+  }*/
   return { ...state, permission: action.response.results }
 }
 

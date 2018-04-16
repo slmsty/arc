@@ -32,6 +32,7 @@ import MyApply from '../containers/myApply/myApplay'
 import MailConfig from '../containers/system/mailConfig'
 import CustomerTaxInfo from '../containers/system/customerTaxInfo'
 import CustomerContent from '../containers/system/customerContent'
+import AuthoritySet from "../components/system/authoritySet";
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -103,6 +104,9 @@ class IndexContainer extends React.Component {
       return CustomerTaxInfo
     } else if(component === 'customerContent') {
       return CustomerContent
+    } else if(component === 'AUTH_SET') {
+      console.log('AUTH_SET')
+      return AuthoritySet
     }
   }
   getMenuRoutes = (menus) => {
