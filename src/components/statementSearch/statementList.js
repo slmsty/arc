@@ -86,6 +86,62 @@ export default class StatementListIndex extends React.Component {
         })
       })
     }
+    if(type==='projectInfoReport'){
+      this.props.getProductDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='outcomeInfoReport'){
+      this.props.getBillDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='receiptAccountReport'){
+      this.props.getConfirmDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='getTotalContractDetailList'){
+      this.props.getConfirmDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='projectInfoReport'){
+      this.props.getProductDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='outcomeInfoReport'){
+      this.props.getBillDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='receiptAccountReport'){
+      this.props.getConfirmDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
+    if(type==='contractInfoReport'){
+      this.props.getTotalContractDetailList(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
     this.setState({
       currencyType: type,
     })
@@ -94,6 +150,7 @@ export default class StatementListIndex extends React.Component {
   /*param:传递参数
   type：报表类型*/
   queryParms = (param,type) => {
+    console.log(type)
     this.setState({
       currencyType:type,
     })
@@ -132,6 +189,26 @@ export default class StatementListIndex extends React.Component {
       let orderSummarize = {}
       orderSummarize.orderSummarize = param
       this.queryParam = { ...this.queryParam,...orderSummarize}
+    }
+    if(type==='contractInfoReport'){
+      let contract = {}
+      contract.contract = param
+      this.queryParam = { ...this.queryParam,...contract}
+    }
+    if(type==='projectInfoReport'){
+      let project = {}
+      project.project = param
+      this.queryParam = { ...this.queryParam,...project}
+    }
+    if(type==='outcomeInfoReport'){
+      let invoice = {}
+      invoice.invoice = param
+      this.queryParam = { ...this.queryParam,...invoice}
+    }
+    if(type==='receiptAccountReport'){
+      let confirReq = {}
+      confirReq.confirReq = param
+      this.queryParam = { ...this.queryParam,...confirReq}
     }
     if(type==='contractInfoReport'){
       let contract = {}
@@ -290,6 +367,34 @@ export default class StatementListIndex extends React.Component {
       current = getProductOrderTotalList.pageNo
       total = getProductOrderTotalList.count
       pageSize = getProductOrderTotalList.pageSize
+    }
+    if(type==='projectInfoReport'){
+      const getProductDetailList = this.props.statement.getProductDetailList;
+      dataSources.dataSource = getProductDetailList.result
+      current = getProductDetailList.pageNo
+      total = getProductDetailList.count
+      pageSize = getProductDetailList.pageSize
+    }
+    if(type==='outcomeInfoReport'){
+      const getBillDetailList = this.props.statement.getBillDetailList;
+      dataSources.dataSource = getBillDetailList.result
+      current = getBillDetailList.pageNo
+      total = getBillDetailList.count
+      pageSize = getBillDetailList.pageSize
+    }
+    if(type==='receiptAccountReport'){
+      const getConfirmDetailList = this.props.statement.getConfirmDetailList;
+      dataSources.dataSource = getConfirmDetailList.result
+      current = getConfirmDetailList.pageNo
+      total = getConfirmDetailList.count
+      pageSize = getConfirmDetailList.pageSize
+    }
+    if(type==='contractInfoReport'){
+      const getTotalContractDetailList = this.props.statement.getTotalContractDetailList;
+      dataSources.dataSource = getTotalContractDetailList.result
+      current = getTotalContractDetailList.pageNo
+      total = getTotalContractDetailList.count
+      pageSize = getTotalContractDetailList.pageSize
     }
     const pagination = {
       current: current,

@@ -198,6 +198,7 @@ class StatementListCom extends React.Component {
       let param = {}
       param.startTime = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
       param.endTime = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+
       param.signCompany = params.signCompany
       param.buType = params.buType
 
@@ -230,46 +231,74 @@ class StatementListCom extends React.Component {
     // 项目综合信息查询报表
     if (statement === 'projectInfoReport') {
       let param = {}
-      param.contractNo = params.contractNo
-      param.contractName = params.contractName
-      param.currency = params.currency
+
       param.projectNo = params.projectNo
       param.custName = params.custName && params.custName.length ? params.custName[0] : ''
-
+      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
+      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
+      param.currency = params.currency
+      param.contractName = params.contractName
+      param.contractNo = params.contractNo
       this.setState({
         param
       })
       this.props.queryParms(param,'projectInfoReport')
     }
 
-    // 发票信息查询表 待写
+    // 发票信息查询表
     if (statement === 'outcomeInfoReport') {
       let param = {}
-      param.contractNo = params.contractNo
-      param.contractName = params.contractName
-      param.currency = params.currency
+      console.log(8)
       param.projectNo = params.projectNo
       param.custName = params.custName && params.custName.length ? params.custName[0] : ''
-
+      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
+      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
+      param.currency = params.currency
+      param.signCompany = params.signCompany
+      param.invoiceNumber = params.invoiceNumber
+      param.billingAmountMin = params.billingAmountMin
+      param.billingAmountMax = params.billingAmountMax
+      param.paymentName = params.paymentName
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
       this.setState({
         param
       })
       this.props.queryParms(param,'outcomeInfoReport')
     }
 
-    // 应收账款询证函报表 待写
+    // 应收账款询证函报表
     if (statement === 'receiptAccountReport') {
       let param = {}
       param.projectNo = params.projectNo
       param.contarctNo = params.contarctNo
-      param.dateStart = params.dateStart
-      param.dateStart = params.dateStart
+      param.signCompany = params.signCompany
+      param.contarctName = params.contarctName
+      param.deadline = params.deadline
       param.custName = params.custName && params.custName.length ? params.custName[0] : ''
 
       this.setState({
         param
       })
       this.props.queryParms(param,'receiptAccountReport')
+    }
+
+    // 整体合同内容查询表
+    if (statement === 'contractInfoReport') {
+      let param = {}
+      param.projectNo = params.projectNo
+      param.contarctNo = params.contarctNo
+      param.signDateStart = params.contractName
+      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.endTime = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.projectBu = params.projectBu
+      param.region = params.region
+      param.salesManager = params.salesManager
+      param.projectManager = params.projectManager
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'contractInfoReport')
     }
     //this.props.form.resetFields()
   }
@@ -459,14 +488,14 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="客户名称">
-                  {getFieldDecorator('custId')(
+                  {getFieldDecorator('custName')(
                     <SelectCustomerWithForm />,
                   )}
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="开票日期">
-                  {getFieldDecorator('billedDate', {
+                  {getFieldDecorator('billingDate', {
                     //initialValue: [moment('2017-08-01'), moment()],
                   })(<RangePicker
                     allowClear
@@ -479,7 +508,7 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
-                  {getFieldDecorator('receiptCurrency')(
+                  {getFieldDecorator('currency')(
                     <Select>
                       <Option value="USD">USD</Option>
                       <Option value="CNY">CNY</Option>
@@ -491,20 +520,20 @@ class StatementListCom extends React.Component {
                 <Row>
                   <Col span={14}>
                     <FormItem {...formItemLayout} label="收款金额" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
-                      {getFieldDecorator('receiptAmountFrom')(<Input />)}
+                      {getFieldDecorator('billingDateStart')(<Input />)}
                     </FormItem>
                   </Col>
                   <Col span={2}><div style={{ textAlign: 'center' }}>～</div></Col>
                   <Col span={8}>
                     <FormItem {...formItemLayout} wrapperCol={{ span: 24 }}>
-                      {getFieldDecorator('receiptAmountTo')(<Input />)}
+                      {getFieldDecorator('billingDateEnd')(<Input />)}
                     </FormItem>
                   </Col>
                 </Row>
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="发票号">
-                  {getFieldDecorator('billedId')(
+                  {getFieldDecorator('invoiceNumber')(
                     <Input
                       placeholder="请输入发票号"
                     />,
@@ -554,7 +583,7 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
-                <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search" />查询</Button>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeInfoReport')}><Icon type="search" />查询</Button>
               </Col>
             </Row>
           </div>
@@ -658,14 +687,14 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="客户名称">
-                  {getFieldDecorator('custId')(
+                  {getFieldDecorator('custName')(
                     <SelectCustomerWithForm />,
                   )}
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="收款截止日期">
-                  {getFieldDecorator('billedDate', {
+                  {getFieldDecorator('deadline', {
                     //initialValue: moment(),
                   })(
                     <DatePicker
@@ -708,7 +737,7 @@ class StatementListCom extends React.Component {
             </Row>
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
-                <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search" />查询</Button>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('receiptAccountReport')}><Icon type="search" />查询</Button>
               </Col>
             </Row>
           </div>
