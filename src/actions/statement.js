@@ -92,6 +92,58 @@ export function getProductOrderDetailList(queryParam) {
     },
   }
 }
+ // 应收账款询证函报表
+export function getConfirmDetailList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/confirmation_request/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_CONFIRM_DETAIL_LISTT_SUCCESS'],
+    },
+  }
+}
+// 发票信息查询表
+export function getBillDetailList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/invoice/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_BILL_DETAIL_LISTT_SUCCESS'],
+    },
+  }
+}
+// 项目综合信息查询报表
+export function getProductDetailList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/project_info/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_PRODUCT_DETAIL_LISTT_SUCCESS'],
+    },
+  }
+}
+// 整体合同内容查询
+export function getTotalContractDetailList(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/contract_info/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_TOTAL_DETAIL_LISTT_SUCCESS'],
+    },
+  }
+}
 // 导出excel
 export function getExcel(queryParam) {
   return {

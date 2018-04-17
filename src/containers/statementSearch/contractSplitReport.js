@@ -23,11 +23,11 @@ const mapDispatchToProps = dispatch => (
 )
 
 // eslint-disable-next-line react/prefer-stateless-function
-class StatementListContainer extends React.Component {
+class ContractSplitReport extends React.Component {
   render() {
-    return (<StatementListCom {...this.props} />)
+    return (<StatementListCom {...this.props} reportType = 'contractSpritReport' />)
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StatementListContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(ContractSplitReport)
 

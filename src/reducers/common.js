@@ -203,10 +203,17 @@ const common = {
         child: [
           {
             key: '71',
-            path: '/statementSearch/statementList',
-            name: '报表',
+            path: '/statementSearch/outcomeReceiptReport',
+            name: '发票与回款',
             icon: 'icon-BilledAR',
-            component: 'statementSearch',
+            component: 'outcomeReceiptReport',
+          },
+          {
+            key: '72',
+            path: '/statementSearch/contractSplitReport',
+            name: '合同拆分',
+            icon: 'icon-BilledAR',
+            component: 'contractSplitReport',
           },
         ],
       },

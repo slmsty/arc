@@ -133,6 +133,11 @@ export default class StatementListIndex extends React.Component {
       orderSummarize.orderSummarize = param
       this.queryParam = { ...this.queryParam,...orderSummarize}
     }
+    if(type==='contractInfoReport'){
+      let contract = {}
+      contract.contract = param
+      this.queryParam = { ...this.queryParam,...contract}
+    }
     this.handleQuery(type)
 
   }
@@ -232,7 +237,6 @@ export default class StatementListIndex extends React.Component {
     this.handleQuery(currencyType)
   }
   render() {
-
     const dataSources = {}
     let [current,total,pageSize,claimAmountTotal] = [0,0,0,'']
     const type = this.state.currencyType
@@ -297,7 +301,7 @@ export default class StatementListIndex extends React.Component {
     }
     return (
       <div>
-        <StatementWithFrom showCols={this.showCols} queryParms={this.queryParms} excel={this.excel} currencyType = {this.state.currencyType}/>
+        <StatementWithFrom reportType={this.props.reportType} showCols={this.showCols} queryParms={this.queryParms} excel={this.excel} currencyType = {this.state.currencyType}/>
 
         {type ?
           <div>

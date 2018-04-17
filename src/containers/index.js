@@ -25,7 +25,8 @@ import BadDebtsStatus from './badDebts/Status'
 import ApplyListContainer from './myApply/applyList'
 import ContractSplit from './ContractSplit/contractSplit'
 import BillStatusManage from './BillManage/billStatusManage'
-import StatementSearch from './statementSearch/statementList'
+import ContractSplitReport from './statementSearch/contractSplitReport'
+import OutcomeReceiptReport from './statementSearch/ountcomeReceiptReport'
 import BillingApplication from '../containers/billApplication/billApplication'
 import Login from '../containers/login/login'
 import MyApply from '../containers/myApply/myApplay'
@@ -94,8 +95,6 @@ class IndexContainer extends React.Component {
       return BillingApplication
     } else if (component === 'BillStatusManage') {
       return BillStatusManage
-    } else if (component === 'statementSearch') {
-      return StatementSearch
     } else if(component === 'myApplyContainer'){
       return MyApply
     } else if(component === 'mailConfig'){
@@ -105,8 +104,11 @@ class IndexContainer extends React.Component {
     } else if(component === 'customerContent') {
       return CustomerContent
     } else if(component === 'AUTH_SET') {
-      console.log('AUTH_SET')
       return AuthoritySet
+    } else if (component === 'outcomeReceiptReport') {
+      return OutcomeReceiptReport
+    }else if (component === 'contractSplitReport') {
+      return ContractSplitReport
     }
   }
   getMenuRoutes = (menus) => {

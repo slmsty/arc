@@ -89,7 +89,6 @@ class StatementListCom extends React.Component {
   }
   // 查询接口
   queryParms = (statement) => {
-    console.log('statement',statement)
     const params = this.props.form.getFieldsValue()
     this.setState({
       param:{},
@@ -209,6 +208,69 @@ class StatementListCom extends React.Component {
       })
       this.props.queryParms(param,'projectOrderTotalReport')
     }
+    // 整体合同内容查询
+    if (statement === 'contractInfoReport') {
+      let param = {}
+      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.region = params.region && params.region.lenght ? params.region[0] : ''
+      param.projectNo = params.projectNo
+      param.salesManager = params.salesManager
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.projectManager = params.projectManager
+      param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
+
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'contractInfoReport')
+    }
+
+    // 项目综合信息查询报表
+    if (statement === 'projectInfoReport') {
+      let param = {}
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.currency = params.currency
+      param.projectNo = params.projectNo
+      param.custName = params.custName && params.custName.length ? params.custName[0] : ''
+
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'projectInfoReport')
+    }
+
+    // 发票信息查询表 待写
+    if (statement === 'outcomeInfoReport') {
+      let param = {}
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.currency = params.currency
+      param.projectNo = params.projectNo
+      param.custName = params.custName && params.custName.length ? params.custName[0] : ''
+
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'outcomeInfoReport')
+    }
+
+    // 应收账款询证函报表 待写
+    if (statement === 'receiptAccountReport') {
+      let param = {}
+      param.projectNo = params.projectNo
+      param.contarctNo = params.contarctNo
+      param.dateStart = params.dateStart
+      param.dateStart = params.dateStart
+      param.custName = params.custName && params.custName.length ? params.custName[0] : ''
+
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'receiptAccountReport')
+    }
     //this.props.form.resetFields()
   }
 
@@ -244,6 +306,7 @@ class StatementListCom extends React.Component {
                   initialValue: this.props.currencyType,
                 })(
                   <SelectRadioApi
+                    reportType={this.props.reportType}
                     typeCode="STATEMENT"
                     paramCode="APPLY_TYPE"
                     onChange={(e)=>this.handleRadioChange(e)}
@@ -672,14 +735,14 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="客户名称">
-                  {getFieldDecorator('custId')(
+                  {getFieldDecorator('custName')(
                     <SelectCustomerWithForm />,
                   )}
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
-                  {getFieldDecorator('receiptCurrency')(
+                  {getFieldDecorator('currency')(
                     <Select>
                       <Option value="USD">USD</Option>
                       <Option value="CNY">CNY</Option>
@@ -710,7 +773,7 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
-                <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search" />查询</Button>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('projectInfoReport')}><Icon type="search" />查询</Button>
               </Col>
             </Row>
           </div>
@@ -771,14 +834,14 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="立项部门">
                   {
-                    getFieldDecorator('projectBuNo')(<SelectSbu keyName="contract"/>)
+                    getFieldDecorator('projectBu')(<SelectSbu keyName="contract"/>)
                   }
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="立项区域">
                   {
-                    getFieldDecorator('projectBuEara')(<SelectSbu keyName="contract"/>)
+                    getFieldDecorator('region')(<SelectSbu keyName="contract"/>)
                   }
                 </FormItem>
               </Col>
@@ -787,19 +850,19 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="销售经理">
                   {
-                    getFieldDecorator('saleMan')(<Input />)
+                    getFieldDecorator('salesManager')(<Input />)
                   }
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="项目经理">
                   {
-                    getFieldDecorator('projectMan')(<Input />)
+                    getFieldDecorator('projectManager')(<Input />)
                   }
                 </FormItem>
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
-                <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search" />查询</Button>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('contractInfoReport')}><Icon type="search" />查询</Button>
                 <Button style={{marginLeft:'20px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>
               </Col>
             </Row>
@@ -1298,7 +1361,9 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="BU类型">
-                  {getFieldDecorator('buType')(
+                  {getFieldDecorator('buType',{
+                    initialValue: 'PROJECT',
+                  })(
                     <Select>
                       <Option value="PROJECT">立项BU</Option>
                       <Option value="SALES">销售BU</Option>
