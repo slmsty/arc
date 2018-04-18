@@ -10,6 +10,7 @@ import GlDateModal from './../common/glDateModal'
 import FileDownModal from './fileDownMotal'
 import currency from '../../util/currency'
 import { billApproveItemColumns, billApproveInfoColumns } from './billStatusCols'
+import InvoiceBackInfoEdit from './InvoiceBackInfoEdit'
 const TO_TAX_TYPE = ['开票审批完成', '作废审批完成', '开票失败']
 const CANCEL_TYPE = ['开票审批中', '作废审批中']
 
@@ -33,6 +34,7 @@ export default class BillStatusCon extends React.Component {
     fileDownData: [],
     firstID: '',
     sendLoading: false,
+    showBackInfo: false,
   }
   componentWillMount() {
     const screenHeight = window.screen.height
@@ -59,6 +61,10 @@ export default class BillStatusCon extends React.Component {
          message.success('发票申请信息传送成功')
        }
        this.setState({sendLoading: false})
+     }
+     if(this.props.billStatusManage.saveBackSuccess !== nextProps.billStatusManage.saveBackSuccess && nextProps.billStatusManage) {
+       message.success('纸票退回情况保存成功')
+       this.setState({showBackInfo: false})
      }
   }
   queryParam = {
@@ -309,6 +315,15 @@ export default class BillStatusCon extends React.Component {
     this.setState({sendLoading: true})
   }
 
+  handleInvoiceBack = () => {
+    const applicationId = this.state.selectedRows[0].billingApplicationId
+    this.props.invoiceBackQuery(applicationId).then(res => {
+      if(res && res.response && res.response.resultCode === '000000') {
+        this.setState({showBackInfo: true})
+      }
+    })
+  }
+
   render() {
     const { result, count, pageCount, pageSize }  = this.props.billStatusManage.getBillStatusManageList
     const billApproveResultColumns = [
@@ -497,6 +512,13 @@ export default class BillStatusCon extends React.Component {
               onClick={() => this.sendInvoiceToTax()}
             >传送金税</Button> : null
         }
+        <Button
+          disabled={!(this.state.selectedRows.length > 0 && this.state.selectedRows[0].applicationType === '项目退票')}
+          style={{marginLeft: '10px'}}
+          onClick={this.handleInvoiceBack}
+          type="primary"
+          ghost
+        >纸票退回情况</Button>
         <br />
         <br />
         <h3>开票申请</h3>
@@ -588,6 +610,15 @@ export default class BillStatusCon extends React.Component {
             onCancel={this.CloseFileDownModal}
             data={this.state.fileDownData}
             fileDown={this.fileDown}
+            /> : null
+        }
+        {
+          this.state.showBackInfo ?
+            <InvoiceBackInfoEdit
+              applicationId={this.state.selectedRows[0].billingApplicationId}
+              invoiceResult={this.props.billStatusManage.backInfo}
+              onCancel={() => this.setState({showBackInfo: false})}
+              saveInvoiceBackInfo={this.props.saveInvoiceBackInfo}
             /> : null
         }
       </div>

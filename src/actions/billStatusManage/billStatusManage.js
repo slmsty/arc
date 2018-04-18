@@ -120,3 +120,42 @@ export function invoiceSendTax(applicationId) {
   }
 }
 
+/**
+ * 发票退回情况查询
+ * @param applicationId
+ * @returns {{}}
+ */
+export function invoiceBackQuery(applicationId) {
+  return {
+    [httpApi]: {
+      url: `/arc/application/invoice/back/query`,
+      options: {
+        method: 'POST',
+        body: {
+          applicationId,
+        },
+      },
+      types: ['INVOICE_BACK_QUERY_SUCCESS'],
+    },
+  }
+}
+
+/**
+ *
+ * @param applicationId
+ * @returns {{}}
+ */
+export function saveInvoiceBackInfo(params) {
+  return {
+    [httpApi]: {
+      url: `/arc/application/invoice/back/update`,
+      options: {
+        method: 'POST',
+        body: params,
+      },
+      types: ['SAVE_INVOICE_BACK_INFO_SUCCESS'],
+    },
+  }
+}
+
+
