@@ -43,34 +43,34 @@ class CustomerTaxInfo extends React.Component {
       {
         title: '客户名称',
         dataIndex: 'custInfoName',
-        width: 280,
+        width: '17%',
       }, {
         title: '开票客户名称',
         dataIndex: 'billingCustName',
-        width: 280,
+        width: '17%',
       }, {
         title: '纳税人识别码',
         dataIndex: 'taxpayerIdentification',
-        width: 150,
+        width: '10%',
       }, {
         title: '纳税人地址、电话',
         dataIndex: 'addressPhoneNum',
-        width: 350,
+        width: '25%',
       }, {
         title: '开户行及账号',
         dataIndex: 'bankAccount',
-        width: 250,
+        width: '18%',
       }, {
-        title: '状态',
+        title: '是否有效',
         dataIndex: 'status',
-        width: 80,
+        width: '5%',
         render: (text) => {
           return text === 'Y' ? '是' : '否'
         }
       }, {
         title: '操作',
         dataIndex: '',
-        width: 80,
+        width: '5%',
         render: (text, record) => {
           return <a onClick={() => this.handleEdit(record)}>修改</a>
         }

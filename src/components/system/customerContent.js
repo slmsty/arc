@@ -56,48 +56,48 @@ class CustomerTaxInfo extends React.Component {
       {
         title: '开票内容编码',
         dataIndex: 'billingContentCode',
-        width: 300,
+        width: '25%',
       }, {
         title: '开票内容名称',
         dataIndex: 'billingContentName',
-        width: 350,
+        width: '25%',
       }, {
         title: '纳税人识别码',
         dataIndex: 'taxCategoryCode',
-        width: 150,
+        width: '10%',
       }, {
         title: '优惠政策标识',
         dataIndex: 'prefPolicySign',
-        width: 100,
+        width: '8%',
         render: (text) => {
           return text === 'Y' ? '使用' : '不使用'
         }
       }, {
         title: '零税率标识',
         dataIndex: 'zeroTaxSign',
-        width: 100,
+        width: '8%',
         render: (text) => {
           return text === 'Y' ? '使用' : '不使用'
         }
       }, {
         title: '税收分类编码版本号',
         dataIndex: 'taxCategoryVersion',
-        width: 150,
+        width: '8%',
       }, {
         title: '扣除额',
         dataIndex: 'taxIncludeAmount',
-        width: 150,
+        width: '5%',
       }, {
-        title: '状态',
+        title: '是否有效',
         dataIndex: 'status',
-        width: 80,
+        width: '5%',
         render: (text) => {
           return text === 'Y' ? '是' : '否'
         }
       }, {
         title: '操作',
         dataIndex: '',
-        width: 80,
+        width: '5%',
         render: (text, record) => {
           return <a onClick={() => this.handleEdit(record)}>修改</a>
         }
