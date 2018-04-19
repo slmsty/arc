@@ -36,6 +36,7 @@ class BillApproveDetail extends React.Component  {
         totalAmount: detail.billingAmount ? detail.billingAmount : 0,
       })
     )
+    const { constructionTaxAmount, educationTaxAmount, incomeTaxAmount, addTaxAmount } = props.serviceDetail.arcBillingTaxInfo
     this.state = {
       dataSource: dataSource,
       count: 1,
@@ -45,10 +46,18 @@ class BillApproveDetail extends React.Component  {
       selectedRows: [],
       currentNo: 1,
       totalAmount: 0,
+      taxInfos: [constructionTaxAmount, educationTaxAmount, incomeTaxAmount, addTaxAmount ],
     }
     if(this.props.setFormValidate) {
       this.props.setFormValidate(dataSource)
     }
+  }
+
+  sum = (array) => {
+    let sum = array.reduce((a, b) => {
+      return a + b
+    }, 0)
+    return sum.toFixed(2)
   }
 
   handleAdd = (lineNo, arBillingId, contractItemId) => {
@@ -227,6 +236,7 @@ class BillApproveDetail extends React.Component  {
           }
         })
       }
+      const [constructionTax, educationTax, incomeTax, addTaxAmount] = this.state.taxInfos
       if (!err) {
         const params = isAgainInvoice !== 'false' ? {
           ...values,
@@ -236,7 +246,11 @@ class BillApproveDetail extends React.Component  {
           appLineItems: this.state.dataSource.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,
-          }))
+          })),
+          constructionTax,
+          educationTax,
+          incomeTax,
+          addTaxAmount,
         } : {
             ...values,
             billingApplicationId: this.props.serviceDetail.billingApplicationId,
@@ -296,6 +310,14 @@ class BillApproveDetail extends React.Component  {
       taxRate: '',
       tax: totalTaxAmount,
     }]
+  }
+
+  handleTaxChange = (v, i) => {
+    let tax = this.state.taxInfos
+    tax[i] = parseFloat(v)
+    this.setState({
+      taxInfos: tax
+    })
   }
 
   render() {
@@ -528,7 +550,30 @@ class BillApproveDetail extends React.Component  {
         )
       }
     }]
-
+    const totalColumns = [
+      {
+        title: '',
+        dataIndex: 'title',
+        width: 80,
+      }, {
+        title: '税率',
+        dataIndex: 'taxRate',
+        width: 150,
+        render: (text, record) => {
+          return record.taxRate ? `${parseInt((record.taxRate) * 100)}%` : ''
+        }
+      }, {
+        title: '税额',
+        dataIndex: 'tax',
+        width: 150,
+        render: (text, record, index) => {
+          return isArFinanceAccount ? (
+            record.title === '合计' ?
+              this.sum(this.state.taxInfos) : <Input defaultValue={text} onChange={(e) => this.handleTaxChange(e.target.value, index)}/>
+          ) : text
+        }
+      }
+    ]
     return (
       <div>
         <div className="infoPanel">
