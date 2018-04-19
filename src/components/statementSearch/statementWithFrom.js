@@ -84,8 +84,8 @@ class StatementListCom extends React.Component {
     excelDis:false,
     param:{}
   }
-  excel = ()=>{
-    this.props.excel(this.state.param)
+  excel = (type)=>{
+    this.props.excel(this.state.param,type)
   }
   // 查询接口
   queryParms = (statement) => {
@@ -1059,8 +1059,9 @@ class StatementListCom extends React.Component {
                 </Col>
                 <Col span={8} style={{ textAlign: 'right' }}>
                   <Button type="primary" key="search" onClick={()=>this.queryParms('contractSplitReport')}><Icon type="search" />查询</Button>
-                  <Button disabled={this.state.excelDis ? false : true} style={{marginLeft:'10px'}} type="primary" onClick={this.excel}>导出Excel</Button>
-                </Col>
+                  {/*<Button disabled={this.state.excelDis ? false : true} style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('split')}>导出Excel</Button>*/}
+                  <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('split')}>导出Excel</Button>
+                  </Col>
               </Row>
 
           </div>
@@ -1190,6 +1191,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeTotalReport')}><Icon type="search" />查询</Button>
+
               </Col>
             </Row>
 
@@ -1369,6 +1371,7 @@ class StatementListCom extends React.Component {
 
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('projectOrderDetailReport')}><Icon type="search" />查询</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('order')}>导出Excel</Button>
               </Col>
             </Row>
 
@@ -1420,6 +1423,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('projectOrderTotalReport')}><Icon type="search" />查询</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('summarize')}>导出Excel</Button>
               </Col>
             </Row>
 
