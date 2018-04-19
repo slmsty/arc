@@ -144,11 +144,21 @@ export function getTotalContractDetailList(queryParam) {
     },
   }
 }
-// 导出excel
-export function getExcel(queryParam) {
+// 导出excel url: '/arc/report/contract_split/excel',
+export function getExcel(queryParam,type) {
+  let url = ''
+  if (type === 'split') {
+    url = '/arc/report/contract_split/excel'  //合同拆分表导出地址
+  }
+  if (type === 'order') {
+    url = '/arc/report/project_order/excel'  //ORDER明细表导出地址
+  }
+  if (type === 'summarize') {
+    url = '/arc/report/order_summarize/excel'  // ORDER汇总表导出地址
+  }
   return {
     [httpApi]: {
-      url: '/arc/report/contract_split/excel',
+      url: url,
       options: {
         method: 'POST',
         body: queryParam,

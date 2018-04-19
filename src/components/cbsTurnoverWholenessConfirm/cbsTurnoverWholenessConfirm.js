@@ -3,6 +3,7 @@ import React from 'react'
 import { Row, Col, Table, Button, message } from 'antd'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import currency from '../../util/currency'
 import CBSTurnoverWholenessConfirmSearchWithForm from './cbsTurnoverWholenessConfirmSearch'
 import EditCBSTurnoverDataWithForm from './editCBSTurnoverData'
 
@@ -36,13 +37,13 @@ const columns = [{
   dataIndex: 'receiptAmount',
   key: 'receiptAmount',
   width: 100,
-  render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : '0.00'}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? currency(text) : currency(0)}</div>),
 }, {
   title: '支出',
   dataIndex: 'payAmount',
   key: 'payAmount',
   width: 100,
-  render: text => (<div style={{ textAlign: 'right' }}>{text ? Math.abs(text).toFixed(2) : '0.00'}</div>),
+  render: text => (<div style={{ textAlign: 'right' }}>{text ? currency( Math.abs(text)) : currency(0)}</div>),
 }, {
   title: '公司',
   dataIndex: 'companyName',
@@ -237,7 +238,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
             <Button type="default" onClick={this.handleBatchConfirm}>确认</Button>&nbsp;&nbsp;
           </Col>
           <Col span={16} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
-            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary()}</span>
+            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{currency(makeSummary())}</span>
           </Col>
         </Row>
         <br />

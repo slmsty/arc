@@ -27,10 +27,19 @@ export default class StatementListIndex extends React.Component {
       pageSize: 10,
     },
   }
-  excel = (param) => {
+
+  excel = (param,type) => {
     let params = {}
-    params.contractSplit = param
-    this.props.getExcel(params)
+    if (type === 'split') {
+      params.contractSplit = param
+    }
+    if (type === 'order') {
+      params.projectOrder = param
+    }
+    if (type === 'summarize') {
+      params.orderSummarize = param
+    }
+    this.props.getExcel(params,type)
   }
 
   handleQuery(type){

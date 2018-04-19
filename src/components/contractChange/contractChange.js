@@ -2,6 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Table, Button, Pagination, message } from 'antd'
+import currency from '../../util/currency'
 import ContractChangeSearchWithForm from './contractChangeSearch'
 
 export default class ContractList extends React.Component {
@@ -50,10 +51,12 @@ export default class ContractList extends React.Component {
     title: '应收金额',
     dataIndex: 'arAmount',
     width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   }, {
     title: '应收余额',
     dataIndex: 'receivableBalance',
     width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   ]
   handleChangeParam = (param) => {
