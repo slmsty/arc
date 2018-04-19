@@ -3,6 +3,7 @@ import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
+import currency from '../../util/currency'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const dateFormat = 'YYYY-MM-DD'
@@ -38,7 +39,8 @@ class Approve extends Component{
       {
         title: '付款金额',
         dataIndex: 'paymentAmount',
-        width: 120
+        width: 120,
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '项目编码',
@@ -78,17 +80,20 @@ class Approve extends Component{
       {
         title: '应收金额',
         dataIndex: 'arAmount',
-        width: 120
+        width: 120,
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '考核含税金额',
         dataIndex: 'assessTaxIncludedAmount',
-        width: 120
+        width: 120,
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
         dataIndex: 'billedArAmount',
-        width: 120
+        width: 120,
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '款项ID',
@@ -118,7 +123,8 @@ class Approve extends Component{
       {
         title: '合同金额',
         dataIndex: 'contractAmount',
-        width: 120
+        width: 120,
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '提示',

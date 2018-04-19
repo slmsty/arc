@@ -3,6 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Table, Button, message, Modal, Row, Col } from 'antd'
 import moment from 'moment'
+import currency from '../../util/currency'
 import ProjectReceiptClaimSearchWithForm from './projectReceiptClaimSearch'
 import ProjectReceiptClaimModal from '../../containers/projectReceiptClaim/projectReceiptClaimModal'
 
@@ -61,7 +62,7 @@ export default class ProjectReceiptClaim extends React.Component {
     dataIndex: 'receiptAmount',
     width: 100,
     render: (text, record, index) => {
-      const receiptAmount = text ? text.toFixed(2) : 0.00
+      const receiptAmount = text ? currency(text) : currency(0)
       return receiptAmount
     },
   }, {
@@ -92,7 +93,7 @@ export default class ProjectReceiptClaim extends React.Component {
     title: '认款金额',
     dataIndex: 'claimAmount',
     width: 100,
-    render: text => (text ? text.toFixed(2) : 0.00),
+    render: text => (text ? currency(text) : currency(0)),
   }, {
     title: '收款用途',
     dataIndex: 'receiptUse',
@@ -300,7 +301,7 @@ export default class ProjectReceiptClaim extends React.Component {
             <Button onClick={this.handleEmailCliam}>邮件确认</Button>
           </Col>
           <Col span={12} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
-            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
+            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{currency(makeSummary)}</span>
           </Col>
         </Row>
         <br />

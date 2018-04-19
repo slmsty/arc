@@ -974,7 +974,7 @@ const productOrderDetailCols = [
   {
     title:'签约公司',
     dataIndex:'signCompany',
-    width:200,
+    width:400,
   },
   {
     title:'合同编码',
