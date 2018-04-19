@@ -9,6 +9,7 @@ import MultipleInput from '../common/multipleInput'
 import SelectRadioApi from  '../common/selectRadioApi'
 import SelectSbu from '../common/SelectSbu'
 import SelectOperator from '../common/selectOperator'
+import StaffInfo from '../common/staffInfo'
 import SelectCustomerWithForm from '../common/selectCustomer'
 
 const FormItem = Form.Item
@@ -17,6 +18,17 @@ const RadioGroup = Radio.Group
 const dateFormat = 'YYYY-MM-DD'
 const { RangePicker } = DatePicker
 const Option = Select.Option;
+const staffColumns = [
+  {
+    title: '员工编号',
+    dataIndex: 'staffCode',
+    width: 100,
+  }, {
+    title: '员工姓名',
+    dataIndex: 'staffName',
+    width: 100,
+  }
+]
 const testoptions = [
   {
     paramCode: "APPLY_TYPE",
@@ -82,6 +94,7 @@ class StatementListCom extends React.Component {
     applyData: '',
     stateType: '',
     excelDis:false,
+    askContractTo:[],
     param:{}
   }
   excel = (type)=>{
@@ -186,7 +199,7 @@ class StatementListCom extends React.Component {
       param.signCompany = params.signCompany
       param.salesBu = params.salesBu && params.salesBu.length ? params.salesBu[0] : ''
       param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
-      param.projectManager = params.projectManager
+      param.personId = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
       param.currency = params.currency
       this.setState({
         param
@@ -294,7 +307,7 @@ class StatementListCom extends React.Component {
       param.projectBu = params.projectBu
       param.region = params.region
       param.salesManager = params.salesManager
-      param.projectManager = params.projectManager
+      param.personId = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
       this.setState({
         param
       })
@@ -886,7 +899,9 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="项目经理">
                   {
-                    getFieldDecorator('projectManager')(<Input />)
+                    getFieldDecorator('projectManager')(
+                      <StaffInfo />
+                    )
                   }
                 </FormItem>
               </Col>
@@ -1349,9 +1364,7 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="项目经理">
                   {
                     getFieldDecorator('projectManager')(
-                      <Input
-                        placeholder="项目经理"
-                      />,
+                      <StaffInfo />
                     )
                   }
                 </FormItem>
