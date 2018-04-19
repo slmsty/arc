@@ -26,6 +26,22 @@ const proCols = [{
   title: '项目名称',
   dataIndex: 'tempProjectName',
   width: 100,
+},{
+  title: 'BUNo',
+  dataIndex: 'sbuNo',
+  width: 100,
+},{
+  title: 'BU名称',
+  dataIndex: 'sbuName',
+  width: 100,
+},{
+  title: '成本中心No',
+  dataIndex: 'costcenterNo',
+  width: 100,
+},{
+  title: '成本中心名称',
+  dataIndex: 'costcenterName',
+  width: 100,
 }]
 
 const invoiceCols = [{
