@@ -94,7 +94,7 @@ class ApplyInfoModal extends React.Component {
           appLineItems: this.state.approveData.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,
-          }))
+          })),
         } : {
           ...values,
           billingApplicationId: serviceDetail.billingApplicationId,

@@ -36,7 +36,6 @@ class BillApproveDetail extends React.Component  {
         totalAmount: detail.billingAmount ? detail.billingAmount : 0,
       })
     )
-    const { constructionTaxAmount, educationTaxAmount, incomeTaxAmount, addTaxAmount } = props.serviceDetail.arcBillingTaxInfo
     this.state = {
       dataSource: dataSource,
       count: 1,
@@ -46,7 +45,6 @@ class BillApproveDetail extends React.Component  {
       selectedRows: [],
       currentNo: 1,
       totalAmount: 0,
-      taxInfos: [constructionTaxAmount, educationTaxAmount, incomeTaxAmount, addTaxAmount ],
     }
     if(this.props.setFormValidate) {
       this.props.setFormValidate(dataSource)
@@ -236,7 +234,6 @@ class BillApproveDetail extends React.Component  {
           }
         })
       }
-      const [constructionTax, educationTax, incomeTax, addTaxAmount] = this.state.taxInfos
       if (!err) {
         const params = isAgainInvoice !== 'false' ? {
           ...values,
@@ -247,10 +244,6 @@ class BillApproveDetail extends React.Component  {
             ...record,
             lineNo: record.lineNo + 1,
           })),
-          constructionTax,
-          educationTax,
-          incomeTax,
-          addTaxAmount,
         } : {
             ...values,
             billingApplicationId: this.props.serviceDetail.billingApplicationId,
@@ -310,14 +303,6 @@ class BillApproveDetail extends React.Component  {
       taxRate: '',
       tax: totalTaxAmount,
     }]
-  }
-
-  handleTaxChange = (v, i) => {
-    let tax = this.state.taxInfos
-    tax[i] = parseFloat(v)
-    this.setState({
-      taxInfos: tax
-    })
   }
 
   render() {
@@ -550,30 +535,6 @@ class BillApproveDetail extends React.Component  {
         )
       }
     }]
-    const totalColumns = [
-      {
-        title: '',
-        dataIndex: 'title',
-        width: 80,
-      }, {
-        title: '税率',
-        dataIndex: 'taxRate',
-        width: 150,
-        render: (text, record) => {
-          return record.taxRate ? `${parseInt((record.taxRate) * 100)}%` : ''
-        }
-      }, {
-        title: '税额',
-        dataIndex: 'tax',
-        width: 150,
-        render: (text, record, index) => {
-          return isArFinanceAccount ? (
-            record.title === '合计' ?
-              this.sum(this.state.taxInfos) : <Input defaultValue={text} onChange={(e) => this.handleTaxChange(e.target.value, index)}/>
-          ) : text
-        }
-      }
-    ]
     return (
       <div>
         <div className="infoPanel">
@@ -796,14 +757,14 @@ class BillApproveDetail extends React.Component  {
               this.props.applyType === 'BILLING_EXCESS' ?
                 <div className="arc-info">
                   <Table
-                    style={{width: '70%'}}
-                    rowKey="id"
-                    size="small"
-                    bordered
-                    columns={totalColumns}
-                    dataSource={this.getTaxData()}
-                    pagination={false}
-                  />
+                  style={{width: '70%'}}
+                  rowKey="id"
+                  size="small"
+                  bordered
+                  columns={totalColumns}
+                  dataSource={this.getTaxData()}
+                  pagination={false}
+                />
                 </div> : null
             }
             <Row gutter={40}>
