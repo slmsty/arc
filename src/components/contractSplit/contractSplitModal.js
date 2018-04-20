@@ -892,7 +892,7 @@ class ContractSplitModal extends React.Component{
     }, {
       title: '合同不含税金额',
       dataIndex: 'contractAmountTaxExclude',
-      width: 100,
+      width: 120,
       render: (text, record, index) => record.taskOpration === '合计' ? currency(countsalePeo) : currency(text),
     }, {
       title: <span>退税率<em style={{ color: '#FF0000' }}>*</em></span>,
