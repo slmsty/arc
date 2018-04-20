@@ -253,13 +253,13 @@ export default class ApplySearchCon extends React.Component {
     queryParam.status = 'Y'
     this.props.getContractList(queryParam).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
-        console.log(res.response.pageInfo.result[0])
         this.showModals(res.response.pageInfo.result[0])
       }
     })
   }
 
   render() {
+    console.log('renderlines',this.state.selectedRows.orderListLines)
     const columns = [{
       title: '拆分状态',
       dataIndex: 'status',
@@ -328,6 +328,11 @@ export default class ApplySearchCon extends React.Component {
         dataIndex: 'recalculate',
         width: 100,
       },
+      {
+        title: '合同拆分操作人',
+        dataIndex: 'splitMan',
+        width: 110,
+      },
     ]
     const { selectedRowKeys } = this.state
     const rowSelection = {
@@ -344,7 +349,7 @@ export default class ApplySearchCon extends React.Component {
       onShowSizeChange: this.handleChangeSize,
     }
     const roleButtons = sessionStorage.getItem('roleButtons')
-    const buttonList = typeof roleButtons === 'undefined' ? [] : JSON.parse(roleButtons).map(r => r.path)
+    const buttonList = typeof roleButtons === 'undefined' || roleButtons === 'undefined' ? [] : JSON.parse(roleButtons).map(r => r.path)
     return (
       <div>
         <ContractSplitWithFrom onQuery={this.handleChangeParam} />

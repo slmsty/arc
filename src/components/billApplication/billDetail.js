@@ -7,18 +7,21 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
 import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols } from './billColumns'
 import UrlModalCom from '../common/getUrlModal'
+import MultipleInput from '../common/multipleInput'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
-const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER']
+const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED_OTHER', 'BILLING_OTHER']
 const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
+const hideContractUrl = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_OTHER']
+const isAdvance = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const formItemLayout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 12 },
 }
 const formItemLayout1 = {
-  labelCol: { span: 3 },
-  wrapperCol: { span: 21 },
+  labelCol: { span: 4 },
+  wrapperCol: { span: 20 },
 }
 const formItemLayout2 = {
   labelCol: { span: 7 },
@@ -54,6 +57,7 @@ class BillDetail extends React.Component {
       comInfo: [comInfo.billingComInfoId, comInfo.billingComName],
       proItems: [],
     }
+    this.isAdvance = isAdvance.includes(props.billType)
   }
 
   componentDidMount() {
@@ -71,8 +75,8 @@ class BillDetail extends React.Component {
         specificationType: item.specificationType ? item.specificationType : '',
         unit: item.unit ? item.unit : '',
         quantity: item.quantity ? item.quantity : 1,
-        unitPrice: item.billingAmount ? item.billingAmount : 0,
-        billingAmountExcludeTax: item.billingAmount ? item.billingAmount : 0,
+        unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
+        billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
         totalAmount: item.billingAmount ? item.billingAmount : 0,
         billingTaxRate: item.billingTaxRate ? item.billingTaxRate : 0,
@@ -182,6 +186,20 @@ class BillDetail extends React.Component {
             break
           }
         }
+        if(this.isAdvance) {
+          for(let i = 0; i< this.state.proItems.length; i++) {
+            const r  = this.state.proItems[i]
+            if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
+              message.error('【提前开票原因】不能为空!')
+              err = true
+              break
+            } else if (r.receiptReturnDate === '' || typeof r.receiptReturnDate === 'undefined') {
+              message.error('【预计回款日期】不能为空!')
+              err = true
+              break
+            }
+          }
+        }
 
         if (!err) {
           this.setState({loading: true})
@@ -204,6 +222,7 @@ class BillDetail extends React.Component {
             isAgainInvoice: 'true',
             billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
+            receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
           }
           if(this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate) {
             const checkParams = {
@@ -249,15 +268,6 @@ class BillDetail extends React.Component {
       })
       //校验所有拆分子项的金额必须小于父级含税金额
       const childAmount = total + value
-      /*if(normalTypes.includes(this.props.billType) && childAmount >= result.totalAmount) {
-        message.error('拆分子项的金额合计必须小于拆分前含税金额')
-        return false
-      } else {
-        if(result.totalAmount !== 0 && record.isParent!== 1 && childAmount >= result.totalAmount) {
-          message.error('拆分子项的金额合计必须小于拆分前含税金额')
-          return false
-        }
-      }*/
       dataSource[result.lineNo][col] = result.totalAmount - childAmount
       const parent = this.state.dataSource[result.lineNo]
       this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
@@ -365,7 +375,7 @@ class BillDetail extends React.Component {
   }
 
   getWarningTableData = () => {
-    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totalTaxAmount } = this.state.taxData
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, addTaxAmount, totalTaxAmount } = this.state.taxData
     return [{
       title: '城建',
       taxRate: constructionTax,
@@ -378,6 +388,10 @@ class BillDetail extends React.Component {
       title: '所得税',
       taxRate: incomeTax,
       tax: incomeTaxAmount,
+    }, {
+      title: '增值税',
+      taxRate: '',
+      tax: addTaxAmount,
     }, {
       title: '合计',
       taxRate: '',
@@ -539,7 +553,6 @@ class BillDetail extends React.Component {
 
   proItemChange = (index, columns, value) => {
     let proData = this.state.proItems
-    console.log(value)
     if(columns === 'receiptReturnDate') {
       proData[index][columns] = value ? moment(value) : ''
     } else {
@@ -550,7 +563,7 @@ class BillDetail extends React.Component {
 
   getProInfoColumns = () => {
     const { billType } = this.props
-    const isAdvance = billType === 'BILLING_CONTRACT' || billType === 'BILLING_UN_CONTRACT_PROJECT' || billType === 'BILLING_UN_CONTRACT_PROJECT'
+
     return [{
       title: '项目编码',
       dataIndex: 'projectCode',
@@ -568,7 +581,7 @@ class BillDetail extends React.Component {
       dataIndex: 'advanceBillingReason',
       width: 300,
       render: (text, record, index) => (
-        isAdvance ?
+        this.isAdvance ?
           <SelectInvokeApi
             typeCode="BILLING_APPLICATION"
             paramCode="ADVANCE_BILLING_REASON"
@@ -576,14 +589,14 @@ class BillDetail extends React.Component {
             hasEmpty
             value={this.state.proItems.length > 0 ? this.state.proItems[index]['advanceBillingReason'] : ''}
             onChange={(value) => this.proItemChange(index, 'advanceBillingReason', value)}
-          /> : text
+          /> : record.advanceBillingReasonName
       )
     }, {
       title: '预计回款日期',
       dataIndex: 'receiptReturnDate',
       width: 150,
       render: (text, record, index) => (
-        isAdvance ?
+        this.isAdvance ?
           <DatePicker
             value={this.state.proItems.length > 0 ? this.state.proItems[index]['receiptReturnDate'] : ''}
             onChange={(value, str) => this.proItemChange(index, 'receiptReturnDate', str)}
@@ -618,7 +631,8 @@ class BillDetail extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate, billingApplicantRemark, taxRateRequest } = this.props.detail
+    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
+      billingApplicantRemark, taxRateRequest, fileName, filePath } = this.props.detail
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
       headers: {
@@ -669,16 +683,19 @@ class BillDetail extends React.Component {
         <Form
           className="ant-search-form"
         >
-          <Row>
-            <Col span={14}>
-              <Button
-                className="scan-document"
-                type="primary"
-                ghost
-                onClick={() => this.setState({ showContractLink: true })}
-              >合同审批表及合同扫描件</Button>
-            </Col>
-          </Row>
+          {
+            !hideContractUrl.includes(this.props.billType) ?
+              <Row>
+                <Col span={14}>
+                  <Button
+                    className="scan-document"
+                    type="primary"
+                    ghost
+                    onClick={() => this.setState({ showContractLink: true })}
+                  >合同审批表及合同扫描件</Button>
+                </Col>
+              </Row> : null
+          }
           {
             this.props.isRed ?
               <Row gutter={40}>
@@ -697,7 +714,7 @@ class BillDetail extends React.Component {
                 </Col>
                 <Col span={8} key={2}>
                   <FormItem {...formItemLayout} label="发票是否丢失">
-                    {getFieldDecorator('isLose', {initialValue: '', rules: [{ required: true, message: '请选择丢失情况!' }]} )(
+                    {getFieldDecorator('isLose', {initialValue: ''} )(
                       <Select onChange={(v) => this.setState({isLost: v === 'Y'})}>
                         <Option value="">请选择</Option>
                         <Option value="Y">是</Option>
@@ -710,7 +727,7 @@ class BillDetail extends React.Component {
                   <FormItem {...formItemLayout} label="丢失类型">
                     {
                       getFieldDecorator('loseType',{
-                        initialValue: '', rules: [{ required: false, message: '请选择丢失类型!' }]
+                        initialValue: '',
                       })(
                         <SelectInvokeApi
                           typeCode="BILLING_APPLICATION"
@@ -836,7 +853,7 @@ class BillDetail extends React.Component {
                             <Button>
                               <Icon type="upload" />点击上传
                             </Button>
-                            <span className="file-tip">说明：未大签项目需要上传合同附件</span>
+                            <span className="file-tip">说明：未大签、其他开票项目需要上传合同附件</span>
                           </Upload>
                         )
                       }
@@ -845,13 +862,13 @@ class BillDetail extends React.Component {
                 </Row>
                 <Row gutter={40}>
                   <Col span={14}>
-                    <FormItem {...formItemLayout1} label="开票要求">
+                    <FormItem {...formItemLayout1} label="开票原因及要求">
                       {
                         getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [
                           { required: requirementType.includes(this.props.billType) || this.state.isRequireRate, message: this.props.billType === 'BILLING_RED' ? '请在此处填写退票原因!' : '请填写开票原因' },
-                          { max: 350, message: '开票要求不能超过350个字符!' }
+                          { max: 350, message: '开票原因及要求不能超过350个字符!' }
                         ]})(
-                          <TextArea placeholder="请输入开票要求" rows="2" />
+                          <TextArea placeholder="请输入开票原因及要求" rows="2" />
                         )
                       }
                     </FormItem>
@@ -904,14 +921,12 @@ class BillDetail extends React.Component {
                   </Col>
                 </Row>
                 <Row gutter={40}>
-                  <Col span={8} key={1}>
-                    <FormItem {...formItemLayout2} label="E-mail">
+                  <Col span={14} key={1}>
+                    <FormItem {...formItemLayout1} label="E-mail">
                       {getFieldDecorator('receiptEmail', {
-                        initialValue: this.props.currentUser.email, rules: [{
-                          type: 'email', message: '请输入正确的E-mail!',
-                        }, { required: true, message: '请填写E-mail!' }]
+                        initialValue: [this.props.currentUser.email], rules: [{ required: true, message: '请填写E-mail!' }]
                       })(
-                        <Input placeholder="E-mail"/>
+                        <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" />
                       )}
                     </FormItem>
                   </Col>
@@ -947,24 +962,27 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="附件">
                       {
-                        getFieldDecorator('file', { rules: [{ required: this.state.showDetail === false && this.props.isRed, message: '请上传附件!' }] })(
-                          <Upload {...props} fileList={this.state.fileList}>
-                            <Button>
-                              <Icon type="upload" />点击上传
-                            </Button>
-                          </Upload>
-                        )
+                        filePath ?
+                          <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+                          :
+                          getFieldDecorator('file', { rules: [{ required: this.state.showDetail === false && this.props.isRed, message: '请上传附件!' }] })(
+                            <Upload {...props} fileList={this.state.fileList}>
+                              <Button>
+                                <Icon type="upload" />点击上传
+                              </Button>
+                            </Upload>
+                          )
                       }
                     </FormItem>
                   </Col>
                 </Row>
                 <Row gutter={40}>
                   <Col span={14}>
-                    <FormItem {...formItemLayout1} label="开票要求">
+                    <FormItem {...formItemLayout1} label="开票原因及要求">
                       {
-                        getFieldDecorator('billingApplicantRequest', {rules: [
-                          { required: this.state.showDetail === false && this.props.isRed, message: '请填写开票要求' },
-                          { max: 350, message: '开票要求不能超过350个字符!' }
+                        getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [
+                          { required: this.state.showDetail === false && this.props.isRed, message: '请填写开票原因及要求' },
+                          { max: 350, message: '开票原因及要求不能超过350个字符!' }
                         ]})(
                           <TextArea placeholder="请输入开票要求" rows="2" />
                         )

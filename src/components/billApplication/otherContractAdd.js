@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Button, Row, Col, Modal, Icon, Input } from 'antd'
+import InputSearch from './inputSearch'
 import SelectSearch from './selectSearch'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import { clientCols, comCols, proCols } from './billColumns'
@@ -23,16 +24,25 @@ class OtherContractAdd extends React.Component {
           billingApplicationType: this.props.billType,
           custName: values.custName[1],
           comName: values.comName[1],
-          projectNo: values.projectNo[1],
+          projectNo: values.projectNo ? values.projectNo.tempProjectNo : '',
+          sbuNo: values.projectNo ? values.projectNo.sbuNo : '',
+          sbuName: values.projectNo ? values.projectNo.sbuName : '',
+          costcenterNo: values.projectNo ? values.projectNo.costcenterNo : '',
+          costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
+          tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
         } : {
           ...values,
           billingApplicationType: this.props.billType,
           arBillingId: record.arBillingId,
           custName: values.custName[1],
           comName: values.comName[1],
-          projectNo: values.projectNo[1],
+          projectNo: values.projectNo ? values.projectNo.tempProjectNo : '',
+          sbuNo: values.projectNo ? values.projectNo.sbuNo : '',
+          sbuName: values.projectNo ? values.projectNo.sbuName : '',
+          costcenterNo: values.projectNo ? values.projectNo.costcenterNo : '',
+          costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
+          tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
         }
-        console.log(params)
         this.props.addAction(params)
       }
     });
@@ -100,15 +110,15 @@ class OtherContractAdd extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('projectNo', {initialValue: ['', projectNo], rules: [{ required: true, message: '请选择项目编码!' }]})(
-                    <SelectSearch
+                  {getFieldDecorator('projectNo', {initialValue: {tempProjectNo: projectNo}, rules: [{ required: true, message: '请选择项目编码!' }]})(
+                    <InputSearch
                       url="/arc/billingApplication/projectNo/search"
                       columns={proCols}
                       label="项目编码"
-                      idKey="tempProjectNo"
+                      idKey="tempProjectId"
                       valueKey="tempProjectNo"
                       billType={this.props.billType}
-                      showSearch={true}
+                      width="800px"
                     />
                   )}
                 </FormItem>

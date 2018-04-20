@@ -20,7 +20,7 @@ const formItemLayout1 = {
   wrapperCol: { span: 8 },
 }
 const span3ItemLayout = {
-  labelCol: { span: 2 },
+  labelCol: { span: 3 },
   wrapperCol: { span: 20 },
 }
 
@@ -49,24 +49,14 @@ class BillApproveDetail extends React.Component  {
     if(this.props.setFormValidate) {
       this.props.setFormValidate(dataSource)
     }
-  }
-  componentWillReceiveProps(nextProps) {
-    if(this.props.serviceDetail !== nextProps.serviceDetail && nextProps.serviceDetail) {
-      const dataSource = nextProps.serviceDetail.appLineList.map(detail => ({
-          ...detail,
-          isParent: 1,
-          quantity: detail.quantity ? detail.quantity : 1,
-          lineNo: detail.lineNo - 1,
-          totalAmount: detail.billingAmount ? detail.billingAmount : 0,
-        })
-      )
-      this.setState({dataSource: dataSource})
-    }
+    //AR财务会计&&其他事项开票可修改城建税
+    this.isEditTax = props.taskCode === 'ar_finance_account' && props.applyType === 'BILLING_EXCESS'
+
   }
 
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;
-    const newData = {
+    let newData = {
       lineNo: count,
       groupNo: 1,
       isParent: 0,
@@ -83,6 +73,15 @@ class BillApproveDetail extends React.Component  {
       billingTaxAmount: 0,
       billingAmountExcludeTax: 0,
     };
+    if(this.isEditTax) {
+      newData = Object.assign(newData, {
+        constructionTax: 0,
+        educationTax: 0,
+        incomeTax: 0,
+        addTaxAmount: 0,
+      })
+    }
+
     const data = dataSource.filter(r=> r.arBillingId === arBillingId)
     dataSource.splice(lineNo + data.length, 0, newData)
     const source = dataSource.map((record, index) => ({
@@ -244,12 +243,12 @@ class BillApproveDetail extends React.Component  {
         const params = isAgainInvoice !== 'false' ? {
           ...values,
           billingApplicationId: this.props.serviceDetail.billingApplicationId,
-          billingApplicationType: this.props.applyType,
+          billingApplicationType: values.billFlow ? values.billFlow : this.props.applyType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
           appLineItems: this.state.dataSource.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,
-          }))
+          })),
         } : {
             ...values,
             billingApplicationId: this.props.serviceDetail.billingApplicationId,
@@ -287,30 +286,45 @@ class BillApproveDetail extends React.Component  {
   }
 
   getTaxData = () => {
-    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totalTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, addTaxAmount, totalTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    let constructionTotal = 0
+    let educationTotal = 0
+    let incomeTotal = 0
+    let addTotal = 0
+    this.state.dataSource.map(r => {
+      constructionTotal += r.constructionTax ? r.constructionTax : 0
+      educationTotal += r.educationTax ? r.educationTax : 0
+      incomeTotal += r.incomeTax ? r.incomeTax : 0
+      addTotal += r.addTaxAmount ? r.addTaxAmount : 0
+    })
+
     return [{
       title: '城建',
       taxRate: constructionTax,
-      tax: constructionTaxAmount,
+      tax: constructionTotal.toFixed(2),
     }, {
       title: '教育',
       taxRate: educationTax,
-      tax: educationTaxAmount,
+      tax: educationTotal.toFixed(2),
     }, {
       title: '所得税',
       taxRate: incomeTax,
-      tax: incomeTaxAmount,
+      tax: incomeTotal.toFixed(2),
+    }, {
+      title: '增值税',
+      taxRate: '',
+      tax: addTotal.toFixed(2),
     }, {
       title: '合计',
       taxRate: '',
-      tax: totalTaxAmount,
+      tax: (constructionTotal + educationTotal + incomeTotal + addTotal).toFixed(2),
     }]
   }
 
   render() {
     const { getFieldDecorator } = this.props.form
     const { billingType, billingDate, billingApplicantRequest, comInfo ={}, custInfo = {}, contractList, outcomeList,
-      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName } = this.props.serviceDetail
+      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName, costBear } = this.props.serviceDetail
     //是否红冲发票
     const isReceiveInvoice = showReceive.includes(this.props.applyType)
     //AR管理员
@@ -319,7 +333,11 @@ class BillApproveDetail extends React.Component  {
     const isArFinanceAccount = this.props.taskCode === 'ar_finance_account'
     //税务审核人
     const isTaxAuditor = this.props.taskCode === 'tax_auditor'
-    const detailData = [{
+    //项目经理
+    const isProManager = this.props.taskCode === 'project_manager'
+
+    const detailData = [
+      {
       title: '购买方',
       customerName: custInfo.billingCustName,
       taxPayer: custInfo.taxpayerIdentificationNumber,
@@ -342,7 +360,7 @@ class BillApproveDetail extends React.Component  {
       },
       selectedRowKeys: this.state.selectedRowKeys,
     }
-    const columns = [
+    let columns = [
       {
       title: '操作',
       dataIndex: 'action',
@@ -535,7 +553,58 @@ class BillApproveDetail extends React.Component  {
         )
       }
     }]
-
+    if(this.isEditTax) {
+      const taxColumns = [{
+        title: '城建税税额',
+        dataIndex: 'constructionTax',
+        width: 100,
+        render: (text, record, index) => {
+          return (
+            <InputNumber
+              value={this.state.dataSource[index]['constructionTax']}
+              onChange={(v) => this.handleChange(v, 'constructionTax', index)}
+            />
+          )
+        }
+      }, {
+        title: '教育税税额',
+        dataIndex: 'educationTax',
+        width: 100,
+        render: (text, record, index) => {
+          return (
+            <InputNumber
+              value={this.state.dataSource[index]['educationTax']}
+              onChange={(v) => this.handleChange(v, 'educationTax', index)}
+            />
+          )
+        }
+      }, {
+        title: '所得税税额',
+        dataIndex: 'incomeTax',
+        width: 100,
+        render: (text, record, index) => {
+          return (
+            <InputNumber
+              value={this.state.dataSource[index]['incomeTax']}
+              onChange={(v) => this.handleChange(v, 'incomeTax', index)}
+            />
+          )
+        }
+      }, {
+        title: '增值税税额',
+        dataIndex: 'addTaxAmount',
+        width: 100,
+        render: (text, record, index) => {
+          return (
+            <InputNumber
+              value={this.state.dataSource[index]['addTaxAmount']}
+              onChange={(v) => this.handleChange(v, 'addTaxAmount', index)}
+            />
+          )
+        }
+      }]
+      columns = columns.concat(taxColumns)
+    }
     return (
       <div>
         <div className="infoPanel">
@@ -591,7 +660,7 @@ class BillApproveDetail extends React.Component  {
                           paramCode="RED_OR_INVALID"
                           placeholder="退票类型"
                           hasEmpty
-                          disabled={this.props.taskCode === 'tax_auditor'}
+                          disabled={isTaxAuditor}
                         />
                       )
                     }
@@ -599,7 +668,7 @@ class BillApproveDetail extends React.Component  {
                 </Col> : null
             }
             {
-              this.props.taskCode === 'tax_auditor' ?
+              isTaxAuditor ?
                 <Col span={8}>
                   <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
                     {
@@ -613,6 +682,25 @@ class BillApproveDetail extends React.Component  {
           :
           <div>
             <Row gutter={40}>
+              {
+                this.props.applyType === 'BILLING_EXCESS' ?
+                  <Col span={8}>
+                    <FormItem {...formItemLayout} label="费用承担者">
+                      {
+                        isProManager ?
+                        getFieldDecorator('costBear',{initialValue: costBear, rules: [{ required: isProManager, message: '请选择费用承担者!' }]})(
+                          //项目经理可以修改费用承担者
+                            <SelectInvokeApi
+                              typeCode="BILLING_APPLICATION"
+                              paramCode="COST_BEAR"
+                              placeholder="费用承担着"
+                              hasEmpty
+                            />
+                        ): costBearName
+                      }
+                    </FormItem>
+                  </Col> : null
+              }
               <Col span={8}>
                 <FormItem {...formItemLayout} label="开票类型">
                   {
@@ -624,6 +712,7 @@ class BillApproveDetail extends React.Component  {
                         paramCode="BILLING_TYPE"
                         placeholder="开票类型"
                         hasEmpty
+                        disabled={isProManager}
                       />
                     )
                   }
@@ -633,7 +722,7 @@ class BillApproveDetail extends React.Component  {
                 <FormItem {...formItemLayout} label="开票日期">
                   {
                     getFieldDecorator('billingDate', {initialValue: moment(billingDate, dateFormat)})(
-                      <DatePicker format="YYYY-MM-DD"/>,
+                      <DatePicker format="YYYY-MM-DD" disabled={isProManager}/>,
                     )
                   }
                 </FormItem>
@@ -643,8 +732,8 @@ class BillApproveDetail extends React.Component  {
                   <Col span={8}>
                     <FormItem {...formItemLayout} label="是否收到发票">
                       {
-                        getFieldDecorator(this.props.taskCode === 'tax_auditor' ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
-                          {initialValue: this.props.taskCode === 'tax_auditor' ? receiptOutcomeTaxVp : receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
+                        getFieldDecorator(isTaxAuditor ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
+                          {initialValue: isTaxAuditor ? receiptOutcomeTaxVp : receiptOutcome, rules: [{ required: isReceiveInvoice, message: '请选择是否收到发票!' }]})(
                           <Select>
                             <Option value="Y">是</Option>
                             <Option value="N">否</Option>
@@ -677,15 +766,7 @@ class BillApproveDetail extends React.Component  {
             {
               <Row gutter={40}>
                 {
-                  this.props.applyType === 'BILLING_EXCESS' ?
-                    <Col span={8}>
-                      <FormItem {...formItemLayout} label="费用承担者">
-                        {costBearName}
-                      </FormItem>
-                    </Col> : null
-                }
-                {
-                  this.props.taskCode === 'tax_auditor' && isReceiveInvoice ?
+                  isTaxAuditor && isReceiveInvoice ?
                     <Col span={8}>
                       <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                         {
@@ -706,7 +787,7 @@ class BillApproveDetail extends React.Component  {
                               paramCode="RED_OR_INVALID"
                               placeholder="退票类型"
                               hasEmpty
-                              disabled={this.props.taskCode === 'tax_auditor'}
+                              disabled={isTaxAuditor}
                             />
                           )
                         }
@@ -737,50 +818,52 @@ class BillApproveDetail extends React.Component  {
               rowKey={record => record.lineNo}
               bordered
               size="small"
-              columns={columns}
+              columns={isProManager ? invoiceLineCols : columns}
               pagination={false}
               dataSource={this.state.dataSource}
-              scroll={{ x: '1600px' }}
+              scroll={{ x: this.isEditTax ? '2000px' : '1600px' }}
             />
             {
               this.props.applyType === 'BILLING_EXCESS' ?
                 <div className="arc-info">
                   <Table
-                    style={{width: '70%'}}
-                    rowKey="id"
-                    size="small"
-                    bordered
-                    columns={totalColumns}
-                    dataSource={this.getTaxData()}
-                    pagination={false}
-                  />
+                  style={{width: '70%'}}
+                  rowKey="id"
+                  size="small"
+                  bordered
+                  columns={totalColumns}
+                  dataSource={this.getTaxData()}
+                  pagination={false}
+                />
                 </div> : null
             }
             <Row gutter={40}>
-              <Col span={24}>
+              <Col span={19}>
                 <FormItem {...span3ItemLayout} label="备注">
-                  {
+                  {!isProManager ?
                     getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 350, message: '备注不能超过350个字符!' }]})(
                       <TextArea placeholder="备注" rows="2" />
-                    )
+                    ) : billingApplicantRemark
                   }
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={40}>
-              <Col span={24}>
-                <FormItem {...span3ItemLayout} label="开票要求">
-                  {
-                    getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票要求不能超过350个字符!' }]})(
-                      <TextArea placeholder="请输入开票要求" rows="2" />
-                    )
+              <Col span={19}>
+                <FormItem {...span3ItemLayout} label="开票原因及要求">
+                  {!isProManager ?
+                    getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票原因及要求不能超过350个字符!' }]})(
+                      <TextArea placeholder="请输入开票原因及要求" rows="2" />
+                    ) : billingApplicantRequest
                   }
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={40}>
-              <Col span={24}>
-                <span className="file-label">附件:</span> <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+              <Col span={19}>
+                <FormItem {...span3ItemLayout} label="附件">
+                  <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+                </FormItem>
               </Col>
             </Row>
           </div>
@@ -802,5 +885,4 @@ class BillApproveDetail extends React.Component  {
   }
 }
 
-//export default Form.create()(BillApproveDetail)
 export default BillApproveDetail

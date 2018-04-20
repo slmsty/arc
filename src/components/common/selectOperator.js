@@ -11,7 +11,7 @@ class SelectOperator extends React.Component {
   state = {
     visible: false,
     pageNo: 1,
-    pageSize: 8,
+    pageSize: 1000,
     total: 1,
     customerList: [],
     selectedRowKeys: [],
@@ -25,6 +25,7 @@ class SelectOperator extends React.Component {
     }
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log('selectedRows',selectedRows)
     this.setState({ selectedRowKeys, selectedRows })
   }
   columns = [{
@@ -73,6 +74,7 @@ class SelectOperator extends React.Component {
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
+      console.log(response.result)
       this.setState({
         customerList: response.result,
         firstLoad: false,

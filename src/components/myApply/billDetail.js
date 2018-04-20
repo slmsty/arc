@@ -1,13 +1,13 @@
 import React from 'react'
 import { Table, Row, Col } from 'antd'
-import { proColumns, billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
+import { billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
 import './billApproveDetail.css'
 const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
 
 
 class BillDetail extends React.Component  {
   getTaxData = () => {
-    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, totaTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, addTaxAmount, totalTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
     return [{
       title: '城建',
       taxRate: constructionTax,
@@ -21,9 +21,13 @@ class BillDetail extends React.Component  {
       taxRate: incomeTax,
       tax: incomeTaxAmount,
     }, {
+      title: '增值税',
+      taxRate: '',
+      tax: addTaxAmount,
+    }, {
       title: '合计',
       taxRate: '',
-      tax: totaTaxAmount,
+      tax: totalTaxAmount,
     }]
   }
   render() {
@@ -150,7 +154,7 @@ class BillDetail extends React.Component  {
               <div style={{padding: '10px 0'}}>
                 <Row gutter={40}>
                   <Col span={24}>
-                    开票要求: {billingApplicantRequest}
+                    开票原因及要求: {billingApplicantRequest}
                   </Col>
                 </Row>
               </div>

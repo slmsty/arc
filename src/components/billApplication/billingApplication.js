@@ -36,12 +36,6 @@ export default class BillingApplication extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    /*if(this.props.billList !== nextProps.billList && nextProps.billList) {
-      this.setState({
-        selectedRows: nextProps.billList.slice(0, 1),
-        selectedRowKeys: [0],
-      })
-    }*/
     if(this.props.updateSuccess !== nextProps.updateSuccess && nextProps.updateSuccess) {
       message.success('申请信息修改成功!')
       this.setState({
@@ -56,7 +50,6 @@ export default class BillingApplication extends React.Component {
         updateVisible: false,
         otherAddVisible: false,
         currentRecord: {},
-        //selectedRowKeys: [0],
       })
       this.getInitQuery()
     } else if(this.props.redApplySuccess != nextProps.redApplySuccess && nextProps.redApplySuccess) {
@@ -76,6 +69,8 @@ export default class BillingApplication extends React.Component {
   setQueryParams = (param) => {
     this.setState({
       queryParam: param,
+      selectedRows: [],
+      selectedRowKeys: [],
     })
   }
 
@@ -97,7 +92,7 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '项目编码',
         dataIndex: 'projectNo',
-        width: 150,
+        width: 120,
         fixed: 'left',
       }, {
         title: '签约公司',
@@ -110,11 +105,11 @@ export default class BillingApplication extends React.Component {
       }, {
         title: '合同名称',
         dataIndex: 'contractName',
-        width: 260,
+        width: 330,
       }, {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 220,
+        width: 260,
       }, {
         title: '付款条件',
         dataIndex: 'paymentTerm',
@@ -145,7 +140,7 @@ export default class BillingApplication extends React.Component {
         width: 100,
       }, {
         title: '提前开票原因',
-        dataIndex: 'advanceBillingReason',
+        dataIndex: 'advanceBillingReasonName',
         width: 130,
       }, {
         title: '预计回款日期',
@@ -337,15 +332,20 @@ export default class BillingApplication extends React.Component {
       contractItems.push({
         arBillingId: b.arBillingId,
         contractItemId: b.contractItemId,
+        fundId: b.fundId,
       })
     })
     const param = {
       billingApplicationType: this.state.currentType,
       contractItems,
     }
-    const contractId = this.state.selectedRows ? this.state.selectedRows[0].contractId : ''
+    if(!(this.state.currentType === 'BILLING_UN_CONTRACT' || this.state.currentType === 'BILLING_OTHER')) {
+      const contractId = this.state.selectedRows ? this.state.selectedRows[0].contractId : ''
+      console.log(contractId)
+      this.props.getContractUrl(contractId)
+    }
     this.props.billApplyEdit(param)
-    this.props.getContractUrl(contractId)
+
   }
 
   handleAddBill = () => {
@@ -409,7 +409,7 @@ export default class BillingApplication extends React.Component {
   getScrollWidth() {
     let scroll = null
     if(normalTypes.includes(this.state.currentType)){
-      scroll = { x: 2760 }
+      scroll = { x: 2850 }
     } else if (redTypes.includes(this.state.currentType)) {
       scroll = { x: 1800 }
     } else if (advanceTypes.includes(this.state.currentType)) {

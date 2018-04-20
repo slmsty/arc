@@ -25,11 +25,15 @@ import BadDebtsStatus from './badDebts/Status'
 import ApplyListContainer from './myApply/applyList'
 import ContractSplit from './ContractSplit/contractSplit'
 import BillStatusManage from './BillManage/billStatusManage'
-import StatementSearch from './statementSearch/statementList'
+import ContractSplitReport from './statementSearch/contractSplitReport'
+import OutcomeReceiptReport from './statementSearch/ountcomeReceiptReport'
 import BillingApplication from '../containers/billApplication/billApplication'
 import Login from '../containers/login/login'
 import MyApply from '../containers/myApply/myApplay'
 import MailConfig from '../containers/system/mailConfig'
+import CustomerTaxInfo from '../containers/system/customerTaxInfo'
+import CustomerContent from '../containers/system/customerContent'
+import AuthoritySet from "../components/system/authoritySet";
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -91,14 +95,21 @@ class IndexContainer extends React.Component {
       return BillingApplication
     } else if (component === 'BillStatusManage') {
       return BillStatusManage
-    } else if (component === 'statementSearch') {
-      return StatementSearch
     } else if(component === 'myApplyContainer'){
       return MyApply
     } else if(component === 'mailConfig'){
       return MailConfig
+    } else if(component === 'customerTaxInfo') {
+      return CustomerTaxInfo
+    } else if(component === 'customerContent') {
+      return CustomerContent
+    } else if(component === 'AUTH_SET') {
+      return AuthoritySet
+    } else if (component === 'outcomeReceiptReport') {
+      return OutcomeReceiptReport
+    }else if (component === 'contractSplitReport') {
+      return ContractSplitReport
     }
-
   }
   getMenuRoutes = (menus) => {
     if (menus && menus.length > 0) {
@@ -122,10 +133,11 @@ class IndexContainer extends React.Component {
       <Router basename={process.env.PUBLIC_URL}>
         <div style={{ height: '100%' }}>
           <Switch>
-            <Route exact path="/login" component={Login} />
             <Index {...this.props}>
+              <Switch>
                 {menuRoutes}
-                {/*<Route component={NoMatch} />*/}
+                <Route component={NoMatch} />
+              </Switch>
             </Index>
           </Switch>
         </div>

@@ -3,6 +3,7 @@ import React from 'react'
 import { Table, Button, message, Icon, Popconfirm, Upload, Modal } from 'antd'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import currency from '../../util/currency'
 import ManualEntryBankTurnoverSearchWithForm from './manualEntryBankTurnoverSearch'
 import EditManualEntryBankTurnoverDataWithForm from './editManualEntryBankTurnoverData'
 
@@ -250,7 +251,7 @@ export default class ManualEntryBankTurnover extends React.Component {
             dataIndex: 'receiptAmount',
             key: 'receiptAmount',
             width: 100,
-            render: text => (<div style={{ textAlign: 'right' }}>{text ? text.toFixed(2) : '0.00'}</div>),
+            render: text => (<div style={{ textAlign: 'right' }}>{text ? currency(text) : currency(0)}</div>),
           }, {
             title: '客户名称',
             dataIndex: 'custName',

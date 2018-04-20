@@ -41,7 +41,7 @@ class SelectSearch extends React.Component {
       return
     }
     const selectedRow = this.state.selectedRows[0]
-    this.props.onChange([selectedRow[this.props.idKey], selectedRow[this.props.valueKey]])
+    this.props.onChange(selectedRow)
     this.handleCancel()
   }
 
@@ -64,43 +64,25 @@ class SelectSearch extends React.Component {
   }
 
   handleQueryFetch= (pageNo) => {
-    if(this.props.showSearch) {
-      const keywords = this.props.form.getFieldValue('keywords')
-      const param = {
-        method: 'POST',
-        body: {
-          pageInfo: {
-            pageNo: pageNo || 1,
-            pageSize: this.state.pageSize,
-          },
-          keywords,
-          billingApplicationType: this.props.billType,
+    const keywords = this.props.form.getFieldValue('keywords')
+    const param = {
+      method: 'POST',
+      body: {
+        pageInfo: {
+          pageNo: pageNo || 1,
+          pageSize: this.state.pageSize,
         },
-      }
-      //this.setState({ loading: true })
-      requestJsonFetch(this.props.url, param, this.handleCallback)
-    } else {
-      this.setState({ loading: true })
-      requestJsonFetch(
-        this.props.url, {
-          method: 'GET'
-        }, (res) => {
-          if(res.resultCode === '000000') {
-            this.setState({
-              dataSource: res.data,
-              loading: false,
-            })
-          }
-        })
+        keywords,
+        billingApplicationType: this.props.billType,
+      },
     }
+    requestJsonFetch(this.props.url, param, this.handleCallback)
   }
+
 
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
-      this.setState(this.props.label === '申请人' ? {
-        dataSource: response.data,
-        loading: false,
-      } : {
+      this.setState({
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.count,
         dataSource: response.pageInfo.result,
@@ -112,14 +94,6 @@ class SelectSearch extends React.Component {
 
   handleEmitEmpty = () => {
     this.props.onChange('')
-  }
-
-  handleChange = (event) => {
-    let v = event.target.value
-    this.setState({
-      inputValue: v,
-    })
-    this.props.onChange([v, v])
   }
 
   render() {
@@ -136,18 +110,15 @@ class SelectSearch extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = (this.props.value && this.props.value[1] !== undefined) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : ''
+    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : ''
     return (
       <div>
         <Input
           style={{zIndex: '0'}}
           placeholder={this.props.label}
-          value={this.props.value && this.props.value[1] !== '' ? this.props.value[1] : this.state.inputValue}
+          value={this.props.value && this.props.value.tempProjectNo ? this.props.value.tempProjectNo : this.state.inputValue}
           suffix={suffix}
-          addonAfter={
-            <Icon type="search" onClick={ () => this.setState({ visible: true }) }/>
-          }
-          onChange={this.handleChange}
+          onClick={() => this.setState({ visible: true })}
         />
         <Modal
           title="选择"
@@ -197,7 +168,7 @@ class SelectSearch extends React.Component {
             locale={{
               emptyText: this.state.firstLoad ? '' : '没有符合条件的记录',
             }}
-            pagination={this.props.label === '申请人' ? false :{
+            pagination={{
               current: this.state.pageNo,
               onChange: this.handleChangePage,
               total: this.state.total,

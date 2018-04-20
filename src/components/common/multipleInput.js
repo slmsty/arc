@@ -4,7 +4,7 @@ import { Select } from 'antd'
 
 export default class MultipleInput extends React.Component {
   state = {
-    values: [],
+    values: this.props.value ? this.props.value : [],
   }
   textTemp = ''
   handleChange = (values) => {

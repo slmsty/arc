@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import { Table, Button, message, Modal, Form, Row, Col, DatePicker } from 'antd'
 import ReviewReceiptClaimSearchWithForm from './reviewReceiptClaimSearch'
 import GlDateModal from './glDateModal'
+import currency from '../../util/currency'
 import ShowTransferNotice from './showTransferNotice'
 
 const FormItem = Form.Item
@@ -48,7 +49,7 @@ const columns = [{
   title: '收款金额',
   dataIndex: 'receiptAmount',
   width: 100,
-  render: (text, record, index) => (text ? text.toFixed(2) : 0.00),
+  render: (text, record, index) => (text ? currency(text) : currency(0)),
 }, {
   title: '银行流水号',
   dataIndex: 'bankTransactionNo',
@@ -73,7 +74,7 @@ const columns = [{
   title: '认款金额',
   dataIndex: 'claimAmount',
   width: 100,
-  render: (text, record, index) => (text ? text.toFixed(2) : text),
+  render: (text, record, index) => (text ? currency(text) : currency(0)),
 }, {
   title: '收款用途',
   dataIndex: 'receiptUse',

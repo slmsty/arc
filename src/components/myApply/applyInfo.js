@@ -12,7 +12,7 @@ import './billApproveDetail.css'
 
 const FormItem = Form.Item
 const { TextArea } = Input
-const EDIT_ROLE_TYPE = ['ar_admin', 'ar_finance_account', 'tax_auditor']
+const EDIT_ROLE_TYPE = ['ar_admin', 'ar_finance_account', 'tax_auditor', 'project_manager']
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 
 class ApplyInfoModal extends React.Component {
@@ -36,91 +36,95 @@ class ApplyInfoModal extends React.Component {
   }
 
   applyConfirm = () => {
-    this.props.form.validateFields((err, values) => {
-      if(!err) {
-        const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
-        const isAgainInvoice = serviceDetail.isAgainInvoice
-        const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
-        if(isAgainInvoice !== 'false') {
-          this.state.approveData.map((record, index) => {
-            if(taskCode === 'ar_admin') {
-              if(this.fieldCheck(record.quantity)) {
-                message.error(`请填写第${index + 1}行的数量`)
-                err = true
-              } else if(this.fieldCheck(record.billingAmount)) {
-                message.error(`请填写第${index + 1}行的含税金额`)
-                err = true
-              } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
-                message.error(`请填写第${index + 1}行的税率`)
-                err = true
-              } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
-                message.error(`请填写第${index + 1}行的优惠政策类型`)
-                err = true
-              }
-            } else if(isTaxAndFinance) {
-              if(this.fieldCheck(record.billingContent)) {
-                message.error(`请填写第${index + 1}行的开票内容`)
-                err = true
-              } else if(this.fieldCheck(record.quantity)) {
-                message.error(`请填写第${index + 1}行的数量`)
-                err = true
-              } else if(this.fieldCheck(record.billingAmount)) {
-                message.error(`请填写第${index + 1}行的含税金额`)
-                err = true
-              } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
-                message.error(`请填写第${index + 1}行的税率`)
-                err = true
-              } else if(this.fieldCheck(record.taxCategoryCode)) {
-                message.error(`请填写第${index + 1}行的税收分类编码`)
-                err = true
-              } else if(this.fieldCheck(record.prefPolicySign)) {
-                message.error(`请填写第${index + 1}行的优惠政策`)
-                err = true
-              } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
-                message.error(`请填写第${index + 1}行的优惠政策类型`)
-                err = true
-              }
-            }
-          })
-        }
-        if(err) {
-          return
-        }
-        const params = isAgainInvoice !== 'false' ? {
-          ...values,
-          billingApplicationId: serviceDetail.billingApplicationId,
-          billingApplicationType: serviceType,
-          billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
-          appLineItems: this.state.approveData.map(record => ({
-            ...record,
-            lineNo: record.lineNo + 1,
-          }))
-        } : {
-          ...values,
-          billingApplicationId: serviceDetail.billingApplicationId,
-          billingApplicationType: serviceType,
-        }
-        requestJsonFetch('/arc/billingApplication/workFlowEdit', {
-          method: 'POST',
-          body: params,
-        }, (res) => {
-          const {resultCode, resultMessage, data} = res
-          if (resultCode === '000000') {
-            const params = {
-              arcFlowId: this.props.applyData.arcFlowId,
-              processInstanceId: this.props.applyData.processInstanceId,
-              businessKey: this.props.applyData.businessKey,
-              taskId: this.props.applyData.taskId,
-              approveType: 'agree',
-              approveRemark: this.trim(values.approveRemark),
-            }
-            this.props.applyComfirm(params)
-          } else {
-            message.error(resultMessage, 5)
+      this.props.form.validateFields((err, values) => {
+        if(!err) {
+          const approveParams = {
+            arcFlowId: this.props.applyData.arcFlowId,
+            processInstanceId: this.props.applyData.processInstanceId,
+            businessKey: this.props.applyData.businessKey,
+            taskId: this.props.applyData.taskId,
+            approveType: 'agree',
+            approveRemark: this.trim(values.approveRemark),
           }
-        })
-      }
-    })
+          if(BILL_APPLY_TYPE.includes(this.props.applyInfoData.serviceType)) {
+            const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
+            const isAgainInvoice = serviceDetail.isAgainInvoice
+            const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
+            if(isAgainInvoice !== 'false') {
+              this.state.approveData.map((record, index) => {
+                if(taskCode === 'ar_admin') {
+                  if(this.fieldCheck(record.quantity)) {
+                    message.error(`请填写第${index + 1}行的数量`)
+                    err = true
+                  } else if(this.fieldCheck(record.billingAmount)) {
+                    message.error(`请填写第${index + 1}行的含税金额`)
+                    err = true
+                  } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
+                    message.error(`请填写第${index + 1}行的税率`)
+                    err = true
+                  } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
+                    message.error(`请填写第${index + 1}行的优惠政策类型`)
+                    err = true
+                  }
+                } else if(isTaxAndFinance) {
+                  if(this.fieldCheck(record.billingContent)) {
+                    message.error(`请填写第${index + 1}行的开票内容`)
+                    err = true
+                  } else if(this.fieldCheck(record.quantity)) {
+                    message.error(`请填写第${index + 1}行的数量`)
+                    err = true
+                  } else if(this.fieldCheck(record.billingAmount)) {
+                    message.error(`请填写第${index + 1}行的含税金额`)
+                    err = true
+                  } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
+                    message.error(`请填写第${index + 1}行的税率`)
+                    err = true
+                  } else if(this.fieldCheck(record.taxCategoryCode)) {
+                    message.error(`请填写第${index + 1}行的税收分类编码`)
+                    err = true
+                  } else if(this.fieldCheck(record.prefPolicySign)) {
+                    message.error(`请填写第${index + 1}行的优惠政策`)
+                    err = true
+                  } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
+                    message.error(`请填写第${index + 1}行的优惠政策类型`)
+                    err = true
+                  }
+                }
+              })
+            }
+            if(err) {
+              return
+            }
+            const params = isAgainInvoice !== 'false' ? {
+              ...values,
+              billingApplicationId: serviceDetail.billingApplicationId,
+              billingApplicationType: serviceType,
+              billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
+              appLineItems: this.state.approveData.map(record => ({
+                ...record,
+                lineNo: record.lineNo + 1,
+              })),
+            } : {
+              ...values,
+              billingApplicationId: serviceDetail.billingApplicationId,
+              billingApplicationType: serviceType,
+            }
+            requestJsonFetch('/arc/billingApplication/workFlowEdit', {
+              method: 'POST',
+              body: params,
+            }, (res) => {
+              const {resultCode, resultMessage, data} = res
+              if (resultCode === '000000') {
+                this.props.applyComfirm(approveParams)
+              } else {
+                message.error(resultMessage, 5)
+              }
+            })
+          } else {
+            this.props.applyComfirm(approveParams)
+          }
+        }
+      })
   }
   applyReject = () => {
     const applyRejectQueryParam = {
@@ -314,7 +318,7 @@ class ApplyInfoModal extends React.Component {
             <Row>
               <Col style={{ textAlign: 'left' }} span={24}>
                 <FormItem>
-                  {getFieldDecorator('approveRemark')(
+                  {getFieldDecorator('approveRemark', {rules: [{ max: 25, message: '审批意见不能超过25个中文!' }]})(
                     <TextArea rows={5} placeholder="请输入审批意见"></TextArea>
                   )}
                 </FormItem>

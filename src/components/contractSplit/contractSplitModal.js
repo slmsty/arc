@@ -67,7 +67,7 @@ class ContractSplitModal extends React.Component{
     })
     this.state = {
       dataSource: dataSource.slice(0),
-      oldDataSource:_.cloneDeep(dataSource.slice(0)),
+      oldDataSource:_.cloneDeep(props.tableDetail),
       countCatalPrice: 0.00,
       rcontent: '',
       rcontentnum: 0,
@@ -120,6 +120,7 @@ class ContractSplitModal extends React.Component{
   }
   // 目录价计算
   calculateListPrice = (newData,data) => {
+    console.log('目录价计算')
     const dataInfos = this.props.data
     const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
     const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
@@ -158,8 +159,7 @@ class ContractSplitModal extends React.Component{
     return newData
 }
   handleChange = (data) => {
-    const newData =this.state.dataSource.slice(0)
-
+    const newData =_.cloneDeep(this.state.dataSource)
     if(data){
       //const indexData = data.No && data.Name ? [data.No,data.Name] : ''
       const indexData = [data.No,data.Name]
@@ -228,7 +228,7 @@ class ContractSplitModal extends React.Component{
       // 如果产品编码为空，则取第一个数据为默认值
       if(!text && text != 0) {
         text = this.props.productNoData.length && this.props.productNoData[0].productNo ? this.props.productNoData[0].productNo : '0'
-        this.handleChange({No:text,Name:text,indexs:index,columns:column})
+        //this.handleChange({No:text,Name:text,indexs:index,columns:column})
       }
       return ( <ProductNo
         placeholder="产品编码"
@@ -351,7 +351,8 @@ class ContractSplitModal extends React.Component{
     newData[index].contractAmountTaxInclude = (parseFloat(listPrice) * (1 - parseFloat(discount) * 0.01)).toFixed(2) // 合同含税额：等于折后合同额
     newData[index].contractAmountTaxExclude = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate))).toFixed(2) // 合同不含税额 根据合同含税额和合同税率计算出合同不含税额
     newData[index].returnTaxRevenue = (parseFloat(newData[index].contractAmountTaxInclude) / (1 + parseFloat(contractTaxRate)) * (parseFloat(returnTaxRate))).toFixed(2) // 退税收入含税额：等于合同含税额/(1+合同税率)*(退税率)
-    newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxInclude)/(1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
+    //newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxInclude)/(1 + parseFloat(contractTaxRate))).toFixed(2) // Gross Order：等于合同含税额/(1+合同税率)
+    newData[index].grossOrder = (parseFloat(newData[index].contractAmountTaxExclude) + parseFloat(newData[index].returnTaxRevenue)).toFixed(2)  //Gross Order = 合同不含税金额+退税额
     return newData
   }
   onTextAreaChange = (event) => {
@@ -817,7 +818,7 @@ class ContractSplitModal extends React.Component{
     for(let i in countTaskCostData){
       countTaskCost +=parseFloat(countTaskCostData[i])
     }
-    const coutnData = this.state.dataSource.slice(0)
+    const coutnData = dataSource
     coutnData.map((item) => {
       if (!item.parentOrderListLineId || item.parentOrderListLineId === '') {
         countCatalPrice += !item || !item.listPrice ? 0 : parseFloat(item.listPrice) // 合计目录价
@@ -889,9 +890,9 @@ class ContractSplitModal extends React.Component{
       width: 80,
       render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractTaxRate',record),
     }, {
-      title: '合同不含税额',
+      title: '合同不含税金额',
       dataIndex: 'contractAmountTaxExclude',
-      width: 100,
+      width: 120,
       render: (text, record, index) => record.taskOpration === '合计' ? currency(countsalePeo) : currency(text),
     }, {
       title: <span>退税率<em style={{ color: '#FF0000' }}>*</em></span>,
@@ -934,7 +935,7 @@ class ContractSplitModal extends React.Component{
       <div>
         <Modal
           wrapClassName="modal"
-          width={1024}
+          width={1200}
           maskClosable={false}
           title="合同拆分"
           visible={true}
@@ -1068,19 +1069,36 @@ class ContractSplitModal extends React.Component{
                   </div>
                 </Col>
               </Row>
-              <Row className="text-css contractRowBorderLeft contractRowBorderTop">
+              <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
                 <Col span={4} className="contract-bg">
-                  软件解决方案保修期：
+                  E-咨询金额：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
-                    {constractData.solutionMaintain}
+                    {constractData.counselAmount ? currency(constractData.counselAmount) : 0}
+                  </div>
+
+                </Col>
+                <Col span={3} className="contractRowBorderLeft  contract-bg">
+                  F-运营金额：
+                </Col>
+                <Col span={4} className="contractRowBorderLeft">
+                  <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
+                    {constractData.operatingAmount ? currency(constractData.operatingAmount) : 0}
                   </div>
                 </Col>
                 <Col span={3} className="contractRowBorderLeft contract-bg">
+                  软件解决方案保修期：<em style={{ color: '#FF0000' }}>*</em>：：
+                </Col>
+                <Col span={5} style={{ textAlign: 'left', paddingLeft: '2px' }} className="contractRowBorderLeft contractRowBorderRight constractInput">
+                  {constractData.solutionMaintain}
+                </Col>
+              </Row>
+              <Row className="text-css contractRowBorderLeft contractRowBorderTop">
+                <Col span={4} className="contract-bg">
                   维护服务开始时间：
                 </Col>
-                <Col span={4} className="contractRowBorderLeft">
+                <Col span={5} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     {constractData.maintainStartDate}
                   </div>
@@ -1088,17 +1106,15 @@ class ContractSplitModal extends React.Component{
                 <Col span={3} className="contractRowBorderLeft contract-bg">
                   维护服务结束时间：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contractRowBorderRight">
+                <Col span={4} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     {constractData.maintainEndDate}
                   </div>
                 </Col>
-              </Row>
-              <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
-                <Col span={4} className="contract-bg">
+                <Col span={3} className="contractRowBorderLeft contract-bg">
                   保修期开始时间<em style={{ color: '#FF0000' }}>*</em>：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft">
+                <Col span={5} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>
                     {getFieldDecorator('maintainBeginDate', {
                       initialValue: constractData.maintainBeginDate,
@@ -1112,55 +1128,77 @@ class ContractSplitModal extends React.Component{
                     )}
                   </FormItem>
                 </Col>
-                <Col span={3} className="contractRowBorderLeft  contract-bg">
+              </Row>
+
+
+              <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
+                <Col span={4} className="contract-bg">
                   合同拆分操作人：
                 </Col>
-                <Col span={4} className="contractRowBorderLeft">
+                <Col span={5} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     {constractData.splitedByName ? (this.state.editFlag ? constractData.splitedByName : this.props.user) : <div style={{display: this.state.editFlag ? 'none' : 'inline-block'}}>{this.props.user}</div>  }
                   </div>
                 </Col>
-                <Col span={3} className="contractRowBorderLeft contract-bg">
+                <Col span={3} className="contractRowBorderLeft  contract-bg">
                   关联BU：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contractRowBorderRight constractInput">
+                <Col span={4} className="contractRowBorderLeft">
                   <FormItem>
                     {
                       getFieldDecorator('relatedBuNo',{initialValue:[constractData.relatedBuNo,constractData.relatedBuNoName]},)(<SelectSbu keyName='contract' disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
-              </Row>
-              <Row className="text-css contractRowBorder">
-                <Col span={4} className="contract-bg ">
+                <Col span={3} className="contractRowBorderLeft contract-bg">
                   C-FORM版本GM%：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft">
+                <Col span={5} className="contractRowBorderLeft contractRowBorderRight constractInput">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     {constractData.cFormGm}
                   </div>
                 </Col>
-                <Col span={3} className="contractRowBorderLeft contract-bg">
+              </Row>
+              <Row className="text-css contractRowBorder contractRowBorderTop">
+                <Col span={4} className="contract-bg">
                   收入结算方式<em style={{ color: '#FF0000' }}>*</em>：
                 </Col>
-                <Col span={7} className="contractRowBorderLeft" style={{ textAlign: 'left',paddingLeft: '2px'}}>
+                <Col span={5} className="contractRowBorderLeft">
+                  <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
+                    <FormItem>
+                      {getFieldDecorator('revenueCheckout', {
+                        /*initialValue: constractData['revenueCheckout'] ? constractData['revenueCheckout']: this.state.selectCountType,*/
+                        initialValue: this.state.selectCountType,
+                      })(
+                        <Checkbox.Group disabled={this.state.editFlag}>
+                          <Checkbox value="POC">POC</Checkbox>
+                          <Checkbox value="RATABLY">RATABLY</Checkbox>
+                          <Checkbox value="FA">FA</Checkbox>
+                        </Checkbox.Group>
+                      )}
+                    </FormItem>
+                  </div>
+                </Col>
+                <Col span={3} className="contractRowBorderLeft  contract-bg">
+                  考核比率：
+                </Col>
+                <Col span={4} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>
-                    {getFieldDecorator('revenueCheckout', {
-                      /*initialValue: constractData['revenueCheckout'] ? constractData['revenueCheckout']: this.state.selectCountType,*/
-                      initialValue: this.state.selectCountType,
+                    {getFieldDecorator('assessRatio', {
+                      initialValue: constractData.assessRatio,
                     })(
-                      <Checkbox.Group disabled={this.state.editFlag}>
-                        <Checkbox value="POC">POC</Checkbox>
-                        <Checkbox value="RATABLY">RATABLY</Checkbox>
-                        <Checkbox value="FA">FA</Checkbox>
-                      </Checkbox.Group>
+                      <InputNumber
+                        disabled={this.state.editFlag}
+                        style={{width:'100%'}}
+                        defaultValue={constractData.status==='Y'? this.state.assessRatio : ''}
+                        onChange={this.changeAssessRation}
+                        formatter={value => `${value}%`}
+                        parser={value => value.replace('%', '')}
+                        onBlur={this.blur}/>
                     )}
                   </FormItem>
                 </Col>
-                <Col span={2} className="contractRowBorderLeft contract-bg" style={{left:'1px'}}>
-                  考核比率：
-                </Col>
-                <Col span={3} className="contractRowBorderLeft">
+                {/*<Col span={4} className="contractRowBorderLeft">
                   <InputNumber
                     disabled={this.state.editFlag}
                     style={{width:'100%'}}
@@ -1172,10 +1210,7 @@ class ContractSplitModal extends React.Component{
                     formatter={value => `${value}%`}
                     parser={value => value.replace('%', '')}
                     onBlur={this.blur}/>
-                  {/*<div className="contractRowBorderNo">
-                    {this.state.assessRatio}
-                  </div>*/}
-                </Col>
+                </Col>*/}
               </Row>
               <br />
               <br />
@@ -1270,7 +1305,7 @@ class ContractSplitModal extends React.Component{
                 columns={columns}
                 size="middle"
                 scroll={{ x: this.getTableWidth(columns) }}
-                dataSource = {dataSource}
+                dataSource = {this.state.dataSource}
                 pagination={false}
               />
               <h2>外购成本预算</h2>
@@ -1282,7 +1317,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={18} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>
                     {
-                      getFieldDecorator('task1Cost',{initialValue:constractData.task1Cost ? currency(constractData.task1Cost) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task1Cost')} disabled={this.state.editFlag} />)
+                      getFieldDecorator('task1Cost',{initialValue:constractData.task1Cost ? constractData.task1Cost : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task1Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
 
@@ -1318,7 +1353,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={4} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('task5Cost',{initialValue:constractData.task5Cost ? currency(constractData.task5Cost) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task5Cost')} disabled={this.state.editFlag} />)
+                      getFieldDecorator('task5Cost',{initialValue:constractData.task5Cost ? constractData.task5Cost : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task5Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
@@ -1328,7 +1363,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={8} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>
                     {
-                      getFieldDecorator('task9Cost',{initialValue:constractData.task9Cost ? currency(constractData.task9Cost) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task9Cost')} disabled={this.state.editFlag} />)
+                      getFieldDecorator('task9Cost',{initialValue:constractData.task9Cost ? constractData.task9Cost : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task9Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
@@ -1384,13 +1419,13 @@ class ContractSplitModal extends React.Component{
                   Net Order(Legal)：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
-                  <Input className="contractRowBorderNo" value={currency(countGrossOrder)} disabled />
+                  <Input className="contractRowBorderNo" value={currency((countGrossOrder - this.state.countTaskCostData["task5Cost"]).toFixed(2) )} disabled />
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
                   Net Order（Management)：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
-                  <Input name="" className="contractRowBorderNo" value={currency(countGrossOrder)} disabled />
+                  <Input name="" className="contractRowBorderNo" value={currency((countGrossOrder - (this.state.countTaskCostData["task5Cost"] + this.state.countTaskCostData["task9Cost"])).toFixed(2) )} disabled />
                 </Col>
               </Row>
               <br />

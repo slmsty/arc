@@ -26,6 +26,22 @@ const proCols = [{
   title: '项目名称',
   dataIndex: 'tempProjectName',
   width: 100,
+},{
+  title: 'BUNo',
+  dataIndex: 'sbuNo',
+  width: 100,
+},{
+  title: 'BU名称',
+  dataIndex: 'sbuName',
+  width: 100,
+},{
+  title: '成本中心No',
+  dataIndex: 'costcenterNo',
+  width: 100,
+},{
+  title: '成本中心名称',
+  dataIndex: 'costcenterName',
+  width: 100,
 }]
 
 const invoiceCols = [{
@@ -81,6 +97,9 @@ const totalColumns = [
     title: '税率',
     dataIndex: 'taxRate',
     width: 150,
+    render: (text, record) => {
+      return record.taxRate ? `${parseInt((record.taxRate) * 100)}%` : ''
+    }
   }, {
     title: '税额',
     dataIndex: 'tax',
@@ -124,11 +143,11 @@ const proColumns = [{
   width: 300,
 }, {
   title: '提前开票原因',
-  dataIndex: 'preInvoiceReason',
+  dataIndex: 'advanceBillingReason',
   width: 300,
 }, {
   title: '预计回款日期',
-  dataIndex: 'preReceiveDate',
+  dataIndex: 'receiptReturnDate',
   width: 150,
 }, {
   title: '付款条件',

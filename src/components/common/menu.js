@@ -7,12 +7,19 @@ import { Menu } from 'antd'
 const SubMenu = Menu.SubMenu
 
 export default class MenuComponent extends React.Component {
+  handleMenuClick = (menu) => {
+    if(menu.component === 'AUTH_SET') {
+      window.open(menu.path, '_blank')
+    } else {
+      sessionStorage.setItem('roleButtons', JSON.stringify(menu.child))
+    }
+  }
   render() {
     const menus = this.props.menu ? this.props.menu.map((menu) => {
       if (menu.child && menu.child.length > 0) {
         const childMenus = menu.child.map(childMenu => (
           <Menu.Item key={childMenu.key}>
-            <Link to={childMenu.path} onClick={() => sessionStorage.setItem('roleButtons', JSON.stringify(childMenu.child))}>
+            <Link to={childMenu.path} onClick={() => this.handleMenuClick(childMenu)}>
               <i className={`iconfont ${childMenu.icon}`} />&nbsp;{childMenu.name}</Link>
           </Menu.Item>)
         )

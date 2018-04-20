@@ -23,25 +23,37 @@ class BillUpdate extends React.Component {
     this.props.form.validateFields((err, values) => {
       if(!err) {
         const { record, isAdd } = this.props;
+        console.log(values.projectNo)
         const params = isAdd ? {
           ...values,
           billingApplicationType: this.props.billType,
           comName: values.comName[1],
           custName: values.custName[1],
-          projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
           receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
+          projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo.tempProjectNo,
+          sbuNo: values.projectNo ? values.projectNo.sbuNo : '',
+          sbuName: values.projectNo ? values.projectNo.sbuName : '',
+          costcenterNo: values.projectNo ? values.projectNo.costcenterNo : '',
+          costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
+          tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
         } : {
           ...values,
           billingApplicationType: this.props.billType,
           arBillingId: record.arBillingId,
           contractItemId: record.contractItemId,
+          fundId: record.fundId,
           comId: values.comName[0],
           comName: values.comName[1],
           custId: values.custName[0],
           custName: values.custName[1],
-          projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo[1],
           receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
           billingOutcomeId: normalTypes.includes(this.props.billType) && values.billingOutcomeId ? values.billingOutcomeId[0] : '',
+          projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo.tempProjectNo,
+          sbuNo: values.projectNo ? values.projectNo.sbuNo : '',
+          sbuName: values.projectNo ? values.projectNo.sbuName : '',
+          costcenterNo: values.projectNo ? values.projectNo.costcenterNo : '',
+          costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
+          tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
         }
         this.props.billAction(params)
       }
@@ -136,7 +148,7 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
-                  {getFieldDecorator('projectNo', {initialValue: this.props.isProCodeEdit ? record.projectNo : ['', record.projectNo] ,rules: [{ required: true, message: '请选择项目编码!' }]})(
+                  {getFieldDecorator('projectNo', {initialValue: this.props.isProCodeEdit ? record.projectNo : {tempProjectNo: record.projectNo} ,rules: [{ required: true, message: '请选择项目编码!' }]})(
                     this.props.isProCodeEdit ?
                       <Input disabled={this.props.billType === 'BILLING_UN_CONTRACT_PROJECT'? false : true}/>
                       :
@@ -148,6 +160,7 @@ class BillUpdate extends React.Component {
                         valueKey="tempProjectNo"
                         billType={this.props.billType}
                         showSearch={true}
+                        width="800px"
                       />
                   )}
                 </FormItem>

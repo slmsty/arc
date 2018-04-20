@@ -16,8 +16,15 @@ export default class SelectRadioApi extends React.Component {
     if (this.props.typeCode && this.props.paramCode) {
       requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
     }
-    if(this.props.typeCode === 'STATEMENT'){
-      requestJsonFetch(`/arc/report/getReportTypeList`, { method: 'get' }, this.handleCallback)
+    if(this.props.typeCode === 'STATEMENT' && this.props.reportType){
+      let url = '/arc/report/getReportTypeList/CONTRACT_SPLIT_REPORT'
+      if (this.props.reportType === 'contractReport') {
+        url = `/arc/report/getReportTypeList/CONTRACT_SPLIT_REPORT`;
+      }
+      if (this.props.reportType === 'outcomeReceiptReport') {
+        url = `/arc/report/getReportTypeList/OUTCOME_RECEIPT_REPORT`;
+      }
+      requestJsonFetch(url, { method: 'get' }, this.handleCallback)
     }
   }
   handleCallback = (response) => {

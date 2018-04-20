@@ -29,7 +29,7 @@ const reciptMoneyInfoCols = [{
     title: '应收金额',
     dataIndex: 'billedArAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   }, {
     title: '收款日期',
     dataIndex: 'receiptDate',
@@ -43,7 +43,7 @@ const reciptMoneyInfoCols = [{
     title: '收款金额',
     dataIndex: 'claimAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   }, {
     title: '合同编号',
     dataIndex: 'contractNo',
@@ -73,7 +73,7 @@ const reciptMoneyInfoCols = [{
     title: '已开票金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
 ]
 //发票信息查询表
@@ -106,13 +106,13 @@ const billInfocomCols = [{
     title: '应收金额',
     dataIndex: 'shouldReciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '申请开票金额',
     dataIndex: 'applyBillMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '开票日期',
@@ -128,7 +128,7 @@ const billInfocomCols = [{
     title: '开票金额',
     dataIndex: 'billMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '开票类型',
@@ -174,7 +174,7 @@ const billInfocomCols = [{
     title: '收款金额',
     dataIndex: 'reciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
 
 ]
@@ -219,13 +219,13 @@ const billAndReciptMoneyCols = [{
     title: '应收金额',
     dataIndex: 'shouldReciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '应收余额',
     dataIndex: 'shouldReciptRemianMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '收款日期',
@@ -241,7 +241,7 @@ const billAndReciptMoneyCols = [{
     title: '收款金额',
     dataIndex: 'reciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '开票日期',
@@ -252,7 +252,7 @@ const billAndReciptMoneyCols = [{
     title: '开票金额',
     dataIndex: 'billMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '发票号',
@@ -263,7 +263,7 @@ const billAndReciptMoneyCols = [{
     title: '扣款',
     dataIndex: 'deductMmoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '坏账划销',
@@ -309,43 +309,43 @@ const shouldReciptCols = [{
     title: '合同总额',
     dataIndex: 'contractTotalMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '其他金额（扣款等）',
     dataIndex: 'otherMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '已收款金额',
     dataIndex: 'reciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '合同未收款金额',
     dataIndex: 'contractDidnotReciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '开票金额',
     dataIndex: 'billMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '开票金额',
     dataIndex: 'billDidnotReciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
 ]
 // 项目综合信息查询报表
 const projectTotalCols = [{
   title: '签约公司',
-  dataIndex: 'siginCommey',
+  dataIndex: 'signCompany',
   width: 200,
 }, {
   title: '项目编码',
@@ -357,7 +357,7 @@ const projectTotalCols = [{
   width: 200,
 }, {
   title: '节点',
-  dataIndex: 'node',
+  dataIndex: 'projectNode',
   width: 80,
 },
   {
@@ -372,12 +372,12 @@ const projectTotalCols = [{
   },
   {
     title: '客户名称',
-    dataIndex: 'constromerName',
+    dataIndex: 'custName',
     width: 200,
   },
   {
     title: '签约时间',
-    dataIndex: 'siginDate',
+    dataIndex: 'signDate',
     width: 120,
   },
   {
@@ -387,54 +387,54 @@ const projectTotalCols = [{
   },
   {
     title: '合同总额',
-    dataIndex: 'contactTotalMoney',
+    dataIndex: 'contarctAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '扣款金额',
-    dataIndex: 'remainMoeny',
+    dataIndex: 'remainMoeny1',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '累计应收账款',
-    dataIndex: 'totalShouldReciptMoney',
+    dataIndex: 'receivableAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '应收账款余额',
-    dataIndex: 'shouldReciptRemainMoney',
+    dataIndex: 'receivableAmountLeft',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '累计已收账款',
-    dataIndex: 'totalReciptedMoney',
+    dataIndex: 'receiptAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '收款比例',
-    dataIndex: 'reciptRate',
+    dataIndex: 'rate',
     width: 80,
   },
   {
     title: '累计已开票金额',
-    dataIndex: 'totalBilledMoney',
+    dataIndex: 'billingAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '未开票金额',
-    dataIndex: 'notBilledMoney',
+    dataIndex: 'notInvoicedAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: 'BU',
-    dataIndex: 'BU',
+    dataIndex: 'bu',
     width: 80,
   },
   {
@@ -460,17 +460,17 @@ const totalContractContentColumns = [
   },
   {
     title: '签约日期',
-    dataIndex: 'siginDate',
+    dataIndex: 'signDate',
     width: 120,
   },
   {
     title: '签约公司',
-    dataIndex: 'siginCOmey',
+    dataIndex: 'signCompany',
     width: 200,
   },
   {
     title: '客户名称',
-    dataIndex: 'comstromerName',
+    dataIndex: 'custName',
     width: 200,
   },
   {
@@ -485,12 +485,12 @@ const totalContractContentColumns = [
   },
   {
     title: '立项区域',
-    dataIndex: 'projecteara',
+    dataIndex: 'projectAr',
     width: 100,
   },
   {
     title: '销售经理',
-    dataIndex: 'saleManager',
+    dataIndex: 'salesManager',
     width: 100,
   },
   {
@@ -505,26 +505,26 @@ const totalContractContentColumns = [
   },
   {
     title: '合同总额',
-    dataIndex: 'contractTotalMoney',
+    dataIndex: 'contarctAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: 'BILLED AR',
-    dataIndex: 'billedAR',
+    dataIndex: 'billedAr',
     width: 80,
   },
   {
     title: '累计开票金额',
     dataIndex: 'totalBillMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '已回款总额',
-    dataIndex: 'totalReciptMoney',
+    dataIndex: 'totalReciptMoney1',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
 ]
 // 转包项目表
@@ -568,7 +568,7 @@ const turnProColumns = [{
     title: '应收金额',
     dataIndex: 'shouldReciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '收款日期',
@@ -579,7 +579,7 @@ const turnProColumns = [{
     title: '收款金额',
     dataIndex: 'reciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '客户名称',
@@ -595,7 +595,7 @@ const turnProColumns = [{
     title: '开票金额',
     dataIndex: 'billedMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '发票号',
@@ -646,7 +646,7 @@ const turnProColumns = [{
     title: '应收金额',
     dataIndex: 'shouldReciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '收款日期',
@@ -657,7 +657,7 @@ const turnProColumns = [{
     title: '收款金额',
     dataIndex: 'reciptMoney',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
 ]
 // 合同拆分查询表
@@ -691,30 +691,36 @@ const constructSplitSearchColumns = [{
     title: '合同税率',
     dataIndex: 'contractTaxRate',
     width: 70,
-    render: (text,rocord,index)=>(text ? (text*100).toFixed(0)+'%' : 0)
+    render: (text, rocord, index) => (text ? (text * 100).toFixed(0) + '%' : 0)
   },
   {
     title: '退税率',
     dataIndex: 'returnTaxRate',
     width: 60,
-    render: (text,rocord,index)=>(text ? (text*100).toFixed(0)+'%' : 0)
+    render: (text, rocord, index) => (text ? (text * 100).toFixed(0) + '%' : 0)
   },
   {
     title: 'Task',
     dataIndex: 'contractCategory',
-    width: 50,
+    width: 100,
   },
   {
     title: '合同额',
     dataIndex: 'contractAmount',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: 'Gross order',
     dataIndex: 'grossOrder',
     width: 100,
-    render: (text,rocord,index)=>(text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title: ' Gross Order含退税额',
+    dataIndex: 'grossOrderIncludeRetRate',
+    width: 120,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '结算方式',
@@ -763,6 +769,302 @@ const constructSplitSearchColumns = [{
   },
 ]
 
+// 发票明细数据表
+const billInfoCols = [
+  {
+    title:'开票日期',
+    dataIndex: 'billingDate',
+    width: 100,
+  },
+  {
+    title:'发票号',
+    dataIndex: 'invoceNumber',
+    width: 100,
+  },
+  {
+    title:'合同编码',
+    dataIndex: 'contractNo',
+    width: 100,
+  },
+  {
+    title:'项目编码',
+    dataIndex: 'projectNo',
+    width: 100,
+  },
+  {
+    title:'项目立项部门',
+    dataIndex: 'projectDept',
+    width: 100,
+  },
+  {
+    title:'项目立项BU',
+    dataIndex: 'projectBu',
+    width: 100,
+  },
+  {
+    title:'客户名称',
+    dataIndex: 'custName',
+    width: 100,
+  },
+  {
+    title:'开票内容',
+    dataIndex: 'billingContent',
+    width: 100,
+  },
+  {
+    title:'开票阶段',
+    dataIndex: 'billingPhase',
+    width: 100,
+  },
+  {
+    title:'含税金额',
+    dataIndex: 'taxIncludeAmount',
+    width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'除税金额',
+    dataIndex: 'taxExcludeAmount',
+    width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'销项税',
+    dataIndex: 'totalReciptMoney',
+    width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'备注',
+    dataIndex: 'remark',
+    width: 150,
+  },
+  {
+    title:'发票税率',
+    dataIndex: 'billingTaxRate',
+    width: 100,
+  },
+]
+// 发票汇总数据
+const outcomeTotalReportCols = [
+  {
+    title:'项目编码',
+    dataIndex: 'projectNo',
+    width: 100,
+  },
+  {
+    title:'项目立项部门',
+    dataIndex: 'projectDept',
+    width: 100,
+  },
+  {
+    title:'项目立项BU',
+    dataIndex: 'projectBu',
+    width: 100,
+  },
+  {
+    title:'当月开票含税金额',
+    dataIndex: 'taxIncludeAmountMonth',
+    width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'当月开票除税金额',
+    dataIndex: 'taxExcludeAmountMonth',
+    width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'销项税',
+    dataIndex: 'tax',
+    width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'开票税率',
+    dataIndex: 'billingTaxRate',
+    width: 100,
+  },
+]
+
+// 未大签提前开票数据补充
+const unContractOutcomeDataAddCols = [
+  {
+    title:'发票号',
+    dataIndex: 'invoiceNumber',
+    width: 100,
+  },
+  {
+    title:'合同编码',
+    dataIndex: 'contractNo',
+    width: 100,
+  },
+  {
+    title:'项目编码',
+    dataIndex: 'projectNo',
+    width: 100,
+  },
+  {
+    title:'项目立项部门',
+    dataIndex: 'projectDept',
+    width: 100,
+  },
+  {
+    title:'项目立项BU',
+    dataIndex: 'projectBu',
+    width: 100,
+  },
+  {
+    title:'客户名称',
+    dataIndex: 'custName',
+    width: 100,
+  },
+  {
+    title:'开票内容',
+    dataIndex: 'billingContent',
+    width: 100,
+  },
+  {
+    title:'开票阶段',
+    dataIndex: 'billingPhase',
+    width: 100,
+  },
+  {
+    title:'含税金额',
+    dataIndex: 'taxIncludeAmount',
+    width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'除税金额',
+    dataIndex: 'taxExcludeAmount',
+    width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'销项税',
+    dataIndex: 'tax',
+    width: 100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'备注',
+    dataIndex: 'remark',
+    width: 120,
+  },
+  {
+    title:'发票税率',
+    dataIndex: 'billingTaxRate',
+    width: 100,
+  }
+]
+
+// 项目order明细
+const productOrderDetailCols = [
+  {
+    title:'合同名称',
+    dataIndex:'contractName',
+    width:200,
+  },
+  {
+    title:'签约日期',
+    dataIndex:'signDate',
+    width:100,
+  },
+  {
+    title:'签约公司',
+    dataIndex:'signCompany',
+    width:400,
+  },
+  {
+    title:'合同编码',
+    dataIndex:'contractNo',
+    width:300,
+  },
+  {
+    title:'立项BU',
+    dataIndex:'projectBu',
+    width:100,
+  },
+  {
+    title:'Sale签约BU',
+    dataIndex:'salesBu',
+    width:100,
+  },
+  {
+    title:'项目代码',
+    dataIndex:'projectNo',
+    width:100,
+  },
+  {
+    title:'合同总金额',
+    dataIndex:'contractAmount',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'Gross Order',
+    dataIndex:'grossOrder',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'Net Order(L)',
+    dataIndex:'netOrderL',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'Net Order(M)',
+    dataIndex:'netOrderM',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'外购成本预算',
+    dataIndex:'orderCost',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+]
+
+// 项目Order汇总
+const productOrderTotalCols = [
+  {
+    title:'立项BU',
+    dataIndex:'projectBu',
+    width:100,
+  },
+  {
+    title:'年度／季度／月度',
+    dataIndex:'time',
+    width:80,
+  },
+  {
+    title:'税前合同额',
+    dataIndex:'contractAmount',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'Gross Order',
+    dataIndex:'grossOrder',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'Net Order(L)',
+    dataIndex:'netOrderL',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title:'Net Order(M)',
+    dataIndex:'netOrderM',
+    width:100,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+]
 
 
 export {
@@ -774,5 +1076,10 @@ export {
   totalContractContentColumns,
   turnProColumns,
   constructSplitSearchColumns,
+  billInfoCols,
+  outcomeTotalReportCols,
+  unContractOutcomeDataAddCols,
+  productOrderTotalCols,
+  productOrderDetailCols
 }
 

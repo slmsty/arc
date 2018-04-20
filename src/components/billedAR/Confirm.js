@@ -6,6 +6,7 @@ import SelectInvokeApi from '../common/selectInvokeApi'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import ARModal from './ARModal'
 import GlDateModal from './glDateModal'
+import currency from '../../util/currency'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 
@@ -80,7 +81,7 @@ class Confirm extends Component{
         title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
         dataIndex: 'billedArAmount',
         width: 120,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '备注',
@@ -101,7 +102,7 @@ class Confirm extends Component{
         title: '合同金额',
         dataIndex: 'contractAmount',
         width: 120,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '合同编码',
@@ -137,25 +138,25 @@ class Confirm extends Component{
         title: '付款金额',
         dataIndex: 'paymentAmount',
         width: 120,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '应收金额',
         dataIndex: 'arAmount',
         width: 120,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '考核含税金额',
         dataIndex: 'assessTaxIncludedAmount',
         width: 120,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '收入额',
         dataIndex: 'revenueAmount',
         width: 120,
-        render: (text, record, index) => (text ? text.toFixed(2) : text),
+        render: (text, rocord, index) => (text ? currency(text) : currency(0))
       },
       {
         title: '提示',
