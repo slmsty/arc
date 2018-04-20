@@ -253,13 +253,13 @@ export default class ApplySearchCon extends React.Component {
     queryParam.status = 'Y'
     this.props.getContractList(queryParam).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
-        console.log(res.response.pageInfo.result[0])
         this.showModals(res.response.pageInfo.result[0])
       }
     })
   }
 
   render() {
+    console.log('renderlines',this.state.selectedRows.orderListLines)
     const columns = [{
       title: '拆分状态',
       dataIndex: 'status',
