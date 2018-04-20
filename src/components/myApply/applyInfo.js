@@ -120,12 +120,11 @@ class ApplyInfoModal extends React.Component {
                 message.error(resultMessage, 5)
               }
             })
-          }else {
+          } else {
             this.props.applyComfirm(approveParams)
           }
         }
       })
-    }
   }
   applyReject = () => {
     const applyRejectQueryParam = {
