@@ -49,18 +49,14 @@ class BillApproveDetail extends React.Component  {
     if(this.props.setFormValidate) {
       this.props.setFormValidate(dataSource)
     }
-  }
+    //AR财务会计&&其他事项开票可修改城建税
+    this.isEditTax = props.taskCode === 'ar_finance_account' && props.applyType === 'BILLING_EXCESS'
 
-  sum = (array) => {
-    let sum = array.reduce((a, b) => {
-      return a + b
-    }, 0)
-    return sum.toFixed(2)
   }
 
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;
-    const newData = {
+    let newData = {
       lineNo: count,
       groupNo: 1,
       isParent: 0,
@@ -77,6 +73,15 @@ class BillApproveDetail extends React.Component  {
       billingTaxAmount: 0,
       billingAmountExcludeTax: 0,
     };
+    if(this.isEditTax) {
+      newData = Object.assign(newData, {
+        constructionTax: 0,
+        educationTax: 0,
+        incomeTax: 0,
+        addTaxAmount: 0,
+      })
+    }
+
     const data = dataSource.filter(r=> r.arBillingId === arBillingId)
     dataSource.splice(lineNo + data.length, 0, newData)
     const source = dataSource.map((record, index) => ({
@@ -282,26 +287,37 @@ class BillApproveDetail extends React.Component  {
 
   getTaxData = () => {
     const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, addTaxAmount, totalTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    let constructionTotal = 0
+    let educationTotal = 0
+    let incomeTotal = 0
+    let addTotal = 0
+    this.state.dataSource.map(r => {
+      constructionTotal += r.constructionTax ? r.constructionTax : 0
+      educationTotal += r.educationTax ? r.educationTax : 0
+      incomeTotal += r.incomeTax ? r.incomeTax : 0
+      addTotal += r.addTaxAmount ? r.addTaxAmount : 0
+    })
+
     return [{
       title: '城建',
       taxRate: constructionTax,
-      tax: constructionTaxAmount,
+      tax: constructionTotal.toFixed(2),
     }, {
       title: '教育',
       taxRate: educationTax,
-      tax: educationTaxAmount,
+      tax: educationTotal.toFixed(2),
     }, {
       title: '所得税',
       taxRate: incomeTax,
-      tax: incomeTaxAmount,
+      tax: incomeTotal.toFixed(2),
     }, {
       title: '增值税',
       taxRate: '',
-      tax: addTaxAmount,
+      tax: addTotal.toFixed(2),
     }, {
       title: '合计',
       taxRate: '',
-      tax: totalTaxAmount,
+      tax: (constructionTotal + educationTotal + incomeTotal + addTotal).toFixed(2),
     }]
   }
 
@@ -319,7 +335,9 @@ class BillApproveDetail extends React.Component  {
     const isTaxAuditor = this.props.taskCode === 'tax_auditor'
     //项目经理
     const isProManager = this.props.taskCode === 'project_manager'
-    const detailData = [{
+
+    const detailData = [
+      {
       title: '购买方',
       customerName: custInfo.billingCustName,
       taxPayer: custInfo.taxpayerIdentificationNumber,
@@ -342,7 +360,7 @@ class BillApproveDetail extends React.Component  {
       },
       selectedRowKeys: this.state.selectedRowKeys,
     }
-    const columns = [
+    let columns = [
       {
       title: '操作',
       dataIndex: 'action',
@@ -535,6 +553,58 @@ class BillApproveDetail extends React.Component  {
         )
       }
     }]
+    if(this.isEditTax) {
+      const taxColumns = [{
+        title: '城建税税额',
+        dataIndex: 'constructionTax',
+        width: 100,
+        render: (text, record, index) => {
+          return (
+            <InputNumber
+              value={this.state.dataSource[index]['constructionTax']}
+              onChange={(v) => this.handleChange(v, 'constructionTax', index)}
+            />
+          )
+        }
+      }, {
+        title: '教育税税额',
+        dataIndex: 'educationTax',
+        width: 100,
+        render: (text, record, index) => {
+          return (
+            <InputNumber
+              value={this.state.dataSource[index]['educationTax']}
+              onChange={(v) => this.handleChange(v, 'educationTax', index)}
+            />
+          )
+        }
+      }, {
+        title: '所得税税额',
+        dataIndex: 'incomeTax',
+        width: 100,
+        render: (text, record, index) => {
+          return (
+            <InputNumber
+              value={this.state.dataSource[index]['incomeTax']}
+              onChange={(v) => this.handleChange(v, 'incomeTax', index)}
+            />
+          )
+        }
+      }, {
+        title: '增值税税额',
+        dataIndex: 'addTaxAmount',
+        width: 100,
+        render: (text, record, index) => {
+          return (
+            <InputNumber
+              value={this.state.dataSource[index]['addTaxAmount']}
+              onChange={(v) => this.handleChange(v, 'addTaxAmount', index)}
+            />
+          )
+        }
+      }]
+      columns = columns.concat(taxColumns)
+    }
     return (
       <div>
         <div className="infoPanel">
@@ -751,7 +821,7 @@ class BillApproveDetail extends React.Component  {
               columns={isProManager ? invoiceLineCols : columns}
               pagination={false}
               dataSource={this.state.dataSource}
-              scroll={{ x: '1600px' }}
+              scroll={{ x: this.isEditTax ? '2000px' : '1600px' }}
             />
             {
               this.props.applyType === 'BILLING_EXCESS' ?
