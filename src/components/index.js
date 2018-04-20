@@ -70,6 +70,9 @@ export default class Index extends React.Component {
         <Menu.Item key="1">
           <a target="_blank" rel="noopener noreferrer" href="https://kara-file.asiainfo.com/arc_work/ARC系统操作手册-开票申请-V1.0.docx">操作手册(开票申请)</a>
         </Menu.Item>
+        <Menu.Item key="2">
+          <a target="_blank" rel="noopener noreferrer" href="https://kara-file.asiainfo.com/arc_work/ARC系统操作手册-合同拆分-V1.0.docx">操作手册(合同拆分)</a>
+        </Menu.Item>
       </Menu>
     );
     return (
