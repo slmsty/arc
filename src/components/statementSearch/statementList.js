@@ -164,9 +164,9 @@ export default class StatementListIndex extends React.Component {
       currencyType:type,
     })
     if(type==='receiptInfoReport'){
-      let contractSplit = {}
-      contractSplit.contractSplit = param
-      this.queryParam = { ...this.queryParam,...contractSplit}
+      let receiptClaim = {}
+      receiptClaim.receiptClaim = param
+      this.queryParam = { ...this.queryParam,...receiptClaim}
     }
     if(type==='contractSplitReport'){
       let contractSplit = {}

@@ -16,7 +16,7 @@ const FormItem = Form.Item
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
 const dateFormat = 'YYYY-MM-DD'
-const { RangePicker } = DatePicker
+const { RangePicker,MonthPicker } = DatePicker
 const Option = Select.Option;
 const staffColumns = [
   {
@@ -120,7 +120,9 @@ class StatementListCom extends React.Component {
       param.signCompany = params.signCompany
       param.paymentName = params.paymentName
       param.contractName = params.contractName
+      param.custName = params.custName && params.custName.length ? params.custName[1] : ''
       param.isReport = 'Y'
+      console.log('param',param)
       this.setState({
         param
       })
@@ -199,7 +201,7 @@ class StatementListCom extends React.Component {
       param.signCompany = params.signCompany
       param.salesBu = params.salesBu && params.salesBu.length ? params.salesBu[0] : ''
       param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
-      param.personId = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
+      param.projectManager = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
       param.currency = params.currency
       this.setState({
         param
@@ -232,7 +234,7 @@ class StatementListCom extends React.Component {
       param.salesManager = params.salesManager
       param.contractNo = params.contractNo
       param.contractName = params.contractName
-      param.projectManager = params.projectManager
+      param.projectManager = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
       param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
 
       this.setState({
@@ -246,7 +248,7 @@ class StatementListCom extends React.Component {
       let param = {}
 
       param.projectNo = params.projectNo
-      param.custName = params.custName && params.custName.length ? params.custName[0] : ''
+      param.custName = params.custName && params.custName.length ? params.custName[1] : ''
       param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
       param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
       param.currency = params.currency
@@ -261,9 +263,8 @@ class StatementListCom extends React.Component {
     // 发票信息查询表
     if (statement === 'outcomeInfoReport') {
       let param = {}
-      console.log(8)
       param.projectNo = params.projectNo
-      param.custName = params.custName && params.custName.length ? params.custName[0] : ''
+      param.custName = params.custName && params.custName.length ? params.custName[1] : ''
       param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
       param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
       param.currency = params.currency
@@ -288,7 +289,7 @@ class StatementListCom extends React.Component {
       param.signCompany = params.signCompany
       param.contarctName = params.contarctName
       param.deadline = params.deadline
-      param.custName = params.custName && params.custName.length ? params.custName[0] : ''
+      param.custName = params.custName && params.custName.length ? params.custName[1] : ''
 
       this.setState({
         param
@@ -492,7 +493,7 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="项目编码">
                   {
                     getFieldDecorator('projectNo')(
-                      <MultipleInput
+                      <Input
                         placeholder="项目编码"
                       />,
                     )
@@ -1198,7 +1199,7 @@ class StatementListCom extends React.Component {
                   {getFieldDecorator('billingMonth', {
                     initialValue: moment(),
                   })(
-                    <DatePicker
+                    <MonthPicker
                       format={"YYYY-MM"}
                     />,
                   )}
@@ -1240,7 +1241,7 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="合同编码">
                   {getFieldDecorator('contractNo')(
                     <Input
-                      placeholder="请输入立项BU"
+                      placeholder="请输入合同编码"
                     />,
                   )}
                 </FormItem>

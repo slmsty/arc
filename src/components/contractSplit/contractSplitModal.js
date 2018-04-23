@@ -1317,7 +1317,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={18} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>
                     {
-                      getFieldDecorator('task1Cost',{initialValue:constractData.task1Cost ? constractData.task1Cost : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task1Cost')} disabled={this.state.editFlag} />)
+                      getFieldDecorator('task1Cost',{initialValue:constractData.task1Cost ? constractData.task1Cost : 0},)(<InputNumber style={{width:'100%'}} formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task1Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
 
@@ -1353,7 +1353,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={4} className="contractRowBorderLeft">
                   <FormItem>
                     {
-                      getFieldDecorator('task5Cost',{initialValue:constractData.task5Cost ? constractData.task5Cost : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task5Cost')} disabled={this.state.editFlag} />)
+                      getFieldDecorator('task5Cost',{initialValue:constractData.task5Cost ? constractData.task5Cost : 0},)(<InputNumber style={{width:'100%'}} formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task5Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
@@ -1363,7 +1363,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={8} className="contractRowBorderLeft contractRowBorderRight">
                   <FormItem>
                     {
-                      getFieldDecorator('task9Cost',{initialValue:constractData.task9Cost ? constractData.task9Cost : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task9Cost')} disabled={this.state.editFlag} />)
+                      getFieldDecorator('task9Cost',{initialValue:constractData.task9Cost ? constractData.task9Cost : 0},)(<InputNumber style={{width:'100%'}} formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task9Cost')} disabled={this.state.editFlag} />)
                     }
                   </FormItem>
                 </Col>
