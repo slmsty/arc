@@ -307,38 +307,44 @@ const shouldReciptCols = [{
   },
   {
     title: '合同总额',
-    dataIndex: 'contractTotalMoney',
+    dataIndex: 'contractAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
-    title: '其他金额（扣款等）',
-    dataIndex: 'otherMoney',
+    title: '考核金额',
+    dataIndex: 'assessmentAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
-    title: '已收款金额',
-    dataIndex: 'reciptMoney',
+    title: '坏账',
+    dataIndex: 'badAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
-    title: '合同未收款金额',
-    dataIndex: 'contractDidnotReciptMoney',
+    title: '其它（调尾差）',
+    dataIndex: 'otherAmount',
+    width: 130,
+    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },
+  {
+    title: '收款金额合计',
+    dataIndex: 'receiptClaimAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '开票金额',
-    dataIndex: 'billMoney',
+    dataIndex: 'billingAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
-    title: '开票金额',
-    dataIndex: 'billDidnotReciptMoney',
-    width: 100,
+    title: '已开票未回款金额',
+    dataIndex: 'invoicedNotReturnAmount',
+    width: 130,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
 ]
