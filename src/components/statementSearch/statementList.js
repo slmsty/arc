@@ -390,6 +390,7 @@ export default class StatementListIndex extends React.Component {
       current = getBillDetailList.pageNo
       total = getBillDetailList.count
       pageSize = getBillDetailList.pageSize
+      claimAmountTotal = currency(getBillDetailList.billingTotal)
     }
     if(type==='receiptAccountReport'){
       const getConfirmDetailList = this.props.statement.getConfirmDetailList;
@@ -413,6 +414,7 @@ export default class StatementListIndex extends React.Component {
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
     }
+    console.log('claimAmountTotal',claimAmountTotal)
     return (
       <div>
         <StatementWithFrom reportType={this.props.reportType} showCols={this.showCols} queryParms={this.queryParms} excel={this.excel} currencyType = {this.state.currencyType}/>

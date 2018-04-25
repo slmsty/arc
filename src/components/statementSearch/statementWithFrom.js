@@ -112,7 +112,7 @@ class StatementListCom extends React.Component {
       let param = {}
       param.projectNo = params.projectNo
       param.contractNo = params.contractNo
-      param.signDateStart = params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : ''
+      param.receiptDateStart = params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : ''
       param.receiptDateEnd = params.receiptDate && params.receiptDate.length ? params.receiptDate[1].format(dateFormat) : ''
       param.receiptCurrency = params.receiptCurrency
       param.claimAmountMin = params.claimAmountMin
@@ -120,7 +120,8 @@ class StatementListCom extends React.Component {
       param.signCompany = params.signCompany
       param.paymentName = params.paymentName
       param.contractName = params.contractName
-      param.custName = params.custName && params.custName.length ? params.custName[1] : ''
+      param.custName = params.custName
+      param.receiptNo = params.receiptNo
       param.isReport = 'Y'
       console.log('param',param)
       this.setState({
@@ -248,7 +249,7 @@ class StatementListCom extends React.Component {
       let param = {}
 
       param.projectNo = params.projectNo
-      param.custName = params.custName && params.custName.length ? params.custName[1] : ''
+      param.custName = params.custName
       param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
       param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
       param.currency = params.currency
@@ -264,7 +265,7 @@ class StatementListCom extends React.Component {
     if (statement === 'outcomeInfoReport') {
       let param = {}
       param.projectNo = params.projectNo
-      param.custName = params.custName && params.custName.length ? params.custName[1] : ''
+      param.custName = params.custName
       param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
       param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
       param.currency = params.currency
@@ -289,7 +290,7 @@ class StatementListCom extends React.Component {
       param.signCompany = params.signCompany
       param.contarctName = params.contarctName
       param.deadline = params.deadline
-      param.custName = params.custName && params.custName.length ? params.custName[1] : ''
+      param.custName = params.custName
 
       this.setState({
         param
@@ -380,7 +381,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="客户名称">
                   {getFieldDecorator('custName')(
-                    <SelectCustomerWithForm />,
+                    <Input />,
                   )}
                 </FormItem>
               </Col>
@@ -503,7 +504,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="客户名称">
                   {getFieldDecorator('custName')(
-                    <SelectCustomerWithForm />,
+                    <Input />,
                   )}
                 </FormItem>
               </Col>
@@ -533,14 +534,14 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <Row>
                   <Col span={14}>
-                    <FormItem {...formItemLayout} label="收款金额" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
-                      {getFieldDecorator('billingDateStart')(<Input />)}
+                    <FormItem {...formItemLayout} label="开票金额" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
+                      {getFieldDecorator('billingAmountMin')(<Input />)}
                     </FormItem>
                   </Col>
                   <Col span={2}><div style={{ textAlign: 'center' }}>～</div></Col>
                   <Col span={8}>
                     <FormItem {...formItemLayout} wrapperCol={{ span: 24 }}>
-                      {getFieldDecorator('billingDateEnd')(<Input />)}
+                      {getFieldDecorator('billingAmountMax')(<Input />)}
                     </FormItem>
                   </Col>
                 </Row>
@@ -625,7 +626,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="客户名称">
                   {getFieldDecorator('custId')(
-                    <SelectCustomerWithForm />,
+                    <Input />,
                   )}
                 </FormItem>
               </Col>
@@ -702,7 +703,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="客户名称">
                   {getFieldDecorator('custName')(
-                    <SelectCustomerWithForm />,
+                    <Input />,
                   )}
                 </FormItem>
               </Col>
@@ -779,7 +780,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="客户名称">
                   {getFieldDecorator('custName')(
-                    <SelectCustomerWithForm />,
+                    <Input />,
                   )}
                 </FormItem>
               </Col>
