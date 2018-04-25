@@ -259,7 +259,6 @@ export default class ApplySearchCon extends React.Component {
   }
 
   render() {
-    console.log('renderlines',this.state.selectedRows.orderListLines)
     const columns = [{
       title: '拆分状态',
       dataIndex: 'status',

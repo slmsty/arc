@@ -120,7 +120,6 @@ class ContractSplitModal extends React.Component{
   }
   // 目录价计算
   calculateListPrice = (newData,data) => {
-    console.log('目录价计算')
     const dataInfos = this.props.data
     const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
     const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
@@ -161,7 +160,6 @@ class ContractSplitModal extends React.Component{
   handleChange = (data) => {
     const newData =_.cloneDeep(this.state.dataSource)
     if(data){
-      //const indexData = data.No && data.Name ? [data.No,data.Name] : ''
       const indexData = [data.No,data.Name]
 
       if(data.columns){
@@ -459,7 +457,6 @@ class ContractSplitModal extends React.Component{
   // 拆分保存接口
   handleOk = () => {
     const coutnData = this.state.dataSource.slice(0)
-    console.log('coutnData',coutnData)
     const contractAmount = parseFloat(this.props.data.contractAmount)
     let totalListPrice = 0
     coutnData.map((item) => {
@@ -545,9 +542,8 @@ class ContractSplitModal extends React.Component{
 
     const newLisfInfo = []
     let j = 1
-    console.log('splitListInfo',splitListInfo)
     for(let i of splitListInfo) {
-      console.log('i.product',i.product)
+      //i.contractCategory.paramValueDesc =
       if (!i.contractCategory || i.contractCategory.length <=0) {
         message.error('合同类型不能为空！')
         return
@@ -585,10 +581,12 @@ class ContractSplitModal extends React.Component{
       let product = i.product
       let returnTaxRate = ''
       let contractTaxRate = ''
+
       if(typeof i.contractCategory ==='string'){
         contractCategory = i.contractCategory
       }else if (i.contractCategory && i.contractCategory.length > 0) {
         contractCategory = i.contractCategory[0]
+        i.taskDesc = i.contractCategory[1]
       }
       if(typeof i.product ==='string' || typeof i.product ==='number'){
         product = i.product
