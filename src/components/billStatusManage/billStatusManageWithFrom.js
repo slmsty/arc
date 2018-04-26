@@ -20,7 +20,7 @@ const applyColumns = [{
   },
   {
     title: '申请人编码',
-    dataIndex: 'accountId',
+    dataIndex: 'staffCode',
     width: 100,
 }]
 class BillStatusManageWithFormCon extends React.Component {
