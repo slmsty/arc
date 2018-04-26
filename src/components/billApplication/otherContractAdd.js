@@ -119,6 +119,7 @@ class OtherContractAdd extends React.Component {
                       valueKey="tempProjectNo"
                       billType={this.props.billType}
                       width="800px"
+                      showSearch={true}
                     />
                   )}
                 </FormItem>
