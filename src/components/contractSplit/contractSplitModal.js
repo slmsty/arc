@@ -1102,7 +1102,7 @@ class ContractSplitModal extends React.Component{
                   </div>
                 </Col>
                 <Col span={3} className="contractRowBorderLeft contract-bg">
-                  软件解决方案保修期：<em style={{ color: '#FF0000' }}>*</em>：
+                  软件解决方案保修期：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
@@ -1147,7 +1147,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={3} className="contractRowBorderLeft contract-bg">
                   合同拆分操作人：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contractRowBorderRight">
+                <Col span={5} className="contractRowBorderLeft contractRowBorderRight" style={{textAlign:'left'}}>
                   {constractData.splitedByName ? (this.state.editFlag ? constractData.splitedByName : this.props.user) : <div style={{display: this.state.editFlag ? 'none' : 'inline-block'}}>{this.props.user}</div>  }
                 </Col>
               </Row>
