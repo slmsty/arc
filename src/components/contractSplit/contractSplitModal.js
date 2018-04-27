@@ -1055,7 +1055,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
-                    {constractData.cSolution ? currency(constractData.cSolution) : 0}
+                    {constractData.cOperation ? currency(constractData.cOperation) : 0}
                   </div>
                 </Col>
                 <Col span={3} className="contractRowBorderLeft contract-bg">

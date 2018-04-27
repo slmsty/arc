@@ -964,7 +964,7 @@ const productOrderDetailCols = [
   {
     title:'合同名称',
     dataIndex:'contractName',
-    width:200,
+    width:400,
   },
   {
     title:'签约日期',
@@ -974,7 +974,7 @@ const productOrderDetailCols = [
   {
     title:'签约公司',
     dataIndex:'signCompany',
-    width:400,
+    width:200,
   },
   {
     title:'合同编码',
@@ -984,12 +984,12 @@ const productOrderDetailCols = [
   {
     title:'立项BU',
     dataIndex:'projectBu',
-    width:100,
+    width:130,
   },
   {
     title:'Sale签约BU',
     dataIndex:'salesBu',
-    width:100,
+    width:130,
   },
   {
     title:'项目代码',
