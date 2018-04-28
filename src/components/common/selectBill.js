@@ -8,7 +8,7 @@ class SelectBill extends React.Component {
   state = {
     visible: false,
     pageNo: 1,
-    pageSize: 3,
+    pageSize: 10,
     total: 1,
     receiptClaimList: [],
     selectedRowKeys: [],
@@ -107,6 +107,13 @@ class SelectBill extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
+    const pagination = {
+      pageSize: this.state.pageSize,
+      current: this.state.pageNo,
+      total: this.state.total,
+      onChange: this.handleChangePage,
+      size: 'small',
+    }
     const suffix = this.props.disabled ? (this.props.value && this.props.value[1]) :
       ((this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />)
     return (
@@ -132,7 +139,7 @@ class SelectBill extends React.Component {
           ]}
         >
           <Table
-            rowKey="receiptClaimId"
+            rowKey={record => record.receiptClaimId}
             columns={this.columns}
             rowSelection={rowSelection}
             bordered
@@ -142,12 +149,7 @@ class SelectBill extends React.Component {
             locale={{
               emptyText: this.state.firstLoad ? '' : '没有符合条件的票据',
             }}
-            pagination={{
-              current: this.state.pageNo,
-              onChange: this.handleChangePage,
-              total: this.state.total,
-              size: 'small',
-            }}
+            pagination={pagination}
           />
         </Modal>
       </div>
