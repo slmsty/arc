@@ -1044,25 +1044,25 @@ const productOrderTotalCols = [
     title:'税前合同额',
     dataIndex:'contractAmount',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? '$'+currency(text) : '$'+currency(0))
   },
   {
     title:'Gross Order',
     dataIndex:'grossOrder',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? '$'+currency(text) : '$'+currency(0))
   },
   {
     title:'Net Order(L)',
     dataIndex:'netOrderL',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? '$'+currency(text) : '$'+currency(0))
   },
   {
     title:'Net Order(M)',
     dataIndex:'netOrderM',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? '$'+currency(text) : '$'+currency(0))
   },
 ]
 
