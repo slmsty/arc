@@ -8,7 +8,7 @@ class SelectBill extends React.Component {
   state = {
     visible: false,
     pageNo: 1,
-    pageSize: 8,
+    pageSize: 3,
     total: 1,
     receiptClaimList: [],
     selectedRowKeys: [],
@@ -88,7 +88,7 @@ class SelectBill extends React.Component {
     if (response.resultCode === '000000') {
       this.setState({
         pageNo: response.pageInfo.pageNo,
-        total: response.pageInfo.pageCount,
+        total: response.pageInfo.count,
         receiptClaimList: response.pageInfo.result,
         firstLoad: false,
       })
