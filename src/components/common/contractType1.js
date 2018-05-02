@@ -32,7 +32,7 @@ export default class SelectInvokeApi extends React.Component {
     const options = this.state.options.slice(0)
     let name = ''
     for (let i = 0; i < options.length; i++) {
-      if (options[i].optionsValue == value ) {
+      if (options[i].paramValue === value ) {
         name = options[i].paramValueDesc
         break;
       }

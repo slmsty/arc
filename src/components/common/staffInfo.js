@@ -38,7 +38,7 @@ class StaffInfo extends React.Component {
   }
   columns = [{
     title: '编码',
-    dataIndex: 'personId',
+    dataIndex: 'staffCode',
     width: 200,
   }, {
     title: '名称',
@@ -51,7 +51,7 @@ class StaffInfo extends React.Component {
       message.error('请选择记录')
       return
     }
-    this.props.onChange([this.state.selectedRows[0].personId, this.state.selectedRows[0].staffName])
+    this.props.onChange([this.state.selectedRows[0].staffCode, this.state.selectedRows[0].staffName])
     this.handleCancel()
   }
   handleCancel = () => {
