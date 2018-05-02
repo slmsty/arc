@@ -195,7 +195,7 @@ class StatementListCom extends React.Component {
     if(statement==='projectOrderDetailReport'){
       let param = {}
       param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
-      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
       param.projectNo = params.projectNo
       param.contractNo = params.contractNo
       param.contractName = params.contractName
