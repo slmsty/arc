@@ -5,6 +5,7 @@ import ApplySearchConWithForm from './applyListWithSearch'
 import NoApplyInfo from './noApplyInfo'
 import BillDetail from '../billApplication/billDetail'
 import { redTypes } from '../billApplication/billColumns'
+import {getTaxInfo} from "../../actions/billApplication";
 
 export default class MyApplyCon extends React.Component {
   state = {
@@ -191,7 +192,7 @@ export default class MyApplyCon extends React.Component {
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
     }
-    const { billApplyCheck, currentUser, contractUrl, myApplyPage, myApplyDetail, billApproveSave } = this.props
+    const { billApplyCheck, currentUser, contractUrl, myApplyPage, myApplyDetail, billApproveSave, getTaxInfo } = this.props
     const { serviceDetail, serviceType} = myApplyDetail
     const isBackBill = redTypes.includes(serviceType)
     return (
@@ -208,7 +209,7 @@ export default class MyApplyCon extends React.Component {
               detail={serviceDetail}
               billType={serviceType}
               billApplySave={billApproveSave}
-              billApplyCheck={billApplyCheck}
+              getTaxInfo={getTaxInfo}
               currentUser={currentUser}
               contractUrl={contractUrl}
               isRed={isBackBill}
