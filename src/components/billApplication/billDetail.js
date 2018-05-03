@@ -259,8 +259,9 @@ class BillDetail extends React.Component {
   }
 
   handleWarningOk = () => {
+    this.setState({showWarning: false})
     this.props.billApplySave(this.state.submitParams).then(res => {
-      this.setState({loading: false, showWarning: false})
+      this.setState({loading: false})
     })
   }
 
