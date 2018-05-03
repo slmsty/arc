@@ -679,7 +679,6 @@ class BillDetail extends React.Component {
           </Button>,
         ]}
         onCancel={() => this.props.onCancel()}
-        maskClosable={false}
       >
         <Form
           className="ant-search-form"
@@ -914,7 +913,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={2}>
                     <FormItem {...formItemLayout2} label="收件人详细地址">
                       {
-                        getFieldDecorator('expressReceiptAddress')(
+                        getFieldDecorator('expressReceiptAddress', {rules:[{ max: 100, message: '收件人详细地址不能超过100个字符!' }]})(
                           <Input placeholder="收件人详细地址"/>
                         )
                       }
