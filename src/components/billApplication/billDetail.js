@@ -898,7 +898,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={2}>
                     <FormItem {...formItemLayout2} label="收件人公司">
                       {
-                        getFieldDecorator('expressReceiptCompany', {rules:[{ max: 20, message: '收件人公司不能超过20个汉字!' }]})(
+                        getFieldDecorator('expressReceiptCompany', {rules:[{ max: 16, message: '收件人公司不能超过20个汉字!' }]})(
                           <Input placeholder="收件人公司"/>
                         )
                       }
@@ -907,7 +907,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={3}>
                     <FormItem {...formItemLayout2} label="收件人电话">
                       {
-                        getFieldDecorator('expressReceiptPhone', {rules:[{ max: 20, message: '收件人电话不能超过20个字符!' }]})(
+                        getFieldDecorator('expressReceiptPhone', {rules:[{ max: 16, message: '收件人电话不能超过20个字符!' }]})(
                           <Input placeholder="收件人电话"/>,
                         )
                       }
@@ -917,7 +917,7 @@ class BillDetail extends React.Component {
                 <Row gutter={40}>
                   <Col span={8} key={1}>
                     <FormItem {...formItemLayout2} label="收件人城市">
-                      {getFieldDecorator('expressReceiptCity', {rules:[{ max: 20, message: '收件人城市不能超过20个汉字!' }]})(
+                      {getFieldDecorator('expressReceiptCity', {rules:[{ max: 16, message: '收件人城市不能超过20个汉字!' }]})(
                         <Input placeholder="收件人城市"/>
                       )}
                     </FormItem>
@@ -925,7 +925,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={2}>
                     <FormItem {...formItemLayout2} label="收件人详细地址">
                       {
-                        getFieldDecorator('expressReceiptAddress', {rules:[{ max: 30, message: '收件人详细地址不能超过30个汉字!' }]})(
+                        getFieldDecorator('expressReceiptAddress', {rules:[{ max: 32, message: '收件人详细地址不能超过30个汉字!' }]})(
                           <Input placeholder="收件人详细地址"/>
                         )
                       }
