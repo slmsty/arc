@@ -213,8 +213,11 @@ class ContractSplitModal extends React.Component{
     newData.forEach(item=>{
       if(item.revenueCheckout){
         newSelectCountType.push(item.revenueCheckout)
+      }else if (!item.hasOwnProperty('revenueCheckout')) {
+        newSelectCountType.push('POC')
       }
     })
+    //newSelectCountType.push(this.state.selectCountType)
     let selectDatas = [...new Set([...newSelectCountType])]
     this.setState({
       dataSource: newData,
@@ -804,8 +807,11 @@ class ContractSplitModal extends React.Component{
     })
   }
   render() {
+
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractData = this.props.data
+    /*console.log('data.revenueCheckout',constractData.revenueCheckout)
+    console.log('this.state.selectCountType',this.state.selectCountType)*/
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
     let countsalePeo = 0 // 合同不含税额
@@ -1180,7 +1186,7 @@ class ContractSplitModal extends React.Component{
                     <FormItem>
                       {getFieldDecorator('revenueCheckout', {
                         /*initialValue: constractData['revenueCheckout'] ? constractData['revenueCheckout']: this.state.selectCountType,*/
-                        initialValue: this.state.selectCountType,
+                       initialValue: this.state.selectCountType,
                       })(
                         <Checkbox.Group disabled={this.state.editFlag}>
                           <Checkbox value="POC">POC</Checkbox>
