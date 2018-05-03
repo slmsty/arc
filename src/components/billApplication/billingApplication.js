@@ -377,7 +377,6 @@ export default class BillingApplication extends React.Component {
   getBillBtns = () => {
     const type = this.state.currentType
     const roles = this.props.role.map(r => r.roleCode)
-    console.log(roles)
     if (normalTypes.includes(type)) {
       return (
         <div>
