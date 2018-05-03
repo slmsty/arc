@@ -5,7 +5,7 @@ export default class Root extends React.Component {
 
   render() {
     return (<div>
-      没能为您找到功能页面，请确认是否有访问权限。
+      欢迎访问应收结算系统（ARC），如果需要使用帮助，请点击右上角的“ARC系统帮助” 。
     </div>)
   }
 }
