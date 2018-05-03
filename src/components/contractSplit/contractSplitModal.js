@@ -213,9 +213,13 @@ class ContractSplitModal extends React.Component{
     newData.forEach(item=>{
       if(item.revenueCheckout){
         newSelectCountType.push(item.revenueCheckout)
+      }else if (!item.hasOwnProperty('revenueCheckout')) {
+        newSelectCountType.push('POC')
       }
     })
+    //newSelectCountType.push(this.state.selectCountType)
     let selectDatas = [...new Set([...newSelectCountType])]
+    console.log('selectDatas',selectDatas)
     this.setState({
       dataSource: newData,
       selectCountType:selectDatas
@@ -366,12 +370,19 @@ class ContractSplitModal extends React.Component{
     })
   }
   renderSelect = (text, index, column) => {
+    console.log('text',text)
     return (
-      <Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : `POC&${index}&${column}`}>
+      <Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : ''}>
+        <Option value=''>请选择</Option>
         <Option value={`POC&${index}&${column}`}>POC</Option>
         <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
         <Option value={`FA&${index}&${column}`}>FA</Option>
       </Select>
+      /*{<Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : `POC&${index}&${column}`}>
+        <Option value={`POC&${index}&${column}`}>POC</Option>
+        <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
+        <Option }value={`FA&${index}&${column}`}>FA</Option>
+      </Select>*/
     )
   }
   handleAdd = (index, flag) => {
@@ -383,7 +394,7 @@ class ContractSplitModal extends React.Component{
       subRow: false,
       discount: 0,
       returnTaxRate: 0,
-      revenueCheckout: "POC",
+      revenueCheckout: "",
       listPrice:listPrice,
 
     }
@@ -396,7 +407,7 @@ class ContractSplitModal extends React.Component{
       subRow: true,
       discount: 0,
       returnTaxRate: 0,
-      revenueCheckout: "POC",
+      revenueCheckout: "",
     }
     const indexArray = []
       newDataSource.map((item,index)=>{
@@ -424,7 +435,7 @@ class ContractSplitModal extends React.Component{
       newDataSource.splice(-1, 0, newData)
     }
     let selectCountType = this.state.selectCountType
-    selectCountType.push('POC')
+    //selectCountType.push('POC')
     let newselectCountType = [...new Set(selectCountType)]
     this.setState({
       dataSource: newDataSource,
@@ -804,8 +815,11 @@ class ContractSplitModal extends React.Component{
     })
   }
   render() {
+
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractData = this.props.data
+    /*console.log('data.revenueCheckout',constractData.revenueCheckout)
+    console.log('this.state.selectCountType',this.state.selectCountType)*/
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
     let countsalePeo = 0 // 合同不含税额
@@ -1180,7 +1194,7 @@ class ContractSplitModal extends React.Component{
                     <FormItem>
                       {getFieldDecorator('revenueCheckout', {
                         /*initialValue: constractData['revenueCheckout'] ? constractData['revenueCheckout']: this.state.selectCountType,*/
-                        initialValue: this.state.selectCountType,
+                       initialValue: this.state.selectCountType,
                       })(
                         <Checkbox.Group disabled={this.state.editFlag}>
                           <Checkbox value="POC">POC</Checkbox>

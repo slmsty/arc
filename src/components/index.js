@@ -65,7 +65,7 @@ export default class Index extends React.Component {
     const menu = (
       <Menu>
         <Menu.Item key="0">
-          <a target="_blank" rel="noopener noreferrer" href="https://xin.asiainfo.com/chat/GC49401E5FD1446BAE1013B32D2F9B8E">问题反馈</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://xin.asiainfo.com/channeljoin/GC49401E5FD1446BAE1013B32D2F9B8E">问题反馈</a>
         </Menu.Item>
         <Menu.Item key="1">
           <a target="_blank" rel="noopener noreferrer" href="https://kara-file.asiainfo.com/arc_work/ARC系统操作手册-开票申请-V1.0.docx">操作手册(开票申请)</a>

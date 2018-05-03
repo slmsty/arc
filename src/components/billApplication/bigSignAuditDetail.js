@@ -88,6 +88,7 @@ class BigSignAuditDetail extends React.Component {
             {<Icon type="check" />}发起审批
           </Button>,
         ]}
+        maskClosable={false}
       >
         <Form>
           <div>

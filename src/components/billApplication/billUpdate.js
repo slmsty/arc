@@ -80,6 +80,7 @@ class BillUpdate extends React.Component {
               <Icon type="check" />保存
             </Button>,
           ]}
+          maskClosable={false}
         >
           <Form
             className="ant-search-form"

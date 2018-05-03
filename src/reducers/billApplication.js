@@ -108,6 +108,7 @@ function billApplyEdit(state, action) {
     ...state,
     searchEditSuccess: true,
     editInfo: action.response,
+    failureMsg: '',
   }
 }
 
@@ -125,15 +126,6 @@ function billApplySave(state, action) {
     isLoading: false,
     searchEditSuccess: false,
     failureMsg: '',
-  }
-}
-
-function billApplySaveFailure(state, action) {
-  return {
-    ...state,
-    isLoading: false,
-    failureMsg: action.response.resultMessage,
-    billSaveSuccess: false,
   }
 }
 
@@ -242,7 +234,6 @@ export default caseReducer(initState, {
   BILL_APPLY_EDIT_SUCCESS: billApplyEdit,
   BILL_CONTENT_SEARCH_SUCCESS: billContentSearch,
   BILL_APPLY_SAVE_SUCCESS: billApplySave,
-  BILL_APPLY_SAVE_FAILURE: billApplySaveFailure,
   BILL_RED_APPLY_SUCCESS: billRedApply,
   HIDE_DETAIL_MODAL: hideDetailModal,
   GET_CONTRACT_URL_SUCCESS: getContractUrl,
