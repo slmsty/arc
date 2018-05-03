@@ -73,6 +73,9 @@ class ApplyInfoModal extends React.Component {
                   } else if(this.fieldCheck(record.quantity)) {
                     message.error(`请填写第${index + 1}行的数量`)
                     err = true
+                  } else if(record.unit === '' || typeof record.unit === 'undefined') {
+                    message.error(`请填写第${index + 1}行单位`)
+                    err = true
                   } else if(this.fieldCheck(record.billingAmount)) {
                     message.error(`请填写第${index + 1}行的含税金额`)
                     err = true
