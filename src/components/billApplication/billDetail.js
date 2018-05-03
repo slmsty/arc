@@ -679,6 +679,7 @@ class BillDetail extends React.Component {
           </Button>,
         ]}
         onCancel={() => this.props.onCancel()}
+        maskClosable={false}
       >
         <Form
           className="ant-search-form"
@@ -837,7 +838,7 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="发票备注">
                       {
-                        getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark})(
+                        getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules:[{ max: 75, message: '发票备注不能超过75个汉字!' }]})(
                           <TextArea placeholder="请输入发票备注" rows="2" />
                         )
                       }
@@ -878,7 +879,7 @@ class BillDetail extends React.Component {
                 <Row gutter={40}>
                   <Col span={8} key={1}>
                     <FormItem {...formItemLayout2} label="收件人">
-                      {getFieldDecorator('expressReceiptName')(
+                      {getFieldDecorator('expressReceiptName', {rules:[{ max: 25, message: '收件人不能超过25个汉字!' }]})(
                         <Input placeholder="收件人"/>
                       )}
                     </FormItem>
@@ -886,7 +887,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={2}>
                     <FormItem {...formItemLayout2} label="收件人公司">
                       {
-                        getFieldDecorator('expressReceiptCompany')(
+                        getFieldDecorator('expressReceiptCompany', {rules:[{ max: 25, message: '收件人公司不能超过25个汉字!' }]})(
                           <Input placeholder="收件人公司"/>
                         )
                       }
@@ -895,7 +896,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={3}>
                     <FormItem {...formItemLayout2} label="收件人电话">
                       {
-                        getFieldDecorator('expressReceiptPhone')(
+                        getFieldDecorator('expressReceiptPhone', {rules:[{ max: 25, message: '收件人电话不能超过25个汉字!' }]})(
                           <Input placeholder="收件人电话"/>,
                         )
                       }
@@ -905,7 +906,7 @@ class BillDetail extends React.Component {
                 <Row gutter={40}>
                   <Col span={8} key={1}>
                     <FormItem {...formItemLayout2} label="收件人城市">
-                      {getFieldDecorator('expressReceiptCity')(
+                      {getFieldDecorator('expressReceiptCity', {rules:[{ max: 25, message: '收件人城市不能超过25个汉字!' }]})(
                         <Input placeholder="收件人城市"/>
                       )}
                     </FormItem>
@@ -913,7 +914,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={2}>
                     <FormItem {...formItemLayout2} label="收件人详细地址">
                       {
-                        getFieldDecorator('expressReceiptAddress', {rules:[{ max: 100, message: '收件人详细地址不能超过100个字符!' }]})(
+                        getFieldDecorator('expressReceiptAddress', {rules:[{ max: 50, message: '收件人详细地址不能超过50个汉字!' }]})(
                           <Input placeholder="收件人详细地址"/>
                         )
                       }
