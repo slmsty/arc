@@ -414,7 +414,7 @@ export default class BillStatusCon extends React.Component {
       dataIndex: 'billingApplicationId',
       width: 110,
       render: (text, record) => (
-        <a href='javascript:;' onClick={() => this.showApplyInfo(record)}>{text}</a>
+        <a href='javascript:void(0);' onClick={() => this.showApplyInfo(record)}>{text}</a>
       ),
     }, {
       title: '申请人',
