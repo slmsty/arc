@@ -219,6 +219,7 @@ class ContractSplitModal extends React.Component{
     })
     //newSelectCountType.push(this.state.selectCountType)
     let selectDatas = [...new Set([...newSelectCountType])]
+    console.log('selectDatas',selectDatas)
     this.setState({
       dataSource: newData,
       selectCountType:selectDatas
@@ -369,12 +370,19 @@ class ContractSplitModal extends React.Component{
     })
   }
   renderSelect = (text, index, column) => {
+    console.log('text',text)
     return (
-      <Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : `POC&${index}&${column}`}>
+      <Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : ''}>
+        <Option value=''>请选择</Option>
         <Option value={`POC&${index}&${column}`}>POC</Option>
         <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
         <Option value={`FA&${index}&${column}`}>FA</Option>
       </Select>
+      /*{<Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : `POC&${index}&${column}`}>
+        <Option value={`POC&${index}&${column}`}>POC</Option>
+        <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
+        <Option }value={`FA&${index}&${column}`}>FA</Option>
+      </Select>*/
     )
   }
   handleAdd = (index, flag) => {
@@ -386,7 +394,7 @@ class ContractSplitModal extends React.Component{
       subRow: false,
       discount: 0,
       returnTaxRate: 0,
-      revenueCheckout: "POC",
+      revenueCheckout: "",
       listPrice:listPrice,
 
     }
@@ -399,7 +407,7 @@ class ContractSplitModal extends React.Component{
       subRow: true,
       discount: 0,
       returnTaxRate: 0,
-      revenueCheckout: "POC",
+      revenueCheckout: "",
     }
     const indexArray = []
       newDataSource.map((item,index)=>{
@@ -427,7 +435,7 @@ class ContractSplitModal extends React.Component{
       newDataSource.splice(-1, 0, newData)
     }
     let selectCountType = this.state.selectCountType
-    selectCountType.push('POC')
+    //selectCountType.push('POC')
     let newselectCountType = [...new Set(selectCountType)]
     this.setState({
       dataSource: newDataSource,
