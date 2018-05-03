@@ -214,6 +214,7 @@ class ApplyInfoModal extends React.Component {
               同意
             </Button>
           ]}
+          maskClosable={false}
         >
           <Form>
             <Row>

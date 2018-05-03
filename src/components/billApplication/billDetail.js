@@ -679,6 +679,7 @@ class BillDetail extends React.Component {
           </Button>,
         ]}
         onCancel={() => this.props.onCancel()}
+        maskClosable={false}
       >
         <Form
           className="ant-search-form"

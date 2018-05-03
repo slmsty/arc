@@ -366,6 +366,7 @@ class CancelDetail extends React.Component {
               </Button>
             </div>
           }
+          maskClosable={false}
         >
           <Form>
             <Row gutter={40}>

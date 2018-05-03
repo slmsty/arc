@@ -376,11 +376,16 @@ export default class BillingApplication extends React.Component {
 
   getBillBtns = () => {
     const type = this.state.currentType
+    const roles = this.props.role.map(r => r.roleCode)
+    console.log(roles)
     if (normalTypes.includes(type)) {
       return (
         <div>
           <Button type="primary" ghost onClick={() => this.handleBilling()}>开票</Button>
-          <Button type="primary" onClick={() => this.searchContractBill()}>开票审核</Button>
+          {
+            roles.includes('ar_admin') ?
+              <Button type="primary" onClick={() => this.searchContractBill()}>开票审核</Button> : ''
+          }
         </div>
       )
     } else if (advanceTypes.includes(type)) {

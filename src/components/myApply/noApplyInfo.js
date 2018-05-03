@@ -78,6 +78,7 @@ class NoApplyInfo extends React.Component {
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           onOk={this.props.closeClaim}
+          maskClosable={false}
         >
             <Row>
               <Col span={14}>

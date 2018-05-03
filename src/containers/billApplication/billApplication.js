@@ -6,6 +6,7 @@ import * as actions from '../../actions/billApplication'
 const mapStateToProps = state => ({
   ...state.billApplication,
   currentUser: state.common.user,
+  role: state.common.permission.role,
 })
 
 const mapDispatchToProps = dispatch => (

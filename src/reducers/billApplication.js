@@ -108,6 +108,7 @@ function billApplyEdit(state, action) {
     ...state,
     searchEditSuccess: true,
     editInfo: action.response,
+    failureMsg: '',
   }
 }
 
