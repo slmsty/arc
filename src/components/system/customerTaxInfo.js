@@ -98,11 +98,11 @@ class CustomerTaxInfo extends React.Component {
     const pagination = {
       total: count,
       pageNo,
-      onChange: () => {
+      onChange: (current) => {
         this.props.queryCustTaxInfo({
           custInfoName: this.props.form.getFieldValue('custName'),
           pageInfo:{
-            pageNo,
+            pageNo: current,
             pageSize: 10
           },
         })
