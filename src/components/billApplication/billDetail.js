@@ -73,7 +73,7 @@ class BillDetail extends React.Component {
         contractItemId: item.contractItemId,
         billingContent: item.billingContent ? item.billingContent : '',
         specificationType: item.specificationType ? item.specificationType : '',
-        unit: item.unit ? item.unit : '',
+        unit: item.unit ? item.unit : this.getInvoiceUnit(item.billingTaxRate ? item.billingTaxRate : 0),
         quantity: item.quantity ? item.quantity : 1,
         unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
@@ -294,6 +294,8 @@ class BillDetail extends React.Component {
       const { billingAmount, quantity} = this.state.dataSource[index]
       this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
       dataSource[index][col] = value
+      console.log(value)
+      dataSource[index]['unit'] = this.getInvoiceUnit(value)
     } else if (col === 'quantity') {
       dataSource[index][col] = value
       const { billingAmountExcludeTax } = this.state.dataSource[index]
@@ -304,6 +306,15 @@ class BillDetail extends React.Component {
     this.setState({
       dataSource: dataSource
     })
+  }
+
+  getInvoiceUnit = (v) => {
+    const rate = parseFloat(v)
+    if(rate === 0 || rate === 0.06) {
+      return '项'
+    } else if (rate === 0.16 || rate === 0.17) {
+      return '套'
+    }
   }
 
   billingUnify = () => {
@@ -610,7 +621,7 @@ class BillDetail extends React.Component {
       render: (text, record, index) => (
         this.isAdvance ?
           <DatePicker
-            value={this.state.proItems.length > 0 ? this.state.proItems[index]['receiptReturnDate'] : ''}
+            defaultValue={this.state.proItems.length > 0 ? this.state.proItems[index]['receiptReturnDate'] : ''}
             onChange={(value, str) => this.proItemChange(index, 'receiptReturnDate', str)}
           /> : text
       )
