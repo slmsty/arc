@@ -14,7 +14,7 @@ const { TextArea } = Input
 const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED_OTHER', 'BILLING_OTHER']
 const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
 const hideContractUrl = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_OTHER']
-const isAdvance = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
+const advanceTypes = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const formItemLayout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 12 },
@@ -57,7 +57,7 @@ class BillDetail extends React.Component {
       comInfo: [comInfo.billingComInfoId, comInfo.billingComName],
       proItems: [],
     }
-    this.isAdvance = isAdvance.includes(props.billType)
+    this.isAdvance = advanceTypes.includes(props.billType)
   }
 
   componentDidMount() {
@@ -192,11 +192,12 @@ class BillDetail extends React.Component {
         if(this.isAdvance) {
           for(let i = 0; i< this.state.proItems.length; i++) {
             const r  = this.state.proItems[i]
+            console.log(r.receiptReturnDate)
             if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
               message.error('【提前开票原因】不能为空!')
               err = true
               break
-            } else if (r.receiptReturnDate === '' || typeof r.receiptReturnDate === 'undefined') {
+            } else if (r.receiptReturnDate && !r.receiptReturnDate._i) {
               message.error('【预计回款日期】不能为空!')
               err = true
               break
@@ -249,9 +250,9 @@ class BillDetail extends React.Component {
               }
             })
           } else {
-            this.props.billApplySave(params).then(res => {
+            /*this.props.billApplySave(params).then(res => {
               this.setState({loading: false})
-            })
+            })*/
           }
         }
       });
