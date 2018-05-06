@@ -192,11 +192,12 @@ class BillDetail extends React.Component {
         if(this.isAdvance) {
           for(let i = 0; i< this.state.proItems.length; i++) {
             const r  = this.state.proItems[i]
+            console.log(r.receiptReturnDate)
             if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
               message.error('【提前开票原因】不能为空!')
               err = true
               break
-            } else if (r.receiptReturnDate && r.receiptReturnDate.format('YYYY-MM-DD') === 'Invalid date') {
+            } else if (!r.receiptReturnDate || (r.receiptReturnDate && r.receiptReturnDate.format('YYYY-MM-DD') === 'Invalid date')) {
               message.error('【预计回款日期】不能为空!')
               err = true
               break
