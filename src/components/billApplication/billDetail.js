@@ -14,7 +14,7 @@ const { TextArea } = Input
 const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED_OTHER', 'BILLING_OTHER']
 const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
 const hideContractUrl = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_OTHER']
-const isAdvance = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
+const advanceTypes = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const formItemLayout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 12 },
@@ -57,7 +57,7 @@ class BillDetail extends React.Component {
       comInfo: [comInfo.billingComInfoId, comInfo.billingComName],
       proItems: [],
     }
-    this.isAdvance = isAdvance.includes(props.billType)
+    this.isAdvance = advanceTypes.includes(props.billType)
   }
 
   componentDidMount() {
@@ -73,7 +73,7 @@ class BillDetail extends React.Component {
         contractItemId: item.contractItemId,
         billingContent: item.billingContent ? item.billingContent : '',
         specificationType: item.specificationType ? item.specificationType : '',
-        unit: item.unit ? item.unit : '',
+        unit: item.unit ? item.unit : this.getInvoiceUnit(item.billingTaxRate ? item.billingTaxRate : 0),
         quantity: item.quantity ? item.quantity : 1,
         unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
@@ -88,7 +88,7 @@ class BillDetail extends React.Component {
       proItems.push({
         arBillingId: record.arBillingId,
         advanceBillingReason: record.advanceBillingReason,
-        receiptReturnDate: moment(record.receiptReturnDate),
+        receiptReturnDate: record.receiptReturnDate ? moment(record.receiptReturnDate) : '',
       })
     })
     this.setState({
@@ -192,11 +192,12 @@ class BillDetail extends React.Component {
         if(this.isAdvance) {
           for(let i = 0; i< this.state.proItems.length; i++) {
             const r  = this.state.proItems[i]
+            console.log(r.receiptReturnDate)
             if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
               message.error('【提前开票原因】不能为空!')
               err = true
               break
-            } else if (r.receiptReturnDate === '' || typeof r.receiptReturnDate === 'undefined') {
+            } else if (!r.receiptReturnDate || (r.receiptReturnDate && r.receiptReturnDate.format('YYYY-MM-DD') === 'Invalid date')) {
               message.error('【预计回款日期】不能为空!')
               err = true
               break
@@ -227,7 +228,12 @@ class BillDetail extends React.Component {
             billingApplicationType: this.state.isRequireRate ? 'BILLING_EXCESS' : this.props.billType,
             billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
             appLineItems: appLineItems,
-            arBillingItems: this.state.proItems,
+            arBillingItems: this.state.proItems.map(pro => {
+              return {
+                ...pro,
+                receiptReturnDate: pro.receiptReturnDate ? pro.receiptReturnDate.format('YYYY-MM-DD') : '',
+              }
+            }),
             objectId: this.state.fileId,
             objectName: this.state.file.name,
             isAgainInvoice: 'true',
@@ -294,6 +300,7 @@ class BillDetail extends React.Component {
       const { billingAmount, quantity} = this.state.dataSource[index]
       this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
       dataSource[index][col] = value
+      dataSource[index]['unit'] = this.getInvoiceUnit(value)
     } else if (col === 'quantity') {
       dataSource[index][col] = value
       const { billingAmountExcludeTax } = this.state.dataSource[index]
@@ -304,6 +311,15 @@ class BillDetail extends React.Component {
     this.setState({
       dataSource: dataSource
     })
+  }
+
+  getInvoiceUnit = (v) => {
+    const rate = parseFloat(v)
+    if(rate === 0 || rate === 0.06) {
+      return '项'
+    } else if (rate === 0.16 || rate === 0.17) {
+      return '套'
+    }
   }
 
   billingUnify = () => {
@@ -566,7 +582,7 @@ class BillDetail extends React.Component {
   proItemChange = (index, columns, value) => {
     let proData = this.state.proItems
     if(columns === 'receiptReturnDate') {
-      proData[index][columns] = value ? moment(value) : ''
+      proData[index][columns] = value
     } else {
       proData[index][columns] = value
     }
@@ -575,7 +591,6 @@ class BillDetail extends React.Component {
 
   getProInfoColumns = () => {
     const { billType } = this.props
-
     return [{
       title: '项目编码',
       dataIndex: 'projectCode',
@@ -611,7 +626,7 @@ class BillDetail extends React.Component {
         this.isAdvance ?
           <DatePicker
             value={this.state.proItems.length > 0 ? this.state.proItems[index]['receiptReturnDate'] : ''}
-            onChange={(value, str) => this.proItemChange(index, 'receiptReturnDate', str)}
+            onChange={(value, str) => this.proItemChange(index, 'receiptReturnDate', value)}
           /> : text
       )
     }, {
