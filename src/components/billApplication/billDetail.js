@@ -88,9 +88,10 @@ class BillDetail extends React.Component {
       proItems.push({
         arBillingId: record.arBillingId,
         advanceBillingReason: record.advanceBillingReason,
-        receiptReturnDate: record.receiptReturnDate ? moment(record.receiptReturnDate) : '',
+        receiptReturnDate: record.receiptReturnDate ? moment(record.receiptReturnDate) : (!this.isAdvance ? moment() : ''),
       })
     })
+    console.log(proItems)
     this.setState({
       dataSource: data,
       count: data.length,
@@ -220,6 +221,7 @@ class BillDetail extends React.Component {
             lineNo: record.lineNo + 1,
             groupNo: groupNos.length > 0 ? record.groupNo : 1,
           }))
+          console.log(this.state.proItems)
           const params = {
             ...values,
             billingOutcomeIds,
@@ -623,11 +625,11 @@ class BillDetail extends React.Component {
       dataIndex: 'receiptReturnDate',
       width: 150,
       render: (text, record, index) => (
-        this.isAdvance || this.props.billType === 'BILLING_OTHER' ?
+        this.isAdvance ?
           <DatePicker
             value={this.state.proItems.length > 0 ? this.state.proItems[index]['receiptReturnDate'] : ''}
             onChange={(value, str) => this.proItemChange(index, 'receiptReturnDate', value)}
-          /> : text
+          /> : (text ? text : moment().format('YYYY-MM-DD'))
       )
     }, {
       title: '付款条件',
