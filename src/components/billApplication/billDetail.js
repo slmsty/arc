@@ -623,7 +623,7 @@ class BillDetail extends React.Component {
       dataIndex: 'receiptReturnDate',
       width: 150,
       render: (text, record, index) => (
-        this.isAdvance ?
+        this.isAdvance || this.props.billType === 'BILLING_OTHER' ?
           <DatePicker
             value={this.state.proItems.length > 0 ? this.state.proItems[index]['receiptReturnDate'] : ''}
             onChange={(value, str) => this.proItemChange(index, 'receiptReturnDate', value)}
