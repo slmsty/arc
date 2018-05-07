@@ -1002,7 +1002,7 @@ class BillDetail extends React.Component {
                         filePath ?
                           <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
                           :
-                          getFieldDecorator('file', { rules: [{ required: this.state.showDetail === false && this.props.isRed, message: '请上传附件!' }] })(
+                          getFieldDecorator('file', { rules: [{ required: false, message: '请上传附件!' }] })(
                             <Upload {...props} fileList={this.state.fileList}>
                               <Button>
                                 <Icon type="upload" />点击上传

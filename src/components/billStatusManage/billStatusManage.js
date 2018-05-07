@@ -427,15 +427,15 @@ export default class BillStatusCon extends React.Component {
     }, {
       title: '开票公司',
       dataIndex: 'companyName',
-      width: 300,
+      width: 200,
     }, {
       title: '开票要求',
       dataIndex: 'invoiceRequire',
-      width: 150,
+      width: 400,
     }, {
       title: '开票客户名称',
       dataIndex: 'customerName',
-      width: 300,
+      width: 250,
     }, {
       title: '纳税人识别号',
       dataIndex: 'companyTaxIdentifyCode',
@@ -529,7 +529,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveColumns}
           size="small"
-          scroll={{ x: '2100px' }}
+          scroll={{ x: '2200px' }}
           loading={this.state.loading}
           pagination={pagination}
           dataSource={result}
