@@ -11,7 +11,7 @@ import MultipleInput from '../common/multipleInput'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
-const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED_OTHER', 'BILLING_OTHER']
+const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_OTHER']
 const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
 const hideContractUrl = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_OTHER']
 const advanceTypes = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
@@ -62,7 +62,8 @@ class BillDetail extends React.Component {
 
   componentDidMount() {
     let data = []
-    const items = this.props.type === 'myApply' ? this.props.detail.appLineList : this.props.detail.appLineItems
+    const { appLineList, appLineItems, contractList, fileName, filePath } = this.props.detail
+    const items = this.props.type === 'myApply' ? appLineList : appLineItems
     items.map((item, index) => {
       data.push({
         lineNo: index,
@@ -84,18 +85,26 @@ class BillDetail extends React.Component {
       })
     })
     let proItems = []
-    this.props.detail.contractList.map((record) => {
+    contractList.map((record) => {
       proItems.push({
         arBillingId: record.arBillingId,
         advanceBillingReason: record.advanceBillingReason,
-        receiptReturnDate: record.receiptReturnDate ? moment(record.receiptReturnDate) : (!this.isAdvance ? moment() : ''),
+        receiptReturnDate: record.receiptReturnDate ? moment(record.receiptReturnDate) : '',
       })
     })
-    console.log(proItems)
+
+    const fileList = filePath ? [{
+      uid: new Date().getTime(),
+      name: fileName,
+      status: 'done',
+      response: '', // custom error message to show
+      url: '',
+      }] : []
     this.setState({
       dataSource: data,
       count: data.length,
-      proItems: proItems
+      proItems: proItems,
+      fileList: fileList
     })
   }
 
@@ -193,7 +202,6 @@ class BillDetail extends React.Component {
         if(this.isAdvance) {
           for(let i = 0; i< this.state.proItems.length; i++) {
             const r  = this.state.proItems[i]
-            console.log(r.receiptReturnDate)
             if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
               message.error('【提前开票原因】不能为空!')
               err = true
@@ -221,7 +229,6 @@ class BillDetail extends React.Component {
             lineNo: record.lineNo + 1,
             groupNo: groupNos.length > 0 ? record.groupNo : 1,
           }))
-          console.log(this.state.proItems)
           const params = {
             ...values,
             billingOutcomeIds,
@@ -629,7 +636,7 @@ class BillDetail extends React.Component {
           <DatePicker
             value={this.state.proItems.length > 0 ? this.state.proItems[index]['receiptReturnDate'] : ''}
             onChange={(value, str) => this.proItemChange(index, 'receiptReturnDate', value)}
-          /> : (text ? text : moment().format('YYYY-MM-DD'))
+          /> : text
       )
     }, {
       title: '付款条件',
@@ -995,7 +1002,7 @@ class BillDetail extends React.Component {
                         filePath ?
                           <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
                           :
-                          getFieldDecorator('file', { rules: [{ required: this.state.showDetail === false && this.props.isRed, message: '请上传附件!' }] })(
+                          getFieldDecorator('file', { rules: [{ required: false, message: '请上传附件!' }] })(
                             <Upload {...props} fileList={this.state.fileList}>
                               <Button>
                                 <Icon type="upload" />点击上传
