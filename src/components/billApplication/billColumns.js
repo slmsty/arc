@@ -235,7 +235,7 @@ const billDetailColumns = [{
   width: 250,
 }, {
   title: '发票类型',
-  dataIndex: 'invoiceType',
+  dataIndex: 'invoiceTypeName',
   width: 250,
 }, {
   title: '发票代码',
