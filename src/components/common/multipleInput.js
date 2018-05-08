@@ -35,6 +35,7 @@ export default class MultipleInput extends React.Component {
         onChange={this.handleChange}
         onSearch={this.handleSearch}
         onBlur={this.handleBlur}
+        disabled={this.props.disabled}
       />
     )
   }

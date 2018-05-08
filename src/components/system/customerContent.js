@@ -70,14 +70,7 @@ class CustomerTaxInfo extends React.Component {
         dataIndex: 'prefPolicySign',
         width: '8%',
         render: (text) => {
-          return text === 'Y' ? '使用' : '不使用'
-        }
-      }, {
-        title: '零税率标识',
-        dataIndex: 'zeroTaxSign',
-        width: '8%',
-        render: (text) => {
-          return text === 'Y' ? '使用' : '不使用'
+          return text === '1' ? '使用' : '不使用'
         }
       }, {
         title: '税收分类编码版本号',
@@ -115,7 +108,7 @@ class CustomerTaxInfo extends React.Component {
       pageNo,
       onChange: (current) => {
         this.props.queryInvoiceTaxInfo({
-          custInfoName: this.props.form.getFieldValue('billingContentName'),
+          billingContentName: this.props.form.getFieldValue('billingContentName'),
           pageInfo:{
             pageNo: current,
             pageSize: 10

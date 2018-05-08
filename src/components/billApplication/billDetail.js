@@ -213,6 +213,15 @@ class BillDetail extends React.Component {
             }
           }
         }
+        if(!this.state.custInfo) {
+          message.error('请选择购买方的客户信息!')
+          err = true
+        }
+        if(!this.state.comInfo) {
+          message.error('请选择销售方的客户信息!')
+          err = true
+        }
+
         if(values.receiptEmail.length > 0  && values.receiptEmail.join(',').length > 500) {
           this.props.form.setFields({
             receiptEmail: {
@@ -1035,7 +1044,7 @@ class BillDetail extends React.Component {
                 title="提示"
                 visible={this.state.showWarning}
                 onOk={() => this.handleWarningOk()}
-                onCancel={() => this.setState({showWarning: false})}
+                onCancel={() => this.setState({showWarning: false, loading: false})}
               >
                 <p className="tips">提示：以下数据将计入项目成本/部门费用</p>
                 <div className="arc-info">

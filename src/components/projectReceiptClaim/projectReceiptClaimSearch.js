@@ -22,11 +22,14 @@ class ProjectReceiptClaimSearch extends React.Component {
   }
   handleQuery = () => {
     const param = this.props.form.getFieldsValue()
-    if (param.receiptDate) {
+    if (param.receiptDate.length > 0) {
       param.receiptDateStart = param.receiptDate[0].format(dateFormat)
       param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
-      delete param.receiptDate
+    } else {
+      param.receiptDateStart = ''
+      param.receiptDateEnd = ''
     }
+    delete param.receiptDate
     if (param.cust) {
       param.custId = param.cust[0]
       delete param.cust

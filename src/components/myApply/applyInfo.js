@@ -275,6 +275,7 @@ class ApplyInfoModal extends React.Component {
                         form={this.props.form}
                         setFormValidate={this.setFormValidate}
                         fileDown={this.props.fileDown}
+                        showSave={true}
                       /> :
                       <BillDetail
                         serviceDetail={applyInfoDatas.serviceDetail}

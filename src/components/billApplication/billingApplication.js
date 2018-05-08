@@ -424,9 +424,28 @@ export default class BillingApplication extends React.Component {
     return scroll
   }
 
+  /**
+   * 已大签开票分类中，多选时，其他事项开票优先级最高，已大签提前开票次之，然后是正常开票
+   * @returns {*}
+   */
+  getBillApplyType = () => {
+    if(normalTypes.includes(this.state.currentType)) {
+      const billTypes = this.state.selectedRows.map(s => s.billingApplicationType)
+      if(billTypes.includes('BILLING_EXCESS')) {
+        return 'BILLING_EXCESS'
+      } else if(billTypes.includes('BILLING_CONTRACT')) {
+        return 'BILLING_CONTRACT'
+      } else {
+        return 'BILLING_NORMAL'
+      }
+    } else {
+      return this.state.selectedRows[0].billingApplicationType
+    }
+  }
+
   render() {
     const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, getTaxInfo,
-      editInfo, billApplySave, billApplyCheck, currentUser, contractUrl, redApplyDetail, billApplicationRedApply } = this.props
+      editInfo, billApplySave, currentUser, contractUrl, redApplyDetail, billApplicationRedApply } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType)? 'checkbox' : 'radio',
       onChange: (selectedRowKeys, selectedRows) => {
@@ -461,7 +480,7 @@ export default class BillingApplication extends React.Component {
           <BillDetail
             onCancel={() => this.props.hideDetailModal()}
             detail={redTypes.includes(this.state.currentType) ? redApplyDetail : editInfo}
-            billType={this.state.selectedRows[0].billingApplicationType}
+            billType={this.getBillApplyType()}
             billApplySave={redTypes.includes(this.state.currentType) ? billApplicationRedApply : billApplySave}
             getTaxInfo={getTaxInfo}
             currentUser={currentUser}
