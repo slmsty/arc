@@ -75,19 +75,35 @@ class BillDetail extends React.Component  {
         </div>
         {
           isAgainInvoice === 'false' && showEdit.includes(this.props.applyType) ?
-            <Row>
-              <Col span={12}>
-                是否收到发票: {receiveTax === 'Y' ? '是' : '否'}
-              </Col>
-              {
-                this.props.taskCode === 'tax_vp' ?
-                  <Row gutter={40}>
-                    <Col span={12}>
-                      AR财务会计是否收到发票: {receiptOutcome === 'Y' ? '是' : '否'}
-                    </Col>
-                  </Row> : null
-              }
-            </Row>
+            <div>
+              <Row>
+                <Col span={12}>
+                  是否收到发票: {receiveTax === 'Y' ? '是' : '否'}
+                </Col>
+                {
+                  this.props.taskCode === 'tax_vp' ?
+                    <Row gutter={40}>
+                      <Col span={12}>
+                        AR财务会计是否收到发票: {receiptOutcome === 'Y' ? '是' : '否'}
+                      </Col>
+                    </Row> : null
+                }
+              </Row>
+              <div style={{padding: '10px 0'}}>
+                <Row gutter={40}>
+                  <Col span={24}>
+                    开票原因及要求: {billingApplicantRequest}
+                  </Col>
+                </Row>
+              </div>
+              <div style={{padding: '10px 0'}}>
+                <Row gutter={40}>
+                  <Col span={24}>
+                    附件: <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+                  </Col>
+                </Row>
+              </div>
+            </div>
             :
             <div>
               <Row gutter={40}>

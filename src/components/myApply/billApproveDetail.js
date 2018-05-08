@@ -639,53 +639,70 @@ class BillApproveDetail extends React.Component  {
           />
         </div>
         {isAgainInvoice === 'false' && (isArAdmin || isArFinanceAccount || isTaxAuditor)  ?
-          <Row gutter={40}>
-            {
-              showReceive.includes(this.props.applyType) && !isArAdmin ?
-                <Col span={8}>
-                  <FormItem {...formItemLayout} label="是否收到发票">
-                    {
-                      getFieldDecorator(isTaxAuditor ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
-                        {initialValue: receiptOutcome, rules: [{ required: true, message: '请选择是否收到发票!' }]})(
-                        <Select>
-                          <Option value="Y">是</Option>
-                          <Option value="N">否</Option>
-                        </Select>
-                      )
-                    }
-                  </FormItem>
-                </Col> : null
-            }
-            {
-              this.props.applyType === 'BILLING_RED' && !isArAdmin ?
-                <Col span={8}>
-                  <FormItem {...formItemLayout} label="退票类型">
-                    {
-                      getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount , message: '请选择退票类型!' }]})(
-                        <SelectInvokeApi
-                          typeCode="RED_TYPE_SELECT"
-                          paramCode="RED_OR_INVALID"
-                          placeholder="退票类型"
-                          hasEmpty
-                          disabled={isTaxAuditor}
-                        />
-                      )
-                    }
-                  </FormItem>
-                </Col> : null
-            }
-            {
-              isTaxAuditor ?
-                <Col span={8}>
-                  <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
-                    {
-                      receiptOutcome === 'Y' ? '是' : '否'
-                    }
-                  </FormItem>
-                </Col>
-               : null
-            }
-          </Row>
+          <div>
+            <Row gutter={40}>
+              {
+                showReceive.includes(this.props.applyType) && !isArAdmin ?
+                  <Col span={8}>
+                    <FormItem {...formItemLayout} label="是否收到发票">
+                      {
+                        getFieldDecorator(isTaxAuditor ? 'receiptOutcomeTaxVp' : 'receiptOutcome',
+                          {initialValue: receiptOutcome, rules: [{ required: true, message: '请选择是否收到发票!' }]})(
+                          <Select>
+                            <Option value="">-请选择-</Option>
+                            <Option value="Y">是</Option>
+                            <Option value="N">否</Option>
+                          </Select>
+                        )
+                      }
+                    </FormItem>
+                  </Col> : null
+              }
+              {
+                this.props.applyType === 'BILLING_RED' && !isArAdmin ?
+                  <Col span={8}>
+                    <FormItem {...formItemLayout} label="退票类型">
+                      {
+                        getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount , message: '请选择退票类型!' }]})(
+                          <SelectInvokeApi
+                            typeCode="RED_TYPE_SELECT"
+                            paramCode="RED_OR_INVALID"
+                            placeholder="退票类型"
+                            hasEmpty
+                            disabled={isTaxAuditor}
+                          />
+                        )
+                      }
+                    </FormItem>
+                  </Col> : null
+              }
+              {
+                isTaxAuditor ?
+                  <Col span={8}>
+                    <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
+                      {
+                        receiptOutcome === 'Y' ? '是' : '否'
+                      }
+                    </FormItem>
+                  </Col>
+                 : null
+              }
+            </Row>
+            <Row gutter={40}>
+              <Col span={19}>
+                <FormItem {...span3ItemLayout} label="附件">
+                  <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={19}>
+                <FormItem {...span3ItemLayout} label="开票原因及要求">
+                  {billingApplicantRequest}
+                </FormItem>
+              </Col>
+            </Row>
+          </div>
           :
           <div>
             <Row gutter={40}>
