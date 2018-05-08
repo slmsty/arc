@@ -70,7 +70,7 @@ class CustomerTaxInfo extends React.Component {
         dataIndex: 'prefPolicySign',
         width: '8%',
         render: (text) => {
-          return text === 'Y' ? '使用' : '不使用'
+          return text === '1' ? '使用' : '不使用'
         }
       }, {
         title: '零税率标识',

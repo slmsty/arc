@@ -669,6 +669,7 @@ class BillDetail extends React.Component {
     const { getFieldDecorator } = this.props.form
     const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
       billingApplicantRemark, taxRateRequest, fileName, filePath } = this.props.detail
+    console.log(this.props.billType)
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
       headers: {

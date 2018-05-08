@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Button, Row, Col, Modal, Icon, Input, Select } from 'antd'
+import SelectInvokeApi from '../common/selectInvokeApi'
 const FormItem = Form.Item
 const Option = Select.Option
 
@@ -7,7 +8,8 @@ class ContentAdd extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      reasonId: ''
+      reasonId: '',
+      prefPolicySign: '',
     }
   }
 
@@ -31,7 +33,7 @@ class ContentAdd extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { billingContentCode, billingContentName, taxCategoryCode, prefPolicySign, zeroTaxSign, taxCategoryVersion, taxIncludeAmount, status } = this.props.record
+    const { billingContentCode, billingContentName, taxCategoryCode, prefPolicySign, prefPolicyType, taxCategoryVersion, taxIncludeAmount, status } = this.props.record
     const formItemLayout = {
       labelCol: { span: 9 },
       wrapperCol: { span: 15 },
@@ -82,34 +84,39 @@ class ContentAdd extends React.Component {
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="优惠政策标识">
                   {getFieldDecorator('prefPolicySign', {initialValue: prefPolicySign || '', rules: [{ required: true, message: '请选择优惠政策标识!' }]})(
-                    <Select>
+                    <Select onChange={(v) => {this.setState({prefPolicySign: v})}}>
                       <Option value="">-请选择-</Option>
-                      <Option value="Y">使用</Option>
-                      <Option value="N">不使用</Option>
+                      <Option value="1">使用</Option>
+                      <Option value="0">不使用</Option>
                     </Select>
                   )}
                 </FormItem>
               </Col>
             </Row>
+
             <Row gutter={30}>
               <Col span={12} key={1}>
-                <FormItem {...formItemLayout} label="零税率标识">
-                  {getFieldDecorator('zeroTaxSign', { initialValue : zeroTaxSign || '', rules: [{ required: true, message: '请选择是否有效!' }]})(
-                    <Select>
-                      <Option value="">-请选择-</Option>
-                      <Option value="Y">使用</Option>
-                      <Option value="N">不使用</Option>
-                    </Select>
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="税收分类版本号">
                   {getFieldDecorator('taxCategoryVersion', {initialValue: taxCategoryVersion, rules: [{ required: true, message: '请填写税收分类版本号!' }]})(
                     <Input />
                   )}
                 </FormItem>
               </Col>
+              {
+                this.state.prefPolicySign === '1' ?
+                  <Col span={12} key={2}>
+                    <FormItem {...formItemLayout} label="优惠政策内容">
+                      {getFieldDecorator('prefPolicyType', { initialValue : prefPolicyType || '', rules: [{ required: this.state.prefPolicySign === '1', message: '请选择优惠政策内容!' }]})(
+                        <SelectInvokeApi
+                          typeCode="PREF_POLICY_TYPE"
+                          paramCode="PREF_POLICY_TYPE"
+                          placeholder="优惠政策内容"
+                          hasEmpty={false}
+                        />
+                      )}
+                    </FormItem>
+                  </Col> : null
+              }
             </Row>
             <Row gutter={30}>
               <Col span={12} key={1}>

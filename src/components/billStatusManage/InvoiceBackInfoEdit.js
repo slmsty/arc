@@ -34,6 +34,9 @@ export default class InvoiceBackInfoEdit extends React.Component{
         title: '发票号',
         dataIndex: 'invoiceNum',
         width: 100,
+        render: (text) => {
+          return text ? text : '无'
+        }
       }, {
         title: '是否收到发票',
         dataIndex: 'invoiceResult',

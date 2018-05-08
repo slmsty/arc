@@ -289,7 +289,7 @@ class BillApproveDetail extends React.Component  {
   }
 
   getTaxData = () => {
-    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, addTaxAmount, totalTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    const { constructionTax, educationTax, incomeTax } = this.props.serviceDetail.arcBillingTaxInfo
     let constructionTotal = 0
     let educationTotal = 0
     let incomeTotal = 0
@@ -532,6 +532,7 @@ class BillApproveDetail extends React.Component  {
             defaultValue="0"
             value={this.state.dataSource[index]['prefPolicySign']}
             onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
+            <Option value="">-请选择-</Option>
             <Option value="1">是</Option>
             <Option value="0">否</Option>
           </Select>
