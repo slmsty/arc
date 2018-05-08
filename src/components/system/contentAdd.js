@@ -9,7 +9,7 @@ class ContentAdd extends React.Component {
     super(props)
     this.state = {
       reasonId: '',
-      prefPolicySign: '',
+      prefPolicySign: props.record.prefPolicySign,
     }
   }
 
