@@ -73,13 +73,6 @@ class CustomerTaxInfo extends React.Component {
           return text === '1' ? '使用' : '不使用'
         }
       }, {
-        title: '零税率标识',
-        dataIndex: 'zeroTaxSign',
-        width: '8%',
-        render: (text) => {
-          return text === 'Y' ? '使用' : '不使用'
-        }
-      }, {
         title: '税收分类编码版本号',
         dataIndex: 'taxCategoryVersion',
         width: '8%',
