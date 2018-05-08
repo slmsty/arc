@@ -1,10 +1,10 @@
 import React from 'react'
 import { Form, Row, Col, Button, Input, Icon, Select, DatePicker } from 'antd'
-import moment from 'moment'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSbu from '../common/SelectSbu'
 import './billingApplication.less'
 import MultipleInput from '../common/multipleInput'
+import { redTypes } from './billColumns'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -15,6 +15,7 @@ class BillingApplyForm extends React.Component {
     super(props)
     this.state = {
       expand: false,
+      currentType: 'BILLING_CONTRACT',
     }
   }
   handleQuery = () => {
@@ -33,6 +34,9 @@ class BillingApplyForm extends React.Component {
 
   handleChange = (value) => {
     this.props.getApplyChange(value)
+    this.setState({
+      currentType: value
+    })
   }
 
   render() {
@@ -106,6 +110,7 @@ class BillingApplyForm extends React.Component {
                   })(
                     <MultipleInput
                       placeholder="多发票号使用英文逗号间隔"
+                      disabled={redTypes.includes(this.state.currentType)}
                     />
                   )
                 }
