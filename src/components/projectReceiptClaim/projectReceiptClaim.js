@@ -284,7 +284,7 @@ export default class ProjectReceiptClaim extends React.Component {
     }
     const rejectBtn = this.queryParam.status === '21' || this.queryParam.status === '40' ? <Button type="danger" onClick={this.handleReject}>拒绝</Button> : null
     const hangUpBtn = <Button onClick={this.handleHangUp}>暂挂</Button>
-    const makeSummary = this.props.amountTotals && this.props.amountTotals.length ? this.props.amountTotals.map(item => `${item.currency}：${item.totalAmount}`).join('  ') : '0.00'
+    const makeSummary = this.props.amountTotals && this.props.amountTotals.length ? this.props.amountTotals.map(item => `${item.currency}：${currency(item.totalAmount)}`).join('  ') : '0.00'
     return (
       <div>
         <ProjectReceiptClaimSearchWithForm
@@ -301,7 +301,7 @@ export default class ProjectReceiptClaim extends React.Component {
             <Button onClick={this.handleEmailCliam}>邮件确认</Button>
           </Col>
           <Col span={12} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
-            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{currency(makeSummary)}</span>
+            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary}</span>
           </Col>
         </Row>
         <br />
