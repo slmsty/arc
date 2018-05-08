@@ -110,7 +110,7 @@ class BillingApplyForm extends React.Component {
                   })(
                     <MultipleInput
                       placeholder="多发票号使用英文逗号间隔"
-                      disabled={redTypes.includes(this.state.currentType)}
+                      disabled={!redTypes.includes(this.state.currentType)}
                     />
                   )
                 }
