@@ -42,7 +42,7 @@ class ContentAdd extends React.Component {
       <div>
         <Modal
           width="700px"
-          title="客户纳税信息"
+          title="新增开票内容"
           visible={this.props.visible}
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}

@@ -108,7 +108,7 @@ class CustomerTaxInfo extends React.Component {
       pageNo,
       onChange: (current) => {
         this.props.queryInvoiceTaxInfo({
-          custInfoName: this.props.form.getFieldValue('billingContentName'),
+          billingContentName: this.props.form.getFieldValue('billingContentName'),
           pageInfo:{
             pageNo: current,
             pageSize: 10
