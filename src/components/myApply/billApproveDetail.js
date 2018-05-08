@@ -339,6 +339,8 @@ class BillApproveDetail extends React.Component  {
     //项目经理
     const isProManager = this.props.taskCode === 'project_manager'
 
+    const isARAdminShow = isArAdmin && isAgainInvoice === 'false'
+
     const detailData = [
       {
       title: '购买方',
@@ -529,7 +531,6 @@ class BillApproveDetail extends React.Component  {
       render: (text, record, index) => {
         return (
           <Select
-            defaultValue="0"
             value={this.state.dataSource[index]['prefPolicySign']}
             onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
             <Option value="">-请选择-</Option>
@@ -609,6 +610,8 @@ class BillApproveDetail extends React.Component  {
       }]
       columns = columns.concat(taxColumns)
     }
+    console.log(this.props.showSave)
+    console.log(!(isArAdmin && isAgainInvoice === 'false'))
     return (
       <div>
         <div className="infoPanel">
@@ -873,7 +876,7 @@ class BillApproveDetail extends React.Component  {
           </div>
         }
         {
-          !(isArAdmin && isAgainInvoice === 'false') ?
+          this.props.showSave && !isARAdminShow ?
             <div className="add-btns">
               <Button
                 type="primary"

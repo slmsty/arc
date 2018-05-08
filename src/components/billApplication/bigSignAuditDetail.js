@@ -112,6 +112,7 @@ class BigSignAuditDetail extends React.Component {
               setBillApplicationType={this.setBillApplicationType}
               form={this.props.form}
               setFormValidate={this.setFormValidate}
+              showSave={false}
             />
           </div>
         </Form>

@@ -392,7 +392,13 @@ const invoiceLineCols = [{
   dataIndex: 'prefPolicySign',
   width: 100,
   render: (text) => {
-    return text === '0' ? '否' : '是'
+    if(text === '0') {
+      return '否'
+    } else if (text === '1') {
+      return '是'
+    } else {
+      return ''
+    }
   }
 }, {
   title: '优惠政策类型',
