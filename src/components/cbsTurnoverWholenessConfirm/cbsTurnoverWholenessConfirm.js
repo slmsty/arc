@@ -222,7 +222,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
       total: this.props.cbsTurnoverWholenessList.pageInfo.count,
     }
     const makeSummary = () => (this.props.cbsTurnoverWholenessList.amountTotals.length ?
-      this.props.cbsTurnoverWholenessList.amountTotals.map(item => `${item.currency}：`+ Math.abs(`${item.totalAmount}`)).join('  ') : '0.00'
+      this.props.cbsTurnoverWholenessList.amountTotals.map(item => `${item.currency}：`+ currency(Math.abs(`${item.totalAmount}`))).join('  ') : '0.00'
     )
     return (
       <div>
@@ -238,7 +238,7 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
             <Button type="default" onClick={this.handleBatchConfirm}>确认</Button>&nbsp;&nbsp;
           </Col>
           <Col span={16} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
-            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{currency(makeSummary())}</span>
+            <span>金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{makeSummary()}</span>
           </Col>
         </Row>
         <br />

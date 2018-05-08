@@ -543,7 +543,6 @@ export default class BillStatusCon extends React.Component {
           columns={billApproveInfoColumns}
           size="small"
           scroll={{ x: '1100px' }}
-          loading={this.state.loading}
           dataSource={this.props.billStatusManage.getBillStatusDetailList}
           pagination={false}
         />
@@ -556,7 +555,6 @@ export default class BillStatusCon extends React.Component {
           columns={billApproveItemColumns}
           size="small"
           scroll={{ x: '1250px' }}
-          loading={this.state.loading}
           pagination={false}
           dataSource={this.props.billStatusManage.getBillStatusContractDetailList}
         />
@@ -569,7 +567,6 @@ export default class BillStatusCon extends React.Component {
           columns={billApproveResultColumns}
           size="small"
           scroll={{ x: '1620px' }}
-          loading={this.state.loading}
           pagination ={false}
           dataSource={this.props.billStatusManage.getBillStatusBillResultList}
         />
