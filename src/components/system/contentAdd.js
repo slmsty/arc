@@ -76,7 +76,7 @@ class ContentAdd extends React.Component {
                 <FormItem {...formItemLayout} label="税收分类编码">
                   {
                     getFieldDecorator('taxCategoryCode',{
-                      initialValue: taxCategoryCode, rules: [{ required: true, message: '请填写税收分类编码!' }]
+                      initialValue: taxCategoryCode, rules: [{ required: true, message: '请填写税收分类编码!' }, {len: 19, message: '税收分类编码必须为19位!'}]
                     })(<Input placeholder="税收分类编码"/>)
                   }
                 </FormItem>
