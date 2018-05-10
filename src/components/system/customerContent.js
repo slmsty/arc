@@ -20,7 +20,7 @@ class CustomerTaxInfo extends React.Component {
 
   componentWillReceiveProps(nextPorps) {
     if(this.props.saveSuccess !== nextPorps.saveSuccess && nextPorps.saveSuccess) {
-      message.success('客户纳税信息保存成功')
+      message.success('开票内容信息保存成功')
       this.setState({
         showAdd: false,
       })
