@@ -115,7 +115,7 @@ class SelectOperator extends React.Component {
     return (
       <div>
         <Input
-          placeholder="请输入姓名"
+          placeholder="拆分操作人"
           onChange={this.handleChange}
           value={this.props.value && this.props.value[1] !== '' ? this.props.value[1] : this.state.inputValue}
           suffix={suffix}
@@ -134,6 +134,7 @@ class SelectOperator extends React.Component {
         >
 
           <Table
+            scroll={{y:300}}
             rowKey="customerId"
             columns={this.columns}
             rowSelection={rowSelection}
@@ -144,6 +145,13 @@ class SelectOperator extends React.Component {
             locale={{
               emptyText: this.state.firstLoad ? '' : '没有符合条件的拆分操作人',
             }}
+            pagination={false}
+            /*pagination={{
+              current: this.state.pageNo,
+              onChange: this.handleChangePage,
+              total: this.state.total,
+              size: 'small',
+            }}*/
           />
         </Modal>
       </div>
