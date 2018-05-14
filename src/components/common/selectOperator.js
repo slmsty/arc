@@ -74,7 +74,7 @@ class SelectOperator extends React.Component {
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
-      console.log(response.result)
+      console.log('22',response.result)
       this.setState({
         customerList: response.result,
         firstLoad: false,
@@ -115,7 +115,7 @@ class SelectOperator extends React.Component {
     return (
       <div>
         <Input
-          placeholder="拆分操作人"
+          placeholder="请输入姓名"
           onChange={this.handleChange}
           value={this.props.value && this.props.value[1] !== '' ? this.props.value[1] : this.state.inputValue}
           suffix={suffix}
@@ -143,12 +143,6 @@ class SelectOperator extends React.Component {
             loading={this.state.loading}
             locale={{
               emptyText: this.state.firstLoad ? '' : '没有符合条件的拆分操作人',
-            }}
-            pagination={{
-              current: this.state.pageNo,
-              onChange: this.handleChangePage,
-              total: this.state.total,
-              size: 'small',
             }}
           />
         </Modal>
