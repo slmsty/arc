@@ -76,7 +76,7 @@ class BillDetail extends React.Component {
         specificationType: item.specificationType ? item.specificationType : '',
         unit: item.unit ? item.unit : this.getInvoiceUnit(item.billingTaxRate ? item.billingTaxRate : 0),
         quantity: item.quantity ? item.quantity : 1,
-        unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
+        unitPrice: item.billingAmountExcludeTax ? Math.abs(item.billingAmountExcludeTax) : 0,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
         totalAmount: item.billingAmount ? item.billingAmount : 0,
@@ -323,7 +323,7 @@ class BillDetail extends React.Component {
     } else if (col === 'quantity') {
       dataSource[index][col] = value
       const { billingAmountExcludeTax } = this.state.dataSource[index]
-      dataSource[index]['unitPrice'] = (billingAmountExcludeTax / (value ? value : 1)).toFixed(2)
+      dataSource[index]['unitPrice'] = Math.abs(billingAmountExcludeTax / (value ? value : 1)).toFixed(2)
     } else {
       dataSource[index][col] = value
     }
@@ -417,7 +417,7 @@ class BillDetail extends React.Component {
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
     const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
     dataSource[index]['billingAmountExcludeTax'] = (billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2)
-    dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
+    dataSource[index]['unitPrice'] = Math.abs(excludeTax / (quantity ? quantity : 1)).toFixed(2)
     dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
   }
 
