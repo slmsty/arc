@@ -237,6 +237,8 @@ class BillDetail extends React.Component {
             ...record,
             lineNo: record.lineNo + 1,
             groupNo: groupNos.length > 0 ? record.groupNo : 1,
+            quantity: isRed ? -record.quantity : record.quantity,
+            unitPrice: isRed ? Math.abs(record.unitPrice) : record.unitPrice,
           }))
           const params = {
             ...values,
