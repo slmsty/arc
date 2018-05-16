@@ -159,6 +159,9 @@ class ContractSplitModal extends React.Component{
     return newData
 }
   handleChange = (data) => {
+    if (data.columns === 'contractCategory') {
+      data.columns = 'taskDesc'
+    }
     const newData =_.cloneDeep(this.state.dataSource)
     if(data){
       const indexData = [data.No,data.Name]
@@ -371,7 +374,6 @@ class ContractSplitModal extends React.Component{
     })
   }
   renderSelect = (text, index, column) => {
-    console.log('text',text)
     return (
       <Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : ''}>
         <Option value=''>请选择</Option>
@@ -869,7 +871,8 @@ class ContractSplitModal extends React.Component{
       ),
     }, {
       title: <span>合同类型<em style={{ color: '#FF0000' }}>*</em></span>,
-      dataIndex: 'contractCategory',
+      /*dataIndex: 'contractCategory', taskDesc*/
+      dataIndex: 'taskDesc',
       width: 200,
       render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractCategory',record),
     }, {
