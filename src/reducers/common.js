@@ -136,7 +136,7 @@ const common = {
           {
             key: '41',
             path: '/BillManage/billingApplication',
-            name: 'kaop开票申请',
+            name: '开票申请',
             icon: 'icon-kaipiaoshenqing',
             component: 'BillingApplication',
           },
