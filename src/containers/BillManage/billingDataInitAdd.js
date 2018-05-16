@@ -15,7 +15,7 @@ const mapDispatchToProps = dispatch => (
 class BillingDataInitAddComContainer extends React.Component {
   render() {
     return (
-      <BillingDataInitAddCom {...this.props}/>
+      <BillingDataInitAddCom />
     )
   }
 }
