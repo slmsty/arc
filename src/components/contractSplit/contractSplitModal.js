@@ -159,9 +159,7 @@ class ContractSplitModal extends React.Component{
     return newData
 }
   handleChange = (data) => {
-    if (data.columns === 'contractCategory') {
-      data.columns = 'taskDesc'
-    }
+
     const newData =_.cloneDeep(this.state.dataSource)
     if(data){
       const indexData = [data.No,data.Name]
@@ -187,6 +185,9 @@ class ContractSplitModal extends React.Component{
 
         }
         newData[data.indexs][data.columns] = indexData
+        if (data.columns === 'contractCategory') {
+          newData[data.indexs]['taskDesc'] = indexData
+        }
       }
       this.inputChange(newData,[data.indexs])
       this.setState({
@@ -470,9 +471,6 @@ class ContractSplitModal extends React.Component{
   }
   // 拆分保存接口
   handleOk = () => {
-    this.setState({
-      saveFlag:true
-    })
     const coutnData = this.state.dataSource.slice(0)
     const contractAmount = parseFloat(this.props.data.contractAmount)
     let totalListPrice = 0
@@ -667,7 +665,9 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
-
+    this.setState({
+      saveFlag:true
+    })
     this.props.saveInfo(postParams).then((res) => {
 
       if (res && res.response && res.response.resultCode === '000000') {
