@@ -258,6 +258,7 @@ class BillDetail extends React.Component {
             billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
             receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
+            specialTaxRate: this.state.isRequireRate ? 'Y' : 'N',
           }
           if(this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate) {
             const checkParams = {

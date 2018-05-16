@@ -74,7 +74,7 @@ class SelectOperator extends React.Component {
   }
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
-      console.log(response.result)
+      console.log('22',response.result)
       this.setState({
         customerList: response.result,
         firstLoad: false,
@@ -134,6 +134,7 @@ class SelectOperator extends React.Component {
         >
 
           <Table
+            scroll={{y:300}}
             rowKey="customerId"
             columns={this.columns}
             rowSelection={rowSelection}
@@ -144,12 +145,13 @@ class SelectOperator extends React.Component {
             locale={{
               emptyText: this.state.firstLoad ? '' : '没有符合条件的拆分操作人',
             }}
-            pagination={{
+            pagination={false}
+            /*pagination={{
               current: this.state.pageNo,
               onChange: this.handleChangePage,
               total: this.state.total,
               size: 'small',
-            }}
+            }}*/
           />
         </Modal>
       </div>

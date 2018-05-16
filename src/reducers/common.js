@@ -136,7 +136,7 @@ const common = {
           {
             key: '41',
             path: '/BillManage/billingApplication',
-            name: '开票申请',
+            name: 'kaop开票申请',
             icon: 'icon-kaipiaoshenqing',
             component: 'BillingApplication',
           },
@@ -149,6 +149,13 @@ const common = {
             child:[{component: "billingStatusSendAp", key: "421", name: "传送ap", path: "billingStatusSendAp"},
               {component: "billingStatusCancel", key: "422", name: "撤销", path: "billingStatusCancel"},
             ]
+          },
+          {
+            key: '43',
+            path: '/BillManage/billingDataInitAdd',
+            name: '期初数据补录',
+            icon: 'icon-kaipiaoshenqing',
+            component: 'billingDataInitAdd',
           },
         ],
       },

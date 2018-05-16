@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, Row, Col, Modal, Icon, Input, Select } from 'antd'
+import { Form, Button, Row, Col, Modal, Icon, Input, InputNumber, Select } from 'antd'
 import SelectInvokeApi from '../common/selectInvokeApi'
 const FormItem = Form.Item
 const Option = Select.Option
@@ -121,8 +121,8 @@ class ContentAdd extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="扣除额">
-                  {getFieldDecorator('taxIncludeAmount', {initialValue: taxIncludeAmount, rules: [{ required: true, message: '请填写开户行及账号!' }]})(
-                    <Input />
+                  {getFieldDecorator('taxIncludeAmount', {initialValue: taxIncludeAmount, rules: [{ required: true, message: '请填写扣除额!' }]})(
+                    <InputNumber style={{width: '200px'}}/>
                   )}
                 </FormItem>
               </Col>

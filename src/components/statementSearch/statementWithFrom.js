@@ -98,7 +98,42 @@ class StatementListCom extends React.Component {
     param:{}
   }
   excel = (type)=>{
-    this.props.excel(this.state.param,type)
+    const param = {}
+    const params = this.props.form.getFieldsValue()
+    if (type==='split') {
+      param.projectNo = params.projectNo
+      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.contractName = params.contractName
+      param.buId = params.buId ? params.buId[0] : ''
+      param.collectionProject = params.collectionProject
+      param.isProdect = params.isProdect
+      param.signCompany = params.signCompany
+      param.contractNo = params.contractNo
+      param.isReport = 'Y'
+    }
+    if (type==='order') {
+      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.projectNo = params.projectNo
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.signCompany = params.signCompany
+      param.salesBu = params.salesBu && params.salesBu.length ? params.salesBu[0] : ''
+      param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
+      param.projectManager = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
+      param.currency = params.currency
+    }
+    if (type==='summarize') {
+      param.startTime = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.endTime = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+
+      param.signCompany = params.signCompany
+      param.buType = params.buType
+
+      param.bu = params.bu && params.bu.length ? params.bu[0] : ''
+    }
+    this.props.excel(param,type)
   }
   // 查询接口
   queryParms = (statement) => {
@@ -909,7 +944,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('contractInfoReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'20px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>
+                {/*<Button style={{marginLeft:'20px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>*/}
               </Col>
             </Row>
           </div>

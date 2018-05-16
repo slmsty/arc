@@ -74,6 +74,7 @@ class ContractSplitModal extends React.Component{
       countTaskCost: 0.00,
       countTaskCostData: countTaskCostDataList,
       editFlag: true,
+      saveFlag:false,
       controactInfo: props.data,
       initInfo: null,
       assessRatio:data.assessRatio,
@@ -467,6 +468,9 @@ class ContractSplitModal extends React.Component{
   }
   // 拆分保存接口
   handleOk = () => {
+    this.setState({
+      saveFlag:true
+    })
     const coutnData = this.state.dataSource.slice(0)
     const contractAmount = parseFloat(this.props.data.contractAmount)
     let totalListPrice = 0
@@ -663,10 +667,12 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.subcontractFee = param.subcontractFee
 
     this.props.saveInfo(postParams).then((res) => {
+
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
         this.setState({
           editFlag:true,
+          saveFlag:false,
           deleteData:[],
         })
         const data = res.response.result[0]
@@ -956,7 +962,7 @@ class ContractSplitModal extends React.Component{
             <Button onClick={this.handleEdit} style={{display:this.state.editFlag ? 'inline-block' : 'none'}} disabled={!this.props.isShowEditBtn}>
               编辑
             </Button>,
-            <Button  key="submit" onClick={this.handleOk} style={{display:this.state.editFlag ? 'none' : 'inline-block'}}>
+            <Button  key="submit" onClick={this.handleOk} disabled={this.state.saveFlag} style={{display:this.state.editFlag ? 'none' : 'inline-block'}}>
               保存
             </Button>,
             <Button  onClick={this.handleReturn} style={{display:this.state.editFlag ? 'none' : 'none'}}>

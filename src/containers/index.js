@@ -34,6 +34,7 @@ import MailConfig from '../containers/system/mailConfig'
 import CustomerTaxInfo from '../containers/system/customerTaxInfo'
 import CustomerContent from '../containers/system/customerContent'
 import AuthoritySet from "../components/system/authoritySet";
+import billingDataInitAdd from './BillManage/billingDataInitAdd'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -109,6 +110,8 @@ class IndexContainer extends React.Component {
       return OutcomeReceiptReport
     }else if (component === 'contractSplitReport') {
       return ContractSplitReport
+    }else if (component === 'billingDataInitAdd') {
+      return billingDataInitAdd
     }
   }
   getMenuRoutes = (menus) => {
