@@ -15,6 +15,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
+    this.props.getBillDataInitList(param)
   }
   render() {
     const {getFieldDecorator} = this.props.form
@@ -28,7 +29,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="项目编码">
-                {getFieldDecorator('productNo', {
+                {getFieldDecorator('projectNo', {
                   initialValue: '',
                 })(<Input/>)}
               </FormItem>
@@ -42,7 +43,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
             </Col>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="发票号">
-                {getFieldDecorator('billNo', {
+                {getFieldDecorator('invoiceNumbers', {
                   initialValue: '',
                 })(<Input/>)}
               </FormItem>
@@ -58,20 +59,22 @@ class BillingDataInitAddWithFromCom extends React.Component {
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="签约公司">
-                {getFieldDecorator('signCompany', {
+                {getFieldDecorator('companyName', {
                   initialValue: '',
                 })(<Input/>)}
               </FormItem>
             </Col>
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="数据状态">
-                {getFieldDecorator('status', {
-                  initialValue: 'init',
+                {getFieldDecorator('createType', {
+                  initialValue: '',
                 })(
-                  <Select>
-                    <Option value='init'>初始化数据</Option>
-                    <Option value='apply'>ARC申请</Option>
-                  </Select>
+                  <SelectInvokeApi
+                    typeCode="CREATE_TYPE"
+                    paramCode="CREATE_TYPE"
+                    placeholder="数据状态"
+                    hasAll
+                  />
                 )}
               </FormItem>
             </Col>
