@@ -93,6 +93,7 @@ const invokeApi = ({
   // 仅仅对全局最常用的JSON格式的Request数据进行类型矫正为String、其他类型转换后放Body上
   if (path(['headers', 'Content-Type'], opt) === 'application/json' && options.body) {
     opt.body = JSON.stringify(options.body)
+    console.log('opt.body',opt.body)
   }
 
   const fetchPromise = async () => {

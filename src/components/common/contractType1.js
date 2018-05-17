@@ -51,6 +51,7 @@ export default class SelectInvokeApi extends React.Component {
   }
   render(){
     // 去重
+    console.log('this.props.value',this.props.value)
     const options = [... new Set(this.state.options)];
     const optionsDom = options ? options.map(option => {
       return <Option

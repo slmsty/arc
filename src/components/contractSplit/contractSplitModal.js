@@ -177,7 +177,7 @@ class ContractSplitModal extends React.Component{
           this.calculateListPrice(newData,data)
         }
         if(newData[data.indexs].orderListLineId){
-          if(this.props.tableDetail[data.indexs][data.columns] !=indexData[0]){
+          if(newData[data.indexs][data.columns] !=indexData[0]){
             newData[data.indexs].opsStatus = 'modify' //把数据的操作类型改为修改
           }else{
             newData[data.indexs].opsStatus = 'none' //把数据的操作类型改为修改
@@ -190,6 +190,8 @@ class ContractSplitModal extends React.Component{
         }
       }
       this.inputChange(newData,[data.indexs])
+      console.log('indexData',indexData)
+      console.log('newData',newData)
       this.setState({
         dataSource: newData,
       })
@@ -208,7 +210,7 @@ class ContractSplitModal extends React.Component{
     selectData = data.split('&')
     const newData = this.state.dataSource.slice(0)
     if(newData[selectData[1]].orderListLineId){
-      if(this.props.tableDetail[selectData[1]][selectData[2]] !=selectData[0]){
+      if(newData[selectData[1]][selectData[2]] !=selectData[0]){
         newData[selectData[1]].opsStatus = 'modify' //把数据的操作类型改为修改
       }else{
         newData[selectData[1]].opsStatus = 'none' //把数据的操作类型改为修改
@@ -249,6 +251,7 @@ class ContractSplitModal extends React.Component{
       />)
     }
     if(column ==='contractCategory'){
+      console.log('record',record)
       return(
         <ContractType1
           placeholder="合同类型"
@@ -322,7 +325,7 @@ class ContractSplitModal extends React.Component{
 
     }
     if(newData[index].orderListLineId){
-      if(this.props.tableDetail[index][column] !=value){
+      if(newData[index][column] !=value){
         newData[index].opsStatus = 'modify' //把数据的操作类型改为修改
       }else{
         newData[index].opsStatus = 'none' //把数据的操作类型改为修改
@@ -665,10 +668,13 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
+
     this.setState({
       saveFlag:true
     })
-    this.props.saveInfo(postParams).then((res) => {
+    console.log('postParams.splitListInfo',postParams.splitListInfo)
+    let saveParams = _.cloneDeep(postParams)
+    this.props.saveInfo(saveParams).then((res) => {
 
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')

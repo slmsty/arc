@@ -15,6 +15,7 @@ export function getContractList(queryParam) {
 }
 
 export function saveContractSplitInfo(queryParam) {
+  console.log('queryParam',queryParam)
   return {
     [httpApi]: {
       url: '/arc/contract/split/add',
