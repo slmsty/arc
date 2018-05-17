@@ -675,16 +675,14 @@ class ContractSplitModal extends React.Component{
     console.log('postParams.splitListInfo',postParams.splitListInfo)
     let saveParams = _.cloneDeep(postParams)
     this.props.saveInfo(saveParams).then((res) => {
-
+      this.setState({
+        saveFlag:false,
+        editFlag:true,
+        deleteData:[],
+      })
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
-        this.setState({
-          editFlag:true,
-          saveFlag:false,
-          deleteData:[],
-        })
         const data = res.response.result[0]
-
         const dataSource = _.cloneDeep(data.orderListLines).concat({
           taskOpration: '合计',
           contractCategory: 0,
