@@ -190,8 +190,6 @@ class ContractSplitModal extends React.Component{
         }
       }
       this.inputChange(newData,[data.indexs])
-      console.log('indexData',indexData)
-      console.log('newData',newData)
       this.setState({
         dataSource: newData,
       })
@@ -226,7 +224,6 @@ class ContractSplitModal extends React.Component{
     })
     //newSelectCountType.push(this.state.selectCountType)
     let selectDatas = [...new Set([...newSelectCountType])]
-    console.log('selectDatas',selectDatas)
     this.setState({
       dataSource: newData,
       selectCountType:selectDatas
@@ -251,7 +248,6 @@ class ContractSplitModal extends React.Component{
       />)
     }
     if(column ==='contractCategory'){
-      console.log('record',record)
       return(
         <ContractType1
           placeholder="合同类型"
@@ -672,7 +668,6 @@ class ContractSplitModal extends React.Component{
     this.setState({
       saveFlag:true
     })
-    console.log('postParams.splitListInfo',postParams.splitListInfo)
     let saveParams = _.cloneDeep(postParams)
     this.props.saveInfo(saveParams).then((res) => {
       this.setState({
@@ -830,8 +825,6 @@ class ContractSplitModal extends React.Component{
 
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractData = this.props.data
-    /*console.log('data.revenueCheckout',constractData.revenueCheckout)
-    console.log('this.state.selectCountType',this.state.selectCountType)*/
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
     let countsalePeo = 0 // 合同不含税额
