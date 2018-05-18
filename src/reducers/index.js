@@ -20,6 +20,7 @@ import billApplication from './billApplication'
 import billStatusManage from './billStatusManage/billStatusManage'
 import statement from './statement'
 import system from './system'
+import billInitData from './billStatusManage/billDataInitAdd'
 
 export default combineReducers({
   common,
@@ -42,5 +43,6 @@ export default combineReducers({
   billStatusManage,
   statement,
   system,
+  billInitData,
   routing: routerReducer, // 整合路由
 })

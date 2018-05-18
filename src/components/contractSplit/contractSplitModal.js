@@ -177,7 +177,7 @@ class ContractSplitModal extends React.Component{
           this.calculateListPrice(newData,data)
         }
         if(newData[data.indexs].orderListLineId){
-          if(this.props.tableDetail[data.indexs][data.columns] !=indexData[0]){
+          if(newData[data.indexs][data.columns] !=indexData[0]){
             newData[data.indexs].opsStatus = 'modify' //把数据的操作类型改为修改
           }else{
             newData[data.indexs].opsStatus = 'none' //把数据的操作类型改为修改
@@ -208,7 +208,7 @@ class ContractSplitModal extends React.Component{
     selectData = data.split('&')
     const newData = this.state.dataSource.slice(0)
     if(newData[selectData[1]].orderListLineId){
-      if(this.props.tableDetail[selectData[1]][selectData[2]] !=selectData[0]){
+      if(newData[selectData[1]][selectData[2]] !=selectData[0]){
         newData[selectData[1]].opsStatus = 'modify' //把数据的操作类型改为修改
       }else{
         newData[selectData[1]].opsStatus = 'none' //把数据的操作类型改为修改
@@ -224,7 +224,6 @@ class ContractSplitModal extends React.Component{
     })
     //newSelectCountType.push(this.state.selectCountType)
     let selectDatas = [...new Set([...newSelectCountType])]
-    console.log('selectDatas',selectDatas)
     this.setState({
       dataSource: newData,
       selectCountType:selectDatas
@@ -322,7 +321,7 @@ class ContractSplitModal extends React.Component{
 
     }
     if(newData[index].orderListLineId){
-      if(this.props.tableDetail[index][column] !=value){
+      if(newData[index][column] !=value){
         newData[index].opsStatus = 'modify' //把数据的操作类型改为修改
       }else{
         newData[index].opsStatus = 'none' //把数据的操作类型改为修改
@@ -665,20 +664,20 @@ class ContractSplitModal extends React.Component{
     postParams.contractInfo.task9Cost = param.task9Cost
     postParams.contractInfo.intercompanyCost = param.intercompanyCost
     postParams.contractInfo.subcontractFee = param.subcontractFee
+
     this.setState({
       saveFlag:true
     })
-    this.props.saveInfo(postParams).then((res) => {
-
+    let saveParams = _.cloneDeep(postParams)
+    this.props.saveInfo(saveParams).then((res) => {
+      this.setState({
+        saveFlag:false,
+        editFlag:true,
+        deleteData:[],
+      })
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
-        this.setState({
-          editFlag:true,
-          saveFlag:false,
-          deleteData:[],
-        })
         const data = res.response.result[0]
-
         const dataSource = _.cloneDeep(data.orderListLines).concat({
           taskOpration: '合计',
           contractCategory: 0,
@@ -826,8 +825,6 @@ class ContractSplitModal extends React.Component{
 
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractData = this.props.data
-    /*console.log('data.revenueCheckout',constractData.revenueCheckout)
-    console.log('this.state.selectCountType',this.state.selectCountType)*/
     let countCatalPrice = 0 // 合计目录价 catalogue
     let discountCatalPrice = 0 // 折后目录价
     let countsalePeo = 0 // 合同不含税额

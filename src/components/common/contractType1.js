@@ -56,8 +56,6 @@ export default class SelectInvokeApi extends React.Component {
       return <Option
         key={option.paramValue ? option.paramValueDesc : 'no_select'}
         value={option.paramValue}>
-        {/*{option.paramValue ==='all' ? '' :option.paramValue}
-        ({option.paramValueDesc})*/}
         {option.paramValueDesc}
       </Option>
     }) : null
