@@ -11,7 +11,8 @@ class BillingDataInitAddCom extends React.Component {
   state = {
     loading: false,
     showInfo:false,
-    infoData:[]
+    infoData:[],
+    billingDataInitResultList:[]
 
   }
   queryParam = {
@@ -45,6 +46,8 @@ class BillingDataInitAddCom extends React.Component {
     this.props.getBillDataInitList(this.queryParam).then((res)=> {
       this.setState({
         loading: false,
+        selectedRowKeys:[],
+        selectedRows:[]
       })
       if (res && res.response && res.response.resultCode === '000000') {
       } else {
@@ -64,13 +67,28 @@ class BillingDataInitAddCom extends React.Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
-  modifiedData = (record) => {
-    this.setState({
-      showInfo:true,
-      infoData:record
+  modifiedData = () => {
+    let paramData = this.state.selectedRows
+    let billingDataInitResultList = []
+    paramData.map((item)=>{
+      let queryParm = {}
+      queryParm.billingOutcomeId = item.billingOutcomeId
+      queryParm.billingAppLineId = item.billingAppLineId
+      billingDataInitResultList.push(queryParm)
+    })
+    this.props.showDataInitModal({billingDataInitResultList:billingDataInitResultList}).then((res) => {
+      if (res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          showInfo:true,
+          billingDataInitResultList:billingDataInitResultList
+        })
+      } else {
+       // message.error(res.resultMessage)
+      }
     })
   }
   closeModal =() => {
+
     this.setState({
       showInfo:false,
       infoData:[]
@@ -78,22 +96,28 @@ class BillingDataInitAddCom extends React.Component {
     this.handleQuery()
   }
   saveData =(param) => {
-    param.billingOutcomeId = this.state.infoData.billingOutcomeId
+    param.billingOutcomeId = this.props.billInitData.eidiBillDataInit.billingOutcomeId
+    param.billingDataInitResultList = this.state.billingDataInitResultList
+
     this.props.saveBillDataInit(param).then((res)=> {
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
       } else {
-        message.error('保存数据失败')
+       // message.error('保存数据失败')
       }
     })
   }
 
   render() {
-
     const billingDataInitColumns = [
       {
         title:'数据状态',
         dataIndex:'createTypeName',
+        width:80
+      },
+      {
+        title:'开票状态',
+        dataIndex:'statusName',
         width:80
       },
       {
@@ -134,7 +158,7 @@ class BillingDataInitAddCom extends React.Component {
       {
         title:'开票日期',
         dataIndex:'billingDate',
-        width:80
+        width:100
       },
       {
         title:'含税金额',
@@ -145,24 +169,14 @@ class BillingDataInitAddCom extends React.Component {
       {
         title:'税率',
         dataIndex:'taxRate',
-        width:60
+        width:60,
+        render: (text, record, index) => (text ? (text * 100) + '%' : text),
       },
       {
         title:'不含税金额',
         dataIndex:'taxExcludeAmount',
         width:120,
         render: (text, record, index) => (text ? currency(text) : text),
-      },
-      {
-        title:'操作',
-        dataIndex:'opion',
-        width:60,
-        fixed:'right',
-        render: (text, record, index) => (
-          <div>
-            <Button onClick={()=>this.modifiedData(record)}>修改</Button>
-          </div>
-        ),
       },
     ]
     const { selectedRowKeys } = this.state
@@ -176,16 +190,19 @@ class BillingDataInitAddCom extends React.Component {
     }
     const rowSelection = {
       selectedRowKeys,
-      type: 'radio',
+      type: 'checkbox',
       onChange: this.onSelectChange,
     }
     return (
       <div>
         <BillingDataInitAddWithFrom getBillDataInitList={this.getBillDataInitList}/>
         <br />
+        <Button key="primary" onClick={this.modifiedData} disabled={!(this.state.selectedRows && this.state.selectedRows.length)}>编辑</Button>
+        <div style={{marginBottom:'10px'}}></div>
         <Table
           rowKey="billingAppLineId"
           bordered
+          rowSelection={rowSelection}
           columns={billingDataInitColumns}
           size="small"
           loading={this.state.loading}
@@ -195,7 +212,7 @@ class BillingDataInitAddCom extends React.Component {
         />
         {
           this.state.showInfo ?
-            <InfoModal data ={this.state.infoData} colseModal={this.closeModal} saveData = {this.saveData}/>
+            <InfoModal data ={this.props.billInitData.eidiBillDataInit} colseModal={this.closeModal} saveData = {this.saveData}/>
             : null
         }
       </div>

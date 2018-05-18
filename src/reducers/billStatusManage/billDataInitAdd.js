@@ -10,6 +10,8 @@ const billDataInit = {
     pageSize: 10,
     result: [],
   },
+  eidiBillDataInit:{
+  },
   myContractRefresh: new Date().getTime(),
 }
 function getBillDataInitList(state, action) {
@@ -20,7 +22,13 @@ function saveBillDataInit(state, action) {
     ...state, myContractRefresh: new Date().getTime()
   }
 }
+function showDataInitModal(state, action) {
+  return {
+    ...state,eidiBillDataInit:action.response
+  }
+}
 export default caseReducer(billDataInit, {
   GET_BILLDATAINIT_LIST_SUCCESS: getBillDataInitList,
   SAVE_BILLDATAINIT_SUCCESS: saveBillDataInit,
+  SHOW_DATA_INIT_MODAL_SUCCESS:showDataInitModal
 })

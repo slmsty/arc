@@ -27,3 +27,15 @@ export function saveBillDataInit(queryParam) {
     },
   }
 }
+export function showDataInitModal(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/billingDataInitEdit',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['SHOW_DATA_INIT_MODAL_SUCCESS'],
+    },
+  }
+}

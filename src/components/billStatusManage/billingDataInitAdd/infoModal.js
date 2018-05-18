@@ -11,6 +11,35 @@ const FormItem = Form.Item
 const { TextArea } = Input
 const Option = Select.Option
 const dateFormat = 'YYYY-MM-DD'
+const cloums = [
+  {
+    title:'行ID',
+    dataIndex:'billingAppLineId',
+    width:80
+  },
+  {
+    title:'项目编码',
+    dataIndex:'projectNo',
+    width:80
+  },
+  {
+    title:'款项名称',
+    dataIndex:'paymentName',
+    width:80
+  },
+  {
+    title:'申请金额',
+    dataIndex:'billingAmount',
+    width:80,
+    render: (text, record, index) => (text ? currency(text) : text),
+  },
+  {
+    title:'税率',
+    dataIndex:'billingTaxRate',
+    width:80,
+    render: (text, record, index) => (text ? (text * 100) + '%' : text),
+  },
+]
 
 class InfoModal extends React.Component {
   save =() => {
@@ -27,19 +56,28 @@ class InfoModal extends React.Component {
         this.props.saveData(param)
       }
     })
-
 }
+  getWidth = (billingDataInitColumns) => {
+    let width = 0
+    billingDataInitColumns.map((item,index) => {
+      width += parseFloat(item.width)
+    })
+    return width
+
+  }
   render() {
     const {getFieldDecorator} = this.props.form
     const formItemLayout = {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
     }
-    let dataSource = this.props.data
-    console.log('dataSource.taxRate',dataSource.taxRate)
+    let datas = this.props.data
+    let billingDataInitResultList = datas.billingDataInitResultList
+    let dataSource = datas.billingDataInitResult
     return (
       <div>
         <Modal
+          maskClosable={false}
           width={600}
           title="详情"
           visible={true}
@@ -48,23 +86,21 @@ class InfoModal extends React.Component {
           footer={null}
         >
           <div style={{textAlign: 'center',marginBottom:'20px'}}>
+            {
+              billingDataInitResultList ?
+                <Table
+                  rowKey={record => record.key}
+                  bordered
+                  columns={cloums}
+                  size="small"
+                  pagination={false}
+                  scroll={{ x:this.getWidth(cloums) }}
+                  dataSource={billingDataInitResultList}
+                />
+                : null
+            }
+            <div style={{marginBottom:'20px'}}></div>
             <Form>
-              <Row gutter={40}>
-                <Col span={12} key={1}>
-                  <FormItem {...formItemLayout} label="项目编码">
-                    {getFieldDecorator('projectNo', {
-                      initialValue: dataSource.projectNo,
-                    })(<Input disabled={true}/>)}
-                  </FormItem>
-                </Col>
-                <Col span={12} key={2}>
-                  <FormItem {...formItemLayout} label="款项名称">
-                    {getFieldDecorator('paymentName', {
-                      initialValue: dataSource.paymentName,
-                    })(<Input disabled={true} />)}
-                  </FormItem>
-                </Col>
-              </Row>
               <Row gutter={40}>
                 <Col span={12} key={3}>
                   <FormItem {...formItemLayout} label="发票号">
@@ -117,9 +153,9 @@ class InfoModal extends React.Component {
                 <Col span={12} key={8}>
                   <FormItem {...formItemLayout} label="开票日期">
                     {getFieldDecorator('billingDate', {
-                      initialValue: moment(dataSource.billingDate),
+                      initialValue: dataSource.billingDate ? moment(dataSource.billingDate) :'',
                       rules: [
-                        { required: true, message: '请选择开票日期', },
+                        { required: true, message: '请选择开票日期' },
                       ]
                     })(
                       <DatePicker
@@ -135,7 +171,7 @@ class InfoModal extends React.Component {
                     {getFieldDecorator('taxIncludeAmount', {
                       initialValue: currency(dataSource.taxIncludeAmount),
                       rules: [
-                        { required: true, message: '请选择含税金额', },
+                        { required: true, message: '请输入含税金额', },
                       ]
                     })(<Input/>)}
                   </FormItem>
@@ -145,7 +181,7 @@ class InfoModal extends React.Component {
                     {getFieldDecorator('taxExcludeAmount', {
                       initialValue: currency(dataSource.taxExcludeAmount),
                       rules: [
-                        { required: true, message: '请选择不含税金额', },
+                        { required: true, message: '请输入不含税金额', },
                       ]
                     })(<Input/>)}
                   </FormItem>
@@ -155,7 +191,7 @@ class InfoModal extends React.Component {
                 <Col span={12} key={11}>
                   <FormItem {...formItemLayout} label="税率">
                     {getFieldDecorator('taxRate', {
-                      initialValue: dataSource.taxRate+'',
+                      initialValue: dataSource.taxRate ? (dataSource.taxRate+'') :'' ,
                     })(
                       <SelectInvokeApi
                         typeCode="BILLING_APPLICATION"
