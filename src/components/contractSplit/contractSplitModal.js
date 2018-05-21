@@ -484,7 +484,7 @@ class ContractSplitModal extends React.Component{
         return
       }
     }else{
-      if(totalListPrice != contractAmount) {
+      if(totalListPrice.toFixed(2) != contractAmount) {
         // 如果合同目录价之和与合同总金额差一分钱，则在保存时，将差异的一分钱合到最后一条上
         if ((Math.abs(totalListPrice - contractAmount)).toFixed(2) === "0.01") {
           if(totalListPrice >contractAmount){
