@@ -89,7 +89,6 @@ class InfoModal extends React.Component {
             {
               billingDataInitResultList ?
                 <Table
-                  rowKey={record => record.key}
                   bordered
                   columns={cloums}
                   size="small"

@@ -378,7 +378,6 @@ export default class ApplySearchCon extends React.Component {
           </Col>
         </Row>
         <Table
-          rowKey="contractId"
           pagination={false}
           bordered
           columns={columns}
