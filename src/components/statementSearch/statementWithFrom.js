@@ -98,9 +98,10 @@ class StatementListCom extends React.Component {
     param:{}
   }
   excel = (type)=>{
-    const param = {}
+    let param = {}
     const params = this.props.form.getFieldsValue()
     if (type==='split') {
+      param = {}
       param.projectNo = params.projectNo
       param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
       param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
@@ -113,6 +114,7 @@ class StatementListCom extends React.Component {
       param.isReport = 'Y'
     }
     if (type==='order') {
+      param = {}
       param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
       param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
       param.projectNo = params.projectNo
@@ -125,6 +127,7 @@ class StatementListCom extends React.Component {
       param.currency = params.currency
     }
     if (type==='summarize') {
+      param = {}
       param.startTime = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
       param.endTime = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
 
@@ -132,6 +135,97 @@ class StatementListCom extends React.Component {
       param.buType = params.buType
 
       param.bu = params.bu && params.bu.length ? params.bu[0] : ''
+    }
+    if (type==='receipt_claim') {
+      param = {}
+      param.projectNo = params.projectNo
+      param.contractNo = params.contractNo
+      param.receiptDateStart = params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : ''
+      param.receiptDateEnd = params.receiptDate && params.receiptDate.length ? params.receiptDate[1].format(dateFormat) : ''
+      param.receiptCurrency = params.receiptCurrency
+      param.claimAmountMin = params.claimAmountMin
+      param.claimAmountMax = params.claimAmountMax
+      param.signCompany = params.signCompany
+      param.paymentName = params.paymentName
+      param.contractName = params.contractName
+      param.custName = params.custName
+      param.receiptNo = params.receiptNo
+      param.isReport = 'Y'
+    }
+    // 发票信息查询表
+    if (type==='outcomeInfoReport') {
+      param = {}
+      param.projectNo = params.projectNo
+      param.custName = params.custName
+      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
+      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
+      param.currency = params.currency
+      param.signCompany = params.signCompany
+      param.invoiceNumber = params.invoiceNumber
+      param.billingAmountMin = params.billingAmountMin
+      param.billingAmountMax = params.billingAmountMax
+      param.paymentName = params.paymentName
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+    }
+    if (type==='receiptAccountReport') {
+      param = {}
+      param.projectNo = params.projectNo
+      param.contarctNo = params.contarctNo
+      param.signCompany = params.signCompany
+      param.contarctName = params.contarctName
+      param.deadline = params.deadline
+      param.custName = params.custName
+    }
+    if (type==='projectInfoReport') {
+      param = {}
+      param.projectNo = params.projectNo
+      param.custName = params.custName
+      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
+      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
+      param.currency = params.currency
+      param.contractName = params.contractName
+      param.contractNo = params.contractNo
+    }
+    if (type==='contractInfoReport') {
+      param = {}
+      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.region = params.region && params.region.lenght ? params.region[0] : ''
+      param.projectNo = params.projectNo
+      param.salesManager = params.salesManager
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.projectManager = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
+      param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
+    }
+    if (type==='outcomeDetailReport') {
+      param = {}
+      param.projectNo = params.projectNo
+      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
+      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
+      param.contractName = params.contractName
+      param.invoiceNumber = params.invoiceNumber
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.custName = params.custName
+    }
+    if (type==='outcomeTotalReport') {
+      param = {}
+      param.projectNo = params.projectNo
+      param.projectDept = params.projectDept
+      param.projectBu = params.projectBu ? params.projectBu[0] : ''
+      param.billingMonth = params.billingMonth.format("YYYY-MM")
+    }
+    if (type==='unContractOutcomeDataAdd') {
+      param = {}
+      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
+      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
+      param.projectNo = params.projectNo
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.custName = params.custName
+      param.invoiceNumber = params.invoiceNumber
     }
     this.props.excel(param,type)
   }
@@ -158,7 +252,6 @@ class StatementListCom extends React.Component {
       param.custName = params.custName
       param.receiptNo = params.receiptNo
       param.isReport = 'Y'
-      console.log('param',param)
       this.setState({
         param
       })
@@ -435,10 +528,12 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
-                  {getFieldDecorator('receiptCurrency')(
+                  {getFieldDecorator('currency',{
+                    initialValue: 'ORIGINAL',
+                  })(
                     <Select>
-                      <Option value="USD">USD</Option>
-                      <Option value="CNY">CNY</Option>
+                      <Option value="ORIGINAL">原币</Option>
+                      <Option value="USD">美元</Option>
                     </Select>
                   )}
                 </FormItem>
@@ -511,7 +606,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('receiptInfoReport')}><Icon type="search" />查询</Button>
-                {/*<Button type="primary" key="search1" onClick={()=>this.excel('receipt_claim')}><Icon type="search" />导出EXCEL</Button>*/}
+                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('receipt_claim')}><Icon type="search" />导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -558,10 +653,12 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
-                  {getFieldDecorator('currency')(
+                  {getFieldDecorator('currency',{
+                    initialValue: 'ORIGINAL',
+                  })(
                     <Select>
-                      <Option value="USD">USD</Option>
-                      <Option value="CNY">CNY</Option>
+                      <Option value="ORIGINAL">原币</Option>
+                      <Option value="USD">美元</Option>
                     </Select>
                   )}
                 </FormItem>
@@ -634,6 +731,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeInfoReport')}><Icon type="search" />查询</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('outcomeInfoReport')}><Icon type="search" />导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -710,7 +808,8 @@ class StatementListCom extends React.Component {
             </Row>
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
-                <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search" />查询</Button>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeInfoReport')}><Icon type="search" />查询</Button>
+                <Button type="primary" key="search1" onClick={()=>this.excel('outcomeInfoReport')}><Icon type="search" />导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -788,6 +887,7 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('receiptAccountReport')}><Icon type="search" />查询</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('receiptAccountReport')}><Icon type="search" />导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -821,10 +921,12 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
-                  {getFieldDecorator('currency')(
+                  {getFieldDecorator('currency',{
+                    initialValue: 'ORIGINAL',
+                  })(
                     <Select>
-                      <Option value="USD">USD</Option>
-                      <Option value="CNY">CNY</Option>
+                      <Option value="ORIGINAL">原币</Option>
+                      <Option value="USD">美元</Option>
                     </Select>
                   )}
                 </FormItem>
@@ -853,6 +955,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('projectInfoReport')}><Icon type="search" />查询</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('projectInfoReport')}><Icon type="search" />导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -944,7 +1047,8 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('contractInfoReport')}><Icon type="search" />查询</Button>
-                {/*<Button style={{marginLeft:'20px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>*/}
+                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('contractInfoReport')}><Icon type="search" />导出EXCEL</Button>
+
               </Col>
             </Row>
           </div>
@@ -1111,7 +1215,6 @@ class StatementListCom extends React.Component {
                 </Col>
                 <Col span={8} style={{ textAlign: 'right' }}>
                   <Button type="primary" key="search" onClick={()=>this.queryParms('contractSplitReport')}><Icon type="search" />查询</Button>
-                  {/*<Button disabled={this.state.excelDis ? false : true} style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('split')}>导出Excel</Button>*/}
                   <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('split')}>导出Excel</Button>
                   </Col>
               </Row>
@@ -1191,6 +1294,7 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeDetailReport')}><Icon type="search" />查询</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('outcomeDetailReport')}>导出Excel</Button>
               </Col>
             </Row>
 
@@ -1243,7 +1347,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeTotalReport')}><Icon type="search" />查询</Button>
-
+                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('outcomeTotalReport')}>导出Excel</Button>
               </Col>
             </Row>
 
@@ -1319,6 +1423,7 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('unContractOutcomeDataAdd')}><Icon type="search" />查询</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('unContractOutcomeDataAdd')}>导出Excel</Button>
               </Col>
             </Row>
 

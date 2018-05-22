@@ -31,13 +31,48 @@ export default class StatementListIndex extends React.Component {
   excel = (param,type) => {
     let params = {}
     if (type === 'split') {
+      params = {}
       params.contractSplit = param
     }
     if (type === 'order') {
+      params = {}
       params.projectOrder = param
     }
     if (type === 'summarize') {
+      params = {}
       params.orderSummarize = param
+    }
+    if (type==='receipt_claim') {
+      params = {}
+      params.receiptClaim = param
+    }
+    if (type==='outcomeInfoReport') {
+      params = {}
+      params.invoice = param
+    }
+    if (type==='receiptAccountReport') {
+      params = {}
+      params.confirReq = param
+    }
+    if (type==='projectInfoReport') {
+      params = {}
+      params.project = param
+    }
+    if (type==='contractInfoReport') {
+      params = {}
+      params.contract = param
+    }
+    if (type==='outcomeDetailReport') {
+      params = {}
+      params.invoiceDetail = param
+    }
+    if (type==='outcomeTotalReport') {
+      params = {}
+      params.billingMonth = param
+    }
+    if (type==='unContractOutcomeDataAdd') {
+      params = {}
+      params.unsignedBilling = param
     }
     this.props.getExcel(params,type)
   }
