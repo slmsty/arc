@@ -361,9 +361,9 @@ class BillDetail extends React.Component {
   }
 
   beforeUpload = (file) => {
-    const isLt10M = file.size / 1024 / 1024 < 10;
-    if (!isLt10M) {
-      message.error('上传文件大小必须小于10MB!');
+    const isLt20M = file.size / 1024 / 1024 < 20;
+    if (!isLt20M) {
+      message.error('上传文件大小必须小于20MB!');
       return false
     }
     this.setState({

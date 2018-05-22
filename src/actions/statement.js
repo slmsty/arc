@@ -156,6 +156,37 @@ export function getExcel(queryParam,type) {
   if (type === 'summarize') {
     url = '/arc/report/order_summarize/excel'  // ORDER汇总表导出地址
   }
+  if (type === 'receipt_claim') {
+    url = '/arc/report/receipt_claim/excel'  // 收款信息查询表导出地址
+  }
+  if (type === 'outcomeInfoReport') {
+    url = '/arc/report/invoice/excel'  // 发票信息查询表导出地址
+  }
+  if (type === 'receiptAccountReport') {
+    url = '/arc/report/confirmation_request/excel'  // 应收账款询证函报表导出地址
+  }
+  if (type === 'projectInfoReport') {
+    url = '/arc/report/project_info/excel'  // 项目综合信息查询报表导出地址
+  }
+  if (type === 'contractInfoReport') {
+    url = '/arc/report/contract_info/excel'  // 整体合同内容查询表导出地址
+  }
+  if (type === 'outcomeDetailReport') {
+    url = '/arc/report/invoice_detail/excel'  // 发票明细表导出地址
+  }
+  if (type === 'outcomeTotalReport') {
+    url = '/arc/report/billing_month/excel'  // 发票汇总表导出地址
+  }
+  if (type === 'unContractOutcomeDataAdd') {
+    url = '/arc/report/unsigned_billing/excel'  // 未大签提前开票数据补充导出地址
+  }
+
+
+
+
+
+
+
   return {
     [httpApi]: {
       url: url,
