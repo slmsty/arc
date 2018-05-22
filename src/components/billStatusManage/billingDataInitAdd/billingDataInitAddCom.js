@@ -11,6 +11,9 @@ class BillingDataInitAddCom extends React.Component {
   state = {
     loading: false,
     showInfo:false,
+    selectedRows:[],
+    selectedRowKeys:[],
+    selectType:'',
     infoData:[],
     billingDataInitResultList:[]
 
@@ -67,19 +70,23 @@ class BillingDataInitAddCom extends React.Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRowKeys, selectedRows })
   }
-  modifiedData = () => {
+  modifiedData = (type) => {
     let paramData = this.state.selectedRows
     let billingDataInitResultList = []
+    let param = {}
     paramData.map((item)=>{
       let queryParm = {}
       queryParm.billingOutcomeId = item.billingOutcomeId
       queryParm.billingAppLineId = item.billingAppLineId
       billingDataInitResultList.push(queryParm)
     })
-    this.props.showDataInitModal({billingDataInitResultList:billingDataInitResultList}).then((res) => {
+    param.billingDataInitResultList = billingDataInitResultList
+    param.buttonType = type
+    this.props.showDataInitModal(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         this.setState({
           showInfo:true,
+          selectType:type,
           billingDataInitResultList:billingDataInitResultList
         })
       } else {
@@ -91,14 +98,15 @@ class BillingDataInitAddCom extends React.Component {
 
     this.setState({
       showInfo:false,
-      infoData:[]
+      infoData:[],
+      selectedRows:[],
+      selectedRowKeys:[],
     })
     this.handleQuery()
   }
   saveData =(param) => {
     param.billingOutcomeId = this.props.billInitData.eidiBillDataInit.billingOutcomeId
     param.billingDataInitResultList = this.state.billingDataInitResultList
-
     this.props.saveBillDataInit(param).then((res)=> {
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
@@ -197,10 +205,10 @@ class BillingDataInitAddCom extends React.Component {
       <div>
         <BillingDataInitAddWithFrom getBillDataInitList={this.getBillDataInitList}/>
         <br />
-        <Button key="primary" onClick={this.modifiedData} disabled={!(this.state.selectedRows && this.state.selectedRows.length)}>编辑</Button>
+        <Button key="primary" onClick={()=>this.modifiedData('add')} disabled={!(this.state.selectedRows && this.state.selectedRows.length)}>增加</Button>
+        <Button style={{marginLeft:'10px'}} key="primary1" onClick={()=>this.modifiedData('edit')} disabled={!(this.state.selectedRows && this.state.selectedRows.length)}>编辑</Button>
         <div style={{marginBottom:'10px'}}></div>
         <Table
-          rowKey="billingAppLineId"
           bordered
           rowSelection={rowSelection}
           columns={billingDataInitColumns}
@@ -212,7 +220,7 @@ class BillingDataInitAddCom extends React.Component {
         />
         {
           this.state.showInfo ?
-            <InfoModal data ={this.props.billInitData.eidiBillDataInit} colseModal={this.closeModal} saveData = {this.saveData}/>
+            <InfoModal type={this.state.selectType} data ={this.props.billInitData.eidiBillDataInit} colseModal={this.closeModal} saveData = {this.saveData}/>
             : null
         }
       </div>
