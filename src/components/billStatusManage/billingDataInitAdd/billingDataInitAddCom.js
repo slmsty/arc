@@ -126,7 +126,17 @@ class BillingDataInitAddCom extends React.Component {
       {
         title:'开票状态',
         dataIndex:'statusName',
-        width:80
+        width:100
+      },
+      {
+        title:'申请单ID',
+        dataIndex:'billingApplicationId',
+        width:100
+      },
+      {
+        title:'行ID',
+        dataIndex:'billingAppLineId',
+        width:100
       },
       {
         title:'项目编码',
