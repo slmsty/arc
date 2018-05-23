@@ -30,6 +30,11 @@ class BillingDataInitAddCom extends React.Component {
     invoiceNumbers: '',
     createType: '',
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.billInitData.myContractRefresh !== nextProps.billInitData.myContractRefresh) {
+      this.closeModal()
+    }
+  }
   getWidth = (billingDataInitColumns) => {
     let width = 0
     billingDataInitColumns.map((item,index) => {
