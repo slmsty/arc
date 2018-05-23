@@ -76,6 +76,7 @@ class BillingDataInitAddCom extends React.Component {
     this.setState({ selectedRowKeys, selectedRows })
   }
   modifiedData = (type) => {
+    let flag = false
     let paramData = this.state.selectedRows
     let billingDataInitResultList = []
     let param = {}
@@ -83,8 +84,15 @@ class BillingDataInitAddCom extends React.Component {
       let queryParm = {}
       queryParm.billingOutcomeId = item.billingOutcomeId
       queryParm.billingAppLineId = item.billingAppLineId
+      if (type === 'add' && (item.status === 'BILLING_OK' || item.status === 'BILLING_INVALID_OK')) {
+        message.error('所选申请单发票已录入完毕，请勿重复增加')
+        flag = true
+      }
       billingDataInitResultList.push(queryParm)
     })
+    if (flag) {
+      return
+    }
     param.billingDataInitResultList = billingDataInitResultList
     param.buttonType = type
     this.props.showDataInitModal(param).then((res) => {
