@@ -9,6 +9,7 @@ import InfoModal from './infoModal'
 
 class BillingDataInitAddCom extends React.Component {
   state = {
+    addFlag:false,
     loading: false,
     showInfo:false,
     selectedRows:[],
@@ -73,6 +74,26 @@ class BillingDataInitAddCom extends React.Component {
     this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
+    let falg = false
+    if (selectedRows[0]) {
+      selectedRows.map((item)=> {
+        if (item.status === 'BILLING_OK' || item.status === 'BILLING_INVALID_OK') {
+          falg = true
+        }
+
+      })
+
+    }
+    if (falg || !selectedRows[0]) {
+      console.log(8)
+      this.setState({
+        addFlag:false
+      })
+    }else {
+      this.setState({
+        addFlag:true
+      })
+    }
     this.setState({ selectedRowKeys, selectedRows })
   }
   modifiedData = (type) => {
@@ -232,7 +253,7 @@ class BillingDataInitAddCom extends React.Component {
       <div>
         <BillingDataInitAddWithFrom getBillDataInitList={this.getBillDataInitList}/>
         <br />
-        <Button key="primary" onClick={()=>this.modifiedData('add')} disabled={!(this.state.selectedRows && this.state.selectedRows.length)}>增加</Button>
+        <Button key="primary" onClick={()=>this.modifiedData('add')} disabled={!this.state.addFlag}>增加</Button>
         <Button style={{marginLeft:'10px'}} key="primary1" onClick={()=>this.modifiedData('edit')} disabled={!(this.state.selectedRows && this.state.selectedRows.length)}>编辑</Button>
         <div style={{marginBottom:'10px'}}></div>
         <Table
