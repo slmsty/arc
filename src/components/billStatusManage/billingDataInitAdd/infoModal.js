@@ -54,6 +54,10 @@ class InfoModal extends React.Component {
         param.taxRate = params.taxRate
         param.taxExcludeAmount = params.taxExcludeAmount.replace(/,/g,'')
         param.invoiceType = params.invoiceType
+        if (param.taxIncludeAmount === "0" || param.taxExcludeAmount === "0" || param.taxIncludeAmount === "0.00" || param.taxExcludeAmount === "0.00") {
+          message.error('发票金额不能为0')
+          return
+        }
         this.props.saveData(param)
       }
     })

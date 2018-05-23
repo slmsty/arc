@@ -91,6 +91,10 @@ class BillingDataInitAddCom extends React.Component {
       billingDataInitResultList.push(queryParm)
     })
     if (flag) {
+      this.setState({
+        selectedRows:[],
+        selectedRowKeys:[],
+      })
       return
     }
     param.billingDataInitResultList = billingDataInitResultList
