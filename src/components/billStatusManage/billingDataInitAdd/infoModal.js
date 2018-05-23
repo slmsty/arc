@@ -53,6 +53,11 @@ class InfoModal extends React.Component {
         param.taxIncludeAmount = params.taxIncludeAmount.replace(/,/g,'')
         param.taxRate = params.taxRate
         param.taxExcludeAmount = params.taxExcludeAmount.replace(/,/g,'')
+        param.invoiceType = params.invoiceType
+        if (param.taxIncludeAmount === "0" || param.taxExcludeAmount === "0" || param.taxIncludeAmount === "0.00" || param.taxExcludeAmount === "0.00") {
+          message.error('含税金额和不含税金额不能为0')
+          return
+        }
         this.props.saveData(param)
       }
     })
@@ -141,11 +146,11 @@ class InfoModal extends React.Component {
               <Row gutter={40}>
                 <Col span={12} key={7}>
                   <FormItem {...formItemLayout} label="发票类型">
-                    {getFieldDecorator('invoiceTypeName', {
-                      initialValue: dataSource.invoiceTypeName,
-                    })(<Select disabled={true}>
-                      <Option value="普票">普票</Option>
-                      <Option value="专票">专票</Option>
+                    {getFieldDecorator('invoiceType', {
+                      initialValue: dataSource.invoiceType,
+                    })(<Select disabled={this.props.type === 'edit' ?true : false}>
+                      <Option value="INVOICE">普票</Option>
+                      <Option value="SPECIAL_INVOICE">专票</Option>
                     </Select>)}
                   </FormItem>
                 </Col>
