@@ -68,6 +68,7 @@ class BillDetail extends React.Component {
       data.push({
         lineNo: index,
         billingAppLineId: item.billingAppLineId ? item.billingAppLineId : '',
+        billingRecordId: item.billingRecordId ? item.billingRecordId : '',
         groupNo: item.groupNo ? parseInt(item.groupNo) : 1,
         isParent: 1,
         arBillingId: item.arBillingId,
