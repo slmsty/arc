@@ -68,11 +68,11 @@ class BillDetail extends React.Component {
       data.push({
         lineNo: index,
         billingAppLineId: item.billingAppLineId ? item.billingAppLineId : '',
-        billingRecordId: item.billingRecordId ? item.billingRecordId : '',
         groupNo: item.groupNo ? parseInt(item.groupNo) : 1,
         isParent: 1,
         arBillingId: item.arBillingId,
         contractItemId: item.contractItemId,
+        billingRecordId: item.billingRecordId ? item.billingRecordId : '',
         billingContent: item.billingContent ? item.billingContent : '',
         specificationType: item.specificationType ? item.specificationType : '',
         unit: item.unit ? item.unit : this.getInvoiceUnit(item.billingTaxRate ? item.billingTaxRate : 0),
@@ -294,6 +294,7 @@ class BillDetail extends React.Component {
   handleChange = (value, col, index, record) => {
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
+      dataSource[index]['billingRecordId'] = value[0]
       dataSource[index][col] = value[1]
     } else if(col === 'billingAmount') {
       //发票拆分子记录输入金额后，从新计算携带数据的金额
