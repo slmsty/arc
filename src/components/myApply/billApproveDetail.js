@@ -115,6 +115,7 @@ class BillApproveDetail extends React.Component  {
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
       dataSource[index][col] = value.billingContentName
+      dataSource[index]['billingRecordId'] = value.billingRecordId
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode
       dataSource[index]['taxCategoryName'] = value.taxCategoryName
       dataSource[index]['prefPolicySign'] = value.prefPolicySign
@@ -610,8 +611,6 @@ class BillApproveDetail extends React.Component  {
       }]
       columns = columns.concat(taxColumns)
     }
-    console.log(this.props.showSave)
-    console.log(!(isArAdmin && isAgainInvoice === 'false'))
     return (
       <div>
         <div className="infoPanel">
