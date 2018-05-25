@@ -30,8 +30,8 @@ class BillStatusManageWithFormCon extends React.Component {
     const param = this.props.form.getFieldsValue()
     param.beginDate = param.signDate && param.signDate.length ? param.signDate[0].format(dateFormat) : ''
     param.endDate = param.signDate && param.signDate.length ? param.signDate[1].format(dateFormat) : ''
-    param.projectCode = param.projectCode && param.projectCode.length ? param.projectCode.join(',') : ''
-    param.contractCode = param.contractCode && param.contractCode.length ? param.contractCode.join(',') : ''
+    //param.projectCode = param.projectCode && param.projectCode.length ? param.projectCode.join(',') : ''
+   //param.contractCode = param.contractCode && param.contractCode.length ? param.contractCode.join(',') : ''
     param.invoiceCode = param.invoiceCode && param.invoiceCode.length ? param.invoiceCode.join(',') : ''
     param.accountId = param.accountId[0]
     delete param.signDate
@@ -68,10 +68,10 @@ class BillStatusManageWithFormCon extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={3}>
-              <FormItem {...formItemLayout} label="项目编码(多)">
+              <FormItem {...formItemLayout} label="项目编码">
                 {
                   getFieldDecorator('projectCode')(
-                    <MultipleInput
+                    <Input
                       placeholder="多项目编码使用英文逗号间隔"
                     />,
                   )
@@ -95,10 +95,10 @@ class BillStatusManageWithFormCon extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={5}>
-              <FormItem {...formItemLayout} label="合同编码(多)">
+              <FormItem {...formItemLayout} label="合同编码">
                 {
                   getFieldDecorator('contractCode')(
-                    <MultipleInput
+                    <Input
                       placeholder="多合同编码使用英文逗号间隔"
                     />,
                   )
