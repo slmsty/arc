@@ -9,6 +9,7 @@ import MultipleInput from '../common/multipleInput'
 import SelectRadioApi from  '../common/selectRadioApi'
 import SelectSbu from '../common/SelectSbu'
 import SelectOperator from '../common/selectOperator'
+import SelectCurrent from '../common/selectCurrent'
 import StaffInfo from '../common/staffInfo'
 import SelectCustomerWithForm from '../common/selectCustomer'
 
@@ -251,7 +252,11 @@ class StatementListCom extends React.Component {
       param.contractName = params.contractName
       param.custName = params.custName
       param.receiptNo = params.receiptNo
+      param.glDateStart = params.glDate && params.glDate.length ? params.glDate[0].format(dateFormat) : ''
+      param.glDateEnd = params.glDate && params.glDate.length ? params.glDate[1].format(dateFormat) : ''
       param.isReport = 'Y'
+      param.status = params.status
+      param.currency = params.currency
       this.setState({
         param
       })
@@ -529,12 +534,8 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency',{
-                    initialValue: 'ORIGINAL',
                   })(
-                    <Select>
-                      <Option value="ORIGINAL">原币</Option>
-                      <Option value="USD">美元</Option>
-                    </Select>
+                    <SelectCurrent />
                   )}
                 </FormItem>
               </Col>
@@ -604,7 +605,32 @@ class StatementListCom extends React.Component {
                   }
                 </FormItem>
               </Col>
-              <Col span={16} style={{ textAlign: 'right' }}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="数据状态">
+                  {getFieldDecorator('status',{
+                    initialValue: '51',
+                  })(
+                    <Select>
+                      <Option value="51">已经传送AR</Option>
+                      <Option value="60">暂挂</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="GL日期">
+                  {getFieldDecorator('glDate', {
+                    //initialValue: [moment('2017-08-01'), moment()],
+                  })(<RangePicker
+                    allowClear
+                    format={dateFormat}
+                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                  />)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('receiptInfoReport')}><Icon type="search" />查询</Button>
                 <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('receipt_claim')}><Icon type="search" />导出EXCEL</Button>
               </Col>
@@ -654,12 +680,8 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency',{
-                    initialValue: 'ORIGINAL',
                   })(
-                    <Select>
-                      <Option value="ORIGINAL">原币</Option>
-                      <Option value="USD">美元</Option>
-                    </Select>
+                    <SelectCurrent />
                   )}
                 </FormItem>
               </Col>
@@ -922,12 +944,8 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency',{
-                    initialValue: 'ORIGINAL',
                   })(
-                    <Select>
-                      <Option value="ORIGINAL">原币</Option>
-                      <Option value="USD">美元</Option>
-                    </Select>
+                    <SelectCurrent />
                   )}
                 </FormItem>
               </Col>
@@ -1514,12 +1532,8 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency',{
-                    initialValue: 'ORIGINAL',
                   })(
-                    <Select>
-                      <Option value="ORIGINAL">原币</Option>
-                      <Option value="USD">美元</Option>
-                    </Select>
+                    <SelectCurrent />
                   )}
                 </FormItem>
               </Col>
