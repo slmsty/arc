@@ -21,7 +21,13 @@ const reciptMoneyInfoCols = [{
     title: '付款条款',
     dataIndex: 'paymentName',
     width: 100,
-  }, {
+  },
+  {
+    title: '款项ID',
+    dataIndex: 'fundId',
+    width: 100,
+  },
+  {
     title: '收款币种',
     dataIndex: 'receiptCurrency',
     width: 80,
@@ -30,7 +36,13 @@ const reciptMoneyInfoCols = [{
     dataIndex: 'billedArAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
-  }, {
+  },
+  {
+    title: 'GL日期',
+    dataIndex: 'glDate',
+    width: 80,
+  },
+  {
     title: '收款日期',
     dataIndex: 'receiptDate',
     width: 80,
@@ -44,10 +56,19 @@ const reciptMoneyInfoCols = [{
     dataIndex: 'claimAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
+  },{
+    title: '客户名称',
+    dataIndex: 'custName',
+    width: 200,
   }, {
     title: '合同编号',
     dataIndex: 'contractNo',
     width: 200,
+  },
+  {
+    title: 'BUNAME',
+    dataIndex: 'buName',
+    width: 100,
   },
   {
     title: '合同名称',
@@ -55,26 +76,33 @@ const reciptMoneyInfoCols = [{
     width: 300,
   },
   {
-    title: '项目经理',
-    dataIndex: 'projectManager',
-    width: 80,
-  },
-  {
-    title: '销售经理',
-    dataIndex: 'salesManager',
-    width: 80,
-  },
-  {
-    title: '立项部门',
-    dataIndex: 'deptId',
-    width: 80,
-  },
-  {
     title: '已开票金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
+  {
+    title: '数据状态',
+    dataIndex: 'status',
+    width: 100,
+  },
+  {
+    title: '客户付款方式',
+    dataIndex: 'paymentMethod',
+    width: 100,
+  },
+  {
+    title: '解付日期',
+    dataIndex: 'paymentDate',
+    width: 100,
+  },
+  {
+    title: '备注',
+    dataIndex: 'remark',
+    width: 100,
+  },
+
+
 ]
 //发票信息查询表
 const billInfocomCols = [{

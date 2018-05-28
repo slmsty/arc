@@ -194,7 +194,6 @@ export default class StatementListIndex extends React.Component {
   /*param:传递参数
   type：报表类型*/
   queryParms = (param,type) => {
-    console.log(type)
     this.setState({
       currencyType:type,
     })

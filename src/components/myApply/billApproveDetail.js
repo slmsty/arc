@@ -552,9 +552,10 @@ class BillApproveDetail extends React.Component  {
             disabled={this.state.dataSource[index]['prefPolicySign'] === '0'}
           >
             <Option value="">-请选择-</Option>
-            <Option value="超税负3%即征即退">超税负3%即征即退</Option>
             <Option value="免税">免税</Option>
             <Option value="不征税">不征税</Option>
+            <Option value="普通零税率">普通零税率</Option>
+            <Option value="超税负3%即征即退">超税负3%即征即退</Option>
           </Select>
         )
       }
