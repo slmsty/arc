@@ -16,6 +16,7 @@ const reciptMoneyInfoCols = [{
   title: '付款百分比',
   dataIndex: 'paymentPercent',
   width: 100,
+  render: (text, rocord, index) => (text ? text+'%' : '')
 },
   {
     title: '付款条款',
@@ -40,12 +41,12 @@ const reciptMoneyInfoCols = [{
   {
     title: 'GL日期',
     dataIndex: 'glDate',
-    width: 80,
+    width: 100,
   },
   {
     title: '收款日期',
     dataIndex: 'receiptDate',
-    width: 80,
+    width: 100,
   },
   {
     title: '收款编号',
@@ -228,6 +229,7 @@ const billAndReciptMoneyCols = [{
     title: '付款百分比',
     dataIndex: 'payParam',
     width: 100,
+    render: (text, rocord, index) => (text ? text+'%' : '')
   },
   {
     title: '付款条款',
@@ -581,6 +583,7 @@ const turnProColumns = [{
     title: '付款百分比',
     dataIndex: 'payParam',
     width: 100,
+    render: (text, rocord, index) => (text ? text+'%' : '')
   },
   {
     title: '付款条款',
@@ -659,6 +662,7 @@ const turnProColumns = [{
     title: '付款百分比',
     dataIndex: 'payParam',
     width: 80,
+    render: (text, rocord, index) => (text ? text+'%' : '')
   },
   {
     title: '付款条款',
