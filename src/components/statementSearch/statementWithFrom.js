@@ -535,7 +535,7 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency',{
                   })(
-                    <SelectCurrent />
+                    <SelectCurrent hasAll />
                   )}
                 </FormItem>
               </Col>
@@ -608,9 +608,10 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="数据状态">
                   {getFieldDecorator('status',{
-                    initialValue: '51',
+                    initialValue: '',
                   })(
                     <Select>
+                      <Option value="">全部</Option>
                       <Option value="51">已经传送AR</Option>
                       <Option value="60">暂挂</Option>
                     </Select>
@@ -681,7 +682,7 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency',{
                   })(
-                    <SelectCurrent />
+                    <SelectCurrent hasAll />
                   )}
                 </FormItem>
               </Col>
@@ -945,7 +946,7 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency',{
                   })(
-                    <SelectCurrent />
+                    <SelectCurrent hasAll />
                   )}
                 </FormItem>
               </Col>
@@ -1533,7 +1534,7 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency',{
                   })(
-                    <SelectCurrent />
+                    <SelectCurrent hasAll />
                   )}
                 </FormItem>
               </Col>
