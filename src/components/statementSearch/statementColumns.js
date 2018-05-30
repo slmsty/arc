@@ -823,7 +823,7 @@ const billInfoCols = [
   },
   {
     title:'发票号',
-    dataIndex: 'invoceNumber',
+    dataIndex: 'invoiceNumber',
     width: 100,
   },
   {
