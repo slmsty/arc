@@ -804,6 +804,11 @@ const constructSplitSearchColumns = [{
 // 发票明细数据表
 const billInfoCols = [
   {
+    title:'签约公司',
+    dataIndex: 'signCompany',
+    width: 150,
+  },
+  {
     title:'开票日期',
     dataIndex: 'billingDate',
     width: 100,
@@ -872,6 +877,11 @@ const billInfoCols = [
     width: 150,
   },
   {
+    title:'发票类型',
+    dataIndex: 'invoiceType',
+    width: 100,
+  },
+  {
     title:'发票税率',
     dataIndex: 'billingTaxRate',
     width: 100,
@@ -921,6 +931,11 @@ const outcomeTotalReportCols = [
 
 // 未大签提前开票数据补充
 const unContractOutcomeDataAddCols = [
+  {
+    title:'签约公司',
+    dataIndex: 'signCompany',
+    width: 150,
+  },
   {
     title:'发票号',
     dataIndex: 'invoiceNumber',
@@ -983,6 +998,11 @@ const unContractOutcomeDataAddCols = [
     title:'备注',
     dataIndex: 'remark',
     width: 120,
+  },
+  {
+    title:'发票类型',
+    dataIndex: 'invoiceType',
+    width: 100,
   },
   {
     title:'发票税率',
