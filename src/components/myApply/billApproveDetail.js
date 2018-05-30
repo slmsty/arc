@@ -863,10 +863,10 @@ class BillApproveDetail extends React.Component  {
             }
             <Row gutter={40}>
               <Col span={19}>
-                <FormItem {...span3ItemLayout} label="备注">
+                <FormItem {...span3ItemLayout} label="发票备注">
                   {!isProManager ?
-                    getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 350, message: '备注不能超过350个字符!' }]})(
-                      <TextArea placeholder="备注" rows="2" />
+                    getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 75, message: '备注不能超过75个汉字!' }]})(
+                      <TextArea placeholder="发票备注" rows="2" />
                     ) : billingApplicantRemark
                   }
                 </FormItem>
@@ -876,7 +876,7 @@ class BillApproveDetail extends React.Component  {
               <Col span={19}>
                 <FormItem {...span3ItemLayout} label="开票原因及要求">
                   {!isProManager ?
-                    getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票原因及要求不能超过350个字符!' }]})(
+                    getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票原因及要求不能超过350字符!' }]})(
                       <TextArea placeholder="请输入开票原因及要求" rows="2" />
                     ) : billingApplicantRequest
                   }
