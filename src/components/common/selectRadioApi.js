@@ -50,7 +50,7 @@ export default class SelectRadioApi extends React.Component {
     const optionDom = options ? options.map(option => <RadioButton style={{ marginRight: '10px', borderRadius: '4px',marginBottom:'10px' }} key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</RadioButton>) : null
     return (
       <RadioGroup
-        size="large" style={{ width: this.props.options.length ? '1000px' :'1000px' }}
+       // size="large" style={{ width: this.props.options.length ? '1000px' :'1000px' }}
         placeholder={this.props.placeholder}
         onChange={this.handleChange}
         value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : '')}

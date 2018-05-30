@@ -59,6 +59,10 @@ class ApplySearchCon extends React.Component {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
     }
+    const formItemLayout1 = {
+      labelCol: { span: 2 },
+      wrapperCol: { span: 22 },
+    }
     return (
       <div>
         <Form
@@ -82,8 +86,8 @@ class ApplySearchCon extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={8} key={3}>
-              <FormItem {...formItemLayout} label="申请类型">
+            <Col span={24}>
+              <FormItem {...formItemLayout1} label="申请类型">
                 {getFieldDecorator('serviceType')(
                   <SelectRadioApi
                     typeCode="WORK_FLOW"
@@ -97,8 +101,8 @@ class ApplySearchCon extends React.Component {
             </Col>
           </Row>
           <Row gutter={40} style={{ display: this.state.showBillType ? 'block' : 'none' }}>
-            <Col span={8} key={3}>
-              <FormItem {...formItemLayout} label="发票类型">
+            <Col span={24} key={3}>
+              <FormItem {...formItemLayout1} label="发票类型">
                 {getFieldDecorator('serviceSonType', {
                   initialValue: 'BILLING_NORMAL',
                 })(
