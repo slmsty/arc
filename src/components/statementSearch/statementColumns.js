@@ -1,4 +1,5 @@
 import currency from '../../util/currency'
+import './statement.css'
 //收款信息查询表
 const reciptMoneyInfoCols = [{
   title: '签约公司',
@@ -36,7 +37,10 @@ const reciptMoneyInfoCols = [{
     title: '应收金额',
     dataIndex: 'billedArAmount',
     width: 100,
+    align:'right',
+    className:'right',
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    //render:(text)=>(<div>5555</div>)
   },
   {
     title: 'GL日期',
@@ -56,6 +60,8 @@ const reciptMoneyInfoCols = [{
     title: '收款金额',
     dataIndex: 'claimAmount',
     width: 100,
+    align:'right',
+    className:'right',
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },{
     title: '客户名称',
@@ -67,7 +73,7 @@ const reciptMoneyInfoCols = [{
     width: 200,
   },
   {
-    title: 'BUNAME',
+    title: '立项BU',
     dataIndex: 'buName',
     width: 100,
   },
@@ -80,6 +86,8 @@ const reciptMoneyInfoCols = [{
     title: '已开票金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
+    align:'right',
+    className:'right',
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
