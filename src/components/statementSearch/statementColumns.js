@@ -1,4 +1,5 @@
 import currency from '../../util/currency'
+import './statement.css'
 //收款信息查询表
 const reciptMoneyInfoCols = [{
   title: '签约公司',
@@ -36,7 +37,10 @@ const reciptMoneyInfoCols = [{
     title: '应收金额',
     dataIndex: 'billedArAmount',
     width: 100,
+    align:'right',
+    className:'right',
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    //render:(text)=>(<div>5555</div>)
   },
   {
     title: 'GL日期',
@@ -56,6 +60,8 @@ const reciptMoneyInfoCols = [{
     title: '收款金额',
     dataIndex: 'claimAmount',
     width: 100,
+    align:'right',
+    className:'right',
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },{
     title: '客户名称',
@@ -67,7 +73,7 @@ const reciptMoneyInfoCols = [{
     width: 200,
   },
   {
-    title: 'BUNAME',
+    title: '立项BU',
     dataIndex: 'buName',
     width: 100,
   },
@@ -80,6 +86,8 @@ const reciptMoneyInfoCols = [{
     title: '已开票金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
+    align:'right',
+    className:'right',
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
@@ -804,13 +812,18 @@ const constructSplitSearchColumns = [{
 // 发票明细数据表
 const billInfoCols = [
   {
+    title:'签约公司',
+    dataIndex: 'signCompany',
+    width: 150,
+  },
+  {
     title:'开票日期',
     dataIndex: 'billingDate',
     width: 100,
   },
   {
     title:'发票号',
-    dataIndex: 'invoceNumber',
+    dataIndex: 'invoiceNumber',
     width: 100,
   },
   {
@@ -862,7 +875,7 @@ const billInfoCols = [
   },
   {
     title:'销项税',
-    dataIndex: 'totalReciptMoney',
+    dataIndex: 'tax',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
@@ -870,6 +883,11 @@ const billInfoCols = [
     title:'备注',
     dataIndex: 'remark',
     width: 150,
+  },
+  {
+    title:'发票类型',
+    dataIndex: 'invoiceType',
+    width: 100,
   },
   {
     title:'发票税率',
@@ -921,6 +939,11 @@ const outcomeTotalReportCols = [
 
 // 未大签提前开票数据补充
 const unContractOutcomeDataAddCols = [
+  {
+    title:'签约公司',
+    dataIndex: 'signCompany',
+    width: 150,
+  },
   {
     title:'发票号',
     dataIndex: 'invoiceNumber',
@@ -983,6 +1006,11 @@ const unContractOutcomeDataAddCols = [
     title:'备注',
     dataIndex: 'remark',
     width: 120,
+  },
+  {
+    title:'发票类型',
+    dataIndex: 'invoiceType',
+    width: 100,
   },
   {
     title:'发票税率',

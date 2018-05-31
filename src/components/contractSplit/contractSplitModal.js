@@ -974,7 +974,7 @@ class ContractSplitModal extends React.Component{
           ]}
         >
           <div>
-            <Form>
+            <Form className="contractSplitForm">
               <Row>
                 <Col span={4}>
                   <h2>合同OrderList信息</h2>

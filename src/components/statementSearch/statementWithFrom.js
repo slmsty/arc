@@ -210,6 +210,7 @@ class StatementListCom extends React.Component {
       param.contractNo = params.contractNo
       param.contractName = params.contractName
       param.custName = params.custName
+      param.signCompany = params.signCompany
     }
     if (type==='outcomeTotalReport') {
       param = {}
@@ -227,6 +228,7 @@ class StatementListCom extends React.Component {
       param.contractName = params.contractName
       param.custName = params.custName
       param.invoiceNumber = params.invoiceNumber
+      param.signCompany = params.signCompany
     }
     this.props.excel(param,type)
   }
@@ -291,6 +293,8 @@ class StatementListCom extends React.Component {
       param.contractNo = params.contractNo
       param.contractName = params.contractName
       param.custName = params.custName
+      param.signCompany = params.signCompany
+
       this.setState({
         param
       })
@@ -319,6 +323,8 @@ class StatementListCom extends React.Component {
       param.contractName = params.contractName
       param.custName = params.custName
       param.invoiceNumber = params.invoiceNumber
+      param.signCompany = params.signCompany
+
       this.setState({
         param
       })
@@ -1311,7 +1317,16 @@ class StatementListCom extends React.Component {
               </Col>
             </Row>
             <Row gutter={40}>
-              <Col span={24} style={{ textAlign: 'right' }}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="签约公司">
+                  {getFieldDecorator('signCompany')(
+                    <Input
+                      placeholder="请输入签约公司"
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeDetailReport')}><Icon type="search" />查询</Button>
                 <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('outcomeDetailReport')}>导出Excel</Button>
               </Col>
@@ -1440,7 +1455,18 @@ class StatementListCom extends React.Component {
               </Col>
             </Row>
             <Row gutter={40}>
-              <Col span={24} style={{ textAlign: 'right' }}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="签约公司">
+                  {
+                    getFieldDecorator('signCompany')(
+                      <Input
+                        placeholder="签约公司"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('unContractOutcomeDataAdd')}><Icon type="search" />查询</Button>
                 <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('unContractOutcomeDataAdd')}>导出Excel</Button>
               </Col>

@@ -111,7 +111,7 @@ class InfoModal extends React.Component {
                     {getFieldDecorator('invoiceNumber', {
                       initialValue: dataSource.invoiceNumber,
                       rules: [
-                        { required: true, message: '请输入发票号', },
+                        { required: true, message: '请输入8位发票号',len:8 },
                       ]
                     })(<Input/>)}
                   </FormItem>
@@ -121,7 +121,7 @@ class InfoModal extends React.Component {
                     {getFieldDecorator('invoiceCode', {
                       initialValue: dataSource.invoiceCode,
                       rules: [
-                        { required: true, message: '请输入发票代码', },
+                        { required: true, message: '请输入10位发票代码',len:10 },
                       ]
                     })(<Input/>)}
                   </FormItem>
