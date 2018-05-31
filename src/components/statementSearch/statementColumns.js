@@ -875,7 +875,7 @@ const billInfoCols = [
   },
   {
     title:'销项税',
-    dataIndex: 'totalReciptMoney',
+    dataIndex: 'tax',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
