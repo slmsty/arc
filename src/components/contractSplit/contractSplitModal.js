@@ -133,7 +133,7 @@ class ContractSplitModal extends React.Component{
     assessRatio = assessRatio/100 // 考核比率为百分数
     let formula = 1
     let formula2 = 1
-    if (assessRatio !== 0) {
+    if (true) {
       if (data.No === '7') {
         formula = (1 + incomeRatio)
         formula2 = (1 - assessRatio)
@@ -160,7 +160,7 @@ class ContractSplitModal extends React.Component{
 }
   handleChange = (data) => {
 
-    const newData =_.cloneDeep(this.state.dataSource)
+    let newData =_.cloneDeep(this.state.dataSource)
     if(data){
       const indexData = [data.No,data.Name]
 
@@ -174,7 +174,8 @@ class ContractSplitModal extends React.Component{
               item.contractCategory = ''
             }
           })
-          this.calculateListPrice(newData,data)
+         newData = this.calculateListPrice(newData,data)
+          //this.calculateListPrice(newData,data)
         }
         if(newData[data.indexs].orderListLineId){
           if(newData[data.indexs][data.columns] !=indexData[0]){
@@ -338,7 +339,7 @@ class ContractSplitModal extends React.Component{
   checkType = (string) => {
     let value = 0
     if(string){
-      if(typeof string ==='string' || typeof text ==='number'){
+      if(typeof string ==='string' || typeof string ==='number'){
         value = string ? string : 0
       }else if(string.length > 0){
         value = string[1] ? string[1] : 0
@@ -347,7 +348,6 @@ class ContractSplitModal extends React.Component{
     return parseFloat(value)/100
   }
   inputChange = (newData,index) => {
-
     const contractTaxRate = this.checkType(newData[index].contractTaxRate)
     const returnTaxRate = this.checkType(newData[index].returnTaxRate)
 
