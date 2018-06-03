@@ -898,7 +898,7 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="附件">
                       {
-                        getFieldDecorator('file', {initialValue: '', rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件!' }] })(
+                        getFieldDecorator('file', {initialValue: fileName, rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件!' }] })(
                           <Upload {...props} fileList={this.state.fileList}>
                             <Button>
                               <Icon type="upload" />点击上传
