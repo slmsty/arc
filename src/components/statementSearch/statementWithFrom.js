@@ -1562,6 +1562,7 @@ class StatementListCom extends React.Component {
                     initialValue: '',
                   })(
                     <Select>
+                      <Option value=''>全部</Option>
                       <Option value='ORIGINAL'>原币</Option>
                       <Option value='USD'>美元</Option>
                     </Select>
