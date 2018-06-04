@@ -342,10 +342,13 @@ class ContractSplitModal extends React.Component{
       if(typeof string ==='string' || typeof string ==='number'){
         value = string ? string : 0
       }else if(string.length > 0){
-        value = string[1] ? string[1] : 0
+
+        if (string[1] && string[1].includes('%')) {
+          value = parseFloat(string[1])/100
+        }
       }
     }
-    return parseFloat(value)/100
+    return value
   }
   inputChange = (newData,index) => {
     const contractTaxRate = this.checkType(newData[index].contractTaxRate)
