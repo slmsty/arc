@@ -342,7 +342,7 @@ class StatementListCom extends React.Component {
       param.salesBu = params.salesBu && params.salesBu.length ? params.salesBu[0] : ''
       param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
       param.projectManager = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
-      param.currency = params.currency
+      param.currency = params.currency1
       this.setState({
         param
       })
@@ -1558,8 +1558,8 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
-                  {getFieldDecorator('currency',{
-                    initialValue: '',
+                  {getFieldDecorator('currency1',{
+                    initialValue: 'ORIGINAL',
                   })(
                     <Select>
                       <Option value=''>全部</Option>
