@@ -234,7 +234,7 @@ class ContractSplitModal extends React.Component{
     if(column=="product"){
       // 如果产品编码为空，则取第一个数据为默认值
       if(!text && text != 0) {
-        text = this.props.productNoData.length && this.props.productNoData[0].productNo ? this.props.productNoData[0].productNo : '0'
+        text = this.props.productNoData.length && this.props.productNoData[0].productNo ? this.props.productNoData[0].productNo : ''
         //this.handleChange({No:text,Name:text,indexs:index,columns:column})
       }
       return ( <ProductNo
@@ -474,6 +474,7 @@ class ContractSplitModal extends React.Component{
   // 拆分保存接口
   handleOk = () => {
     const coutnData = this.state.dataSource.slice(0)
+    console.log('coutnData',coutnData)
     const contractAmount = parseFloat(this.props.data.contractAmount)
     let totalListPrice = 0
     coutnData.map((item) => {
@@ -521,10 +522,10 @@ class ContractSplitModal extends React.Component{
     param.relatedBuNoName = relatedBuNoName
     param.projectBuNoName = projectBuNoName
 
-    if (param.maintainBeginDate === '' || typeof param.maintainBeginDate ==='undefined') {
+    /*if (param.maintainBeginDate === '' || typeof param.maintainBeginDate ==='undefined') {
       message.error('保修开始时间不能为空！')
       return
-    }
+    }*/
     if (param.revenueCheckout && param.revenueCheckout.length<=0 || typeof param.revenueCheckout ==='undefined') {
       message.error('收入结算方式不能为空！')
       return
@@ -558,6 +559,7 @@ class ContractSplitModal extends React.Component{
     }
 
     const newLisfInfo = []
+    console.log('splitListInfo',splitListInfo)
     let j = 1
     for(let i of splitListInfo) {
       //i.contractCategory.paramValueDesc =
@@ -595,7 +597,8 @@ class ContractSplitModal extends React.Component{
       }
 
       let contractCategory = ''
-      let product = i.product
+      let product = i.product ? i.product : ''
+      console.log('product1',product)
       let returnTaxRate = ''
       let contractTaxRate = ''
 
@@ -607,10 +610,12 @@ class ContractSplitModal extends React.Component{
       }
       if(typeof i.product ==='string' || typeof i.product ==='number'){
         product = i.product
+        console.log('product2',product)
       }
       if(Array.isArray(i.product)){
         product = i.product[0]
       }
+      console.log('product3',product)
       if(typeof i.returnTaxRate ==='string' || typeof i.returnTaxRate ==='number'){
         returnTaxRate = i.returnTaxRate
       }else if (i.returnTaxRate.length > 0) {
@@ -1149,13 +1154,13 @@ class ContractSplitModal extends React.Component{
                   </div>
                 </Col>
                 <Col span={3} className="contractRowBorderLeft contract-bg">
-                  保修期开始时间<em style={{ color: '#FF0000' }}>*</em>：
+                  保修期开始时间：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     <FormItem>
                       {getFieldDecorator('maintainBeginDate', {
-                        initialValue: constractData.maintainBeginDate,
+                        initialValue: constractData.maintainBeginDate ? constractData.maintainBeginDate :'',
                       })(
                         <SelectInvokeApi
                           placeholder="请选择保修期开始时间"
