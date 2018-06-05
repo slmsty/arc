@@ -124,7 +124,6 @@ class ContractSplitModal extends React.Component{
     const dataInfos = this.props.data
     const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
     const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
-    //let assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
     let assessRatio = this.state.assessRatio ? parseFloat(this.state.assessRatio) : 0 // 考核比率
     const incomeRatio =  parseFloat(parseFloat(solutionMaintain)/12 * 0.05)  // 收入比率
     if(isNaN(assessRatio)){
@@ -159,13 +158,13 @@ class ContractSplitModal extends React.Component{
     return newData
 }
   handleChange = (data) => {
-
     let newData =_.cloneDeep(this.state.dataSource)
     if(data){
       const indexData = [data.No,data.Name]
 
       if(data.columns){
         if(data.columns === 'contractCategory'){
+          newData[data.indexs].contractTaxRate = 'all'
           // 当父拆分数据改变时 清空子拆分数据的合同类型的数据
           // 当前的合同类型的父拆分数据的id
           const orderListLineId = newData[data.indexs].orderListLineId ? newData[data.indexs].orderListLineId : 0
@@ -208,7 +207,7 @@ class ContractSplitModal extends React.Component{
     let newSelectCountType = []
     selectData = data.split('&')
     const newData = this.state.dataSource.slice(0)
-    if(newData[selectData[1]].orderListLineId){
+    if(newData[selectData[1]] && newData[selectData[1]].orderListLineId){
       if(newData[selectData[1]][selectData[2]] !=selectData[0]){
         newData[selectData[1]].opsStatus = 'modify' //把数据的操作类型改为修改
       }else{
@@ -348,6 +347,7 @@ class ContractSplitModal extends React.Component{
         }
       }
     }
+    if (isNaN(value)) value = 0
     return value
   }
   inputChange = (newData,index) => {
@@ -1160,7 +1160,7 @@ class ContractSplitModal extends React.Component{
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     <FormItem>
                       {getFieldDecorator('maintainBeginDate', {
-                        initialValue: constractData.maintainBeginDate ? constractData.maintainBeginDate :'',
+                        initialValue: constractData.maintainBeginDate ? constractData.maintainBeginDate :'MAINTAIN_TIME_6',
                       })(
                         <SelectInvokeApi
                           placeholder="请选择保修期开始时间"
