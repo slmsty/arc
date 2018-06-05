@@ -214,7 +214,12 @@ export default class ProjectReceiptClaimModal extends React.Component {
         self.props.submitClaim({
           receiptClaimId: self.props.receiptInfo.receiptClaimId,
           claimItems,
-        })
+        }).then((res)=>{
+          self.setState({confirmLoading: false})
+          }
+
+        )
+        //self.setState({confirmLoading: false})
       },
     })
     this.setState({confirmLoading: false})

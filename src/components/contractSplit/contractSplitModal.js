@@ -124,9 +124,8 @@ class ContractSplitModal extends React.Component{
     const dataInfos = this.props.data
     const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
     const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
-    //let assessRatio = dataInfos.assessRatio ? parseFloat(dataInfos.assessRatio) : 0 // 考核比率
     let assessRatio = this.state.assessRatio ? parseFloat(this.state.assessRatio) : 0 // 考核比率
-    const incomeRatio =  parseFloat(parseFloat(solutionMaintain)/12 * 0.05)  // 收入比率
+    const incomeRatio =  parseFloat(solutionMaintain)/12 * 0.05 // 收入比率
     if(isNaN(assessRatio)){
       assessRatio = 0
     }
@@ -137,35 +136,35 @@ class ContractSplitModal extends React.Component{
       if (data.No === '7') {
         formula = (1 + incomeRatio)
         formula2 = (1 - assessRatio)
-        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        newData[data.indexs]['listPrice'] = parseFloat((parseFloat((contractTotalMoney / formula) * formula2)).toFixed(3)).toFixed(2)
       }
       if (data.No === '7-K') {
         formula = (1 + incomeRatio)
         formula2 = assessRatio
-        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        newData[data.indexs]['listPrice'] = parseFloat((parseFloat((contractTotalMoney / formula) * formula2)).toFixed(3)).toFixed(2)
       }
       if (data.No === '10S') {
         formula = (1 + incomeRatio)
         formula2 = incomeRatio * (1 - assessRatio)
-        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        newData[data.indexs]['listPrice'] = parseFloat((parseFloat((contractTotalMoney / formula) * formula2)).toFixed(3)).toFixed(2)
       }
       if (data.No === '10S-K') {
         formula = (1 + incomeRatio)
         formula2 = incomeRatio * assessRatio
-        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        newData[data.indexs]['listPrice'] = parseFloat((parseFloat((contractTotalMoney / formula) * formula2)).toFixed(3)).toFixed(2)
       }
 
     }
     return newData
 }
   handleChange = (data) => {
-
     let newData =_.cloneDeep(this.state.dataSource)
     if(data){
       const indexData = [data.No,data.Name]
 
       if(data.columns){
         if(data.columns === 'contractCategory'){
+          newData[data.indexs].contractTaxRate = 'all'
           // 当父拆分数据改变时 清空子拆分数据的合同类型的数据
           // 当前的合同类型的父拆分数据的id
           const orderListLineId = newData[data.indexs].orderListLineId ? newData[data.indexs].orderListLineId : 0
@@ -208,7 +207,7 @@ class ContractSplitModal extends React.Component{
     let newSelectCountType = []
     selectData = data.split('&')
     const newData = this.state.dataSource.slice(0)
-    if(newData[selectData[1]].orderListLineId){
+    if(newData[selectData[1]] && newData[selectData[1]].orderListLineId){
       if(newData[selectData[1]][selectData[2]] !=selectData[0]){
         newData[selectData[1]].opsStatus = 'modify' //把数据的操作类型改为修改
       }else{
@@ -234,7 +233,7 @@ class ContractSplitModal extends React.Component{
     if(column=="product"){
       // 如果产品编码为空，则取第一个数据为默认值
       if(!text && text != 0) {
-        text = this.props.productNoData.length && this.props.productNoData[0].productNo ? this.props.productNoData[0].productNo : '0'
+        text = this.props.productNoData.length && this.props.productNoData[0].productNo ? this.props.productNoData[0].productNo : ''
         //this.handleChange({No:text,Name:text,indexs:index,columns:column})
       }
       return ( <ProductNo
@@ -342,10 +341,14 @@ class ContractSplitModal extends React.Component{
       if(typeof string ==='string' || typeof string ==='number'){
         value = string ? string : 0
       }else if(string.length > 0){
-        value = string[1] ? string[1] : 0
+
+        if (string[1] && string[1].includes('%')) {
+          value = parseFloat(string[1])/100
+        }
       }
     }
-    return parseFloat(value)/100
+    if (isNaN(value)) value = 0
+    return value
   }
   inputChange = (newData,index) => {
     const contractTaxRate = this.checkType(newData[index].contractTaxRate)
@@ -471,6 +474,7 @@ class ContractSplitModal extends React.Component{
   // 拆分保存接口
   handleOk = () => {
     const coutnData = this.state.dataSource.slice(0)
+    console.log('coutnData',coutnData)
     const contractAmount = parseFloat(this.props.data.contractAmount)
     let totalListPrice = 0
     coutnData.map((item) => {
@@ -518,10 +522,10 @@ class ContractSplitModal extends React.Component{
     param.relatedBuNoName = relatedBuNoName
     param.projectBuNoName = projectBuNoName
 
-    if (param.maintainBeginDate === '' || typeof param.maintainBeginDate ==='undefined') {
+    /*if (param.maintainBeginDate === '' || typeof param.maintainBeginDate ==='undefined') {
       message.error('保修开始时间不能为空！')
       return
-    }
+    }*/
     if (param.revenueCheckout && param.revenueCheckout.length<=0 || typeof param.revenueCheckout ==='undefined') {
       message.error('收入结算方式不能为空！')
       return
@@ -555,6 +559,7 @@ class ContractSplitModal extends React.Component{
     }
 
     const newLisfInfo = []
+    console.log('splitListInfo',splitListInfo)
     let j = 1
     for(let i of splitListInfo) {
       //i.contractCategory.paramValueDesc =
@@ -592,7 +597,8 @@ class ContractSplitModal extends React.Component{
       }
 
       let contractCategory = ''
-      let product = i.product
+      let product = i.product ? i.product : ''
+      console.log('product1',product)
       let returnTaxRate = ''
       let contractTaxRate = ''
 
@@ -604,10 +610,12 @@ class ContractSplitModal extends React.Component{
       }
       if(typeof i.product ==='string' || typeof i.product ==='number'){
         product = i.product
+        console.log('product2',product)
       }
       if(Array.isArray(i.product)){
         product = i.product[0]
       }
+      console.log('product3',product)
       if(typeof i.returnTaxRate ==='string' || typeof i.returnTaxRate ==='number'){
         returnTaxRate = i.returnTaxRate
       }else if (i.returnTaxRate.length > 0) {
@@ -1146,13 +1154,13 @@ class ContractSplitModal extends React.Component{
                   </div>
                 </Col>
                 <Col span={3} className="contractRowBorderLeft contract-bg">
-                  保修期开始时间<em style={{ color: '#FF0000' }}>*</em>：
+                  保修期开始时间：
                 </Col>
                 <Col span={4} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     <FormItem>
                       {getFieldDecorator('maintainBeginDate', {
-                        initialValue: constractData.maintainBeginDate,
+                        initialValue: constractData.maintainBeginDate ? constractData.maintainBeginDate :'MAINTAIN_TIME_6',
                       })(
                         <SelectInvokeApi
                           placeholder="请选择保修期开始时间"

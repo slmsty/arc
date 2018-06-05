@@ -6,7 +6,7 @@ const Option = Select.Option
 
 export default class SelectInvokeApi extends React.Component {
   state = {
-    options: [0],
+    options: [''],
     selectValue: '',
     flag: true,
   }
@@ -51,7 +51,7 @@ export default class SelectInvokeApi extends React.Component {
     const optionData = this.state.options;
     const productNoData = [];
     optionData.map(item=>{
-      productNoData.push(item.productNo ? item.productNo : 0)
+      productNoData.push(item.productNo ? item.productNo : '')
     })
     const productNo = [... new Set(productNoData)];
     const optionsDom = productNo ? productNo.map(option => <Option key={!option && option != 0 ? 'no_select' : option } value={option}>{option}</Option>) : null
