@@ -77,7 +77,7 @@ class BillDetail extends React.Component {
         billingContent: item.billingContent ? item.billingContent : '',
         specificationType: item.specificationType ? item.specificationType : '',
         unit: item.unit ? item.unit : this.getInvoiceUnit(item.billingTaxRate ? item.billingTaxRate : 0),
-        quantity: item.quantity ? item.quantity : 1,
+        quantity: item.quantity ? parseFloat(item.quantity).toFixed(2) : 1,
         unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
@@ -192,11 +192,6 @@ class BillDetail extends React.Component {
           }
           if(this.state.isRequireRate && (record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined')) {
             message.error(`第${i+1}行【开票税率】不能为空!`)
-            err = true
-            break
-          }
-          if(record.quantity === '' || typeof record.quantity === 'undefined' || record.quantity === 0) {
-            message.error(`第${i+1}行【开票数量】不能为空或者为0!`)
             err = true
             break
           }

@@ -198,10 +198,7 @@ class BillApproveDetail extends React.Component  {
       if(isAgainInvoice !== 'false') {
         this.state.dataSource.map((record, index) => {
           if(this.props.taskCode === 'ar_admin') {
-            if(this.fieldCheck(record.quantity)) {
-              message.error(`请填写第${index + 1}行的数量`)
-              err = true
-            } else if(this.fieldCheck(record.billingAmount)) {
+            if(this.fieldCheck(record.billingAmount)) {
               message.error(`请填写第${index + 1}行的含税金额`)
               err = true
             } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
@@ -214,12 +211,6 @@ class BillApproveDetail extends React.Component  {
           } else if(isTaxAndFinance) {
             if(this.props.taskCode !== 'tax_auditor' && this.fieldCheck(record.billingContent)) {
               message.error(`请填写第${index + 1}行的开票内容`)
-              err = true
-            } else if(this.fieldCheck(record.quantity)) {
-              message.error(`请填写第${index + 1}行的数量`)
-              err = true
-            } else if(record.unit === '' || typeof record.unit === 'undefined') {
-              message.error(`请填写第${index + 1}行单位`)
               err = true
             } else if(this.fieldCheck(record.billingAmount)) {
               message.error(`请填写第${index + 1}行的含税金额`)
