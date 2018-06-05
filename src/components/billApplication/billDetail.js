@@ -449,13 +449,16 @@ class BillDetail extends React.Component {
       title: '',
       dataIndex: 'title',
       width: 50,
+      float: 'left',
     }, {
       title: '客户名称',
       dataIndex: 'customerName',
-      width: 150,
+      width: 200,
+      float: 'left',
       render: (text, record, index) => (
         index === 0 ?
           <SelectSearch
+            style={{width: '200px'}}
             url="/arc/billingApplication/custom/search"
             columns={clientCols}
             label="客户名称"
@@ -466,6 +469,7 @@ class BillDetail extends React.Component {
             onChange={(v) => this.setState({custInfo: v})}
           /> :
           <SelectSearch
+            style={{width: '200px'}}
             url="/arc/billingApplication/company/search"
             columns={comCols}
             label="公司名称"
@@ -804,6 +808,7 @@ class BillDetail extends React.Component {
                     rowKey="id"
                     size="small"
                     bordered
+                    scroll={{ x: '1350px' }}
                     columns={this.getCustInfoColumns()}
                     dataSource={detailData}
                     pagination={false}
