@@ -125,7 +125,7 @@ class ContractSplitModal extends React.Component{
     const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
     const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
     let assessRatio = this.state.assessRatio ? parseFloat(this.state.assessRatio) : 0 // 考核比率
-    const incomeRatio =  parseFloat(parseFloat(solutionMaintain)/12 * 0.05)  // 收入比率
+    const incomeRatio =  parseFloat(solutionMaintain)/12 * 0.05 // 收入比率
     if(isNaN(assessRatio)){
       assessRatio = 0
     }
@@ -136,22 +136,22 @@ class ContractSplitModal extends React.Component{
       if (data.No === '7') {
         formula = (1 + incomeRatio)
         formula2 = (1 - assessRatio)
-        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        newData[data.indexs]['listPrice'] = parseFloat((parseFloat((contractTotalMoney / formula) * formula2)).toFixed(3)).toFixed(2)
       }
       if (data.No === '7-K') {
         formula = (1 + incomeRatio)
         formula2 = assessRatio
-        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        newData[data.indexs]['listPrice'] = parseFloat((parseFloat((contractTotalMoney / formula) * formula2)).toFixed(3)).toFixed(2)
       }
       if (data.No === '10S') {
         formula = (1 + incomeRatio)
         formula2 = incomeRatio * (1 - assessRatio)
-        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        newData[data.indexs]['listPrice'] = parseFloat((parseFloat((contractTotalMoney / formula) * formula2)).toFixed(3)).toFixed(2)
       }
       if (data.No === '10S-K') {
         formula = (1 + incomeRatio)
         formula2 = incomeRatio * assessRatio
-        newData[data.indexs]['listPrice'] = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
+        newData[data.indexs]['listPrice'] = parseFloat((parseFloat((contractTotalMoney / formula) * formula2)).toFixed(3)).toFixed(2)
       }
 
     }
