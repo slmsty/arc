@@ -201,7 +201,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
       okType: 'danger',
       cancelText: '否',
       onOk() {
-        self.setState({confirmLoading: true})
         const claimItems = self.state.funds.map(fund => ({
           contractItemId: fund.contractItemId,
           claimAmount: fund.claimAmount,
@@ -211,10 +210,12 @@ export default class ProjectReceiptClaimModal extends React.Component {
           custId: fund.custId,
           custName: fund.custName,
         }))
+        self.setState({confirmLoading: true})
         self.props.submitClaim({
           receiptClaimId: self.props.receiptInfo.receiptClaimId,
           claimItems,
         })
+        self.setState({confirmLoading: false})
       },
     })
     this.setState({confirmLoading: false})
