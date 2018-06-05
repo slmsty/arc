@@ -67,7 +67,7 @@ class ApplyInfoModal extends React.Component {
                     err = true
                   }
                 } else if(isTaxAndFinance) {
-                  if(this.fieldCheck(record.billingContent)) {
+                  if(taskCode !== 'tax_auditor' && this.fieldCheck(record.billingContent)) {
                     message.error(`请填写第${index + 1}行的开票内容`)
                     err = true
                   } else if(this.fieldCheck(record.quantity)) {
