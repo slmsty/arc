@@ -3,6 +3,7 @@ import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload
 import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
+import InputSearch from './inputSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
 import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols } from './billColumns'
@@ -53,8 +54,8 @@ class BillDetail extends React.Component {
       showContractLink: false,
       isRequireRate: false,
       isLost: false,
-      custInfo: [custInfo.billingCustInfoId, custInfo.billingCustName],
-      comInfo: [comInfo.billingComInfoId, comInfo.billingComName],
+      custInfo: custInfo,
+      comInfo: comInfo,
       proItems: [],
     }
     this.isAdvance = advanceTypes.includes(props.billType)
@@ -77,7 +78,7 @@ class BillDetail extends React.Component {
         billingContent: item.billingContent ? item.billingContent : '',
         specificationType: item.specificationType ? item.specificationType : '',
         unit: item.unit ? item.unit : this.getInvoiceUnit(item.billingTaxRate ? item.billingTaxRate : 0),
-        quantity: item.quantity ? parseFloat(item.quantity).toFixed(2) : 1,
+        quantity: item.quantity ? item.quantity : 1,
         unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
@@ -238,8 +239,8 @@ class BillDetail extends React.Component {
           const params = {
             ...values,
             billingOutcomeIds,
-            billingCustInfoId: this.state.custInfo[0],
-            billingComInfoId: this.state.comInfo[0],
+            billingCustInfoId: this.state.custInfo.billingCustInfoId,
+            billingComInfoId: this.state.comInfo.billingComInfoId,
             billingApplicationType: this.state.isRequireRate ? 'BILLING_EXCESS' : this.props.billType,
             billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
             appLineItems: appLineItems,
@@ -322,6 +323,11 @@ class BillDetail extends React.Component {
       dataSource[index][col] = value
       const { billingAmountExcludeTax } = this.state.dataSource[index]
       dataSource[index]['unitPrice'] = (billingAmountExcludeTax / (value ? value : 1)).toFixed(2)
+    } else if (col === 'billingTaxAmount') {
+      dataSource[index][col] = value
+      const { billingAmount, quantity } = this.state.dataSource[index]
+      dataSource[index].billingAmountExcludeTax = billingAmount - value
+      dataSource[index].unitPrice = (billingAmount - value) / quantity
     } else {
       dataSource[index][col] = value
     }
@@ -337,25 +343,6 @@ class BillDetail extends React.Component {
     } else if (rate === 0.16 || rate === 0.17) {
       return '套'
     }
-  }
-
-  billingUnify = () => {
-    let { selectedRows, currentNo, dataSource } = this.state
-    const groupNo = selectedRows[0].groupNo
-    if(dataSource.length ===  selectedRows.length) {
-      currentNo = 0
-    } else {
-      const selectNos = selectedRows.map(r => r.lineNo)
-      const groupNos = dataSource.filter(d => !selectNos.includes(d.lineNo)).map( r => r.groupNo)
-      currentNo = groupNos.length === 0 ? 1 : Math.max(...groupNos)
-    }
-    selectedRows.map(record => {
-      dataSource[record.lineNo]['groupNo'] = currentNo + 1
-    })
-    this.setState({
-      dataSource: dataSource,
-      selectedRowKeys: [],
-    })
   }
 
   beforeUpload = (file) => {
@@ -413,9 +400,12 @@ class BillDetail extends React.Component {
   }
 
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
+    //不含税金额
     const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
-    dataSource[index]['billingAmountExcludeTax'] = (billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2)
+    dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
+    //单价
     dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
+    //含税金额
     dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
   }
 
@@ -457,7 +447,7 @@ class BillDetail extends React.Component {
       float: 'left',
       render: (text, record, index) => (
         index === 0 ?
-          <SelectSearch
+          <InputSearch
             style={{width: '200px'}}
             url="/arc/billingApplication/custom/search"
             columns={clientCols}
@@ -468,7 +458,7 @@ class BillDetail extends React.Component {
             value={this.state.custInfo}
             onChange={(v) => this.setState({custInfo: v})}
           /> :
-          <SelectSearch
+          <InputSearch
             style={{width: '200px'}}
             url="/arc/billingApplication/company/search"
             columns={comCols}
@@ -679,7 +669,7 @@ class BillDetail extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
+    const { contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
       billingApplicantRemark, taxRateRequest, fileName, filePath } = this.props.detail
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
@@ -691,6 +681,7 @@ class BillDetail extends React.Component {
       customRequest: this.customRequest,
       onChange: this.handleFileChange,
     };
+    const { custInfo, comInfo } = this.state
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -716,7 +707,7 @@ class BillDetail extends React.Component {
     }
     return (
       <Modal
-        title="发票编辑"
+        title="开票申请详情"
         width="1200px"
         style={{ top: 20 }}
         visible={true}

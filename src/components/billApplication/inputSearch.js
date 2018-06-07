@@ -97,13 +97,12 @@ class SelectSearch extends React.Component {
   }
 
   render() {
-    const { visible } = this.state
+    const { visible, selectedRowKeys } = this.state
     const formItemLayout = {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
     }
     const { getFieldDecorator } = this.props.form
-    const { selectedRowKeys } = this.state
     const rowSelection = {
       type: 'radio',
       hideDefaultSelections: true,
@@ -116,7 +115,7 @@ class SelectSearch extends React.Component {
         <Input
           style={{zIndex: '0'}}
           placeholder={this.props.label}
-          value={this.props.value && this.props.value.tempProjectNo ? this.props.value.tempProjectNo : this.state.inputValue}
+          value={this.props.value && this.props.value[this.props.valueKey] ? this.props.value[this.props.valueKey] : this.state.inputValue}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
         />

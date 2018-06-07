@@ -50,7 +50,7 @@ class BigSignAuditForm extends React.Component {
                   getFieldDecorator('projectNo',{
                     initialValue: '',
                   })(
-                    <Input placeholder="客户名称"/>
+                    <Input placeholder="请输入项目编码"/>
                   )
                 }
               </FormItem>
@@ -61,7 +61,7 @@ class BigSignAuditForm extends React.Component {
                   getFieldDecorator('contractNo',{
                     initialValue: '',
                   })(
-                    <Input placeholder="项目编码"/>,
+                    <Input placeholder="请输入合同编码"/>,
                   )
                 }
               </FormItem>

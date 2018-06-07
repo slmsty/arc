@@ -13,6 +13,7 @@ import requestJson from './http/requestJson'
 import './index.css'
 import reducers from './reducers/index'
 import IndexContainer from './containers/index'
+import './util/toFixed'
 
 export const httpRequestJson = requestJson(process.env.REACT_APP_GATEWAY)
 

@@ -30,8 +30,6 @@ class BillApproveDetail extends React.Component  {
     const appLineList = props.serviceDetail.appLineList ? props.serviceDetail.appLineList : []
     const dataSource = appLineList.map(detail => ({
         ...detail,
-        isParent: 1,
-        quantity: detail.quantity ? detail.quantity : 1,
         lineNo: detail.lineNo - 1,
         totalAmount: detail.billingAmount ? detail.billingAmount : 0,
       })
@@ -110,7 +108,16 @@ class BillApproveDetail extends React.Component  {
     }))
     this.setState({ dataSource: newSource });
   }
-
+  /**
+   * 改动变化原则
+   * 1、不含税金额 = 含税金额 / (1 + 税率)，
+   * 2、单价 = 不含税金额 / 数量
+   * 3、税额 = 不含税金额 * 税率
+   * @param value
+   * @param col
+   * @param index
+   * @param record
+   */
   handleChange = (value, col, index, record) => {
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
@@ -125,7 +132,7 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['taxCategoryName'] = value.taxCategoryName
       dataSource[index]['prefPolicySign'] = value.prefPolicySign
       dataSource[index]['prefPolicyType'] = value.prefPolicyType
-    } else if(col === 'billingAmount') {
+    } else if(col === 'billingAmount') {//含税金额
       const result = dataSource.filter(d => d.isParent === 1 && record.arBillingId === d.arBillingId)[0]
       let total = 0
       dataSource.map(d => {
@@ -145,14 +152,35 @@ class BillApproveDetail extends React.Component  {
       if(record.isParent === 1 && !normalTypes.includes(this.props.billType)) {
         dataSource[result.lineNo].totalAmount = value
       }
-    } else if (col === 'billingTaxRate') {
+    } else if (col === 'billingTaxRate') {//税率
       const { billingAmount, quantity} = this.state.dataSource[index]
       this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
       dataSource[index][col] = value
-    } else if (col === 'quantity') {
+
+    } else if (col === 'quantity') {//数量
       dataSource[index][col] = value
       const { billingAmountExcludeTax } = this.state.dataSource[index]
       dataSource[index]['unitPrice'] = (billingAmountExcludeTax / (value ? value : 1)).toFixed(2)
+
+    } else if (col === 'unitPrice') {//单价
+      dataSource[index][col] = value
+      const { billingAmountExcludeTax } = this.state.dataSource[index]
+      const remainder = (billingAmountExcludeTax % (value ? value : 1))
+      const quantity = (billingAmountExcludeTax / (value ? value : 1))
+      dataSource[index]['quantity'] = remainder === 0 ? quantity : quantity.toFixed(5)
+
+    } else if (col === 'billingTaxAmount') {//含税金额
+      dataSource[index][col] = value
+      const { billingAmount, quantity } = this.state.dataSource[index]
+      dataSource[index]['billingAmountExcludeTax'] = billingAmount - value
+      dataSource[index]['unitPrice'] = ((billingAmount - value) / quantity).toFixed(2)
+
+    } else if (col === 'billingAmountExcludeTax') {//不含税金额
+      dataSource[index][col] = value
+      const { billingAmount, quantity } = this.state.dataSource[index]
+      dataSource[index].billingTaxAmount = billingAmount - value
+      dataSource[index].unitPrice = (value / quantity).toFixed(2)
+
     } else if (col === 'prefPolicySign') {
       dataSource[index][col] = value
       dataSource[index]['prefPolicyType'] = ''
@@ -275,7 +303,7 @@ class BillApproveDetail extends React.Component  {
 
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
     const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
-    dataSource[index]['billingAmountExcludeTax'] = (billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2)
+    dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
     dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
     dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
   }
@@ -366,12 +394,12 @@ class BillApproveDetail extends React.Component  {
       render: (text, record, index) => (
         <div>
           {
-            record.isParent === 1 ?
+            record.isParent === '1' ?
               <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
               : null
           }
           {
-            record.isParent === 0 ?
+            record.isParent === '0' ?
               <Button type="primary" ghost onClick={() => this.handleDelete(record)}>-</Button>
               : null
           }
@@ -415,12 +443,12 @@ class BillApproveDetail extends React.Component  {
     }, {
       title: '数量',
       dataIndex: 'quantity',
-      width: 70,
+      width: 100,
       render: (text, record, index) => (
-        <InputNumber
+        <Input
           placeholder="数量"
-          defaultValue={this.state.dataSource[index]['quantity']}
-          onChange={(value) => this.handleChange(value, 'quantity', index)} />
+          value={this.state.dataSource[index]['quantity']}
+          onChange={(e) => this.handleChange(e.target.value, 'quantity', index)} />
       )
     }, {
       title: '单价',
@@ -836,7 +864,7 @@ class BillApproveDetail extends React.Component  {
               columns={isProManager ? invoiceLineCols : columns}
               pagination={false}
               dataSource={this.state.dataSource}
-              scroll={{ x: this.isEditTax ? '2000px' : '1600px' }}
+              scroll={{ x: this.isEditTax ? '2030px' : '1600px' }}
             />
             {
               this.props.applyType === 'BILLING_EXCESS' ?
