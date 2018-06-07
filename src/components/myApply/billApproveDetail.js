@@ -30,7 +30,6 @@ class BillApproveDetail extends React.Component  {
     const appLineList = props.serviceDetail.appLineList ? props.serviceDetail.appLineList : []
     const dataSource = appLineList.map(detail => ({
         ...detail,
-        isParent: 1,
         lineNo: detail.lineNo - 1,
         totalAmount: detail.billingAmount ? detail.billingAmount : 0,
       })
@@ -166,7 +165,9 @@ class BillApproveDetail extends React.Component  {
     } else if (col === 'unitPrice') {//单价
       dataSource[index][col] = value
       const { billingAmountExcludeTax } = this.state.dataSource[index]
-      dataSource[index]['quantity'] = (billingAmountExcludeTax / (value ? value : 1)).toFixed(5)
+      const remainder = (billingAmountExcludeTax % (value ? value : 1))
+      const quantity = (billingAmountExcludeTax / (value ? value : 1))
+      dataSource[index]['quantity'] = remainder === 0 ? quantity : quantity.toFixed(5)
 
     } else if (col === 'billingTaxAmount') {//含税金额
       dataSource[index][col] = value
@@ -178,7 +179,7 @@ class BillApproveDetail extends React.Component  {
       dataSource[index][col] = value
       const { billingAmount, quantity } = this.state.dataSource[index]
       dataSource[index].billingTaxAmount = billingAmount - value
-      dataSource[index].unitPrice = ((billingAmount - value) / quantity).toFixed(2)
+      dataSource[index].unitPrice = (value / quantity).toFixed(2)
 
     } else if (col === 'prefPolicySign') {
       dataSource[index][col] = value
@@ -393,12 +394,12 @@ class BillApproveDetail extends React.Component  {
       render: (text, record, index) => (
         <div>
           {
-            record.isParent === 1 ?
+            record.isParent === '1' ?
               <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
               : null
           }
           {
-            record.isParent === 0 ?
+            record.isParent === '0' ?
               <Button type="primary" ghost onClick={() => this.handleDelete(record)}>-</Button>
               : null
           }
