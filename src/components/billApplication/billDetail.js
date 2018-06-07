@@ -3,6 +3,7 @@ import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload
 import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
+import InputSearch from './inputSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
 import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols } from './billColumns'
@@ -53,8 +54,8 @@ class BillDetail extends React.Component {
       showContractLink: false,
       isRequireRate: false,
       isLost: false,
-      custInfo: [custInfo.billingCustInfoId, custInfo.billingCustName],
-      comInfo: [comInfo.billingComInfoId, comInfo.billingComName],
+      custInfo: custInfo,
+      comInfo: comInfo,
       proItems: [],
     }
     this.isAdvance = advanceTypes.includes(props.billType)
@@ -238,8 +239,8 @@ class BillDetail extends React.Component {
           const params = {
             ...values,
             billingOutcomeIds,
-            billingCustInfoId: this.state.custInfo[0],
-            billingComInfoId: this.state.comInfo[0],
+            billingCustInfoId: this.state.custInfo.billingCustInfoId,
+            billingComInfoId: this.state.comInfo.billingComInfoId,
             billingApplicationType: this.state.isRequireRate ? 'BILLING_EXCESS' : this.props.billType,
             billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
             appLineItems: appLineItems,
@@ -446,7 +447,7 @@ class BillDetail extends React.Component {
       float: 'left',
       render: (text, record, index) => (
         index === 0 ?
-          <SelectSearch
+          <InputSearch
             style={{width: '200px'}}
             url="/arc/billingApplication/custom/search"
             columns={clientCols}
@@ -457,7 +458,7 @@ class BillDetail extends React.Component {
             value={this.state.custInfo}
             onChange={(v) => this.setState({custInfo: v})}
           /> :
-          <SelectSearch
+          <InputSearch
             style={{width: '200px'}}
             url="/arc/billingApplication/company/search"
             columns={comCols}
@@ -668,7 +669,7 @@ class BillDetail extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { custInfo, comInfo, contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
+    const { contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
       billingApplicantRemark, taxRateRequest, fileName, filePath } = this.props.detail
     const props = {
       action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
@@ -680,6 +681,7 @@ class BillDetail extends React.Component {
       customRequest: this.customRequest,
       onChange: this.handleFileChange,
     };
+    const { custInfo, comInfo } = this.state
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
