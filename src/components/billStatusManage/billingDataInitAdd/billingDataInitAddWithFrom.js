@@ -2,14 +2,9 @@
  * Created by liangshuang on 18/5/14.
  */
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Form, Row, Col, Button, Input, Icon, DatePicker, Select } from 'antd'
+import { Form, Row, Col, Button, Input, Icon } from 'antd'
 import SelectInvokeApi from '../../common/selectInvokeApi'
-import moment from 'moment'
 const FormItem = Form.Item
-const { RangePicker } = DatePicker
-const Option = Select.Option
-const dateFormat = 'YYYY-MM-DD'
 
 class BillingDataInitAddWithFromCom extends React.Component {
   handleQuery = () => {

@@ -77,7 +77,7 @@ class BillDetail extends React.Component {
         billingContent: item.billingContent ? item.billingContent : '',
         specificationType: item.specificationType ? item.specificationType : '',
         unit: item.unit ? item.unit : this.getInvoiceUnit(item.billingTaxRate ? item.billingTaxRate : 0),
-        quantity: item.quantity ? parseFloat(item.quantity).toFixed(2) : 1,
+        quantity: item.quantity ? parseFloat(item.quantity) : 1,
         unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
@@ -716,7 +716,7 @@ class BillDetail extends React.Component {
     }
     return (
       <Modal
-        title="发票编辑"
+        title="开票申请详情"
         width="1200px"
         style={{ top: 20 }}
         visible={true}

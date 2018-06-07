@@ -2,7 +2,6 @@
  * Created by liangshuang on 18/5/17.
  */
 import React from 'react'
-import PropTypes from 'prop-types'
 import moment from 'moment'
 import SelectInvokeApi from '../../common/selectInvokeApi'
 import currency from '../../../util/currency'
@@ -11,7 +10,7 @@ const FormItem = Form.Item
 const { TextArea } = Input
 const Option = Select.Option
 const dateFormat = 'YYYY-MM-DD'
-const cloums = [
+const columns = [
   {
     title:'行ID',
     dataIndex:'billingAppLineId',
@@ -31,13 +30,13 @@ const cloums = [
     title:'申请金额',
     dataIndex:'billingAmount',
     width:80,
-    render: (text, record, index) => (text ? currency(text) : text),
+    render: (text) => (text ? currency(text) : text),
   },
   {
     title:'税率',
     dataIndex:'billingTaxRate',
     width:80,
-    render: (text, record, index) => (text ? (text * 100) + '%' : text),
+    render: (text) => (text ? (text * 100) + '%' : text),
   },
 ]
 
@@ -45,20 +44,17 @@ class InfoModal extends React.Component {
   save =() => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const params = this.props.form.getFieldsValue()
-        const param = {}
-        param.invoiceNumber = params.invoiceNumber
-        param.invoiceCode = params.invoiceCode
-        param.billingDate = params.billingDate.format(dateFormat)
-        param.taxIncludeAmount = params.taxIncludeAmount.replace(/,/g,'')
-        param.taxRate = params.taxRate
-        param.taxExcludeAmount = params.taxExcludeAmount.replace(/,/g,'')
-        param.invoiceType = params.invoiceType
-        if (param.taxIncludeAmount === "0" || param.taxExcludeAmount === "0" || param.taxIncludeAmount === "0.00" || param.taxExcludeAmount === "0.00") {
-          message.error('含税金额和不含税金额不能为0')
+        if (values.taxIncludeAmount <= 0 || values.taxExcludeAmount <= 0) {
+          message.error('含税金额和不含税金额必须大于0')
           return
         }
-        this.props.saveData(param)
+        const params = {
+          ...values,
+          invoiceNumber: values.invoiceNumber.trim(),
+          invoiceCode: values.invoiceCode.trim(),
+          billingDate: values.billingDate.format(dateFormat),
+        }
+        this.props.saveData(params)
       }
     })
 }
@@ -83,7 +79,7 @@ class InfoModal extends React.Component {
       <div>
         <Modal
           maskClosable={false}
-          width={600}
+          width={700}
           title="详情"
           visible={true}
           onOk={this.props.colseModal}
@@ -95,10 +91,10 @@ class InfoModal extends React.Component {
               billingDataInitResultList ?
                 <Table
                   bordered
-                  columns={cloums}
+                  columns={columns}
                   size="small"
                   pagination={false}
-                  scroll={{ x:this.getWidth(cloums) }}
+                  scroll={{ x:this.getWidth(columns) }}
                   dataSource={billingDataInitResultList}
                 />
                 : null
@@ -177,7 +173,7 @@ class InfoModal extends React.Component {
                       rules: [
                         { required: true, message: '请输入含税金额', },
                       ]
-                    })(<Input/>)}
+                    })(<InputNumber style={{width: '220px'}}/>)}
                   </FormItem>
                 </Col>
                 <Col span={12} key={10}>
@@ -187,7 +183,7 @@ class InfoModal extends React.Component {
                       rules: [
                         { required: true, message: '请输入不含税金额', },
                       ]
-                    })(<Input/>)}
+                    })(<InputNumber style={{width: '220px'}}/>)}
                   </FormItem>
                 </Col>
               </Row>

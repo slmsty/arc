@@ -58,10 +58,6 @@ class BillingDataInitAddCom extends React.Component {
         selectedRowKeys:[],
         selectedRows:[]
       })
-      if (res && res.response && res.response.resultCode === '000000') {
-      } else {
-        message.error('加载数据失败')
-      }
     })
   }
   handleChangePage = (page) => {
@@ -74,18 +70,15 @@ class BillingDataInitAddCom extends React.Component {
     this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    let falg = false
+    let flag = false
     if (selectedRows[0]) {
       selectedRows.map((item)=> {
         if (item.status === 'BILLING_OK' || item.status === 'BILLING_INVALID_OK') {
-          falg = true
+          flag = true
         }
-
       })
-
     }
-    if (falg || !selectedRows[0]) {
-      console.log(8)
+    if (flag || !selectedRows[0]) {
       this.setState({
         addFlag:false
       })
@@ -102,14 +95,14 @@ class BillingDataInitAddCom extends React.Component {
     let billingDataInitResultList = []
     let param = {}
     paramData.map((item)=>{
-      let queryParm = {}
-      queryParm.billingOutcomeId = item.billingOutcomeId
-      queryParm.billingAppLineId = item.billingAppLineId
       if (type === 'add' && (item.status === 'BILLING_OK' || item.status === 'BILLING_INVALID_OK')) {
         message.error('所选申请单发票已录入完毕，请勿重复增加')
         flag = true
       }
-      billingDataInitResultList.push(queryParm)
+      billingDataInitResultList.push({
+        billingOutcomeId: item.billingOutcomeId,
+        billingAppLineId: item.billingAppLineId,
+      })
     })
     if (flag) {
       this.setState({
@@ -127,8 +120,6 @@ class BillingDataInitAddCom extends React.Component {
           selectType:type,
           billingDataInitResultList:billingDataInitResultList
         })
-      } else {
-       // message.error(res.resultMessage)
       }
     })
   }
@@ -142,14 +133,12 @@ class BillingDataInitAddCom extends React.Component {
     })
     this.handleQuery()
   }
-  saveData =(param) => {
+  saveData = (param) => {
     param.billingOutcomeId = this.props.billInitData.eidiBillDataInit.billingOutcomeId
     param.billingDataInitResultList = this.state.billingDataInitResultList
     this.props.saveBillDataInit(param).then((res)=> {
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
-      } else {
-       // message.error('保存数据失败')
       }
     })
   }
@@ -160,86 +149,73 @@ class BillingDataInitAddCom extends React.Component {
         title:'数据状态',
         dataIndex:'createTypeName',
         width:80
-      },
-      {
+      }, {
         title:'开票状态',
         dataIndex:'statusName',
         width:100
-      },
-      {
+      }, {
         title:'申请单ID',
         dataIndex:'billingApplicationId',
         width:100
-      },
-      {
+      }, {
         title:'行ID',
         dataIndex:'billingAppLineId',
         width:100
-      },
-      {
+      }, {
         title:'项目编码',
         dataIndex:'projectNo',
         width:100
-      },
-      {
+      }, {
         title:'款项名称',
         dataIndex:'paymentName',
         width:80
-      },
-      {
+      }, {
         title:'发票号码',
         dataIndex:'invoiceNumber',
         width:80
-      },
-      {
+      }, {
         title:'签约公司',
         dataIndex:'companyName',
         width:200
-      },
-      {
+      }, {
         title:'开票客户名称',
         dataIndex:'custName',
         width:250
-      },
-      {
+      }, {
         title:'发票类型',
         dataIndex:'invoiceTypeName',
         width:80
-      },
-      {
+      }, {
         title:'发票代码',
         dataIndex:'invoiceCode',
         width:150
-      },
-      {
+      }, {
         title:'开票日期',
         dataIndex:'billingDate',
         width:100
-      },
-      {
+      }, {
         title:'含税金额',
         dataIndex:'taxIncludeAmount',
         width:120,
-        render: (text, record, index) => (text ? currency(text) : text),
-      },
-      {
+        render: (text) => (text ? currency(text) : text),
+      }, {
         title:'税率',
         dataIndex:'taxRate',
         width:60,
-        render: (text, record, index) => (text ? (text * 100) + '%' : text),
-      },
-      {
+        render: (text) => (text ? (text * 100) + '%' : text),
+      }, {
         title:'不含税金额',
         dataIndex:'taxExcludeAmount',
         width:120,
-        render: (text, record, index) => (text ? currency(text) : text),
+        render: (text) => (text ? currency(text) : text),
       },
     ]
     const { selectedRowKeys } = this.state
+    const { pageNo, count, pageSize} = this.props.billInitData.getbillDataInitList
     const pagination = {
-      current: this.props.billInitData.getbillDataInitList.pageNo,
-      total: this.props.billInitData.getbillDataInitList.count,
-      pageSize: this.props.billInitData.getbillDataInitList.pageSize,
+      current: pageNo,
+      total: count,
+      pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
@@ -268,7 +244,11 @@ class BillingDataInitAddCom extends React.Component {
         />
         {
           this.state.showInfo ?
-            <InfoModal type={this.state.selectType} data ={this.props.billInitData.eidiBillDataInit} colseModal={this.closeModal} saveData = {this.saveData}/>
+            <InfoModal
+              type={this.state.selectType}
+              data ={this.props.billInitData.eidiBillDataInit}
+              colseModal={this.closeModal}
+              saveData = {this.saveData}/>
             : null
         }
       </div>
