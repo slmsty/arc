@@ -77,7 +77,7 @@ class BillDetail extends React.Component {
         billingContent: item.billingContent ? item.billingContent : '',
         specificationType: item.specificationType ? item.specificationType : '',
         unit: item.unit ? item.unit : this.getInvoiceUnit(item.billingTaxRate ? item.billingTaxRate : 0),
-        quantity: item.quantity ? parseFloat(item.quantity) : 1,
+        quantity: item.quantity ? item.quantity : 1,
         unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
@@ -322,6 +322,11 @@ class BillDetail extends React.Component {
       dataSource[index][col] = value
       const { billingAmountExcludeTax } = this.state.dataSource[index]
       dataSource[index]['unitPrice'] = (billingAmountExcludeTax / (value ? value : 1)).toFixed(2)
+    } else if (col === 'billingTaxAmount') {
+      dataSource[index][col] = value
+      const { billingAmount, quantity } = this.state.dataSource[index]
+      dataSource[index].billingAmountExcludeTax = billingAmount - value
+      dataSource[index].unitPrice = (billingAmount - value) / quantity
     } else {
       dataSource[index][col] = value
     }
@@ -337,25 +342,6 @@ class BillDetail extends React.Component {
     } else if (rate === 0.16 || rate === 0.17) {
       return '套'
     }
-  }
-
-  billingUnify = () => {
-    let { selectedRows, currentNo, dataSource } = this.state
-    const groupNo = selectedRows[0].groupNo
-    if(dataSource.length ===  selectedRows.length) {
-      currentNo = 0
-    } else {
-      const selectNos = selectedRows.map(r => r.lineNo)
-      const groupNos = dataSource.filter(d => !selectNos.includes(d.lineNo)).map( r => r.groupNo)
-      currentNo = groupNos.length === 0 ? 1 : Math.max(...groupNos)
-    }
-    selectedRows.map(record => {
-      dataSource[record.lineNo]['groupNo'] = currentNo + 1
-    })
-    this.setState({
-      dataSource: dataSource,
-      selectedRowKeys: [],
-    })
   }
 
   beforeUpload = (file) => {
@@ -413,9 +399,12 @@ class BillDetail extends React.Component {
   }
 
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
+    //不含税金额
     const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
-    dataSource[index]['billingAmountExcludeTax'] = (billingAmount / (1 + parseFloat(billingTaxRate))).toFixed(2)
+    dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
+    //单价
     dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
+    //含税金额
     dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
   }
 
