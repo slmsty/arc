@@ -26,6 +26,9 @@ class BigSignAuditDetail extends React.Component {
   billStartWorkFlow = (billingApplicationId) => {
     this.props.form.validateFields((err, values) => {
       if(!err) {
+        this.setState({
+          loading: true,
+        })
         const { serviceType, serviceDetail } = this.props.applicationInfo
         const params = {
           ...values,
@@ -47,10 +50,19 @@ class BigSignAuditDetail extends React.Component {
               billingApplicationId,
               billingApplicationType: this.state.billType,
             }
-            this.props.billStartWorkFlow(params)
+            this.props.billStartWorkFlow(params).then(res => {
+              if(res && res.response && res.response.resultCode === '000000') {
+                this.setState({
+                  loading: false,
+                })
+              }
+            })
             this.props.onCancel()
           } else {
             message.error(resultMessage, 5)
+            this.setState({
+              loading: false,
+            })
           }
         })
       }
@@ -83,8 +95,8 @@ class BigSignAuditDetail extends React.Component {
         wrapClassName="vertical-center-modal"
         onCancel={() => this.props.onCancel()}
         footer={[
-          <Button key="submit" type="primary" onClick={() => this.billStartWorkFlow(serviceDetail.billingApplicationId)}>
-            {<Icon type="check" />}发起审批
+          <Button key="submit" type="primary" loading={this.state.loading} onClick={() => this.billStartWorkFlow(serviceDetail.billingApplicationId)}>
+            {!this.state.loading ? <Icon type="check" /> : ''}发起审批
           </Button>,
         ]}
         maskClosable={false}

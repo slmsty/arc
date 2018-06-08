@@ -48,8 +48,6 @@ export default class MyApplyCon extends React.Component {
         loading: false,
       })
       if (res && res.response && res.response.resultCode === '000000') {
-      } else {
-        message.error('加载数据失败')
       }
     })
   }

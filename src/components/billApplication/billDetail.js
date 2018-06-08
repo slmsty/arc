@@ -71,7 +71,7 @@ class BillDetail extends React.Component {
         billingAppLineId: item.billingAppLineId ? item.billingAppLineId : '',
         sourceAppLineId: item.sourceAppLineId ? item.sourceAppLineId : '',
         groupNo: item.groupNo ? parseInt(item.groupNo) : 1,
-        isParent: 1,
+        isParent: '1',
         arBillingId: item.arBillingId,
         contractItemId: item.contractItemId,
         billingRecordId: item.billingRecordId ? item.billingRecordId : '',
@@ -116,7 +116,7 @@ class BillDetail extends React.Component {
     const newData = {
       lineNo: count,
       groupNo: 1,
-      isParent: 0,
+      isParent: '0',
       arBillingId,
       contractItemId,
       billingContent: '',
@@ -146,7 +146,7 @@ class BillDetail extends React.Component {
   handleDelete = (record) => {
     let dataSource = [...this.state.dataSource];
     this.state.dataSource.map((item, index) => {
-      if(record.arBillingId === item.arBillingId && item.isParent === 1) {
+      if(record.arBillingId === item.arBillingId && item.isParent === '1') {
         const amount = dataSource[item.lineNo]['billingAmount']
         dataSource[item.lineNo]['billingAmount'] = parseFloat(record.billingAmount) + parseFloat(amount)
       }
@@ -295,10 +295,10 @@ class BillDetail extends React.Component {
       dataSource[index][col] = value[1]
     } else if(col === 'billingAmount') {
       //发票拆分子记录输入金额后，从新计算携带数据的金额
-      const result = dataSource.filter(d => d.isParent === 1 && record.arBillingId === d.arBillingId)[0]
+      const result = dataSource.filter(d => d.isParent === '1' && record.arBillingId === d.arBillingId)[0]
       let total = 0
       dataSource.map(d => {
-        if(d.arBillingId === record.arBillingId && d.isParent === 0 && d.lineNo !== index){
+        if(d.arBillingId === record.arBillingId && d.isParent === '0' && d.lineNo !== index){
           total += (d.billingAmount ? d.billingAmount : 0)
         }
       })
@@ -311,7 +311,7 @@ class BillDetail extends React.Component {
       const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
       this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
       //未大签、红冲、其他开票含税金额为0, 手动输入金额后并赋值给总金额
-      if(record.isParent === 1 && !normalTypes.includes(this.props.billType)) {
+      if(record.isParent === '1' && !normalTypes.includes(this.props.billType)) {
         dataSource[result.lineNo].totalAmount = value
       }
     } else if (col === 'billingTaxRate') {
@@ -494,12 +494,12 @@ class BillDetail extends React.Component {
         render: (text, record, index) => (
           <div>
             {
-              record.isParent === 1 ?
+              record.isParent === '1' ?
                 <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
                 : null
             }
             {
-              record.isParent === 0 ?
+              record.isParent === '0' ?
                 <Button type="primary" ghost onClick={() => this.handleDelete(record)}>-</Button>
                 : null
             }

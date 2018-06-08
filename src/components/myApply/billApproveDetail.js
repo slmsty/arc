@@ -57,7 +57,7 @@ class BillApproveDetail extends React.Component  {
     let newData = {
       lineNo: count,
       groupNo: 1,
-      isParent: 0,
+      isParent: '0',
       arBillingId,
       contractItemId,
       billingContent: '',
@@ -96,7 +96,7 @@ class BillApproveDetail extends React.Component  {
   handleDelete = (record) => {
     let dataSource = [...this.state.dataSource];
     this.state.dataSource.map((item, index) => {
-      if(record.arBillingId === item.arBillingId && item.isParent === 1) {
+      if(record.arBillingId === item.arBillingId && item.isParent === '1') {
         const amount = dataSource[item.lineNo]['billingAmount']
         dataSource[item.lineNo]['billingAmount'] = parseFloat(record.billingAmount) + parseFloat(amount)
       }
@@ -128,19 +128,21 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['prefPolicySign'] = value.prefPolicySign
       dataSource[index]['prefPolicyType'] = value.prefPolicyContent
     } else if (col === 'taxCategoryCode') {
+      console.log(value.prefPolicySign, value.prefPolicyType)
       dataSource[index][col] = value.taxCategoryCode
       dataSource[index]['taxCategoryName'] = value.taxCategoryName
       dataSource[index]['prefPolicySign'] = value.prefPolicySign
-      dataSource[index]['prefPolicyType'] = value.prefPolicyType
+      dataSource[index]['prefPolicyType'] = value.prefPolicySign === '1' ? value.prefPolicyType : ''
     } else if(col === 'billingAmount') {//含税金额
-      const result = dataSource.filter(d => d.isParent === 1 && record.arBillingId === d.arBillingId)[0]
+      const result = dataSource.filter(d => d.isParent === '1' && record.arBillingId === d.arBillingId)[0]
       let total = 0
       dataSource.map(d => {
-        if(d.arBillingId === record.arBillingId && d.isParent === 0 && d.lineNo !== index){
+        if(d.arBillingId === record.arBillingId && d.isParent === '0' && d.lineNo !== index){
           total += (d.billingAmount ? d.billingAmount : 0)
         }
       })
       //校验所有拆分子项的金额必须小于父级含税金额
+      console.log(result)
       const childAmount = total + value
       dataSource[result.lineNo][col] = result.totalAmount - childAmount
       const parent = this.state.dataSource[result.lineNo]
@@ -149,7 +151,7 @@ class BillApproveDetail extends React.Component  {
       const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
       this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
       //未大签、红冲、其他开票含税金额为0, 手动输入金额后并赋值给总金额
-      if(record.isParent === 1 && !normalTypes.includes(this.props.billType)) {
+      if(record.isParent === '1' && !normalTypes.includes(this.props.billType)) {
         dataSource[result.lineNo].totalAmount = value
       }
     } else if (col === 'billingTaxRate') {//税率
@@ -178,7 +180,7 @@ class BillApproveDetail extends React.Component  {
     } else if (col === 'billingAmountExcludeTax') {//不含税金额
       dataSource[index][col] = value
       const { billingAmount, quantity } = this.state.dataSource[index]
-      dataSource[index].billingTaxAmount = billingAmount - value
+      dataSource[index].billingTaxAmount = (billingAmount - value).toFixed(2)
       dataSource[index].unitPrice = (value / quantity).toFixed(2)
 
     } else if (col === 'prefPolicySign') {

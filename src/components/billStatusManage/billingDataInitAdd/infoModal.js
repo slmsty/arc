@@ -41,9 +41,18 @@ const columns = [
 ]
 
 class InfoModal extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loading: false,
+    }
+  }
   save =() => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.setState({
+          loading: true,
+        })
         if (values.taxIncludeAmount <= 0 || values.taxExcludeAmount <= 0) {
           message.error('含税金额和不含税金额必须大于0')
           return
@@ -56,6 +65,9 @@ class InfoModal extends React.Component {
         }
         this.props.saveData(params)
       }
+      this.setState({
+        loading: false,
+      })
     })
 }
   getWidth = (billingDataInitColumns) => {
@@ -205,7 +217,7 @@ class InfoModal extends React.Component {
               </Row>
               <Row gutter={40}>
                 <Col style={{textAlign: 'center',marginTop:'20px'}}>
-                  <Button type="primary" onClick={()=>this.save()}>保存</Button>
+                  <Button type="primary" onClick={()=>this.save()} loading={this.state.loading}>保存</Button>
                 </Col>
               </Row>
             </Form>
