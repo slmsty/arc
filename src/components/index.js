@@ -105,7 +105,7 @@ export default class Index extends React.Component {
               <p>
                 欢迎您，<span>{accountName}</span><span>{orgName}</span>
                 <Dropdown overlay={menu}>
-                  <a className="ant-dropdown-link" href="#">
+                  <a className="ant-dropdown-link" href="javascript:void(0)">
                     ARC系统帮助 <Icon type="down" />
                   </a>
                 </Dropdown>

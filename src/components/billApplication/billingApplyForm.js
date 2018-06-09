@@ -7,7 +7,6 @@ import MultipleInput from '../common/multipleInput'
 import { redTypes } from './billColumns'
 
 const FormItem = Form.Item
-const Option = Select.Option
 const { RangePicker } = DatePicker
 
 class BillingApplyForm extends React.Component {

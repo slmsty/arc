@@ -41,9 +41,18 @@ const columns = [
 ]
 
 class InfoModal extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loading: false,
+    }
+  }
   save =() => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.setState({
+          loading: true,
+        })
         if (values.taxIncludeAmount <= 0 || values.taxExcludeAmount <= 0) {
           message.error('含税金额和不含税金额必须大于0')
           return
@@ -53,8 +62,17 @@ class InfoModal extends React.Component {
           invoiceNumber: values.invoiceNumber.trim(),
           invoiceCode: values.invoiceCode.trim(),
           billingDate: values.billingDate.format(dateFormat),
+          billingOutcomeId: this.props.data.billingOutcomeId,
+          billingDataInitResultList: this.props.resultList,
         }
-        this.props.saveData(params)
+        this.props.saveData(params).then(res => {
+          if (res && res.response && res.response.resultCode === '000000') {
+            message.success('保存成功')
+          }
+          this.setState({
+            loading: false,
+          })
+        })
       }
     })
 }
@@ -205,7 +223,7 @@ class InfoModal extends React.Component {
               </Row>
               <Row gutter={40}>
                 <Col style={{textAlign: 'center',marginTop:'20px'}}>
-                  <Button type="primary" onClick={()=>this.save()}>保存</Button>
+                  <Button type="primary" onClick={()=>this.save()} loading={this.state.loading}>保存</Button>
                 </Col>
               </Row>
             </Form>
