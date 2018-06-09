@@ -144,7 +144,7 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'statusName',
         width:100
       }, {
-        title:'申请单ID',
+        title:'申请单号',
         dataIndex:'billingApplicationId',
         width:100
       }, {

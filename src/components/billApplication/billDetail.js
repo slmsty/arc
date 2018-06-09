@@ -448,7 +448,7 @@ class BillDetail extends React.Component {
       render: (text, record, index) => (
         index === 0 ?
           <InputSearch
-            style={{width: '200px'}}
+            style={{width: '300px'}}
             url="/arc/billingApplication/custom/search"
             columns={clientCols}
             label="客户名称"
@@ -459,7 +459,7 @@ class BillDetail extends React.Component {
             onChange={(v) => this.setState({custInfo: v})}
           /> :
           <InputSearch
-            style={{width: '200px'}}
+            style={{width: '300px'}}
             url="/arc/billingApplication/company/search"
             columns={comCols}
             label="公司名称"
