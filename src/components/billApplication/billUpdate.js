@@ -23,7 +23,6 @@ class BillUpdate extends React.Component {
     this.props.form.validateFields((err, values) => {
       if(!err) {
         const { record, isAdd } = this.props;
-        console.log(values.projectNo)
         const params = isAdd ? {
           ...values,
           billingApplicationType: this.props.billType,

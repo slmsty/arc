@@ -124,7 +124,6 @@ class BillingDataInitAddCom extends React.Component {
     })
   }
   closeModal =() => {
-
     this.setState({
       showInfo:false,
       infoData:[],
@@ -132,15 +131,6 @@ class BillingDataInitAddCom extends React.Component {
       selectedRowKeys:[],
     })
     this.handleQuery()
-  }
-  saveData = (param) => {
-    param.billingOutcomeId = this.props.billInitData.eidiBillDataInit.billingOutcomeId
-    param.billingDataInitResultList = this.state.billingDataInitResultList
-    this.props.saveBillDataInit(param).then((res)=> {
-      if (res && res.response && res.response.resultCode === '000000') {
-        message.success('保存成功')
-      }
-    })
   }
 
   render() {
@@ -246,9 +236,10 @@ class BillingDataInitAddCom extends React.Component {
           this.state.showInfo ?
             <InfoModal
               type={this.state.selectType}
+              resultList={this.state.billingDataInitResultList}
               data ={this.props.billInitData.eidiBillDataInit}
               colseModal={this.closeModal}
-              saveData = {this.saveData}/>
+              saveData = {this.props.saveBillDataInit}/>
             : null
         }
       </div>

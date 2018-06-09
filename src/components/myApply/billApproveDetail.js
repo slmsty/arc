@@ -128,7 +128,6 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['prefPolicySign'] = value.prefPolicySign
       dataSource[index]['prefPolicyType'] = value.prefPolicyContent
     } else if (col === 'taxCategoryCode') {
-      console.log(value.prefPolicySign, value.prefPolicyType)
       dataSource[index][col] = value.taxCategoryCode
       dataSource[index]['taxCategoryName'] = value.taxCategoryName
       dataSource[index]['prefPolicySign'] = value.prefPolicySign

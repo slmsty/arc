@@ -79,12 +79,12 @@ class BillDetail extends React.Component {
         specificationType: item.specificationType ? item.specificationType : '',
         unit: item.unit ? item.unit : this.getInvoiceUnit(item.billingTaxRate ? item.billingTaxRate : 0),
         quantity: item.quantity ? item.quantity : 1,
-        unitPrice: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
+        unitPrice: item.unitPrice  ? item.unitPrice : item.billingAmountExcludeTax,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
-        totalAmount: item.billingAmount ? item.billingAmount : 0,
         billingTaxRate: item.billingTaxRate ? item.billingTaxRate : 0,
         billingTaxAmount: item.billingTaxAmount ? item.billingTaxAmount : 0,
+        totalAmount: item.billingAmount ? item.billingAmount : 0,
       })
     })
     let proItems = []

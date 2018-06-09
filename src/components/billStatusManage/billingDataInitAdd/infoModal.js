@@ -62,12 +62,18 @@ class InfoModal extends React.Component {
           invoiceNumber: values.invoiceNumber.trim(),
           invoiceCode: values.invoiceCode.trim(),
           billingDate: values.billingDate.format(dateFormat),
+          billingOutcomeId: this.props.data.billingOutcomeId,
+          billingDataInitResultList: this.props.resultList,
         }
-        this.props.saveData(params)
+        this.props.saveData(params).then(res => {
+          if (res && res.response && res.response.resultCode === '000000') {
+            message.success('保存成功')
+          }
+          this.setState({
+            loading: false,
+          })
+        })
       }
-      this.setState({
-        loading: false,
-      })
     })
 }
   getWidth = (billingDataInitColumns) => {
