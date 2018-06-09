@@ -168,9 +168,8 @@ class BillApproveDetail extends React.Component  {
       dataSource[index][col] = value
       const { billingAmountExcludeTax, quantity } = this.state.dataSource[index]
       if(value) {
-        const newQuantity = billingAmountExcludeTax / value
-        const number = newQuantity.toString().split('.')[1]
-        dataSource[index]['quantity'] = number && number.length > 5 ? newQuantity.toFixed(5) : newQuantity
+        const newQuantity = (billingAmountExcludeTax / value).toFixed(5)
+        dataSource[index]['quantity'] = parseFloat(newQuantity)
       }
     } else if (col === 'billingTaxAmount') {//含税金额
       dataSource[index][col] = value
