@@ -168,11 +168,11 @@ export default class BillStatusCon extends React.Component {
   }
   // 撤销
   cancelHandle = () => {
-    if (this.state.selectedRowKeys.length === 0) {
+    if (this.state.selectedRows.length === 0) {
       message.error('请选择要撤销的数据')
       return
     }
-    if (this.state.selectedRowKeys.length > 1) {
+    if (this.state.selectedRows.length > 1) {
       message.error('一次只能撤销一条数据')
       return
     }
@@ -202,7 +202,7 @@ export default class BillStatusCon extends React.Component {
   }
   // 传送AP
   sendAp = (param) => {
-    if (this.state.selectedRowKeys.length === 0) {
+    if (this.state.selectedRows.length === 0) {
       message.error('请选择要传送AP的数据')
       return
     }
@@ -230,11 +230,11 @@ export default class BillStatusCon extends React.Component {
     })
   }
   showGlDate = () => {
-    if (this.state.selectedRowKeys.length === 0) {
+    if (this.state.selectedRows.length === 0) {
       message.error('请选择要传送AP的数据')
       return
     }
-    if (this.state.selectedRowKeys.length > 1) {
+    if (this.state.selectedRows.length > 1) {
       message.error('一次只能传送一条数据')
       return
     }

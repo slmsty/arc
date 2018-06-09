@@ -121,7 +121,6 @@ class BillApproveDetail extends React.Component  {
   handleChange = (value, col, index, record) => {
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
-      console.log(value.billingContentName)
       dataSource[index][col] = value.billingContentName ? value.billingContentName : ''
       dataSource[index]['billingRecordId'] = value.billingRecordId
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode
