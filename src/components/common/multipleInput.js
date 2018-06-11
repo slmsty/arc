@@ -6,6 +6,13 @@ export default class MultipleInput extends React.Component {
   state = {
     values: this.props.value ? this.props.value : [],
   }
+  componentWillReceiveProps(nextProps) {
+    if(this.props.isClear && nextProps.disabled) {
+      this.setState({
+        values: [],
+      })
+    }
+  }
   textTemp = ''
   handleChange = (values) => {
     this.textTemp = ''
