@@ -18,10 +18,11 @@ const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS',
 class ApplyInfoModal extends React.Component {
   constructor(props) {
     super(props)
+    const { serviceDetail } = props.applyInfoData
     this.state = {
       formValidate: false,
       showContractLink: false,
-      approveData: [],
+      approveData: serviceDetail ? serviceDetail.appLineList : [],
       approveLoading: false,
     }
   }
