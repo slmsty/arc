@@ -17,7 +17,6 @@ class BillingDataInitAddCom extends React.Component {
     selectType:'',
     infoData:[],
     billingDataInitResultList:[]
-
   }
   queryParam = {
     pageInfo: {
@@ -136,7 +135,7 @@ class BillingDataInitAddCom extends React.Component {
   render() {
     const billingDataInitColumns = [
       {
-        title:'数据状态',
+        title:'数据来源',
         dataIndex:'createTypeName',
         width:80
       }, {
@@ -148,6 +147,10 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'billingApplicationId',
         width:100
       }, {
+        title:'申请日期',
+        dataIndex:'billingApplicationDate',
+        width:150
+      }, {
         title:'行ID',
         dataIndex:'billingAppLineId',
         width:100
@@ -155,6 +158,14 @@ class BillingDataInitAddCom extends React.Component {
         title:'项目编码',
         dataIndex:'projectNo',
         width:100
+      }, {
+        title:'合同编码',
+        dataIndex:'contractNo',
+        width:190
+      }, {
+        title:'合同名称',
+        dataIndex:'contractName',
+        width:350
       }, {
         title:'款项名称',
         dataIndex:'paymentName',
@@ -172,13 +183,29 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'custName',
         width:250
       }, {
+        title:'开票内容',
+        dataIndex:'billingContent',
+        width:250
+      }, {
+        title:'开票阶段',
+        dataIndex:'billingPhrases',
+        width:120
+      }, {
         title:'发票类型',
         dataIndex:'invoiceTypeName',
         width:80
       }, {
+        title:'开票说明',
+        dataIndex:'billingApplicationRequest',
+        width:150
+      }, {
         title:'发票代码',
         dataIndex:'invoiceCode',
         width:150
+      }, {
+        title:'发票备注',
+        dataIndex:'billingApplicationRemark',
+        width:180
       }, {
         title:'开票日期',
         dataIndex:'billingDate',
@@ -196,7 +223,12 @@ class BillingDataInitAddCom extends React.Component {
       }, {
         title:'不含税金额',
         dataIndex:'taxExcludeAmount',
-        width:120,
+        width:100,
+        render: (text) => (text ? currency(text) : text),
+      }, {
+        title:'税额',
+        dataIndex:'taxAmount',
+        width:100,
         render: (text) => (text ? currency(text) : text),
       },
     ]
@@ -217,7 +249,10 @@ class BillingDataInitAddCom extends React.Component {
     }
     return (
       <div>
-        <BillingDataInitAddWithFrom getBillDataInitList={this.getBillDataInitList}/>
+        <BillingDataInitAddWithFrom
+          getBillDataInitList={this.getBillDataInitList}
+          exportExcel={this.props.exportExcel}
+        />
         <br />
         <Button key="primary" onClick={()=>this.modifiedData('add')} disabled={!this.state.addFlag}>增加</Button>
         <Button style={{marginLeft:'10px'}} key="primary1" onClick={()=>this.modifiedData('edit')} disabled={!(this.state.selectedRows && this.state.selectedRows.length)}>编辑</Button>
@@ -239,7 +274,8 @@ class BillingDataInitAddCom extends React.Component {
               resultList={this.state.billingDataInitResultList}
               data ={this.props.billInitData.eidiBillDataInit}
               colseModal={this.closeModal}
-              saveData = {this.props.saveBillDataInit}/>
+              saveData={this.props.saveBillDataInit}
+            />
             : null
         }
       </div>

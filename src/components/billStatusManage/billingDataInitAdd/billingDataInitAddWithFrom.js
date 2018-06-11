@@ -2,8 +2,9 @@
  * Created by liangshuang on 18/5/14.
  */
 import React from 'react'
-import { Form, Row, Col, Button, Input, Icon } from 'antd'
+import { Form, Row, Col, Button, Input, Icon, DatePicker } from 'antd'
 import SelectInvokeApi from '../../common/selectInvokeApi'
+import moment from 'moment'
 const FormItem = Form.Item
 
 class BillingDataInitAddWithFromCom extends React.Component {
@@ -12,11 +13,18 @@ class BillingDataInitAddWithFromCom extends React.Component {
     const param = this.props.form.getFieldsValue()
     this.props.getBillDataInitList(param)
   }
+  exportExcel = () => {
+    const values = this.props.form.getFieldsValue()
+    this.props.exportExcel({
+      ...values,
+      statusDate: values.statusDate? values.statusDate.format('YYYY-MM-DD') : ''
+    })
+  }
   render() {
     const {getFieldDecorator} = this.props.form
     const formItemLayout = {
       labelCol: { span: 7 },
-      wrapperCol: { span: 17 },
+      wrapperCol: { span: 15 },
     }
     return (
       <div>
@@ -60,7 +68,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={6}>
-              <FormItem {...formItemLayout} label="数据状态">
+              <FormItem {...formItemLayout} label="数据来源">
                 {getFieldDecorator('createType', {
                   initialValue: '',
                 })(
@@ -75,11 +83,43 @@ class BillingDataInitAddWithFromCom extends React.Component {
             </Col>
           </Row>
           <Row gutter={40}>
-            <Col span={24} key={7} style={{ textAlign: 'right' }}>
-              <Button type="primary" key="search" onClick={this.handleQuery}><Icon type="search" />查询</Button>
+            <Col span={8} key={4}>
+              <FormItem {...formItemLayout} label="申请单号">
+                {getFieldDecorator('billingApplicationId', {
+                  initialValue: '',
+                })(<Input/>)}
+              </FormItem>
+            </Col>
+            <Col span={8} key={5}>
+              <FormItem {...formItemLayout} label="状态">
+                {getFieldDecorator('status', {
+                  initialValue: '',
+                })(
+                  <SelectInvokeApi
+                  typeCode="BILLING_APPLICATION_STATUS"
+                  paramCode="STATUS"
+                  placeholder="数据状态"
+                  hasAll
+                />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8} key={6}>
+              <FormItem {...formItemLayout} label="审批完成日期">
+                {getFieldDecorator('statusDate', {
+                  initialValue: '',
+                })(
+                  <DatePicker />
+                )}
+              </FormItem>
             </Col>
           </Row>
-
+          <Row gutter={40}>
+            <Col span={24} key={7} style={{ textAlign: 'right' }}>
+              <Button type="primary" onClick={this.handleQuery}><Icon type="search" />查询</Button>
+              <Button type="primary" style={{marginLeft: '15px'}} onClick={this.exportExcel}><Icon type="export" />导出</Button>
+            </Col>
+          </Row>
         </Form>
       </div>
       )
