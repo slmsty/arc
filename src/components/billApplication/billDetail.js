@@ -145,13 +145,17 @@ class BillDetail extends React.Component {
 
   handleDelete = (record) => {
     let dataSource = [...this.state.dataSource];
+    let parentIndex = 0
     this.state.dataSource.map((item, index) => {
       if(record.arBillingId === item.arBillingId && item.isParent === '1') {
+        parentIndex = item.lineNo
         const amount = dataSource[item.lineNo]['billingAmount']
         dataSource[item.lineNo]['billingAmount'] = parseFloat(record.billingAmount) + parseFloat(amount)
       }
     })
-
+    console.log(parentIndex)
+    const { billingTaxRate, quantity, billingAmount } = dataSource[parentIndex]
+    this.calBillAmountTax(dataSource, parentIndex, billingAmount, billingTaxRate, quantity)
     dataSource.splice(record.lineNo, 1)
     const newSource = dataSource.map((record, index) => ({
       ...record,
@@ -403,6 +407,7 @@ class BillDetail extends React.Component {
 
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
     //不含税金额
+    console.log(index, billingAmount, billingTaxRate, quantity)
     const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
     dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
     //单价
