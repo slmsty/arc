@@ -43,6 +43,7 @@ class BillApproveDetail extends React.Component  {
       selectedRows: [],
       currentNo: 1,
       totalAmount: 0,
+      saveLoading: false,
     }
     if(this.props.setFormValidate) {
       this.props.setFormValidate(dataSource)
@@ -280,6 +281,9 @@ class BillApproveDetail extends React.Component  {
         })
       }
       if (!err) {
+        this.setState({
+          saveLoading: true,
+        })
         const params = isAgainInvoice !== 'false' ? {
           ...values,
           billingApplicationId: this.props.serviceDetail.billingApplicationId,
@@ -307,10 +311,14 @@ class BillApproveDetail extends React.Component  {
                 })
               )
               this.setState({
-                dataSource: newSources
+                dataSource: newSources,
+                saveLoading: false,
               })
             } else {
               message.error(resultMessage, 5)
+              this.setState({
+                saveLoading: false,
+              })
             }
           }
         )
@@ -935,8 +943,9 @@ class BillApproveDetail extends React.Component  {
                 type="primary"
                 style={{marginLeft: '5px'}}
                 ghost
+                loading={this.state.saveLoading}
                 onClick={(e) => this.handleOk(e)}>
-                <Icon type="check" />保存修改
+                {!this.state.saveLoading ? <Icon type="check" /> : ''}保存修改
               </Button>
             </div> : null
         }

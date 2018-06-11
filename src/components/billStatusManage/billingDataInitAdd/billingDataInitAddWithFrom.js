@@ -11,7 +11,10 @@ class BillingDataInitAddWithFromCom extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
-    this.props.getBillDataInitList(param)
+    this.props.getBillDataInitList({
+      ...param,
+      statusDate: param.statusDate? param.statusDate.format('YYYY-MM-DD') : ''
+    })
   }
   exportExcel = () => {
     const values = this.props.form.getFieldsValue()
@@ -85,7 +88,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
           <Row gutter={40}>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="申请单号">
-                {getFieldDecorator('billingApplicationId', {
+                {getFieldDecorator('applicationId', {
                   initialValue: '',
                 })(<Input/>)}
               </FormItem>
@@ -107,7 +110,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="审批完成日期">
                 {getFieldDecorator('statusDate', {
-                  initialValue: '',
+                  initialValue: "",
                 })(
                   <DatePicker />
                 )}

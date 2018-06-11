@@ -22,6 +22,7 @@ class ApplyInfoModal extends React.Component {
       formValidate: false,
       showContractLink: false,
       approveData: [],
+      approveLoading: false,
     }
   }
 
@@ -38,6 +39,9 @@ class ApplyInfoModal extends React.Component {
   applyConfirm = () => {
       this.props.form.validateFields((err, values) => {
         if(!err) {
+          this.setState({
+            approveLoading: true,
+          })
           const approveParams = {
             arcFlowId: this.props.applyData.arcFlowId,
             processInstanceId: this.props.applyData.processInstanceId,
@@ -46,7 +50,7 @@ class ApplyInfoModal extends React.Component {
             approveType: 'agree',
             approveRemark: this.trim(values.approveRemark),
           }
-          if(BILL_APPLY_TYPE.includes(this.props.applyInfoData.serviceType)) {
+          if(BILL_APPLY_TYPE.includes(this.props.applyInfoData.serviceType) && EDIT_ROLE_TYPE.includes(this.props.applyInfoData.taskCode)) {
             const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
             const isAgainInvoice = serviceDetail.isAgainInvoice
             const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
@@ -109,13 +113,28 @@ class ApplyInfoModal extends React.Component {
             }, (res) => {
               const {resultCode, resultMessage, data} = res
               if (resultCode === '000000') {
-                this.props.applyComfirm(approveParams)
+                this.props.applyComfirm(approveParams).then(res => {
+                  if(res && res.response && res.response.resultCode === '000000') {
+                    this.setState({
+                      approveLoading: false,
+                    })
+                  }
+                })
               } else {
+                this.setState({
+                  approveLoading: false,
+                })
                 message.error(resultMessage, 5)
               }
             })
           } else {
-            this.props.applyComfirm(approveParams)
+            this.props.applyComfirm(approveParams).then(res => {
+              if(res && res.response && res.response.resultCode === '000000') {
+                this.setState({
+                  approveLoading: false
+                })
+              }
+            })
           }
         }
       })
@@ -204,7 +223,7 @@ class ApplyInfoModal extends React.Component {
             <Button type="primary" key="reset" onClick={this.applyReject}>
               驳回
             </Button>,
-            <Button key="submit" type="primary" onClick={this.applyConfirm}>
+            <Button key="submit" loading={this.state.approveLoading} type="primary" onClick={this.applyConfirm}>
               同意
             </Button>
           ]}
