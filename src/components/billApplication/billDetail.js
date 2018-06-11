@@ -306,9 +306,11 @@ class BillDetail extends React.Component {
       const childAmount = total + value
       dataSource[result.lineNo][col] = result.totalAmount - childAmount
       const parent = this.state.dataSource[result.lineNo]
+      //联动计算父级中不含税金额、单价、税额
       this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
       dataSource[index][col] = value
       const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
+      //联动计算子节点不含税金额、单价、税额
       this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
       //未大签、红冲、其他开票含税金额为0, 手动输入金额后并赋值给总金额
       if(record.isParent === '1' && !normalTypes.includes(this.props.billType)) {

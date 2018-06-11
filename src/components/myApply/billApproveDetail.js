@@ -141,7 +141,6 @@ class BillApproveDetail extends React.Component  {
         }
       })
       //校验所有拆分子项的金额必须小于父级含税金额
-      console.log(result)
       const childAmount = total + value
       dataSource[result.lineNo][col] = result.totalAmount - childAmount
       const parent = this.state.dataSource[result.lineNo]
@@ -172,14 +171,26 @@ class BillApproveDetail extends React.Component  {
         dataSource[index]['quantity'] = parseFloat(newQuantity)
       }
     } else if (col === 'billingTaxAmount') {//含税金额
-      dataSource[index][col] = value
       const { billingAmount, quantity } = this.state.dataSource[index]
+      if(value > billingAmount) {
+        message.error('含税金额不能大于含税金额')
+        return
+      } else {
+        dataSource[index][col] = value
+      }
       dataSource[index]['billingAmountExcludeTax'] = billingAmount - value
       dataSource[index]['unitPrice'] = ((billingAmount - value) / quantity).toFixed(2)
 
     } else if (col === 'billingAmountExcludeTax') {//不含税金额
-      dataSource[index][col] = value
+
       const { billingAmount, quantity } = this.state.dataSource[index]
+      //如果修改的不含税金额大于含税金额，提示
+      if(value > billingAmount) {
+        message.error('不含税金额不能大于含税金额')
+        return
+      } else {
+        dataSource[index][col] = value
+      }
       dataSource[index].billingTaxAmount = (billingAmount - value).toFixed(2)
       dataSource[index].unitPrice = (value / quantity).toFixed(2)
 
