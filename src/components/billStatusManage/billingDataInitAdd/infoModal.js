@@ -187,7 +187,7 @@ class InfoModal extends React.Component {
                 <Col span={12} key={9}>
                   <FormItem {...formItemLayout} label="含税金额">
                     {getFieldDecorator('taxIncludeAmount', {
-                      initialValue: currency(dataSource.taxIncludeAmount),
+                      initialValue: dataSource.taxIncludeAmount,
                       rules: [
                         { required: true, message: '请输入含税金额', },
                       ]
@@ -197,7 +197,7 @@ class InfoModal extends React.Component {
                 <Col span={12} key={10}>
                   <FormItem {...formItemLayout} label="不含税金额">
                     {getFieldDecorator('taxExcludeAmount', {
-                      initialValue: currency(dataSource.taxExcludeAmount),
+                      initialValue: dataSource.taxExcludeAmount,
                       rules: [
                         { required: true, message: '请输入不含税金额', },
                       ]

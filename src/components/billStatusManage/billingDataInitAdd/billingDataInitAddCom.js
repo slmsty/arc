@@ -187,6 +187,7 @@ class BillingDataInitAddCom extends React.Component {
         title:'含税金额',
         dataIndex:'taxIncludeAmount',
         width:120,
+        render: (text) => (text ? currency(text) : text),
       }, {
         title:'税率',
         dataIndex:'taxRate',
@@ -196,6 +197,7 @@ class BillingDataInitAddCom extends React.Component {
         title:'不含税金额',
         dataIndex:'taxExcludeAmount',
         width:120,
+        render: (text) => (text ? currency(text) : text),
       },
     ]
     const { selectedRowKeys } = this.state
