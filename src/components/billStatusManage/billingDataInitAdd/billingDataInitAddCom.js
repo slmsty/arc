@@ -151,7 +151,7 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'billingApplicationDate',
         width:150
       }, {
-        title:'行ID',
+        title:'行号',
         dataIndex:'billingAppLineId',
         width:100
       }, {
@@ -171,7 +171,7 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'paymentName',
         width:80
       }, {
-        title:'发票号码',
+        title:'发票号',
         dataIndex:'invoiceNumber',
         width:80
       }, {
@@ -179,7 +179,7 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'companyName',
         width:200
       }, {
-        title:'开票客户名称',
+        title:'客户名称',
         dataIndex:'custName',
         width:250
       }, {
@@ -237,6 +237,7 @@ class BillingDataInitAddCom extends React.Component {
     const pagination = {
       current: pageNo,
       total: count,
+      showTotal: (total) => (`共 ${total} 条`),
       pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,

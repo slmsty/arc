@@ -93,6 +93,7 @@ class InfoModal extends React.Component {
     let datas = this.props.data
     let billingDataInitResultList = datas.billingDataInitResultList
     let dataSource = datas.billingDataInitResult
+    console.log(dataSource.taxRate.toString())
     return (
       <div>
         <Modal
@@ -209,7 +210,7 @@ class InfoModal extends React.Component {
                 <Col span={12} key={11}>
                   <FormItem {...formItemLayout} label="税率">
                     {getFieldDecorator('taxRate', {
-                      initialValue: dataSource.taxRate ? (dataSource.taxRate+'') :'' ,
+                      initialValue: dataSource.taxRate + '' ,
                     })(
                       <SelectInvokeApi
                         typeCode="BILLING_APPLICATION"

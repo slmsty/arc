@@ -23,6 +23,9 @@ class BillingDataInitAddWithFromCom extends React.Component {
       statusDate: values.statusDate? values.statusDate.format('YYYY-MM-DD') : ''
     })
   }
+  clearFormValues = () => {
+    this.props.form.resetFields()
+  }
   render() {
     const {getFieldDecorator} = this.props.form
     const formItemLayout = {
@@ -41,7 +44,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={2}>
-              <FormItem {...formItemLayout} label="合同客户名称">
+              <FormItem {...formItemLayout} label="客户名称">
                 {getFieldDecorator('custName', {
                   initialValue: '',
                 })(<Input/>)}
@@ -94,12 +97,12 @@ class BillingDataInitAddWithFromCom extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={5}>
-              <FormItem {...formItemLayout} label="状态">
+              <FormItem {...formItemLayout} label="开票状态">
                 {getFieldDecorator('status', {
                   initialValue: '',
                 })(
                   <SelectInvokeApi
-                  typeCode="BILLING_APPLICATION_STATUS"
+                  typeCode="BILLING_STATUS"
                   paramCode="STATUS"
                   placeholder="数据状态"
                   hasAll
@@ -121,6 +124,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
             <Col span={24} key={7} style={{ textAlign: 'right' }}>
               <Button type="primary" onClick={this.handleQuery}><Icon type="search" />查询</Button>
               <Button type="primary" style={{marginLeft: '15px'}} onClick={this.exportExcel}><Icon type="export" />导出</Button>
+              <Button type="primary" ghost style={{marginLeft: '15px'}} onClick={this.clearFormValues}>清空</Button>
             </Col>
           </Row>
         </Form>
