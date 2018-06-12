@@ -93,7 +93,6 @@ class InfoModal extends React.Component {
     let datas = this.props.data
     let billingDataInitResultList = datas.billingDataInitResultList
     let dataSource = datas.billingDataInitResult
-    console.log(dataSource.taxRate.toString())
     return (
       <div>
         <Modal
@@ -216,7 +215,7 @@ class InfoModal extends React.Component {
                         typeCode="BILLING_APPLICATION"
                         paramCode="TAX_RATE"
                         placeholder="税率"
-                        hasAll
+                        hasEmpty
                       />
                     )}
                   </FormItem>

@@ -233,6 +233,9 @@ class BillApproveDetail extends React.Component  {
       dataSource: dataSource,
       selectedRowKeys: [],
     })
+    if(this.props.setFormValidate) {
+      this.props.setFormValidate(dataSource)
+    }
   }
 
   fieldCheck = (value) => {

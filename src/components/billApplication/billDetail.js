@@ -153,7 +153,6 @@ class BillDetail extends React.Component {
         dataSource[item.lineNo]['billingAmount'] = parseFloat(record.billingAmount) + parseFloat(amount)
       }
     })
-    console.log(parentIndex)
     const { billingTaxRate, quantity, billingAmount } = dataSource[parentIndex]
     this.calBillAmountTax(dataSource, parentIndex, billingAmount, billingTaxRate, quantity)
     dataSource.splice(record.lineNo, 1)
