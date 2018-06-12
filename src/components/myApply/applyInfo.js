@@ -40,9 +40,6 @@ class ApplyInfoModal extends React.Component {
   applyConfirm = () => {
       this.props.form.validateFields((err, values) => {
         if(!err) {
-          this.setState({
-            approveLoading: true,
-          })
           const approveParams = {
             arcFlowId: this.props.applyData.arcFlowId,
             processInstanceId: this.props.applyData.processInstanceId,
@@ -94,6 +91,9 @@ class ApplyInfoModal extends React.Component {
             if(err) {
               return
             }
+            this.setState({
+              approveLoading: true,
+            })
             const params = isAgainInvoice !== 'false' ? {
               ...values,
               billingApplicationId: serviceDetail.billingApplicationId,
