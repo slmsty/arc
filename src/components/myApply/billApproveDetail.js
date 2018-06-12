@@ -112,6 +112,9 @@ class BillApproveDetail extends React.Component  {
       lineNo: index,
     }))
     this.setState({ dataSource: newSource });
+    if(this.props.setFormValidate) {
+      this.props.setFormValidate(dataSource)
+    }
   }
   /**
    * 改动变化原则

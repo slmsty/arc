@@ -81,38 +81,7 @@ export default class ApplySearchCon extends React.Component {
       }
     })
   }
-  /*
-   function applyComfirm
-   审批同意
-   */
-  applyComfirm = (param) => {
-    this.props.approveSubmit(param).then((res) => {
-      this.setState({
-        loading: false,
-        infoVisitable: false,
-        applyData: '',
-      })
-      if (res && res.response && res.response.resultCode === '000000') {
-        message.success('审批成功')
-      }
-    })
-  }
-  /*
-   function applyReject
-   审批驳回
-   */
-  applyReject = (param) => {
-    this.props.approveReject(param).then((res) => {
-      this.setState({
-        loading: false,
-        infoVisitable: false,
-        applyData: '',
-      })
-      if (res && res.response && res.response.resultCode === '000000') {
-        message.success('驳回成功')
-      }
-    })
-  }
+
   /*
    function closeModalClaim
    关闭详情modal
@@ -216,8 +185,8 @@ export default class ApplySearchCon extends React.Component {
             <ApplyInfoModal
               infoVisitable={this.state.infoVisitable}
               closeClaim={this.closeModalClaim}
-              applyComfirm={this.applyComfirm}
-              applyReject={this.applyReject}
+              approveComfirm={this.props.approveSubmit}
+              approveReject={this.props.approveReject}
               applyData={this.state.applyData}
               applyInfoData={this.props.myApply.getMyApplyInfo}
               billApplySave={this.props.billApproveSave}

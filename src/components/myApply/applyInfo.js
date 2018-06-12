@@ -24,6 +24,7 @@ class ApplyInfoModal extends React.Component {
       showContractLink: false,
       approveData: serviceDetail ? serviceDetail.appLineList : [],
       approveLoading: false,
+      rejectLoading: false,
     }
   }
 
@@ -40,14 +41,7 @@ class ApplyInfoModal extends React.Component {
   applyConfirm = () => {
       this.props.form.validateFields((err, values) => {
         if(!err) {
-          const approveParams = {
-            arcFlowId: this.props.applyData.arcFlowId,
-            processInstanceId: this.props.applyData.processInstanceId,
-            businessKey: this.props.applyData.businessKey,
-            taskId: this.props.applyData.taskId,
-            approveType: 'agree',
-            approveRemark: this.trim(values.approveRemark),
-          }
+
           if(BILL_APPLY_TYPE.includes(this.props.applyInfoData.serviceType) && EDIT_ROLE_TYPE.includes(this.props.applyInfoData.taskCode)) {
             const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
             const isAgainInvoice = serviceDetail.isAgainInvoice
@@ -114,13 +108,7 @@ class ApplyInfoModal extends React.Component {
             }, (res) => {
               const {resultCode, resultMessage, data} = res
               if (resultCode === '000000') {
-                this.props.applyComfirm(approveParams).then(res => {
-                  if(res && res.response && res.response.resultCode === '000000') {
-                    this.setState({
-                      approveLoading: false,
-                    })
-                  }
-                })
+                this.approveConfirm(values)
               } else {
                 this.setState({
                   approveLoading: false,
@@ -129,32 +117,52 @@ class ApplyInfoModal extends React.Component {
               }
             })
           } else {
-            this.props.applyComfirm(approveParams).then(res => {
-              if(res && res.response && res.response.resultCode === '000000') {
-                this.setState({
-                  approveLoading: false
-                })
-              }
-            })
+            this.approveConfirm(values)
           }
         }
       })
   }
-  applyReject = () => {
-    const applyRejectQueryParam = {
+  approveConfirm = (values) => {
+    const approveParams = {
       arcFlowId: this.props.applyData.arcFlowId,
       processInstanceId: this.props.applyData.processInstanceId,
       businessKey: this.props.applyData.businessKey,
       taskId: this.props.applyData.taskId,
-      approveType: '',
-      approveRemark: '',
+      approveType: 'agree',
+      approveRemark: values.approveRemark ? values.approveRemark.trim() : '',
     }
-    const param = this.props.form.getFieldsValue()
-    param.approveRemark = param.approveRemark ? this.trim(param.approveRemark) : param.approveRemark
-    param.approveType = 'cancel'
-    applyRejectQueryParam.approveRemark = param.approveRemark
-    applyRejectQueryParam.approveType = param.approveType
-    this.props.applyReject(applyRejectQueryParam)
+    this.props.approveComfirm(approveParams).then(res => {
+      if(res && res.response && res.response.resultCode === '000000') {
+        message.success('审批成功')
+        this.props.closeClaim()
+      }
+      this.setState({
+        approveLoading: false
+      })
+    })
+  }
+  applyReject = () => {
+    //按钮提交后显示loading
+    this.setState({rejectLoading: true})
+    const values = this.props.form.getFieldsValue()
+    const rejectParams = {
+      ...values,
+      approveType: 'cancel',
+      arcFlowId: this.props.applyData.arcFlowId,
+      processInstanceId: this.props.applyData.processInstanceId,
+      businessKey: this.props.applyData.businessKey,
+      taskId: this.props.applyData.taskId,
+      approveRemark: values.approveRemark ? values.approveRemark.trim() : '',
+    }
+    this.props.approveReject(rejectParams).then(res => {
+      if(res && res.response && res.response.resultCode === '000000') {
+        message.success('驳回成功')
+        this.props.closeClaim()
+      }
+      this.setState({
+        rejectLoading: false,
+      })
+    })
   }
   trim = (str) => {
     return str ? str.replace(/(^\s*)|(\s*$)/g, '') : ''
@@ -221,7 +229,7 @@ class ApplyInfoModal extends React.Component {
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           footer={[
-            <Button type="primary" key="reset" onClick={this.applyReject}>
+            <Button type="primary" loading={this.state.rejectLoading} key="reset" onClick={this.applyReject}>
               驳回
             </Button>,
             <Button key="submit" loading={this.state.approveLoading} type="primary" onClick={this.applyConfirm}>
