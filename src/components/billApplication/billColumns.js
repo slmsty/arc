@@ -1,3 +1,6 @@
+import currency from '../../util/currency'
+
+
 const clientCols = [{
   title: '客户名称',
   dataIndex: 'custName',
@@ -253,10 +256,16 @@ const billDetailColumns = [{
   title: '税率',
   dataIndex: 'taxRate',
   width: 250,
+  render: (text, record) => {
+    return record.taxRate ? `${parseInt((record.taxRate) * 100)}%` : ''
+  }
 }, {
   title: '不含税金额',
   dataIndex: 'taxExcludeAmount',
   width: 250,
+  render: (text, record) => {
+    return currency(record.taxExcludeAmount)
+  }
 }]
 
 const taxCategoryCols = [{
