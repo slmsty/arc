@@ -751,14 +751,14 @@ const constructSplitSearchColumns = [{
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
-    title: 'Funding',
-    dataIndex: 'funding',
+    title: 'Gross order',
+    dataIndex: 'grossOrder',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
-    title: ' Gross Order',
-    dataIndex: 'grossOrder',
+    title: ' Gross Order含退税额',
+    dataIndex: 'grossOrderIncludeRetRate',
     width: 120,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },

@@ -50,9 +50,6 @@ class InfoModal extends React.Component {
   save =() => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.setState({
-          loading: true,
-        })
         if (values.taxIncludeAmount <= 0 || values.taxExcludeAmount <= 0) {
           message.error('含税金额和不含税金额必须大于0')
           return
@@ -61,6 +58,9 @@ class InfoModal extends React.Component {
           message.error('不含税金额不能大于含税金额')
           return
         }
+        this.setState({
+          loading: true,
+        })
         const params = {
           ...values,
           invoiceNumber: values.invoiceNumber.trim(),
@@ -195,7 +195,7 @@ class InfoModal extends React.Component {
                       rules: [
                         { required: true, message: '请输入含税金额'},
                       ]
-                    })(<InputNumber style={{width: '220px'}} max={10}/>)}
+                    })(<InputNumber style={{width: '220px'}} min={-999999999} max={999999999}/>)}
                   </FormItem>
                 </Col>
                 <Col span={12} key={10}>
@@ -205,7 +205,7 @@ class InfoModal extends React.Component {
                       rules: [
                         { required: true, message: '请输入不含税金额'},
                       ]
-                    })(<InputNumber style={{width: '220px'}} max={10}/>)}
+                    })(<InputNumber style={{width: '220px'}} min={-999999999} max={999999999}/>)}
                   </FormItem>
                 </Col>
               </Row>
