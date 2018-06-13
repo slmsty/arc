@@ -58,6 +58,14 @@ class InfoModal extends React.Component {
           message.error('不含税金额不能大于含税金额')
           return
         }
+        if(values.taxIncludeAmount > 99999999) {
+          message.error('含税金额不能大于千万')
+          return
+        }
+        if(values.taxExcludeAmount > 99999999) {
+          message.error('不含税金额不能大于千万')
+          return
+        }
         this.setState({
           loading: true,
         })
@@ -195,7 +203,7 @@ class InfoModal extends React.Component {
                       rules: [
                         { required: true, message: '请输入含税金额'},
                       ]
-                    })(<InputNumber style={{width: '220px'}} min={-999999999} max={999999999}/>)}
+                    })(<InputNumber style={{width: '220px'}}/>)}
                   </FormItem>
                 </Col>
                 <Col span={12} key={10}>
@@ -205,7 +213,7 @@ class InfoModal extends React.Component {
                       rules: [
                         { required: true, message: '请输入不含税金额'},
                       ]
-                    })(<InputNumber style={{width: '220px'}} min={-999999999} max={999999999}/>)}
+                    })(<InputNumber style={{width: '220px'}}/>)}
                   </FormItem>
                 </Col>
               </Row>
