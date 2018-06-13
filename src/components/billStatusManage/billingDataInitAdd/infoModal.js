@@ -213,7 +213,7 @@ class InfoModal extends React.Component {
                 <Col span={12} key={11}>
                   <FormItem {...formItemLayout} label="税率">
                     {getFieldDecorator('taxRate', {
-                      initialValue: dataSource.taxRate + '' ,
+                      initialValue: typeof dataSource.taxRate !== 'undefined' ? dataSource.taxRate + '' :  '',
                     })(
                       <SelectInvokeApi
                         typeCode="BILLING_APPLICATION"
