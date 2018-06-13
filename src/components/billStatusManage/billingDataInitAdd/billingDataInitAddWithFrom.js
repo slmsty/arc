@@ -123,8 +123,8 @@ class BillingDataInitAddWithFromCom extends React.Component {
           <Row gutter={40}>
             <Col span={24} key={7} style={{ textAlign: 'right' }}>
               <Button type="primary" onClick={this.handleQuery}><Icon type="search" />查询</Button>
-              <Button type="primary" style={{marginLeft: '15px'}} onClick={this.exportExcel}><Icon type="export" />导出</Button>
-              <Button type="primary" ghost style={{marginLeft: '15px'}} onClick={this.clearFormValues}>清空</Button>
+              /*<Button type="primary" style={{marginLeft: '15px'}} onClick={this.exportExcel}><Icon type="export" />导出</Button>
+              <Button type="primary" ghost style={{marginLeft: '15px'}} onClick={this.clearFormValues}>清空</Button>*/
             </Col>
           </Row>
         </Form>
