@@ -11,12 +11,13 @@ class BillingDataInitAddWithFromCom extends React.Component {
   handleQuery = () => {
     // 验证通过后查询
     const param = this.props.form.getFieldsValue()
-    this.props.getBillDataInitList({
+    /*this.props.getBillDataInitList({
       ...param,
       approveCPDate: param.approveCPDate? param.approveCPDate.format('YYYY-MM-DD') : ''
-    })
+    })*/
+    this.props.getBillDataInitList(param)
   }
-  exportExcel = () => {
+  /*exportExcel = () => {
     const values = this.props.form.getFieldsValue()
     this.props.exportExcel({
       ...values,
@@ -25,7 +26,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
   }
   clearFormValues = () => {
     this.props.form.resetFields()
-  }
+  }*/
   render() {
     const {getFieldDecorator} = this.props.form
     const formItemLayout = {
@@ -88,7 +89,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={40}>
+          {/*<Row gutter={40}>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="申请单号">
                 {getFieldDecorator('applicationId', {
@@ -119,12 +120,12 @@ class BillingDataInitAddWithFromCom extends React.Component {
                 )}
               </FormItem>
             </Col>
-          </Row>
+          </Row>*/}
           <Row gutter={40}>
             <Col span={24} key={7} style={{ textAlign: 'right' }}>
               <Button type="primary" onClick={this.handleQuery}><Icon type="search" />查询</Button>
-              <Button type="primary" style={{marginLeft: '15px'}} onClick={this.exportExcel}><Icon type="export" />导出</Button>
-              <Button type="primary" ghost style={{marginLeft: '15px'}} onClick={this.clearFormValues}>清空</Button>
+              {/*<Button type="primary" style={{marginLeft: '15px'}} onClick={this.exportExcel}><Icon type="export" />导出</Button>
+              <Button type="primary" ghost style={{marginLeft: '15px'}} onClick={this.clearFormValues}>清空</Button>*/}
             </Col>
           </Row>
         </Form>
