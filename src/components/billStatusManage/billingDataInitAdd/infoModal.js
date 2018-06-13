@@ -50,13 +50,25 @@ class InfoModal extends React.Component {
   save =() => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.setState({
-          loading: true,
-        })
         if (values.taxIncludeAmount <= 0 || values.taxExcludeAmount <= 0) {
           message.error('含税金额和不含税金额必须大于0')
           return
         }
+        if (values.taxIncludeAmount < values.taxExcludeAmount ) {
+          message.error('不含税金额不能大于含税金额')
+          return
+        }
+        if(values.taxIncludeAmount > 99999999) {
+          message.error('含税金额不能大于千万')
+          return
+        }
+        if(values.taxExcludeAmount > 99999999) {
+          message.error('不含税金额不能大于千万')
+          return
+        }
+        this.setState({
+          loading: true,
+        })
         const params = {
           ...values,
           invoiceNumber: values.invoiceNumber.trim(),
@@ -189,7 +201,7 @@ class InfoModal extends React.Component {
                     {getFieldDecorator('taxIncludeAmount', {
                       initialValue: dataSource.taxIncludeAmount,
                       rules: [
-                        { required: true, message: '请输入含税金额', },
+                        { required: true, message: '请输入含税金额'},
                       ]
                     })(<InputNumber style={{width: '220px'}}/>)}
                   </FormItem>
@@ -199,7 +211,7 @@ class InfoModal extends React.Component {
                     {getFieldDecorator('taxExcludeAmount', {
                       initialValue: dataSource.taxExcludeAmount,
                       rules: [
-                        { required: true, message: '请输入不含税金额', },
+                        { required: true, message: '请输入不含税金额'},
                       ]
                     })(<InputNumber style={{width: '220px'}}/>)}
                   </FormItem>
@@ -209,13 +221,13 @@ class InfoModal extends React.Component {
                 <Col span={12} key={11}>
                   <FormItem {...formItemLayout} label="税率">
                     {getFieldDecorator('taxRate', {
-                      initialValue: dataSource.taxRate ? (dataSource.taxRate+'') :'' ,
+                      initialValue: typeof dataSource.taxRate !== 'undefined' ? dataSource.taxRate + '' :  '',
                     })(
                       <SelectInvokeApi
                         typeCode="BILLING_APPLICATION"
                         paramCode="TAX_RATE"
                         placeholder="税率"
-                        hasAll
+                        hasEmpty
                       />
                     )}
                   </FormItem>

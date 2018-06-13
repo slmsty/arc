@@ -35,6 +35,7 @@ import CustomerTaxInfo from '../containers/system/customerTaxInfo'
 import CustomerContent from '../containers/system/customerContent'
 import AuthoritySet from "../components/system/authoritySet";
 import billingDataInitAdd from './BillManage/billingDataInitAdd'
+//import ReceiptApply from '../components/billStatusManage/receiptApplication/receiptApply'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -108,11 +109,13 @@ class IndexContainer extends React.Component {
       return AuthoritySet
     } else if (component === 'outcomeReceiptReport') {
       return OutcomeReceiptReport
-    }else if (component === 'contractSplitReport') {
+    } else if (component === 'contractSplitReport') {
       return ContractSplitReport
-    }else if (component === 'billingDataInitAdd') {
+    } else if (component === 'billingDataInitAdd') {
       return billingDataInitAdd
-    }
+    } /*else if (component === 'ReceiptApply') {
+      return ReceiptApply
+    }*/
   }
   getMenuRoutes = (menus) => {
     if (menus && menus.length > 0) {

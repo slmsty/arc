@@ -39,3 +39,17 @@ export function showDataInitModal(queryParam) {
     },
   }
 }
+
+export function exportExcel(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/billingApplication/exportBillingDataInit',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['EXPORT_EXCEL_SUCCESS'],
+      acceptType: 'blob',
+    },
+  }
+}

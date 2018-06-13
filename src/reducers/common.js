@@ -139,6 +139,9 @@ const common = {
             name: '开票申请',
             icon: 'icon-kaipiaoshenqing',
             component: 'BillingApplication',
+            child:[{component: "billingStatusSendAp", key: "421", name: "传送ap", path: "billingStatusSendAp"},
+              {component: "billingStatusCancel", key: "422", name: "撤销", path: "billingStatusCancel"},
+            ]
           },
           {
             key: '42',
@@ -152,6 +155,13 @@ const common = {
           },
           {
             key: '43',
+            path: '/BillManage/receiptApply',
+            name: '收据申请',
+            icon: 'icon-kaipiaozhuangtai',
+            component: 'ReceiptApply',
+          },
+          {
+            key: '44',
             path: '/BillManage/billingDataInitAdd',
             name: '期初数据补录',
             icon: 'icon-kaipiaoshenqing',
@@ -254,6 +264,7 @@ const common = {
          ],
       },
     ],
+    role: [{roleCode: "ar_admin", roleName: "ar管理员"}]
   } : {},
 }
 
@@ -262,9 +273,9 @@ function getUserInfo(state, action) {
 }
 
 function getPermission(state, action) {
-  /*if (process.env.NODE_ENV === 'develop_local') {
+  if (process.env.NODE_ENV === 'develop_local') {
     return state
-  }*/
+  }
   return { ...state, permission: action.response.results }
 }
 

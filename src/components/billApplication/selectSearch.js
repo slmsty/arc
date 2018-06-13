@@ -178,7 +178,7 @@ class SelectSearch extends React.Component {
             columns={this.props.columns}
             rowSelection={rowSelection}
             bordered
-            size="middle"
+            size="small"
             dataSource={this.state.dataSource}
             loading={this.state.loading}
             locale={{

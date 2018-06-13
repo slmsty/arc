@@ -43,6 +43,7 @@ class BillApproveDetail extends React.Component  {
       selectedRows: [],
       currentNo: 1,
       totalAmount: 0,
+      saveLoading: false,
     }
     if(this.props.setFormValidate) {
       this.props.setFormValidate(dataSource)
@@ -95,18 +96,25 @@ class BillApproveDetail extends React.Component  {
 
   handleDelete = (record) => {
     let dataSource = [...this.state.dataSource];
+    let parentIndex = 0
     this.state.dataSource.map((item, index) => {
       if(record.arBillingId === item.arBillingId && item.isParent === '1') {
+        parentIndex = item.lineNo
         const amount = dataSource[item.lineNo]['billingAmount']
         dataSource[item.lineNo]['billingAmount'] = parseFloat(record.billingAmount) + parseFloat(amount)
       }
     })
+    const { billingTaxRate, quantity, billingAmount } = dataSource[parentIndex]
+    this.calBillAmountTax(dataSource, parentIndex, billingAmount, billingTaxRate, quantity)
     dataSource.splice(record.lineNo, 1)
     const newSource = dataSource.map((record, index) => ({
       ...record,
       lineNo: index,
     }))
     this.setState({ dataSource: newSource });
+    if(this.props.setFormValidate) {
+      this.props.setFormValidate(dataSource)
+    }
   }
   /**
    * 改动变化原则
@@ -141,7 +149,6 @@ class BillApproveDetail extends React.Component  {
         }
       })
       //校验所有拆分子项的金额必须小于父级含税金额
-      console.log(result)
       const childAmount = total + value
       dataSource[result.lineNo][col] = result.totalAmount - childAmount
       const parent = this.state.dataSource[result.lineNo]
@@ -168,19 +175,30 @@ class BillApproveDetail extends React.Component  {
       dataSource[index][col] = value
       const { billingAmountExcludeTax, quantity } = this.state.dataSource[index]
       if(value) {
-        const newQuantity = billingAmountExcludeTax / value
-        const number = newQuantity.toString().split('.')[1]
-        dataSource[index]['quantity'] = number && number.length > 5 ? newQuantity.toFixed(5) : newQuantity
+        const newQuantity = (billingAmountExcludeTax / value).toFixed(5)
+        dataSource[index]['quantity'] = parseFloat(newQuantity)
       }
     } else if (col === 'billingTaxAmount') {//含税金额
-      dataSource[index][col] = value
       const { billingAmount, quantity } = this.state.dataSource[index]
+      if(value > billingAmount) {
+        message.error('含税金额不能大于含税金额')
+        return
+      } else {
+        dataSource[index][col] = value
+      }
       dataSource[index]['billingAmountExcludeTax'] = billingAmount - value
       dataSource[index]['unitPrice'] = ((billingAmount - value) / quantity).toFixed(2)
 
     } else if (col === 'billingAmountExcludeTax') {//不含税金额
-      dataSource[index][col] = value
+
       const { billingAmount, quantity } = this.state.dataSource[index]
+      //如果修改的不含税金额大于含税金额，提示
+      if(value > billingAmount) {
+        message.error('不含税金额不能大于含税金额')
+        return
+      } else {
+        dataSource[index][col] = value
+      }
       dataSource[index].billingTaxAmount = (billingAmount - value).toFixed(2)
       dataSource[index].unitPrice = (value / quantity).toFixed(2)
 
@@ -215,6 +233,9 @@ class BillApproveDetail extends React.Component  {
       dataSource: dataSource,
       selectedRowKeys: [],
     })
+    if(this.props.setFormValidate) {
+      this.props.setFormValidate(dataSource)
+    }
   }
 
   fieldCheck = (value) => {
@@ -266,6 +287,9 @@ class BillApproveDetail extends React.Component  {
         })
       }
       if (!err) {
+        this.setState({
+          saveLoading: true,
+        })
         const params = isAgainInvoice !== 'false' ? {
           ...values,
           billingApplicationId: this.props.serviceDetail.billingApplicationId,
@@ -293,10 +317,14 @@ class BillApproveDetail extends React.Component  {
                 })
               )
               this.setState({
-                dataSource: newSources
+                dataSource: newSources,
+                saveLoading: false,
               })
             } else {
               message.error(resultMessage, 5)
+              this.setState({
+                saveLoading: false,
+              })
             }
           }
         )
@@ -921,8 +949,9 @@ class BillApproveDetail extends React.Component  {
                 type="primary"
                 style={{marginLeft: '5px'}}
                 ghost
+                loading={this.state.saveLoading}
                 onClick={(e) => this.handleOk(e)}>
-                <Icon type="check" />保存修改
+                {!this.state.saveLoading ? <Icon type="check" /> : ''}保存修改
               </Button>
             </div> : null
         }
