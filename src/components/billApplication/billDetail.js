@@ -871,7 +871,6 @@ class BillDetail extends React.Component {
                     </Row> : null
                 }
                 <Table
-                  rowSelection={rowSelection}
                   style={{marginBottom: '10px'}}
                   rowKey="lineNo"
                   bordered

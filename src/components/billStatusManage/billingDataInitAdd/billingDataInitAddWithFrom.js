@@ -13,14 +13,14 @@ class BillingDataInitAddWithFromCom extends React.Component {
     const param = this.props.form.getFieldsValue()
     this.props.getBillDataInitList({
       ...param,
-      statusDate: param.statusDate? param.statusDate.format('YYYY-MM-DD') : ''
+      approveCPDate: param.approveCPDate? param.approveCPDate.format('YYYY-MM-DD') : ''
     })
   }
   exportExcel = () => {
     const values = this.props.form.getFieldsValue()
     this.props.exportExcel({
       ...values,
-      statusDate: values.statusDate? values.statusDate.format('YYYY-MM-DD') : ''
+      approveCPDate: values.approveCPDate? values.approveCPDate.format('YYYY-MM-DD') : ''
     })
   }
   clearFormValues = () => {
@@ -112,7 +112,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
             </Col>
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="审批完成日期">
-                {getFieldDecorator('statusDate', {
+                {getFieldDecorator('approveCPDate', {
                   initialValue: "",
                 })(
                   <DatePicker />

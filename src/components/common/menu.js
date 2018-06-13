@@ -41,6 +41,7 @@ export default class MenuComponent extends React.Component {
     }) : null
     return (
       <Menu
+        style={{overflow: 'auto', height: '100vh'}}
         theme="dark"
         mode="inline"
         className="m-menu"

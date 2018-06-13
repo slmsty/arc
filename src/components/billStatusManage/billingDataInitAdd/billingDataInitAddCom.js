@@ -232,7 +232,7 @@ class BillingDataInitAddCom extends React.Component {
         render: (text) => (text ? currency(text) : text),
       }, {
         title:'审批完成日期',
-        dataIndex:'statusDate',
+        dataIndex:'approveCPDate',
         width:100
       }, {
         title:'数据来源',
