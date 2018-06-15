@@ -239,7 +239,6 @@ class BillDetail extends React.Component {
             lineNo: record.lineNo + 1,
             groupNo: groupNos.length > 0 ? record.groupNo : 1,
           }))
-          console.log(values)
           const params = {
             ...values,
             billingOutcomeIds,
@@ -264,7 +263,6 @@ class BillDetail extends React.Component {
             receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
             specialTaxRate: this.state.isRequireRate ? 'Y' : 'N',
           }
-          console.log(params)
           if(this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate) {
             const checkParams = {
               appLineItems: appLineItems,

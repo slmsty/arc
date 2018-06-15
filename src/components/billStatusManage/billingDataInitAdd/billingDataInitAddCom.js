@@ -168,6 +168,18 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'custName',
         width:250
       }, {
+        title:'客户纳税务人识别号',
+        dataIndex:'custTaxIdentNumber',
+        width:150
+      }, {
+        title:'客户地址、电话',
+        dataIndex:'custAddressPhone',
+        width:200
+      }, {
+        title:'客户开户行及账号',
+        dataIndex:'custBankAccount',
+        width:200
+      }, {
         title:'开票内容',
         dataIndex:'billingContent',
         width:250
@@ -193,13 +205,37 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'billingAmount',
         width:100,
       }, {
-        title:'开票说明',
+        title:'开票原因及要求',
         dataIndex:'billingApplicationRequest',
-        width:150
+        width:150,
       }, {
         title:'发票备注',
         dataIndex:'billingApplicationRemark',
         width:180
+      }, {
+        title:'不含税金额',
+        dataIndex:'billingAmountExcludeTax',
+        width:100
+      }, {
+        title:'税额',
+        dataIndex:'billingAmountTax',
+        width:100
+      }, {
+        title:'单位',
+        dataIndex:'unit',
+        width:100
+      }, {
+        title:'数量',
+        dataIndex:'quantity',
+        width:100
+      }, {
+        title:'单价',
+        dataIndex:'price',
+        width:100
+      }, {
+        title:'规格型号',
+        dataIndex:'sepcificationType',
+        width:100
       }, {
         title:'发票代码',
         dataIndex:'invoiceCode',

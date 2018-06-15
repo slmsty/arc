@@ -113,7 +113,7 @@ class BillApproveDetail extends React.Component  {
     }))
     this.setState({ dataSource: newSource });
     if(this.props.setFormValidate) {
-      this.props.setFormValidate(dataSource)
+      this.props.setFormValidate(newSource)
     }
   }
   /**
