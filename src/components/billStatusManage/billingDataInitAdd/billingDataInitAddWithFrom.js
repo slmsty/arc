@@ -16,7 +16,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
       approveCPDate: param.approveCPDate? param.approveCPDate.format('YYYY-MM-DD') : ''
     })
   }
-  /*exportExcel = () => {
+  exportExcel = () => {
     const values = this.props.form.getFieldsValue()
     this.props.exportExcel({
       ...values,
@@ -25,7 +25,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
   }
   clearFormValues = () => {
     this.props.form.resetFields()
-  }*/
+  }
   render() {
     const {getFieldDecorator} = this.props.form
     const formItemLayout = {

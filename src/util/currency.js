@@ -23,3 +23,31 @@ export default function currency(value, currency, decimals) {
     _int.slice(i).replace(digitsRE, '$1,') +
     _float
 }
+
+export function toThousands(num) {
+  if((num+"").trim() === ""){
+    return"";
+  }
+  if(isNaN(num)){
+    return"";
+  }
+  num = num+"";
+  if(/^.*\..*$/.test(num)){
+    var pointIndex =num.lastIndexOf(".");
+    var intPart = num.substring(0,pointIndex);
+    var pointPart =num.substring(pointIndex+1,num.length);
+    intPart = intPart +"";
+    var re =/(-?\d+)(\d{3})/
+    while(re.test(intPart)){
+      intPart =intPart.replace(re,"$1,$2")
+    }
+    num = intPart+"."+pointPart;
+  }else{
+    num = num +"";
+    var re =/(-?\d+)(\d{3})/
+    while(re.test(num)){
+      num =num.replace(re,"$1,$2")
+    }
+  }
+  return num
+}

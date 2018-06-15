@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import {Table, message, Button} from 'antd'
-import currency from '../../../util/currency'
+import { toThousands } from '../../../util/currency'
 import BillingDataInitAddWithFrom from './billingDataInitAddWithFrom'
 import InfoModal from './infoModal'
 
@@ -220,17 +220,17 @@ class BillingDataInitAddCom extends React.Component {
         title:'含税金额',
         dataIndex:'taxIncludeAmount',
         width:120,
-        render: (text) => (text ? currency(text) : text),
+        render: (text) => (text ? toThousands(text) : text),
       }, {
         title:'不含税金额',
         dataIndex:'taxExcludeAmount',
         width:100,
-        render: (text) => (text ? currency(text) : text),
+        render: (text) => (text ? toThousands(text) : text),
       }, {
         title:'税额',
         dataIndex:'taxAmount',
         width:100,
-        render: (text) => (text ? currency(text) : text),
+        render: (text) => (text ? toThousands(text) : text),
       }, {
         title:'审批完成日期',
         dataIndex:'approveCPDate',
@@ -242,7 +242,8 @@ class BillingDataInitAddCom extends React.Component {
       }, {
         title:'开票状态',
         dataIndex:'statusName',
-        width:100
+        width:100,
+        fixed: 'right'
       },
     ]
     const { selectedRowKeys } = this.state
