@@ -295,6 +295,8 @@ class BillApproveDetail extends React.Component  {
           billingApplicationId: this.props.serviceDetail.billingApplicationId,
           billingApplicationType: values.billFlow ? values.billFlow : this.props.applyType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
+          billingApplicantRemark: values.billingApplicantRemark ? values.billingApplicantRemark.trim() : '',
+          billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
           appLineItems: this.state.dataSource.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,

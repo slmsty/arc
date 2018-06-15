@@ -192,7 +192,7 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'billingPhrases',
         width:120
       }, {
-        title:'发票类型',
+        title:'发票申请类型',
         dataIndex:'invoiceTypeName',
         width:80
       }, {
@@ -245,7 +245,7 @@ class BillingDataInitAddCom extends React.Component {
         dataIndex:'invoiceNumber',
         width:150
       }, {
-        title:'发票申请类型',
+        title:'发票类型',
         dataIndex:'billingType',
         width:150
       }, {

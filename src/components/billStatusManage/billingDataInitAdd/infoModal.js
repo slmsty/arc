@@ -4,7 +4,7 @@
 import React from 'react'
 import moment from 'moment'
 import SelectInvokeApi from '../../common/selectInvokeApi'
-import currency from '../../../util/currency'
+import { toThousands } from '../../../util/currency'
 import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select, message, InputNumber } from 'antd'
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -30,7 +30,7 @@ const columns = [
     title:'申请金额',
     dataIndex:'billingAmount',
     width:80,
-    render: (text) => (text ? currency(text) : text),
+    render: (text) => (text ? toThousands(text) : text),
   },
   {
     title:'税率',
@@ -50,8 +50,14 @@ class InfoModal extends React.Component {
   save =() => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        if (values.taxIncludeAmount <= 0 || values.taxExcludeAmount <= 0) {
-          message.error('含税金额和不含税金额必须大于0')
+        const { billingDataInitResultList } = this.props.data
+        if (billingDataInitResultList[0].billingAmount > 0 && (values.taxIncludeAmount <= 0 || values.taxExcludeAmount <= 0)) {
+          message.error('含税金额或不含税金额不能为负数')
+          return
+        }
+        console.log(billingDataInitResultList[0].billingAmount)
+        if(billingDataInitResultList[0].billingAmount < 0 && (values.taxIncludeAmount >= 0 || values.taxExcludeAmount >= 0)) {
+          message.error('含税金额或不含税金额必须为负数')
           return
         }
         if (values.taxIncludeAmount < values.taxExcludeAmount ) {
