@@ -72,7 +72,7 @@ class BillStatusManageWithFormCon extends React.Component {
                 {
                   getFieldDecorator('projectCode')(
                     <Input
-                      placeholder="多项目编码使用英文逗号间隔"
+                      placeholder="项目编码"
                     />,
                   )
                 }
@@ -99,7 +99,7 @@ class BillStatusManageWithFormCon extends React.Component {
                 {
                   getFieldDecorator('contractCode')(
                     <Input
-                      placeholder="多合同编码使用英文逗号间隔"
+                      placeholder="合同编码"
                     />,
                   )
                 }

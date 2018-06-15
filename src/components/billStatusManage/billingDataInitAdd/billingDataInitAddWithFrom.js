@@ -6,6 +6,8 @@ import { Form, Row, Col, Button, Input, Icon, DatePicker } from 'antd'
 import SelectInvokeApi from '../../common/selectInvokeApi'
 import moment from 'moment'
 const FormItem = Form.Item
+const { RangePicker } = DatePicker
+
 
 class BillingDataInitAddWithFromCom extends React.Component {
   handleQuery = () => {
@@ -13,14 +15,16 @@ class BillingDataInitAddWithFromCom extends React.Component {
     const param = this.props.form.getFieldsValue()
     this.props.getBillDataInitList({
       ...param,
-      approveCPDate: param.approveCPDate? param.approveCPDate.format('YYYY-MM-DD') : ''
+      approveCPBeginDate: param.approveCPDate? param.approveCPDate[0].format('YYYY-MM-DD') : '',
+      approveCPEndDate: param.approveCPDate? param.approveCPDate[1].format('YYYY-MM-DD') : '',
     })
   }
   exportExcel = () => {
     const values = this.props.form.getFieldsValue()
     this.props.exportExcel({
       ...values,
-      approveCPDate: values.approveCPDate? values.approveCPDate.format('YYYY-MM-DD') : ''
+      approveCPBeginDate: values.approveCPDate? values.approveCPDate[0].format('YYYY-MM-DD') : '',
+      approveCPEndDate: values.approveCPDate? values.approveCPDate[1].format('YYYY-MM-DD') : '',
     })
   }
   clearFormValues = () => {
@@ -115,7 +119,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
                 {getFieldDecorator('approveCPDate', {
                   initialValue: "",
                 })(
-                  <DatePicker />
+                  <RangePicker />
                 )}
               </FormItem>
             </Col>

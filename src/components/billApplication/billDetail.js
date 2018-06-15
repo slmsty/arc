@@ -176,7 +176,7 @@ class BillDetail extends React.Component {
             billingApplicationType: this.props.billType,
             objectId: this.state.fileId,
             objectName: this.state.file.name,
-            billingApplicantRequest: values.billingApplicantRequest,
+            billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
             isAgainInvoice: 'false',
           }
           this.props.billApplySave(params).then(res => {
@@ -246,6 +246,8 @@ class BillDetail extends React.Component {
             billingComInfoId: this.state.comInfo.billingComInfoId,
             billingApplicationType: this.state.isRequireRate ? 'BILLING_EXCESS' : this.props.billType,
             billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
+            billingApplicantRemark: values.billingApplicantRemark ? values.billingApplicantRemark.trim() : '',
+            billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
             appLineItems: appLineItems,
             arBillingItems: this.state.proItems.map(pro => {
               return {

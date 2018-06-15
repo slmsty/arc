@@ -93,6 +93,8 @@ class ApplyInfoModal extends React.Component {
               billingApplicationId: serviceDetail.billingApplicationId,
               billingApplicationType: serviceType,
               billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
+              billingApplicantRemark: values.billingApplicantRemark ? values.billingApplicantRemark.trim() : '',
+              billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
               appLineItems: this.state.approveData.map(record => ({
                 ...record,
                 lineNo: record.lineNo + 1,
