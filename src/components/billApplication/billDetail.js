@@ -408,7 +408,6 @@ class BillDetail extends React.Component {
 
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
     //不含税金额
-    console.log(index, billingAmount, billingTaxRate, quantity)
     const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
     dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
     //单价

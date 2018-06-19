@@ -89,6 +89,10 @@ class BillingDataInitAddCom extends React.Component {
     this.setState({ selectedRowKeys, selectedRows })
   }
   modifiedData = (type) => {
+    if(this.state.selectedRows && this.state.selectedRows.length === 0) {
+      message.error('请选择要操作的的记录!')
+      return
+    }
     let flag = false
     let paramData = this.state.selectedRows
     let billingDataInitResultList = []
@@ -307,17 +311,18 @@ class BillingDataInitAddCom extends React.Component {
         <br />
         <Button key="primary" onClick={()=>this.modifiedData('add')} disabled={!this.state.addFlag}>增加</Button>
         <Button style={{marginLeft:'10px'}} key="primary1" onClick={()=>this.modifiedData('edit')} disabled={!(this.state.selectedRows && this.state.selectedRows.length)}>编辑</Button>
-        <div style={{marginBottom:'10px'}}></div>
-        <Table
-          bordered
-          rowSelection={rowSelection}
-          columns={billingDataInitColumns}
-          size="small"
-          loading={this.state.loading}
-          pagination={pagination}
-          scroll={{ x:this.getWidth(billingDataInitColumns) }}
-          dataSource={this.props.billInitData.getbillDataInitList.result}
-        />
+        <div style={{height: '100%',margin: '10px 0'}}>
+          <Table
+            bordered
+            rowSelection={rowSelection}
+            columns={billingDataInitColumns}
+            size="small"
+            loading={this.state.loading}
+            pagination={pagination}
+            scroll={{ x:this.getWidth(billingDataInitColumns) }}
+            dataSource={this.props.billInitData.getbillDataInitList.result}
+          />
+        </div>
         {
           this.state.showInfo ?
             <InfoModal

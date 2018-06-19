@@ -52,10 +52,9 @@ class InfoModal extends React.Component {
       if (!err) {
         const { billingDataInitResultList } = this.props.data
         if (billingDataInitResultList[0].billingAmount > 0 && (values.taxIncludeAmount <= 0 || values.taxExcludeAmount <= 0)) {
-          message.error('含税金额或不含税金额不能为负数')
+          message.error('含税金额或不含税金额必须大于0')
           return
         }
-        console.log(billingDataInitResultList[0].billingAmount)
         if(billingDataInitResultList[0].billingAmount < 0 && (values.taxIncludeAmount >= 0 || values.taxExcludeAmount >= 0)) {
           message.error('含税金额或不含税金额必须为负数')
           return

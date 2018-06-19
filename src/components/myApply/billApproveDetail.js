@@ -731,7 +731,7 @@ class BillApproveDetail extends React.Component  {
               {
                 isTaxAuditor ?
                   <Col span={8}>
-                    <FormItem {...formItemLayout} label="AR财务会计是否收到发票">
+                    <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                       {
                         receiptOutcome === 'Y' ? '是' : '否'
                       }
@@ -854,7 +854,7 @@ class BillApproveDetail extends React.Component  {
                 {
                   this.props.applyType === 'BILLING_RED' && (isArFinanceAccount || isTaxAuditor) ?
                     <Col span={8}>
-                      <FormItem {...formItemLayout} label="退票类型">
+                      <FormItem {...formItemLayout1} label="退票类型">
                         {
                           getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid,
                             rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount, message: '请选择退票类型!' }]})(
@@ -889,7 +889,7 @@ class BillApproveDetail extends React.Component  {
                 </div> : null
             }
             <Table
-              rowSelection={rowSelection}
+              rowSelection={ isArAdmin || isArFinanceAccount ? rowSelection : false}
               style={{marginBottom: '10px'}}
               rowKey={record => record.lineNo}
               bordered
