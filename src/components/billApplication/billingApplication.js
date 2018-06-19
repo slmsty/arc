@@ -487,6 +487,7 @@ export default class BillingApplication extends React.Component {
             isLoading={isLoading}
             isRed={redTypes.includes(this.state.currentType)}
             billingOutcomeIds={this.state.selectedRows.map(s => s.billingOutcomeId)}
+            type="billApply"
           /> : null
         }
         {

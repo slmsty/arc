@@ -222,6 +222,10 @@ class BillDetail extends React.Component {
           message.error('请选择销售方的客户信息!')
           err = true
         }
+        if(this.props.type === 'billApply' && !this.state.fileId) {
+          message.error('请上传完附件，再提交开票申请')
+          err = true
+        }
 
         if(values.receiptEmail.length > 0  && values.receiptEmail.join(',').length > 500) {
           this.props.form.setFields({
@@ -358,6 +362,10 @@ class BillDetail extends React.Component {
       message.error('上传文件大小必须小于20MB!');
       return false
     }
+    if(file.name.length > 50) {
+      message.error('上传的文件名必须小于50个中文')
+      return false
+    }
     this.setState({
       file,
     })
@@ -389,7 +397,7 @@ class BillDetail extends React.Component {
         }]
       })
     } else {
-      message.success(`${this.state.file.name} 上传失败`);
+      message.error(`${this.state.file.name} 上传失败`);
     }
   }
 
