@@ -4,11 +4,15 @@ import currency from '../../util/currency'
 const clientCols = [{
   title: '客户名称',
   dataIndex: 'custName',
-  width: 100,
+  width: 200,
 }, {
   title: '地址电话',
   dataIndex: 'addressPhoneNumber',
-  width: 100,
+  width: 250,
+}, {
+  title: '纳税银行账户信息',
+  dataIndex: 'bankBankAccount',
+  width: 250,
 }]
 
 const comCols = [{
@@ -19,6 +23,10 @@ const comCols = [{
   title: '公司编号',
   dataIndex: 'comId',
   width: 200,
+}, {
+  title: '纳税银行账户信息',
+  dataIndex: 'bankBankAccount',
+  width: 250,
 }]
 
 const proCols = [{

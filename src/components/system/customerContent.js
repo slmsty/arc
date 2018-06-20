@@ -1,9 +1,10 @@
 import React from 'react'
-import { Table, Button, Form, Row, Col, Input, Icon } from 'antd'
+import { Table, Button, Form, Row, Col, Input, Icon, Select } from 'antd'
 import ContentAdd from './contentAdd'
 import {message} from "antd/lib/index";
 
 const FormItem = Form.Item
+const Option = Select.Option
 
 const formItemLayout = {
   labelCol: { span: 7 },
@@ -127,6 +128,19 @@ class CustomerTaxInfo extends React.Component {
               <FormItem {...formItemLayout} label="开票内容名称">
                 {getFieldDecorator('billingContentName')(
                   <Input placeholder="开票内容名称"/>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8} key={1}>
+              <FormItem {...formItemLayout} label="是否有效">
+                {getFieldDecorator('isValid', {
+                  initialValue: '1',
+                })(
+                  <Select>
+                    <Option value=''>--请选择--</Option>
+                    <Option value='1'>是</Option>
+                    <Option value='0'>否</Option>
+                  </Select>
                 )}
               </FormItem>
             </Col>

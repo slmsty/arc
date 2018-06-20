@@ -59,7 +59,7 @@ class InfoModal extends React.Component {
           message.error('含税金额或不含税金额必须为负数')
           return
         }
-        if (values.taxIncludeAmount < values.taxExcludeAmount ) {
+        if (Math.abs(values.taxIncludeAmount) < Math.abs(values.taxExcludeAmount)) {
           message.error('不含税金额不能大于含税金额')
           return
         }

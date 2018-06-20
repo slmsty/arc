@@ -122,7 +122,7 @@ class SelectSearch extends React.Component {
         <Modal
           title="选择"
           width={this.props.width ? this.props.width : '600px'}
-          style={{ top: 20}}
+          style={{ top: 20 }}
           visible={visible}
           wrapClassName="vertical-center-modal"
           onCancel={this.handleCancel}
@@ -173,6 +173,7 @@ class SelectSearch extends React.Component {
               total: this.state.total,
               size: 'small',
             }}
+            scroll={{x: '900'}}
           />
         </Modal>
       </div>

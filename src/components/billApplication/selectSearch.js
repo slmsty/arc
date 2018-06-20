@@ -190,6 +190,7 @@ class SelectSearch extends React.Component {
               total: this.state.total,
               size: 'small',
             }}
+            scroll={{x: '900'}}
           />
           {
             this.props.label === '客户名称' || this.props.label === '开票内容' ?
