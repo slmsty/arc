@@ -744,7 +744,7 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeInfoReport')}><Icon type="search" />查询</Button>
-                <Button type="primary" loading={this.state.excelDis} onClick={()=>this.excel('outcomeInfoReport')}>导出EXCEL</Button>
+                <Button type="primary" style={{marginLeft: '10px'}} loading={this.state.excelDis} onClick={()=>this.excel('outcomeInfoReport')}>导出EXCEL</Button>
               </Col>
             </Row>
           </div>

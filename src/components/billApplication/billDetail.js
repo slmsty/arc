@@ -187,56 +187,7 @@ class BillDetail extends React.Component {
     } else {
       this.props.form.validateFields((err, values) => {
         const groupNos = this.state.dataSource.filter(r => typeof r.groupNo !== 'undefined')
-        for(let i = 0; i< this.state.dataSource.length; i++) {
-          const record = this.state.dataSource[i]
-          if(record.billingAmount <= 0) {
-            message.error(`第${i+1}行【开票含税金额】必须大于0`)
-            err = true
-            break
-          }
-          if(this.state.isRequireRate && (record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined')) {
-            message.error(`第${i+1}行【开票税率】不能为空!`)
-            err = true
-            break
-          }
-        }
-        if(this.isAdvance) {
-          for(let i = 0; i< this.state.proItems.length; i++) {
-            const r  = this.state.proItems[i]
-            if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
-              message.error('【提前开票原因】不能为空!')
-              err = true
-              break
-            } else if (!r.receiptReturnDate || (r.receiptReturnDate && r.receiptReturnDate.format('YYYY-MM-DD') === 'Invalid date')) {
-              message.error('【预计回款日期】不能为空!')
-              err = true
-              break
-            }
-          }
-        }
-        if(!this.state.custInfo) {
-          message.error('请选择购买方的客户信息!')
-          err = true
-        }
-        if(!this.state.comInfo) {
-          message.error('请选择销售方的客户信息!')
-          err = true
-        }
-        if(this.props.type === 'billApply' && uploadFileType.includes(this.props.billType) && !this.state.fileId) {
-          message.error('请上传完附件，再提交开票申请')
-          err = true
-        }
-
-        if(values.receiptEmail.length > 0  && values.receiptEmail.join(',').length > 500) {
-          this.props.form.setFields({
-            receiptEmail: {
-              value: values.receiptEmail,
-              errors: [new Error('收件人邮件不能超过500个字符')]
-            }
-          })
-        }
-
-        if (!err) {
+        if (!err && !this.submitCheck(values)) {
           this.setState({loading: true})
           const appLineItems = this.state.dataSource.map(record => ({
             ...record,
@@ -288,6 +239,59 @@ class BillDetail extends React.Component {
         }
       });
     }
+  }
+
+  submitCheck = (values) => {
+    let err = false
+    for(let i = 0; i< this.state.dataSource.length; i++) {
+      const record = this.state.dataSource[i]
+      if(record.billingAmount <= 0) {
+        message.error(`第${i+1}行【开票含税金额】必须大于0`)
+        err = true
+        break
+      }
+      if(this.state.isRequireRate && (record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined')) {
+        message.error(`第${i+1}行【开票税率】不能为空!`)
+        err = true
+        break
+      }
+    }
+    if(this.isAdvance) {
+      for(let i = 0; i< this.state.proItems.length; i++) {
+        const r  = this.state.proItems[i]
+        if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
+          message.error('【提前开票原因】不能为空!')
+          err = true
+          break
+        } else if (!r.receiptReturnDate || (r.receiptReturnDate && r.receiptReturnDate.format('YYYY-MM-DD') === 'Invalid date')) {
+          message.error('【预计回款日期】不能为空!')
+          err = true
+          break
+        }
+      }
+    }
+    if(!this.state.custInfo) {
+      message.error('请选择购买方的客户信息!')
+      err = true
+    }
+    if(!this.state.comInfo) {
+      message.error('请选择销售方的客户信息!')
+      err = true
+    }
+    if(this.props.type === 'billApply' && uploadFileType.includes(this.props.billType) && !this.state.fileId) {
+      message.error('请上传完附件，再提交开票申请')
+      err = true
+    }
+
+    if(values.receiptEmail.length > 0  && values.receiptEmail.join(',').length > 500) {
+      this.props.form.setFields({
+        receiptEmail: {
+          value: values.receiptEmail,
+          errors: [new Error('收件人邮件不能超过500个字符')]
+        }
+      })
+    }
+    return err
   }
 
   handleWarningOk = () => {
@@ -880,7 +884,7 @@ class BillDetail extends React.Component {
                     </Row> : null
                 }
                 <Table
-                  style={{marginBottom: '10px'}}
+                  style={{margin: '10px 0'}}
                   rowKey="lineNo"
                   bordered
                   size="small"

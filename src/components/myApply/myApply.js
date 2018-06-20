@@ -171,7 +171,7 @@ export default class MyApplyCon extends React.Component {
       width: 140,
     }, {
       title: '操作',
-      dataIndex: 'opration',
+      dataIndex: 'operation',
       width: 80,
       fixed: 'right',
       render: (text, record, index) => (
