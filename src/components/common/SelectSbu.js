@@ -162,7 +162,7 @@ class SelectSbu extends React.Component {
             columns={this.columns}
             rowSelection={rowSelection}
             bordered
-            size="middle"
+            size="small"
             dataSource={this.state.customerList}
             loading={this.state.loading}
             locale={{

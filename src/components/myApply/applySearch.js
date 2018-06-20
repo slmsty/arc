@@ -180,7 +180,7 @@ export default class ApplySearchCon extends React.Component {
           }
           {
             record.statusName === '新建' ?
-              <Button type="primary" ghost onClick={() => this.startWorkFlow(record)}>发起审批</Button> : null
+              <Button type="primary" ghost onClick={() => this.startWorkFlow(record)}>审核</Button> : null
           }
         </div>
       ),
@@ -196,7 +196,6 @@ export default class ApplySearchCon extends React.Component {
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
-
     }
     const { billSaveSuccess, applicationIds } = this.props.myApply
     return (
