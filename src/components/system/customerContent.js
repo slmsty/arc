@@ -34,9 +34,9 @@ class CustomerTaxInfo extends React.Component {
   }
 
   handleQuery = () => {
-    const value = this.props.form.getFieldValue('billingContentName')
+    const value = this.props.form.getFieldsValue()
     const params = {
-      billingContentName: value,
+      ...value,
       pageInfo:{
         pageNo: 1,
         pageSize: 10
@@ -131,20 +131,20 @@ class CustomerTaxInfo extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={1}>
+            <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="是否有效">
-                {getFieldDecorator('isValid', {
-                  initialValue: '1',
+                {getFieldDecorator('active', {
+                  initialValue: 'Y',
                 })(
-                  <Select>
-                    <Option value=''>--请选择--</Option>
-                    <Option value='1'>是</Option>
-                    <Option value='0'>否</Option>
+                  <Select style={{width: '100px'}}>
+                    <Option value=''>全部</Option>
+                    <Option value='Y'>是</Option>
+                    <Option value='N'>否</Option>
                   </Select>
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={2} style={{ textAlign: 'left' }}>
+            <Col span={8} key={3} style={{ textAlign: 'left' }}>
               <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />查询</Button>
             </Col>
           </Row>

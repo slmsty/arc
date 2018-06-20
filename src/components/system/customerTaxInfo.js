@@ -1,8 +1,9 @@
 import React from 'react'
-import { Table, Button, Form, Row, Col, Input, Icon, message } from 'antd'
+import { Table, Button, Form, Row, Col, Input, Icon, message, Select } from 'antd'
 import TaxInfoAdd from './taxInfoAdd'
 
 const FormItem = Form.Item
+const Option = Select.Option
 
 const formItemLayout = {
   labelCol: { span: 7 },
@@ -80,9 +81,9 @@ class CustomerTaxInfo extends React.Component {
   }
 
   handleQuery = () => {
-    const value = this.props.form.getFieldValue('custName')
+    const value = this.props.form.getFieldsValue()
     const params = {
-      custInfoName: value,
+      ...value,
       pageInfo:{
         pageNo: 1,
         pageSize: 10
@@ -122,7 +123,20 @@ class CustomerTaxInfo extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={2} style={{ textAlign: 'left' }}>
+            <Col span={8} key={2}>
+              <FormItem {...formItemLayout} label="是否有效">
+                {getFieldDecorator('active', {
+                  initialValue: 'Y',
+                })(
+                  <Select style={{width: '100px'}}>
+                    <Option value=''>全部</Option>
+                    <Option value='Y'>是</Option>
+                    <Option value='N'>否</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8} key={3} style={{ textAlign: 'left' }}>
               <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />查询</Button>
             </Col>
           </Row>
