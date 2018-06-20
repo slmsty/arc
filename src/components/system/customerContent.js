@@ -106,6 +106,7 @@ class CustomerTaxInfo extends React.Component {
     const pagination = {
       total: count,
       pageNo,
+      showTotal: (total) => (`共 ${total} 条`),
       onChange: (current) => {
         this.props.queryInvoiceTaxInfo({
           billingContentName: this.props.form.getFieldValue('billingContentName'),

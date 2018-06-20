@@ -97,6 +97,7 @@ class CustomerTaxInfo extends React.Component {
     const { getFieldDecorator } = this.props.form
     const pagination = {
       total: count,
+      showTotal: (total) => (`共 ${total} 条`),
       pageNo,
       onChange: (current) => {
         this.props.queryCustTaxInfo({

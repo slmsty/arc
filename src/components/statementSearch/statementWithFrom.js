@@ -19,75 +19,7 @@ const RadioGroup = Radio.Group
 const dateFormat = 'YYYY-MM-DD'
 const { RangePicker,MonthPicker } = DatePicker
 const Option = Select.Option;
-const staffColumns = [
-  {
-    title: '员工编号',
-    dataIndex: 'staffCode',
-    width: 100,
-  }, {
-    title: '员工姓名',
-    dataIndex: 'staffName',
-    width: 100,
-  }
-]
-const testoptions = [
-  {
-    paramCode: "APPLY_TYPE",
-    paramValue: "100",
-    paramValueDesc: "收款信息查询表",
-    primaryKey: "WORK_FLOW.APPLY_TYPE",
-    typeCode: "WORK_FLOW",
-  },
-  {
-    paramCode: "APPLY_TYPE",
-    paramValue: "1001",
-    paramValueDesc: "发票信息查询表",
-    primaryKey: "WORK_FLOW.APPLY_TYPE",
-    typeCode: "WORK_FLOW",
-  },
-  {
-    paramCode: "APPLY_TYPE",
-    paramValue: "1002",
-    paramValueDesc: "发票及收款信息查询表",
-    primaryKey: "WORK_FLOW.APPLY_TYPE",
-    typeCode: "WORK_FLOW",
-  },
-  {
-    paramCode: "APPLY_TYPE",
-    paramValue: "1003",
-    paramValueDesc: "应收账款询证函报表",
-    primaryKey: "WORK_FLOW.APPLY_TYPE",
-    typeCode: "WORK_FLOW",
-  },
-  {
-    paramCode: "APPLY_TYPE",
-    paramValue: "1004",
-    paramValueDesc: "项目综合信息查询报表",
-    primaryKey: "WORK_FLOW.APPLY_TYPE",
-    typeCode: "WORK_FLOW",
-  },
-  {
-    paramCode: "APPLY_TYPE",
-    paramValue: "1005",
-    paramValueDesc: "整体合同内容查询",
-    primaryKey: "WORK_FLOW.APPLY_TYPE",
-    typeCode: "WORK_FLOW",
-  },
-  {
-    paramCode: "APPLY_TYPE",
-    paramValue: "1006",
-    paramValueDesc: "转包项目表",
-    primaryKey: "WORK_FLOW.APPLY_TYPE",
-    typeCode: "WORK_FLOW",
-  },
-  {
-    paramCode: "APPLY_TYPE",
-    paramValue: "1007",
-    paramValueDesc: "合同拆分查询表",
-    primaryKey: "WORK_FLOW.APPLY_TYPE",
-    typeCode: "WORK_FLOW",
-  },
-]
+
 class StatementListCom extends React.Component {
   state = {
     infoVisitable: false,
@@ -99,148 +31,122 @@ class StatementListCom extends React.Component {
     param:{}
   }
   excel = (type)=>{
+    this.setState({
+      excelDis: true,
+    })
     let param = {}
     const params = this.props.form.getFieldsValue()
     if (type==='split') {
-      param = {}
-      param.projectNo = params.projectNo
-      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
-      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
-      param.contractName = params.contractName
-      param.buId = params.buId ? params.buId[0] : ''
-      param.collectionProject = params.collectionProject
-      param.isProdect = params.isProdect
-      param.signCompany = params.signCompany
-      param.contractNo = params.contractNo
-      param.isReport = 'Y'
-    }
-    if (type==='order') {
-      param = {}
-      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
-      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
-      param.projectNo = params.projectNo
-      param.contractNo = params.contractNo
-      param.contractName = params.contractName
-      param.signCompany = params.signCompany
-      param.salesBu = params.salesBu && params.salesBu.length ? params.salesBu[0] : ''
-      param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
-      param.projectManager = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
-      param.currency = params.currency
-    }
-    if (type==='summarize') {
-      param = {}
-      param.startTime = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
-      param.endTime = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
-
-      param.signCompany = params.signCompany
-      param.buType = params.buType
-
-      param.bu = params.bu && params.bu.length ? params.bu[0] : ''
-    }
-    if (type==='receipt_claim') {
-      param = {}
-      param.projectNo = params.projectNo
-      param.contractNo = params.contractNo
-      param.receiptDateStart = params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : ''
-      param.receiptDateEnd = params.receiptDate && params.receiptDate.length ? params.receiptDate[1].format(dateFormat) : ''
-      param.receiptCurrency = params.receiptCurrency
-      param.claimAmountMin = params.claimAmountMin
-      param.claimAmountMax = params.claimAmountMax
-      param.signCompany = params.signCompany
-      param.paymentName = params.paymentName
-      param.contractName = params.contractName
-      param.custName = params.custName
-      param.receiptNo = params.receiptNo
-      param.isReport = 'Y'
-    }
-    // 发票信息查询表
-    if (type==='outcomeInfoReport') {
-      param = {}
-      param.projectNo = params.projectNo
-      param.custName = params.custName
-      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
-      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
-      param.currency = params.currency
-      param.signCompany = params.signCompany
-      param.invoiceNumber = params.invoiceNumber
-      param.billingAmountMin = params.billingAmountMin
-      param.billingAmountMax = params.billingAmountMax
-      param.paymentName = params.paymentName
-      param.contractNo = params.contractNo
-      param.contractName = params.contractName
-    }
-    if (type==='receiptAccountReport') {
-      param = {}
-      param.projectNo = params.projectNo
-      param.contarctNo = params.contarctNo
-      param.signCompany = params.signCompany
-      param.contarctName = params.contarctName
-      param.deadline = params.deadline
-      param.custName = params.custName
-    }
-    if (type==='projectInfoReport') {
-      param = {}
-      param.projectNo = params.projectNo
-      param.custName = params.custName
-      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
-      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
-      param.currency = params.currency
-      param.contractName = params.contractName
-      param.contractNo = params.contractNo
-    }
-    if (type==='contractInfoReport') {
-      param = {}
-      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
-      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
-      param.region = params.region && params.region.lenght ? params.region[0] : ''
-      param.projectNo = params.projectNo
-      param.salesManager = params.salesManager
-      param.contractNo = params.contractNo
-      param.contractName = params.contractName
-      param.projectManager = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
-      param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
-    }
-    if (type==='outcomeDetailReport') {
-      param = {}
-      param.projectNo = params.projectNo
-      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
-      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
-      param.contractName = params.contractName
-      param.invoiceNumber = params.invoiceNumber
-      param.contractNo = params.contractNo
-      param.contractName = params.contractName
-      param.custName = params.custName
-      param.signCompany = params.signCompany
-    }
-    if (type==='outcomeTotalReport') {
-      param = {}
-      param.projectNo = params.projectNo
-      param.projectDept = params.projectDept
-      param.projectBu = params.projectBu ? params.projectBu[0] : ''
-      param.billingMonth = params.billingMonth.format("YYYY-MM")
+      param = {
+        contractSplit:  {
+          ...params,
+          signDateStart: params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : '',
+          signDateEnd: params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '',
+          buId: params.buId ? params.buId[0] : '',
+          isReport: 'Y',
+        }
+      }
+    } else if (type==='order') {
+      param = {
+        projectOrder: {
+          ...params,
+          signDateStart: params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : '',
+          signDateEnd: params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '',
+          salesBu: params.salesBu && params.salesBu.length ? params.salesBu[0] : '',
+          projectBu: params.projectBu && params.projectBu.length ? params.projectBu[0] : '',
+          projectManager: params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
+        }
+      }
+    } else if (type==='summarize') {
+      param = {
+        orderSummarize: {
+          ...params,
+          startTime: params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : '',
+          endTime: params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '',
+          bu: params.bu && params.bu.length ? params.bu[0] : '',
+        }
+      }
+    } else if (type==='receipt_claim') {
+      param = {
+        receiptClaim: {
+          ...params,
+          receiptDateStart: params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : '',
+          receiptDateEnd: params.receiptDate && params.receiptDate.length ? params.receiptDate[1].format(dateFormat) : '',
+          isReport: 'Y',
+        }
+      }
+    } else if (type==='outcomeInfoReport') {
+      param = {
+        invoice: {
+          ...params,
+          billingDateStart: params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : '',
+          billingDateEnd: params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : '',
+        }
+      }
+    } else if (type==='receiptAccountReport') {
+      param = {
+        confirReq: {
+          ...params
+        }
+      }
+    } else if (type==='projectInfoReport') {
+      param = {
+        project: {
+          ...params,
+          billingDateStart: params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : '',
+          billingDateEnd: params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : '',
+        }
+      }
+    } else if (type==='contractInfoReport') {
+      param = {
+        contract: {
+          ...params,
+          signDateStart: params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : '',
+          signDateEnd: params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '',
+          region: params.region && params.region.lenght ? params.region[0] : '',
+          projectManager: params.projectManager && params.projectManager.length ? params.projectManager[0] : '',
+          projectBu: params.projectBu && params.projectBu.length ? params.projectBu[0] : '',
+        }
+      }
+    } else if (type==='outcomeDetailReport') {
+      param = {
+        invoiceDetail: {
+          ...params,
+          billingDateStart: params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : '',
+          billingDateEnd: params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : '',
+        }
+      }
+    } else if (type==='outcomeTotalReport') {
+      param = {
+        billingMonth: {
+          ...params,
+          projectBu: params.projectBu ? params.projectBu[0] : '',
+          billingMonth: params.billingMonth.format("YYYY-MM")
+        }
+      }
     }
     if (type==='unContractOutcomeDataAdd') {
-      param = {}
-      param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
-      param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
-      param.projectNo = params.projectNo
-      param.contractNo = params.contractNo
-      param.contractName = params.contractName
-      param.custName = params.custName
-      param.invoiceNumber = params.invoiceNumber
-      param.signCompany = params.signCompany
+      param = {
+        unsignedBilling: {
+          ...params,
+          billingDateStart: params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : '',
+          billingDateEnd: params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
+        }
+      }
     }
-    this.props.excel(param,type)
+    this.props.getExcel(param, type).then(res => {
+      if(res) {
+        this.setState({
+          excelDis: false,
+        })
+      }
+    })
   }
   // 查询接口
   queryParms = (statement) => {
     const params = this.props.form.getFieldsValue()
-    this.setState({
-      param:{},
-      excelDis:true,
-    })
       //收款信息查询表
-    if(statement ==='receiptInfoReport'){
+    if(statement === 'receiptInfoReport'){
       let param = {}
       param.projectNo = params.projectNo
       param.contractNo = params.contractNo
@@ -639,7 +545,7 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('receiptInfoReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('receipt_claim')}><Icon type="search" />导出EXCEL</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('receipt_claim')}>导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -760,7 +666,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeInfoReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('outcomeInfoReport')}><Icon type="search" />导出EXCEL</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('outcomeInfoReport')}>导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -838,7 +744,7 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeInfoReport')}><Icon type="search" />查询</Button>
-                <Button type="primary" key="search1" onClick={()=>this.excel('outcomeInfoReport')}><Icon type="search" />导出EXCEL</Button>
+                <Button type="primary" loading={this.state.excelDis} onClick={()=>this.excel('outcomeInfoReport')}>导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -916,7 +822,7 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('receiptAccountReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('receiptAccountReport')}><Icon type="search" />导出EXCEL</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('receiptAccountReport')}>导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -980,7 +886,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('projectInfoReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('projectInfoReport')}><Icon type="search" />导出EXCEL</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('projectInfoReport')}>导出EXCEL</Button>
               </Col>
             </Row>
           </div>
@@ -1072,7 +978,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('contractInfoReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" key="search1" onClick={()=>this.excel('contractInfoReport')}><Icon type="search" />导出EXCEL</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('contractInfoReport')}>导出EXCEL</Button>
 
               </Col>
             </Row>
@@ -1240,7 +1146,7 @@ class StatementListCom extends React.Component {
                 </Col>
                 <Col span={8} style={{ textAlign: 'right' }}>
                   <Button type="primary" key="search" onClick={()=>this.queryParms('contractSplitReport')}><Icon type="search" />查询</Button>
-                  <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('split')}>导出Excel</Button>
+                  <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('split')}>导出Excel</Button>
                   </Col>
               </Row>
 
@@ -1328,7 +1234,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeDetailReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('outcomeDetailReport')}>导出Excel</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('outcomeDetailReport')}>导出Excel</Button>
               </Col>
             </Row>
 
@@ -1381,7 +1287,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeTotalReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('outcomeTotalReport')}>导出Excel</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('outcomeTotalReport')}>导出Excel</Button>
               </Col>
             </Row>
 
@@ -1468,7 +1374,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('unContractOutcomeDataAdd')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('unContractOutcomeDataAdd')}>导出Excel</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('unContractOutcomeDataAdd')}>导出Excel</Button>
               </Col>
             </Row>
 
@@ -1574,7 +1480,7 @@ class StatementListCom extends React.Component {
 
               <Col span={24} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('projectOrderDetailReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('order')}>导出Excel</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('order')}>导出Excel</Button>
               </Col>
             </Row>
 
@@ -1626,7 +1532,7 @@ class StatementListCom extends React.Component {
               </Col>
               <Col span={16} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('projectOrderTotalReport')}><Icon type="search" />查询</Button>
-                <Button style={{marginLeft:'10px'}} type="primary" onClick={()=>this.excel('summarize')}>导出Excel</Button>
+                <Button style={{marginLeft:'10px'}} loading={this.state.excelDis} type="primary" onClick={()=>this.excel('summarize')}>导出Excel</Button>
               </Col>
             </Row>
 

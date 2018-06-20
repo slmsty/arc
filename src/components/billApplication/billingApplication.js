@@ -471,6 +471,7 @@ export default class BillingApplication extends React.Component {
           rowKey={record => record.key}
           rowSelection={rowSelection}
           bordered
+          size="small"
           columns={this.getApplyColumns()}
           dataSource={billList}
           scroll={this.getScrollWidth()}

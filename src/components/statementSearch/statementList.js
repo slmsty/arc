@@ -1,14 +1,8 @@
-/**
- * Created by liangshuang on 17/12/1.
- */
 import React from 'react'
 import PropTypes from 'prop-types'
 import currency from '../../util/currency'
-//import Excel from 'exceljs'
 import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns,billInfoCols,outcomeTotalReportCols,unContractOutcomeDataAddCols,productOrderDetailCols,productOrderTotalCols } from './statementColumns'
-
-import { Table, Row, Col, Form, Radio, DatePicker, Input, Icon } from 'antd'
-
+import { Table, Row, Col } from 'antd'
 
 import StatementWithFrom from './statementWithFrom'
 export default class StatementListIndex extends React.Component {
@@ -18,8 +12,6 @@ export default class StatementListIndex extends React.Component {
     applyData: '',
     currencyType: '',
     loading:false,
-  }
-  componentDidMount(){
   }
   queryParam = {
     pageInfo: {
@@ -33,44 +25,34 @@ export default class StatementListIndex extends React.Component {
     if (type === 'split') {
       params = {}
       params.contractSplit = param
-    }
-    if (type === 'order') {
+    } else if (type === 'order') {
       params = {}
       params.projectOrder = param
-    }
-    if (type === 'summarize') {
+    } else if (type === 'summarize') {
       params = {}
       params.orderSummarize = param
-    }
-    if (type==='receipt_claim') {
+    } else if (type==='receipt_claim') {
       params = {}
       params.receiptClaim = param
-    }
-    if (type==='outcomeInfoReport') {
+    } else if (type==='outcomeInfoReport') {
       params = {}
       params.invoice = param
-    }
-    if (type==='receiptAccountReport') {
+    } else if (type==='receiptAccountReport') {
       params = {}
       params.confirReq = param
-    }
-    if (type==='projectInfoReport') {
+    } else if (type==='projectInfoReport') {
       params = {}
       params.project = param
-    }
-    if (type==='contractInfoReport') {
+    } else if (type==='contractInfoReport') {
       params = {}
       params.contract = param
-    }
-    if (type==='outcomeDetailReport') {
+    } else if (type==='outcomeDetailReport') {
       params = {}
       params.invoiceDetail = param
-    }
-    if (type==='outcomeTotalReport') {
+    } else if (type==='outcomeTotalReport') {
       params = {}
       params.billingMonth = param
-    }
-    if (type==='unContractOutcomeDataAdd') {
+    } else if (type==='unContractOutcomeDataAdd') {
       params = {}
       params.unsignedBilling = param
     }
@@ -267,22 +249,22 @@ export default class StatementListIndex extends React.Component {
     const type = this.state.currencyType
     if(type==='receiptInfoReport'){
       //  获取宽度width
-      reciptMoneyInfoCols.map((item,idnex)=>{
+      reciptMoneyInfoCols.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,reciptMoneyInfoCols,'收款汇总金额','']
     } else if(type==='outcomeInfoReport'){
-      billInfocomCols.map((item,idnex)=>{
+      billInfocomCols.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,billInfocomCols,'发票汇总金额','']
     } else if(type==='outcomeReceiptInfoReport'){
-      billAndReciptMoneyCols.map((item,idnex)=>{
+      billAndReciptMoneyCols.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,billAndReciptMoneyCols,'收款汇总金额','发票汇总金额']
     } else if(type==='receiptAccountReport'){
-      shouldReciptCols.map((item,idnex)=>{
+      shouldReciptCols.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,shouldReciptCols]
@@ -292,45 +274,45 @@ export default class StatementListIndex extends React.Component {
       })
       return [width,projectTotalCols,'收款汇总金额','发票汇总金额','']
     } else if(type==='contractInfoReport'){
-      totalContractContentColumns.map((item,idnex)=>{
+      totalContractContentColumns.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,totalContractContentColumns]
     } else if(type==='outProjectInfoReport'){
-      turnProColumns.map((item,idnex)=>{
+      turnProColumns.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,turnProColumns,'','']
     }else if(type==='contractSplitReport'){
-      constructSplitSearchColumns.map((item,idnex)=>{
+      constructSplitSearchColumns.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,constructSplitSearchColumns,'','']
     } else if(type==='outcomeDetailReport') {
-      billInfoCols.map((item,idnex)=>{
+      billInfoCols.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,billInfoCols,'','']
     } else if(type==='outcomeTotalReport') {
-      outcomeTotalReportCols.map((item,idnex)=>{
+      outcomeTotalReportCols.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,outcomeTotalReportCols,'','']
     }
     else if(type==='unContractOutcomeDataAdd') {
-      unContractOutcomeDataAddCols.map((item,idnex)=>{
+      unContractOutcomeDataAddCols.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,unContractOutcomeDataAddCols,'','']
     }
     else if(type==='projectOrderDetailReport') {
-      productOrderDetailCols.map((item,idnex)=>{
+      productOrderDetailCols.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,productOrderDetailCols,'','']
     }
     else if(type==='projectOrderTotalReport') {
-      productOrderTotalCols.map((item,idnex)=>{
+      productOrderTotalCols.map((item)=>{
         width += parseFloat(item.width)
       })
       return [width,productOrderTotalCols,'','']
@@ -443,6 +425,7 @@ export default class StatementListIndex extends React.Component {
     const pagination = {
       current: current,
       total: total,
+      showTotal: (total) => (`共 ${total} 条`),
       pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
@@ -450,8 +433,13 @@ export default class StatementListIndex extends React.Component {
     }
     return (
       <div>
-        <StatementWithFrom reportType={this.props.reportType} showCols={this.showCols} queryParms={this.queryParms} excel={this.excel} currencyType = {this.state.currencyType}/>
-
+        <StatementWithFrom
+          reportType={this.props.reportType}
+          showCols={this.showCols}
+          queryParms={this.queryParms}
+          getExcel={this.props.getExcel}
+          currencyType = {this.state.currencyType}
+        />
         {type ?
           <div>
             <Row  style={{ lineHeight: '28px' }}>
@@ -461,7 +449,7 @@ export default class StatementListIndex extends React.Component {
                     <div>
                       <span>{this.getApplyColumns()[2]}：</span><span className="primary-color" style={{ color: '#F4A034' }}>{claimAmountTotal}</span>
                       {this.getApplyColumns()[3] ?
-                        <span><span>{this.getApplyColumns()[3]}：</span> < span className = "primary-color" style={{ color: '#F4A034' }}></span></span>
+                        <span><span>{this.getApplyColumns()[3]}：</span> <span className = "primary-color" style={{ color: '#F4A034' }}></span></span>
                         :''
                       }
                     </div>

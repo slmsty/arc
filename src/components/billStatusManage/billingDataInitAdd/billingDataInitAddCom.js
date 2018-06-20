@@ -107,13 +107,13 @@ class BillingDataInitAddCom extends React.Component {
         billingAppLineId: item.billingAppLineId,
       })
     })
-    if (flag) {
+    /*if (flag) {
       this.setState({
         selectedRows:[],
         selectedRowKeys:[],
       })
       return
-    }
+    }*/
     param.billingDataInitResultList = billingDataInitResultList
     param.buttonType = type
     this.props.showDataInitModal(param).then((res) => {

@@ -167,10 +167,12 @@ export default class ApplySearchCon extends React.Component {
       ),
     },
     ]
+    const { pageNo, count, pageSize } = this.props.myApply.getMyApplyList
     const pagination = {
-      current: this.props.myApply.getMyApplyList.pageNo,
-      total: this.props.myApply.getMyApplyList.count,
-      pageSize: this.props.myApply.getMyApplyList.pageSize,
+      current: pageNo,
+      total: count,
+      showTotal: (total) => (`共 ${total} 条`),
+      pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
