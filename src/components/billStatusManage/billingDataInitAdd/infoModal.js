@@ -89,6 +89,7 @@ class InfoModal extends React.Component {
       const number = parseInt(value || 0, 10)
       const { taxIncludeAmount, taxExcludeAmount} = this.props.form.getFieldsValue()
       const { billingDataInitResultList } = this.props.data
+      console.log(Math.abs(taxIncludeAmount))
       if (isNaN(value)) {
         callback('请填写正确的金额');
         return
@@ -104,8 +105,12 @@ class InfoModal extends React.Component {
       } else if (billingDataInitResultList[0].billingAmount < 0 && (number >= 0)) {
         callback('申请金额为负数，填写的金额必须为负数');
         return;
-      } else if (parseFloat(taxIncludeAmount) < parseFloat(taxExcludeAmount)) {
-        callback('含税金额必须大于不含税金额');
+      } else if (Math.abs(taxIncludeAmount) < Math.abs(taxExcludeAmount)) {
+        if(parseFloat(taxIncludeAmount) < 0) {
+          callback('含税金额绝对值必须大于不含税金额绝对值');
+        } else {
+          callback('含税金额必须大于不含税金额');
+        }
         return;
       } else {
         callback();
