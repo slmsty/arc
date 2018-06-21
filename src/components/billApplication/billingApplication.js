@@ -35,6 +35,10 @@ export default class BillingApplication extends React.Component {
     }
   }
 
+  componentWillMount() {
+    this.props.initData()
+  }
+
   componentWillReceiveProps(nextProps) {
     if(this.props.updateSuccess !== nextProps.updateSuccess && nextProps.updateSuccess) {
       message.success('申请信息修改成功!')

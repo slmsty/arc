@@ -11,7 +11,6 @@ const billingDataInitColumns = [
     title:'申请单号',
     dataIndex:'billingApplicationId',
     width:100,
-    fixed: 'left',
   }, {
     title:'行号',
     dataIndex:'billingAppLineId',
@@ -27,11 +26,11 @@ const billingDataInitColumns = [
   }, {
     title:'合同编码',
     dataIndex:'contractNo',
-    width:190
+    width:280
   }, {
     title:'合同名称',
     dataIndex:'contractName',
-    width:350
+    width:400
   }, {
     title:'签约公司',
     dataIndex:'companyName',
@@ -47,15 +46,15 @@ const billingDataInitColumns = [
   }, {
     title:'客户地址、电话',
     dataIndex:'custAddressPhone',
-    width:200
+    width:350
   }, {
     title:'客户开户行及账号',
     dataIndex:'custBankAccount',
-    width:200
+    width:300
   }, {
     title:'开票内容',
     dataIndex:'billingContent',
-    width:250
+    width:350
   },  {
     title:'款项名称',
     dataIndex:'paymentName',
@@ -84,7 +83,7 @@ const billingDataInitColumns = [
   }, {
     title:'发票备注',
     dataIndex:'billingApplicationRemark',
-    width:180
+    width:200
   }, {
     title:'不含税金额',
     dataIndex:'billingAmountExcludeTax',
@@ -96,7 +95,8 @@ const billingDataInitColumns = [
   }, {
     title:'单位',
     dataIndex:'unit',
-    width:100
+    width:100,
+    render: (text) => (text ? toThousands(text) : text),
   }, {
     title:'数量',
     dataIndex:'quantity',
@@ -152,7 +152,6 @@ const billingDataInitColumns = [
     title:'开票状态',
     dataIndex:'statusName',
     width:100,
-    fixed: 'right'
   },
 ]
 class BillingDataInitAddCom extends React.Component {

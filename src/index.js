@@ -10,10 +10,10 @@ import thunk from 'redux-thunk'
 import 'normalize.css'
 import reduxRequestMiddleware from './http/reduxRequestMiddleware'
 import requestJson from './http/requestJson'
-import './index.css'
 import reducers from './reducers/index'
 import IndexContainer from './containers/index'
 import './util/toFixed'
+import './index.css'
 
 export const httpRequestJson = requestJson(process.env.REACT_APP_GATEWAY)
 
