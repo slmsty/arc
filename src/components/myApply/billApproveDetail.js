@@ -141,24 +141,28 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
       dataSource[index]['prefPolicyType'] = value.prefPolicySign === '1' ? value.prefPolicyType : ''
     } else if(col === 'billingAmount') {//含税金额
-      const result = dataSource.filter(d => d.isParent === '1' && record.arBillingId === d.arBillingId)[0]
-      let total = 0
-      dataSource.map(d => {
-        if(d.arBillingId === record.arBillingId && d.isParent === '0' && d.lineNo !== index){
-          total += (d.billingAmount ? d.billingAmount : 0)
-        }
-      })
-      //校验所有拆分子项的金额必须小于父级含税金额
-      const childAmount = total + value
-      dataSource[result.lineNo][col] = result.totalAmount - childAmount
-      const parent = this.state.dataSource[result.lineNo]
-      this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
-      dataSource[index][col] = value
       const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
-      this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
-      //未大签、红冲、其他开票含税金额为0, 手动输入金额后并赋值给总金额
-      if(record.isParent === '1' && !normalTypes.includes(this.props.billType)) {
-        dataSource[result.lineNo].totalAmount = value
+      if(record.isParent === '1') {//操作的记录为父节点
+        dataSource[index]['billingAmount'] = value
+        dataSource[index]['totalAmount'] = value
+        this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
+      } else {
+        const result = dataSource.filter(d => d.isParent === '1' && record.arBillingId === d.arBillingId)[0]
+        let total = 0
+        //1、计算子节点金额总和
+        dataSource.map(d => {
+          if(d.arBillingId === record.arBillingId && d.isParent === '0' && d.lineNo !== index){
+            total += (d.billingAmount ? d.billingAmount : 0)
+          }
+        })
+        const childAmount = total + value
+        //2、父节点金额重新计算
+        dataSource[result.lineNo]['billingAmount'] = result.totalAmount - childAmount
+        const parent = this.state.dataSource[result.lineNo]
+        this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
+        //3、子节点金额重新计算
+        dataSource[index]['billingAmount'] = value
+        this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
       }
     } else if (col === 'billingTaxRate') {//税率
       const { billingAmount, quantity} = this.state.dataSource[index]
@@ -337,7 +341,7 @@ class BillApproveDetail extends React.Component  {
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
     const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
     dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
-    dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
+    dataSource[index]['unitPrice'] = (excludeTax / (quantity || 1)).toFixed(2)
     dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
   }
 
