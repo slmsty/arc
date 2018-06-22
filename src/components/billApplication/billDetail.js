@@ -328,7 +328,7 @@ class BillDetail extends React.Component {
         this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
         //3、子节点金额重新计算
         dataSource[index]['billingAmount'] = value
-        this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
+        this.calBillAmountTax(dataSource, index, value, billingTaxRate, quantity)
       }
     } else if (col === 'billingTaxRate') {
       const { billingAmount, quantity} = this.state.dataSource[index]
