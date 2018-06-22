@@ -80,8 +80,13 @@ export default class BillingApplication extends React.Component {
 
   getApplyChange = (value) => {
     this.props.initData()
+    const params = this.state.queryParam
     this.setState({
       currentType: value,
+      queryParam: {
+        ...params,
+        billingApplicationType: value,
+      },
     })
   }
 
@@ -173,6 +178,7 @@ export default class BillingApplication extends React.Component {
         fixed: 'right',
         render: (text, record) => (
           <a href="#"
+             style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
                  updateVisible: true,
@@ -233,6 +239,7 @@ export default class BillingApplication extends React.Component {
         fixed: 'right',
         render: (text, record) => (
           <a href="#"
+             style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
                  updateVisible: true,
@@ -279,6 +286,7 @@ export default class BillingApplication extends React.Component {
         width: 80,
         render: (text, record) => (
           <a href="#"
+             style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
                  otherAddVisible: true,

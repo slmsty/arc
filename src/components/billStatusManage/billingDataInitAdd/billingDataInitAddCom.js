@@ -152,6 +152,7 @@ const billingDataInitColumns = [
     title:'开票状态',
     dataIndex:'statusName',
     width:100,
+    fixed: 'right',
   },
 ]
 class BillingDataInitAddCom extends React.Component {
