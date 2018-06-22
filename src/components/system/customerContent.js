@@ -24,6 +24,7 @@ class CustomerTaxInfo extends React.Component {
       message.success('开票内容信息保存成功')
       this.setState({
         showAdd: false,
+        record: {},
       })
       this.handleQuery()
     }
@@ -106,7 +107,7 @@ class CustomerTaxInfo extends React.Component {
     const { getFieldDecorator } = this.props.form
     const pagination = {
       total: count,
-      pageNo,
+      current: pageNo,
       showTotal: (total) => (`共 ${total} 条`),
       onChange: (current) => {
         this.props.queryInvoiceTaxInfo({
