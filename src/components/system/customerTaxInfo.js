@@ -120,7 +120,7 @@ class CustomerTaxInfo extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="开票客户名称">
                 {getFieldDecorator('custName')(
-                  <Input placeholder="客户名称"/>
+                  <Input placeholder="开票客户名称"/>
                 )}
               </FormItem>
             </Col>

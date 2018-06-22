@@ -22,7 +22,11 @@ class ApplyInfoModal extends React.Component {
     this.state = {
       formValidate: false,
       showContractLink: false,
-      approveData: serviceDetail ? serviceDetail.appLineList : [],
+      approveData: {
+        serviceDetail: serviceDetail ? serviceDetail.appLineList : [],
+        custInfo: serviceDetail ? serviceDetail.custInfo : {},
+        comInfo: serviceDetail ? serviceDetail.comInfo : {},
+      },
       approveLoading: false,
       rejectLoading: false,
     }
@@ -47,7 +51,7 @@ class ApplyInfoModal extends React.Component {
             const isAgainInvoice = serviceDetail.isAgainInvoice
             const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
             if(isAgainInvoice !== 'false') {
-              this.state.approveData.map((record, index) => {
+              this.state.approveData.serviceDetail.map((record, index) => {
                 if(taskCode === 'ar_admin') {
                   if(this.fieldCheck(record.billingAmount)) {
                     message.error(`请填写第${index + 1}行的含税金额`)
@@ -90,12 +94,14 @@ class ApplyInfoModal extends React.Component {
             })
             const params = isAgainInvoice !== 'false' ? {
               ...values,
+              billingCustInfoId: this.state.approveData.custInfo.billingCustInfoId,
+              billingComInfoId: this.state.approveData.comInfo.billingComInfoId,
               billingApplicationId: serviceDetail.billingApplicationId,
               billingApplicationType: serviceType,
               billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
               billingApplicantRemark: values.billingApplicantRemark ? values.billingApplicantRemark.trim() : '',
               billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
-              appLineItems: this.state.approveData.map(record => ({
+              appLineItems: this.state.approveData.serviceDetail.map(record => ({
                 ...record,
                 lineNo: record.lineNo + 1,
               })),

@@ -1,10 +1,21 @@
 import React from 'react'
 import { Table, Form, message, Row, Col, Input, DatePicker, Button, InputNumber, Icon, Select } from 'antd'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import { proColumns, billDetailColumns, detailColumns, contentCols, taxCategoryCols, normalTypes, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
+import {
+  proColumns,
+  billDetailColumns,
+  detailColumns,
+  contentCols,
+  taxCategoryCols,
+  normalTypes,
+  invoiceLineCols,
+  totalColumns,
+  clientCols, comCols
+} from '../billApplication/billColumns'
 import SearchAllColumns from '../common/SearchAllColumns'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment';
+import InputSearch from '../billApplication/inputSearch'
 import './billApproveDetail.css'
 const FormItem = Form.Item
 const TextArea = Input.TextArea
@@ -28,6 +39,7 @@ class BillApproveDetail extends React.Component  {
   constructor(props) {
     super(props)
     const appLineList = props.serviceDetail.appLineList ? props.serviceDetail.appLineList : []
+    const { custInfo, comInfo } = props.serviceDetail
     const dataSource = appLineList.map(detail => ({
         ...detail,
         lineNo: detail.lineNo - 1,
@@ -44,9 +56,15 @@ class BillApproveDetail extends React.Component  {
       currentNo: 1,
       totalAmount: 0,
       saveLoading: false,
+      custInfo: custInfo,
+      comInfo: comInfo,
     }
     if(this.props.setFormValidate) {
-      this.props.setFormValidate(dataSource)
+      this.props.setFormValidate({
+        serviceDetail: dataSource,
+        custInfo: custInfo,
+        comInfo: comInfo,
+      })
     }
     //AR财务会计&&其他事项开票可修改城建税
     this.isEditTax = props.taskCode === 'ar_finance_account' && props.applyType === 'BILLING_EXCESS'
@@ -113,7 +131,11 @@ class BillApproveDetail extends React.Component  {
     }))
     this.setState({ dataSource: newSource });
     if(this.props.setFormValidate) {
-      this.props.setFormValidate(newSource)
+      this.props.setFormValidate({
+        serviceDetail: dataSource,
+        custInfo: this.state.custInfo,
+        comInfo: this.state.comInfo,
+      })
     }
   }
   /**
@@ -162,7 +184,7 @@ class BillApproveDetail extends React.Component  {
         this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
         //3、子节点金额重新计算
         dataSource[index]['billingAmount'] = value
-        this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
+        this.calBillAmountTax(dataSource, index, value, billingTaxRate, quantity)
       }
     } else if (col === 'billingTaxRate') {//税率
       const { billingAmount, quantity} = this.state.dataSource[index]
@@ -216,7 +238,11 @@ class BillApproveDetail extends React.Component  {
       dataSource: dataSource
     })
     if(this.props.setFormValidate) {
-      this.props.setFormValidate(dataSource)
+      this.props.setFormValidate({
+        serviceDetail: dataSource,
+        custInfo: this.state.custInfo,
+        comInfo: this.state.comInfo,
+      })
     }
   }
 
@@ -238,7 +264,11 @@ class BillApproveDetail extends React.Component  {
       selectedRowKeys: [],
     })
     if(this.props.setFormValidate) {
-      this.props.setFormValidate(dataSource)
+      this.props.setFormValidate({
+        serviceDetail: dataSource,
+        custInfo: this.state.custInfo,
+        comInfo: this.state.comInfo,
+      })
     }
   }
 
@@ -296,6 +326,8 @@ class BillApproveDetail extends React.Component  {
         })
         const params = isAgainInvoice !== 'false' ? {
           ...values,
+          billingCustInfoId: this.state.custInfo.billingCustInfoId,
+          billingComInfoId: this.state.comInfo.billingComInfoId,
           billingApplicationId: this.props.serviceDetail.billingApplicationId,
           billingApplicationType: values.billFlow ? values.billFlow : this.props.applyType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
@@ -345,6 +377,25 @@ class BillApproveDetail extends React.Component  {
     dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
   }
 
+  handleCompanyChange = (v, index) => {
+    if(index === 0) {
+      this.setState({
+        custInfo: v
+      })
+    } else {
+      this.setState({
+        comInfo: v
+      })
+    }
+    if(this.props.setFormValidate) {
+      this.props.setFormValidate({
+        serviceDetail: this.state.dataSource,
+        custInfo: index === 0 ? v : this.state.custInfo,
+        comInfo: index === 1 ? v : this.state.comInfo,
+      })
+    }
+  }
+
   getTaxData = () => {
     const { constructionTax, educationTax, incomeTax } = this.props.serviceDetail.arcBillingTaxInfo
     let constructionTotal = 0
@@ -381,9 +432,60 @@ class BillApproveDetail extends React.Component  {
     }]
   }
 
+  getCustInfoColumns = () => {
+    return [{
+      title: '',
+      dataIndex: 'title',
+      width: 50,
+      float: 'left',
+    }, {
+      title: '客户名称',
+      dataIndex: 'customerName',
+      width: 200,
+      float: 'left',
+      render: (text, record, index) => (
+        index === 0 ?
+          <InputSearch
+            width='700px'
+            url="/arc/billingApplication/custom/search"
+            columns={clientCols}
+            label="客户名称"
+            idKey="billingCustInfoId"
+            valueKey="custName"
+            showSearch={true}
+            value={this.state.custInfo}
+            onChange={(v) => this.handleCompanyChange(v, index)}
+          /> :
+          <InputSearch
+            width='800px'
+            url="/arc/billingApplication/company/search"
+            columns={comCols}
+            label="公司名称"
+            idKey="billingComInfoId"
+            valueKey="comName"
+            showSearch={true}
+            value={this.state.comInfo}
+            onChange={(v) => this.handleCompanyChange(v, index)}
+          />
+      )
+    }, {
+      title: '纳税人识别码',
+      dataIndex: 'taxPayer',
+      width: 100,
+    }, {
+      title: '地址电话',
+      dataIndex: 'address',
+      width: 200,
+    }, {
+      title: '开户行及账号',
+      dataIndex: 'bankAccount',
+      width: 180,
+    }]
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form
-    const { billingType, billingDate, billingApplicantRequest, comInfo ={}, custInfo = {}, contractList, outcomeList,
+    const { billingType, billingDate, billingApplicantRequest, contractList, outcomeList,
       billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName, costBear } = this.props.serviceDetail
     //是否红冲发票
     const isReceiveInvoice = showReceive.includes(this.props.applyType)
@@ -397,9 +499,8 @@ class BillApproveDetail extends React.Component  {
     const isProManager = this.props.taskCode === 'project_manager'
 
     const isARAdminShow = isArAdmin && isAgainInvoice === 'false'
-
-    const detailData = [
-      {
+    const { custInfo, comInfo } = this.state
+    const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
       taxPayer: custInfo.taxpayerIdentificationNumber,
@@ -881,7 +982,7 @@ class BillApproveDetail extends React.Component  {
                 rowKey="id"
                 size="small"
                 bordered
-                columns={detailColumns}
+                columns={isArAdmin || isArFinanceAccount ? this.getCustInfoColumns() : detailColumns}
                 dataSource={detailData}
                 pagination={false}
               />
