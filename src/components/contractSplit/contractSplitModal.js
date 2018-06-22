@@ -1,9 +1,6 @@
 /**
  * Created by liangshuang on 17/12/12.
  */
-/**
- * Created by liangshuang on 17/12/8.
- */
 import React from 'react'
 import SelectSbu from '../common/SelectSbu'
 import ContractType from '../common/contractType'
@@ -121,6 +118,7 @@ class ContractSplitModal extends React.Component{
   }
   // 目录价计算
   calculateListPrice = (newData,data) => {
+    console.log('目录价计算')
     const dataInfos = this.props.data
     const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
     const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
@@ -153,7 +151,6 @@ class ContractSplitModal extends React.Component{
         formula2 = incomeRatio * assessRatio
         newData[data.indexs]['listPrice'] = parseFloat((contractTotalMoney / formula) * formula2).toFixed(2)
       }
-
     }
     return newData
 }
@@ -820,6 +817,7 @@ class ContractSplitModal extends React.Component{
         formula2 = incomeRatio * assessRatio
         splitData[i].listPrice = (parseFloat((contractTotalMoney / formula) * formula2)).toFixed(2)
       }
+      splitData[i].opsStatus = 'modify'
       this.inputChange(splitData,i)
   }
   this.setState({
@@ -871,14 +869,12 @@ class ContractSplitModal extends React.Component{
               </div>
               :
               <div>
-                {/*<Button disabled={this.state.editFlag} onClick={() => this.handleAdd(index, '0')}>＋</Button>&nbsp;&nbsp;*/}
                 <Button disabled={this.state.editFlag} onClick={() => this.handleMinus(index)}>－</Button>
               </div>
           )
       ),
     }, {
       title: <span>合同类型<em style={{ color: '#FF0000' }}>*</em></span>,
-      /*dataIndex: 'contractCategory', taskDesc*/
       dataIndex: 'taskDesc',
       width: 200,
       render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractCategory',record),

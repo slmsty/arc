@@ -83,6 +83,8 @@ export default class BillingApplication extends React.Component {
     const params = this.state.queryParam
     this.setState({
       currentType: value,
+      selectedRows: [],
+      selectedRowKeys: [],
       queryParam: {
         ...params,
         billingApplicationType: value,
