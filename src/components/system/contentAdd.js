@@ -19,6 +19,7 @@ class ContentAdd extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const trimValues = {
+          ...values,
           billingContentCode: values.billingContentCode.trim(),
           billingContentName: values.billingContentName.trim(),
           taxCategoryCode: values.taxCategoryCode.trim(),

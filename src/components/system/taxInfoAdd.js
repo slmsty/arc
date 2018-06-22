@@ -14,6 +14,7 @@ class TaxInfoAdd extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const trimValues = {
+          ...values,
           custInfoName: values.custInfoName.trim(),
           billingCustName: values.billingCustName.trim(),
           taxpayerIdentification: values.taxpayerIdentification.trim(),
