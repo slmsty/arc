@@ -64,7 +64,7 @@ class CustomerTaxInfo extends React.Component {
         dataIndex: 'billingContentName',
         width: '25%',
       }, {
-        title: '纳税人识别码',
+        title: '税收分类编码',
         dataIndex: 'taxCategoryCode',
         width: '10%',
       }, {
