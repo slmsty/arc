@@ -13,12 +13,19 @@ class TaxInfoAdd extends React.Component {
     const { custInfoId } = this.props.record
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        const trimValues = {
+          custInfoName: values.custInfoName.trim(),
+          billingCustName: values.billingCustName.trim(),
+          taxpayerIdentification: values.taxpayerIdentification.trim(),
+          addressPhoneNum: values.addressPhoneNum.trim(),
+          bankAccount: values.bankAccount.trim(),
+        }
         const params = custInfoId ? {
-          ...values,
+          ...trimValues,
           custInfoId,
           actionType: 'EDIT',
         } : {
-          ...values,
+          ...trimValues,
           actionType: 'NEW',
         }
         this.props.saveCustTaxInfo(params)

@@ -151,6 +151,7 @@ const common = {
             component: 'BillStatusManage',
             child:[{component: "billingStatusSendAp", key: "421", name: "传送ap", path: "billingStatusSendAp"},
               {component: "billingStatusCancel", key: "422", name: "撤销", path: "billingStatusCancel"},
+              {component: "billingStatusSendTax", key: "423", name: "传送金税", path: "billingStatusSendTax"}
             ]
           },
           {
