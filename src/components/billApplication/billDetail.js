@@ -278,6 +278,7 @@ class BillDetail extends React.Component {
       message.error('请选择销售方的客户信息!')
       err = true
     }
+    console.log(this.state.fileId, !this.state.fileId)
     if(this.props.type === 'billApply' && uploadFileType.includes(this.props.billType) && !this.state.fileId) {
       message.error('请上传完附件，再提交开票申请')
       err = true
@@ -391,6 +392,7 @@ class BillDetail extends React.Component {
     if(response.resultCode === '000000') {
       const { file, fileList } = this.state
       message.success(`${file.name} 上传成功`);
+      console.log(response, response.data)
       this.setState({
         fileId: response.data,
         fileList: [...fileList, {
