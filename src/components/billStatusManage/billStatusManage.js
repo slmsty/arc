@@ -469,6 +469,7 @@ export default class BillStatusCon extends React.Component {
     }
     const pagination = {
       total: count,
+      showTotal: (total) => (`共 ${total} 条`),
       pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,

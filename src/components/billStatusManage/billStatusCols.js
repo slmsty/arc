@@ -23,7 +23,7 @@ const billApproveItemColumns = [
   }, {
     title: '预计回款日期',
     dataIndex: 'receiptReturnDate',
-    width: 150,
+    width: 110,
   },
   {
     title: '付款条件',
@@ -43,25 +43,25 @@ const billApproveItemColumns = [
   {
     title: '款项金额',
     dataIndex: 'paymentAmount',
-    width: 100,
+    width: 130,
     render: (text, record, index) => (text ? currency(text) : text),
   },
   {
     title: 'Billed AR金额',
     dataIndex: 'arAmount',
-    width: 100,
+    width: 130,
     render: (text, record, index) => (text ? currency(text) : text),
   },
   {
     title: '已申请金额',
     dataIndex: 'billingAmount',
-    width: 100,
+    width: 130,
     render: (text, record, index) => (text ? currency(text) : text),
   },
   {
     title: '已开票金额',
     dataIndex: 'invoiceAmount',
-    width: 100,
+    width: 130,
     render: (text, record, index) => (text ? currency(text) : text),
   },
 ]

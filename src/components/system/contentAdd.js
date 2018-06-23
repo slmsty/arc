@@ -18,12 +18,18 @@ class ContentAdd extends React.Component {
     const { billingRecordId } = this.props.record
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const params = billingRecordId ? {
+        const trimValues = {
           ...values,
+          billingContentCode: values.billingContentCode.trim(),
+          billingContentName: values.billingContentName.trim(),
+          taxCategoryCode: values.taxCategoryCode.trim(),
+        }
+        const params = billingRecordId ? {
+          ...trimValues,
           billingRecordId,
           actionType: 'EDIT',
         } : {
-          ...values,
+          ...trimValues,
           actionType: 'NEW',
         }
         this.props.saveInvoiceTaxInfo(params)

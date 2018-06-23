@@ -51,13 +51,3 @@ export default class SelectInvokeApi extends React.Component {
     )
   }
 }
-
-SelectInvokeApi.propTypes = {
-  placeholder: PropTypes.string.isRequired,
-  typeCode: PropTypes.string.isRequired,
-  paramCode: PropTypes.string.isRequired,
-  value: PropTypes.string,
-  initialValue: PropTypes.string,
-  hasEmpty: PropTypes.bool,
-  hasAll: PropTypes.bool,
-}

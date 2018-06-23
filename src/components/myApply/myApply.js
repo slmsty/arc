@@ -171,7 +171,7 @@ export default class MyApplyCon extends React.Component {
       width: 140,
     }, {
       title: '操作',
-      dataIndex: 'opration',
+      dataIndex: 'operation',
       width: 80,
       fixed: 'right',
       render: (text, record, index) => (
@@ -182,10 +182,12 @@ export default class MyApplyCon extends React.Component {
       ),
     },
     ]
+    const { pageNo, count, pageSize } = this.props.myApplyPage
     const pagination = {
-      current: this.props.myApplyPage.pageNo,
-      total: this.props.myApplyPage.count,
-      pageSize: this.props.myApplyPage.pageSize,
+      current: pageNo,
+      total: count,
+      showTotal: (total) => (`共 ${total} 条`),
+      pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,

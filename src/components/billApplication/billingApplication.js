@@ -35,6 +35,10 @@ export default class BillingApplication extends React.Component {
     }
   }
 
+  componentWillMount() {
+    this.props.initData()
+  }
+
   componentWillReceiveProps(nextProps) {
     if(this.props.updateSuccess !== nextProps.updateSuccess && nextProps.updateSuccess) {
       message.success('申请信息修改成功!')
@@ -76,8 +80,15 @@ export default class BillingApplication extends React.Component {
 
   getApplyChange = (value) => {
     this.props.initData()
+    const params = this.state.queryParam
     this.setState({
       currentType: value,
+      selectedRows: [],
+      selectedRowKeys: [],
+      queryParam: {
+        ...params,
+        billingApplicationType: value,
+      },
     })
   }
 
@@ -169,6 +180,7 @@ export default class BillingApplication extends React.Component {
         fixed: 'right',
         render: (text, record) => (
           <a href="#"
+             style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
                  updateVisible: true,
@@ -229,6 +241,7 @@ export default class BillingApplication extends React.Component {
         fixed: 'right',
         render: (text, record) => (
           <a href="#"
+             style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
                  updateVisible: true,
@@ -275,6 +288,7 @@ export default class BillingApplication extends React.Component {
         width: 80,
         render: (text, record) => (
           <a href="#"
+             style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
                  otherAddVisible: true,
@@ -305,7 +319,7 @@ export default class BillingApplication extends React.Component {
       return
     }
     const _this = this
-    if(normalTypes.includes(this.state.currentType)) {
+    if(normalTypes.includes(this.state.selectedRows[0].billingApplicationType)) {
       let content = ''
       this.state.selectedRows.map(s => {
         if(s.applyUseAmount > 0) {
@@ -340,11 +354,10 @@ export default class BillingApplication extends React.Component {
       contractItems,
     }
     if(!(this.state.currentType === 'BILLING_UN_CONTRACT' || this.state.currentType === 'BILLING_OTHER')) {
-      const contractId = this.state.selectedRows ? this.state.selectedRows[0].contractId : ''
+      const contractId = this.state.selectedRows && this.state.selectedRows[0].contractId ? this.state.selectedRows[0].contractId : ''
       this.props.getContractUrl(contractId)
     }
     this.props.billApplyEdit(param)
-
   }
 
   handleAddBill = () => {
@@ -443,7 +456,7 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
-    const { billList, updateBillInfo, isLoading, addBillUnContract, addOtherContract, getTaxInfo,
+    const { billList=[], updateBillInfo, isLoading, addBillUnContract, addOtherContract, getTaxInfo,
       editInfo, billApplySave, currentUser, contractUrl, redApplyDetail, billApplicationRedApply } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType)? 'checkbox' : 'radio',
@@ -456,6 +469,10 @@ export default class BillingApplication extends React.Component {
       selectedRowKeys: this.state.selectedRowKeys,
     }
     const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply } = this.state
+    const pagination = {
+      total: billList.length,
+      showTotal: (total) => (`共 ${total} 条`),
+    }
     return (
       <div>
         <BillingApplyForm
@@ -471,9 +488,11 @@ export default class BillingApplication extends React.Component {
           rowKey={record => record.key}
           rowSelection={rowSelection}
           bordered
+          size="small"
           columns={this.getApplyColumns()}
           dataSource={billList}
           scroll={this.getScrollWidth()}
+          pagination={pagination}
         />
         {this.props.searchEditSuccess || this.props.showRedApply ?
           <BillDetail
@@ -487,6 +506,7 @@ export default class BillingApplication extends React.Component {
             isLoading={isLoading}
             isRed={redTypes.includes(this.state.currentType)}
             billingOutcomeIds={this.state.selectedRows.map(s => s.billingOutcomeId)}
+            type="billApply"
           /> : null
         }
         {

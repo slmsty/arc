@@ -1,13 +1,9 @@
-/**
- * Created by liangshuang on 18/5/17.
- */
 import React from 'react'
 import moment from 'moment'
 import SelectInvokeApi from '../../common/selectInvokeApi'
 import { toThousands } from '../../../util/currency'
-import { Modal, Form, Table, Row, Col, Button, Input, Checkbox, DatePicker, Select, message, InputNumber } from 'antd'
+import { Modal, Form, Table, Row, Col, Button, Input, DatePicker, Select, message, InputNumber } from 'antd'
 const FormItem = Form.Item
-const { TextArea } = Input
 const Option = Select.Option
 const dateFormat = 'YYYY-MM-DD'
 const columns = [
@@ -50,26 +46,8 @@ class InfoModal extends React.Component {
   save =() => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const { billingDataInitResultList } = this.props.data
-        if (billingDataInitResultList[0].billingAmount > 0 && (values.taxIncludeAmount <= 0 || values.taxExcludeAmount <= 0)) {
-          message.error('含税金额或不含税金额不能为负数')
-          return
-        }
-        console.log(billingDataInitResultList[0].billingAmount)
-        if(billingDataInitResultList[0].billingAmount < 0 && (values.taxIncludeAmount >= 0 || values.taxExcludeAmount >= 0)) {
-          message.error('含税金额或不含税金额必须为负数')
-          return
-        }
-        if (values.taxIncludeAmount < values.taxExcludeAmount ) {
+        if (Math.abs(values.taxIncludeAmount) < Math.abs(values.taxExcludeAmount)) {
           message.error('不含税金额不能大于含税金额')
-          return
-        }
-        if(values.taxIncludeAmount > 99999999) {
-          message.error('含税金额不能大于千万')
-          return
-        }
-        if(values.taxExcludeAmount > 99999999) {
-          message.error('不含税金额不能大于千万')
           return
         }
         this.setState({
@@ -100,8 +78,46 @@ class InfoModal extends React.Component {
       width += parseFloat(item.width)
     })
     return width
-
   }
+
+  checkAmount = (rule, value, callback) => {
+    if(value === '') {
+      callback()
+      return
+    } else {
+      const decimal = value && value.toString().split('.')
+      const number = parseInt(value || 0, 10)
+      const { taxIncludeAmount, taxExcludeAmount} = this.props.form.getFieldsValue()
+      const { billingDataInitResultList } = this.props.data
+      console.log(Math.abs(taxIncludeAmount))
+      if (isNaN(value)) {
+        callback('请填写正确的金额');
+        return
+      } else if (Math.abs(value) > 99999999) {
+        callback('填写的金额不能大于千万');
+        return;
+      } else if (decimal[1] && decimal[1].length > 2) {
+        callback('填写的金额请保留两位小数');
+        return;
+      } else if (billingDataInitResultList[0].billingAmount > 0 && (number <= 0)) {
+        callback('申请金额为正数，填写的金额必须为正数');
+        return;
+      } else if (billingDataInitResultList[0].billingAmount < 0 && (number >= 0)) {
+        callback('申请金额为负数，填写的金额必须为负数');
+        return;
+      } else if (Math.abs(taxIncludeAmount) < Math.abs(taxExcludeAmount)) {
+        if(parseFloat(taxIncludeAmount) < 0) {
+          callback('含税金额绝对值必须大于不含税金额绝对值');
+        } else {
+          callback('含税金额必须大于不含税金额');
+        }
+        return;
+      } else {
+        callback();
+      }
+    }
+  }
+
   render() {
     const {getFieldDecorator} = this.props.form
     const formItemLayout = {
@@ -208,8 +224,9 @@ class InfoModal extends React.Component {
                       initialValue: dataSource.taxIncludeAmount,
                       rules: [
                         { required: true, message: '请输入含税金额'},
+                        { validator: this.checkAmount },
                       ]
-                    })(<InputNumber style={{width: '220px'}}/>)}
+                    })(<Input style={{width: '220px'}}/>)}
                   </FormItem>
                 </Col>
                 <Col span={12} key={10}>
@@ -218,8 +235,9 @@ class InfoModal extends React.Component {
                       initialValue: dataSource.taxExcludeAmount,
                       rules: [
                         { required: true, message: '请输入不含税金额'},
+                        { validator: this.checkAmount },
                       ]
-                    })(<InputNumber style={{width: '220px'}}/>)}
+                    })(<Input style={{width: '220px'}}/>)}
                   </FormItem>
                 </Col>
               </Row>

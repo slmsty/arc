@@ -13,7 +13,7 @@ class BigSignAuditDetail extends React.Component {
       selectedRows: [],
       showApproveDetail: false,
       billType: 'BILLING_CONTRACT',
-      approveData: [],
+      approveData: {},
     }
   }
 
@@ -29,13 +29,13 @@ class BigSignAuditDetail extends React.Component {
         this.setState({
           loading: true,
         })
-        const { serviceType, serviceDetail } = this.props.applicationInfo
+        const { serviceType } = this.props.applicationInfo
         const params = {
           ...values,
           billingApplicationId,
           billingApplicationType: values.billFlow ? values.billFlow : serviceType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
-          appLineItems: this.state.approveData.map(record => ({
+          appLineItems: this.state.approveData.serviceDetail.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,
           }))

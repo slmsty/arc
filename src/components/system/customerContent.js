@@ -1,9 +1,10 @@
 import React from 'react'
-import { Table, Button, Form, Row, Col, Input, Icon } from 'antd'
+import { Table, Button, Form, Row, Col, Input, Icon, Select } from 'antd'
 import ContentAdd from './contentAdd'
 import {message} from "antd/lib/index";
 
 const FormItem = Form.Item
+const Option = Select.Option
 
 const formItemLayout = {
   labelCol: { span: 7 },
@@ -23,6 +24,7 @@ class CustomerTaxInfo extends React.Component {
       message.success('开票内容信息保存成功')
       this.setState({
         showAdd: false,
+        record: {},
       })
       this.handleQuery()
     }
@@ -33,9 +35,9 @@ class CustomerTaxInfo extends React.Component {
   }
 
   handleQuery = () => {
-    const value = this.props.form.getFieldValue('billingContentName')
+    const value = this.props.form.getFieldsValue()
     const params = {
-      billingContentName: value,
+      ...value,
       pageInfo:{
         pageNo: 1,
         pageSize: 10
@@ -62,7 +64,7 @@ class CustomerTaxInfo extends React.Component {
         dataIndex: 'billingContentName',
         width: '25%',
       }, {
-        title: '纳税人识别码',
+        title: '税收分类编码',
         dataIndex: 'taxCategoryCode',
         width: '10%',
       }, {
@@ -105,7 +107,8 @@ class CustomerTaxInfo extends React.Component {
     const { getFieldDecorator } = this.props.form
     const pagination = {
       total: count,
-      pageNo,
+      current: pageNo,
+      showTotal: (total) => (`共 ${total} 条`),
       onChange: (current) => {
         this.props.queryInvoiceTaxInfo({
           billingContentName: this.props.form.getFieldValue('billingContentName'),
@@ -129,7 +132,20 @@ class CustomerTaxInfo extends React.Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={8} key={2} style={{ textAlign: 'left' }}>
+            <Col span={8} key={2}>
+              <FormItem {...formItemLayout} label="是否有效">
+                {getFieldDecorator('active', {
+                  initialValue: 'Y',
+                })(
+                  <Select style={{width: '100px'}}>
+                    <Option value=''>全部</Option>
+                    <Option value='Y'>是</Option>
+                    <Option value='N'>否</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8} key={3} style={{ textAlign: 'left' }}>
               <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />查询</Button>
             </Col>
           </Row>

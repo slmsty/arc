@@ -8,3 +8,8 @@
   padding: 0px !important;
   margin: 0px !important;
 }
+.ant-input-lg {
+  padding: 2px 7px;
+  height: 26px;
+}
+

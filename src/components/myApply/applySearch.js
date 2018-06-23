@@ -6,6 +6,7 @@ import { Button, Table, message } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
 import ApplyInfoModal from './applyInfo'
 import NoApplyInfo from './noApplyInfo'
+import BigSignAuditDetail from '../billApplication/bigSignAuditDetail'
 
 export default class ApplySearchCon extends React.Component {
   state = {
@@ -14,12 +15,17 @@ export default class ApplySearchCon extends React.Component {
     applyData: '',
     noApplyInfoVisitable: false,
     noApplyInfoData: '',
+    showApproveDetail: false,
   }
   componentDidMount() {
     this.handleQuery()
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.myApply.myapplyListRefresh !== nextProps.myApply.myapplyListRefresh) {
+      this.handleQuery()
+    }
+    if(nextProps.billStartSuccess && this.props.billStartSuccess !== nextProps.billStartSuccess) {
+      message.success('发起审核流程成功!')
       this.handleQuery()
     }
   }
@@ -114,6 +120,13 @@ export default class ApplySearchCon extends React.Component {
       noApplyInfoData: '',
     })
   }
+  startWorkFlow = (record) => {
+    this.props.getApplicationDetail(record.businessKey).then(res => {
+      if(res && res.response && res.response.resultCode === '000000') {
+        this.setState({showApproveDetail: true})
+      }
+    })
+  }
   render() {
     const columns = [{
       title: '申请单编号',
@@ -161,20 +174,28 @@ export default class ApplySearchCon extends React.Component {
       fixed: 'right',
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
-          {/* disabled={record.statusName === '审批中' ? 'false' : 'true'} */}
-          <Button type="primary" ghost disabled={record.statusName === '审批中' ? false : true} onClick={() => this.approveClick(record)}>审批</Button>
+          {
+            record.statusName === '审批中' ?
+              <Button type="primary" ghost onClick={() => this.approveClick(record)}>审批</Button> : null
+          }
+          {
+            record.statusName === '新建' ?
+              <Button type="primary" ghost onClick={() => this.startWorkFlow(record)}>审核</Button> : null
+          }
         </div>
       ),
     },
     ]
+    const { pageNo, count, pageSize } = this.props.myApply.getMyApplyList
+    const { applicationInfo, billApplySave, billStartWorkFlow } = this.props
     const pagination = {
-      current: this.props.myApply.getMyApplyList.pageNo,
-      total: this.props.myApply.getMyApplyList.count,
-      pageSize: this.props.myApply.getMyApplyList.pageSize,
+      current: pageNo,
+      total: count,
+      showTotal: (total) => (`共 ${total} 条`),
+      pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
-
     }
     const { billSaveSuccess, applicationIds } = this.props.myApply
     return (
@@ -220,6 +241,15 @@ export default class ApplySearchCon extends React.Component {
           loading={this.state.loading}
           dataSource={this.props.myApply.getMyApplyList.result}
         />
+        {
+          this.state.showApproveDetail ?
+            <BigSignAuditDetail
+              onCancel={() => this.setState({showApproveDetail: false})}
+              applicationInfo={applicationInfo}
+              billApplySave={billApplySave}
+              billStartWorkFlow={billStartWorkFlow}
+            /> : null
+        }
       </div>
     )
   }

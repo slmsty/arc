@@ -731,13 +731,13 @@ const constructSplitSearchColumns = [{
     title: '合同税率',
     dataIndex: 'contractTaxRate',
     width: 70,
-    render: (text, rocord, index) => (text ? (text * 100).toFixed(0) + '%' : 0)
+    render: (text, rocord, index) => (text ? (text * 100).toFixed(0) + '%' : '')
   },
   {
     title: '退税率',
     dataIndex: 'returnTaxRate',
     width: 60,
-    render: (text, rocord, index) => (text ? (text * 100).toFixed(0) + '%' : 0)
+    render: (text, rocord, index) => (text ? (text * 100).toFixed(0) + '%' : '')
   },
   {
     title: 'Task',
@@ -748,19 +748,19 @@ const constructSplitSearchColumns = [{
     title: '合同额',
     dataIndex: 'contractAmount',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title: 'Funding',
     dataIndex: 'funding',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title: ' Gross Order',
     dataIndex: 'grossOrder',
     width: 120,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title: '结算方式',
@@ -865,19 +865,19 @@ const billInfoCols = [
     title:'含税金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'除税金额',
     dataIndex: 'taxExcludeAmount',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'销项税',
     dataIndex: 'tax',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'备注',
@@ -916,19 +916,19 @@ const outcomeTotalReportCols = [
     title:'当月开票含税金额',
     dataIndex: 'taxIncludeAmountMonth',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'当月开票除税金额',
     dataIndex: 'taxExcludeAmountMonth',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'销项税',
     dataIndex: 'tax',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'开票税率',
@@ -988,19 +988,19 @@ const unContractOutcomeDataAddCols = [
     title:'含税金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'除税金额',
     dataIndex: 'taxExcludeAmount',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'销项税',
     dataIndex: 'tax',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'备注',
@@ -1060,31 +1060,31 @@ const productOrderDetailCols = [
     title:'合同总金额',
     dataIndex:'contractAmount',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'Gross Order',
     dataIndex:'grossOrder',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'Net Order(L)',
     dataIndex:'netOrderL',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
   {
     title:'Net Order(M)',
     dataIndex:'netOrderM',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) :'')
   },
   {
     title:'外购成本预算',
     dataIndex:'orderCost',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, rocord, index) => (text ? currency(text) : '')
   },
 ]
 
@@ -1104,25 +1104,25 @@ const productOrderTotalCols = [
     title:'税前合同额',
     dataIndex:'contractAmount',
     width:100,
-    render: (text, rocord, index) => (text ? '$'+currency(text) : '$'+currency(0))
+    render: (text, rocord, index) => (text ? rocord.contractAmount < 0 ? '-$'+currency(Math.abs(text)) : '$'+currency(text) : '')
   },
   {
     title:'Gross Order',
     dataIndex:'grossOrder',
     width:100,
-    render: (text, rocord, index) => (text ? '$'+currency(text) : '$'+currency(0))
+    render: (text, rocord, index) => (text ? rocord.grossOrder < 0 ? '-$'+currency(Math.abs(text)) : '$'+currency(text) : '')
   },
   {
     title:'Net Order(L)',
     dataIndex:'netOrderL',
     width:100,
-    render: (text, rocord, index) => (text ? '$'+currency(text) : '$'+currency(0))
+    render: (text, rocord, index) => (text ? rocord.netOrderL < 0 ? '-$'+currency(Math.abs(text)) : '$'+currency(text) : '')
   },
   {
     title:'Net Order(M)',
     dataIndex:'netOrderM',
     width:100,
-    render: (text, rocord, index) => (text ? '$'+currency(text) : '$'+currency(0))
+    render: (text, rocord, index) => (text ? rocord.netOrderM < 0 ? '-$'+currency(Math.abs(text)) : '$'+currency(text) : '')
   },
 ]
 

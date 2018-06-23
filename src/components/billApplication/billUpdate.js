@@ -89,6 +89,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="签约公司">
                   {getFieldDecorator('comName', {initialValue: ['', record.comName] , rules: [{ required: true, message: '请选择签约公司!' }]} )(
                     <SelectSearch
+                      width='700px'
                       url="/arc/billingApplication/company/search"
                       columns={comCols}
                       label="公司名称"
@@ -106,6 +107,7 @@ class BillUpdate extends React.Component {
                       initialValue: ['', record.custName], rules: [{ required: true, message: '请选择客户名称!' }]
                     })(
                       <SelectSearch
+                        width='800px'
                         url="/arc/billingApplication/custom/search"
                         columns={clientCols}
                         label="客户名称"

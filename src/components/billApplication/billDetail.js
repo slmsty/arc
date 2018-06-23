@@ -187,52 +187,7 @@ class BillDetail extends React.Component {
     } else {
       this.props.form.validateFields((err, values) => {
         const groupNos = this.state.dataSource.filter(r => typeof r.groupNo !== 'undefined')
-        for(let i = 0; i< this.state.dataSource.length; i++) {
-          const record = this.state.dataSource[i]
-          if(record.billingAmount <= 0) {
-            message.error(`第${i+1}行【开票含税金额】必须大于0`)
-            err = true
-            break
-          }
-          if(this.state.isRequireRate && (record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined')) {
-            message.error(`第${i+1}行【开票税率】不能为空!`)
-            err = true
-            break
-          }
-        }
-        if(this.isAdvance) {
-          for(let i = 0; i< this.state.proItems.length; i++) {
-            const r  = this.state.proItems[i]
-            if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
-              message.error('【提前开票原因】不能为空!')
-              err = true
-              break
-            } else if (!r.receiptReturnDate || (r.receiptReturnDate && r.receiptReturnDate.format('YYYY-MM-DD') === 'Invalid date')) {
-              message.error('【预计回款日期】不能为空!')
-              err = true
-              break
-            }
-          }
-        }
-        if(!this.state.custInfo) {
-          message.error('请选择购买方的客户信息!')
-          err = true
-        }
-        if(!this.state.comInfo) {
-          message.error('请选择销售方的客户信息!')
-          err = true
-        }
-
-        if(values.receiptEmail.length > 0  && values.receiptEmail.join(',').length > 500) {
-          this.props.form.setFields({
-            receiptEmail: {
-              value: values.receiptEmail,
-              errors: [new Error('收件人邮件不能超过500个字符')]
-            }
-          })
-        }
-
-        if (!err) {
+        if (!err && !this.submitCheck(values)) {
           this.setState({loading: true})
           const appLineItems = this.state.dataSource.map(record => ({
             ...record,
@@ -286,6 +241,60 @@ class BillDetail extends React.Component {
     }
   }
 
+  submitCheck = (values) => {
+    let err = false
+    for(let i = 0; i< this.state.dataSource.length; i++) {
+      const record = this.state.dataSource[i]
+      if(record.billingAmount <= 0) {
+        message.error(`第${i+1}行【开票含税金额】必须大于0`)
+        err = true
+        break
+      }
+      if(this.state.isRequireRate && (record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined')) {
+        message.error(`第${i+1}行【开票税率】不能为空!`)
+        err = true
+        break
+      }
+    }
+    if(this.isAdvance) {
+      for(let i = 0; i< this.state.proItems.length; i++) {
+        const r  = this.state.proItems[i]
+        if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
+          message.error('【提前开票原因】不能为空!')
+          err = true
+          break
+        } else if (!r.receiptReturnDate || (r.receiptReturnDate && r.receiptReturnDate.format('YYYY-MM-DD') === 'Invalid date')) {
+          message.error('【预计回款日期】不能为空!')
+          err = true
+          break
+        }
+      }
+    }
+    if(!this.state.custInfo) {
+      message.error('请选择购买方的客户信息!')
+      err = true
+    }
+    if(!this.state.comInfo) {
+      message.error('请选择销售方的客户信息!')
+      err = true
+    }
+    console.log(this.state.fileId, !this.state.fileId)
+    if(this.props.type === 'billApply' && uploadFileType.includes(this.props.billType) && !this.state.fileId) {
+      message.error('请上传完附件，再提交开票申请')
+      err = true
+    }
+
+    if(values.receiptEmail.length > 0  && values.receiptEmail.join(',').length > 500) {
+      this.props.form.setFields({
+        receiptEmail: {
+          value: values.receiptEmail,
+          errors: [new Error('收件人邮件不能超过500个字符')]
+        }
+      })
+    }
+    return err
+  }
+
   handleWarningOk = () => {
     this.setState({showWarning: false})
     this.props.billApplySave(this.state.submitParams).then(res => {
@@ -299,27 +308,28 @@ class BillDetail extends React.Component {
       dataSource[index]['billingRecordId'] = value[0]
       dataSource[index][col] = value[1]
     } else if(col === 'billingAmount') {
-      //发票拆分子记录输入金额后，从新计算携带数据的金额
-      const result = dataSource.filter(d => d.isParent === '1' && record.arBillingId === d.arBillingId)[0]
-      let total = 0
-      dataSource.map(d => {
-        if(d.arBillingId === record.arBillingId && d.isParent === '0' && d.lineNo !== index){
-          total += (d.billingAmount ? d.billingAmount : 0)
-        }
-      })
-      //校验所有拆分子项的金额必须小于父级含税金额
-      const childAmount = total + value
-      dataSource[result.lineNo][col] = result.totalAmount - childAmount
-      const parent = this.state.dataSource[result.lineNo]
-      //联动计算父级中不含税金额、单价、税额
-      this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
-      dataSource[index][col] = value
       const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
-      //联动计算子节点不含税金额、单价、税额
-      this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
-      //未大签、红冲、其他开票含税金额为0, 手动输入金额后并赋值给总金额
-      if(record.isParent === '1' && !normalTypes.includes(this.props.billType)) {
-        dataSource[result.lineNo].totalAmount = value
+      if(record.isParent === '1') {//操作的记录为父节点
+        dataSource[index]['billingAmount'] = value
+        dataSource[index]['totalAmount'] = value
+        this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
+      } else {
+        const result = dataSource.filter(d => d.isParent === '1' && record.arBillingId === d.arBillingId)[0]
+        let total = 0
+        //1、计算子节点金额总和
+        dataSource.map(d => {
+          if(d.arBillingId === record.arBillingId && d.isParent === '0' && d.lineNo !== index){
+            total += (d.billingAmount ? d.billingAmount : 0)
+          }
+        })
+        const childAmount = total + value
+        //2、父节点金额重新计算
+        dataSource[result.lineNo]['billingAmount'] = result.totalAmount - childAmount
+        const parent = this.state.dataSource[result.lineNo]
+        this.calBillAmountTax(dataSource, result.lineNo, parent.billingAmount, parent.billingTaxRate, parent.quantity)
+        //3、子节点金额重新计算
+        dataSource[index]['billingAmount'] = value
+        this.calBillAmountTax(dataSource, index, value, billingTaxRate, quantity)
       }
     } else if (col === 'billingTaxRate') {
       const { billingAmount, quantity} = this.state.dataSource[index]
@@ -328,13 +338,13 @@ class BillDetail extends React.Component {
       dataSource[index]['unit'] = this.getInvoiceUnit(value)
     } else if (col === 'quantity') {
       dataSource[index][col] = value
-      const { billingAmountExcludeTax } = this.state.dataSource[index]
-      dataSource[index]['unitPrice'] = (billingAmountExcludeTax / (value ? value : 1)).toFixed(2)
+      const { billingAmount,  billingTaxRate } = this.state.dataSource[index]
+      this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, value)
     } else if (col === 'billingTaxAmount') {
       dataSource[index][col] = value
       const { billingAmount, quantity } = this.state.dataSource[index]
       dataSource[index].billingAmountExcludeTax = billingAmount - value
-      dataSource[index].unitPrice = (billingAmount - value) / quantity
+      dataSource[index].unitPrice = ((billingAmount - value) / quantity).toFixed(2)
     } else {
       dataSource[index][col] = value
     }
@@ -358,6 +368,10 @@ class BillDetail extends React.Component {
       message.error('上传文件大小必须小于20MB!');
       return false
     }
+    if(file.name.length > 40) {
+      message.error('上传的文件名必须小于40个中文')
+      return false
+    }
     this.setState({
       file,
     })
@@ -378,6 +392,7 @@ class BillDetail extends React.Component {
     if(response.resultCode === '000000') {
       const { file, fileList } = this.state
       message.success(`${file.name} 上传成功`);
+      console.log(response, response.data)
       this.setState({
         fileId: response.data,
         fileList: [...fileList, {
@@ -389,7 +404,7 @@ class BillDetail extends React.Component {
         }]
       })
     } else {
-      message.success(`${this.state.file.name} 上传失败`);
+      message.error(`${this.state.file.name} 上传失败`);
     }
   }
 
@@ -408,7 +423,6 @@ class BillDetail extends React.Component {
 
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
     //不含税金额
-    console.log(index, billingAmount, billingTaxRate, quantity)
     const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
     dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
     //单价
@@ -456,7 +470,7 @@ class BillDetail extends React.Component {
       render: (text, record, index) => (
         index === 0 ?
           <InputSearch
-            style={{width: '300px'}}
+            width='700px'
             url="/arc/billingApplication/custom/search"
             columns={clientCols}
             label="客户名称"
@@ -467,7 +481,7 @@ class BillDetail extends React.Component {
             onChange={(v) => this.setState({custInfo: v})}
           /> :
           <InputSearch
-            style={{width: '300px'}}
+            width='800px'
             url="/arc/billingApplication/company/search"
             columns={comCols}
             label="公司名称"
@@ -873,7 +887,7 @@ class BillDetail extends React.Component {
                     </Row> : null
                 }
                 <Table
-                  style={{marginBottom: '10px'}}
+                  style={{margin: '10px 0'}}
                   rowKey="lineNo"
                   bordered
                   size="small"
@@ -898,7 +912,7 @@ class BillDetail extends React.Component {
                       {
                         getFieldDecorator('file', {initialValue: fileName, rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件!' }] })(
                           <Upload {...props} fileList={this.state.fileList}>
-                            <Button>
+                            <Button disabled={this.state.fileList.length === 1}>
                               <Icon type="upload" />点击上传
                             </Button>
                             <span className="file-tip">说明：未大签、其他开票项目需要上传合同附件</span>
