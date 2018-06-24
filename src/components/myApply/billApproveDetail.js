@@ -167,7 +167,7 @@ class BillApproveDetail extends React.Component  {
       if(record.isParent === '1') {//操作的记录为父节点
         dataSource[index]['billingAmount'] = value
         dataSource[index]['totalAmount'] = value
-        this.calBillAmountTax(dataSource, index, billingAmount, billingTaxRate, quantity)
+        this.calBillAmountTax(dataSource, index, value, billingTaxRate, quantity)
       } else {
         const result = dataSource.filter(d => d.isParent === '1' && record.arBillingId === d.arBillingId)[0]
         let total = 0
