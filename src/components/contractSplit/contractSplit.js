@@ -88,21 +88,12 @@ export default class ApplySearchCon extends React.Component {
     }
   }
 
-  componentWillMount() {
-    const screenHeight = window.screen.height
-    // 屏幕高-header高64-margin8-padding12-查询条件div147.5-按钮56-翻页160
-    const tableHeight = screenHeight - 8 - 12 - 147.5 - 56 - 160
-    this.setState({ tableHeight })
-  }
   componentWillReceiveProps(nextProps) {
     if (this.props.contractSplitDara.myContractRefresh !== nextProps.contractSplitDara.myContractRefresh) {
       this.handleQuery()
     }
   }
 
-  componentDidMount() {
-    // this.handleQuery()
-  }
   queryParam = {
     contractDateStart: '',
     contractDateEnd: '',
@@ -298,12 +289,12 @@ export default class ApplySearchCon extends React.Component {
     }, {
       title: 'Sale签约BU',
       dataIndex: 'salesBuNo',
-      width: 100,
+      width: 130,
       render:(text,record,index)=>(text ? (record.salesBuNoName ? `${text}:${record.salesBuNoName}` : text) : ''),
     }, {
       title: '立项BU',
       dataIndex: 'projectBuNo',
-      width: 80,
+      width: 130,
       render:(text,record,index)=>(text ? (record.projectBuNoName ? `${text}:${record.projectBuNoName}` : text) : ''),
     }, {
       title: '销售人员',
@@ -382,7 +373,7 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="middle"
-          scroll={{ x: this.getTableWidth(columns), y: this.state.tableHeight }}
+          scroll={{ x: this.getTableWidth(columns) }}
           loading={this.state.loading}
           dataSource={this.props.contractSplitDara.getContractList.result}
         />
