@@ -958,27 +958,27 @@ class ContractSplitModal extends React.Component{
     return (
       <div>
         <Modal
-          wrapClassName="modal"
           width={1200}
           maskClosable={false}
           title="合同拆分"
           visible={true}
           onCancel={this.closeModal}
-          footer={[
-            <Button onClick={this.handleEdit} style={{display:this.state.editFlag ? 'inline-block' : 'none'}} disabled={!this.props.isShowEditBtn}>
-              编辑
-            </Button>,
-            <Button  key="submit" onClick={this.handleOk} disabled={this.state.saveFlag} style={{display:this.state.editFlag ? 'none' : 'inline-block'}}>
-              保存
-            </Button>,
-            <Button  onClick={this.handleReturn} style={{display:this.state.editFlag ? 'none' : 'none'}}>
-              还原
-            </Button>,
-            <Button  key="back" onClick={this.closeModal}>
-              取消
-            </Button>,
-          ]}
+          footer={null}
         >
+          <div className="splitFooter">
+            <Button type="primary" ghost onClick={this.handleEdit} style={{display:this.state.editFlag ? 'inline-block' : 'none'}} disabled={!this.props.isShowEditBtn}>
+              编辑
+            </Button>
+            <Button  key="submit" type="primary" ghost onClick={this.handleOk} disabled={this.state.saveFlag} style={{display:this.state.editFlag ? 'none' : 'inline-block'}}>
+              保存
+            </Button>
+            <Button type="primary" ghost  onClick={this.handleReturn} style={{display:this.state.editFlag ? 'none' : 'none'}}>
+              还原
+            </Button>
+            <Button type="primary" ghost  key="back" onClick={this.closeModal}>
+              取消
+            </Button>
+          </div>
           <div>
             <Form className="contractSplitForm">
               <Row>
