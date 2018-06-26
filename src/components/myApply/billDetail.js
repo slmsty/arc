@@ -1,13 +1,15 @@
 import React from 'react'
 import { Table, Row, Col } from 'antd'
 import { billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
-import './billApproveDetail.css'
+import './billApproveDetail.less'
+import currency from '../../util/currency'
 const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
 
 
 class BillDetail extends React.Component  {
   getTaxData = () => {
-    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, addTaxAmount, totalTaxAmount } = this.props.serviceDetail.arcBillingTaxInfo
+    const { arcBillingTaxInfo = {} } = this.props.serviceDetail
+    const { constructionTax, constructionTaxAmount, educationTax, educationTaxAmount, incomeTax, incomeTaxAmount, addTaxAmount, totalTaxAmount } = arcBillingTaxInfo
     return [{
       title: '城建',
       taxRate: constructionTax,
@@ -29,6 +31,24 @@ class BillDetail extends React.Component  {
       taxRate: '',
       tax: totalTaxAmount,
     }]
+  }
+  getTotalAmount = () => {
+    let { appLineList } = this.props.serviceDetail
+    let amountTotal = 0
+    let totalExtraAmount = 0
+    let totalTaxAmount = 0
+    appLineList.map(item => {
+      amountTotal = amountTotal + parseFloat(item.billingAmount)
+      totalExtraAmount = totalExtraAmount + parseFloat(item.billingAmountExcludeTax)
+      totalTaxAmount = totalTaxAmount + parseFloat(item.billingTaxAmount)
+    })
+    return appLineList.concat({
+      lineNo: appLineList.length + 1,
+      groupNo: '合计',
+      billingAmountExcludeTax: currency(totalExtraAmount),
+      billingAmount: currency(amountTotal),
+      billingTaxAmount: currency(totalTaxAmount),
+    })
   }
   render() {
     const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo = {}, custInfo = {},
@@ -143,7 +163,7 @@ class BillDetail extends React.Component  {
                 size="small"
                 columns={invoiceLineCols}
                 pagination={false}
-                dataSource={appLineList}
+                dataSource={this.getTotalAmount()}
                 scroll={{ x: '1500px' }}
               />
               {

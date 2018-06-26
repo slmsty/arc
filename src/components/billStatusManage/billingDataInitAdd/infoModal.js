@@ -80,6 +80,19 @@ class InfoModal extends React.Component {
     return width
   }
 
+  invoiceValidator = (rule, value, callback) => {
+    if(value === '' || typeof value === 'undefined') {
+      callback()
+      return
+    } else {
+      if(value.length === 10 || value.length === 12) {
+        callback()
+        return
+      }
+      callback('请输入10位或12位的发票代码')
+    }
+  }
+
   checkAmount = (rule, value, callback) => {
     if(value === '') {
       callback()
@@ -169,7 +182,8 @@ class InfoModal extends React.Component {
                     {getFieldDecorator('invoiceCode', {
                       initialValue: dataSource.invoiceCode,
                       rules: [
-                        { required: true, message: '请输入10位发票代码',len:10 },
+                        { required: true, message: '请输入10位或12位的发票代码' },
+                        { validator: this.invoiceValidator }
                       ]
                     })(<Input/>)}
                   </FormItem>

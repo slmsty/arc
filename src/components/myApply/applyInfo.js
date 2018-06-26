@@ -8,7 +8,7 @@ import BillApproveDetail from './billApproveDetail'
 import UrlModalCom from '../common/getUrlModal'
 import BillDetail from './billDetail'
 import requestJsonFetch from '../../http/requestJsonFecth'
-import './billApproveDetail.css'
+import './billApproveDetail.less'
 
 const FormItem = Form.Item
 const { TextArea } = Input

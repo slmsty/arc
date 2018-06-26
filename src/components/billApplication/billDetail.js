@@ -717,16 +717,6 @@ class BillDetail extends React.Component {
       address: comInfo.addressPhoneNumber,
       bankAccount: comInfo.bankBankAccount
     }]
-    const rowSelection = {
-      type: 'checkbox',
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.setState({
-          selectedRows,
-          selectedRowKeys
-        })
-      },
-      selectedRowKeys: this.state.selectedRowKeys,
-    }
     return (
       <Modal
         title="开票申请详情"
@@ -894,6 +884,19 @@ class BillDetail extends React.Component {
                   columns={this.getEditColumns()}
                   pagination={false}
                   dataSource={this.state.dataSource}
+                  footer={(currentPageData) => {
+                    let totalAmount = 0
+                    let totalTaxAmount = 0
+                    currentPageData.map(item => {
+                      totalAmount = totalAmount + parseFloat(item.billingAmount)
+                      totalTaxAmount = totalTaxAmount + parseFloat(item.billingTaxAmount)
+                    })
+                    return <div className="totalAmount">
+                      <span>合计</span>
+                      <span>{totalAmount}</span>
+                      <span>{totalTaxAmount}</span>
+                    </div>
+                  }}
                 />
                 <Row gutter={40}>
                   <Col span={14}>
