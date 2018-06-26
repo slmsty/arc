@@ -73,8 +73,8 @@ class StatementListCom extends React.Component {
           receiptDateStart: params.receiptDate && params.receiptDate.length ? params.receiptDate[0].format(dateFormat) : '',
           receiptDateEnd: params.receiptDate && params.receiptDate.length ? params.receiptDate[1].format(dateFormat) : '',
           isReport: 'Y',
-          glDateStart: params.glDate.length > 0 ? params.glDate[0].format(dateFormat) : '',
-          glDateEnd: params.glDate.length > 0  ? params.glDate[1].format(dateFormat) : '',
+          glDateStart: params.glDate && params.glDate.length > 0 ? params.glDate[0].format(dateFormat) : '',
+          glDateEnd: params.glDate && params.glDate.length > 0  ? params.glDate[1].format(dateFormat) : '',
         }
       }
       delete param.receiptClaim.glDate
