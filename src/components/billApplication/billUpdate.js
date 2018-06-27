@@ -23,10 +23,13 @@ class BillUpdate extends React.Component {
     this.props.form.validateFields((err, values) => {
       if(!err) {
         const { record, isAdd } = this.props;
+        console.log(values.comName)
         const params = isAdd ? {
           ...values,
           billingApplicationType: this.props.billType,
+          billingComInfoId: values.comName[0],
           comName: values.comName[1],
+          billingCustInfoId: values.custName[0],
           custName: values.custName[1],
           receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
           projectNo: this.props.isProCodeEdit ? values.projectNo : values.projectNo.tempProjectNo,
@@ -41,9 +44,9 @@ class BillUpdate extends React.Component {
           arBillingId: record.arBillingId,
           contractItemId: record.contractItemId,
           fundId: record.fundId,
-          comId: values.comName[0],
+          billingComInfoId: values.comName[0],
           comName: values.comName[1],
-          custId: values.custName[0],
+          billingCustInfoId: values.custName[0],
           custName: values.custName[1],
           receiptReturnDate: values.receiptReturnDate ? values.receiptReturnDate.format('YYYY-MM-DD') : '',
           billingOutcomeId: normalTypes.includes(this.props.billType) && values.billingOutcomeId ? values.billingOutcomeId[0] : '',
@@ -93,7 +96,7 @@ class BillUpdate extends React.Component {
                       url="/arc/billingApplication/company/search"
                       columns={comCols}
                       label="公司名称"
-                      idKey="comId"
+                      idKey="billingComInfoId"
                       valueKey="comName"
                       showSearch={true}
                     />
@@ -111,7 +114,7 @@ class BillUpdate extends React.Component {
                         url="/arc/billingApplication/custom/search"
                         columns={clientCols}
                         label="客户名称"
-                        idKey="custId"
+                        idKey="billingCustInfoId"
                         valueKey="custName"
                         showSearch={true}
                     />)
