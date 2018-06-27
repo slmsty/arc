@@ -20,7 +20,7 @@ class ContentAdd extends React.Component {
       if (!err) {
         const trimValues = {
           ...values,
-          billingContentCode: values.billingContentCode.trim(),
+          billingContentCode: values.billingContentCode ? values.billingContentCode.trim() : null,
           billingContentName: values.billingContentName.trim(),
           taxCategoryCode: values.taxCategoryCode.trim(),
         }
@@ -39,7 +39,7 @@ class ContentAdd extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { billingContentCode, billingContentName, taxCategoryCode, prefPolicySign, prefPolicyType, taxCategoryVersion, taxIncludeAmount, status } = this.props.record
+    const { billingContentCode, billingRecordId, billingContentName, taxCategoryCode, prefPolicySign, prefPolicyType, taxCategoryVersion, taxIncludeAmount, status } = this.props.record
     const formItemLayout = {
       labelCol: { span: 9 },
       wrapperCol: { span: 15 },
@@ -64,8 +64,9 @@ class ContentAdd extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="开票内容编码">
-                  {getFieldDecorator('billingContentCode', {initialValue: billingContentCode, rules: [{ required: true, message: '请填写开票内容编码!' }]})(
-                    <Input />
+                  {getFieldDecorator('billingContentCode', {
+                    initialValue: billingContentCode})(
+                    <Input disabled={typeof billingRecordId !== 'undefined'}/>
                   )}
                 </FormItem>
               </Col>

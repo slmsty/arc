@@ -21,6 +21,7 @@ import billStatusManage from './billStatusManage/billStatusManage'
 import statement from './statement'
 import system from './system'
 import billInitData from './billStatusManage/billDataInitAdd'
+//import receiptApply from './billStatusManage/receiptApplication'
 
 export default combineReducers({
   common,
@@ -44,5 +45,6 @@ export default combineReducers({
   statement,
   system,
   billInitData,
+  /*receiptApply,*/
   routing: routerReducer, // 整合路由
 })

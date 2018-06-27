@@ -47,12 +47,6 @@ const billApproveItemColumns = [
     render: (text, record, index) => (text ? currency(text) : text),
   },
   {
-    title: 'Billed AR金额',
-    dataIndex: 'arAmount',
-    width: 130,
-    render: (text, record, index) => (text ? currency(text) : text),
-  },
-  {
     title: '已申请金额',
     dataIndex: 'billingAmount',
     width: 130,

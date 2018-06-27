@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, Row, Col, Button, Input, Form, Table } from 'antd'
 import { contentCols, totalColumns, detailColumns, normalTypes, proApplyColumns, billDetailColumns } from '../billApplication/billColumns'
-import './billApproveDetail.css'
+import './billApproveDetail.less'
 const FormItem = Form.Item
 const { TextArea } = Input
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']

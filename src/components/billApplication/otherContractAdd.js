@@ -22,8 +22,10 @@ class OtherContractAdd extends React.Component {
         const params = isAdd ? {
           ...values,
           billingApplicationType: this.props.billType,
-          custName: values.custName[1],
+          billingComInfoId: values.comName[0],
           comName: values.comName[1],
+          billingCustInfoId: values.custName[0],
+          custName: values.custName[1],
           projectNo: values.projectNo ? values.projectNo.tempProjectNo : '',
           sbuNo: values.projectNo ? values.projectNo.sbuNo : '',
           sbuName: values.projectNo ? values.projectNo.sbuName : '',
@@ -34,6 +36,8 @@ class OtherContractAdd extends React.Component {
           ...values,
           billingApplicationType: this.props.billType,
           arBillingId: record.arBillingId,
+          billingComInfoId: values.comName[0],
+          billingCustInfoId: values.custName[0],
           custName: values.custName[1],
           comName: values.comName[1],
           projectNo: values.projectNo ? values.projectNo.tempProjectNo : '',
@@ -99,7 +103,7 @@ class OtherContractAdd extends React.Component {
                         url="/arc/billingApplication/custom/search"
                         columns={clientCols}
                         label="客户名称"
-                        idKey="custId"
+                        idKey="billingCustInfoId"
                         valueKey="custName"
                         width='800px'
                         showSearch={true}

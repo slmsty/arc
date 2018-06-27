@@ -35,7 +35,7 @@ import CustomerTaxInfo from '../containers/system/customerTaxInfo'
 import CustomerContent from '../containers/system/customerContent'
 import AuthoritySet from "../components/system/authoritySet";
 import billingDataInitAdd from './BillManage/billingDataInitAdd'
-//import ReceiptApply from '../components/billStatusManage/receiptApplication/receiptApply'
+//import ReceiptApply from '../containers/BillManage/receiptApplication'
 
 const mapStateToProps = state => ({
   user: state.common.user,

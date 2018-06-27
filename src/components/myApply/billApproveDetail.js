@@ -16,7 +16,8 @@ import SearchAllColumns from '../common/SearchAllColumns'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment';
 import InputSearch from '../billApplication/inputSearch'
-import './billApproveDetail.css'
+import './billApproveDetail.less'
+import { toThousands } from "../../util/currency";
 const FormItem = Form.Item
 const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
@@ -46,6 +47,7 @@ class BillApproveDetail extends React.Component  {
         totalAmount: detail.billingAmount ? detail.billingAmount : 0,
       })
     )
+    //const { amountTotal, totalExtraAmount, totalTaxAmount} = this.getTotalAmount(dataSource)
     this.state = {
       dataSource: dataSource,
       count: 1,
@@ -68,7 +70,6 @@ class BillApproveDetail extends React.Component  {
     }
     //AR财务会计&&其他事项开票可修改城建税
     this.isEditTax = props.taskCode === 'ar_finance_account' && props.applyType === 'BILLING_EXCESS'
-
   }
 
   handleAdd = (lineNo, arBillingId, contractItemId) => {
@@ -483,7 +484,20 @@ class BillApproveDetail extends React.Component  {
     }]
   }
 
+  getTotalAmount = (dataSource) => {
+    let amountTotal = 0
+    let totalExtraAmount = 0
+    let totalTaxAmount = 0
+    dataSource.map(item => {
+      amountTotal = amountTotal + parseFloat(item.billingAmount)
+      totalExtraAmount = totalExtraAmount + parseFloat(item.billingAmountExcludeTax)
+      totalTaxAmount = totalTaxAmount + parseFloat(item.billingTaxAmount)
+    })
+    return {amountTotal, totalExtraAmount, totalTaxAmount}
+  }
+
   render() {
+    let appLineItems = this.state.dataSource
     const { getFieldDecorator } = this.props.form
     const { billingType, billingDate, billingApplicantRequest, contractList, outcomeList,
       billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName, costBear } = this.props.serviceDetail
@@ -530,6 +544,7 @@ class BillApproveDetail extends React.Component  {
       width: 60,
       fixed: 'left',
       render: (text, record, index) => (
+        text === '合计' ? text :
         <div>
           {
             record.isParent === '1' ?
@@ -548,34 +563,44 @@ class BillApproveDetail extends React.Component  {
       dataIndex: 'groupNo',
       width: 50,
       fixed: 'left',
+      render: (text, record) => (
+        record.action === '合计' ? "" : text
+      )
     }, {
       title: '开票内容',
       dataIndex: 'billingContent',
       width: 250,
       render: (text, record, index) => (
-        <SearchAllColumns
-          url="/arc/billingApplication/billingContent/search"
-          columns={contentCols}
-          label="开票内容"
-          width="1000px"
-          idKey="billingRecordId"
-          valueKey="billingContentName"
-          value={this.state.dataSource[index]['billingContent']}
-          onChange={(v) => this.handleChange(v, 'billingContent', index)}
-        />
+        record.action === '合计' ? '' :
+          <SearchAllColumns
+            url="/arc/billingApplication/billingContent/search"
+            columns={contentCols}
+            label="开票内容"
+            width="1000px"
+            idKey="billingRecordId"
+            valueKey="billingContentName"
+            value={this.state.dataSource[index]['billingContent']}
+            onChange={(v) => this.handleChange(v, 'billingContent', index)}
+          />
       )
     }, {
       title: '规格型号',
       dataIndex: 'specificationType',
       width: 100,
       render: (text, record, index) => (
-        <Input placeholder="规格型号" defaultValue={this.state.dataSource[index]['specificationType']} onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}/>
+        record.action === '合计' ? '' :
+          <Input
+            placeholder="规格型号"
+            defaultValue={this.state.dataSource[index]['specificationType']}
+            onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}
+          />
       )
     }, {
       title: '单位',
       dataIndex: 'unit',
       width: 80,
       render: (text, record, index) => (
+        record.action === '合计' ? '' :
         <Input placeholder="单位" defaultValue={this.state.dataSource[index]['unit']} onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
       )
     }, {
@@ -583,6 +608,7 @@ class BillApproveDetail extends React.Component  {
       dataIndex: 'quantity',
       width: 100,
       render: (text, record, index) => (
+        record.action === '合计' ? '' :
         <Input
           placeholder="数量"
           value={this.state.dataSource[index]['quantity']}
@@ -592,32 +618,31 @@ class BillApproveDetail extends React.Component  {
       title: '单价',
       dataIndex: 'unitPrice',
       width: 100,
-      render: (text, record, index) => {
-        return (
+      render: (text, record, index) => (
+        record.action === '合计' ? '' :
           <InputNumber
             placeholder="单价"
             value={this.state.dataSource[index]['unitPrice']}
             onChange={(value) => this.handleChange(value, 'unitPrice', index)}
           />
-        )
-      }
+      )
     }, {
       title: '不含税金额',
       dataIndex: 'billingAmountExcludeTax',
       width: 100,
-      render: (text, record, index) => {
-        return (
+      render: (text, record, index) => (
+        record.action === '合计' ? text :
           <InputNumber
             placeholder="不含税金额"
             value={this.state.dataSource[index]['billingAmountExcludeTax']}
             onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
-        )
-      }
+      )
     }, {
       title: '含税金额',
       dataIndex: 'billingAmount',
       width: 100,
       render: (text, record, index) => (
+        record.action === '合计' ? text :
         <InputNumber
           placeholder="含税金额"
           defaultValue={record.billingAmount}
@@ -629,6 +654,7 @@ class BillApproveDetail extends React.Component  {
       dataIndex: 'billingTaxRate',
       width: 100,
       render: (text, record, index) => (
+        record.action === '合计' ? '' :
         <SelectInvokeApi
           typeCode="BILLING_APPLICATION"
           paramCode="TAX_RATE"
@@ -643,9 +669,10 @@ class BillApproveDetail extends React.Component  {
       dataIndex: 'billingTaxAmount',
       width: 100,
       render: (text, record, index) => {
-        const { billingAmount, billingTaxRate} = this.state.dataSource[index]
-        const unitPrice = billingAmount / (1 + parseFloat(billingTaxRate))
+        //const { billingAmount, billingTaxRate} = this.state.dataSource[index]
+        //const unitPrice = billingAmount / (1 + parseFloat(billingTaxRate))
         return (
+          record.action === '合计' ? text :
           <InputNumber
             placeholder="税额"
             value={this.state.dataSource[index]['billingTaxAmount']}
@@ -659,15 +686,16 @@ class BillApproveDetail extends React.Component  {
       width: 150,
       render: (text, record, index) => {
         return (
-          <SearchAllColumns
-            url="/arc/billingApplication/taxInfo/search"
-            columns={taxCategoryCols}
-            label="编码名称"
-            idKey="taxCategoryCode"
-            valueKey="taxCategoryCode"
-            value={this.state.dataSource[index]['taxCategoryCode']}
-            onChange={(v) => this.handleChange(v, 'taxCategoryCode', index)}
-          />
+          record.action === '合计' ? '' :
+            <SearchAllColumns
+              url="/arc/billingApplication/taxInfo/search"
+              columns={taxCategoryCols}
+              label="编码名称"
+              idKey="taxCategoryCode"
+              valueKey="taxCategoryCode"
+              value={this.state.dataSource[index]['taxCategoryCode']}
+              onChange={(v) => this.handleChange(v, 'taxCategoryCode', index)}
+            />
         )
       }
     }, {
@@ -676,10 +704,11 @@ class BillApproveDetail extends React.Component  {
       width: 150,
       render: (text, record, index) => {
         return (
-          <Input
-            value={this.state.dataSource[index]['taxCategoryName']}
-            onChange={(e) => this.handleChange(e.target.value, 'taxCategoryName', index)}
-          />
+          record.action === '合计' ? '' :
+            <Input
+              value={this.state.dataSource[index]['taxCategoryName']}
+              onChange={(e) => this.handleChange(e.target.value, 'taxCategoryName', index)}
+            />
         )
       }
     }, {
@@ -688,13 +717,14 @@ class BillApproveDetail extends React.Component  {
       width: 100,
       render: (text, record, index) => {
         return (
-          <Select
-            value={this.state.dataSource[index]['prefPolicySign']}
-            onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
-            <Option value="">-请选择-</Option>
-            <Option value="1">是</Option>
-            <Option value="0">否</Option>
-          </Select>
+          record.action === '合计' ? '' :
+            <Select
+              value={this.state.dataSource[index]['prefPolicySign']}
+              onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
+              <Option value="">-请选择-</Option>
+              <Option value="1">是</Option>
+              <Option value="0">否</Option>
+            </Select>
         )
       }
     }, {
@@ -703,7 +733,8 @@ class BillApproveDetail extends React.Component  {
       width: 130,
       render: (text, record, index) => {
         return (
-          <Select
+          record.action === '合计' ? '' :
+            <Select
             value={this.state.dataSource[index]['prefPolicyType']}
             onChange={(v) => this.handleChange(v, 'prefPolicyType', index)}
             disabled={this.state.dataSource[index]['prefPolicySign'] === '0'}
@@ -724,7 +755,8 @@ class BillApproveDetail extends React.Component  {
         width: 100,
         render: (text, record, index) => {
           return (
-            <InputNumber
+            record.action === '合计' ? '' :
+              <InputNumber
               value={this.state.dataSource[index]['constructionTax']}
               onChange={(v) => this.handleChange(v, 'constructionTax', index)}
             />
@@ -736,7 +768,8 @@ class BillApproveDetail extends React.Component  {
         width: 100,
         render: (text, record, index) => {
           return (
-            <InputNumber
+            record.action === '合计' ? '' :
+              <InputNumber
               value={this.state.dataSource[index]['educationTax']}
               onChange={(v) => this.handleChange(v, 'educationTax', index)}
             />
@@ -748,7 +781,8 @@ class BillApproveDetail extends React.Component  {
         width: 100,
         render: (text, record, index) => {
           return (
-            <InputNumber
+            record.action === '合计' ? '' :
+              <InputNumber
               value={this.state.dataSource[index]['incomeTax']}
               onChange={(v) => this.handleChange(v, 'incomeTax', index)}
             />
@@ -760,15 +794,24 @@ class BillApproveDetail extends React.Component  {
         width: 100,
         render: (text, record, index) => {
           return (
-            <InputNumber
-              value={this.state.dataSource[index]['addTaxAmount']}
-              onChange={(v) => this.handleChange(v, 'addTaxAmount', index)}
-            />
+            record.action === '合计' ? '' :
+              <InputNumber
+                value={this.state.dataSource[index]['addTaxAmount']}
+                onChange={(v) => this.handleChange(v, 'addTaxAmount', index)}
+              />
           )
         }
       }]
       columns = columns.concat(taxColumns)
     }
+
+    const { totalExtraAmount, amountTotal, totalTaxAmount } = this.getTotalAmount(appLineItems)
+    appLineItems = appLineItems.concat({
+      action: '合计',
+      billingAmountExcludeTax: toThousands(parseFloat(totalExtraAmount.toFixed(2))),
+      billingAmount: toThousands(parseFloat(amountTotal.toFixed(2))),
+      billingTaxAmount: toThousands(parseFloat(totalTaxAmount.toFixed(2))),
+    })
     return (
       <div>
         <div className="infoPanel">
@@ -994,15 +1037,15 @@ class BillApproveDetail extends React.Component  {
                 </div> : null
             }
             <Table
-              rowSelection={ isArAdmin || isArFinanceAccount ? rowSelection : false}
+              rowSelection={ isArAdmin || isArFinanceAccount ? rowSelection : null}
               style={{marginBottom: '10px'}}
               rowKey={record => record.lineNo}
               bordered
               size="small"
               columns={isProManager ? invoiceLineCols : columns}
               pagination={false}
-              dataSource={this.state.dataSource}
-              scroll={{ x: this.isEditTax ? '2030px' : '1600px' }}
+              dataSource={appLineItems}
+              scroll={{ x: this.isEditTax ? '2030px' : '1500px' }}
             />
             {
               this.props.applyType === 'BILLING_EXCESS' ?
@@ -1021,10 +1064,10 @@ class BillApproveDetail extends React.Component  {
             <Row gutter={40}>
               <Col span={19}>
                 <FormItem {...span3ItemLayout} label="发票备注">
-                  {!isProManager ?
+                  {
                     getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 75, message: '备注不能超过75个汉字!' }]})(
-                      <TextArea placeholder="发票备注" rows="2" />
-                    ) : billingApplicantRemark
+                      <TextArea rows="2" disabled={isProManager}/>
+                    )
                   }
                 </FormItem>
               </Col>
@@ -1032,10 +1075,10 @@ class BillApproveDetail extends React.Component  {
             <Row gutter={40}>
               <Col span={19}>
                 <FormItem {...span3ItemLayout} label="开票原因及要求">
-                  {!isProManager ?
+                  {
                     getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [{max: 350, message: '开票原因及要求不能超过350字符!' }]})(
-                      <TextArea placeholder="请输入开票原因及要求" rows="2" />
-                    ) : billingApplicantRequest
+                      <TextArea rows="2" disabled={isProManager}/>
+                    )
                   }
                 </FormItem>
               </Col>
