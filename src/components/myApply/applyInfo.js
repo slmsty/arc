@@ -7,6 +7,7 @@ import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillApproveDetail from './billApproveDetail'
 import UrlModalCom from '../common/getUrlModal'
 import BillDetail from './billDetail'
+import ReceiptApplyDetail from './receiptApplyDetail'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import './billApproveDetail.less'
 
@@ -312,6 +313,13 @@ class ApplyInfoModal extends React.Component {
                   }
                 </div>
                 : null
+            }
+            {
+              applyInfoDatas.serviceType === 'RECEIPT' ?
+                <div>
+                  <h2>收据申请</h2>
+                  <ReceiptApplyDetail />
+                </div> : null
             }
             <br />
             <br />

@@ -9,6 +9,7 @@ import moment from 'moment'
 import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols } from './billColumns'
 import UrlModalCom from '../common/getUrlModal'
 import MultipleInput from '../common/multipleInput'
+import { toThousands } from '../../util/currency'
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -893,8 +894,8 @@ class BillDetail extends React.Component {
                     })
                     return <div className="totalAmount">
                       <span>合计</span>
-                      <span>{totalAmount}</span>
-                      <span>{totalTaxAmount}</span>
+                      <span>{toThousands(parseFloat(totalAmount.toFixed(2)))}</span>
+                      <span>{toThousands(parseFloat(totalTaxAmount.toFixed(2)))}</span>
                     </div>
                   }}
                 />

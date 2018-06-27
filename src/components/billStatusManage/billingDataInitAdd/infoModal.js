@@ -102,7 +102,6 @@ class InfoModal extends React.Component {
       const number = parseInt(value || 0, 10)
       const { taxIncludeAmount, taxExcludeAmount} = this.props.form.getFieldsValue()
       const { billingDataInitResultList } = this.props.data
-      console.log(Math.abs(taxIncludeAmount))
       if (isNaN(value)) {
         callback('请填写正确的金额');
         return

@@ -17,7 +17,7 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment';
 import InputSearch from '../billApplication/inputSearch'
 import './billApproveDetail.less'
-import currency from "../../util/currency";
+import { toThousands } from "../../util/currency";
 const FormItem = Form.Item
 const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
@@ -808,9 +808,9 @@ class BillApproveDetail extends React.Component  {
     const { totalExtraAmount, amountTotal, totalTaxAmount } = this.getTotalAmount(appLineItems)
     appLineItems = appLineItems.concat({
       action: '合计',
-      billingAmountExcludeTax: currency(totalExtraAmount),
-      billingAmount: currency(amountTotal),
-      billingTaxAmount: currency(totalTaxAmount),
+      billingAmountExcludeTax: toThousands(totalExtraAmount),
+      billingAmount: toThousands(amountTotal),
+      billingTaxAmount: toThousands(totalTaxAmount),
     })
     return (
       <div>

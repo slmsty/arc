@@ -2,7 +2,7 @@ import React from 'react'
 import { Table, Row, Col } from 'antd'
 import { billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
 import './billApproveDetail.less'
-import currency from '../../util/currency'
+import { toThousands } from '../../util/currency'
 const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
 
 
@@ -45,9 +45,9 @@ class BillDetail extends React.Component  {
     return appLineList.concat({
       lineNo: appLineList.length + 1,
       groupNo: '合计',
-      billingAmountExcludeTax: currency(totalExtraAmount),
-      billingAmount: currency(amountTotal),
-      billingTaxAmount: currency(totalTaxAmount),
+      billingAmountExcludeTax: toThousands(totalExtraAmount),
+      billingAmount: toThousands(amountTotal),
+      billingTaxAmount: toThousands(totalTaxAmount),
     })
   }
   render() {
