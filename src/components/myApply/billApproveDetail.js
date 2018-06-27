@@ -808,9 +808,9 @@ class BillApproveDetail extends React.Component  {
     const { totalExtraAmount, amountTotal, totalTaxAmount } = this.getTotalAmount(appLineItems)
     appLineItems = appLineItems.concat({
       action: '合计',
-      billingAmountExcludeTax: toThousands(totalExtraAmount),
-      billingAmount: toThousands(amountTotal),
-      billingTaxAmount: toThousands(totalTaxAmount),
+      billingAmountExcludeTax: toThousands(parseFloat(totalExtraAmount.toFixed(2))),
+      billingAmount: toThousands(parseFloat(amountTotal.toFixed(2))),
+      billingTaxAmount: toThousands(parseFloat(totalTaxAmount.toFixed(2))),
     })
     return (
       <div>

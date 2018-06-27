@@ -45,9 +45,9 @@ class BillDetail extends React.Component  {
     return appLineList.concat({
       lineNo: appLineList.length + 1,
       groupNo: '合计',
-      billingAmountExcludeTax: toThousands(totalExtraAmount),
-      billingAmount: toThousands(amountTotal),
-      billingTaxAmount: toThousands(totalTaxAmount),
+      billingAmountExcludeTax: toThousands(parseFloat(totalExtraAmount.toFixed(2))),
+      billingAmount: toThousands(parseFloat(amountTotal.toFixed(2))),
+      billingTaxAmount: toThousands(parseFloat(totalTaxAmount.toFixed(2))),
     })
   }
   render() {
