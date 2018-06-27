@@ -20,7 +20,7 @@ class ContentAdd extends React.Component {
       if (!err) {
         const trimValues = {
           ...values,
-          billingContentCode: values.billingContentCode.trim(),
+          billingContentCode: values.billingContentCode ? values.billingContentCode.trim() : null,
           billingContentName: values.billingContentName.trim(),
           taxCategoryCode: values.taxCategoryCode.trim(),
         }
