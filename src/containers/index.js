@@ -35,7 +35,7 @@ import CustomerTaxInfo from '../containers/system/customerTaxInfo'
 import CustomerContent from '../containers/system/customerContent'
 import AuthoritySet from "../components/system/authoritySet";
 import billingDataInitAdd from './BillManage/billingDataInitAdd'
-import ReceiptApply from '../containers/BillManage/receiptApplication'
+//import ReceiptApply from '../containers/BillManage/receiptApplication'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -113,9 +113,9 @@ class IndexContainer extends React.Component {
       return ContractSplitReport
     } else if (component === 'billingDataInitAdd') {
       return billingDataInitAdd
-    } else if (component === 'ReceiptApply') {
+    } /*else if (component === 'ReceiptApply') {
       return ReceiptApply
-    }
+    }*/
   }
   getMenuRoutes = (menus) => {
     if (menus && menus.length > 0) {
