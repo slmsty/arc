@@ -1045,7 +1045,7 @@ class BillApproveDetail extends React.Component  {
               columns={isProManager ? invoiceLineCols : columns}
               pagination={false}
               dataSource={appLineItems}
-              scroll={{ x: this.isEditTax ? '2030px' : '1600px' }}
+              scroll={{ x: this.isEditTax ? '2030px' : '1500px' }}
             />
             {
               this.props.applyType === 'BILLING_EXCESS' ?
