@@ -1037,7 +1037,7 @@ class BillApproveDetail extends React.Component  {
                 </div> : null
             }
             <Table
-              rowSelection={ isArAdmin || isArFinanceAccount ? rowSelection : {}}
+              rowSelection={ isArAdmin || isArFinanceAccount ? rowSelection : null}
               style={{marginBottom: '10px'}}
               rowKey={record => record.lineNo}
               bordered
