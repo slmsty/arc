@@ -186,8 +186,8 @@ export default class ProjectReceiptClaimModal extends React.Component {
       }
       totalClaimAmount += this.state.funds[i].claimAmount
     }
+    totalClaimAmount = parseFloat(totalClaimAmount.toFixed(2))
     totalClaimAmount = this.props.receiptInfo.receiptAmount - totalClaimAmount
-    totalClaimAmount = totalClaimAmount.toFixed(2)
     if (totalClaimAmount < 0 || totalClaimAmount > 3) {
       message.error('认款金额合计与收款金额不相符，不能进行认款')
       return
