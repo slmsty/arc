@@ -62,7 +62,6 @@ export function returnEditClim(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['RETURNEDITCLIM_SUCCESS'],
     },
@@ -76,7 +75,6 @@ export function returnEditSendErp(badDebtIds) {
       options: {
         method: 'POST',
         body: {badDebtIds},
-        version: 'v0.0.1',
       },
       types: ['RETURNEDITSENDERP_SUCCESS'],
     },
