@@ -67,7 +67,7 @@ function parseFetch(response) {
  */
 const invokeApi = ({
   prefixG,
-  versionG = 'v0.0.1',
+  versionG = 'v1.0.0',
 }, { getToken, setToken, removeToken, authRefused }) => (url, options = {}, type) => {
   if (!prefixG) {
     throw new Error('请设置全局统一网关，即请求前缀')
