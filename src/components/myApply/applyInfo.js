@@ -119,7 +119,7 @@ class ApplyInfoModal extends React.Component {
                 if(type === 'confirm') {
                   this.approveConfirm(values)
                 } else if(type === 'reject') {
-                  this.applyReject()
+                  this.applyReject(values)
                 }
               } else {
                 this.setState({
@@ -132,7 +132,7 @@ class ApplyInfoModal extends React.Component {
             if(type === 'confirm') {
               this.approveConfirm(values)
             } else if(type === 'reject') {
-              this.applyReject()
+              this.applyReject(values)
             }
           }
         }
@@ -157,10 +157,9 @@ class ApplyInfoModal extends React.Component {
       })
     })
   }
-  applyReject = () => {
+  applyReject = (values) => {
     //按钮提交后显示loading
     this.setState({rejectLoading: true})
-    const values = this.props.form.getFieldsValue()
     const rejectParams = {
       ...values,
       approveType: 'cancel',
@@ -245,10 +244,10 @@ class ApplyInfoModal extends React.Component {
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           footer={[
-            <Button type="primary" loading={this.state.rejectLoading} key="reset" onClick={this.applyConfirm('reject')}>
+            <Button type="primary" loading={this.state.rejectLoading} key="reset" onClick={() => this.applyConfirm('reject')}>
               驳回
             </Button>,
-            <Button key="submit" loading={this.state.approveLoading} type="primary" onClick={this.applyConfirm('confirm')}>
+            <Button key="submit" loading={this.state.approveLoading} type="primary" onClick={() => this.applyConfirm('confirm')}>
               同意
             </Button>
           ]}
