@@ -97,6 +97,10 @@ export default class ReceiptApply extends React.Component {
     const params = this.state.selectedRows.map(item => ({
       fundId: item.fundId,
     }))
+    const contractId = this.state.selectedRows && this.state.selectedRows[0].contractId ? this.state.selectedRows[0].contractId : ''
+    if(contractId) {
+      this.props.getContractUrl(contractId)
+    }
     this.props.getReceiptDetail({
       contractItems: params,
     }).then(res => {
@@ -176,6 +180,7 @@ export default class ReceiptApply extends React.Component {
               receiptDetail={receiptDetail}
               onCancel={this.closeDetail}
               receiptApplySave={this.props.receiptApplySave}
+              contractUrl={this.props.contractUrl}
             /> : null
         }
       </div>

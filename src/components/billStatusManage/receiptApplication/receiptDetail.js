@@ -3,6 +3,7 @@ import { Row, Col, Button, Input,Upload, Icon, InputNumber, Modal, message, Tabl
 import './receiptDetail.less'
 import { toThousands } from "../../../util/currency";
 import getByteLen from '../../../util/common'
+import UrlModalCom from '../../common/getUrlModal'
 const TextArea = Input.TextArea
 const FormItem = Form.Item;
 
@@ -10,6 +11,7 @@ class ReceiptDetail extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      showContractLink: false,
       applyLoading: false,
       appLineItems: props.receiptDetail.appLineItems.map(item => ({
         arBillingId: item.arBillingId,
@@ -260,6 +262,13 @@ class ReceiptDetail extends React.Component {
           </div>
         </div>
       </div>
+        {
+          this.state.showContractLink ?
+            <UrlModalCom
+              closeModal={() => this.setState({showContractLink: false}) }
+              contractUrl={this.props.contractUrl}
+            /> : null
+        }
       </Modal>
     )
   }
