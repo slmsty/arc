@@ -265,6 +265,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         total += item.claimAmount
       }
     })
+    total = parseFloat(total.toFixed(2))
     funds.forEach((item) => {
       if (item.fundId === 'ARC001') {
         item.claimAmount = this.props.receiptInfo.receiptAmount - total
@@ -289,11 +290,12 @@ export default class ProjectReceiptClaimModal extends React.Component {
           total += parseFloat(item.claimAmount)
         }
       })
+      total = parseFloat(total.toFixed(2))
       const fund = {}
       fund.fundId = 'ARC001'
-      fund.claimAmount = parseFloat(this.props.receiptInfo.receiptAmount) - parseFloat(total)
+      fund.claimAmount = parseFloat(this.props.receiptInfo.receiptAmount) - total
       // fund.claimContractAmount = this.props.receiptInfo.receiptAmount
-      fund.claimContractAmount = parseFloat(this.props.receiptInfo.receiptAmount) - parseFloat(total)
+      fund.claimContractAmount = parseFloat(this.props.receiptInfo.receiptAmount) - total
       fund.receiptAmount = this.props.receiptInfo.receiptAmount
       fund.fundReceivableBalance = this.props.receiptInfo.receiptAmount
       fund.receiptUse = 'On account'
