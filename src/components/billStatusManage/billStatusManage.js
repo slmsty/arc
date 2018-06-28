@@ -8,12 +8,77 @@ import NoApplyInfo from '../myApply/noApplyInfo'
 import DetailModal from './calcelDetail'
 import GlDateModal from './../common/glDateModal'
 import FileDownModal from './fileDownMotal'
-import currency from '../../util/currency'
-import { billApproveItemColumns, billApproveInfoColumns } from './billStatusCols'
+import currency, {toThousands} from '../../util/currency'
+import { billApproveItemColumns } from './billStatusCols'
 import InvoiceBackInfoEdit from './InvoiceBackInfoEdit'
 const TO_TAX_TYPE = ['开票审批完成', '作废审批完成', '开票失败']
 const CANCEL_TYPE = ['开票审批中', '作废审批中']
-
+const billApproveInfoColumns = [
+  {
+    title: '开票行号',
+    dataIndex: 'lineNo',
+    width: 70,
+    render: (text, record) => text === '合计' ?
+      <span style={{fontWeight: 'bold', color: '#ff8928'}}>合计</span> : text
+  }, {
+    title: '开票内容',
+    dataIndex: 'billingContent',
+    width: 300,
+  },
+  {
+    title: '规格型号',
+    dataIndex: 'specificationType',
+    width: 100,
+  },
+  {
+    title: '单位',
+    dataIndex: 'unit',
+    width: 100,
+  },
+  {
+    title: '数量',
+    dataIndex: 'quantity',
+    width: 100,
+  },
+  {
+    title: '单价',
+    dataIndex: 'unitPrice',
+    width: 100,
+    render: (text, record, index) => (text ? toThousands(text) : text),
+  },
+  {
+    title: '开票不含税金额',
+    dataIndex: 'billingAmountExcludeTax',
+    width: 100,
+    render: (text, record, index) =>
+      record.lineNo === '合计' ? <span style={{color: '#ff8928'}}>{text}</span> :
+        (text ? toThousands(text) : text),
+  },
+  {
+    title: '开票金额',
+    dataIndex: 'billingAmount',
+    width: 100,
+    render: (text, record, index) =>
+      (record.lineNo === '合计' ? <span style={{color: '#ff8928'}}>{text}</span>  :
+        (text ? toThousands(text) : text)),
+  },
+  {
+    title: '开票税率',
+    dataIndex: 'billingTaxRate',
+    width: 100,
+    render: (text, record) =>
+      record.lineNo === '合计' ? text :
+        (`${text * 100}%`)
+  },
+  {
+    title: '开票税额',
+    dataIndex: 'billingTaxAmount',
+    width: 100,
+    render: (text, record, index) => (
+      record.lineNo === '合计' ? <span style={{color: '#ff8928'}}>{text}</span>  :
+        (text ? toThousands(text) : text)),
+  },
+]
 export default class BillStatusCon extends React.Component {
   state = {
     loading: false,
@@ -165,6 +230,76 @@ export default class BillStatusCon extends React.Component {
         this.props.getContractUrl(res.response.data.serviceDetail.contractId)
       }
     })
+  }
+
+  getBillLineColumns = () => {
+    const billApproveInfoColumns = [
+      {
+        title: '开票行号',
+        dataIndex: 'lineNo',
+        width: 70,
+        render: (text, record) => text === '合计' ?
+          <span style={{fontWeight: 'bold', color: '#ff8928'}}>合计</span> : text
+      }, {
+        title: '开票内容',
+        dataIndex: 'billingContent',
+        width: 300,
+      },
+      {
+        title: '规格型号',
+        dataIndex: 'specificationType',
+        width: 100,
+      },
+      {
+        title: '单位',
+        dataIndex: 'unit',
+        width: 100,
+      },
+      {
+        title: '数量',
+        dataIndex: 'quantity',
+        width: 100,
+      },
+      {
+        title: '单价',
+        dataIndex: 'unitPrice',
+        width: 100,
+        render: (text, record, index) => (text ? toThousands(text) : text),
+      },
+      {
+        title: '开票不含税金额',
+        dataIndex: 'billingAmountExcludeTax',
+        width: 100,
+        render: (text, record, index) =>
+          record.lineNo === '合计' ? <span style={{color: '#ff8928'}}>{text}</span> :
+            (text ? toThousands(text) : text),
+      },
+      {
+        title: '开票金额',
+        dataIndex: 'billingAmount',
+        width: 100,
+        render: (text, record, index) =>
+          (record.lineNo === '合计' ? <span style={{color: '#ff8928'}}>{text}</span>  :
+            (text ? toThousands(text) : text)),
+      },
+      {
+        title: '开票税率',
+        dataIndex: 'billingTaxRate',
+        width: 100,
+        render: (text, record) =>
+          record.lineNo === '合计' ? text :
+            (`${text * 100}%`)
+      },
+      {
+        title: '开票税额',
+        dataIndex: 'billingTaxAmount',
+        width: 100,
+        render: (text, record, index) => (
+          record.lineNo === '合计' ? <span style={{color: '#ff8928'}}>{text}</span>  :
+            (text ? toThousands(text) : text)),
+      },
+    ]
+    return billApproveInfoColumns
   }
   // 撤销
   cancelHandle = () => {
@@ -324,6 +459,19 @@ export default class BillStatusCon extends React.Component {
     })
   }
 
+  getTotalAmount = (dataSource) => {
+    console.log(dataSource)
+    let amountTotal = 0
+    let totalExtraAmount = 0
+    let totalTaxAmount = 0
+    dataSource.map(item => {
+      amountTotal = amountTotal + parseFloat(item.billingAmount)
+      totalExtraAmount = totalExtraAmount + parseFloat(item.billingAmountExcludeTax)
+      totalTaxAmount = totalTaxAmount + parseFloat(item.billingTaxAmount)
+    })
+    return {amountTotal, totalExtraAmount, totalTaxAmount}
+  }
+
   render() {
     const { result, count, pageCount, pageSize }  = this.props.billStatusManage.getBillStatusManageList
     const billApproveResultColumns = [
@@ -479,6 +627,16 @@ export default class BillStatusCon extends React.Component {
       type: 'checkBox',
       onChange: this.onBillResultSelectChange,
     }
+    let detailList = this.props.billStatusManage.getBillStatusDetailList
+    const { totalExtraAmount, amountTotal, totalTaxAmount } = this.getTotalAmount(detailList)
+    console.log(totalExtraAmount, amountTotal, totalTaxAmount)
+    detailList = detailList.concat({
+      lineNo: '合计',
+      billingAmountExcludeTax: toThousands(parseFloat(totalExtraAmount.toFixed(2))),
+      billingAmount: toThousands(parseFloat(amountTotal.toFixed(2))),
+      billingTaxAmount: toThousands(parseFloat(totalTaxAmount.toFixed(2))),
+    })
+
     const roleButtons = sessionStorage.getItem('roleButtons')
     const buttonList = typeof roleButtons === 'undefined' || roleButtons === 'undefined' ? [] : JSON.parse(roleButtons).map(r => r.path)
     return (
@@ -541,10 +699,10 @@ export default class BillStatusCon extends React.Component {
         <Table
           rowKey="billingAppLineId"
           bordered
-          columns={billApproveInfoColumns}
+          columns={this.getBillLineColumns()}
           size="small"
           scroll={{ x: '1100px' }}
-          dataSource={this.props.billStatusManage.getBillStatusDetailList}
+          dataSource={detailList}
           pagination={false}
         />
         <br />

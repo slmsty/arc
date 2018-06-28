@@ -1,4 +1,4 @@
-import currency from '../../util/currency'
+import { toThousands } from '../../util/currency'
 
 const billApproveItemColumns = [
   {
@@ -44,84 +44,24 @@ const billApproveItemColumns = [
     title: '款项金额',
     dataIndex: 'paymentAmount',
     width: 130,
-    render: (text, record, index) => (text ? currency(text) : text),
+    render: (text, record, index) => (text ? toThousands(text) : text),
   },
   {
     title: '已申请金额',
     dataIndex: 'billingAmount',
     width: 130,
-    render: (text, record, index) => (text ? currency(text) : text),
+    render: (text, record, index) => (text ? toThousands(text) : text),
   },
   {
     title: '已开票金额',
     dataIndex: 'invoiceAmount',
     width: 130,
-    render: (text, record, index) => (text ? currency(text) : text),
+    render: (text, record, index) =>
+      record.lineNo === '合计' ? text :
+      (text ? toThousands(text) : text),
   },
 ]
-
-const billApproveInfoColumns = [
-  {
-    title: '开票行号',
-    dataIndex: 'lineNo',
-    width: 70,
-  }, {
-    title: '开票内容',
-    dataIndex: 'billingContent',
-    width: 300,
-  },
-  {
-    title: '规格型号',
-    dataIndex: 'specificationType',
-    width: 100,
-  },
-  {
-    title: '单位',
-    dataIndex: 'unit',
-    width: 100,
-  },
-  {
-    title: '数量',
-    dataIndex: 'quantity',
-    width: 100,
-  },
-  {
-    title: '单价',
-    dataIndex: 'unitPrice',
-    width: 100,
-    render: (text, record, index) => (text ? currency(text) : text),
-  },
-  {
-    title: '开票不含税金额',
-    dataIndex: 'billingAmountExcludeTax',
-    width: 100,
-    render: (text, record, index) => (text ? currency(text) : text),
-  },
-  {
-    title: '开票金额',
-    dataIndex: 'billingAmount',
-    width: 100,
-    render: (text, record, index) => (text ? currency(text) : text),
-  },
-  {
-    title: '开票税率',
-    dataIndex: 'billingTaxRate',
-    width: 100,
-    render: (text) => (`${text * 100}%`)
-  },
-  {
-    title: '开票税额',
-    dataIndex: 'billingTaxAmount',
-    width: 100,
-    render: (text, record, index) => (text ? currency(text) : text),
-  },
-]
-
-
-
-
 
 export {
   billApproveItemColumns,
-  billApproveInfoColumns
 }
