@@ -7,7 +7,7 @@ import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillApproveDetail from './billApproveDetail'
 import UrlModalCom from '../common/getUrlModal'
 import BillDetail from './billDetail'
-//import ReceiptApplyDetail from './receiptApplyDetail'
+import ReceiptApplyDetail from './receiptApplyDetail'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import './billApproveDetail.less'
 
@@ -43,10 +43,9 @@ class ApplyInfoModal extends React.Component {
     return value === '' || typeof value === 'undefined' || value === 0
   }
 
-  applyConfirm = () => {
+  applyConfirm = (type) => {
       this.props.form.validateFields((err, values) => {
         if(!err) {
-
           if(BILL_APPLY_TYPE.includes(this.props.applyInfoData.serviceType) && EDIT_ROLE_TYPE.includes(this.props.applyInfoData.taskCode)) {
             const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
             const isAgainInvoice = serviceDetail.isAgainInvoice
@@ -314,13 +313,15 @@ class ApplyInfoModal extends React.Component {
                 </div>
                 : null
             }
-            {/*{
+            {
               applyInfoDatas.serviceType === 'RECEIPT' ?
                 <div>
                   <h2>收据申请</h2>
-                  <ReceiptApplyDetail />
+                  <ReceiptApplyDetail
+                    serviceDetail={applyInfoDatas.serviceDetail}
+                  />
                 </div> : null
-            }*/}
+            }
             <br />
             <br />
             <hr style={{ borderTop: '1px solid #d9d9d9' }} />
