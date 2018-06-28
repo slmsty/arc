@@ -116,7 +116,11 @@ class ApplyInfoModal extends React.Component {
             }, (res) => {
               const {resultCode, resultMessage, data} = res
               if (resultCode === '000000') {
-                this.approveConfirm(values)
+                if(type === 'confirm') {
+                  this.approveConfirm(values)
+                } else if(type === 'reject') {
+                  this.applyReject()
+                }
               } else {
                 this.setState({
                   approveLoading: false,
@@ -125,7 +129,11 @@ class ApplyInfoModal extends React.Component {
               }
             })
           } else {
-            this.approveConfirm(values)
+            if(type === 'confirm') {
+              this.approveConfirm(values)
+            } else if(type === 'reject') {
+              this.applyReject()
+            }
           }
         }
       })
@@ -237,10 +245,10 @@ class ApplyInfoModal extends React.Component {
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           footer={[
-            <Button type="primary" loading={this.state.rejectLoading} key="reset" onClick={this.applyReject}>
+            <Button type="primary" loading={this.state.rejectLoading} key="reset" onClick={this.applyConfirm('reject')}>
               驳回
             </Button>,
-            <Button key="submit" loading={this.state.approveLoading} type="primary" onClick={this.applyConfirm}>
+            <Button key="submit" loading={this.state.approveLoading} type="primary" onClick={this.applyConfirm('confirm')}>
               同意
             </Button>
           ]}
