@@ -115,27 +115,30 @@ const reciptMoneyInfoCols = [{
 ]
 //发票信息查询表
 const billInfocomCols = [{
-  title: '签约公司',
-  dataIndex: 'signCompany',
-  width: 250,
-}, {
-  title: '项目编号',
-  dataIndex: 'projectNo',
-  width: 200,
-},
-  {
+    title: '签约公司',
+    dataIndex: 'signCompany',
+    width: 250,
+  }, {
+    title: '项目编号',
+    dataIndex: 'projectNo',
+    width: 200,
+  }, {
     title: '付款条款',
     dataIndex: 'paymentName',
     width: 100,
   }, {
+    title: '付款百分比',
+    dataIndex: 'paymentPercent',
+    width: 100,
+  }, {
     title: '应收金额',
-    dataIndex: 'shouldReciptMoney',
+    dataIndex: 'billedArAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
   {
     title: '申请开票金额',
-    dataIndex: 'applyBillMoney',
+    dataIndex: 'billingAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
@@ -151,7 +154,7 @@ const billInfocomCols = [{
   },
   {
     title: '开票金额',
-    dataIndex: 'billMoney',
+    dataIndex: 'taxIncludeAmount',
     width: 100,
     render: (text, rocord, index) => (text ? currency(text) : currency(0))
   },
@@ -159,6 +162,11 @@ const billInfocomCols = [{
     title: '开票类型',
     dataIndex: 'invoiceType',
     width: 80,
+  },
+  {
+    title: '税率',
+    dataIndex: 'billingTaxRate',
+    width: 100,
   },
   {
     title: '发票内容',
@@ -199,13 +207,13 @@ const billInfocomCols = [{
     title:'条款金额',
     dataIndex:'billedArAmount',
     width:100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text) => (text ? currency(text) : currency(0))
   },
   {
     title: '收款金额',
     dataIndex: 'receiptAmount',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text) => (text ? currency(text) : currency(0))
   },
 
 ]

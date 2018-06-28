@@ -1,6 +1,5 @@
 /* eslint-disable react/prefer-stateless-function,react/prop-types,max-len,react/require-default-props,no-nested-ternary */
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Select } from 'antd'
 
 import requestJsonFetch from '../../http/requestJsonFecth'
@@ -230,13 +229,4 @@ export default class SelectInvokeApi extends React.Component {
       </Select>
     )
   }
-}
-
-SelectInvokeApi.propTypes = {
-  placeholder: PropTypes.string.isRequired,
-  typeCode: PropTypes.string.isRequired,
-  paramCode: PropTypes.string.isRequired,
-  value: PropTypes.string,
-  initialValue: PropTypes.string,
-  hasEmpty: PropTypes.bool,
 }

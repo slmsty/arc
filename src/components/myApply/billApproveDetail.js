@@ -32,7 +32,7 @@ const formItemLayout1 = {
   wrapperCol: { span: 8 },
 }
 const span3ItemLayout = {
-  labelCol: { span: 3 },
+  labelCol: { span: 4 },
   wrapperCol: { span: 20 },
 }
 
@@ -544,7 +544,7 @@ class BillApproveDetail extends React.Component  {
       width: 60,
       fixed: 'left',
       render: (text, record, index) => (
-        text === '合计' ? text :
+        text === '合计' ? <span style={{fontWeight: 'bold', color: '#ff8928'}}>合计</span> :
         <div>
           {
             record.isParent === '1' ?
@@ -631,7 +631,7 @@ class BillApproveDetail extends React.Component  {
       dataIndex: 'billingAmountExcludeTax',
       width: 100,
       render: (text, record, index) => (
-        record.action === '合计' ? text :
+        record.action === '合计' ? <span style={{color: '#ff8927'}}>{text}</span> :
           <InputNumber
             placeholder="不含税金额"
             value={this.state.dataSource[index]['billingAmountExcludeTax']}
@@ -642,7 +642,7 @@ class BillApproveDetail extends React.Component  {
       dataIndex: 'billingAmount',
       width: 100,
       render: (text, record, index) => (
-        record.action === '合计' ? text :
+        record.action === '合计' ? <span style={{color: '#ff8927'}}>{text}</span> :
         <InputNumber
           placeholder="含税金额"
           defaultValue={record.billingAmount}
@@ -672,7 +672,7 @@ class BillApproveDetail extends React.Component  {
         //const { billingAmount, billingTaxRate} = this.state.dataSource[index]
         //const unitPrice = billingAmount / (1 + parseFloat(billingTaxRate))
         return (
-          record.action === '合计' ? text :
+          record.action === '合计' ? <span style={{color: '#ff8927'}}>{text}</span> :
           <InputNumber
             placeholder="税额"
             value={this.state.dataSource[index]['billingTaxAmount']}
