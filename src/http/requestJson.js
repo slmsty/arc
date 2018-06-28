@@ -3,7 +3,7 @@ import invokeApi from './index'
 function requestJson(prefixG) {
   return invokeApi({
     prefixG,
-    version: 'v1.0.0',
+    version: 'v0.0.1',
   }, {
     getToken() {
       return {
