@@ -173,6 +173,7 @@ class BillDetail extends React.Component {
         if(!err) {
           this.setState({loading: false})
           const params = {
+            ...values,
             billingOutcomeIds,
             billingApplicationType: this.props.billType,
             objectId: this.state.fileId,
@@ -776,22 +777,24 @@ class BillDetail extends React.Component {
                     )}
                   </FormItem>
                 </Col>
-                <Col span={8} key={3}>
-                  <FormItem {...formItemLayout} label="丢失类型">
-                    {
-                      getFieldDecorator('loseType',{
-                        initialValue: '',
-                      })(
-                        <SelectInvokeApi
-                          typeCode="BILLING_APPLICATION"
-                          paramCode="LOSE_TYPE"
-                          placeholder="请选择丢失类型"
-                          hasEmpty
-                          disabled={!this.state.isLost}
-                        />)
-                    }
-                  </FormItem>
-                </Col>
+                {
+                  this.state.isLost ?
+                    <Col span={8} key={3}>
+                      <FormItem {...formItemLayout} label="丢失类型">
+                        {
+                          getFieldDecorator('loseType',{
+                            initialValue: '',
+                          })(
+                            <SelectInvokeApi
+                              typeCode="BILLING_APPLICATION"
+                              paramCode="LOSE_TYPE"
+                              placeholder="请选择丢失类型"
+                              hasEmpty
+                            />)
+                        }
+                      </FormItem>
+                    </Col> : null
+                }
               </Row> : null
           }
           {
