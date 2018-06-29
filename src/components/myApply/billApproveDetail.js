@@ -484,6 +484,89 @@ class BillApproveDetail extends React.Component  {
     }]
   }
 
+  getProManagerColumns = () => {
+    const invoiceLineCols = [{
+      title: '组号',
+      dataIndex: 'groupNo',
+      width: 50,
+      fixed: 'left',
+      render: (text) =>
+        text === '合计' ? <span style={{fontWeight: 'bold', color: '#ff8928'}}>{text}</span> : text
+    }, {
+      title: '开票内容',
+      dataIndex: 'billingContent',
+      width: 250,
+    }, {
+      title: '规格型号',
+      dataIndex: 'specificationType',
+      width: 100,
+    }, {
+      title: '单位',
+      dataIndex: 'unit',
+      width: 80,
+    }, {
+      title: '数量',
+      dataIndex: 'quantity',
+      width: 70,
+    }, {
+      title: '单价',
+      dataIndex: 'unitPrice',
+      width: 100,
+    }, {
+      title: '不含税金额',
+      dataIndex: 'billingAmountExcludeTax',
+      width: 100,
+      render: (text, record) => (
+        record.groupNo === '合计' ? <span style={{color: '#ff8928'}}>{toThousands(record.billingAmountExcludeTax)}</span> : text
+      )
+    }, {
+      title: '含税金额',
+      dataIndex: 'billingAmount',
+      width: 100,
+      render: (text, record) => (
+        record.groupNo === '合计' ? <span style={{color: '#ff8928'}}>{toThousands(record.billingAmount)}</span> : text
+      )
+    }, {
+      title: '税率',
+      dataIndex: 'billingTaxRate',
+      width: 100,
+      render: (text) => text ? (`${text * 100}%`) : ''
+    }, {
+      title: '税额',
+      dataIndex: 'billingTaxAmount',
+      width: 100,
+      render: (text, record) => (
+        record.groupNo === '合计' ? <span style={{color: '#ff8928'}}>{toThousands(record.billingTaxAmount)}</span> : text
+      )
+    }, {
+      title: '税收分类编码',
+      dataIndex: 'taxCategoryCode',
+      width: 120,
+    }, {
+      title: '税收分类名称',
+      dataIndex: 'taxCategoryName',
+      width: 120,
+    }, {
+      title: '优惠政策',
+      dataIndex: 'prefPolicySign',
+      width: 100,
+      render: (text) => {
+        if(text === '0') {
+          return '否'
+        } else if (text === '1') {
+          return '是'
+        } else {
+          return ''
+        }
+      }
+    }, {
+      title: '优惠政策类型',
+      dataIndex: 'prefPolicyType',
+      width: 100,
+    }]
+    return invoiceLineCols
+  }
+
   getTotalAmount = (dataSource) => {
     let amountTotal = 0
     let totalExtraAmount = 0
@@ -806,7 +889,12 @@ class BillApproveDetail extends React.Component  {
     }
 
     const { totalExtraAmount, amountTotal, totalTaxAmount } = this.getTotalAmount(appLineItems)
-    appLineItems = appLineItems.concat({
+    appLineItems = appLineItems.concat(isProManager ? {
+      groupNo: '合计',
+      billingAmountExcludeTax: toThousands(parseFloat(totalExtraAmount.toFixed(2))),
+      billingAmount: toThousands(parseFloat(amountTotal.toFixed(2))),
+      billingTaxAmount: toThousands(parseFloat(totalTaxAmount.toFixed(2))),
+    } : {
       action: '合计',
       billingAmountExcludeTax: toThousands(parseFloat(totalExtraAmount.toFixed(2))),
       billingAmount: toThousands(parseFloat(amountTotal.toFixed(2))),
@@ -1042,7 +1130,7 @@ class BillApproveDetail extends React.Component  {
               rowKey={record => record.lineNo}
               bordered
               size="small"
-              columns={isProManager ? invoiceLineCols : columns}
+              columns={isProManager ? this.getProManagerColumns() : columns}
               pagination={false}
               dataSource={appLineItems}
               scroll={{ x: this.isEditTax ? '2030px' : isProManager ? '1500px': '1600px' }}

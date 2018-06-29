@@ -39,7 +39,7 @@ class ReceiptApplyDetail extends React.Component {
   }
 
   render() {
-    const { appLineList, applicationContract = {}, totalApplyAmount, applicantRequest, applicantRequestReason, receiptApplicantConetent } = this.props.serviceDetail
+    const { appLineList, applicationContract = {}, totalApplyAmount, applicantRequest, applicantRequestReason, receiptContent } = this.props.serviceDetail
 
     return (
       <div className="receipt">
@@ -121,7 +121,7 @@ class ReceiptApplyDetail extends React.Component {
               <tr>
                 <td>收据内容 :</td>
                 <td colSpan="3">
-                  {receiptApplicantConetent}
+                  {receiptContent}
                 </td>
               </tr>
               </tbody>
