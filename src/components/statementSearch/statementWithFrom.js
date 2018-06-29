@@ -1258,7 +1258,7 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="立项部门">
+                <FormItem {...formItemLayoutChild} label="项目立项部门">
                   {
                     getFieldDecorator('projectDept')(
                       <Input
@@ -1269,7 +1269,7 @@ class StatementListCom extends React.Component {
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem {...formItemLayoutChild} label="立项BU">
+                <FormItem {...formItemLayoutChild} label="项目立项BU">
                   {
                     getFieldDecorator('projectBu')(<SelectSbu keyName="contract"/>)
                   }

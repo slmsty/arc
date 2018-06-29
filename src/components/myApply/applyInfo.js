@@ -7,7 +7,7 @@ import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillApproveDetail from './billApproveDetail'
 import UrlModalCom from '../common/getUrlModal'
 import BillDetail from './billDetail'
-//import ReceiptApplyDetail from './receiptApplyDetail'
+import ReceiptApplyDetail from './receiptApplyDetail'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import './billApproveDetail.less'
 
@@ -43,10 +43,9 @@ class ApplyInfoModal extends React.Component {
     return value === '' || typeof value === 'undefined' || value === 0
   }
 
-  applyConfirm = () => {
+  applyConfirm = (type) => {
       this.props.form.validateFields((err, values) => {
         if(!err) {
-
           if(BILL_APPLY_TYPE.includes(this.props.applyInfoData.serviceType) && EDIT_ROLE_TYPE.includes(this.props.applyInfoData.taskCode)) {
             const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
             const isAgainInvoice = serviceDetail.isAgainInvoice
@@ -117,7 +116,11 @@ class ApplyInfoModal extends React.Component {
             }, (res) => {
               const {resultCode, resultMessage, data} = res
               if (resultCode === '000000') {
-                this.approveConfirm(values)
+                if(type === 'confirm') {
+                  this.approveConfirm(values)
+                } else if(type === 'reject') {
+                  this.applyReject(values)
+                }
               } else {
                 this.setState({
                   approveLoading: false,
@@ -126,7 +129,11 @@ class ApplyInfoModal extends React.Component {
               }
             })
           } else {
-            this.approveConfirm(values)
+            if(type === 'confirm') {
+              this.approveConfirm(values)
+            } else if(type === 'reject') {
+              this.applyReject(values)
+            }
           }
         }
       })
@@ -150,10 +157,9 @@ class ApplyInfoModal extends React.Component {
       })
     })
   }
-  applyReject = () => {
+  applyReject = (values) => {
     //按钮提交后显示loading
     this.setState({rejectLoading: true})
-    const values = this.props.form.getFieldsValue()
     const rejectParams = {
       ...values,
       approveType: 'cancel',
@@ -238,10 +244,10 @@ class ApplyInfoModal extends React.Component {
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           footer={[
-            <Button type="primary" loading={this.state.rejectLoading} key="reset" onClick={this.applyReject}>
+            <Button type="primary" loading={this.state.rejectLoading} key="reset" onClick={() => this.applyConfirm('reject')}>
               驳回
             </Button>,
-            <Button key="submit" loading={this.state.approveLoading} type="primary" onClick={this.applyConfirm}>
+            <Button key="submit" loading={this.state.approveLoading} type="primary" onClick={() => this.applyConfirm('confirm')}>
               同意
             </Button>
           ]}
@@ -314,13 +320,15 @@ class ApplyInfoModal extends React.Component {
                 </div>
                 : null
             }
-            {/*{
+            {
               applyInfoDatas.serviceType === 'RECEIPT' ?
                 <div>
                   <h2>收据申请</h2>
-                  <ReceiptApplyDetail />
+                  <ReceiptApplyDetail
+                    serviceDetail={applyInfoDatas.serviceDetail}
+                  />
                 </div> : null
-            }*/}
+            }
             <br />
             <br />
             <hr style={{ borderTop: '1px solid #d9d9d9' }} />

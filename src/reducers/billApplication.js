@@ -4,7 +4,11 @@ const initState = {
   isLoading: false,
   billCompany: [],
   billClient: [],
-  billList: [],
+  billPage: {
+    result: [],
+    pageNo: 1,
+    pageSize: 10,
+  },
   updateSuccess: false,
   addContractSuccess: false,
   otherSuccess: false,
@@ -68,13 +72,9 @@ function getBillClients(state, action) {
 }
 
 function billApplySearch(state, action) {
-  const responseList = action.response.data.map((record, index) => ({
-    key: index,
-    ...record,
-  }))
   return {
     ...state,
-    billList: responseList,
+    billPage: action.response.data,
     isLoading: false,
     billSaveSuccess: false,
     updateSuccess: false,
