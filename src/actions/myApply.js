@@ -8,7 +8,6 @@ export function getMyApplyList(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['GET_MYAPPLY_LIST_SUCCESS'],
     },
@@ -22,7 +21,6 @@ export function approveSubmit(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['APPROVE_MYAPPLY_SUCCESS'],
     },
@@ -35,7 +33,6 @@ export function approveReject(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['APPROVE_REJECT_MYAPPLY_SUCCESS'],
     },
@@ -48,7 +45,6 @@ export function myApplyInfo(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['APPROVE_MYAPPLYINFO_SUCCESS'],
     },
@@ -87,7 +83,6 @@ export function BillStatusSendErp(badDebtIds, glDate) {
       options: {
         method: 'POST',
         body: {badDebtIds, glDate},
-        version: 'v0.0.1',
       },
       types: ['BILLSTATUSSENDERP_SUCCESS'],
     },
@@ -100,7 +95,6 @@ export function cancelApply(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['UNDOERP_SUCCESS'],
     },
@@ -114,7 +108,6 @@ export function billApproveSave(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['BILL_APPLY_SAVE_SUCCESS'],
     },
@@ -132,7 +125,6 @@ export function myApplyList(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['MY_APPLY_LIST_SUCCESS'],
     },
