@@ -26,6 +26,10 @@ class BillingApplyForm extends React.Component {
       arDateEnd: values.arDate ? values.arDate[1].format('YYYY-MM-DD') : '',
       invoiceNumbers: values.invoiceNumbers ? values.invoiceNumbers : [],
       sbuNo: values.sbuNo ? values.sbuNo[0] : '',
+      pageInfo: {
+        pageNo: 1,
+        pageSize: 10,
+      }
     }
     this.props.onQuery(param)
     this.props.setQueryParams(param)

@@ -249,6 +249,9 @@ class BillingDataInitAddCom extends React.Component {
       if (type === 'add' && (item.status === 'BILLING_OK' || item.status === 'BILLING_INVALID_OK')) {
         message.error('所选申请单发票已录入完毕，请勿重复增加')
         flag = true
+      } else if (item.status === 'BILLING_ERROR' || item.status === 'BILLING_APPLICATION_APPROVE_OK') {
+        message.error('未传送金税的数据，不能进行发票补录')
+        flag = true
       }
       billingDataInitResultList.push({
         billingOutcomeId: item.billingOutcomeId,
@@ -256,10 +259,10 @@ class BillingDataInitAddCom extends React.Component {
       })
     })
     if (flag) {
-      /*this.setState({
+      this.setState({
         selectedRows:[],
         selectedRowKeys:[],
-      })*/
+      })
       return false
     }
     param.billingDataInitResultList = billingDataInitResultList
@@ -270,7 +273,9 @@ class BillingDataInitAddCom extends React.Component {
           showInfo:true,
           addFlag: false,
           selectType:type,
-          billingDataInitResultList:billingDataInitResultList
+          billingDataInitResultList:billingDataInitResultList,
+          selectedRows:[],
+          selectedRowKeys:[],
         })
       }
     })

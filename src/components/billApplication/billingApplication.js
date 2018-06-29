@@ -21,17 +21,21 @@ export default class BillingApplication extends React.Component {
       isAdd: false,
       currentRecord: {},
       showBillApprove: false,
-      queryParam: {
-        arDateStart: '',
-        arDateEnd: '',
-        companyName: '',
-        custName: '',
-        projectNos: [],
-        contractNos: [],
-        invoiceNumbers: [],
-        paymentName: '',
-        billingApplicationType: 'BILLING_CONTRACT',
-      },
+    }
+    this.queryParam = {
+      arDateStart: '',
+      arDateEnd: '',
+      companyName: '',
+      custName: '',
+      projectNos: [],
+      contractNos: [],
+      invoiceNumbers: [],
+      paymentName: '',
+      billingApplicationType: 'BILLING_CONTRACT',
+      pageInfo: {
+        pageNo: 1,
+        pageSize: 10,
+      }
     }
   }
 
@@ -67,29 +71,39 @@ export default class BillingApplication extends React.Component {
   }
 
   getInitQuery = () => {
-    this.props.billApplySearch(this.state.queryParam)
+    this.props.billApplySearch(this.queryParam)
+  }
+
+  handleChangePage = (page) => {
+    this.queryParam.pageInfo.pageNo = page
+    this.getInitQuery()
+  }
+
+  handleChangeSize = (current, size) => {
+    this.queryParam.pageInfo.pageNo = current
+    this.queryParam.pageInfo.pageSize = size
+    this.getInitQuery()
   }
 
   setQueryParams = (param) => {
     this.setState({
-      queryParam: param,
       selectedRows: [],
       selectedRowKeys: [],
     })
+    this.queryParam = {
+      ...this.queryParam,
+      param
+    }
   }
 
   getApplyChange = (value) => {
     this.props.initData()
-    const params = this.state.queryParam
     this.setState({
       currentType: value,
       selectedRows: [],
       selectedRowKeys: [],
-      queryParam: {
-        ...params,
-        billingApplicationType: value,
-      },
     })
+    this.queryParam.billingApplicationType = value
   }
 
   getApplyColumns = () => {
@@ -456,7 +470,7 @@ export default class BillingApplication extends React.Component {
   }
 
   render() {
-    const { billList=[], updateBillInfo, isLoading, addBillUnContract, addOtherContract, getTaxInfo,
+    const { billPage, updateBillInfo, isLoading, addBillUnContract, addOtherContract, getTaxInfo,
       editInfo, billApplySave, currentUser, contractUrl, redApplyDetail, billApplicationRedApply } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType)? 'checkbox' : 'radio',
@@ -469,9 +483,23 @@ export default class BillingApplication extends React.Component {
       selectedRowKeys: this.state.selectedRowKeys,
     }
     const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply } = this.state
-    const pagination = {
-      total: billList.length,
-      showTotal: (total) => (`共 ${total} 条`),
+    let pagination = {}
+    if(normalTypes.includes(this.state.currentType)) {
+      pagination = {
+        total: billPage.result.length,
+        showTotal: (total) => (`共 ${total} 条`),
+      }
+    } else {
+      const { count, pageSize, pageNo } = billPage
+      pagination = {
+        current: pageNo,
+        total: count,
+        showTotal: (total) => (`共 ${total} 条`),
+        pageSize: pageSize,
+        onChange: this.handleChangePage,
+        showSizeChanger: true,
+        onShowSizeChange: this.handleChangeSize,
+      }
     }
     return (
       <div>
@@ -490,7 +518,7 @@ export default class BillingApplication extends React.Component {
           bordered
           size="small"
           columns={this.getApplyColumns()}
-          dataSource={billList}
+          dataSource={billPage.result}
           scroll={this.getScrollWidth()}
           pagination={pagination}
         />
