@@ -130,7 +130,7 @@ const billInfocomCols = [{
     dataIndex: 'paymentPercent',
     width: 100,
     render: (text, record) => (
-      text !== '' || typeof record.paymentPercent !== 'undefined' ? text+'%' : ''
+      text !== '' && typeof text !== 'undefined' ? record.paymentPercent+'%' : ''
     )
   }, {
     title: '应收金额',
@@ -207,9 +207,9 @@ const billInfocomCols = [{
   },
   {
     title:'条款金额',
-    dataIndex:'billedArAmount',
+    dataIndex:'paymentAmount',
     width:100,
-    render: (text, record) => (text ? toThousands(record.billedArAmount) : 0)
+    render: (text, record) => (text ? toThousands(record.paymentAmount) : 0)
   },
   {
     title: '收款金额',
@@ -217,7 +217,6 @@ const billInfocomCols = [{
     width: 100,
     render: (text, record) => (text ? toThousands(record.receiptAmount) : 0)
   },
-
 ]
 //发票及收款信息查询表
 const billAndReciptMoneyCols = [{

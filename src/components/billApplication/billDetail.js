@@ -171,7 +171,7 @@ class BillDetail extends React.Component {
     if(isRed && this.props.form.getFieldValue('isAgainInvoice') === 'false') {
       this.props.form.validateFields((err, values) => {
         if(!err) {
-          this.setState({loading: false})
+          this.setState({loading: true})
           const params = {
             ...values,
             billingOutcomeIds,

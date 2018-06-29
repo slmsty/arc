@@ -90,10 +90,7 @@ export default class BillingApplication extends React.Component {
       selectedRows: [],
       selectedRowKeys: [],
     })
-    this.queryParam = {
-      ...this.queryParam,
-      param
-    }
+    this.queryParam = param
   }
 
   getApplyChange = (value) => {
@@ -491,6 +488,7 @@ export default class BillingApplication extends React.Component {
       }
     } else {
       const { count, pageSize, pageNo } = billPage
+      console.log(pageSize)
       pagination = {
         current: pageNo,
         total: count,
