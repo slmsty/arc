@@ -245,19 +245,22 @@ class BillingDataInitAddCom extends React.Component {
     let paramData = this.state.selectedRows
     let billingDataInitResultList = []
     let param = {}
-    paramData.map((item)=>{
-      if (type === 'add' && (item.status === 'BILLING_OK' || item.status === 'BILLING_INVALID_OK')) {
+    for(let i = 0; i < paramData.length; i++) {
+      const status = paramData[i].status
+      if (type === 'add' && (status === 'BILLING_OK' || status === 'BILLING_INVALID_OK')) {
         message.error('所选申请单发票已录入完毕，请勿重复增加')
         flag = true
-      } else if (item.status === 'BILLING_ERROR' || item.status === 'BILLING_APPLICATION_APPROVE_OK') {
+        break;
+      } else if (status === 'BILLING_ERROR' || status === 'BILLING_APPLICATION_APPROVE_OK') {
         message.error('未传送金税的数据，不能进行发票补录')
         flag = true
+        break;
       }
       billingDataInitResultList.push({
-        billingOutcomeId: item.billingOutcomeId,
-        billingAppLineId: item.billingAppLineId,
+        billingOutcomeId: paramData[i].billingOutcomeId,
+        billingAppLineId: paramData[i].billingAppLineId,
       })
-    })
+    }
     if (flag) {
       this.setState({
         selectedRows:[],
