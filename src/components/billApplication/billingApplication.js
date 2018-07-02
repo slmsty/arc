@@ -488,7 +488,6 @@ export default class BillingApplication extends React.Component {
       }
     } else {
       const { count, pageSize, pageNo } = billPage
-      console.log(pageSize)
       pagination = {
         current: pageNo,
         total: count,
