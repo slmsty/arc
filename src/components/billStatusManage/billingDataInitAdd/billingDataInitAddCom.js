@@ -227,11 +227,11 @@ class BillingDataInitAddCom extends React.Component {
           message.warning(`申请单号【${item.billingApplicationId}】未传送金税的数据，不能进行发票补录`)
           flag = true
           break;
-        } else if(item.outcomeId !== '' && typeof item.outcomeId === 'undefined') {
+        } else if(typeof item.outcomeId !== 'undefined') {
           message.warning(`申请单号【${item.billingApplicationId}】发票已录入完毕，请勿重复增加`)
           flag = true
           break;
-        } else if (item.status === 'BILLING_OK' || item.status === 'BILLING_INVALID_OK') {
+        } else {
           flag = false
         }
       }
@@ -248,28 +248,14 @@ class BillingDataInitAddCom extends React.Component {
       message.error('请选择要操作的的记录!')
       return
     }
-    let flag = false
     let paramData = this.state.selectedRows
     let billingDataInitResultList = []
     let param = {}
     for(let i = 0; i < paramData.length; i++) {
-      const status = paramData[i].status
-      if (type === 'add' && (status === 'BILLING_OK' || status === 'BILLING_INVALID_OK')) {
-        message.warning('所选申请单发票已录入完毕，请勿重复增加')
-        flag = true
-        break;
-      }
       billingDataInitResultList.push({
         billingOutcomeId: paramData[i].billingOutcomeId,
         billingAppLineId: paramData[i].billingAppLineId,
       })
-    }
-    if (flag) {
-      this.setState({
-        selectedRows:[],
-        selectedRowKeys:[],
-      })
-      return false
     }
     param.billingDataInitResultList = billingDataInitResultList
     param.buttonType = type
