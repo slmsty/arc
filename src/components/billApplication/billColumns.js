@@ -264,9 +264,7 @@ const billDetailColumns = [{
   title: '税率',
   dataIndex: 'taxRate',
   width: 250,
-  render: (text, record) => {
-    return record.taxRate ? `${parseInt((record.taxRate) * 100)}%` : ''
-  }
+  render: (text) => (typeof text !== 'undefined' ? (`${text * 100}%`) : '')
 }, {
   title: '不含税金额',
   dataIndex: 'taxExcludeAmount',
@@ -391,7 +389,7 @@ const invoiceLineCols = [{
   title: '税率',
   dataIndex: 'billingTaxRate',
   width: 100,
-  render: (text) => text ? (`${text * 100}%`) : ''
+  render: (text) => typeof text !== 'undefined' ? (`${text * 100}%`) : ''
 }, {
   title: '税额',
   dataIndex: 'billingTaxAmount',

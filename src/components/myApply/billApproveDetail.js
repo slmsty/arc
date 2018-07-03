@@ -530,7 +530,7 @@ class BillApproveDetail extends React.Component  {
       title: '税率',
       dataIndex: 'billingTaxRate',
       width: 100,
-      render: (text) => text ? (`${text * 100}%`) : ''
+      render: (text) => typeof text !== 'undefined' ? (`${text * 100}%`) : ''
     }, {
       title: '税额',
       dataIndex: 'billingTaxAmount',
