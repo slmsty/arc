@@ -99,6 +99,12 @@ const contentCols = [{
   }
 }]
 
+const contentOnlyCols = [{
+  title: '内容名称',
+  dataIndex: 'billingContentName',
+  width: 100,
+}]
+
 const totalColumns = [
   {
     title: '',
@@ -441,6 +447,7 @@ export {
   comCols,
   proCols,
   contentCols,
+  contentOnlyCols,
   totalColumns,
   detailColumns,
   invoiceCols,

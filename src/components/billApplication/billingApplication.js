@@ -72,6 +72,10 @@ export default class BillingApplication extends React.Component {
 
   getInitQuery = () => {
     this.props.billApplySearch(this.queryParam)
+    this.setState({
+      selectedRows: [],
+      selectedRowKeys: [],
+    })
   }
 
   handleChangePage = (page) => {
@@ -471,13 +475,13 @@ export default class BillingApplication extends React.Component {
       editInfo, billApplySave, currentUser, contractUrl, redApplyDetail, billApplicationRedApply } = this.props
     const rowSelection = {
       type: normalTypes.includes(this.state.currentType) || redTypes.includes(this.state.currentType)? 'checkbox' : 'radio',
+      selectedRowKeys: this.state.selectedRowKeys,
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({
           selectedRows,
           selectedRowKeys
         })
       },
-      selectedRowKeys: this.state.selectedRowKeys,
     }
     const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply } = this.state
     let pagination = {}
@@ -532,6 +536,7 @@ export default class BillingApplication extends React.Component {
             isRed={redTypes.includes(this.state.currentType)}
             billingOutcomeIds={this.state.selectedRows.map(s => s.billingOutcomeId)}
             type="billApply"
+            roles={this.props.role.map(r => r.roleCode)}
           /> : null
         }
         {

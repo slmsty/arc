@@ -6,6 +6,7 @@ import {
   billDetailColumns,
   detailColumns,
   contentCols,
+  contentOnlyCols,
   taxCategoryCols,
   normalTypes,
   invoiceLineCols,
@@ -657,9 +658,9 @@ class BillApproveDetail extends React.Component  {
         record.action === '合计' ? '' :
           <SearchAllColumns
             url="/arc/billingApplication/billingContent/search"
-            columns={contentCols}
+            columns={(isArFinanceAccount || isTaxAuditor) ? contentCols : contentOnlyCols}
             label="开票内容"
-            width="1000px"
+            width={(isArFinanceAccount || isTaxAuditor) ? '1000px' : ''}
             idKey="billingRecordId"
             valueKey="billingContentName"
             value={this.state.dataSource[index]['billingContent']}
@@ -1133,7 +1134,7 @@ class BillApproveDetail extends React.Component  {
               columns={isProManager ? this.getProManagerColumns() : columns}
               pagination={false}
               dataSource={appLineItems}
-              scroll={{ x: this.isEditTax ? '2030px' : isProManager ? '1500px': '1600px' }}
+              scroll={{ x: this.isEditTax ? '2030px' : isProManager ? '1500px': '1690px' }}
             />
             {
               this.props.applyType === 'BILLING_EXCESS' ?
