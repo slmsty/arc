@@ -18,8 +18,8 @@ class TaxInfoAdd extends React.Component {
           custInfoName: values.custInfoName.trim(),
           billingCustName: values.billingCustName.trim(),
           taxpayerIdentification: values.taxpayerIdentification.trim(),
-          addressPhoneNum: values.addressPhoneNum.trim(),
-          bankAccount: values.bankAccount.trim(),
+          addressPhoneNum: values.addressPhoneNum ? values.addressPhoneNum.trim() : '',
+          bankAccount: values.bankAccount ? values.bankAccount.trim() : '',
         }
         const params = custInfoId ? {
           ...trimValues,

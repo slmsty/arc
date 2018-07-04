@@ -219,28 +219,30 @@ class BillingDataInitAddCom extends React.Component {
     this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    let flag = true
+    let addDisabled = true
+    let editDisabled = true
     if (selectedRows.length > 0) {
       for(let i = 0; i< selectedRows.length; i++) {
         const item = selectedRows[i]
         if(item.status === 'BILLING_ERROR' || item.status === 'BILLING_APPLICATION_APPROVE_OK') {
           message.warning(`申请单号【${item.billingApplicationId}】未传送金税的数据，不能进行发票补录`)
-          flag = true
           break;
+        } else if(item.status === 'BILLING_OK') {
+          editDisabled = false
         } else if(typeof item.outcomeId !== 'undefined') {
           message.warning(`申请单号【${item.billingApplicationId}】发票已录入完毕，请勿重复增加`)
-          flag = true
           break;
         } else {
-          flag = false
+          addDisabled = false
+          editDisabled = false
         }
       }
     }
     this.setState({
       selectedRowKeys,
       selectedRows,
-      addDisabled: flag,
-      editDisabled: flag,
+      addDisabled,
+      editDisabled,
     })
   }
   modifiedData = (type) => {

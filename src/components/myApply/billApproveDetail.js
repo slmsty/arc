@@ -620,6 +620,14 @@ class BillApproveDetail extends React.Component  {
         })
       },
       selectedRowKeys: this.state.selectedRowKeys,
+      getCheckboxProps:(record) => {
+        console.log(record)
+        if(record.action === '合计') {
+          return { disabled: true }
+        } else {
+          return ''
+        }
+      }
     }
     let columns = [
       {
