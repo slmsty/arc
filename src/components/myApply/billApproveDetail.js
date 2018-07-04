@@ -46,6 +46,7 @@ class BillApproveDetail extends React.Component  {
         ...detail,
         lineNo: detail.lineNo - 1,
         totalAmount: detail.billingAmount ? detail.billingAmount : 0,
+        prefPolicySign: detail.billingTaxRate === 0 ? '1' : '0'
       })
     )
     //const { amountTotal, totalExtraAmount, totalTaxAmount} = this.getTotalAmount(dataSource)
@@ -192,7 +193,8 @@ class BillApproveDetail extends React.Component  {
       const { billingAmount, quantity} = this.state.dataSource[index]
       this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
       dataSource[index][col] = value
-
+      //税率为0时，优惠政策为是
+      dataSource[index]['prefPolicySign'] = '1'
     } else if (col === 'quantity') {//数量
       dataSource[index][col] = value
       const { unitPrice } = dataSource[index]
@@ -621,7 +623,6 @@ class BillApproveDetail extends React.Component  {
       },
       selectedRowKeys: this.state.selectedRowKeys,
       getCheckboxProps:(record) => {
-        console.log(record)
         if(record.action === '合计') {
           return { disabled: true }
         } else {
