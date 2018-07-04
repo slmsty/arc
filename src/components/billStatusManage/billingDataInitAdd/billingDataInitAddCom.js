@@ -97,7 +97,6 @@ const billingDataInitColumns = [
     title:'单位',
     dataIndex:'unit',
     width:100,
-    render: (text) => (text ? toThousands(text) : text),
   }, {
     title:'数量',
     dataIndex:'quantity',
@@ -105,7 +104,8 @@ const billingDataInitColumns = [
   }, {
     title:'单价',
     dataIndex:'price',
-    width:100
+    width:100,
+    render: (text, record) => (text ? toThousands(record.price) : text),
   }, {
     title:'规格型号',
     dataIndex:'sepcificationType',
