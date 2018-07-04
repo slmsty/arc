@@ -113,7 +113,7 @@ class SelectSearch extends React.Component {
     return (
       <div>
         <Input
-          style={{zIndex: '0'}}
+          style={{zIndex: '0', width: '200px'}}
           placeholder={this.props.label}
           value={this.props.value && this.props.value[this.props.valueKey] ? this.props.value[this.props.valueKey] : this.state.inputValue}
           suffix={suffix}

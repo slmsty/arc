@@ -6,6 +6,7 @@ import {
   billDetailColumns,
   detailColumns,
   contentCols,
+  contentOnlyCols,
   taxCategoryCols,
   normalTypes,
   invoiceLineCols,
@@ -45,9 +46,9 @@ class BillApproveDetail extends React.Component  {
         ...detail,
         lineNo: detail.lineNo - 1,
         totalAmount: detail.billingAmount ? detail.billingAmount : 0,
+        prefPolicySign: detail.billingTaxRate === 0 ? '1' : detail.prefPolicySign
       })
     )
-    //const { amountTotal, totalExtraAmount, totalTaxAmount} = this.getTotalAmount(dataSource)
     this.state = {
       dataSource: dataSource,
       count: 1,
@@ -191,7 +192,10 @@ class BillApproveDetail extends React.Component  {
       const { billingAmount, quantity} = this.state.dataSource[index]
       this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
       dataSource[index][col] = value
-
+      //税率为0时，优惠政策为是
+      if(value === '0') {
+        dataSource[index]['prefPolicySign'] = '1'
+      }
     } else if (col === 'quantity') {//数量
       dataSource[index][col] = value
       const { unitPrice } = dataSource[index]
@@ -530,7 +534,7 @@ class BillApproveDetail extends React.Component  {
       title: '税率',
       dataIndex: 'billingTaxRate',
       width: 100,
-      render: (text) => text ? (`${text * 100}%`) : ''
+      render: (text) => typeof text !== 'undefined' ? (`${text * 100}%`) : ''
     }, {
       title: '税额',
       dataIndex: 'billingTaxAmount',
@@ -619,6 +623,13 @@ class BillApproveDetail extends React.Component  {
         })
       },
       selectedRowKeys: this.state.selectedRowKeys,
+      getCheckboxProps:(record) => {
+        if(record.action === '合计') {
+          return { disabled: true }
+        } else {
+          return ''
+        }
+      }
     }
     let columns = [
       {
@@ -657,9 +668,9 @@ class BillApproveDetail extends React.Component  {
         record.action === '合计' ? '' :
           <SearchAllColumns
             url="/arc/billingApplication/billingContent/search"
-            columns={contentCols}
+            columns={(isArFinanceAccount || isTaxAuditor) ? contentCols : contentOnlyCols}
             label="开票内容"
-            width="1000px"
+            width={(isArFinanceAccount || isTaxAuditor) ? '1000px' : ''}
             idKey="billingRecordId"
             valueKey="billingContentName"
             value={this.state.dataSource[index]['billingContent']}
@@ -1113,7 +1124,7 @@ class BillApproveDetail extends React.Component  {
                 rowKey="id"
                 size="small"
                 bordered
-                columns={isArAdmin || isArFinanceAccount ? this.getCustInfoColumns() : detailColumns}
+                columns={(isArAdmin || isArFinanceAccount || this.props.isBigSign) ? this.getCustInfoColumns() : detailColumns}
                 dataSource={detailData}
                 pagination={false}
               />
@@ -1133,7 +1144,7 @@ class BillApproveDetail extends React.Component  {
               columns={isProManager ? this.getProManagerColumns() : columns}
               pagination={false}
               dataSource={appLineItems}
-              scroll={{ x: this.isEditTax ? '2030px' : isProManager ? '1500px': '1600px' }}
+              scroll={{ x: this.isEditTax ? '2030px' : isProManager ? '1500px': '1690px' }}
             />
             {
               this.props.applyType === 'BILLING_EXCESS' ?

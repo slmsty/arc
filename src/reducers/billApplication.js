@@ -132,7 +132,11 @@ function billApplySave(state, action) {
 function initData(state) {
   return {
     ...state,
-    billList: [],
+    billPage: {
+      result: [],
+      pageNo: 1,
+      pageSize: 10,
+    },
     addSuccess: false,
     updateSuccess: false,
     billSaveSuccess: false,

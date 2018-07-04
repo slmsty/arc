@@ -135,7 +135,7 @@ class BigSignAudit extends React.Component {
           columns={billApproveColumns}
           pagination={false}
           dataSource={billContracts}
-          scroll={{ x: 2550 }}
+          scroll={{ x: 2410 }}
         />
         {
           this.state.showApproveDetail ?

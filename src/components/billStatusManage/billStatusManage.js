@@ -460,7 +460,6 @@ export default class BillStatusCon extends React.Component {
   }
 
   getTotalAmount = (dataSource) => {
-    console.log(dataSource)
     let amountTotal = 0
     let totalExtraAmount = 0
     let totalTaxAmount = 0
@@ -629,7 +628,6 @@ export default class BillStatusCon extends React.Component {
     }
     let detailList = this.props.billStatusManage.getBillStatusDetailList
     const { totalExtraAmount, amountTotal, totalTaxAmount } = this.getTotalAmount(detailList)
-    console.log(totalExtraAmount, amountTotal, totalTaxAmount)
     detailList = detailList.concat({
       lineNo: '合计',
       billingAmountExcludeTax: toThousands(parseFloat(totalExtraAmount.toFixed(2))),

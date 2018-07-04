@@ -11,6 +11,7 @@ const billingDataInitColumns = [
     title:'申请单号',
     dataIndex:'billingApplicationId',
     width:100,
+    fixed: 'left',
   }, {
     title:'行号',
     dataIndex:'billingAppLineId',
@@ -96,7 +97,6 @@ const billingDataInitColumns = [
     title:'单位',
     dataIndex:'unit',
     width:100,
-    render: (text) => (text ? toThousands(text) : text),
   }, {
     title:'数量',
     dataIndex:'quantity',
@@ -104,7 +104,8 @@ const billingDataInitColumns = [
   }, {
     title:'单价',
     dataIndex:'price',
-    width:100
+    width:100,
+    render: (text, record) => (text ? toThousands(record.price) : text),
   }, {
     title:'规格型号',
     dataIndex:'sepcificationType',
@@ -157,14 +158,15 @@ const billingDataInitColumns = [
 ]
 class BillingDataInitAddCom extends React.Component {
   state = {
-    addFlag:false,
+    addDisabled: true,
+    editDisabled: true,
     loading: false,
-    showInfo:false,
-    selectedRows:[],
-    selectedRowKeys:[],
-    selectType:'',
-    infoData:[],
-    billingDataInitResultList:[]
+    showInfo: false,
+    selectedRows: [],
+    selectedRowKeys: [],
+    selectType: '',
+    infoData: [],
+    billingDataInitResultList: []
   }
   queryParam = {
     pageInfo: {
@@ -217,56 +219,45 @@ class BillingDataInitAddCom extends React.Component {
     this.handleQuery()
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    let flag = false
-    if (selectedRows[0]) {
-      selectedRows.map((item)=> {
-        if (item.status === 'BILLING_OK' || item.status === 'BILLING_INVALID_OK') {
-          flag = true
+    let addDisabled = true
+    let editDisabled = true
+    if (selectedRows.length > 0) {
+      for(let i = 0; i< selectedRows.length; i++) {
+        const item = selectedRows[i]
+        if(item.status === 'BILLING_ERROR' || item.status === 'BILLING_APPLICATION_APPROVE_OK') {
+          message.warning(`申请单号【${item.billingApplicationId}】未传送金税的数据，不能进行发票补录`)
+          break;
+        } else if(item.status === 'BILLING_OK') {
+          editDisabled = false
+        } else if(typeof item.outcomeId !== 'undefined') {
+          message.warning(`申请单号【${item.billingApplicationId}】发票已录入完毕，请勿重复增加`)
+          break;
+        } else {
+          addDisabled = false
+          editDisabled = false
         }
-      })
+      }
     }
-    if (flag || !selectedRows[0]) {
-      this.setState({
-        addFlag:false
-      })
-    }else {
-      this.setState({
-        addFlag:true
-      })
-    }
-    this.setState({ selectedRowKeys, selectedRows })
+    this.setState({
+      selectedRowKeys,
+      selectedRows,
+      addDisabled,
+      editDisabled,
+    })
   }
   modifiedData = (type) => {
     if(this.state.selectedRows && this.state.selectedRows.length === 0) {
       message.error('请选择要操作的的记录!')
       return
     }
-    let flag = false
     let paramData = this.state.selectedRows
     let billingDataInitResultList = []
     let param = {}
     for(let i = 0; i < paramData.length; i++) {
-      const status = paramData[i].status
-      if (type === 'add' && (status === 'BILLING_OK' || status === 'BILLING_INVALID_OK')) {
-        message.error('所选申请单发票已录入完毕，请勿重复增加')
-        flag = true
-        break;
-      } else if (status === 'BILLING_ERROR' || status === 'BILLING_APPLICATION_APPROVE_OK') {
-        message.error('未传送金税的数据，不能进行发票补录')
-        flag = true
-        break;
-      }
       billingDataInitResultList.push({
         billingOutcomeId: paramData[i].billingOutcomeId,
         billingAppLineId: paramData[i].billingAppLineId,
       })
-    }
-    if (flag) {
-      this.setState({
-        selectedRows:[],
-        selectedRowKeys:[],
-      })
-      return false
     }
     param.billingDataInitResultList = billingDataInitResultList
     param.buttonType = type
@@ -319,8 +310,8 @@ class BillingDataInitAddCom extends React.Component {
           exportExcel={this.props.exportExcel}
         />
         <br />
-        <Button type="primary" ghost onClick={()=>this.modifiedData('add')} disabled={!this.state.addFlag}>增加</Button>
-        <Button style={{marginLeft:'10px'}} type="primary" ghost onClick={()=>this.modifiedData('edit')} disabled={!(this.state.selectedRows && this.state.selectedRows.length)}>编辑</Button>
+        <Button type="primary" ghost onClick={()=>this.modifiedData('add')} disabled={this.state.addDisabled}>增加</Button>
+        <Button style={{marginLeft:'10px'}} type="primary" ghost onClick={()=>this.modifiedData('edit')} disabled={this.state.editDisabled}>编辑</Button>
         <div style={{height: '100%',margin: '10px 0'}}>
           <Table
             bordered

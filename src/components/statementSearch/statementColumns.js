@@ -746,13 +746,13 @@ const constructSplitSearchColumns = [{
     title: '合同税率',
     dataIndex: 'contractTaxRate',
     width: 70,
-    render: (text, rocord, index) => (text ? (text * 100).toFixed(0) + '%' : '')
+    render: (text) => (typeof text !== 'undefined' ? `${text * 100}%` : '')
   },
   {
     title: '退税率',
     dataIndex: 'returnTaxRate',
     width: 60,
-    render: (text, rocord, index) => (text ? (text * 100).toFixed(0) + '%' : '')
+    render: (text) => (typeof text !== 'undefined' ? `${text * 100}%` : '')
   },
   {
     title: 'Task',
@@ -829,7 +829,7 @@ const billInfoCols = [
   {
     title:'签约公司',
     dataIndex: 'signCompany',
-    width: 150,
+    width: 240,
   },
   {
     title:'开票日期',
@@ -837,14 +837,19 @@ const billInfoCols = [
     width: 100,
   },
   {
+    title:'申请人',
+    dataIndex: 'applyPersonName',
+    width: 100,
+  },
+  {
     title:'发票号',
     dataIndex: 'invoiceNumber',
-    width: 100,
+    width: 160,
   },
   {
     title:'合同编码',
     dataIndex: 'contractNo',
-    width: 100,
+    width: 160,
   },
   {
     title:'项目编码',
@@ -854,27 +859,27 @@ const billInfoCols = [
   {
     title:'项目立项部门',
     dataIndex: 'projectDept',
-    width: 100,
+    width: 180,
   },
   {
     title:'项目立项BU',
     dataIndex: 'projectBu',
-    width: 100,
+    width: 180,
   },
   {
     title:'客户名称',
     dataIndex: 'custName',
-    width: 100,
+    width: 240,
   },
   {
     title:'开票内容',
     dataIndex: 'billingContent',
-    width: 100,
+    width: 200,
   },
   {
     title:'开票阶段',
     dataIndex: 'billingPhase',
-    width: 100,
+    width: 120,
   },
   {
     title:'含税金额',
@@ -897,7 +902,7 @@ const billInfoCols = [
   {
     title:'备注',
     dataIndex: 'remark',
-    width: 150,
+    width: 250,
   },
   {
     title:'发票类型',

@@ -89,9 +89,16 @@ class ApplyInfoModal extends React.Component {
             if(err) {
               return
             }
-            this.setState({
-              approveLoading: true,
-            })
+            if(type === 'confirm') {
+              this.setState({
+                approveLoading: true,
+              })
+            } else if(type === 'reject') {
+              this.setState({
+                rejectLoading: true,
+              })
+            }
+
             const params = isAgainInvoice !== 'false' ? {
               ...values,
               billingCustInfoId: this.state.approveData.custInfo.billingCustInfoId,
@@ -124,6 +131,7 @@ class ApplyInfoModal extends React.Component {
               } else {
                 this.setState({
                   approveLoading: false,
+                  rejectLoading: false,
                 })
                 message.error(resultMessage, 5)
               }
@@ -159,7 +167,6 @@ class ApplyInfoModal extends React.Component {
   }
   applyReject = (values) => {
     //按钮提交后显示loading
-    this.setState({rejectLoading: true})
     const rejectParams = {
       ...values,
       approveType: 'cancel',
@@ -244,10 +251,10 @@ class ApplyInfoModal extends React.Component {
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           footer={[
-            <Button type="primary" loading={this.state.rejectLoading} key="reset" onClick={() => this.applyConfirm('reject')}>
+            <Button type="primary" disabled={this.state.approveLoading} loading={this.state.rejectLoading} key="reset" onClick={() => this.applyConfirm('reject')}>
               驳回
             </Button>,
-            <Button key="submit" loading={this.state.approveLoading} type="primary" onClick={() => this.applyConfirm('confirm')}>
+            <Button key="submit" disabled={this.state.rejectLoading} loading={this.state.approveLoading} type="primary" onClick={() => this.applyConfirm('confirm')}>
               同意
             </Button>
           ]}

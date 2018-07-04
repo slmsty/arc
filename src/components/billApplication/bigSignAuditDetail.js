@@ -7,6 +7,7 @@ import './bigSignAuditDetail.less'
 class BigSignAuditDetail extends React.Component {
   constructor(props) {
     super(props)
+    const { custInfo, comInfo } = props.applicationInfo.serviceDetail
     this.state = {
       dataSource: [],
       loading: false,
@@ -14,12 +15,16 @@ class BigSignAuditDetail extends React.Component {
       showApproveDetail: false,
       billType: 'BILLING_CONTRACT',
       approveData: {},
+      custInfo: custInfo,
+      comInfo: comInfo,
     }
   }
 
   setFormValidate = (v) => {
     this.setState({
-      approveData: v
+      approveData: v.serviceDetail,
+      custInfo: v.custInfo,
+      comInfo: v.comInfo,
     })
   }
 
@@ -33,9 +38,11 @@ class BigSignAuditDetail extends React.Component {
         const params = {
           ...values,
           billingApplicationId,
+          billingCustInfoId: this.state.custInfo.billingCustInfoId,
+          billingComInfoId: this.state.comInfo.billingComInfoId,
           billingApplicationType: values.billFlow ? values.billFlow : serviceType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
-          appLineItems: this.state.approveData.serviceDetail.map(record => ({
+          appLineItems: this.state.approveData.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,
           }))
@@ -124,6 +131,7 @@ class BigSignAuditDetail extends React.Component {
               form={this.props.form}
               setFormValidate={this.setFormValidate}
               showSave={false}
+              isBigSign={true}
             />
           </div>
         </Form>

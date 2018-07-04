@@ -18,8 +18,8 @@ class TaxInfoAdd extends React.Component {
           custInfoName: values.custInfoName.trim(),
           billingCustName: values.billingCustName.trim(),
           taxpayerIdentification: values.taxpayerIdentification.trim(),
-          addressPhoneNum: values.addressPhoneNum.trim(),
-          bankAccount: values.bankAccount.trim(),
+          addressPhoneNum: values.addressPhoneNum ? values.addressPhoneNum.trim() : '',
+          bankAccount: values.bankAccount ? values.bankAccount.trim() : '',
         }
         const params = custInfoId ? {
           ...trimValues,
@@ -99,14 +99,14 @@ class TaxInfoAdd extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="纳税人地址、电话">
-                  {getFieldDecorator('addressPhoneNum', {initialValue: addressPhoneNum, rules: [{ required: true, message: '请填写纳税人地址、电话!' }]})(
+                  {getFieldDecorator('addressPhoneNum', {initialValue: addressPhoneNum})(
                     <Input />
                   )}
                 </FormItem>
               </Col>
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="开户行及账号">
-                  {getFieldDecorator('bankAccount', {initialValue: bankAccount, rules: [{ required: true, message: '请填写开户行及账号!' }]})(
+                  {getFieldDecorator('bankAccount', {initialValue: bankAccount})(
                     <Input />
                   )}
                 </FormItem>

@@ -155,6 +155,7 @@ class ContractSplitModal extends React.Component{
     return newData
 }
   handleChange = (data) => {
+    console.log(data)
     let newData =_.cloneDeep(this.state.dataSource)
     if(data){
       const indexData = [data.No,data.Name]
@@ -171,6 +172,7 @@ class ContractSplitModal extends React.Component{
             }
           })
          newData = this.calculateListPrice(newData,data)
+         console.log(newData)
           //this.calculateListPrice(newData,data)
         }
         if(newData[data.indexs].orderListLineId){
@@ -179,7 +181,6 @@ class ContractSplitModal extends React.Component{
           }else{
             newData[data.indexs].opsStatus = 'none' //把数据的操作类型改为修改
           }
-
         }
         newData[data.indexs][data.columns] = indexData
         if (data.columns === 'contractCategory') {
@@ -315,15 +316,13 @@ class ContractSplitModal extends React.Component{
         message.error('合同总金额为正数，目录价不能为负数')
         return
       }
-
     }
     if(newData[index].orderListLineId){
-      if(newData[index][column] !=value){
+      if(newData[index][column] !== parseFloat(value)){
         newData[index].opsStatus = 'modify' //把数据的操作类型改为修改
       }else{
         newData[index].opsStatus = 'none' //把数据的操作类型改为修改
       }
-
     }
     newData[index][column] = value
     //newData[index].opsStatus = 'modify'
@@ -1240,38 +1239,6 @@ class ContractSplitModal extends React.Component{
                     </FormItem>
                   </div>
                 </Col>
-                {/*<Col span={3} className="contractRowBorderLeft  contract-bg">
-                  考核比率：
-                </Col>
-                <Col span={4} className="contractRowBorderLeft contractRowBorderRight">
-                  <FormItem>
-                    {getFieldDecorator('assessRatio', {
-                      initialValue: constractData.assessRatio,
-                    })(
-                      <InputNumber
-                        disabled={this.state.editFlag}
-                        style={{width:'100%'}}
-                        defaultValue={constractData.status==='Y'? this.state.assessRatio : ''}
-                        onChange={this.changeAssessRation}
-                        formatter={value => `${value}%`}
-                        parser={value => value.replace('%', '')}
-                        onBlur={this.blur}/>
-                    )}
-                  </FormItem>
-                </Col>*/}
-                {/*<Col span={4} className="contractRowBorderLeft">
-                  <InputNumber
-                    disabled={this.state.editFlag}
-                    style={{width:'100%'}}
-                    max="100"
-                    min="0"
-                    precision="2"
-                    defaultValue={constractData.status==='Y'? this.state.assessRatio : ''}
-                    onChange={this.changeAssessRation}
-                    formatter={value => `${value}%`}
-                    parser={value => value.replace('%', '')}
-                    onBlur={this.blur}/>
-                </Col>*/}
               </Row>
               <br />
               <br />

@@ -6,7 +6,7 @@ import SelectSearch from './selectSearch'
 import InputSearch from './inputSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
-import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols } from './billColumns'
+import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols, contentOnlyCols } from './billColumns'
 import UrlModalCom from '../common/getUrlModal'
 import MultipleInput from '../common/multipleInput'
 import { toThousands } from '../../util/currency'
@@ -575,9 +575,8 @@ class BillDetail extends React.Component {
         render: (text, record, index) => (
           <SelectSearch
             url="/arc/billingApplication/billingContent/search"
-            columns={contentCols}
+            columns={contentOnlyCols}
             label="开票内容"
-            width="1000px"
             idKey="billingRecordId"
             valueKey="billingContentName"
             value={['', this.state.dataSource[index]['billingContent']]}
@@ -871,7 +870,7 @@ class BillDetail extends React.Component {
                           {
                             getFieldDecorator('taxRateRequest', {initialValue: taxRateRequest})(
                               <Checkbox
-                                onChange={(e) => {this.setState({isRequireRate: e.target.checked, isCostBearEdit: true})}}
+                                onChange={(e) => {this.setState({isRequireRate: e.target.checked, isCostBearEdit: e.target.checked})}}
                               >
                               </Checkbox>
                             )
