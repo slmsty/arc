@@ -118,7 +118,6 @@ class ContractSplitModal extends React.Component{
   }
   // 目录价计算
   calculateListPrice = (newData,data) => {
-    console.log('目录价计算')
     const dataInfos = this.props.data
     const contractTotalMoney = dataInfos.contractAmount ? parseFloat(dataInfos.contractAmount) : 0 //  合同总金额
     const solutionMaintain = dataInfos.solutionMaintain ? dataInfos.solutionMaintain : 0 // 软件解决方案保修期
@@ -155,7 +154,6 @@ class ContractSplitModal extends React.Component{
     return newData
 }
   handleChange = (data) => {
-    console.log(data)
     let newData =_.cloneDeep(this.state.dataSource)
     if(data){
       const indexData = [data.No,data.Name]
@@ -380,11 +378,6 @@ class ContractSplitModal extends React.Component{
         <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
         <Option value={`FA&${index}&${column}`}>FA</Option>
       </Select>
-      /*{<Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : `POC&${index}&${column}`}>
-        <Option value={`POC&${index}&${column}`}>POC</Option>
-        <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
-        <Option }value={`FA&${index}&${column}`}>FA</Option>
-      </Select>*/
     )
   }
   handleAdd = (index, flag) => {
@@ -470,7 +463,6 @@ class ContractSplitModal extends React.Component{
   // 拆分保存接口
   handleOk = () => {
     const coutnData = this.state.dataSource.slice(0)
-    console.log('coutnData',coutnData)
     const contractAmount = parseFloat(this.props.data.contractAmount)
     let totalListPrice = 0
     coutnData.map((item) => {
@@ -518,10 +510,6 @@ class ContractSplitModal extends React.Component{
     param.relatedBuNoName = relatedBuNoName
     param.projectBuNoName = projectBuNoName
 
-    /*if (param.maintainBeginDate === '' || typeof param.maintainBeginDate ==='undefined') {
-      message.error('保修开始时间不能为空！')
-      return
-    }*/
     if (param.revenueCheckout && param.revenueCheckout.length<=0 || typeof param.revenueCheckout ==='undefined') {
       message.error('收入结算方式不能为空！')
       return
@@ -557,15 +545,10 @@ class ContractSplitModal extends React.Component{
     const newLisfInfo = []
     let j = 1
     for(let i of splitListInfo) {
-      //i.contractCategory.paramValueDesc =
       if (!i.contractCategory || i.contractCategory.length <=0) {
         message.error('合同类型不能为空！')
         return
       }
-      /*if (!i.product || i.product.length <= 0) {
-        message.error('产品编码不能为空！')
-        return
-      }*/
       if (i.product==='' && i.product === 'undefined') {
         message.error('产品编码不能为空！')
         return
@@ -674,7 +657,6 @@ class ContractSplitModal extends React.Component{
       saveFlag:true
     })
     let saveParams = _.cloneDeep(postParams)
-    //console.log('saveParams',saveParams)
     this.props.saveInfo(saveParams).then((res) => {
       this.setState({
         saveFlag:false,
@@ -968,7 +950,7 @@ class ContractSplitModal extends React.Component{
             <Button type="primary" ghost onClick={this.handleEdit} style={{display:this.state.editFlag ? 'inline-block' : 'none'}} disabled={!this.props.isShowEditBtn}>
               编辑
             </Button>
-            <Button  key="submit" type="primary" ghost onClick={this.handleOk} disabled={this.state.saveFlag} style={{display:this.state.editFlag ? 'none' : 'inline-block'}}>
+            <Button  key="submit" type="primary" ghost onClick={this.handleOk} loading={this.state.saveFlag} style={{display:this.state.editFlag ? 'none' : 'inline-block'}}>
               保存
             </Button>
             <Button type="primary" ghost  onClick={this.handleReturn} style={{display:this.state.editFlag ? 'none' : 'none'}}>

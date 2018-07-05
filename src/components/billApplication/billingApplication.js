@@ -21,6 +21,7 @@ export default class BillingApplication extends React.Component {
       isAdd: false,
       currentRecord: {},
       showBillApprove: false,
+      pageNo: 1,
     }
     this.queryParam = {
       arDateStart: '',
@@ -485,10 +486,19 @@ export default class BillingApplication extends React.Component {
     }
     const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply } = this.state
     let pagination = {}
+    const end = this.state.pageNo * 10
+    let result = billPage.result.slice(end - 10, end)
     if(normalTypes.includes(this.state.currentType)) {
       pagination = {
         total: billPage.result.length,
         showTotal: (total) => (`共 ${total} 条`),
+        onChange: (page) => {
+          this.setState({
+            pageNo: page,
+            selectedRows: [],
+            selectedRowKeys: [],
+          })
+        }
       }
     } else {
       const { count, pageSize, pageNo } = billPage
@@ -519,7 +529,7 @@ export default class BillingApplication extends React.Component {
           bordered
           size="small"
           columns={this.getApplyColumns()}
-          dataSource={billPage.result}
+          dataSource={normalTypes.includes(this.state.currentType) ? result : billPage.result}
           scroll={this.getScrollWidth()}
           pagination={pagination}
         />

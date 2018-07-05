@@ -30,6 +30,17 @@ class BigSignAuditDetail extends React.Component {
 
   billStartWorkFlow = (billingApplicationId) => {
     this.props.form.validateFields((err, values) => {
+      for(let i = 0; i< this.state.approveData.length; i++) {
+        const record = this.state.approveData[i]
+        if(record.billingAmount <= 0) {
+          message.error(`第${i+1}行【开票含税金额】必须大于0`)
+          err = true
+          break
+        }
+      }
+      if(err) {
+        return false
+      }
       if(!err) {
         this.setState({
           loading: true,
@@ -63,8 +74,8 @@ class BigSignAuditDetail extends React.Component {
                   loading: false,
                 })
               }
+              this.props.onCancel()
             })
-            this.props.onCancel()
           } else {
             message.error(resultMessage, 5)
             this.setState({
