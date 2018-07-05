@@ -46,7 +46,7 @@ class BillApproveDetail extends React.Component  {
         ...detail,
         lineNo: detail.lineNo - 1,
         totalAmount: detail.billingAmount ? detail.billingAmount : 0,
-        prefPolicySign: props.taskCode === 'ar_admin' && detail.billingTaxRate === 0 ? '1' : detail.prefPolicySign
+        prefPolicySign: props.taskCode === 'ar_finance_account' && detail.billingTaxRate === 0 ? '1' : detail.prefPolicySign
       })
     )
     this.state = {
@@ -193,7 +193,7 @@ class BillApproveDetail extends React.Component  {
       this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
       dataSource[index][col] = value
       //税率为0时，优惠政策为是
-      if(this.props.taskCode === 'ar_admin' && value === '0') {
+      if(this.props.taskCode === 'ar_finance_account' && value === '0') {
         dataSource[index]['prefPolicySign'] = '1'
       }
     } else if (col === 'quantity') {//数量
