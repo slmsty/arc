@@ -46,7 +46,7 @@ class BillApproveDetail extends React.Component  {
         ...detail,
         lineNo: detail.lineNo - 1,
         totalAmount: detail.billingAmount ? detail.billingAmount : 0,
-        prefPolicySign: detail.billingTaxRate === 0 ? '1' : detail.prefPolicySign
+        prefPolicySign: props.taskCode === 'ar_finance_account' && detail.billingTaxRate === 0 ? '1' : detail.prefPolicySign
       })
     )
     this.state = {
@@ -157,8 +157,10 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['billingRecordId'] = value.billingRecordId ? value.billingRecordId : ''
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode ? value.taxCategoryCode : ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
-      dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
-      dataSource[index]['prefPolicyType'] = value.prefPolicyContent ? value.prefPolicyContent : ''
+      if(dataSource[index]['billingTaxRate'] !== '0') {
+        dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
+        dataSource[index]['prefPolicyType'] = value.prefPolicyContent ? value.prefPolicyContent : ''
+      }
     } else if (col === 'taxCategoryCode') {
       dataSource[index][col] = value.taxCategoryCode ? value.taxCategoryCode : ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
@@ -193,7 +195,7 @@ class BillApproveDetail extends React.Component  {
       this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
       dataSource[index][col] = value
       //税率为0时，优惠政策为是
-      if(value === '0') {
+      if(this.props.taskCode === 'ar_finance_account' && value === '0') {
         dataSource[index]['prefPolicySign'] = '1'
       }
     } else if (col === 'quantity') {//数量
@@ -290,33 +292,33 @@ class BillApproveDetail extends React.Component  {
         this.state.dataSource.map((record, index) => {
           if(this.props.taskCode === 'ar_admin') {
             if(this.fieldCheck(record.billingAmount)) {
-              message.error(`请填写第${index + 1}行的含税金额`)
+              message.warning(`请填写第${index + 1}行的含税金额`)
               err = true
             } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
-              message.error(`请填写第${index + 1}行的税率`)
+              message.warning(`请填写第${index + 1}行的税率`)
               err = true
             } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
-              message.error(`请填写第${index + 1}行的优惠政策类型`)
+              message.warning(`请填写第${index + 1}行的优惠政策类型`)
               err = true
             }
           } else if(isTaxAndFinance) {
             if(this.props.taskCode !== 'tax_auditor' && this.fieldCheck(record.billingContent)) {
-              message.error(`请填写第${index + 1}行的开票内容`)
+              message.warning(`请填写第${index + 1}行的开票内容`)
               err = true
             } else if(this.fieldCheck(record.billingAmount)) {
-              message.error(`请填写第${index + 1}行的含税金额`)
+              message.warning(`请填写第${index + 1}行的含税金额`)
               err = true
             } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
-              message.error(`请填写第${index + 1}行的税率`)
+              message.warning(`请填写第${index + 1}行的税率`)
               err = true
             } else if(this.fieldCheck(record.taxCategoryCode)) {
-              message.error(`请填写第${index + 1}行的税收分类编码`)
+              message.warning(`请填写第${index + 1}行的税收分类编码`)
               err = true
             } else if(this.fieldCheck(record.prefPolicySign)) {
-              message.error(`请填写第${index + 1}行的优惠政策`)
+              message.warning(`请填写第${index + 1}行的优惠政策`)
               err = true
             } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
-              message.error(`请填写第${index + 1}行的优惠政策类型`)
+              message.warning(`请填写第${index + 1}行的优惠政策类型`)
               err = true
             }
           }
@@ -1028,13 +1030,12 @@ class BillApproveDetail extends React.Component  {
                 <FormItem {...formItemLayout} label="开票类型">
                   {
                     getFieldDecorator('billingType', {
-                      initialValue: billingType
+                      initialValue: billingType, rules: [{ required: isArFinanceAccount, message: '请选择开票类型!' }]
                     })(
                       <SelectInvokeApi
                         typeCode="BILLING_APPLICATION"
                         paramCode="BILLING_TYPE"
                         placeholder="开票类型"
-                        hasEmpty
                         disabled={isProManager}
                       />
                     )

@@ -870,7 +870,12 @@ class BillDetail extends React.Component {
                           {
                             getFieldDecorator('taxRateRequest', {initialValue: taxRateRequest})(
                               <Checkbox
-                                onChange={(e) => {this.setState({isRequireRate: e.target.checked, isCostBearEdit: e.target.checked})}}
+                                onChange={(e) => {
+                                  this.setState({isRequireRate: e.target.checked, isCostBearEdit: e.target.checked})
+                                  if(!e.target.checked) {
+                                    this.props.form.setFieldsValue({'costBear': ''})
+                                  }
+                                }}
                               >
                               </Checkbox>
                             )

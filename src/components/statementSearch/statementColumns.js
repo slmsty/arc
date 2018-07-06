@@ -136,13 +136,13 @@ const billInfocomCols = [{
     title: '应收金额',
     dataIndex: 'billedArAmount',
     width: 100,
-    render: (text, record) => (text ? toThousands(record.billedArAmount) : 0)
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.billedArAmount) : '')
   },
   {
     title: '申请开票金额',
     dataIndex: 'billingAmount',
     width: 100,
-    render: (text, record) => (text ? toThousands(record.billingAmount) : 0)
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.billingAmount) : '')
   },
   {
     title: '开票日期',
@@ -158,7 +158,7 @@ const billInfocomCols = [{
     title: '开票金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
-    render: (text, record) => (text ? toThousands(record.taxIncludeAmount) : 0)
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '')
   },
   {
     title: '开票类型',
@@ -209,13 +209,13 @@ const billInfocomCols = [{
     title:'条款金额',
     dataIndex:'paymentAmount',
     width:100,
-    render: (text, record) => (text ? toThousands(record.paymentAmount) : 0)
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.paymentAmount) : '')
   },
   {
     title: '收款金额',
     dataIndex: 'receiptAmount',
     width: 100,
-    render: (text, record) => (text ? toThousands(record.receiptAmount) : 0)
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.receiptAmount) : '')
   },
 ]
 //发票及收款信息查询表
@@ -262,13 +262,13 @@ const billAndReciptMoneyCols = [{
     title: '应收金额',
     dataIndex: 'shouldReciptMoney',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.shouldReciptMoney) : currency(0))
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.shouldReciptMoney) : '')
   },
   {
     title: '应收余额',
     dataIndex: 'shouldReciptRemianMoney',
     width: 100,
-    render: (text, record) => (text ? toThousands(record.shouldReciptRemianMoney) : currency(0))
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.shouldReciptRemianMoney) : '')
   },
   {
     title: '收款日期',
@@ -284,7 +284,7 @@ const billAndReciptMoneyCols = [{
     title: '收款金额',
     dataIndex: 'reciptMoney',
     width: 100,
-    render: (text, record) => (text ? toThousands(record.reciptMoney) : 0)
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.reciptMoney) : '')
   },
   {
     title: '开票日期',
@@ -295,7 +295,7 @@ const billAndReciptMoneyCols = [{
     title: '开票金额',
     dataIndex: 'billMoney',
     width: 100,
-    render: (text, record) => (text ? toThousands(record.billMoney) : 0)
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.billMoney) : '')
   },
   {
     title: '发票号',
@@ -306,7 +306,7 @@ const billAndReciptMoneyCols = [{
     title: '扣款',
     dataIndex: 'deductMmoney',
     width: 100,
-    render: (text, record) => (text ? toThousands(record.deductMmoney) : currency(0))
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.deductMmoney) : '')
   },
   {
     title: '坏账划销',
@@ -352,43 +352,43 @@ const shouldReciptCols = [{
     title: '合同总额',
     dataIndex: 'contractAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.contractAmount) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.contractAmount) : '')
   },
   {
     title: '考核金额',
     dataIndex: 'assessmentAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.assessmentAmount) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.assessmentAmount) : '')
   },
   {
     title: '坏账',
     dataIndex: 'badAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.badAmount) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.badAmount) : '')
   },
   {
     title: '其它（调尾差）',
     dataIndex: 'otherAmount',
     width: 130,
-    render: (text, record, index) => (text ? toThousands(record.otherAmount) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.otherAmount) : '')
   },
   {
     title: '收款金额合计',
     dataIndex: 'receiptClaimAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.receiptClaimAmount) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.receiptClaimAmount) : '')
   },
   {
     title: '开票金额',
     dataIndex: 'billingAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.billingAmount) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.billingAmount) : '')
   },
   {
     title: '已开票未回款金额',
     dataIndex: 'invoicedNotReturnAmount',
     width: 130,
-    render: (text, record, index) => (text ? toThousands(record.invoicedNotReturnAmount) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.invoicedNotReturnAmount) : '')
   },
 ]
 // 项目综合信息查询报表
@@ -438,31 +438,31 @@ const projectTotalCols = [{
     title: '合同总额',
     dataIndex: 'contarctAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(text) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.contarctAmount) : '')
   },
   {
     title: '扣款金额',
     dataIndex: 'remainMoeny1',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(text) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.remainMoeny1) : '')
   },
   {
     title: '累计应收账款',
     dataIndex: 'receivableAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(text) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.receivableAmount) : '')
   },
   {
     title: '应收账款余额',
     dataIndex: 'receivableAmountLeft',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(text) :0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.receivableAmountLeft) : '')
   },
   {
     title: '累计已收账款',
     dataIndex: 'receiptAmount',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.receiptAmount) : '')
   },
   {
     title: '收款比例',
@@ -473,13 +473,13 @@ const projectTotalCols = [{
     title: '累计已开票金额',
     dataIndex: 'billingAmount',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, record, index) => (typeof text !== 'undefined' ? currency(record.billingAmount) : '')
   },
   {
     title: '未开票金额',
     dataIndex: 'notInvoicedAmount',
     width: 100,
-    render: (text, rocord, index) => (text ? currency(text) : currency(0))
+    render: (text, record, index) => (typeof text !== 'undefined' ? currency(record.notInvoicedAmount) : '')
   },
   {
     title: 'BU',
@@ -556,7 +556,7 @@ const totalContractContentColumns = [
     title: '合同总额',
     dataIndex: 'contarctAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.contarctAmount) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.contarctAmount) : '')
   },
   {
     title: 'BILLED AR',
@@ -567,13 +567,13 @@ const totalContractContentColumns = [
     title: '累计开票金额',
     dataIndex: 'totalBillMoney',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.totalBillMoney) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.totalBillMoney) : '')
   },
   {
     title: '已回款总额',
     dataIndex: 'totalReciptMoney1',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.totalReciptMoney1) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.totalReciptMoney1) : '')
   },
 ]
 // 转包项目表
@@ -620,7 +620,7 @@ const turnProColumns = [{
     title: '应收金额',
     dataIndex: 'shouldReciptMoney',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.shouldReciptMoney) : currency(0))
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.shouldReciptMoney) : '')
   },
   {
     title: '收款日期',
@@ -631,7 +631,7 @@ const turnProColumns = [{
     title: '收款金额',
     dataIndex: 'reciptMoney',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.reciptMoney) : currency(0))
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.reciptMoney) : '')
   },
   {
     title: '客户名称',
@@ -647,7 +647,7 @@ const turnProColumns = [{
     title: '开票金额',
     dataIndex: 'billedMoney',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.billedMoney) : currency(0))
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.billedMoney) : '')
   },
   {
     title: '发票号',
@@ -701,7 +701,7 @@ const turnProColumns = [{
     title: '应收金额',
     dataIndex: 'shouldReciptMoney',
     width: 100,
-    render: (text, record) => (text ? toThousands(record.shouldReciptMoney) : 0)
+    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.shouldReciptMoney) : '')
   },
   {
     title: '收款日期',
@@ -712,7 +712,7 @@ const turnProColumns = [{
     title: '收款金额',
     dataIndex: 'reciptMoney',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.reciptMoney) : 0)
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.reciptMoney) : '')
   },
 ]
 // 合同拆分查询表
@@ -763,19 +763,19 @@ const constructSplitSearchColumns = [{
     title: '合同额',
     dataIndex: 'contractAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.contractAmount) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.contractAmount) : '')
   },
   {
     title: 'Funding',
     dataIndex: 'funding',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.funding) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.funding) : '')
   },
   {
     title: ' Gross Order',
     dataIndex: 'grossOrder',
     width: 120,
-    render: (text, record, index) => (text ? toThousands(record.grossOrder) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.grossOrder) : '')
   },
   {
     title: '结算方式',
@@ -849,7 +849,7 @@ const billInfoCols = [
   {
     title:'合同编码',
     dataIndex: 'contractNo',
-    width: 160,
+    width: 200,
   },
   {
     title:'项目编码',
@@ -885,19 +885,19 @@ const billInfoCols = [
     title:'含税金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.taxIncludeAmount) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '')
   },
   {
     title:'除税金额',
     dataIndex: 'taxExcludeAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.taxExcludeAmount) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxExcludeAmount) : '')
   },
   {
     title:'销项税',
     dataIndex: 'tax',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.tax) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.tax) : '')
   },
   {
     title:'备注',
@@ -936,19 +936,19 @@ const outcomeTotalReportCols = [
     title:'当月开票含税金额',
     dataIndex: 'taxIncludeAmountMonth',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.taxIncludeAmountMonth) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmountMonth) : '')
   },
   {
     title:'当月开票除税金额',
     dataIndex: 'taxExcludeAmountMonth',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.taxExcludeAmountMonth) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxExcludeAmountMonth) : '')
   },
   {
     title:'销项税',
     dataIndex: 'tax',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.tax) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.tax) : '')
   },
   {
     title:'开票税率',
@@ -1008,19 +1008,19 @@ const unContractOutcomeDataAddCols = [
     title:'含税金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.taxIncludeAmount) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '')
   },
   {
     title:'除税金额',
     dataIndex: 'taxExcludeAmount',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.taxExcludeAmount) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxExcludeAmount) : '')
   },
   {
     title:'销项税',
     dataIndex: 'tax',
     width: 100,
-    render: (text, record, index) => (text ? toThousands(record.tax) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.tax) : '')
   },
   {
     title:'备注',
@@ -1080,31 +1080,31 @@ const productOrderDetailCols = [
     title:'合同总金额',
     dataIndex:'contractAmount',
     width:100,
-    render: (text, record, index) => (text ? toThousands(record.contractAmount) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.contractAmount) : '')
   },
   {
     title:'Gross Order',
     dataIndex:'grossOrder',
     width:100,
-    render: (text, record, index) => (text ? toThousands(record.grossOrder) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.grossOrder) : '')
   },
   {
     title:'Net Order(L)',
     dataIndex:'netOrderL',
     width:100,
-    render: (text, record, index) => (text ? toThousands(record.netOrderL) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.netOrderL) : '')
   },
   {
     title:'Net Order(M)',
     dataIndex:'netOrderM',
     width:100,
-    render: (text, record, index) => (text ? toThousands(record.netOrderM) :'')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.netOrderM) :'')
   },
   {
     title:'外购成本预算',
     dataIndex:'orderCost',
     width:100,
-    render: (text, record, index) => (text ? toThousands(record.orderCost) : '')
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.orderCost) : '')
   },
 ]
 
