@@ -157,8 +157,10 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['billingRecordId'] = value.billingRecordId ? value.billingRecordId : ''
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode ? value.taxCategoryCode : ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
-      dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
-      dataSource[index]['prefPolicyType'] = value.prefPolicyContent ? value.prefPolicyContent : ''
+      if(record.billingTaxRate !== '0') {
+        dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
+        dataSource[index]['prefPolicyType'] = value.prefPolicyContent ? value.prefPolicyContent : ''
+      }
     } else if (col === 'taxCategoryCode') {
       dataSource[index][col] = value.taxCategoryCode ? value.taxCategoryCode : ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
@@ -1028,13 +1030,12 @@ class BillApproveDetail extends React.Component  {
                 <FormItem {...formItemLayout} label="开票类型">
                   {
                     getFieldDecorator('billingType', {
-                      initialValue: billingType
+                      initialValue: billingType, rules: [{ required: isArFinanceAccount, message: '请选择开票类型!' }]
                     })(
                       <SelectInvokeApi
                         typeCode="BILLING_APPLICATION"
                         paramCode="BILLING_TYPE"
                         placeholder="开票类型"
-                        hasEmpty
                         disabled={isProManager}
                       />
                     )

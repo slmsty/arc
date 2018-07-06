@@ -89,9 +89,10 @@ export default class ApplySearchCon extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    /*console.log(this.props.contractSplitDara.myContractRefresh, nextProps.contractSplitDara.myContractRefresh)
     if (this.props.contractSplitDara.myContractRefresh !== nextProps.contractSplitDara.myContractRefresh) {
       this.handleQuery()
-    }
+    }*/
   }
 
   queryParam = {

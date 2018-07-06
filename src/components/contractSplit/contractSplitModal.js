@@ -658,11 +658,6 @@ class ContractSplitModal extends React.Component{
     })
     let saveParams = _.cloneDeep(postParams)
     this.props.saveInfo(saveParams).then((res) => {
-      this.setState({
-        saveFlag:false,
-        editFlag:true,
-        deleteData:[],
-      })
       if (res && res.response && res.response.resultCode === '000000') {
         message.success('保存成功')
         const data = res.response.result[0]
@@ -684,10 +679,18 @@ class ContractSplitModal extends React.Component{
           serviceEndDate: 0,
         })
         this.setState({
-          dataSource:dataSource
+          dataSource:dataSource,
+          saveFlag:false,
+          editFlag:true,
+          deleteData:[],
         })
       } else {
         message.error('保存失败')
+        this.setState({
+          saveFlag:false,
+          editFlag:true,
+          deleteData:[],
+        })
       }
     })
   }
