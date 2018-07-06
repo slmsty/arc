@@ -157,7 +157,7 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['billingRecordId'] = value.billingRecordId ? value.billingRecordId : ''
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode ? value.taxCategoryCode : ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
-      if(record.billingTaxRate !== '0') {
+      if(dataSource[index]['billingTaxRate'] !== '0') {
         dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
         dataSource[index]['prefPolicyType'] = value.prefPolicyContent ? value.prefPolicyContent : ''
       }
