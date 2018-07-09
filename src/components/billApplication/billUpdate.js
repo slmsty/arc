@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from 'antd'
+import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon, message } from 'antd'
 import SelectInvoice from '../common/SelectInvoice'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
@@ -21,9 +21,16 @@ class BillUpdate extends React.Component {
   handleOk = (e) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
+      if(!err && values.comName[0] === '') {
+        message.warning('请选择签约公司')
+        return false
+      }
+      if(!err && values.custName[0] === '') {
+        message.warning('请选择签约公司')
+        return false
+      }
       if(!err) {
         const { record, isAdd } = this.props;
-        console.log(values.comName)
         const params = isAdd ? {
           ...values,
           billingApplicationType: this.props.billType,

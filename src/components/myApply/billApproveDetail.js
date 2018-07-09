@@ -17,6 +17,7 @@ import SearchAllColumns from '../common/SearchAllColumns'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment';
 import InputSearch from '../billApplication/inputSearch'
+import MultipleInput from '../common/multipleInput'
 import './billApproveDetail.less'
 import { toThousands } from "../../util/currency";
 const FormItem = Form.Item
@@ -31,6 +32,10 @@ const formItemLayout = {
 const formItemLayout1 = {
   labelCol: { span: 12 },
   wrapperCol: { span: 8 },
+}
+const formItemLayout2 = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
 }
 const span3ItemLayout = {
   labelCol: { span: 4 },
@@ -289,43 +294,74 @@ class BillApproveDetail extends React.Component  {
     const isTaxAndFinance = this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account'
     this.props.form.validateFields((err, values) => {
       if(isAgainInvoice !== 'false') {
-        this.state.dataSource.map((record, index) => {
+        let map = new Map()
+        for(let i = 0; i< this.state.dataSource.length; i++) {
+          const record = this.state.dataSource[i]
           if(this.props.taskCode === 'ar_admin') {
             if(this.fieldCheck(record.billingAmount)) {
-              message.warning(`请填写第${index + 1}行的含税金额`)
+              message.warning(`请填写第${i + 1}行的含税金额`)
               err = true
+              break
             } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
-              message.warning(`请填写第${index + 1}行的税率`)
+              message.warning(`请填写第${i + 1}行的税率`)
               err = true
+              break
             } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
-              message.warning(`请填写第${index + 1}行的优惠政策类型`)
+              message.warning(`请填写第${i + 1}行的优惠政策类型`)
               err = true
+              break
             }
           } else if(isTaxAndFinance) {
             if(this.props.taskCode !== 'tax_auditor' && this.fieldCheck(record.billingContent)) {
-              message.warning(`请填写第${index + 1}行的开票内容`)
+              message.warning(`请填写第${i + 1}行的开票内容`)
               err = true
+              break
             } else if(this.fieldCheck(record.billingAmount)) {
-              message.warning(`请填写第${index + 1}行的含税金额`)
+              message.warning(`请填写第${i + 1}行的含税金额`)
               err = true
+              break
             } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
-              message.warning(`请填写第${index + 1}行的税率`)
+              message.warning(`请填写第${i + 1}行的税率`)
               err = true
+              break
             } else if(this.fieldCheck(record.taxCategoryCode)) {
-              message.warning(`请填写第${index + 1}行的税收分类编码`)
+              message.warning(`请填写第${i + 1}行的税收分类编码`)
               err = true
+              break
             } else if(this.fieldCheck(record.prefPolicySign)) {
-              message.warning(`请填写第${index + 1}行的优惠政策`)
+              message.warning(`请填写第${i + 1}行的优惠政策`)
               err = true
+              break
             } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
-              message.warning(`请填写第${index + 1}行的优惠政策类型`)
+              message.warning(`请填写第${i + 1}行的优惠政策类型`)
               err = true
+              break
+            }
+            //税率容差控制
+            const excludeTaxAmount = record.billingAmount / (1 + parseFloat(record.billingTaxRate))
+            const taxAmount = record.billingAmount - excludeTaxAmount
+            const taxTolerance = taxAmount - record.billingTaxAmount
+            if(Math.abs(taxTolerance) > 0.06) {
+              message.warning(`第【${i + 1}】行不含税金额或者税额容差超过6分钱，请调整！`)
+              err = true
+              break
+            }
+            let sumAmount = map.get(record.groupNo) || 0
+            map.set(record.groupNo, taxTolerance + sumAmount)
+          }
+        }
+        if(isTaxAndFinance) {
+          for(let [key, value] of map) {
+            if(Math.abs(value) > 0.62) {
+              message.warning(`组号【${key}】发票不含税金额合计或者税额合计容差超过0.62分钱，请调整`)
+              err = true
+              break;
             }
           }
-          if(err) {
-            return
-          }
-        })
+        }
+      }
+      if(err) {
+        return false
       }
       if (!err) {
         this.setState({
@@ -589,7 +625,9 @@ class BillApproveDetail extends React.Component  {
     let appLineItems = this.state.dataSource
     const { getFieldDecorator } = this.props.form
     const { billingType, billingDate, billingApplicantRequest, contractList, outcomeList,
-      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice, redOrInvalid, costBearName, costBear } = this.props.serviceDetail
+      billingApplicantRemark, fileName, filePath, receiptOutcome, receiptOutcomeTaxVp, isAgainInvoice,
+      redOrInvalid, costBearName, costBear, expressReceiptName, expressReceiptPhone,
+      expressReceiptCompany, expressReceiptCity,expressReceiptAddress, receiptEmail } = this.props.serviceDetail
     //是否红冲发票
     const isReceiveInvoice = showReceive.includes(this.props.applyType)
     //AR管理员
@@ -1187,6 +1225,74 @@ class BillApproveDetail extends React.Component  {
               <Col span={19}>
                 <FormItem {...span3ItemLayout} label="附件">
                   <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+                </FormItem>
+              </Col>
+            </Row>
+            <h3 className="sent-info">寄件信息</h3>
+            <Row gutter={40}>
+              <Col span={8} key={1}>
+                <FormItem {...formItemLayout2} label="收件人">
+                  {getFieldDecorator('expressReceiptName', {
+                    initialValue: expressReceiptName,
+                    rules:[{ max: 10, message: '收件人不能超过10个汉字!' }]})(
+                    <Input placeholder="收件人" disabled={!isArAdmin}/>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={8} key={2}>
+                <FormItem {...formItemLayout2} label="收件人公司">
+                  {
+                    getFieldDecorator('expressReceiptCompany', {
+                      initialValue: expressReceiptCompany,
+                      rules:[{ max: 16, message: '收件人公司不能超过20个汉字!' }]})(
+                      <Input placeholder="收件人公司" disabled={!isArAdmin}/>
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8} key={3}>
+                <FormItem {...formItemLayout2} label="收件人电话">
+                  {
+                    getFieldDecorator('expressReceiptPhone', {
+                      initialValue: expressReceiptPhone,
+                      rules:[{ max: 16, message: '收件人电话不能超过20个字符!' }]})(
+                      <Input placeholder="收件人电话" disabled={!isArAdmin}/>,
+                    )
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8} key={1}>
+                <FormItem {...formItemLayout2} label="收件人城市">
+                  {getFieldDecorator('expressReceiptCity', {
+                    initialValue: expressReceiptCity,
+                    rules:[{ max: 16, message: '收件人城市不能超过20个汉字!' }]})(
+                    <Input placeholder="收件人城市" disabled={!isArAdmin}/>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={8} key={2}>
+                <FormItem {...formItemLayout2} label="收件人详细地址">
+                  {
+                    getFieldDecorator('expressReceiptAddress', {
+                      initialValue: expressReceiptAddress,
+                      rules:[{ max: 32, message: '收件人详细地址不能超过30个汉字!' }]})(
+                      <Input placeholder="收件人详细地址" disabled={!isArAdmin}/>
+                    )
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={14} key={1}>
+                <FormItem {...span3ItemLayout} label="E-mail">
+                  {getFieldDecorator('receiptEmail', {
+                    initialValue: receiptEmail,
+                    rules: [{ required: true, message: '请填写E-mail!' }]
+                  })(
+                    <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" disabled={!isArAdmin}/>
+                  )}
                 </FormItem>
               </Col>
             </Row>

@@ -275,15 +275,15 @@ class ApplyInfoModal extends React.Component {
             <br />
             <Row>
               <Col style={{ textAlign: 'right' }} span={3} key={1}>申请人：</Col>
-              <Col span={5} key={2}>{applyInfoDatas.applyPersonName}</Col>
+              <Col span={8} key={2}>{applyInfoDatas.applyPersonName}</Col>
               <Col style={{ textAlign: 'right' }} span={3} key={3}>申请人部门：</Col>
-              <Col span={5} key={4}>{applyInfoDatas.applyPersonDept}</Col>
+              <Col span={8} key={4}>{applyInfoDatas.applyPersonDept}</Col>
             </Row>
             <Row>
               <Col style={{ textAlign: 'right' }} span={3} key={5}>联系电话：</Col>
-              <Col span={5} key={6}>{applyInfoDatas.applyPersonPhone}</Col>
+              <Col span={8} key={6}>{applyInfoDatas.applyPersonPhone}</Col>
               <Col style={{ textAlign: 'right' }} span={3} key={7}>邮箱地址：</Col>
-              <Col span={5} key={8}>{applyInfoDatas.applyPersonEmail}</Col>
+              <Col span={8} key={8}>{applyInfoDatas.applyPersonEmail}</Col>
             </Row>
             <br />
             <hr style={{ borderTop: '1px solid #d9d9d9' }} />
