@@ -51,43 +51,65 @@ class ApplyInfoModal extends React.Component {
             const isAgainInvoice = serviceDetail.isAgainInvoice
             const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
             if(isAgainInvoice !== 'false') {
-              this.state.approveData.serviceDetail.map((record, index) => {
+              let map = new Map()
+              for(let i = 0; i< this.state.dataSource.length; i++) {
+                const record = this.state.dataSource[i]
                 if(taskCode === 'ar_admin') {
                   if(this.fieldCheck(record.billingAmount)) {
-                    message.error(`请填写第${index + 1}行的含税金额`)
+                    message.warning(`请填写第${i + 1}行的含税金额`)
                     err = true
                   } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
-                    message.error(`请填写第${index + 1}行的税率`)
+                    message.warning(`请填写第${i + 1}行的税率`)
                     err = true
                   } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
-                    message.error(`请填写第${index + 1}行的优惠政策类型`)
+                    message.warning(`请填写第${i + 1}行的优惠政策类型`)
                     err = true
                   }
                 } else if(isTaxAndFinance) {
                   if(taskCode !== 'tax_auditor' && this.fieldCheck(record.billingContent)) {
-                    message.error(`请填写第${index + 1}行的开票内容`)
+                    message.warning(`请填写第${i + 1}行的开票内容`)
                     err = true
                   } else if(this.fieldCheck(record.billingAmount)) {
-                    message.error(`请填写第${index + 1}行的含税金额`)
+                    message.warning(`请填写第${i + 1}行的含税金额`)
                     err = true
                   } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
-                    message.error(`请填写第${index + 1}行的税率`)
+                    message.warning(`请填写第${i + 1}行的税率`)
                     err = true
                   } else if(this.fieldCheck(record.taxCategoryCode)) {
-                    message.error(`请填写第${index + 1}行的税收分类编码`)
+                    message.warning(`请填写第${i + 1}行的税收分类编码`)
                     err = true
                   } else if(this.fieldCheck(record.prefPolicySign)) {
-                    message.error(`请填写第${index + 1}行的优惠政策`)
+                    message.warning(`请填写第${i + 1}行的优惠政策`)
                     err = true
                   } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
-                    message.error(`请填写第${index + 1}行的优惠政策类型`)
+                    message.warning(`请填写第${i + 1}行的优惠政策类型`)
                     err = true
                   }
+                  //税率容差控制
+                  const excludeTaxAmount = record.billingAmount / (1 + parseFloat(record.billingTaxRate))
+                  const taxAmount = record.billingAmount - excludeTaxAmount
+                  const taxTolerance = taxAmount - record.billingTaxAmount
+                  if(Math.abs(taxTolerance) > 0.06) {
+                    message.warning(`第【${i + 1}】行不含税金额或者税额容差超过6分钱，请调整！`)
+                    err = true
+                    break
+                  }
+                  let sumAmount = map.get(record.groupNo) || 0
+                  map.set(record.groupNo, taxTolerance + sumAmount)
                 }
-              })
+              }
+              if(isTaxAndFinance) {
+                for(let [key, value] of map) {
+                  if(Math.abs(value) > 0.62) {
+                    message.warning(`组号【${key}】发票不含税金额合计或者税额合计容差超过0.62分钱，请调整`)
+                    err = true
+                    break;
+                  }
+                }
+              }
             }
             if(err) {
-              return
+              return false
             }
             if(type === 'confirm') {
               this.setState({
