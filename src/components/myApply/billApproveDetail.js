@@ -338,11 +338,9 @@ class BillApproveDetail extends React.Component  {
               break
             }
             //税率容差控制 税率为0不能修改税额和不含税金额
-
             const excludeTaxAmount = record.billingAmount / (1 + parseFloat(record.billingTaxRate))
             const taxAmount = record.billingAmount - excludeTaxAmount
             const taxTolerance = parseFloat((taxAmount - record.billingTaxAmount).toFixed(2))
-            console.log(record.billingTaxRate)
             if(record.billingTaxRate === 0) {
               if(Math.abs(taxTolerance) > 0) {
                 message.warning(`第【${i + 1}】行税率为0%，税额只能为0，请调整!`)

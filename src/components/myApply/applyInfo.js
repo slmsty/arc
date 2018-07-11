@@ -86,14 +86,22 @@ class ApplyInfoModal extends React.Component {
                     message.warning(`请填写第${i + 1}行的优惠政策类型`)
                     err = true
                   }
-                  //税率容差控制
+                  //税率容差控制 税率为0不能修改税额和不含税金额
                   const excludeTaxAmount = record.billingAmount / (1 + parseFloat(record.billingTaxRate))
                   const taxAmount = record.billingAmount - excludeTaxAmount
-                  const taxTolerance = taxAmount - record.billingTaxAmount
-                  if(Math.abs(taxTolerance) > 0.06) {
-                    message.warning(`第【${i + 1}】行不含税金额或者税额容差超过6分钱，请调整！`)
-                    err = true
-                    break
+                  const taxTolerance = parseFloat((taxAmount - record.billingTaxAmount).toFixed(2))
+                  if(record.billingTaxRate === 0) {
+                    if(Math.abs(taxTolerance) > 0) {
+                      message.warning(`第【${i + 1}】行税率为0%，税额只能为0，请调整!`)
+                      err = true
+                      break
+                    }
+                  } else {
+                    if(Math.abs(taxTolerance) > 0.06) {
+                      message.warning(`第【${i + 1}】行不含税金额或者税额容差超过6分钱，请调整！`)
+                      err = true
+                      break
+                    }
                   }
                   let sumAmount = map.get(record.groupNo) || 0
                   map.set(record.groupNo, taxTolerance + sumAmount)
