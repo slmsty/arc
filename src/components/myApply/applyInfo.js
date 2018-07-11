@@ -90,7 +90,7 @@ class ApplyInfoModal extends React.Component {
                   const excludeTaxAmount = record.billingAmount / (1 + parseFloat(record.billingTaxRate))
                   const taxAmount = record.billingAmount - excludeTaxAmount
                   const taxTolerance = parseFloat((taxAmount - record.billingTaxAmount).toFixed(2))
-                  if(record.billingTaxRate === 0) {
+                  if(parseFloat(record.billingTaxRate) === 0) {
                     if(Math.abs(taxTolerance) > 0) {
                       message.warning(`第【${i + 1}】行税率为0%，税额只能为0，请调整!`)
                       err = true
