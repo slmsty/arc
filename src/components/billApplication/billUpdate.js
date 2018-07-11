@@ -21,14 +21,6 @@ class BillUpdate extends React.Component {
   handleOk = (e) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-      if(!err && values.comName[0] === '') {
-        message.warning('请选择签约公司')
-        return false
-      }
-      if(!err && values.custName[0] === '') {
-        message.warning('请选择签约公司')
-        return false
-      }
       if(!err) {
         const { record, isAdd } = this.props;
         const params = isAdd ? {
@@ -97,7 +89,7 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
-                  {getFieldDecorator('comName', {initialValue: ['', record.comName] , rules: [{ required: true, message: '请选择签约公司!' }]} )(
+                  {getFieldDecorator('comName', {initialValue: record.comName ? ['', record.comName] : '' , rules: [{ required: true, message: '请选择签约公司!' }]} )(
                     <SelectSearch
                       width='700px'
                       url="/arc/billingApplication/company/search"
@@ -114,7 +106,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="客户名称">
                   {
                     getFieldDecorator('custName',{
-                      initialValue: ['', record.custName], rules: [{ required: true, message: '请选择客户名称!' }]
+                      initialValue: record.custName ? ['', record.custName] : '', rules: [{ required: true, message: '请选择客户名称!' }]
                     })(
                       <SelectSearch
                         width='800px'
