@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon } from 'antd'
+import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon, message } from 'antd'
 import SelectInvoice from '../common/SelectInvoice'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
@@ -23,7 +23,6 @@ class BillUpdate extends React.Component {
     this.props.form.validateFields((err, values) => {
       if(!err) {
         const { record, isAdd } = this.props;
-        console.log(values.comName)
         const params = isAdd ? {
           ...values,
           billingApplicationType: this.props.billType,
@@ -90,7 +89,7 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
-                  {getFieldDecorator('comName', {initialValue: ['', record.comName] , rules: [{ required: true, message: '请选择签约公司!' }]} )(
+                  {getFieldDecorator('comName', {initialValue: record.comName ? ['', record.comName] : '' , rules: [{ required: true, message: '请选择签约公司!' }]} )(
                     <SelectSearch
                       width='700px'
                       url="/arc/billingApplication/company/search"
@@ -107,7 +106,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="客户名称">
                   {
                     getFieldDecorator('custName',{
-                      initialValue: ['', record.custName], rules: [{ required: true, message: '请选择客户名称!' }]
+                      initialValue: record.custName ? ['', record.custName] : '', rules: [{ required: true, message: '请选择客户名称!' }]
                     })(
                       <SelectSearch
                         width='800px'

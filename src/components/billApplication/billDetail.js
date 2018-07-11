@@ -6,7 +6,7 @@ import SelectSearch from './selectSearch'
 import InputSearch from './inputSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
-import { contentCols, totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols, contentOnlyCols } from './billColumns'
+import { totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols, contentOnlyCols } from './billColumns'
 import UrlModalCom from '../common/getUrlModal'
 import MultipleInput from '../common/multipleInput'
 import { toThousands } from '../../util/currency'
@@ -248,12 +248,12 @@ class BillDetail extends React.Component {
     for(let i = 0; i< this.state.dataSource.length; i++) {
       const record = this.state.dataSource[i]
       if(record.billingAmount <= 0) {
-        message.error(`第${i+1}行【开票含税金额】必须大于0`)
+        message.warning(`第${i + 1}行【开票含税金额】必须大于0`)
         err = true
         break
       }
       if(this.state.isRequireRate && (record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined')) {
-        message.error(`第${i+1}行【开票税率】不能为空!`)
+        message.warning(`第${i + 1}行【开票税率】不能为空!`)
         err = true
         break
       }
@@ -262,27 +262,26 @@ class BillDetail extends React.Component {
       for(let i = 0; i< this.state.proItems.length; i++) {
         const r  = this.state.proItems[i]
         if(r.advanceBillingReason === '' || typeof r.advanceBillingReason === 'undefined') {
-          message.error('【提前开票原因】不能为空!')
+          message.warning('【提前开票原因】不能为空!')
           err = true
           break
         } else if (!r.receiptReturnDate || (r.receiptReturnDate && r.receiptReturnDate.format('YYYY-MM-DD') === 'Invalid date')) {
-          message.error('【预计回款日期】不能为空!')
+          message.warning('【预计回款日期】不能为空!')
           err = true
           break
         }
       }
     }
     if(!this.state.custInfo) {
-      message.error('请选择购买方的客户信息!')
+      message.warning('请选择购买方的客户信息!')
       err = true
     }
     if(!this.state.comInfo) {
-      message.error('请选择销售方的客户信息!')
+      message.warning('请选择销售方的客户信息!')
       err = true
     }
-    console.log(this.state.fileId, !this.state.fileId)
     if(this.props.type === 'billApply' && uploadFileType.includes(this.props.billType) && !this.state.fileId) {
-      message.error('请上传完附件，再提交开票申请')
+      message.warning('请上传完附件，再提交开票申请')
       err = true
     }
 

@@ -21,8 +21,8 @@ class BillingDataInitAddWithFromCom extends React.Component {
     const param = this.props.form.getFieldsValue()
     this.props.getBillDataInitList({
       ...param,
-      approveCPBeginDate: param.approveCPDate? param.approveCPDate[0].format('YYYY-MM-DD') : '',
-      approveCPEndDate: param.approveCPDate? param.approveCPDate[1].format('YYYY-MM-DD') : '',
+      approveCPBeginDate: param.approveCPDate && param.approveCPDate.length > 0? param.approveCPDate[0].format('YYYY-MM-DD') : '',
+      approveCPEndDate: param.approveCPDate && param.approveCPDate.length > 0? param.approveCPDate[1].format('YYYY-MM-DD') : '',
     })
   }
   exportExcel = () => {
@@ -32,8 +32,8 @@ class BillingDataInitAddWithFromCom extends React.Component {
     const values = this.props.form.getFieldsValue()
     this.props.exportExcel({
       ...values,
-      approveCPBeginDate: values.approveCPDate? values.approveCPDate[0].format('YYYY-MM-DD') : '',
-      approveCPEndDate: values.approveCPDate? values.approveCPDate[1].format('YYYY-MM-DD') : '',
+      approveCPBeginDate: values.approveCPDate && values.approveCPDate.length > 0 ? values.approveCPDate[0].format('YYYY-MM-DD') : '',
+      approveCPEndDate: values.approveCPDate && values.approveCPDate.length > 0 ? values.approveCPDate[1].format('YYYY-MM-DD') : '',
     }).then(res => {
       if(res) {
         this.setState({
