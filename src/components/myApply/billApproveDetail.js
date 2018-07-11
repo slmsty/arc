@@ -725,7 +725,7 @@ class BillApproveDetail extends React.Component  {
         record.action === '合计' ? '' :
           <Input
             placeholder="规格型号"
-            defaultValue={this.state.dataSource[index]['specificationType']}
+            value={this.state.dataSource[index]['specificationType']}
             onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}
           />
       )
@@ -735,7 +735,11 @@ class BillApproveDetail extends React.Component  {
       width: 80,
       render: (text, record, index) => (
         record.action === '合计' ? '' :
-        <Input placeholder="单位" defaultValue={this.state.dataSource[index]['unit']} onChange={(e) => this.handleChange(e.target.value, 'unit', index)} />
+        <Input
+          placeholder="单位"
+          value={this.state.dataSource[index]['unit']}
+          onChange={(e) => this.handleChange(e.target.value, 'unit', index)}
+        />
       )
     }, {
       title: '数量',
@@ -1235,7 +1239,7 @@ class BillApproveDetail extends React.Component  {
                   {getFieldDecorator('expressReceiptName', {
                     initialValue: expressReceiptName,
                     rules:[{ max: 10, message: '收件人不能超过10个汉字!' }]})(
-                    <Input placeholder="收件人" disabled={!isArAdmin}/>
+                    <Input  disabled={!isArAdmin}/>
                   )}
                 </FormItem>
               </Col>
@@ -1245,7 +1249,7 @@ class BillApproveDetail extends React.Component  {
                     getFieldDecorator('expressReceiptCompany', {
                       initialValue: expressReceiptCompany,
                       rules:[{ max: 16, message: '收件人公司不能超过20个汉字!' }]})(
-                      <Input placeholder="收件人公司" disabled={!isArAdmin}/>
+                      <Input disabled={!isArAdmin}/>
                     )
                   }
                 </FormItem>
@@ -1256,7 +1260,7 @@ class BillApproveDetail extends React.Component  {
                     getFieldDecorator('expressReceiptPhone', {
                       initialValue: expressReceiptPhone,
                       rules:[{ max: 16, message: '收件人电话不能超过20个字符!' }]})(
-                      <Input placeholder="收件人电话" disabled={!isArAdmin}/>,
+                      <Input disabled={!isArAdmin}/>,
                     )
                   }
                 </FormItem>
@@ -1268,7 +1272,7 @@ class BillApproveDetail extends React.Component  {
                   {getFieldDecorator('expressReceiptCity', {
                     initialValue: expressReceiptCity,
                     rules:[{ max: 16, message: '收件人城市不能超过20个汉字!' }]})(
-                    <Input placeholder="收件人城市" disabled={!isArAdmin}/>
+                    <Input disabled={!isArAdmin}/>
                   )}
                 </FormItem>
               </Col>
@@ -1278,7 +1282,7 @@ class BillApproveDetail extends React.Component  {
                     getFieldDecorator('expressReceiptAddress', {
                       initialValue: expressReceiptAddress,
                       rules:[{ max: 32, message: '收件人详细地址不能超过30个汉字!' }]})(
-                      <Input placeholder="收件人详细地址" disabled={!isArAdmin}/>
+                      <Input disabled={!isArAdmin}/>
                     )
                   }
                 </FormItem>

@@ -52,8 +52,9 @@ class ApplyInfoModal extends React.Component {
             const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
             if(isAgainInvoice !== 'false') {
               let map = new Map()
-              for(let i = 0; i< this.state.dataSource.length; i++) {
-                const record = this.state.dataSource[i]
+              const dataSource = this.state.approveData.serviceDetail
+              for(let i = 0; i< dataSource.length; i++) {
+                const record = dataSource[i]
                 if(taskCode === 'ar_admin') {
                   if(this.fieldCheck(record.billingAmount)) {
                     message.warning(`请填写第${i + 1}行的含税金额`)
