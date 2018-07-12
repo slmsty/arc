@@ -14,6 +14,12 @@ const system = {
   },
   taxPageInfo: {
     result: [],
+  },
+  mailCcConfig: {
+    result: [],
+  },
+  regionPage:{
+    result: []
   }
 }
 function loadingRequest(state) {
@@ -66,6 +72,35 @@ function saveInvoiceTaxInfo(state, action) {
   }
 }
 
+function queryMailCc(state, action) {
+  return {
+    ...state,
+    mailCcConfig: action.response.pageInfo,
+    isLoading: false,
+  }
+}
+
+function saveMailCc(state, action) {
+  return {
+    ...state,
+    saveSuccess: true,
+  }
+}
+
+function queryRegionList(state, action) {
+  return {
+    ...state,
+    regionList: action.response.data.map(region => ({
+      label: region.buName,
+      value: region.buNo,
+      children: region.regions ?region.regions.map((child, index) => ({
+        label: child,
+        value: child,
+      })) : [],
+    })),
+  }
+}
+
 export default caseReducer(system, {
   GET_MAIL_CONFIG_SUCCESS: getMailConfig,
   SAVE_MAIL_CONFIG_SUCCESS: saveMailConfig,
@@ -74,4 +109,7 @@ export default caseReducer(system, {
   SAVE_CUST_TAX_INFO_SUCCESS: saveCustTaxInfo,
   QUERY_INVOICE_TAX_INFO_SUCCESS: queryInvoiceTaxInfo,
   SAVE_INVOICE_TAX_INFO_SUCCESS: saveInvoiceTaxInfo,
+  QUERY_MAIL_CC_SUCCESS: queryMailCc,
+  QUERY_REGION_LIST_SUCCESS: queryRegionList,
+  SAVE_MAIL_CC_SUCCESS: saveMailCc,
 })

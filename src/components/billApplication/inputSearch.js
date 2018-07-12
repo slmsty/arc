@@ -67,6 +67,7 @@ class SelectSearch extends React.Component {
     const keywords = this.props.form.getFieldValue('keywords')
     const param = {
       method: 'POST',
+      version: 'v0.0.1',
       body: {
         pageInfo: {
           pageNo: pageNo || 1,
@@ -76,16 +77,24 @@ class SelectSearch extends React.Component {
         billingApplicationType: this.props.billType,
       },
     }
+    this.setState({
+      loading: true
+    })
     requestJsonFetch(this.props.url, param, this.handleCallback)
   }
 
 
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
+      console.log(response.pageInfo.result)
+      let result = response.pageInfo.result
+      result.unshift({
+        provinceName: '全部'
+      })
       this.setState({
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.count,
-        dataSource: response.pageInfo.result,
+        dataSource: result,
         firstLoad: false,
         loading: false,
       })
@@ -109,7 +118,7 @@ class SelectSearch extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : ''
+    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
@@ -173,7 +182,7 @@ class SelectSearch extends React.Component {
               total: this.state.total,
               size: 'small',
             }}
-            scroll={{x: '900'}}
+            scroll={this.props.width ? {x: '900'} : false}
           />
         </Modal>
       </div>

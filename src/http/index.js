@@ -73,7 +73,6 @@ const invokeApi = ({
     throw new Error('请设置全局统一网关，即请求前缀')
   }
   const { params, version, prefix, notWithToken, ...opt } = options
-
   const prefixUrl = `${prefix || prefixG}${version || versionG}`
   const uri = queryParams(`${prefixUrl}${url}`, params)
   const { token, refreshToken } = getToken()

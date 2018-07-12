@@ -104,3 +104,60 @@ export function saveInvoiceTaxInfo(params) {
   }
 }
 
+/**
+ * 查询到款邮件配置
+ * @param params
+ * @returns {{}}
+ */
+export function queryMailCcConfig(params) {
+  return {
+    [httpApi]: {
+      url: '/arc/sysManage/queryReceiptClaimEmail',
+      options: {
+        method: 'POST',
+        body: params,
+        version: 'v0.0.1',
+      },
+      types: ['QUERY_MAIL_CC_SUCCESS', 'LOADING_REQUEST'],
+    },
+  }
+}
+
+/**
+ * 保存邮件配置
+ * @param params
+ * @returns {{}}
+ */
+export function saveMailCcConfig(params) {
+  return {
+    [httpApi]: {
+      url: '/arc/sysManage/saveReceiptClaimEmail',
+      options: {
+        method: 'POST',
+        body: params,
+        version: 'v0.0.1',
+      },
+      types: ['SAVE_MAIL_CC_SUCCESS'],
+    },
+  }
+}
+
+/**
+ * 查询区域
+ * @param params
+ * @returns {{}}
+ */
+export function queryRegionList(params) {
+  return {
+    [httpApi]: {
+      url: '/arc/common/region/list',
+      options: {
+        method: 'POST',
+        body: params,
+        version: 'v0.0.1',
+      },
+      types: ['QUERY_REGION_LIST_SUCCESS'],
+    },
+  }
+}
+
