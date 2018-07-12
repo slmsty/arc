@@ -116,7 +116,6 @@ export function queryMailCcConfig(params) {
       options: {
         method: 'POST',
         body: params,
-        version: 'v0.0.1',
       },
       types: ['QUERY_MAIL_CC_SUCCESS', 'LOADING_REQUEST'],
     },
@@ -135,7 +134,6 @@ export function saveMailCcConfig(params) {
       options: {
         method: 'POST',
         body: params,
-        version: 'v0.0.1',
       },
       types: ['SAVE_MAIL_CC_SUCCESS'],
     },
@@ -154,7 +152,6 @@ export function queryRegionList(params) {
       options: {
         method: 'POST',
         body: params,
-        version: 'v0.0.1',
       },
       types: ['QUERY_REGION_LIST_SUCCESS'],
     },

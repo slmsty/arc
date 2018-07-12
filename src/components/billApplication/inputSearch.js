@@ -67,7 +67,6 @@ class SelectSearch extends React.Component {
     const keywords = this.props.form.getFieldValue('keywords')
     const param = {
       method: 'POST',
-      version: 'v0.0.1',
       body: {
         pageInfo: {
           pageNo: pageNo || 1,
@@ -86,7 +85,6 @@ class SelectSearch extends React.Component {
 
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
-      console.log(response.pageInfo.result)
       let result = response.pageInfo.result
       result.unshift({
         provinceName: '全部'
