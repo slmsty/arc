@@ -20,6 +20,7 @@ class StaffSearch extends React.Component {
       firstLoad: true,
       keywords: '',
     }
+    this.currentText = ''
   }
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -97,10 +98,22 @@ class StaffSearch extends React.Component {
   }
 
   handleChange = (v) => {
-    this.setState({
-      selectEmail: v,
-    })
+    this.textTemp = ''
     this.props.onChange(v)
+  }
+
+  handleBlur= () => {
+    console.log(this.currentText)
+    let values = this.props.value || []
+    if(this.currentText) {
+      values.push(this.currentText)
+      this.props.onChange(values)
+      this.currentText = ''
+    }
+  }
+
+  handleSearch = (v) => {
+    this.currentText = v
   }
 
   render() {
@@ -121,6 +134,8 @@ class StaffSearch extends React.Component {
           placeholder={this.props.placeholder}
           dropdownStyle={{ display: 'none' }}
           onChange={this.handleChange}
+          onSearch={this.handleSearch}
+          onBlur={this.handleBlur}
         />
         <Icon
           type="search"

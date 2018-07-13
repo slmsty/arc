@@ -97,7 +97,7 @@ class MailCcConfig extends React.Component {
 
   render() {
     const { isLoading, mailCcConfig, saveMailCcConfig } = this.props
-    const { pageNo, result, count} = mailCcConfig
+    const { pageNo, result, count, pageSize } = mailCcConfig
     const { getFieldDecorator } = this.props.form
     const pagination = {
       total: count,
@@ -106,6 +106,7 @@ class MailCcConfig extends React.Component {
       onChange: (current) => {
         this.handleQuery(current)
       },
+      pageSize: pageSize,
       showSizeChanger: true,
       onShowSizeChange: (current, size) => {
         this.handleQuery(current, size)

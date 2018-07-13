@@ -44,12 +44,44 @@ class MailCcConfigAdd extends React.Component {
     this.setState({ value });
   }
 
+  handleChange = (value) => {
+    this.props.form.setFieldsValue({
+      email: value
+    })
+  }
+
+  checkEmail = (email) => {
+    const mailRex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+    if(!mailRex.test(email)){
+      return false
+    }
+    return true
+  }
+
+
   handleOk = (e) => {
     e.preventDefault();
     const { emailId } = this.props.record
     this.props.form.validateFields((err, values) => {
+      let invalidEmail = []
+      values.email.map(email => {
+        if(!this.checkEmail(email)) {
+          invalidEmail.push(email)
+        }
+      })
+      console.log(invalidEmail)
+      if(invalidEmail.length > 0) {
+        this.props.form.setFields({
+          email: {
+            value: values.email,
+            errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+          },
+        });
+        err = true
+        return false
+      }
       if (!err) {
-        const province = values.province && values.province.provinceName === '全部' ? 'ALL' : values.province.provinceName
+        const province = values.province  ? values.province.provinceName : ''
         const params = {
           sbuNo: values.SBU ? values.SBU[0] : '',
           sbuName: values.SBU ? values.SBU[1]: '',
@@ -151,6 +183,8 @@ class MailCcConfigAdd extends React.Component {
                       url="/search/addressbook/staff"
                       columns={columns}
                       placeholder="请选择到款邮件抄送人"
+                      form={this.props.form}
+                      onChange={this.handleChange}
                     />
                   )}
                 </FormItem>
