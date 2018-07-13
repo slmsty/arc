@@ -1240,7 +1240,7 @@ class BillApproveDetail extends React.Component  {
                 </FormItem>
               </Col>
             </Row>
-            {/*<h3 className="sent-info">寄件信息</h3>
+            <h3 className="sent-info">寄件信息</h3>
             <Row gutter={40}>
               <Col span={8} key={1}>
                 <FormItem {...formItemLayout2} label="收件人">
@@ -1307,7 +1307,7 @@ class BillApproveDetail extends React.Component  {
                   )}
                 </FormItem>
               </Col>
-            </Row>*/}
+            </Row>
           </div>
         }
         {
