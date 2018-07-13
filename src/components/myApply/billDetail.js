@@ -52,7 +52,9 @@ class BillDetail extends React.Component  {
   }
   render() {
     const { billingType, billingTypeName, billingDate, billingApplicantRequest, appLineList, comInfo = {}, custInfo = {},
-      contractList, outcomeList, billingApplicantRemark, receiptOutcome, receiptOutcomeTaxVp, fileName, filePath, isAgainInvoice, costBearName } = this.props.serviceDetail
+      contractList, outcomeList, billingApplicantRemark, receiptOutcome, receiptOutcomeTaxVp, fileName, filePath,
+      isAgainInvoice, costBearName, expressReceiptName, expressReceiptPhone,
+      expressReceiptCompany, expressReceiptCity,expressReceiptAddress, receiptEmail } = this.props.serviceDetail
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -198,6 +200,36 @@ class BillDetail extends React.Component  {
                 <Row gutter={40}>
                   <Col span={24}>
                     附件: <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
+                  </Col>
+                </Row>
+              </div>
+              <div style={{padding: '10px 0'}}>
+                <Row gutter={40}>
+                  <Col span={8}>
+                    收件人 :{expressReceiptName}
+                  </Col>
+                  <Col span={8} >
+                    收件人公司 :{expressReceiptCompany}
+                  </Col>
+                  <Col span={8}>
+                    收件人电话: {expressReceiptPhone}
+                  </Col>
+                </Row>
+              </div>
+              <div style={{padding: '10px 0'}}>
+                <Row gutter={40}>
+                  <Col span={8}>
+                    收件人城市 :{expressReceiptCity}
+                  </Col>
+                  <Col span={16} >
+                    收件人详细地址 :{expressReceiptAddress}
+                  </Col>
+                </Row>
+              </div>
+              <div style={{padding: '10px 0'}}>
+                <Row gutter={40}>
+                  <Col span={24}>
+                    E-mail :{receiptEmail}
                   </Col>
                 </Row>
               </div>
