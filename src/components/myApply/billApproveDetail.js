@@ -1247,7 +1247,7 @@ class BillApproveDetail extends React.Component  {
                   {getFieldDecorator('expressReceiptName', {
                     initialValue: expressReceiptName,
                     rules:[{ max: 10, message: '收件人不能超过10个汉字!' }]})(
-                    <Input  disabled={!isArAdmin}/>
+                    <Input  disabled={!(isArAdmin || this.props.isArAdminRole)}/>
                   )}
                 </FormItem>
               </Col>
@@ -1257,7 +1257,7 @@ class BillApproveDetail extends React.Component  {
                     getFieldDecorator('expressReceiptCompany', {
                       initialValue: expressReceiptCompany,
                       rules:[{ max: 16, message: '收件人公司不能超过20个汉字!' }]})(
-                      <Input disabled={!isArAdmin}/>
+                      <Input disabled={!(isArAdmin || this.props.isArAdminRole)}/>
                     )
                   }
                 </FormItem>
@@ -1268,7 +1268,7 @@ class BillApproveDetail extends React.Component  {
                     getFieldDecorator('expressReceiptPhone', {
                       initialValue: expressReceiptPhone,
                       rules:[{ max: 16, message: '收件人电话不能超过20个字符!' }]})(
-                      <Input disabled={!isArAdmin}/>,
+                      <Input disabled={!(isArAdmin || this.props.isArAdminRole)}/>,
                     )
                   }
                 </FormItem>
@@ -1280,7 +1280,7 @@ class BillApproveDetail extends React.Component  {
                   {getFieldDecorator('expressReceiptCity', {
                     initialValue: expressReceiptCity,
                     rules:[{ max: 16, message: '收件人城市不能超过20个汉字!' }]})(
-                    <Input disabled={!isArAdmin}/>
+                    <Input disabled={!(isArAdmin || this.props.isArAdminRole)}/>
                   )}
                 </FormItem>
               </Col>
@@ -1290,7 +1290,7 @@ class BillApproveDetail extends React.Component  {
                     getFieldDecorator('expressReceiptAddress', {
                       initialValue: expressReceiptAddress,
                       rules:[{ max: 32, message: '收件人详细地址不能超过30个汉字!' }]})(
-                      <Input disabled={!isArAdmin}/>
+                      <Input disabled={!(isArAdmin || this.props.isArAdminRole)}/>
                     )
                   }
                 </FormItem>
@@ -1303,7 +1303,7 @@ class BillApproveDetail extends React.Component  {
                     initialValue: receiptEmail,
                     rules: [{ required: true, message: '请填写E-mail!' }]
                   })(
-                    <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" disabled={!isArAdmin}/>
+                    <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" disabled={!(isArAdmin || this.props.isArAdminRole)}/>
                   )}
                 </FormItem>
               </Col>

@@ -90,7 +90,7 @@ class SelectSbu extends React.Component {
     this.setState({ loading: false })
   }
   handleEmitEmpty = () => {
-    this.props.onChange(['', ''])
+    this.props.onChange([])
   }
   render() {
     const { visible } = this.state
@@ -118,7 +118,7 @@ class SelectSbu extends React.Component {
         <Input
           placeholder="SBU"
           value={this.props.keyName==='contract' && this.props.value && this.props.value[0] !== undefined ? (this.props.value[1]!== undefined ? `${this.props.value[0]}:${this.props.value[1]}` :this.props.value[0]) : (this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : '')}
-          suffix={suffix}
+          suffix={!this.props.disabled ? suffix : null}
           onClick={() => this.setState({ visible: true })}
           disabled={this.props.disabled}
         />
@@ -160,6 +160,7 @@ class SelectSbu extends React.Component {
 
           <Table
             columns={this.columns}
+            rowKey="sbuNo"
             rowSelection={rowSelection}
             bordered
             size="small"

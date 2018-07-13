@@ -86,9 +86,6 @@ class SelectSearch extends React.Component {
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
       let result = response.pageInfo.result
-      result.unshift({
-        provinceName: '全部'
-      })
       this.setState({
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.count,
@@ -123,8 +120,9 @@ class SelectSearch extends React.Component {
           style={{zIndex: '0', width: '200px'}}
           placeholder={this.props.label}
           value={this.props.value && this.props.value[this.props.valueKey] ? this.props.value[this.props.valueKey] : this.state.inputValue}
-          suffix={suffix}
+          suffix={!this.props.disabled ? suffix : null}
           onClick={() => this.setState({ visible: true })}
+          disabled={this.props.disabled}
         />
         <Modal
           title="选择"
@@ -180,7 +178,7 @@ class SelectSearch extends React.Component {
               total: this.state.total,
               size: 'small',
             }}
-            scroll={this.props.width ? {x: '900'} : false}
+            scroll={this.props.width ? {x: 900} : {}}
           />
         </Modal>
       </div>

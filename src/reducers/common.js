@@ -273,7 +273,10 @@ const common = {
       },
     ],
     role: [{roleCode: "ar_admin", roleName: "ar管理员"}]
-  } : {},
+  } : {
+    menu: [],
+    role: [],
+  },
 }
 
 function getUserInfo(state, action) {

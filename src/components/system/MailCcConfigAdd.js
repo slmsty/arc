@@ -80,7 +80,7 @@ class MailCcConfigAdd extends React.Component {
       <div>
         <Modal
           width="700px"
-          title="添加到款邮件抄送人配置"
+          title={`${this.isEdit ? '修改' : '添加'}到款邮件抄送人配置`}
           visible={this.props.visible}
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
@@ -116,6 +116,7 @@ class MailCcConfigAdd extends React.Component {
                         onChange={this.onChange}
                         showSearch={true}
                         treeNodeFilterProp='label'
+                        treeDefaultExpandAll={true}
                         allowClear={true}
                         searchPlaceholder="根据区域名筛选"
                       />

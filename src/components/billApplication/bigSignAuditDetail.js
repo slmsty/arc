@@ -94,15 +94,7 @@ class BigSignAuditDetail extends React.Component {
   }
 
   render() {
-    const rowSelection = {
-      type: 'checkbox',
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.setState({
-          selectedRows,
-        })
-      },
-    }
-
+    console.log(this.props.roles, this.props.roles.map(role => role.roleCode).includes('ar_admin'))
     const { applyPersonName, applyPersonPhone, applyPersonDept, applyPersonEmail, serviceType, serviceTypeName, serviceDetail } = this.props.applicationInfo
     return (
       <Modal
@@ -143,6 +135,7 @@ class BigSignAuditDetail extends React.Component {
               setFormValidate={this.setFormValidate}
               showSave={false}
               isBigSign={true}
+              isArAdminRole={this.props.roles.map(role => role.roleCode).includes('ar_admin')}
             />
           </div>
         </Form>

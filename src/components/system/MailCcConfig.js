@@ -85,7 +85,7 @@ class MailCcConfig extends React.Component {
     const value = this.props.form.getFieldsValue()
     const params = {
       ...value,
-      province: value.province ? (value.province.provinceName === '全部' ? 'ALL' : value.province.provinceName) : '',
+      province: value.province ? value.province.provinceName : '',
       sbuNo: value.sbuNo && value.sbuNo.length > 0 ? value.sbuNo[0] : '',
       pageInfo:{
         pageNo: pageNo || 1,
@@ -120,7 +120,7 @@ class MailCcConfig extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="立项BU">
                 {getFieldDecorator('sbuNo')(
-                  <SelectSbu/>
+                  <SelectSbu />
                 )}
               </FormItem>
             </Col>

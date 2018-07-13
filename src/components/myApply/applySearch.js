@@ -248,6 +248,7 @@ export default class ApplySearchCon extends React.Component {
               applicationInfo={applicationInfo}
               billApplySave={billApplySave}
               billStartWorkFlow={billStartWorkFlow}
+              roles={this.props.role}
             /> : null
         }
       </div>
