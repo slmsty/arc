@@ -77,6 +77,7 @@ function queryMailCc(state, action) {
     ...state,
     mailCcConfig: action.response.pageInfo,
     isLoading: false,
+    saveSuccess: false,
   }
 }
 

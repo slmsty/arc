@@ -85,7 +85,7 @@ class MailCcConfigAdd extends React.Component {
           onCancel={() => this.props.onCancel()}
           footer={[
             <Button key="submit" type="primary" loading={this.state.saveLoading} onClick={this.handleOk}>
-              <Icon type="check" />保存
+              {!this.state.saveLoading ? <Icon type="check" /> : '' }保存
             </Button>,
           ]}
         >
@@ -95,8 +95,8 @@ class MailCcConfigAdd extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="立项BU">
-                  {getFieldDecorator('SBU', {initialValue: sbuNo && sbuName ? [sbuNo, sbuName] : '', rules: [{ required: true, message: '立项BU!' }]})(
-                    <SelectSbu keyName="contract"/>
+                  {getFieldDecorator('SBU', {initialValue: sbuNo && sbuName ? [sbuNo, sbuName] : '', rules: [{ required: true, message: '请选择立项BU!' }]})(
+                    <SelectSbu />
                   )}
                 </FormItem>
               </Col>

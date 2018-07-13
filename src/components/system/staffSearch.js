@@ -56,10 +56,6 @@ class StaffSearch extends React.Component {
 
   handleQueryFetch= (pageNo) => {
     const keywords = this.props.form.getFieldValue('keywords')
-    if(typeof keywords === 'undefined') {
-      message.warn('请输入关键字查询')
-      return
-    }
     const param = {
       method: 'POST',
       body: {

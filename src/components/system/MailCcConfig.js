@@ -23,7 +23,7 @@ class MailCcConfig extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props.saveSuccess !== nextProps.saveSuccess && nextProps.saveSuccess) {
-      message.success('到款邮件抄送人配置保存成功')
+      message.success('保存成功')
       this.setState({
         showAdd: false,
         record: {},
@@ -55,6 +55,7 @@ class MailCcConfig extends React.Component {
         title: 'BU',
         dataIndex: 'sbuName',
         width: '10%',
+        render: (text, record) => (`${record.sbuNo}:${text}`)
       }, {
         title: '立项区域',
         dataIndex: 'region',
@@ -79,13 +80,15 @@ class MailCcConfig extends React.Component {
     return columns
   }
 
-  handleQuery = () => {
+  handleQuery = (pageNo, pageSize) => {
     const value = this.props.form.getFieldsValue()
     const params = {
       ...value,
+      province: value.province ? (value.province.provinceName === '全部' ? 'ALL' : value.province.provinceName) : '',
+      sbuNo: value.sbuNo && value.sbuNo.length > 0 ? value.sbuNo[0] : '',
       pageInfo:{
-        pageNo: 1,
-        pageSize: 10
+        pageNo: pageNo || 1,
+        pageSize: pageSize || 10
       },
     }
     this.props.queryMailCcConfig(params)
@@ -100,14 +103,12 @@ class MailCcConfig extends React.Component {
       showTotal: (total) => (`共 ${total} 条`),
       current: pageNo,
       onChange: (current) => {
-        this.props.queryCustTaxInfo({
-          custInfoName: this.props.form.getFieldValue('custName'),
-          pageInfo:{
-            pageNo: current,
-            pageSize: 10
-          },
-        })
-      }
+        this.handleQuery(current)
+      },
+      showSizeChanger: true,
+      onShowSizeChange: (current, size) => {
+        this.handleQuery(current, size)
+      },
     }
     return (
       <div>
@@ -117,8 +118,8 @@ class MailCcConfig extends React.Component {
           <Row gutter={10}>
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="立项BU">
-                {getFieldDecorator('sbu')(
-                  <SelectSbu keyName="contract"/>
+                {getFieldDecorator('sbuNo')(
+                  <SelectSbu/>
                 )}
               </FormItem>
             </Col>
@@ -168,6 +169,7 @@ class MailCcConfig extends React.Component {
           loading={isLoading}
           rowKey={record => record.emailId}
           bordered
+          size="small"
           columns={this.getTableColumns()}
           dataSource={result}
           pagination={pagination}
