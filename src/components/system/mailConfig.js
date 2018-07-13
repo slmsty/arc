@@ -26,7 +26,6 @@ class MailConfig extends React.Component {
     super(props)
     this.state = {
       askContractTo: [],
-      askContractCc:[],
     }
   }
 
@@ -41,6 +40,12 @@ class MailConfig extends React.Component {
           message.success('邮件配置保存成功!')
         }
       })
+    })
+  }
+
+  handleChange = (v) => {
+    this.props.form.setFieldsValue({
+      askContractCc: v
     })
   }
 
@@ -77,8 +82,8 @@ class MailConfig extends React.Component {
                         url="/search/addressbook/staff"
                         columns={columns}
                         placeholder="请选择未确认到款抄送人"
-                        value={this.state.askContractCc}
-                        onChange={(v) => this.setState({askContractCc: v})}
+                        form={this.props.form}
+                        onChange={this.handleChange}
                       />
                     )
                   }

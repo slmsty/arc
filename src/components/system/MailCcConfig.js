@@ -45,6 +45,7 @@ class MailCcConfig extends React.Component {
       showAdd: true,
     })
   }
+
   clearFormValues = () => {
     this.props.form.resetFields()
   }
@@ -134,6 +135,7 @@ class MailCcConfig extends React.Component {
                     showSearch={true}
                     treeNodeFilterProp='label'
                     allowClear={true}
+                    treeDefaultExpandAll={true}
                     searchPlaceholder="根据区域名筛选"
                   />
                 )}

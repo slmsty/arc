@@ -37,6 +37,7 @@ class MailCcConfigAdd extends React.Component {
       value: [''],
       saveLoading: false,
     }
+    this.isEdit = props.record.emailId ? true : false
   }
 
   onChange = (value) => {
@@ -96,7 +97,7 @@ class MailCcConfigAdd extends React.Component {
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="立项BU">
                   {getFieldDecorator('SBU', {initialValue: sbuNo && sbuName ? [sbuNo, sbuName] : '', rules: [{ required: true, message: '请选择立项BU!' }]})(
-                    <SelectSbu />
+                    <SelectSbu disabled={this.isEdit}/>
                   )}
                 </FormItem>
               </Col>
@@ -107,6 +108,7 @@ class MailCcConfigAdd extends React.Component {
                       initialValue: region, rules: [{ required: true, message: '请填写立项区域!' }]
                     })(
                       <TreeSelect
+                        disabled={this.isEdit}
                         value={this.state.value}
                         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                         treeData={this.props.regionList}
@@ -127,6 +129,7 @@ class MailCcConfigAdd extends React.Component {
                 <FormItem {...formItemLayout} label="省份">
                   {getFieldDecorator('province', {initialValue: province ? {provinceName: province} : '', rules: [{ required: true, message: '请填写省份!' }]})(
                     <InputSearch
+                      disabled={this.isEdit}
                       url="/arc/common/province/list"
                       columns={provinceCols}
                       label="省份"

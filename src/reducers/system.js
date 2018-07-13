@@ -94,6 +94,7 @@ function queryRegionList(state, action) {
     regionList: action.response.data.map(region => ({
       label: region.buName,
       value: region.buNo,
+      disabled: true,
       children: region.regions ?region.regions.map((child, index) => ({
         label: child,
         value: child,
