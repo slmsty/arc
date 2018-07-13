@@ -88,7 +88,7 @@ class ApplyInfoModal extends React.Component {
                   }
                   //税率容差控制 税率为0不能修改税额和不含税金额
                   const excludeTaxAmount = record.billingAmount / (1 + parseFloat(record.billingTaxRate))
-                  const taxAmount = record.billingAmount - excludeTaxAmount
+                  const taxAmount = parseFloat((record.billingAmount - excludeTaxAmount).toFixed(2))
                   const taxTolerance = parseFloat((taxAmount - record.billingTaxAmount).toFixed(2))
                   if(parseFloat(record.billingTaxRate) === 0) {
                     if(Math.abs(taxTolerance) > 0) {
