@@ -76,16 +76,20 @@ class SelectSearch extends React.Component {
         billingApplicationType: this.props.billType,
       },
     }
+    this.setState({
+      loading: true
+    })
     requestJsonFetch(this.props.url, param, this.handleCallback)
   }
 
 
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
+      let result = response.pageInfo.result
       this.setState({
         pageNo: response.pageInfo.pageNo,
         total: response.pageInfo.count,
-        dataSource: response.pageInfo.result,
+        dataSource: result,
         firstLoad: false,
         loading: false,
       })
@@ -109,15 +113,16 @@ class SelectSearch extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : ''
+    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
           style={{zIndex: '0', width: '200px'}}
           placeholder={this.props.label}
           value={this.props.value && this.props.value[this.props.valueKey] ? this.props.value[this.props.valueKey] : this.state.inputValue}
-          suffix={suffix}
+          suffix={!this.props.disabled ? suffix : null}
           onClick={() => this.setState({ visible: true })}
+          disabled={this.props.disabled}
         />
         <Modal
           title="选择"
@@ -173,7 +178,7 @@ class SelectSearch extends React.Component {
               total: this.state.total,
               size: 'small',
             }}
-            scroll={{x: '900'}}
+            scroll={this.props.width ? {x: 900} : {}}
           />
         </Modal>
       </div>

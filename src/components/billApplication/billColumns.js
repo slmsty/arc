@@ -15,6 +15,12 @@ const clientCols = [{
   width: 250,
 }]
 
+const provinceCols = [{
+  title: '省份',
+  dataIndex: 'provinceName',
+  width: 200,
+}]
+
 const comCols = [{
   title: '公司名称',
   dataIndex: 'comName',
@@ -462,5 +468,6 @@ export {
   invoiceLineCols,
   contentDetailCols,
   proApplyColumns,
+  provinceCols,
 }
 

@@ -26,9 +26,6 @@ class MailConfig extends React.Component {
     super(props)
     this.state = {
       askContractTo: [],
-      askContractCc:[],
-      receiptArrivalTo: [],
-      receiptArrivalCc: [],
     }
   }
 
@@ -46,9 +43,15 @@ class MailConfig extends React.Component {
     })
   }
 
+  handleChange = (v) => {
+    this.props.form.setFieldsValue({
+      askContractCc: v
+    })
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form
-    const { askContractTo, askContractCc, receiptArrivalTo, receiptArrivalCc } = this.props.mailConfig
+    const { askContractTo, askContractCc } = this.props.mailConfig
     return (
       <div>
         <Form className="ant-search-form">
@@ -79,44 +82,8 @@ class MailConfig extends React.Component {
                         url="/search/addressbook/staff"
                         columns={columns}
                         placeholder="请选择未确认到款抄送人"
-                        value={this.state.askContractCc}
-                        onChange={(v) => this.setState({askContractCc: v})}
-                      />
-                    )
-                  }
-                </FormItem>
-              </Col>
-            </Row>
-          </Card>
-          <Card title="到款邮件" style={{marginTop: '20px'}}>
-            <Row gutter={10}>
-              <Col span={18} key={1}>
-                <FormItem {...formItemLayout} label="收件人">
-                  {getFieldDecorator('receiptArrivalTo', {initialValue: receiptArrivalTo})(
-                    <StaffSearch
-                      url="/search/addressbook/staff"
-                      columns={columns}
-                      placeholder="请选择到款邮件收件人"
-                      value={this.state.receiptArrivalTo}
-                      onChange={(v) => this.setState({receiptArrivalTo: v})}
-                    />
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={18} key={2}>
-                <FormItem {...formItemLayout} label="抄送人">
-                  {
-                    getFieldDecorator('receiptArrivalCc',{
-                      initialValue: receiptArrivalCc,
-                    })(
-                      <StaffSearch
-                        url="/search/addressbook/staff"
-                        columns={columns}
-                        placeholder="请选择到款邮件抄送人"
-                        value={this.state.receiptArrivalCc}
-                        onChange={(v) => this.setState({receiptArrivalCc: v})}
+                        form={this.props.form}
+                        onChange={this.handleChange}
                       />
                     )
                   }

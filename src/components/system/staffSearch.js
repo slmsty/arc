@@ -18,11 +18,17 @@ class StaffSearch extends React.Component {
       selectedRows: [],
       loading: false,
       firstLoad: true,
-      selectEmail: [],
+      keywords: '',
     }
+    this.currentText = ''
   }
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
+    const emails = this.props.value
+    if(emails.length > 0 && selectedRows.length > 0 && emails.includes(selectedRows[selectedRows.length - 1].email)) {
+      message.warning('抄送人已存在，请重新选择!')
+      return false
+    }
     this.setState({ selectedRowKeys, selectedRows })
   }
 
@@ -31,8 +37,7 @@ class StaffSearch extends React.Component {
       message.error('请选择记录')
       return
     }
-    const selectedEmail = this.state.selectedRows.map(s => s.email).concat(this.state.selectEmail)
-    this.setState({selectEmail: selectedEmail})
+    const selectedEmail = this.state.selectedRows.map(s => s.email).concat(this.props.value)
     this.props.onChange(selectedEmail)
     this.handleCancel()
   }
@@ -55,11 +60,6 @@ class StaffSearch extends React.Component {
   }
 
   handleQueryFetch= (pageNo) => {
-    const keywords = this.props.form.getFieldValue('keywords')
-    if(typeof keywords === 'undefined') {
-      message.warn('请输入关键字查询')
-      return
-    }
     const param = {
       method: 'POST',
       body: {
@@ -67,10 +67,12 @@ class StaffSearch extends React.Component {
           pageNo: pageNo || 1,
           pageSize: this.state.pageSize,
         },
-        keywords,
-        billingApplicationType: this.props.billType,
+        keywords: this.state.keywords,
       },
     }
+    this.setState({
+      loading: true
+    })
     requestJsonFetch(this.props.url, param, this.handleCallback)
   }
 
@@ -83,27 +85,39 @@ class StaffSearch extends React.Component {
         firstLoad: false,
         loading: false,
       })
+    } else {
+      message.error(response.resultMessage)
+      this.setState({
+        loading: false,
+      })
     }
   }
 
   handleEmitEmpty = () => {
-    this.props.onChange('')
+    this.props.onChange([])
   }
 
   handleChange = (v) => {
-    this.setState({
-      selectEmail: v,
-    })
+    this.textTemp = ''
     this.props.onChange(v)
+  }
+
+  handleBlur= () => {
+    console.log(this.currentText)
+    let values = this.props.value || []
+    if(this.currentText) {
+      values.push(this.currentText)
+      this.props.onChange(values)
+      this.currentText = ''
+    }
+  }
+
+  handleSearch = (v) => {
+    this.currentText = v
   }
 
   render() {
     const { visible } = this.state
-    const formItemLayout = {
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
-    }
-    const { getFieldDecorator } = this.props.form
     const { selectedRowKeys } = this.state
     const rowSelection = {
       type: 'checkbox',
@@ -120,6 +134,8 @@ class StaffSearch extends React.Component {
           placeholder={this.props.placeholder}
           dropdownStyle={{ display: 'none' }}
           onChange={this.handleChange}
+          onSearch={this.handleSearch}
+          onBlur={this.handleBlur}
         />
         <Icon
           type="search"
@@ -139,28 +155,26 @@ class StaffSearch extends React.Component {
             </Button>,
           ]}
         >
-          <Form
-            className="ant-search-form"
-          >
+          <div style={{margin: '20px 0', padding: '0 40px'}}>
             <Row>
               <Col span={16} key={1}>
-                <FormItem {...formItemLayout} label="员工姓名">
-                  {getFieldDecorator('keywords', {
-                    initialValue: this.props.defaultQueryParam,
-                  })(
-                    <Input
-                      onPressEnter={this.handleQuery}
-                      placeholder="请输入关键字"
-                    />,
-                  )}
-                </FormItem>
+                员工姓名:
+                <Input
+                  style={{width: '300px', margin: '0 10px'}}
+                  ref={el => this.inputElement = el}
+                  onPressEnter={this.handleQuery}
+                  placeholder="请输入关键字"
+                  onChange={(e) => this.setState({
+                    keywords: e.target.value
+                  })}
+                />,
               </Col>
               <Col span={1} key={2} />
               <Col span={7} key={3}>
                 <Button type="primary" icon="search" htmlType="submit" onClick={this.handleQuery}>查询</Button>
               </Col>
             </Row>
-          </Form>
+          </div>
           <Table
             columns={this.props.columns}
             rowSelection={rowSelection}
@@ -182,4 +196,4 @@ class StaffSearch extends React.Component {
   }
 }
 
-export default Form.create()(StaffSearch)
+export default StaffSearch

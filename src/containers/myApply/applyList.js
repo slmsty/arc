@@ -12,6 +12,7 @@ const mapStateToProps = state => ({
   contractUrl: state.billApplication.contractUrl,
   applicationInfo: state.billApplication.applicationInfo,
   billStartSuccess: state.billApplication.billStartSuccess,
+  role: state.common.permission.role,
 })
 const mapDispatchToProps = dispatch => (
   bindActionCreators({

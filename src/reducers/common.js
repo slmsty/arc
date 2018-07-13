@@ -262,11 +262,21 @@ const common = {
             icon: 'icon-xitongguanli',
             component: 'customerContent',
           },
+          {
+            key: '84',
+            path: '/system/mailCcConfig',
+            name: '到款邮件抄送人配置',
+            icon: 'icon-youjianpeizhi',
+            component: 'MailCcConfig',
+          },
          ],
       },
     ],
     role: [{roleCode: "ar_admin", roleName: "ar管理员"}]
-  } : {},
+  } : {
+    menu: [],
+    role: [],
+  },
 }
 
 function getUserInfo(state, action) {

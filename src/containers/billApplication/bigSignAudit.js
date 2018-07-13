@@ -10,6 +10,7 @@ const mapStateToProps = state => ({
   applicationInfo: state.billApplication.applicationInfo,
   billStartSuccess: state.billApplication.billStartSuccess,
   currentUser: state.common.user,
+  role: state.common.permission.role,
 })
 
 const mapDispatchToProps = dispatch => (
