@@ -10,14 +10,15 @@ const FormItem = Form.Item;
 class ReceiptDetail extends React.Component {
   constructor(props) {
     super(props)
+    const appLineItems = props.type === 'myApply' ? props.receiptDetail.appLineList : props.receiptDetail.appLineItems
     this.state = {
       applyLoading: false,
       showContractLink: false,
-      appLineItems: props.receiptDetail.appLineItems.map(item => ({
+      appLineItems: appLineItems.map(item => ({
         arBillingId: item.arBillingId,
         fundId: item.fundId,
         receiptType: '收据',
-        applyAmount: item.unApplyAmount ,
+        applyAmount: typeof item.applyAmount !== 'undefined' ? item.applyAmount : item.unApplyAmount,
       })),
     }
     this.columns = [
@@ -73,7 +74,6 @@ class ReceiptDetail extends React.Component {
       this.state.appLineItems.map(item => {
         total = total + parseFloat(item.applyAmount)
       })
-      console.log(total, values.receiptAmount)
       if(total !== values.receiptAmount) {
         this.props.form.setFields({
           receiptAmount: {
@@ -135,10 +135,12 @@ class ReceiptDetail extends React.Component {
   }
 
   render() {
-    const { appLineItems, applicationContract, comInfo } = this.props.receiptDetail
+    const { applicationContract, receiptContent, applicantRequest, applicantRequestReason,
+      totalApplyAmount, appLineList, appLineItems } = this.props.receiptDetail
     const { getFieldDecorator } = this.props.form;
+    const dataSource = this.props.type === 'myApply' ? appLineList : appLineItems
     let receiptTotal = 0
-    appLineItems.map(item => {
+    dataSource.map(item => {
       receiptTotal = receiptTotal + item.unApplyAmount
     })
     return (
@@ -218,6 +220,7 @@ class ReceiptDetail extends React.Component {
                     <FormItem>
                       {getFieldDecorator('receiptApplicantRequest',
                         {
+                          initialValue: applicantRequest,
                           rules: [
                             { validator: this.custNameValidator }
                           ]
@@ -232,6 +235,7 @@ class ReceiptDetail extends React.Component {
                     <FormItem>
                       {getFieldDecorator('receiptApplicantRequestReason',
                         {
+                          initialValue: applicantRequestReason,
                           rules: [
                             { validator: this.custNameValidator }
                           ]
@@ -263,7 +267,7 @@ class ReceiptDetail extends React.Component {
                       bordered
                       size="small"
                       columns={this.columns}
-                      dataSource={appLineItems}
+                      dataSource={dataSource}
                       pagination={false}
                       footer={() => {
                         let total = 0
@@ -280,6 +284,7 @@ class ReceiptDetail extends React.Component {
                   <td colSpan="3">
                     <FormItem>
                       {getFieldDecorator('receiptApplicantConetent', {
+                          initialValue: receiptContent,
                           rules: [
                             { required: true, message: '请输入收据内容'},
                             { validator: this.contentValidator }

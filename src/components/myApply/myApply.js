@@ -4,8 +4,8 @@ import { Button, Table, message, Modal } from 'antd'
 import ApplySearchConWithForm from './applyListWithSearch'
 import NoApplyInfo from './noApplyInfo'
 import BillDetail from '../billApplication/billDetail'
+import ReceiptDetail from '../billStatusManage/receiptApplication/receiptDetail'
 import { redTypes } from '../billApplication/billColumns'
-import {getTaxInfo} from "../../actions/billApplication";
 
 export default class MyApplyCon extends React.Component {
   state = {
@@ -14,7 +14,8 @@ export default class MyApplyCon extends React.Component {
     applyData: '',
     noApplyInfoVisitable: false,
     noApplyInfoData: '',
-    editVisitable:false
+    editVisitable:false,
+    receiptVisitable: false,
   }
 
   componentDidMount() {
@@ -75,11 +76,19 @@ export default class MyApplyCon extends React.Component {
     paramsData.taskId = record.taskId
     this.props.myApplyInfo(paramsData).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
-        this.setState({
-          editVisitable: true,
-          applyData: record,
-        })
-        this.props.getContractUrl(res.response.data.serviceDetail.contractId)
+        const { serviceDetail, serviceType } = res.response.data
+        if(serviceType === 'RECEIPT') {
+          this.setState({
+            receiptVisitable: true,
+            applyData: record,
+          })
+        } else {
+          this.setState({
+            editVisitable: true,
+            applyData: record,
+          })
+        }
+        this.props.getContractUrl(serviceDetail.contractId)
       }
     })
   }
@@ -214,6 +223,16 @@ export default class MyApplyCon extends React.Component {
               contractUrl={contractUrl}
               isRed={isBackBill}
               type="myApply"
+            /> : null
+        }
+        {
+          this.state.receiptVisitable ?
+            <ReceiptDetail
+              receiptDetail={serviceDetail}
+              onCancel={() => this.setState({receiptVisitable: false})}
+              receiptApplySave={this.props.receiptApplySave}
+              contractUrl={contractUrl}
+              type='myApply'
             /> : null
         }
         {

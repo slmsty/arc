@@ -69,7 +69,7 @@ class UrlModalCom extends React.Component {
             </div>
              :
             <div>
-              <h3>{`该合同有${this.state.result.length}条审批记录:`}</h3>
+              <h3>{`该合同有${this.props.contractUrl.length}条审批记录:`}</h3>
               <ul style={{minHeight:'150px',marginTop:'20px'}}>
                 {this.props.contractUrl.map(item=>{
                   return(

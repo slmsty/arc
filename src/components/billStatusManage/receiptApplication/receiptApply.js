@@ -35,7 +35,7 @@ const receiptColumns = [{
   width: 100,
 }, {
   title: '应收日期',
-  dataIndex: 'arDate',
+  dataIndex: 'arIncomeDate',
   width: 100,
 }, {
   title: '应收账款',

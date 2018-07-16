@@ -18,6 +18,7 @@ class ReceiptApplyDetail extends React.Component {
         title: '金额',
         dataIndex: 'paymentAmount',
         width: 110,
+        render: (text, record) => record.paymentAmount > 0 ? toThousands(record.paymentAmount) : text
       }, {
         title: '百分比',
         dataIndex: 'paymentPercent',
@@ -26,10 +27,12 @@ class ReceiptApplyDetail extends React.Component {
         title: '未申请收据金额',
         dataIndex: 'unApplyAmount',
         width: 120,
+        render: (text, record) => record.unApplyAmount > 0 ? toThousands(record.unApplyAmount) : text
       }, {
         title: '本次申请金额',
         dataIndex: 'applyAmount',
         width: 150,
+        render: (text, record) => record.applyAmount > 0 ? toThousands(record.applyAmount) : text
       }, {
         title: '收据类型',
         dataIndex: 'receiptType',
@@ -67,10 +70,10 @@ class ReceiptApplyDetail extends React.Component {
               <td>项目经理 :</td><td>{applicationContract.projectManager}</td><td>签约区域 :</td><td>{applicationContract.signRegion}</td><td>立项区域 :</td><td>{applicationContract.region}</td>
             </tr>
             <tr>
-              <td>销售经理 :</td><td>{applicationContract.saleManager}</td><td>合同总金额 :</td><td>{applicationContract.contractAmount}</td><td>币种 :</td><td>{applicationContract.contractCurrency}</td>
+              <td>销售经理 :</td><td>{applicationContract.saleManager}</td><td>合同总金额 :</td><td>{toThousands(applicationContract.contractAmount)}</td><td>币种 :</td><td>{applicationContract.contractCurrency}</td>
             </tr>
             <tr>
-              <td>累计应收帐 :</td><td>{applicationContract.oughtMoney}</td><td>累计已收帐 :</td><td>{applicationContract.returnMoney}</td><td>应收金额 :</td><td>{applicationContract.oughtReturnMoney}</td>
+              <td>累计应收帐 :</td><td>{toThousands(applicationContract.oughtMoney)}</td><td>累计已收帐 :</td><td>{toThousands(applicationContract.returnMoney)}</td><td>应收金额 :</td><td>{toThousands(applicationContract.oughtReturnMoney)}</td>
             </tr>
             <tr>
               <td>收款比例 :</td><td>{applicationContract.paymentPercent}</td><td>收款银行 :</td><td>{applicationContract.bank}</td><td>银行账号 :</td><td>{applicationContract.bankAccount}</td>
