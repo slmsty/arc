@@ -6,6 +6,7 @@ import OtherContractAdd from './otherContractAdd'
 import BigSignAudit from '../../containers/billApplication/bigSignAudit'
 import { Table, Button, message, Modal } from 'antd'
 import { otherTypes, advanceTypes, redTypes, redFontCols, normalTypes } from './billColumns'
+import UnSignProjectAdd from './unSignProjectAdd'
 import './billingApplication.less'
 const confirm = Modal.confirm
 
@@ -15,6 +16,7 @@ export default class BillingApplication extends React.Component {
     this.state = {
       currentType: 'BILLING_CONTRACT',
       updateVisible: false,
+      unSignShow: false,
       otherAddVisible: false,
       selectedRows: [],
       selectedRowKeys: [],
@@ -261,7 +263,7 @@ export default class BillingApplication extends React.Component {
              style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
-                 updateVisible: true,
+                 unSignShow: true,
                  currentRecord: record,
                  isAdd: false,
                })}
@@ -372,14 +374,18 @@ export default class BillingApplication extends React.Component {
     }
     if(!(this.state.currentType === 'BILLING_UN_CONTRACT' || this.state.currentType === 'BILLING_OTHER')) {
       const contractId = this.state.selectedRows && this.state.selectedRows[0].contractId ? this.state.selectedRows[0].contractId : ''
-      this.props.getContractUrl(contractId)
+      if(contractId) {
+        this.props.getContractUrl(contractId)
+      }
+    } else {
+
     }
     this.props.billApplyEdit(param)
   }
 
   handleAddBill = () => {
     this.setState({
-      updateVisible: true,
+      unSignShow: true,
       isAdd: true,
     })
   }
@@ -485,7 +491,7 @@ export default class BillingApplication extends React.Component {
         })
       },
     }
-    const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply, pageNo } = this.state
+    const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply, pageNo, unSignShow } = this.state
     let pagination = {}
     const end = pageNo * 10
     let result = billPage.result.slice(end - 10, end)
@@ -562,6 +568,19 @@ export default class BillingApplication extends React.Component {
               billType={isAdd ? this.state.currentType : this.state.currentRecord.billingApplicationType}
               isProCodeEdit={normalTypes.includes(this.state.currentType) || this.state.currentType === 'BILLING_UN_CONTRACT_PROJECT'}
             /> : null
+        }
+        {
+          unSignShow ?
+            <UnSignProjectAdd
+              visible={unSignShow}
+              onCancel={() => this.setState({unSignShow: false, currentRecord: {}})}
+              billAction={isAdd ? addBillUnContract : updateBillInfo}
+              record={this.state.currentRecord}
+              isAdd={isAdd}
+              billType={isAdd ? this.state.currentType : this.state.currentRecord.billingApplicationType}
+              isProCodeEdit={normalTypes.includes(this.state.currentType) || this.state.currentType === 'BILLING_UN_CONTRACT_PROJECT'}
+            /> : null
+
         }
         {
           otherAddVisible ?

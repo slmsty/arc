@@ -10,12 +10,13 @@ import { totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCo
 import UrlModalCom from '../common/getUrlModal'
 import MultipleInput from '../common/multipleInput'
 import { toThousands } from '../../util/currency'
+import {checkEmail} from "../../util/common";
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
 const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_OTHER']
 const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
-const hideContractUrl = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_OTHER']
+const hideContractUrl = ['BILLING_OTHER']
 const advanceTypes = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const formItemLayout = {
   labelCol: { span: 7 },
@@ -285,6 +286,21 @@ class BillDetail extends React.Component {
       err = true
     }
 
+    let invalidEmail = []
+    values.receiptEmail.map(email => {
+      if(!checkEmail(email)) {
+        invalidEmail.push(email)
+      }
+    })
+    if(invalidEmail.length > 0) {
+      this.props.form.setFields({
+        receiptEmail: {
+          value: values.receiptEmail,
+          errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+        },
+      });
+      err = true
+    }
     if(values.receiptEmail.length > 0  && values.receiptEmail.join(',').length > 500) {
       this.props.form.setFields({
         receiptEmail: {
@@ -1090,6 +1106,7 @@ class BillDetail extends React.Component {
               <UrlModalCom
                 closeModal={() => this.setState({showContractLink: false}) }
                 contractUrl={this.props.contractUrl}
+                billType={this.props.billType}
               /> : null
           }
         </Form>

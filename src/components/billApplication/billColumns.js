@@ -443,6 +443,42 @@ const contentDetailCols = [{
   width: 200,
 }]
 
+const contractApproveCols = [
+  {
+    title: '合同流水号',
+    dataIndex: 'contractApprovalNo',
+    width: 200,
+  }, {
+    title: '合同类型',
+    dataIndex: 'isContractedName',
+    width: 200,
+  }, {
+    title: '状态',
+    dataIndex: 'approvalStatusName',
+    width: 200,
+  }, {
+    title: '公司名',
+    dataIndex: 'comName',
+    width: 200,
+  }, {
+    title: '客户名',
+    dataIndex: 'custName',
+    width: 200,
+  }, {
+    title: '币种',
+    dataIndex: 'contractCurrency',
+    width: 200,
+  }, {
+    title: '合同名称',
+    dataIndex: 'contractName',
+    width: 200,
+  }, {
+    title: '编码',
+    dataIndex: 'forecastNo',
+    width: 200,
+  }
+]
+
 const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
 const advanceTypes = ['BILLING_UN_CONTRACT']
 const redTypes = ['BILLING_RED', 'BILLING_RED_OTHER']
@@ -469,5 +505,6 @@ export {
   contentDetailCols,
   proApplyColumns,
   provinceCols,
+  contractApproveCols,
 }
 
