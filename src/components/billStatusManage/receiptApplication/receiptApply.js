@@ -24,13 +24,13 @@ const receiptColumns = [{
   dataIndex: 'paymentPhrases',
   width: 80,
 }, {
-  title: '金额',
+  title: '款项金额',
   dataIndex: 'paymentAmount',
   width: 100,
   render: (text, record) => record.paymentAmount > 0 ? toThousands(record.paymentAmount) : text
 }, {
   title: '实际完成日期',
-  dataIndex: 'actualDate',
+  dataIndex: 'actualCpDate',
   width: 100,
 }, {
   title: '应收日期',

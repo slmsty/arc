@@ -141,15 +141,19 @@ class ReceiptDetail extends React.Component {
         onCancel={() => this.props.onCancel()}
         maskClosable={false}
       >
-        <div className="receipt">
-          <div className="contract">
-            <h1>合同基本信息 <Button
+        <Row>
+          <Col span={14}>
+            <Button
               className="scan-document"
-              style={{float: 'right'}}
               type="primary"
               ghost
               onClick={() => this.setState({ showContractLink: true })}
-            >合同审批表及合同扫描件</Button></h1>
+            >合同审批表及合同扫描件</Button>
+          </Col>
+        </Row>
+        <div className="receipt">
+          <div className="contract">
+            <h1>合同基本信息</h1>
             <table>
               <tbody>
               <tr>
@@ -172,10 +176,10 @@ class ReceiptDetail extends React.Component {
                 <td>项目经理 :</td><td>{applicationContract.projectManager}</td><td>签约区域 :</td><td>{applicationContract.signRegion}</td><td>立项区域 :</td><td>{applicationContract.region}</td>
               </tr>
               <tr>
-                <td>销售经理 :</td><td>{applicationContract.saleManager}</td><td>合同总金额 :</td><td>{applicationContract.contractAmount}</td><td>币种 :</td><td>{applicationContract.contractCurrency}</td>
+                <td>销售经理 :</td><td>{applicationContract.saleManager}</td><td>合同总金额 :</td><td>{toThousands(applicationContract.contractAmount)}</td><td>币种 :</td><td>{applicationContract.contractCurrency}</td>
               </tr>
               <tr>
-                <td>累计应收帐 :</td><td>{applicationContract.oughtMoney}</td><td>累计已收帐 :</td><td>{applicationContract.returnMoney}</td><td>应收金额 :</td><td>{applicationContract.oughtReturnMoney}</td>
+                <td>累计应收帐 :</td><td>{toThousands(applicationContract.oughtMoney)}</td><td>累计已收帐 :</td><td>{toThousands(applicationContract.returnMoney)}</td><td>应收金额 :</td><td>{toThousands(applicationContract.oughtReturnMoney)}</td>
               </tr>
               <tr>
                 <td>收款比例 :</td><td>{applicationContract.paymentPercent}</td><td>收款银行 :</td><td>{applicationContract.bank}</td><td>银行账号 :</td><td>{applicationContract.bankAccount}</td>
@@ -229,7 +233,7 @@ class ReceiptDetail extends React.Component {
                   </td>
                 </tr>
                 <tr>
-                  <td>开发收据阶段 :</td>
+                  <td>开收据阶段 :</td>
                   <td colSpan="3">
                     <Table
                       rowKey={record => record.fundId}
