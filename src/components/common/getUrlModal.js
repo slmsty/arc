@@ -52,7 +52,7 @@ class UrlModalCom extends React.Component {
         visible={true}
         onOk={this.props.closeModal}
         onCancel={this.props.closeModal}
-        title=""
+        title="合同审批表"
         footer={false}
       >
         {
