@@ -3,7 +3,6 @@ import { Row, Col, Button, Input,Upload, Icon, InputNumber, Modal, message, Tabl
 import './receiptDetail.less'
 import { toThousands } from "../../../util/currency";
 import getByteLen from '../../../util/common'
-import UrlModalCom from '../../common/getUrlModal'
 const TextArea = Input.TextArea
 const FormItem = Form.Item;
 
@@ -11,7 +10,6 @@ class ReceiptDetail extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showContractLink: false,
       applyLoading: false,
       appLineItems: props.receiptDetail.appLineItems.map(item => ({
         arBillingId: item.arBillingId,
@@ -97,6 +95,10 @@ class ReceiptDetail extends React.Component {
     })
   }
   custNameValidator = (rule, value, callback) => {
+    if(value === '' || typeof value === 'undefined') {
+      callback()
+      return false
+    }
     if(getByteLen(value) < 100) {
       callback()
       return
@@ -105,11 +107,16 @@ class ReceiptDetail extends React.Component {
   }
 
   contentValidator = (rule, value, callback) => {
-    if(getByteLen(value) < 220) {
+    if(value === '' || typeof value === 'undefined') {
       callback()
-      return
+      return false
+    } else {
+      if(getByteLen(value) < 220) {
+        callback()
+        return
+      }
+      callback('收据内容不能超过220个字符')
     }
-    callback('收据内容不能超过220个字符')
   }
 
   render() {
@@ -134,51 +141,51 @@ class ReceiptDetail extends React.Component {
         onCancel={() => this.props.onCancel()}
         maskClosable={false}
       >
-      <div className="receipt">
-        <div className="contract">
-          <h1>合同基本信息 <Button
-            className="scan-document"
-            style={{float: 'right'}}
-            type="primary"
-            ghost
-            onClick={() => this.setState({ showContractLink: true })}
-          >合同审批表及合同扫描件</Button></h1>
-          <table>
-            <tbody>
-            <tr>
-              <td>合同编码 :</td><td colSpan="5">{applicationContract.contractCode}</td>
-            </tr>
-            <tr>
-              <td>项目名称 :</td><td colSpan="5">{applicationContract.projectName}</td>
-            </tr>
-            <tr>
-              <td>合同名称 :</td><td colSpan="5">{applicationContract.contractName}</td>
-            </tr>
-            <tr>
-              <td width="10%">项目代码 :</td><td width="23%">{applicationContract.projectCode}</td><td width="10%">签约公司 :</td><td width="23%">{applicationContract.comName}</td>
-              <td width="10%">客户名称 :</td><td width="23%">{applicationContract.custName}</td>
-            </tr>
-            <tr>
-              <td>签约日期 :</td><td>{applicationContract.signDate}</td><td>签约BU :</td><td>{applicationContract.salesBuName}</td><td>立项BU :</td><td>{applicationContract.sbuName}</td>
-            </tr>
-            <tr>
-              <td>项目经理 :</td><td>{applicationContract.projectManager}</td><td>签约区域 :</td><td>{applicationContract.signRegion}</td><td>立项区域 :</td><td>{applicationContract.region}</td>
-            </tr>
-            <tr>
-              <td>销售经理 :</td><td>{applicationContract.saleManager}</td><td>合同总金额 :</td><td>{applicationContract.contractAmount}</td><td>币种 :</td><td>{applicationContract.contractCurrency}</td>
-            </tr>
-            <tr>
-              <td>累计应收帐 :</td><td>{applicationContract.oughtMoney}</td><td>累计已收帐 :</td><td>{applicationContract.returnMoney}</td><td>应收金额 :</td><td>{applicationContract.oughtReturnMoney}</td>
-            </tr>
-            <tr>
-              <td>收款比例 :</td><td>{applicationContract.paymentPercent}</td><td>收款银行 :</td><td>{applicationContract.bank}</td><td>银行账号 :</td><td>{applicationContract.bankAccount}</td>
-            </tr>
-            </tbody>
-          </table>
+        <div className="receipt">
           <div className="contract">
-            <h1>收据申请信息</h1>
+            <h1>合同基本信息 <Button
+              className="scan-document"
+              style={{float: 'right'}}
+              type="primary"
+              ghost
+              onClick={() => this.setState({ showContractLink: true })}
+            >合同审批表及合同扫描件</Button></h1>
             <table>
               <tbody>
+              <tr>
+                <td>合同编码 :</td><td colSpan="5">{applicationContract.contractCode}</td>
+              </tr>
+              <tr>
+                <td>项目名称 :</td><td colSpan="5">{applicationContract.projectName}</td>
+              </tr>
+              <tr>
+                <td>合同名称 :</td><td colSpan="5">{applicationContract.contractName}</td>
+              </tr>
+              <tr>
+                <td width="10%">项目代码 :</td><td width="23%">{applicationContract.projectCode}</td><td width="10%">签约公司 :</td><td width="23%">{applicationContract.comName}</td>
+                <td width="10%">客户名称 :</td><td width="23%">{applicationContract.custName}</td>
+              </tr>
+              <tr>
+                <td>签约日期 :</td><td>{applicationContract.signDate}</td><td>签约BU :</td><td>{applicationContract.salesBuName}</td><td>立项BU :</td><td>{applicationContract.sbuName}</td>
+              </tr>
+              <tr>
+                <td>项目经理 :</td><td>{applicationContract.projectManager}</td><td>签约区域 :</td><td>{applicationContract.signRegion}</td><td>立项区域 :</td><td>{applicationContract.region}</td>
+              </tr>
+              <tr>
+                <td>销售经理 :</td><td>{applicationContract.saleManager}</td><td>合同总金额 :</td><td>{applicationContract.contractAmount}</td><td>币种 :</td><td>{applicationContract.contractCurrency}</td>
+              </tr>
+              <tr>
+                <td>累计应收帐 :</td><td>{applicationContract.oughtMoney}</td><td>累计已收帐 :</td><td>{applicationContract.returnMoney}</td><td>应收金额 :</td><td>{applicationContract.oughtReturnMoney}</td>
+              </tr>
+              <tr>
+                <td>收款比例 :</td><td>{applicationContract.paymentPercent}</td><td>收款银行 :</td><td>{applicationContract.bank}</td><td>银行账号 :</td><td>{applicationContract.bankAccount}</td>
+              </tr>
+              </tbody>
+            </table>
+            <div className="contract">
+              <h1>收据申请信息</h1>
+              <table>
+                <tbody>
                 <tr>
                   <td width="15%">客户名称特殊要求 :</td>
                   <td width="35%">
@@ -248,6 +255,7 @@ class ReceiptDetail extends React.Component {
                     <FormItem>
                       {getFieldDecorator('receiptApplicantConetent', {
                           rules: [
+                            { required: true, message: '请输入收据内容'},
                             { validator: this.contentValidator }
                           ]
                         }
@@ -257,18 +265,11 @@ class ReceiptDetail extends React.Component {
                     </FormItem>
                   </td>
                 </tr>
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-        {
-          this.state.showContractLink ?
-            <UrlModalCom
-              closeModal={() => this.setState({showContractLink: false}) }
-              contractUrl={this.props.contractUrl}
-            /> : null
-        }
       </Modal>
     )
   }

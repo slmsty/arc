@@ -4,53 +4,49 @@ import ReceiptApplyForm from './receiptApplyForm'
 import ReceiptDetail from './receiptDetail'
 import { toThousands }  from '../../../util/currency'
 const receiptColumns = [{
-    title: '项目编码',
-    dataIndex: 'projectNo',
-    width: 100,
-  }, {
-    title: '合同编码',
-    dataIndex: 'contractNo',
-    width: 260,
-  }, {
-    title: '合同名称',
-    dataIndex: 'contractName',
-    width: 350,
-  }, {
-    title: '付款条款',
-    dataIndex: 'paymentName',
-    width: 80,
-  }, {
-    title: '付款阶段',
-    dataIndex: 'paymentPhrases',
-    width: 80,
-  }, {
-    title: '金额',
-    dataIndex: 'paymentAmount',
-    width: 100,
-    render: (text, record) => record.paymentAmount > 0 ? toThousands(record.paymentAmount) : text
-  }, {
-    title: '实际完成日期',
-    dataIndex: 'actualDate',
-    width: 100,
-  }, {
-    title: '应收日期',
-    dataIndex: 'arDate',
-    width: 100,
-  }, {
-    title: '应收账款',
-    dataIndex: 'oughtReturnMoney',
-    width: 100,
-    render: (text, record) => record.oughtReturnMoney > 0 ? toThousands(record.oughtReturnMoney) : text
-  }, {
-    title: '申请余额',
-    dataIndex: 'applyUseAmount',
-    width: 100,
-    render: (text, record) => record.applyUseAmount > 0 ? toThousands(record.applyUseAmount) : text
+  title: '项目编码',
+  dataIndex: 'projectNo',
+  width: 100,
 }, {
-    title: '明细',
-    dataIndex: 'mingxi',
-    width: 80,
-  }]
+  title: '合同编码',
+  dataIndex: 'contractNo',
+  width: 260,
+}, {
+  title: '合同名称',
+  dataIndex: 'contractName',
+  width: 350,
+}, {
+  title: '付款条款',
+  dataIndex: 'paymentName',
+  width: 80,
+}, {
+  title: '付款阶段',
+  dataIndex: 'paymentPhrases',
+  width: 80,
+}, {
+  title: '金额',
+  dataIndex: 'paymentAmount',
+  width: 100,
+  render: (text, record) => record.paymentAmount > 0 ? toThousands(record.paymentAmount) : text
+}, {
+  title: '实际完成日期',
+  dataIndex: 'actualDate',
+  width: 100,
+}, {
+  title: '应收日期',
+  dataIndex: 'arDate',
+  width: 100,
+}, {
+  title: '应收账款',
+  dataIndex: 'oughtReturnMoney',
+  width: 100,
+  render: (text, record) => record.oughtReturnMoney > 0 ? toThousands(record.oughtReturnMoney) : text
+}, {
+  title: '申请余额',
+  dataIndex: 'applyUseAmount',
+  width: 100,
+  render: (text, record) => record.applyUseAmount > 0 ? toThousands(record.applyUseAmount) : text
+}]
 export default class ReceiptApply extends React.Component {
   constructor(props) {
     super(props)
@@ -76,10 +72,6 @@ export default class ReceiptApply extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.queryReceiptApply()
-  }
-
   queryReceiptApply = (params) => {
     if(params) {
       this.queryParams = {
@@ -97,10 +89,6 @@ export default class ReceiptApply extends React.Component {
     const params = this.state.selectedRows.map(item => ({
       fundId: item.fundId,
     }))
-    const contractId = this.state.selectedRows && this.state.selectedRows[0].contractId ? this.state.selectedRows[0].contractId : ''
-    if(contractId) {
-      this.props.getContractUrl(contractId)
-    }
     this.props.getReceiptDetail({
       contractItems: params,
     }).then(res => {
@@ -180,7 +168,6 @@ export default class ReceiptApply extends React.Component {
               receiptDetail={receiptDetail}
               onCancel={this.closeDetail}
               receiptApplySave={this.props.receiptApplySave}
-              contractUrl={this.props.contractUrl}
             /> : null
         }
       </div>

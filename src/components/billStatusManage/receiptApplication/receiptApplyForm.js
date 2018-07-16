@@ -5,7 +5,7 @@ const FormItem = Form.Item
 const Option = Select.Option
 const { RangePicker } = DatePicker
 
-class ReceiptApply extends React.Component {
+class ReceiptApplyForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -46,7 +46,7 @@ class ReceiptApply extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="项目编码">
                 {
-                  getFieldDecorator('projectNos',{
+                  getFieldDecorator('projectNo',{
                     initialValue: '',
                   })(
                     <Input placeholder="项目编码"/>,
@@ -86,7 +86,7 @@ class ReceiptApply extends React.Component {
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="合同编码">
                 {
-                  getFieldDecorator('contractNos',{
+                  getFieldDecorator('contractNo',{
                     initialValue: '',
                   })(
                     <Input placeholder="合同编码"/>,
@@ -156,4 +156,4 @@ class ReceiptApply extends React.Component {
     )
   }
 }
-export default Form.create()(ReceiptApply)
+export default Form.create()(ReceiptApplyForm)
