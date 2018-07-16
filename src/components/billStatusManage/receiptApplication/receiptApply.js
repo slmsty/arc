@@ -3,6 +3,7 @@ import { Table, Button } from 'antd'
 import ReceiptApplyForm from './receiptApplyForm'
 import ReceiptDetail from './receiptDetail'
 import { toThousands }  from '../../../util/currency'
+import {getContractUrl} from "../../../actions/billApplication";
 const receiptColumns = [{
   title: '项目编码',
   dataIndex: 'projectNo',
@@ -86,7 +87,8 @@ export default class ReceiptApply extends React.Component {
   }
 
   handleApplyReceipt = () => {
-    const params = this.state.selectedRows.map(item => ({
+    const { selectedRows } = this.state
+    const params = selectedRows.map(item => ({
       fundId: item.fundId,
     }))
     this.props.getReceiptDetail({
@@ -98,11 +100,12 @@ export default class ReceiptApply extends React.Component {
         })
       }
     })
-
+    if(selectedRows.length > 0 && typeof selectedRows[0].contractId !== 'undefined') {
+      this.props.getContractUrl(selectedRows[0].contractId)
+    }
   }
 
   handleChangePage = (page) => {
-    console.log(page)
     this.queryParams.pageInfo.pageNo = page
     this.queryReceiptApply()
   }
@@ -120,7 +123,7 @@ export default class ReceiptApply extends React.Component {
   }
 
   render() {
-    const { loading, receiptPage, receiptDetail } = this.props
+    const { loading, receiptPage, receiptDetail, contractUrl } = this.props
     const { count, pageNo, pageSize, result } = receiptPage
     const rowSelection = {
       type: 'checkbox',
@@ -168,6 +171,7 @@ export default class ReceiptApply extends React.Component {
               receiptDetail={receiptDetail}
               onCancel={this.closeDetail}
               receiptApplySave={this.props.receiptApplySave}
+              contractUrl={contractUrl}
             /> : null
         }
       </div>

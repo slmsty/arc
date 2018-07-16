@@ -3,6 +3,7 @@ import { Row, Col, Button, Input,Upload, Icon, InputNumber, Modal, message, Tabl
 import './receiptDetail.less'
 import { toThousands } from "../../../util/currency";
 import getByteLen from '../../../util/common'
+import UrlModalCom from '../../common/getUrlModal'
 const TextArea = Input.TextArea
 const FormItem = Form.Item;
 
@@ -11,17 +12,18 @@ class ReceiptDetail extends React.Component {
     super(props)
     this.state = {
       applyLoading: false,
+      showContractLink: false,
       appLineItems: props.receiptDetail.appLineItems.map(item => ({
         arBillingId: item.arBillingId,
         fundId: item.fundId,
-        receiptType: '直接收据',
+        receiptType: '收据',
         applyAmount: item.unApplyAmount ,
       })),
     }
     this.columns = [
       {
         title: '付款条件',
-        dataIndex: 'paymentName',
+        dataIndex: 'paymentTerm',
         width: 120,
       }, {
         title: '金额',
@@ -45,7 +47,6 @@ class ReceiptDetail extends React.Component {
           <InputNumber
             value={this.state.appLineItems[index].applyAmount}
             style={{width: '150px'}}
-            max={record.unApplyAmount}
             onChange={(v) => this.handleOnChange(index, v)}
           />
         )
@@ -53,7 +54,7 @@ class ReceiptDetail extends React.Component {
         title: '收据类型',
         dataIndex: 'receiptType',
         width: 100,
-        render: () => '直接收据'
+        render: () => '收据'
       },
     ]
   }
@@ -68,6 +69,20 @@ class ReceiptDetail extends React.Component {
 
   handleApply = () => {
     this.props.form.validateFields((err, values) => {
+      let total = 0
+      this.state.appLineItems.map(item => {
+        total = total + parseFloat(item.applyAmount)
+      })
+      console.log(total, values.receiptAmount)
+      if(total !== values.receiptAmount) {
+        this.props.form.setFields({
+          receiptAmount: {
+            value: values.receiptAmount,
+            errors: [new Error('收据金额与本次申请金额合计不等，请调整')],
+          },
+        });
+        err = true
+      }
       if(!err) {
         this.setState({
           applyLoading: true,
@@ -141,6 +156,13 @@ class ReceiptDetail extends React.Component {
         onCancel={() => this.props.onCancel()}
         maskClosable={false}
       >
+        {
+          this.state.showContractLink ?
+            <UrlModalCom
+              closeModal={() => this.setState({showContractLink: false}) }
+              contractUrl={this.props.contractUrl}
+            /> : null
+        }
         <Row>
           <Col span={14}>
             <Button
@@ -254,7 +276,7 @@ class ReceiptDetail extends React.Component {
                   </td>
                 </tr>
                 <tr>
-                  <td>收据内容 :</td>
+                  <td><span style={{color: 'red'}}>*</span> 收据内容 :</td>
                   <td colSpan="3">
                     <FormItem>
                       {getFieldDecorator('receiptApplicantConetent', {
