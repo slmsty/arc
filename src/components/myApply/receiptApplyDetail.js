@@ -12,7 +12,7 @@ class ReceiptApplyDetail extends React.Component {
     this.columns = [
       {
         title: '付款条件',
-        dataIndex: 'paymentName',
+        dataIndex: 'paymentTerm',
         width: 120,
       }, {
         title: '金额',
@@ -116,7 +116,7 @@ class ReceiptApplyDetail extends React.Component {
                       appLineList.map(item => {
                         total = total + parseFloat(item.applyAmount)
                       })
-                      return <span>本次申请金额合计：<em style={{color: 'blue'}}>{toThousands(total)}</em></span>
+                      return <span>本次申请金额合计：<em style={{color: 'blue'}}>{toThousands(parseFloat(total.toFixed(2)))}</em></span>
                     }}
                   />
                 </td>

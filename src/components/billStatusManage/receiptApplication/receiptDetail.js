@@ -87,15 +87,19 @@ class ReceiptDetail extends React.Component {
         this.setState({
           applyLoading: true,
         })
+        const { comInfo, receiptApplicationId } = this.props.receiptDetail
         const params = {
           ...values,
-          billingComInfoId: this.props.receiptDetail.comInfo.billingComInfoId || '',
+          billingComInfoId: comInfo.billingComInfoId || '',
           appLineItems: this.state.appLineItems,
+          receiptApplicationId: receiptApplicationId || '',
         }
-
         this.props.receiptApplySave(params).then(res => {
           if(res && res.response && res.response.resultCode === '000000') {
             message.success('收据已申请成功')
+            if(this.props.type === 'myApply') {
+              this.props.handleQuery()
+            }
             this.setState({
               applyLoading: false,
             })
@@ -143,6 +147,7 @@ class ReceiptDetail extends React.Component {
     dataSource.map(item => {
       receiptTotal = receiptTotal + item.unApplyAmount
     })
+    receiptTotal = parseFloat(receiptTotal.toFixed(2))
     return (
       <Modal
         title="收据申请详情"
@@ -274,7 +279,7 @@ class ReceiptDetail extends React.Component {
                         this.state.appLineItems.map(item => {
                           total = total + parseFloat(item.applyAmount)
                         })
-                        return <span>本次申请金额合计：<em style={{color: 'blue'}}>{toThousands(total)}</em></span>
+                        return <span>本次申请金额合计：<em style={{color: 'blue'}}>{toThousands(parseFloat(total.toFixed(2)))}</em></span>
                       }}
                     />
                   </td>

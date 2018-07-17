@@ -45,10 +45,10 @@ export default class MyApplyCon extends React.Component {
       loading: true,
     })
     this.props.myApplyList(this.queryParam).then((res) => {
-      this.setState({
-        loading: false,
-      })
-      if (res && res.response && res.response.resultCode === '000000') {
+      if (res && res.response) {
+        this.setState({
+          loading: false,
+        })
       }
     })
   }
@@ -233,6 +233,7 @@ export default class MyApplyCon extends React.Component {
               receiptApplySave={this.props.receiptApplySave}
               contractUrl={contractUrl}
               type='myApply'
+              handleQuery={this.handleQuery}
             /> : null
         }
         {
