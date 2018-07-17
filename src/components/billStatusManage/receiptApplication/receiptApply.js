@@ -23,7 +23,7 @@ const receiptColumns = [{
 }, {
   title: '付款阶段',
   dataIndex: 'paymentPhrases',
-  width: 80,
+  width: 120,
 }, {
   title: '款项金额',
   dataIndex: 'paymentAmount',
@@ -164,6 +164,7 @@ export default class ReceiptApply extends React.Component {
           columns={receiptColumns}
           dataSource={result}
           pagination={pagination}
+          scroll={{x: 1500}}
         />
         {
           this.state.showApplyDetail ?

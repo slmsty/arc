@@ -116,7 +116,7 @@ class ReceiptApplyDetail extends React.Component {
                       appLineList.map(item => {
                         total = total + parseFloat(item.applyAmount)
                       })
-                      return <span>本次申请金额合计：<em style={{color: 'blue'}}>{toThousands(parseFloat(total.toFixed(2)))}</em></span>
+                      return <span>本次申请金额合计：<em style={{color: '#ff8928'}}>{toThousands(parseFloat(total.toFixed(2)))}</em></span>
                     }}
                   />
                 </td>

@@ -68,6 +68,22 @@ class ReceiptDetail extends React.Component {
     })
   }
 
+  handleReceiptAmount = (value) => {
+    const total = this.getReceiptAmountTotal(this.state.appLineItems)
+    let errors = ''
+    if(total === value) {
+      errors = [new Error('收据金额与本次申请金额合计不等，请调整')]
+    } else {
+      errors = ''
+    }
+    this.props.form.setFields({
+      receiptAmount: {
+        value: value,
+        errors: errors,
+      },
+    });
+  }
+
   handleApply = () => {
     this.props.form.validateFields((err, values) => {
       let total = 0
@@ -113,6 +129,16 @@ class ReceiptDetail extends React.Component {
       }
     })
   }
+
+  getReceiptAmountTotal = (dataSource) => {
+    let receiptTotal = 0
+    dataSource.map(item => {
+      receiptTotal = receiptTotal + item.unApplyAmount
+    })
+    receiptTotal = parseFloat(receiptTotal.toFixed(2))
+    return receiptTotal
+  }
+
   custNameValidator = (rule, value, callback) => {
     if(value === '' || typeof value === 'undefined') {
       callback()
@@ -139,15 +165,9 @@ class ReceiptDetail extends React.Component {
   }
 
   render() {
-    const { applicationContract, receiptContent, applicantRequest, applicantRequestReason,
-      totalApplyAmount, appLineList, appLineItems } = this.props.receiptDetail
+    const { applicationContract, receiptContent, applicantRequest, applicantRequestReason, appLineList, appLineItems } = this.props.receiptDetail
     const { getFieldDecorator } = this.props.form;
     const dataSource = this.props.type === 'myApply' ? appLineList : appLineItems
-    let receiptTotal = 0
-    dataSource.map(item => {
-      receiptTotal = receiptTotal + item.unApplyAmount
-    })
-    receiptTotal = parseFloat(receiptTotal.toFixed(2))
     return (
       <Modal
         title="收据申请详情"
@@ -255,9 +275,10 @@ class ReceiptDetail extends React.Component {
                   <td>收据金额 :</td>
                   <td colSpan="3">
                     <FormItem>
-                      {getFieldDecorator('receiptAmount', {initialValue: receiptTotal})(
+                      {getFieldDecorator('receiptAmount', {initialValue: this.getReceiptAmountTotal(dataSource)})(
                         <InputNumber
                           style={{width: '150px'}}
+                          onChange={this.handleReceiptAmount}
                         />
                       )}
                     </FormItem>
@@ -285,13 +306,12 @@ class ReceiptDetail extends React.Component {
                   </td>
                 </tr>
                 <tr>
-                  <td><span style={{color: 'red'}}>*</span> 收据内容 :</td>
+                  <td>收据内容 :</td>
                   <td colSpan="3">
                     <FormItem>
                       {getFieldDecorator('receiptApplicantConetent', {
                           initialValue: receiptContent,
                           rules: [
-                            { required: true, message: '请输入收据内容'},
                             { validator: this.contentValidator }
                           ]
                         }
