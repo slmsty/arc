@@ -18,8 +18,8 @@ class ReceiptApplyForm extends React.Component {
     const values = this.props.form.getFieldsValue()
     const param = {
       ...values,
-      arDateStart: values.arDate ? values.arDate[0].format('YYYY-MM-DD') : '',
-      arDateEnd: values.arDate ? values.arDate[1].format('YYYY-MM-DD') : '',
+      arDateStart: values.arDate && values.arDate.length > 0 ? values.arDate[0].format('YYYY-MM-DD') : '',
+      arDateEnd: values.arDate && values.arDate.length > 0 ? values.arDate[1].format('YYYY-MM-DD') : '',
       custName: values.custName ? values.custName.trim() : '',
       projectNo: values.projectNo ? values.projectNo.trim() : '',
       companyName: values.companyName ? values.companyName.trim() : '',

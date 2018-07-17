@@ -5,33 +5,30 @@ const reciptMoneyInfoCols = [{
   title: '签约公司',
   dataIndex: 'signCompany',
   width: 100,
-}, {
-  title: '项目编号',
-  dataIndex: 'projectNo',
-  width: 150,
-}, {
-  title: '节点',
-  dataIndex: 'projectNode',
-  width: 100,
-}, {
-  title: '付款百分比',
-  dataIndex: 'paymentPercent',
-  width: 100,
-  render: (text, record) => (
-    text !== '' || typeof record.paymentPercent !== 'undefined' ? text+'%' : ''
-  )
-},
-  {
+  }, {
+    title: '项目编号',
+    dataIndex: 'projectNo',
+    width: 150,
+  }, {
+    title: '节点',
+    dataIndex: 'projectNode',
+    width: 100,
+  }, {
+    title: '付款百分比',
+    dataIndex: 'paymentPercent',
+    width: 100,
+    render: (text, record) => (
+      text !== '' || typeof record.paymentPercent !== 'undefined' ? text+'%' : ''
+    )
+  }, {
     title: '付款条款',
     dataIndex: 'paymentName',
     width: 100,
-  },
-  {
+  }, {
     title: '款项ID',
     dataIndex: 'fundId',
     width: 100,
-  },
-  {
+  }, {
     title: '收款币种',
     dataIndex: 'receiptCurrency',
     width: 80,
@@ -42,8 +39,7 @@ const reciptMoneyInfoCols = [{
     align:'right',
     className:'right',
     render: (text) => (text ? toThousands(text) : 0)
-  },
-  {
+  }, {
     title: 'GL日期',
     dataIndex: 'glDate',
     width: 100,
@@ -69,44 +65,41 @@ const reciptMoneyInfoCols = [{
     dataIndex: 'custName',
     width: 200,
   }, {
-    title: '合同编号',
+    title: '合同内部编码',
+    dataIndex: 'contractId',
+    width: 200,
+  }, {
+    title: '合同编码',
     dataIndex: 'contractNo',
     width: 200,
-  },
-  {
+  }, {
     title: '立项BU',
     dataIndex: 'buName',
     width: 100,
-  },
-  {
+  }, {
     title: '合同名称',
     dataIndex: 'contractName',
     width: 300,
-  },
-  {
+  }, {
     title: '已开票金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
     align:'right',
     className:'right',
     render: (text, record) => (text ? toThousands(record.taxIncludeAmount) : 0)
-  },
-  {
+  }, {
     title: '数据状态',
     dataIndex: 'status',
     width: 100,
-  },
-  {
+  }, {
     title: '客户付款方式',
     dataIndex: 'paymentMethod',
     width: 100,
-  },
-  {
+  }, {
     title: '解付日期',
     dataIndex: 'paymentDate',
     width: 100,
-  },
-  {
+  }, {
     title: '备注',
     dataIndex: 'remark',
     width: 100,
