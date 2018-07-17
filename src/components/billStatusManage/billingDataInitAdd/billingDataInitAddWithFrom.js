@@ -23,6 +23,8 @@ class BillingDataInitAddWithFromCom extends React.Component {
       ...param,
       approveCPBeginDate: param.approveCPDate && param.approveCPDate.length > 0? param.approveCPDate[0].format('YYYY-MM-DD') : '',
       approveCPEndDate: param.approveCPDate && param.approveCPDate.length > 0? param.approveCPDate[1].format('YYYY-MM-DD') : '',
+      billingBeginDate: param.billingDate && param.billingDate.length > 0 ? param.billingDate[0].format('YYYY-MM-DD') : '',
+      billingEndDate: param.billingDate && param.billingDate.length > 0 ? param.billingDate[0].format('YYYY-MM-DD') : '',
     })
   }
   exportExcel = () => {
@@ -34,6 +36,8 @@ class BillingDataInitAddWithFromCom extends React.Component {
       ...values,
       approveCPBeginDate: values.approveCPDate && values.approveCPDate.length > 0 ? values.approveCPDate[0].format('YYYY-MM-DD') : '',
       approveCPEndDate: values.approveCPDate && values.approveCPDate.length > 0 ? values.approveCPDate[1].format('YYYY-MM-DD') : '',
+      billingBeginDate: values.billingDate && values.billingDate.length > 0 ? values.billingDate[0].format('YYYY-MM-DD') : '',
+      billingEndDate: values.billingDate && values.billingDate.length > 0 ? values.billingDate[0].format('YYYY-MM-DD') : '',
     }).then(res => {
       if(res) {
         this.setState({
@@ -138,6 +142,17 @@ class BillingDataInitAddWithFromCom extends React.Component {
                 )}
               </FormItem>
             </Col>
+          </Row>
+          <Row gutter={40}>
+            <Col span={8} key={1}>
+              <FormItem {...formItemLayout} label="开票日期">
+                {getFieldDecorator('billingDate', {
+                  initialValue: "",
+                })(
+                  <RangePicker />
+                )}
+              </FormItem>
+            </Col><Col span={8}></Col><Col span={8}></Col>
           </Row>
           <Row gutter={40}>
             <Col span={24} key={7} style={{ textAlign: 'right' }}>

@@ -14,7 +14,8 @@ class ReceiptDetail extends React.Component {
     this.state = {
       applyLoading: false,
       showContractLink: false,
-      appLineItems: appLineItems.map(item => ({
+      appLineItems: appLineItems.map((item, index) => ({
+        lineNo: index,
         arBillingId: item.arBillingId,
         fundId: item.fundId,
         receiptType: '收据',
@@ -300,7 +301,7 @@ class ReceiptDetail extends React.Component {
                         this.state.appLineItems.map(item => {
                           total = total + parseFloat(item.applyAmount)
                         })
-                        return <span>本次申请金额合计：<em style={{color: 'blue'}}>{toThousands(parseFloat(total.toFixed(2)))}</em></span>
+                        return <span>本次申请金额合计：<em style={{color: '#ff8928'}}>{toThousands(parseFloat(total.toFixed(2)))}</em></span>
                       }}
                     />
                   </td>

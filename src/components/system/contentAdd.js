@@ -10,6 +10,7 @@ class ContentAdd extends React.Component {
     this.state = {
       reasonId: '',
       prefPolicySign: props.record.prefPolicySign,
+      addLoading: false,
     }
   }
 
@@ -18,6 +19,9 @@ class ContentAdd extends React.Component {
     const { billingRecordId } = this.props.record
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.setState({
+          addLoading: true
+        })
         const trimValues = {
           ...values,
           billingContentCode: values.billingContentCode ? values.billingContentCode.trim() : null,
@@ -32,7 +36,13 @@ class ContentAdd extends React.Component {
           ...trimValues,
           actionType: 'NEW',
         }
-        this.props.saveInvoiceTaxInfo(params)
+        this.props.saveInvoiceTaxInfo(params).then(res => {
+          if(res && res.response) {
+            this.setState({
+              addLoading: false
+            })
+          }
+        })
       }
     });
   }
@@ -53,8 +63,8 @@ class ContentAdd extends React.Component {
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
           footer={[
-            <Button key="submit" type="primary" onClick={(e) => this.handleOk(e)}>
-              <Icon type="check" />保存
+            <Button key="submit" type="primary" loading={this.state.addLoading} onClick={(e) => this.handleOk(e)}>
+              {!this.state.addLoading ? <Icon type="check" /> : ''}保存
             </Button>,
           ]}
         >

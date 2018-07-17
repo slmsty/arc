@@ -6,6 +6,9 @@ const Option = Select.Option
 class TaxInfoAdd extends React.Component {
   constructor(props){
     super(props)
+    this.state = {
+      saveLoading: false,
+    }
   }
 
   handleOk = (e) => {
@@ -13,6 +16,9 @@ class TaxInfoAdd extends React.Component {
     const { custInfoId } = this.props.record
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.setState({
+          saveLoading: true
+        })
         const trimValues = {
           ...values,
           custInfoName: values.custInfoName.trim(),
@@ -29,7 +35,13 @@ class TaxInfoAdd extends React.Component {
           ...trimValues,
           actionType: 'NEW',
         }
-        this.props.saveCustTaxInfo(params)
+        this.props.saveCustTaxInfo(params).then(res => {
+          if(res && res.response) {
+            this.setState({
+              saveLoading: false
+            })
+          }
+        })
       }
     });
   }
@@ -50,8 +62,8 @@ class TaxInfoAdd extends React.Component {
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
           footer={[
-            <Button key="submit" type="primary" onClick={this.handleOk}>
-              <Icon type="check" />保存
+            <Button key="submit" type="primary" loading={this.state.saveLoading} onClick={this.handleOk}>
+              {!this.state.saveLoading ? <Icon type="check" /> : ''}保存
             </Button>,
           ]}
         >
