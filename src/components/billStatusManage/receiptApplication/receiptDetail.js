@@ -15,7 +15,7 @@ class ReceiptDetail extends React.Component {
       applyLoading: false,
       showContractLink: false,
       appLineItems: appLineItems.map((item, index) => ({
-        lineNo: index,
+        lineNo: index + 1,
         arBillingId: item.arBillingId,
         fundId: item.fundId,
         receiptType: '收据',
@@ -91,7 +91,7 @@ class ReceiptDetail extends React.Component {
       this.state.appLineItems.map(item => {
         total = total + parseFloat(item.applyAmount)
       })
-      if(total !== values.receiptAmount) {
+      if(parseFloat(total.toFixed(2)) !== values.receiptAmount) {
         this.props.form.setFields({
           receiptAmount: {
             value: values.receiptAmount,
@@ -166,7 +166,7 @@ class ReceiptDetail extends React.Component {
   }
 
   render() {
-    const { applicationContract, receiptContent, applicantRequest, applicantRequestReason, appLineList, appLineItems } = this.props.receiptDetail
+    const { applicationContract, totalApplyAmount, receiptContent, applicantRequest, applicantRequestReason, appLineList, appLineItems } = this.props.receiptDetail
     const { getFieldDecorator } = this.props.form;
     const dataSource = this.props.type === 'myApply' ? appLineList : appLineItems
     return (
@@ -276,7 +276,7 @@ class ReceiptDetail extends React.Component {
                   <td>收据金额 :</td>
                   <td colSpan="3">
                     <FormItem>
-                      {getFieldDecorator('receiptAmount', {initialValue: this.getReceiptAmountTotal(dataSource)})(
+                      {getFieldDecorator('receiptAmount', {initialValue: this.props.type === 'myApply' ? totalApplyAmount : this.getReceiptAmountTotal(dataSource)})(
                         <InputNumber
                           style={{width: '150px'}}
                           onChange={this.handleReceiptAmount}
