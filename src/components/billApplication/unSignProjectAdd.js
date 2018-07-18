@@ -1,21 +1,58 @@
 import React from 'react'
 import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon, message } from 'antd'
-import SelectInvoice from '../common/SelectInvoice'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import InputSearch from './inputSearch'
 import ContractApproveSearch from './contractApproveSearch'
+import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
 import { normalTypes } from './billColumns'
 import { clientCols, comCols, proCols, invoiceCols, contractApproveCols } from './billColumns'
 const FormItem = Form.Item
 const needSelectType = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 
-class BillUpdate extends React.Component {
+class UnSignProjectAdd extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      reasonId: props.record.advanceBillingReason
+      reasonId: props.record.advanceBillingReason,
+      contractInfo: {
+        approvalStatus: '',
+        approvalStatusName: '',
+        comName: '',
+        contractApprovalNo: '',
+        contractCurrency: '',
+        contractName: '',
+        custName: '',
+        isContracted: '',
+        isContractedName: '',
+        contractCurrency: '',
+      }
+    }
+    this.statusMap = new Map()
+  }
+
+  handleOnChange = (v) => {
+    this.statusMap.set(v.approvalStatusName, v.approvalStatus)
+    this.props.form.setFieldsValue({
+      approvalStatus: v.approvalStatusName,
+      comName: ['', v.comName],
+      custName: ['', v.custName],
+      contractCurrency: v.contractCurrency,
+      contractName: v.contractName,
+    })
+    console.log(v.forecastNo)
+    if(typeof v.forecastNo !== 'undefined') {
+      requestJsonFetch(`/arc/billingApplication/searchProjectApproveInfo/${v.forecastNo}`, {
+        method: 'GET',
+      }, (res) => {
+        console.log(res)
+        if(res && res.resultCode === '000000') {
+          this.props.form.setFieldsValue({
+            projectNo:  this.props.isProCodeEdit ? res.data : {tempProjectNo: res.data}
+          })
+        }
+      });
     }
   }
 
@@ -24,6 +61,7 @@ class BillUpdate extends React.Component {
     this.props.form.validateFields((err, values) => {
       if(!err) {
         const { record, isAdd } = this.props;
+        console.log(values)
         const params = isAdd ? {
           ...values,
           billingApplicationType: this.props.billType,
@@ -38,6 +76,8 @@ class BillUpdate extends React.Component {
           costcenterNo: values.projectNo ? values.projectNo.costcenterNo : '',
           costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
           tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
+          contractApprovalNo: values.contractApprovalNo ? values.contractApprovalNo.contractApprovalNo : '',
+          approvalStatus: values.approvalStatus ? this.statusMap.get(values.approvalStatus) : '',
         } : {
           ...values,
           billingApplicationType: this.props.billType,
@@ -56,6 +96,8 @@ class BillUpdate extends React.Component {
           costcenterNo: values.projectNo ? values.projectNo.costcenterNo : '',
           costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
           tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
+          contractApprovalNo: values.contractApprovalNo ? values.contractApprovalNo.contractApprovalNo : '',
+          approvalStatus: values.approvalStatus ? this.statusMap.get(values.approvalStatus) : '',
         }
         this.props.billAction(params)
       }
@@ -65,15 +107,19 @@ class BillUpdate extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form
     const { record, isAdd, visible, billType } = this.props
+    console.log(record)
     const formItemLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 16 },
+    }
+    if(record.approvalStatus) {
+      this.statusMap.set(record.approvalStatusName, record.approvalStatus)
     }
     return (
       <div>
         <Modal
           width="650px"
-          title={isAdd ? '发票添加' : '发票编辑'}
+          title={isAdd ? '未大签添加' : '未大签编辑'}
           visible={visible}
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
@@ -87,6 +133,39 @@ class BillUpdate extends React.Component {
           <Form
             className="ant-search-form"
           >
+            <Row gutter={30}>
+              <Col span={12} key={1}>
+                <FormItem {...formItemLayout} label="合同审批流水号">
+                  {getFieldDecorator('contractApprovalNo',{
+                    initialValue: {contractApprovalNo: record.contractApprovalNo},
+                  })(
+                    <ContractApproveSearch
+                      width='900px'
+                      url="/arc/billingApplication/searchContractApproveInfo"
+                      columns={contractApproveCols}
+                      label="合同审批流水号"
+                      idKey="contractApprovalNo"
+                      valueKey="contractApprovalNo"
+                      showSearch={true}
+                      onChange={this.handleOnChange}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12} key={2}>
+                <FormItem {...formItemLayout} label="合同审批状态">
+                  {
+                    getFieldDecorator('approvalStatus',{
+                      initialValue: record.approvalStatusName
+                    })(
+                      <Input
+                        placeholder="合同审批状态"
+                      />
+                    )
+                  }
+                </FormItem>
+              </Col>
+            </Row>
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
@@ -117,35 +196,7 @@ class BillUpdate extends React.Component {
                         idKey="billingCustInfoId"
                         valueKey="custName"
                         showSearch={true}
-                    />)
-                  }
-                </FormItem>
-              </Col>
-            </Row>
-            <Row gutter={30}>
-              <Col span={12} key={1}>
-                <FormItem {...formItemLayout} label="提前开票原因">
-                  {
-                    getFieldDecorator('advanceBillingReason',{
-                      initialValue: record.advanceBillingReason, rules: [{ required: needSelectType.includes(billType), message: '提前开票原因!' }]
-                    })(
-                      <SelectInvokeApi
-                        typeCode="BILLING_APPLICATION"
-                        paramCode="ADVANCE_BILLING_REASON"
-                        placeholder="提前开票原因"
-                        hasEmpty
-                        onChange={(value) => this.setState({reasonId: value})}
-                      />
-                    )
-                  }
-                </FormItem>
-              </Col>
-              <Col span={12} key={2}>
-                <FormItem {...formItemLayout} label="预计回款日期">
-                  {
-                    getFieldDecorator('receiptReturnDate', {
-                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : moment(), rules: [{ required: needSelectType.includes(billType), message: '请选择预计回款日期!' }]}
-                    )(<DatePicker format="YYYY-MM-DD"/>)
+                      />)
                   }
                 </FormItem>
               </Col>
@@ -170,36 +221,18 @@ class BillUpdate extends React.Component {
                   )}
                 </FormItem>
               </Col>
-              {
-                normalTypes.includes(this.props.billType) && !this.props.isAdd ?
-                  <Col span={12} key={2}>
-                    <FormItem {...formItemLayout} label="关联发票">
-                      {
-                        getFieldDecorator('billingOutcomeId',{
-                          initialValue: [record.billingOutcomeId, record.outcomeInvoiceNumber],
-                        })(<SelectInvoice
-                          url="/arc/billingApplication/outcome/search"
-                          columns={invoiceCols}
-                          label="关联发票"
-                          idKey="billingOutcomeId"
-                          valueKey="invoiceNumber"
-                        />)
-                      }
-                    </FormItem>
-                  </Col> :
-                  <Col span={12} key={2}>
-                    <FormItem {...formItemLayout} label="币种">
-                      {getFieldDecorator('contractCurrency', { initialValue : record.contractCurrency, rules: [{ required: true, message: '请选择币种!' }]})(
-                        <SelectInvokeApi
-                          typeCode="COMMON"
-                          paramCode="CURRENCY"
-                          placeholder="请选择币种"
-                          hasEmpty
-                        />
-                      )}
-                    </FormItem>
-                  </Col>
-              }
+              <Col span={12} key={2}>
+                <FormItem {...formItemLayout} label="币种">
+                  {getFieldDecorator('contractCurrency', { initialValue : record.contractCurrency, rules: [{ required: true, message: '请选择币种!' }]})(
+                    <SelectInvokeApi
+                      typeCode="COMMON"
+                      paramCode="CURRENCY"
+                      placeholder="请选择币种"
+                      hasEmpty
+                    />
+                  )}
+                </FormItem>
+              </Col>
             </Row>
             {
               this.props.billType === 'BILLING_UN_CONTRACT_PROJECT' || this.props.billType === 'BILLING_UN_CONTRACT_UN_PROJECT' || this.props.billType === 'BILLING_UN_CONTRACT' ?
@@ -207,12 +240,41 @@ class BillUpdate extends React.Component {
                   <Col span={12} key={1}>
                     <FormItem {...formItemLayout} label="合同名称">
                       {getFieldDecorator('contractName', {initialValue : record.contractName, rules: [{ required: true, message: '请填写合同名称!' }]})(
-                        <Input placeholder="请输入合同名称"/>
+                        <Input
+                          placeholder="请输入合同名称"/>
                       )}
                     </FormItem>
                   </Col>
                 </Row> : null
             }
+            <Row gutter={30}>
+              <Col span={12} key={1}>
+                <FormItem {...formItemLayout} label="提前开票原因">
+                  {
+                    getFieldDecorator('advanceBillingReason',{
+                      initialValue: record.advanceBillingReason, rules: [{ required: true, message: '请填写提前开票原因!' }]
+                    })(
+                      <SelectInvokeApi
+                        typeCode="BILLING_APPLICATION"
+                        paramCode="ADVANCE_BILLING_REASON"
+                        placeholder="提前开票原因"
+                        hasEmpty
+                        onChange={(value) => this.setState({reasonId: value})}
+                      />
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={12} key={2}>
+                <FormItem {...formItemLayout} label="预计回款日期">
+                  {
+                    getFieldDecorator('receiptReturnDate', {
+                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : moment(), rules: [{ required: true, message: '请选择预计回款日期!' }]}
+                    )(<DatePicker format="YYYY-MM-DD"/>)
+                  }
+                </FormItem>
+              </Col>
+            </Row>
             {
               //fix 后端接口添加reasonId
               this.state.reasonId === 'other' || this.state.reasonId === '其它' ?
@@ -233,4 +295,4 @@ class BillUpdate extends React.Component {
   }
 }
 
-export default Form.create()(BillUpdate)
+export default Form.create()(UnSignProjectAdd)

@@ -1,11 +1,12 @@
 import React from 'react'
 import { Form, Row, Col, Button, Input, Icon, Select, DatePicker } from 'antd'
+import SelectSbu from '../../common/SelectSbu'
 
 const FormItem = Form.Item
 const Option = Select.Option
 const { RangePicker } = DatePicker
 
-class ReceiptApply extends React.Component {
+class ReceiptApplyForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -17,13 +18,13 @@ class ReceiptApply extends React.Component {
     const values = this.props.form.getFieldsValue()
     const param = {
       ...values,
-      arDateStart: values.arDate ? values.arDate[0].format('YYYY-MM-DD') : '',
-      arDateEnd: values.arDate ? values.arDate[1].format('YYYY-MM-DD') : '',
+      arDateStart: values.arDate && values.arDate.length > 0 ? values.arDate[0].format('YYYY-MM-DD') : '',
+      arDateEnd: values.arDate && values.arDate.length > 0 ? values.arDate[1].format('YYYY-MM-DD') : '',
       custName: values.custName ? values.custName.trim() : '',
-      projectNos: values.projectNos ? values.projectNos.trim() : '',
+      projectNo: values.projectNo ? values.projectNo.trim() : '',
       companyName: values.companyName ? values.companyName.trim() : '',
       contractNos: values.contractNos ? values.contractNos.trim() : '',
-      sbuNo: values.sbuNo ? values.sbuNo.trim() : '',
+      sbuNo: values.sbuNo && values.sbuNo.length > 0 ? values.sbuNo[0] : '',
       paymentName: values.paymentName ? values.paymentName.trim() : '',
       province: values.province ? values.province.trim() : '',
       region: values.region ? values.region.trim() : '',
@@ -46,7 +47,7 @@ class ReceiptApply extends React.Component {
             <Col span={8} key={1}>
               <FormItem {...formItemLayout} label="项目编码">
                 {
-                  getFieldDecorator('projectNos',{
+                  getFieldDecorator('projectNo',{
                     initialValue: '',
                   })(
                     <Input placeholder="项目编码"/>,
@@ -86,7 +87,7 @@ class ReceiptApply extends React.Component {
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="合同编码">
                 {
-                  getFieldDecorator('contractNos',{
+                  getFieldDecorator('contractNo',{
                     initialValue: '',
                   })(
                     <Input placeholder="合同编码"/>,
@@ -97,10 +98,8 @@ class ReceiptApply extends React.Component {
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="立项BU">
                 {
-                  getFieldDecorator('sbuNo',{
-                    initialValue: '',
-                  })(
-                    <Input placeholder="立项BU"/>,
+                  getFieldDecorator('sbuNo')(
+                    <SelectSbu />,
                   )
                 }
               </FormItem>
@@ -148,7 +147,7 @@ class ReceiptApply extends React.Component {
           <Row gutter={40}>
             <Col style={{ textAlign: 'right' }}>
               <Button type="primary" onClick={() => this.handleQuery()}><Icon type="search" />查询</Button>
-              <Button type="primary" style={{marginLeft: '10px'}} ghost onClick={() => this.props.form.resetFields()}><Icon type="search" />清空</Button>
+              <Button type="primary" style={{marginLeft: '10px'}} ghost onClick={() => this.props.form.resetFields()}><Icon type="delete" />清空</Button>
             </Col>
           </Row>
         </Form>
@@ -156,4 +155,4 @@ class ReceiptApply extends React.Component {
     )
   }
 }
-export default Form.create()(ReceiptApply)
+export default Form.create()(ReceiptApplyForm)

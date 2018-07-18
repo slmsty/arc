@@ -169,8 +169,14 @@ class ApplyInfoModal extends React.Component {
             })
           } else {
             if(type === 'confirm') {
+              this.setState({
+                approveLoading: true,
+              })
               this.approveConfirm(values)
             } else if(type === 'reject') {
+              this.setState({
+                rejectLoading: true,
+              })
               this.applyReject(values)
             }
           }

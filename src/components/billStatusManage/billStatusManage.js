@@ -67,8 +67,7 @@ const billApproveInfoColumns = [
     dataIndex: 'billingTaxRate',
     width: 100,
     render: (text, record) =>
-      record.lineNo === '合计' ? text :
-        (`${text * 100}%`)
+      record.lineNo === '合计' ? text : (typeof record.billingTaxRate !== 'undefined' ? `${text * 100}%` : '')
   },
   {
     title: '开票税额',
@@ -287,8 +286,7 @@ export default class BillStatusCon extends React.Component {
         dataIndex: 'billingTaxRate',
         width: 100,
         render: (text, record) =>
-          record.lineNo === '合计' ? text :
-            (`${text * 100}%`)
+          record.lineNo === '合计' ? text : (typeof record.billingTaxRate !== 'undefined' ? `${text * 100}%` : '')
       },
       {
         title: '开票税额',

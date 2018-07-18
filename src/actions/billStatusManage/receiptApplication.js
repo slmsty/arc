@@ -7,7 +7,6 @@ export function getReceiptAppList(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['GET_RECEIPT_APP_LIST_SUCCESS', 'RECEIPT_LOADING_REQUEST'],
     },
@@ -21,7 +20,6 @@ export function getReceiptDetail(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['GET_RECEIPT_DETAIL_SUCCESS'],
     },
@@ -35,7 +33,6 @@ export function receiptApplySave(queryParam) {
       options: {
         method: 'POST',
         body: queryParam,
-        version: 'v0.0.1',
       },
       types: ['RECEIPT_APPLY_SAVE_SUCCESS'],
     },

@@ -4,9 +4,8 @@ import SelectSbu from '../common/SelectSbu'
 import InputSearch from '../billApplication/inputSearch'
 import { provinceCols } from "../billApplication/billColumns";
 import StaffSearch from './staffSearch'
+import { checkEmail } from '../../util/common'
 const FormItem = Form.Item
-const TextArea = Input.TextArea
-const SHOW_CHILD = TreeSelect.SHOW_CHILD;
 const formItemLayout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 15 },
@@ -50,26 +49,16 @@ class MailCcConfigAdd extends React.Component {
     })
   }
 
-  checkEmail = (email) => {
-    const mailRex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-    if(!mailRex.test(email)){
-      return false
-    }
-    return true
-  }
-
-
   handleOk = (e) => {
     e.preventDefault();
     const { emailId } = this.props.record
     this.props.form.validateFields((err, values) => {
       let invalidEmail = []
       values.email.map(email => {
-        if(!this.checkEmail(email)) {
+        if(!checkEmail(email)) {
           invalidEmail.push(email)
         }
       })
-      console.log(invalidEmail)
       if(invalidEmail.length > 0) {
         this.props.form.setFields({
           email: {
