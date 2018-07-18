@@ -16,6 +16,7 @@ class ReceiptDetail extends React.Component {
       showContractLink: false,
       appLineItems: appLineItems.map((item, index) => ({
         lineNo: index + 1,
+        receiptAppLineId: item.receiptAppLineId ? item.receiptAppLineId : '',
         arBillingId: item.arBillingId,
         fundId: item.fundId,
         receiptType: '收据',
