@@ -386,6 +386,7 @@ export default class BillingApplication extends React.Component {
   handleAddBill = () => {
     this.setState({
       //unSignShow: true,
+      updateVisible: true,
       isAdd: true,
     })
   }

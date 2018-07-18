@@ -124,6 +124,34 @@ class BillUpdate extends React.Component {
             </Row>
             <Row gutter={30}>
               <Col span={12} key={1}>
+                <FormItem {...formItemLayout} label="提前开票原因">
+                  {
+                    getFieldDecorator('advanceBillingReason',{
+                      initialValue: record.advanceBillingReason, rules: [{ required: needSelectType.includes(billType), message: '提前开票原因!' }]
+                    })(
+                      <SelectInvokeApi
+                        typeCode="BILLING_APPLICATION"
+                        paramCode="ADVANCE_BILLING_REASON"
+                        placeholder="提前开票原因"
+                        hasEmpty
+                        onChange={(value) => this.setState({reasonId: value})}
+                      />
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={12} key={2}>
+                <FormItem {...formItemLayout} label="预计回款日期">
+                  {
+                    getFieldDecorator('receiptReturnDate', {
+                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : moment(), rules: [{ required: needSelectType.includes(billType), message: '请选择预计回款日期!' }]}
+                    )(<DatePicker format="YYYY-MM-DD"/>)
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={30}>
+              <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="项目编码">
                   {getFieldDecorator('projectNo', {initialValue: this.props.isProCodeEdit ? record.projectNo : {tempProjectNo: record.projectNo} ,rules: [{ required: true, message: '请选择项目编码!' }]})(
                     this.props.isProCodeEdit ?
@@ -185,34 +213,6 @@ class BillUpdate extends React.Component {
                   </Col>
                 </Row> : null
             }
-            <Row gutter={30}>
-              <Col span={12} key={1}>
-                <FormItem {...formItemLayout} label="提前开票原因">
-                  {
-                    getFieldDecorator('advanceBillingReason',{
-                      initialValue: record.advanceBillingReason, rules: [{ required: needSelectType.includes(billType), message: '提前开票原因!' }]
-                    })(
-                      <SelectInvokeApi
-                        typeCode="BILLING_APPLICATION"
-                        paramCode="ADVANCE_BILLING_REASON"
-                        placeholder="提前开票原因"
-                        hasEmpty
-                        onChange={(value) => this.setState({reasonId: value})}
-                      />
-                    )
-                  }
-                </FormItem>
-              </Col>
-              <Col span={12} key={2}>
-                <FormItem {...formItemLayout} label="预计回款日期">
-                  {
-                    getFieldDecorator('receiptReturnDate', {
-                      initialValue: record.receiptReturnDate ? moment(record.receiptReturnDate, 'YYYY-MM-DD') : moment(), rules: [{ required: needSelectType.includes(billType), message: '请选择预计回款日期!' }]}
-                    )(<DatePicker format="YYYY-MM-DD"/>)
-                  }
-                </FormItem>
-              </Col>
-            </Row>
             {
               //fix 后端接口添加reasonId
               this.state.reasonId === 'other' || this.state.reasonId === '其它' ?
