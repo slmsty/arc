@@ -216,7 +216,8 @@ class ReceiptDetail extends React.Component {
                 <td>合同名称 :</td><td colSpan="5">{applicationContract.contractName}</td>
               </tr>
               <tr>
-                <td width="10%">项目代码 :</td><td width="23%">{applicationContract.projectCode}</td><td width="10%">签约公司 :</td><td width="23%">{applicationContract.comName}</td>
+                <td width="10%">项目代码 :</td><td width="23%">{applicationContract.projectCode}</td>
+                <td width="10%">签约公司 :</td><td width="23%">{applicationContract.comName}</td>
                 <td width="10%">客户名称 :</td><td width="23%">{applicationContract.custName}</td>
               </tr>
               <tr>
@@ -236,95 +237,95 @@ class ReceiptDetail extends React.Component {
               </tr>
               </tbody>
             </table>
-            <div className="contract">
-              <h1>收据申请信息</h1>
-              <table>
-                <tbody>
-                <tr>
-                  <td width="15%">客户名称特殊要求 :</td>
-                  <td width="35%">
-                    <FormItem>
-                      {getFieldDecorator('receiptApplicantRequest',
-                        {
-                          initialValue: applicantRequest,
-                          rules: [
-                            { validator: this.custNameValidator }
-                          ]
-                        }
-                      )(
-                        <Input />
-                      )}
-                    </FormItem>
-                  </td>
-                  <td width="15%">客户名称特殊要求理由 :</td>
-                  <td width="35%">
-                    <FormItem>
-                      {getFieldDecorator('receiptApplicantRequestReason',
-                        {
-                          initialValue: applicantRequestReason,
-                          rules: [
-                            { validator: this.custNameValidator }
-                          ]
-                        }
-                      )(
-                        <Input />
-                      )}
-                    </FormItem>
-                  </td>
-                </tr>
-                <tr>
-                  <td>收据金额 :</td>
-                  <td colSpan="3">
-                    <FormItem>
-                      {getFieldDecorator('receiptAmount', {initialValue: this.props.type === 'myApply' ? totalApplyAmount : this.getReceiptAmountTotal(dataSource)})(
-                        <InputNumber
-                          style={{width: '150px'}}
-                          onChange={this.handleReceiptAmount}
-                        />
-                      )}
-                    </FormItem>
-                  </td>
-                </tr>
-                <tr>
-                  <td>开收据阶段 :</td>
-                  <td colSpan="3">
-                    <Table
-                      rowKey={record => record.fundId}
-                      rowSelection={null}
-                      bordered
-                      size="small"
-                      columns={this.columns}
-                      dataSource={dataSource}
-                      pagination={false}
-                      footer={() => {
-                        let total = 0
-                        this.state.appLineItems.map(item => {
-                          total = total + parseFloat(item.applyAmount)
-                        })
-                        return <span>本次申请金额合计：<em style={{color: '#ff8928'}}>{toThousands(parseFloat(total.toFixed(2)))}</em></span>
-                      }}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>收据内容 :</td>
-                  <td colSpan="3">
-                    <FormItem>
-                      {getFieldDecorator('receiptApplicantConetent', {
-                          initialValue: receiptContent,
-                          rules: [
-                            { validator: this.contentValidator }
-                          ]
-                        }
-                      )(
-                        <TextArea  rows={3}/>
-                      )}
-                    </FormItem>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
+          </div>
+          <div className="contract">
+            <h1>收据申请信息</h1>
+            <table>
+              <tbody>
+              <tr>
+                <td width="15%">客户名称特殊要求 :</td>
+                <td width="35%">
+                  <FormItem>
+                    {getFieldDecorator('receiptApplicantRequest',
+                      {
+                        initialValue: applicantRequest,
+                        rules: [
+                          { validator: this.custNameValidator }
+                        ]
+                      }
+                    )(
+                      <Input />
+                    )}
+                  </FormItem>
+                </td>
+                <td width="15%">客户名称特殊要求理由 :</td>
+                <td width="35%">
+                  <FormItem>
+                    {getFieldDecorator('receiptApplicantRequestReason',
+                      {
+                        initialValue: applicantRequestReason,
+                        rules: [
+                          { validator: this.custNameValidator }
+                        ]
+                      }
+                    )(
+                      <Input />
+                    )}
+                  </FormItem>
+                </td>
+              </tr>
+              <tr>
+                <td>收据金额 :</td>
+                <td colSpan="3">
+                  <FormItem>
+                    {getFieldDecorator('receiptAmount', {initialValue: this.props.type === 'myApply' ? totalApplyAmount : this.getReceiptAmountTotal(dataSource)})(
+                      <InputNumber
+                        style={{width: '150px'}}
+                        onChange={this.handleReceiptAmount}
+                      />
+                    )}
+                  </FormItem>
+                </td>
+              </tr>
+              <tr>
+                <td>开收据阶段 :</td>
+                <td colSpan="3">
+                  <Table
+                    rowKey={record => record.fundId}
+                    rowSelection={null}
+                    bordered
+                    size="small"
+                    columns={this.columns}
+                    dataSource={dataSource}
+                    pagination={false}
+                    footer={() => {
+                      let total = 0
+                      this.state.appLineItems.map(item => {
+                        total = total + parseFloat(item.applyAmount)
+                      })
+                      return <span>本次申请金额合计：<em style={{color: '#ff8928'}}>{toThousands(parseFloat(total.toFixed(2)))}</em></span>
+                    }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>收据内容 :</td>
+                <td colSpan="3">
+                  <FormItem>
+                    {getFieldDecorator('receiptApplicantConetent', {
+                        initialValue: receiptContent,
+                        rules: [
+                          { validator: this.contentValidator }
+                        ]
+                      }
+                    )(
+                      <TextArea  rows={3}/>
+                    )}
+                  </FormItem>
+                </td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </Modal>
