@@ -11,17 +11,17 @@ const advanceTypes = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLIN
 const urlColumns = [{
     title: '是否已大签',
     dataIndex: 'isContractedName',
-    width: 150,
+    width: 100,
   }, {
     title: '合同审批状态',
     dataIndex: 'approvalStatusName',
-    width: 150,
+    width: 100,
   }, {
     title: '合同审批表链接',
     dataIndex: 'approvalSite',
     width: 300,
     render: (text) => (
-      <a href={text} target="_blank">text</a>
+      <a href={text} target="_blank">{text}</a>
     )
   }
 ]
@@ -32,19 +32,19 @@ class UrlModalCom extends React.Component {
       result: []
     }
   }
-  componentDidMount() {
+  /*componentDidMount() {
     if(advanceTypes.includes(this.props.billType)) {
-      requestJsonFetch(`/arc/billingApplication/searchContractApproveAddress/{${this.props.approvalNo}`, {
+      requestJsonFetch(`/arc/billingApplication/searchContractApproveAddress/${this.props.approvalNo}`, {
         method: 'GET',
       }, (res) => {
-        if(res && res.response && res.response.resultCode === '000000') {
+        if(res && res.resultCode === '000000') {
           this.setState({
-            result: res.response.data
+            result: res.data ? [res.data] : []
           })
         }
       });
     }
-  }
+  }*/
   render() {
     return (
       <Modal
@@ -55,7 +55,7 @@ class UrlModalCom extends React.Component {
         title="合同审批表"
         footer={false}
       >
-        {
+        {/*{
           advanceTypes.includes(this.props.billType) ?
             <div>
               <h3 style={{padding: '10px 0'}}>未大签合同审批表</h3>
@@ -78,7 +78,17 @@ class UrlModalCom extends React.Component {
                 })}
               </ul>
             </div>
-        }
+        }*/}
+        <div>
+          <h3>{`该合同有${this.props.contractUrl.length}条审批记录:`}</h3>
+          <ul style={{minHeight:'150px',marginTop:'20px'}}>
+            {this.props.contractUrl.map(item=>{
+              return(
+                <li><a href={item.url} target="_blank">{item.contractName}</a></li>
+              )
+            })}
+          </ul>
+        </div>
       </Modal>
     )
   }

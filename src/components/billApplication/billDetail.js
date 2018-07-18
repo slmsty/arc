@@ -937,12 +937,16 @@ class BillDetail extends React.Component {
                     <FormItem {...formItemLayout1} label="附件">
                       {
                         getFieldDecorator('file', {initialValue: fileName, rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件!' }] })(
-                          <Upload {...props} fileList={this.state.fileList}>
-                            <Button disabled={this.state.fileList.length === 1}>
-                              <Icon type="upload" />点击上传
-                            </Button>
-                            <span className="file-tip">说明：未大签、其他开票项目需要上传合同附件</span>
-                          </Upload>
+                            <div>
+                              <div style={{float: 'left'}}>
+                                <Upload {...props} fileList={this.state.fileList}>
+                                  <Button disabled={this.state.fileList.length === 1}>
+                                    <Icon type="upload" />点击上传
+                                  </Button>
+                                </Upload>
+                              </div>
+                              <span className="file-tip" style={{float: 'left'}}>说明：未大签、其他开票项目需要上传合同附件</span>
+                            </div>
                         )
                       }
                     </FormItem>
@@ -1107,6 +1111,7 @@ class BillDetail extends React.Component {
                 closeModal={() => this.setState({showContractLink: false}) }
                 contractUrl={this.props.contractUrl}
                 billType={this.props.billType}
+                approvalNo={contractList.length > 0 ? contractList[0].contractApprovalNo : ''}
               /> : null
           }
         </Form>

@@ -11,7 +11,7 @@ import { clientCols, comCols, proCols, invoiceCols, contractApproveCols } from '
 const FormItem = Form.Item
 const needSelectType = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 
-class BillUpdate extends React.Component {
+class UnSignProjectAdd extends React.Component {
   constructor(props){
     super(props)
     this.state = {
@@ -107,15 +107,19 @@ class BillUpdate extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form
     const { record, isAdd, visible, billType } = this.props
+    console.log(record)
     const formItemLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 16 },
+    }
+    if(record.approvalStatus) {
+      this.statusMap.set(record.approvalStatusName, record.approvalStatus)
     }
     return (
       <div>
         <Modal
           width="650px"
-          title={isAdd ? '发票添加' : '发票编辑'}
+          title={isAdd ? '未大签添加' : '未大签编辑'}
           visible={visible}
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
@@ -132,7 +136,9 @@ class BillUpdate extends React.Component {
             <Row gutter={30}>
               <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="合同审批流水号">
-                  {getFieldDecorator('contractApprovalNo')(
+                  {getFieldDecorator('contractApprovalNo',{
+                    initialValue: {contractApprovalNo: record.contractApprovalNo},
+                  })(
                     <ContractApproveSearch
                       width='900px'
                       url="/arc/billingApplication/searchContractApproveInfo"
@@ -150,7 +156,7 @@ class BillUpdate extends React.Component {
                 <FormItem {...formItemLayout} label="合同审批状态">
                   {
                     getFieldDecorator('approvalStatus',{
-                      initialValue: ''
+                      initialValue: record.approvalStatusName
                     })(
                       <Input
                         placeholder="合同审批状态"
@@ -289,4 +295,4 @@ class BillUpdate extends React.Component {
   }
 }
 
-export default Form.create()(BillUpdate)
+export default Form.create()(UnSignProjectAdd)
