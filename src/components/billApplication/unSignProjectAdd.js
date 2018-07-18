@@ -29,9 +29,11 @@ class BillUpdate extends React.Component {
         contractCurrency: '',
       }
     }
+    this.statusMap = new Map()
   }
 
   handleOnChange = (v) => {
+    this.statusMap.set(v.approvalStatusName, v.approvalStatus)
     this.props.form.setFieldsValue({
       approvalStatus: v.approvalStatusName,
       comName: ['', v.comName],
@@ -39,13 +41,15 @@ class BillUpdate extends React.Component {
       contractCurrency: v.contractCurrency,
       contractName: v.contractName,
     })
+    console.log(v.forecastNo)
     if(typeof v.forecastNo !== 'undefined') {
       requestJsonFetch(`/arc/billingApplication/searchProjectApproveInfo/${v.forecastNo}`, {
         method: 'GET',
       }, (res) => {
-        if(res && res.response && res.response.resultCode === '000000') {
+        console.log(res)
+        if(res && res.resultCode === '000000') {
           this.props.form.setFieldsValue({
-            projectNo: res.response.data
+            projectNo:  this.props.isProCodeEdit ? res.data : {tempProjectNo: res.data}
           })
         }
       });
@@ -57,6 +61,7 @@ class BillUpdate extends React.Component {
     this.props.form.validateFields((err, values) => {
       if(!err) {
         const { record, isAdd } = this.props;
+        console.log(values)
         const params = isAdd ? {
           ...values,
           billingApplicationType: this.props.billType,
@@ -71,6 +76,8 @@ class BillUpdate extends React.Component {
           costcenterNo: values.projectNo ? values.projectNo.costcenterNo : '',
           costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
           tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
+          contractApprovalNo: values.contractApprovalNo ? values.contractApprovalNo.contractApprovalNo : '',
+          approvalStatus: values.approvalStatus ? this.statusMap.get(values.approvalStatus) : '',
         } : {
           ...values,
           billingApplicationType: this.props.billType,
@@ -89,6 +96,8 @@ class BillUpdate extends React.Component {
           costcenterNo: values.projectNo ? values.projectNo.costcenterNo : '',
           costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
           tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
+          contractApprovalNo: values.contractApprovalNo ? values.contractApprovalNo.contractApprovalNo : '',
+          approvalStatus: values.approvalStatus ? this.statusMap.get(values.approvalStatus) : '',
         }
         this.props.billAction(params)
       }
@@ -144,7 +153,8 @@ class BillUpdate extends React.Component {
                       initialValue: ''
                     })(
                       <Input
-                        placeholder="合同审批状态"/>
+                        placeholder="合同审批状态"
+                      />
                     )
                   }
                 </FormItem>

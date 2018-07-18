@@ -73,14 +73,17 @@ class ContractApproveSearch extends React.Component {
   }
 
   handleQueryFetch= () => {
-    const keywords = this.props.form.getFieldValue('keywords')
-    const param = {
-      method: 'GET',
-    }
-    this.setState({
-      loading: true
+    this.props.form.validateFields((err, values) => {
+      if(!err) {
+        const param = {
+          method: 'GET',
+        }
+        this.setState({
+          loading: true
+        })
+        requestJsonFetch(`${this.props.url}/${values.keywords}`, param, this.handleCallback)
+      }
     })
-    requestJsonFetch(`${this.props.url}/${keywords}`, param, this.handleCallback)
   }
 
 
@@ -140,24 +143,27 @@ class ContractApproveSearch extends React.Component {
               <Form
                 className="ant-search-form"
               >
-                <Row>
-                  <Col span={16} key={1}>
-                    <FormItem {...formItemLayout} label={this.props.label}>
-                      {getFieldDecorator('keywords', {
-                        initialValue: this.props.defaultQueryParam,
-                      })(
-                        <Input
-                          onPressEnter={this.handleQuery}
-                          placeholder="请输入关键字"
-                        />,
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={1} key={2} />
-                  <Col span={7} key={3}>
-                    <Button type="primary" icon="search" htmlType="submit" onClick={this.handleQuery}>查询</Button>
-                  </Col>
-                </Row>
+                <div style={{padding: '10px 0'}}>
+                  <Row>
+                    <Col span={16} key={1}>
+                      <FormItem {...formItemLayout} label={this.props.label}>
+                        {getFieldDecorator('keywords', {
+                          initialValue: this.props.defaultQueryParam,
+                          rules: [{ required: true, message: '请输入合同审批流水号进行查询!' }]
+                        })(
+                          <Input
+                            onPressEnter={this.handleQuery}
+                            placeholder="请输入合同审批流水号"
+                          />,
+                        )}
+                      </FormItem>
+                    </Col>
+                    <Col span={1} key={2} />
+                    <Col span={7} key={3}>
+                      <Button type="primary" icon="search" htmlType="submit" onClick={this.handleQuery}>查询</Button>
+                    </Col>
+                  </Row>
+                </div>
               </Form> : null
           }
           <Table

@@ -89,34 +89,6 @@ class BillUpdate extends React.Component {
           >
             <Row gutter={30}>
               <Col span={12} key={1}>
-                <FormItem {...formItemLayout} label="合同审批流水号">
-                  {getFieldDecorator('comName')(
-                    <ContractApproveSearch
-                      width='900px'
-                      url="/arc/billingApplication/searchContractApproveInfo"
-                      columns={contractApproveCols}
-                      label="合同审批流水号"
-                      idKey="contractApprovalNo"
-                      valueKey="contractApprovalNo"
-                      showSearch={true}
-                    />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={12} key={2}>
-                <FormItem {...formItemLayout} label="合同审批状态">
-                  {
-                    getFieldDecorator('custName',{
-                      initialValue: ''
-                    })(
-                      <Input placeholder="合同审批状态"/>
-                      )
-                  }
-                </FormItem>
-              </Col>
-            </Row>
-            <Row gutter={30}>
-              <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="签约公司">
                   {getFieldDecorator('comName', {initialValue: record.comName ? ['', record.comName] : '' , rules: [{ required: true, message: '请选择签约公司!' }]} )(
                     <SelectSearch
