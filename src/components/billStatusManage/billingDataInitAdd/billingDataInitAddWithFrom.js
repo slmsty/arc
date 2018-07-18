@@ -24,7 +24,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
       approveCPBeginDate: param.approveCPDate && param.approveCPDate.length > 0? param.approveCPDate[0].format('YYYY-MM-DD') : '',
       approveCPEndDate: param.approveCPDate && param.approveCPDate.length > 0? param.approveCPDate[1].format('YYYY-MM-DD') : '',
       billingBeginDate: param.billingDate && param.billingDate.length > 0 ? param.billingDate[0].format('YYYY-MM-DD') : '',
-      billingEndDate: param.billingDate && param.billingDate.length > 0 ? param.billingDate[0].format('YYYY-MM-DD') : '',
+      billingEndDate: param.billingDate && param.billingDate.length > 0 ? param.billingDate[1].format('YYYY-MM-DD') : '',
     })
   }
   exportExcel = () => {
@@ -37,7 +37,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
       approveCPBeginDate: values.approveCPDate && values.approveCPDate.length > 0 ? values.approveCPDate[0].format('YYYY-MM-DD') : '',
       approveCPEndDate: values.approveCPDate && values.approveCPDate.length > 0 ? values.approveCPDate[1].format('YYYY-MM-DD') : '',
       billingBeginDate: values.billingDate && values.billingDate.length > 0 ? values.billingDate[0].format('YYYY-MM-DD') : '',
-      billingEndDate: values.billingDate && values.billingDate.length > 0 ? values.billingDate[0].format('YYYY-MM-DD') : '',
+      billingEndDate: values.billingDate && values.billingDate.length > 0 ? values.billingDate[1].format('YYYY-MM-DD') : '',
     }).then(res => {
       if(res) {
         this.setState({
