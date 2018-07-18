@@ -263,7 +263,7 @@ export default class BillingApplication extends React.Component {
              style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
-                 updateVisible: true,
+                 unSignShow: true,
                  currentRecord: record,
                  isAdd: false,
                })}
@@ -385,8 +385,7 @@ export default class BillingApplication extends React.Component {
 
   handleAddBill = () => {
     this.setState({
-      //unSignShow: true,
-      updateVisible: true,
+      unSignShow: true,
       isAdd: true,
     })
   }
