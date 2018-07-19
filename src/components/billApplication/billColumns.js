@@ -451,11 +451,11 @@ const contractApproveCols = [
   }, {
     title: '合同类型',
     dataIndex: 'isContractedName',
-    width: 200,
+    width: 150,
   }, {
     title: '状态',
     dataIndex: 'approvalStatusName',
-    width: 200,
+    width: 100,
   }, {
     title: '公司名',
     dataIndex: 'comName',
@@ -467,15 +467,15 @@ const contractApproveCols = [
   }, {
     title: '币种',
     dataIndex: 'contractCurrency',
-    width: 200,
+    width: 100,
   }, {
     title: '合同名称',
     dataIndex: 'contractName',
     width: 200,
   }, {
-    title: '编码',
+    title: '预测流水号',
     dataIndex: 'forecastNo',
-    width: 200,
+    width: 150,
   }
 ]
 

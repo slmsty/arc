@@ -342,9 +342,9 @@ export default class BillingApplication extends React.Component {
       let content = ''
       this.state.selectedRows.map(s => {
         if(s.applyUseAmount > 0) {
-          content += `【${s.paymentName}】的款项已申请${s.applyIngAmount}元发票，还可正常申请${s.applyUseAmount}元，是否继续申请?\n`
+          content += `【${s.paymentName ? s.paymentName : ''}】的款项已申请${s.applyIngAmount}元发票，还可正常申请${s.applyUseAmount}元，是否继续申请?\n`
         } else {
-          content += `【${s.paymentName}】的款项已开票申请完成，是否再次申请?`
+          content += `【${s.paymentName ? s.paymentName : ''}】的款项已开票申请完成，是否再次申请?`
         }
       })
       confirm({

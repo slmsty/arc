@@ -41,12 +41,10 @@ class UnSignProjectAdd extends React.Component {
       contractCurrency: v.contractCurrency,
       contractName: v.contractName,
     })
-    console.log(v.forecastNo)
     if(typeof v.forecastNo !== 'undefined') {
       requestJsonFetch(`/arc/billingApplication/searchProjectApproveInfo/${v.forecastNo}`, {
         method: 'GET',
       }, (res) => {
-        console.log(res)
         if(res && res.resultCode === '000000') {
           this.props.form.setFieldsValue({
             projectNo:  this.props.isProCodeEdit ? res.data : {tempProjectNo: res.data}
@@ -61,7 +59,6 @@ class UnSignProjectAdd extends React.Component {
     this.props.form.validateFields((err, values) => {
       if(!err) {
         const { record, isAdd } = this.props;
-        console.log(values)
         const params = isAdd ? {
           ...values,
           billingApplicationType: this.props.billType,
@@ -107,7 +104,6 @@ class UnSignProjectAdd extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form
     const { record, isAdd, visible, billType } = this.props
-    console.log(record)
     const formItemLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 16 },
