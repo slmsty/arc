@@ -7,7 +7,7 @@
 import React from 'react'
 import { Table, Button, message, Modal } from 'antd'
 import requestJsonFetch from '../../http/requestJsonFecth'
-const advanceTypes = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
+const advanceTypes = ['BILLING_UN_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const urlColumns = [{
     title: '是否已大签',
     dataIndex: 'isContractedName',
