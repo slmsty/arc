@@ -635,7 +635,7 @@ class BillApproveDetail extends React.Component  {
       callback()
       return false
     }
-    if(getByteLen(value) < 220) {
+    if(getByteLen(value) <= 220) {
       callback()
       return
     }
