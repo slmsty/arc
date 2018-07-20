@@ -81,6 +81,7 @@ const reciptMoneyInfoCols = [{
     title: '合同总金额',
     dataIndex: 'contractAmount',
     width: 100,
+    render: (text,record) => (typeof record.contractAmount !== 'undefined'? toThousands(record.contractAmount) : '')
   }, {
     title: '立项BU',
     dataIndex: 'buName',
