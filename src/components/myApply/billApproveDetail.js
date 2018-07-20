@@ -20,6 +20,7 @@ import InputSearch from '../billApplication/inputSearch'
 import MultipleInput from '../common/multipleInput'
 import './billApproveDetail.less'
 import { toThousands } from "../../util/currency";
+import getByteLen from "../../util/common";
 const FormItem = Form.Item
 const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
@@ -629,6 +630,18 @@ class BillApproveDetail extends React.Component  {
     return {amountTotal, totalExtraAmount, totalTaxAmount}
   }
 
+  remarkValidator = (rule, value, callback) => {
+    if(value === '' || typeof value === 'undefined') {
+      callback()
+      return false
+    }
+    if(getByteLen(value) <= 220) {
+      callback()
+      return
+    }
+    callback('不能超过220个字符，请重新填写')
+  }
+
   render() {
     let appLineItems = this.state.dataSource
     const { getFieldDecorator } = this.props.form
@@ -1215,7 +1228,9 @@ class BillApproveDetail extends React.Component  {
               <Col span={19}>
                 <FormItem {...span3ItemLayout} label="发票备注">
                   {
-                    getFieldDecorator('billingApplicantRemark', {initialValue: billingApplicantRemark, rules: [{max: 75, message: '备注不能超过75个汉字!' }]})(
+                    getFieldDecorator('billingApplicantRemark', {
+                      initialValue: billingApplicantRemark,
+                      rules: [{validator: this.remarkValidator}]})(
                       <TextArea rows="2" disabled={isProManager}/>
                     )
                   }

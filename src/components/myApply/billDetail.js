@@ -182,14 +182,14 @@ class BillDetail extends React.Component  {
                     />
                   </div> : null
               }
-              <div style={{padding: '10px 0'}}>
+              <div style={{padding: '10px 0', wordBreak: 'break-word'}}>
                 <Row gutter={40}>
                   <Col span={24}>
                     备注: {billingApplicantRemark}
                   </Col>
                 </Row>
               </div>
-              <div style={{padding: '10px 0'}}>
+              <div style={{padding: '10px 0', wordBreak: 'break-word'}}>
                 <Row gutter={40}>
                   <Col span={24}>
                     开票原因及要求: {billingApplicantRequest}

@@ -7,7 +7,7 @@
 import React from 'react'
 import { Table, Button, message, Modal } from 'antd'
 import requestJsonFetch from '../../http/requestJsonFecth'
-const advanceTypes = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
+const advanceTypes = ['BILLING_UN_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const urlColumns = [{
     title: '是否已大签',
     dataIndex: 'isContractedName',
@@ -32,7 +32,7 @@ class UrlModalCom extends React.Component {
       result: []
     }
   }
-  /*componentDidMount() {
+  componentDidMount() {
     if(advanceTypes.includes(this.props.billType)) {
       requestJsonFetch(`/arc/billingApplication/searchContractApproveAddress/${this.props.approvalNo}`, {
         method: 'GET',
@@ -44,7 +44,7 @@ class UrlModalCom extends React.Component {
         }
       });
     }
-  }*/
+  }
   render() {
     return (
       <Modal
@@ -55,7 +55,7 @@ class UrlModalCom extends React.Component {
         title="合同审批表"
         footer={false}
       >
-        {/*{
+        {
           advanceTypes.includes(this.props.billType) ?
             <div>
               <h3 style={{padding: '10px 0'}}>未大签合同审批表</h3>
@@ -78,17 +78,7 @@ class UrlModalCom extends React.Component {
                 })}
               </ul>
             </div>
-        }*/}
-        <div>
-          <h3>{`该合同有${this.props.contractUrl.length}条审批记录:`}</h3>
-          <ul style={{minHeight:'150px',marginTop:'20px'}}>
-            {this.props.contractUrl.map(item=>{
-              return(
-                <li><a href={item.url} target="_blank">{item.contractName}</a></li>
-              )
-            })}
-          </ul>
-        </div>
+        }
       </Modal>
     )
   }
