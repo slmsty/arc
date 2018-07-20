@@ -481,7 +481,7 @@ export default class BillStatusCon extends React.Component {
       {
         title: '发票号码',
         dataIndex: 'invoiceNumber',
-        width: 100,
+        width: 130,
         render: (text, record, index) => {
           return (
             <a href="javascript:;" onClick={()=>this.showBillFiles(record)}>{text}</a>
@@ -717,11 +717,10 @@ export default class BillStatusCon extends React.Component {
         <h3>开票结果</h3>
         <br />
         <Table
-          rowSelection={billResultRowSelection}
           bordered
           columns={billApproveResultColumns}
           size="small"
-          scroll={{ x: '1640px' }}
+          scroll={{ x: '1400px' }}
           pagination ={false}
           dataSource={this.props.billStatusManage.getBillStatusBillResultList}
         />
