@@ -4,11 +4,11 @@ import './statement.css'
 const reciptMoneyInfoCols = [{
   title: '签约公司',
   dataIndex: 'signCompany',
-  width: 100,
+  width: 150,
   }, {
     title: '项目编号',
     dataIndex: 'projectNo',
-    width: 150,
+    width: 120,
   }, {
     title: '节点',
     dataIndex: 'projectNode',
@@ -60,7 +60,12 @@ const reciptMoneyInfoCols = [{
     align:'right',
     className:'right',
     render: (text,record) => (text ? toThousands(record.claimAmount) : 0)
-  },{
+  }, {
+    title: '收款比例',
+    dataIndex: 'receiptRate',
+    width: 100,
+    render: (text,record) => (text ? `${record.receiptRate.toFixed(2)}%` : '')
+  }, {
     title: '客户名称',
     dataIndex: 'custName',
     width: 200,
@@ -72,6 +77,10 @@ const reciptMoneyInfoCols = [{
     title: '合同编码',
     dataIndex: 'contractNo',
     width: 200,
+  }, {
+    title: '合同总金额',
+    dataIndex: 'contractAmount',
+    width: 100,
   }, {
     title: '立项BU',
     dataIndex: 'buName',
