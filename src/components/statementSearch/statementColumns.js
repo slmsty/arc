@@ -132,7 +132,7 @@ const billInfocomCols = [{
     dataIndex: 'paymentPercent',
     width: 100,
     render: (text, record) => (
-      text !== '' && typeof text !== 'undefined' ? record.paymentPercent+'%' : ''
+      record.paymentPercent !== '' && typeof record.paymentPercent !== 'undefined' ? record.paymentPercent+'%' : ''
     )
   }, {
     title: '应收金额',
