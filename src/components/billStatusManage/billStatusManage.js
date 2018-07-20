@@ -531,7 +531,7 @@ export default class BillStatusCon extends React.Component {
         width: 100,
         render: (text, record, index) => (text ? currency(text) : text),
       },
-      {
+      /*{
         title: '操作',
         dataIndex: 'oprateion',
         width: 100,
@@ -541,7 +541,7 @@ export default class BillStatusCon extends React.Component {
             <Button onClick={() => this.disableItem(record)}>作废</Button>
           </div>
         )
-      },
+      },*/
     ]
     const billApproveColumns = [
       {
@@ -721,7 +721,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveResultColumns}
           size="small"
-          scroll={{ x: '1740px' }}
+          scroll={{ x: '1640px' }}
           pagination ={false}
           dataSource={this.props.billStatusManage.getBillStatusBillResultList}
         />
