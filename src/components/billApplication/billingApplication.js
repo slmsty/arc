@@ -369,7 +369,7 @@ export default class BillingApplication extends React.Component {
       })
     })
     const param = {
-      billingApplicationType: this.state.currentType,
+      billingApplicationType: this.getBillApplyType(),
       contractItems,
     }
     if(!(this.state.currentType === 'BILLING_UN_CONTRACT' || this.state.currentType === 'BILLING_OTHER')) {
@@ -377,8 +377,6 @@ export default class BillingApplication extends React.Component {
       if(contractId) {
         this.props.getContractUrl(contractId)
       }
-    } else {
-
     }
     this.props.billApplyEdit(param)
   }
