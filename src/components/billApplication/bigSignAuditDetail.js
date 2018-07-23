@@ -2,6 +2,8 @@ import React from 'react'
 import { Button, Row, Col, Table, Modal, Icon, Form, message } from 'antd'
 import BillApproveDetail from '../myApply/billApproveDetail'
 import requestJsonFetch from '../../http/requestJsonFecth'
+import {checkEmail} from "../../util/common"
+import UrlModalCom from '../common/getUrlModal'
 import './bigSignAuditDetail.less'
 
 class BigSignAuditDetail extends React.Component {
@@ -17,6 +19,14 @@ class BigSignAuditDetail extends React.Component {
       approveData: {},
       custInfo: custInfo,
       comInfo: comInfo,
+      showContractLink: false,
+    }
+  }
+
+  componentDidMount() {
+    const { contractId } = this.props.applicationInfo.serviceDetail
+    if(contractId) {
+      this.props.getContractUrl(contractId)
     }
   }
 
@@ -38,6 +48,16 @@ class BigSignAuditDetail extends React.Component {
           break
         }
       }
+      const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
+      if(invalidEmail.length > 0) {
+        this.props.form.setFields({
+          receiptEmail: {
+            value: values.receiptEmail,
+            errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+          },
+        });
+        err = true
+      }
       if(err) {
         return false
       }
@@ -56,7 +76,8 @@ class BigSignAuditDetail extends React.Component {
           appLineItems: this.state.approveData.map(record => ({
             ...record,
             lineNo: record.lineNo + 1,
-          }))
+          })),
+          receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
         }
         requestJsonFetch('/arc/billingApplication/workFlowEdit', {
           method: 'POST',
@@ -94,7 +115,6 @@ class BigSignAuditDetail extends React.Component {
   }
 
   render() {
-    console.log(this.props.roles, this.props.roles.map(role => role.roleCode).includes('ar_admin'))
     const { applyPersonName, applyPersonPhone, applyPersonDept, applyPersonEmail, serviceType, serviceTypeName, serviceDetail } = this.props.applicationInfo
     return (
       <Modal
@@ -112,6 +132,16 @@ class BigSignAuditDetail extends React.Component {
         maskClosable={false}
       >
         <Form>
+          <Row>
+            <Col span={14}>
+              <Button
+                className="scan-document"
+                type="primary"
+                ghost
+                onClick={() => this.setState({showContractLink: true})}
+              >合同审批表及合同扫描件</Button>
+            </Col>
+          </Row>
           <div>
             <h3 className="bill-title">申请人信息</h3>
             <Row gutter={30}>
@@ -139,6 +169,13 @@ class BigSignAuditDetail extends React.Component {
             />
           </div>
         </Form>
+        {
+          this.state.showContractLink ?
+            <UrlModalCom
+              closeModal={() => this.setState({showContractLink: false}) }
+              contractUrl={this.props.contractUrl}
+            /> : null
+        }
       </Modal>
     )
   }

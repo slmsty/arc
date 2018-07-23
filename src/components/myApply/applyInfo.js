@@ -9,6 +9,7 @@ import UrlModalCom from '../common/getUrlModal'
 import BillDetail from './billDetail'
 import ReceiptApplyDetail from './receiptApplyDetail'
 import requestJsonFetch from '../../http/requestJsonFecth'
+import { hideContractUrl } from '../billApplication/billColumns'
 import './billApproveDetail.less'
 
 const FormItem = Form.Item
@@ -298,16 +299,19 @@ class ApplyInfoModal extends React.Component {
           maskClosable={false}
         >
           <Form>
-            <Row>
-              <Col span={14}>
-                <Button
-                  className="scan-document"
-                  type="primary"
-                  ghost
-                  onClick={() => this.setState({showContractLink: true})}
-                >合同审批表及合同扫描件</Button>
-              </Col>
-            </Row>
+            {
+              !hideContractUrl.includes(applyInfoDatas.serviceType) ?
+                <Row>
+                  <Col span={14}>
+                    <Button
+                      className="scan-document"
+                      type="primary"
+                      ghost
+                      onClick={() => this.setState({showContractLink: true})}
+                    >合同审批表及合同扫描件</Button>
+                  </Col>
+                </Row> : null
+            }
             <h2>申请人信息</h2>
             <br />
             <Row>

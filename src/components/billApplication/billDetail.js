@@ -6,7 +6,7 @@ import SelectSearch from './selectSearch'
 import InputSearch from './inputSearch'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
-import { totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols, contentOnlyCols } from './billColumns'
+import { totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols, contentOnlyCols, hideContractUrl } from './billColumns'
 import UrlModalCom from '../common/getUrlModal'
 import MultipleInput from '../common/multipleInput'
 import { toThousands } from '../../util/currency'
@@ -17,7 +17,6 @@ const FormItem = Form.Item
 const { TextArea } = Input
 const uploadFileType = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_OTHER']
 const requirementType = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_EXCESS']
-const hideContractUrl = ['BILLING_OTHER']
 const advanceTypes = ['BILLING_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const formItemLayout = {
   labelCol: { span: 7 },
@@ -951,17 +950,12 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="附件">
                       {
-                        getFieldDecorator('file', {initialValue: fileName, rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件!' }] })(
-                            <div>
-                              <div style={{float: 'left'}}>
-                                <Upload {...props} fileList={this.state.fileList}>
-                                  <Button disabled={this.state.fileList.length === 1}>
-                                    <Icon type="upload" />点击上传
-                                  </Button>
-                                </Upload>
-                              </div>
-                              <span className="file-tip" style={{float: 'left'}}>说明：未大签、其他开票项目需要上传合同附件</span>
-                            </div>
+                        getFieldDecorator('file', {initialValue: fileName, rules: [{ required: uploadFileType.includes(this.props.billType), message: '未大签、其他开票项目需要上传合同附件!' }] })(
+                          <Upload {...props} fileList={this.state.fileList}>
+                            <Button disabled={this.state.fileList.length === 1}>
+                              <Icon type="upload" />点击上传
+                            </Button>
+                          </Upload>
                         )
                       }
                     </FormItem>
