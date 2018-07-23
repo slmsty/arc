@@ -99,7 +99,7 @@ class InfoModal extends React.Component {
       return
     } else {
       const decimal = value && value.toString().split('.')
-      const number = parseInt(value || 0, 10)
+      const number = parseFloat(value || 0)
       const { taxIncludeAmount, taxExcludeAmount} = this.props.form.getFieldsValue()
       const { billingDataInitResultList } = this.props.data
       if (isNaN(value)) {
