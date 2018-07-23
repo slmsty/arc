@@ -409,7 +409,6 @@ class BillDetail extends React.Component {
     if(response.resultCode === '000000') {
       const { file, fileList } = this.state
       message.success(`${file.name} 上传成功`);
-      console.log(response, response.data)
       this.setState({
         fileId: response.data,
         fileList: [...fileList, {
@@ -430,10 +429,14 @@ class BillDetail extends React.Component {
       console.log(info.file, info.fileList);
     }
     if (info.file.status === 'removed') {
+      console.log(info.fileList)
       this.setState({
         fileList: info.fileList,
         fileId: '',
         file: {},
+      })
+      this.props.form.setFieldsValue({
+        file: '',
       })
     }
   }
@@ -950,12 +953,15 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="附件">
                       {
-                        getFieldDecorator('file', {initialValue: fileName, rules: [{ required: uploadFileType.includes(this.props.billType), message: '未大签、其他开票项目需要上传合同附件!' }] })(
-                          <Upload {...props} fileList={this.state.fileList}>
-                            <Button disabled={this.state.fileList.length === 1}>
-                              <Icon type="upload" />点击上传
-                            </Button>
-                          </Upload>
+                        getFieldDecorator('file', {initialValue: fileName, rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件' }] })(
+                          <div style={{position: 'relative'}}>
+                            <Upload {...props} fileList={this.state.fileList}>
+                              <Button disabled={this.state.fileList.length === 1}>
+                                <Icon type="upload" />点击上传
+                              </Button>
+                            </Upload>
+                            <span className="file-tip">说明：未大签、其他开票项目需要上传合同附件</span>
+                          </div>
                         )
                       }
                     </FormItem>

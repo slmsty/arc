@@ -25,6 +25,7 @@ export default class MultipleInput extends React.Component {
   handleBlur= () => {
     if (this.textTemp) {
       const values = this.state.values
+      console.log(values)
       values.push(this.textTemp)
       this.textTemp = ''
       this.setState({ values })
