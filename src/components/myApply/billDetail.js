@@ -144,7 +144,7 @@ class BillDetail extends React.Component  {
                 {
                   showEdit.includes(this.props.applyType) ?
                     <Col span={8}>
-                      是否收到发票: {receiveTax === 'Y' ? '是' : '否'}
+                      是否收到发票: {receiveInvoice[receiveTax]}
                     </Col> : null
                 }
               </Row>
