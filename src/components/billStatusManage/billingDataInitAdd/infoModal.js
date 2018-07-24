@@ -93,39 +93,64 @@ class InfoModal extends React.Component {
     }
   }
 
-  checkAmount = (rule, value, callback) => {
+  checkAmount = (value) => {
+    const decimal = value && value.toString().split('.')
+    const number = parseFloat(value || 0)
+    const { billingDataInitResultList } = this.props.data
+    if (isNaN(value)) {
+      return '请填写正确的金额'
+    } else if (Math.abs(value) > 99999999) {
+      return '填写的金额不能大于千万'
+    } else if (decimal[1] && decimal[1].length > 2) {
+      return '填写的金额请保留两位小数'
+    } else if (billingDataInitResultList[0].billingAmount > 0 && (number <= 0)) {
+      return '申请金额为正数，填写的金额必须为正数'
+    } else if (billingDataInitResultList[0].billingAmount < 0 && (number >= 0)) {
+      return '申请金额为负数，填写的金额必须为负数'
+    } else {
+      return ''
+    }
+  }
+
+  checkIncludeAmount = (rule, value, callback) => {
     if(value === '') {
       callback()
       return
     } else {
-      const decimal = value && value.toString().split('.')
-      const number = parseFloat(value || 0)
+      const errorText = this.checkAmount(value)
       const { taxIncludeAmount, taxExcludeAmount} = this.props.form.getFieldsValue()
-      const { billingDataInitResultList } = this.props.data
-      if (isNaN(value)) {
-        callback('请填写正确的金额');
-        return
-      } else if (Math.abs(value) > 99999999) {
-        callback('填写的金额不能大于千万');
-        return;
-      } else if (decimal[1] && decimal[1].length > 2) {
-        callback('填写的金额请保留两位小数');
-        return;
-      } else if (billingDataInitResultList[0].billingAmount > 0 && (number <= 0)) {
-        callback('申请金额为正数，填写的金额必须为正数');
-        return;
-      } else if (billingDataInitResultList[0].billingAmount < 0 && (number >= 0)) {
-        callback('申请金额为负数，填写的金额必须为负数');
-        return;
-      } else if (Math.abs(taxIncludeAmount) < Math.abs(taxExcludeAmount)) {
-        if(parseFloat(taxIncludeAmount) < 0) {
-          callback('含税金额绝对值必须大于不含税金额绝对值');
-        } else {
-          callback('含税金额必须大于不含税金额');
-        }
-        return;
+      if(errorText) {
+        callback(errorText);
       } else {
-        callback();
+        if(Math.abs(taxIncludeAmount) < Math.abs(taxExcludeAmount)) {
+          if(parseFloat(taxIncludeAmount) < 0) {
+            callback('含税金额绝对值必须大于不含税金额绝对值')
+          } else {
+            callback('含税金额必须大于不含税金额')
+          }
+        }
+      }
+    }
+  }
+  checkExcludeAmount = (rule, value, callback) => {
+    if(value === '') {
+      callback()
+      return
+    } else {
+      const errorText = this.checkAmount(value)
+      const { taxIncludeAmount, taxExcludeAmount} = this.props.form.getFieldsValue()
+      if(errorText) {
+        callback(errorText);
+      } else {
+        if(Math.abs(taxIncludeAmount) < Math.abs(taxExcludeAmount)) {
+          if(parseFloat(taxIncludeAmount) < 0) {
+            callback('不含税金额绝对值必须小于含税金额绝对值')
+          } else {
+            callback('不含税金额必须小于含税金额')
+          }
+        } else {
+          callback()
+        }
       }
     }
   }
@@ -237,9 +262,9 @@ class InfoModal extends React.Component {
                       initialValue: dataSource.taxIncludeAmount,
                       rules: [
                         { required: true, message: '请输入含税金额'},
-                        { validator: this.checkAmount },
+                        { validator: this.checkIncludeAmount },
                       ]
-                    })(<Input style={{width: '220px'}}/>)}
+                    })(<Input style={{width: '220px'}} />)}
                   </FormItem>
                 </Col>
                 <Col span={12} key={10}>
@@ -248,9 +273,9 @@ class InfoModal extends React.Component {
                       initialValue: dataSource.taxExcludeAmount,
                       rules: [
                         { required: true, message: '请输入不含税金额'},
-                        { validator: this.checkAmount },
+                        { validator: this.checkExcludeAmount },
                       ]
-                    })(<Input style={{width: '220px'}}/>)}
+                    })(<Input style={{width: '220px'}} />)}
                   </FormItem>
                 </Col>
               </Row>

@@ -12,6 +12,11 @@ export default class MultipleInput extends React.Component {
         values: [],
       })
     }
+    if(this.props.value !== nextProps.value && nextProps.value) {
+      this.setState({
+        values: nextProps.value,
+      })
+    }
   }
   textTemp = ''
   handleChange = (values) => {
@@ -25,7 +30,6 @@ export default class MultipleInput extends React.Component {
   handleBlur= () => {
     if (this.textTemp) {
       const values = this.state.values
-      console.log(values)
       values.push(this.textTemp)
       this.textTemp = ''
       this.setState({ values })
