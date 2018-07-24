@@ -128,6 +128,8 @@ class InfoModal extends React.Component {
           } else {
             callback('含税金额必须大于不含税金额')
           }
+        } else {
+          callback()
         }
       }
     }

@@ -90,7 +90,7 @@ class BigSignAuditDetail extends React.Component {
               billingApplicationType: this.state.billType,
             }
             this.props.billStartWorkFlow(params).then(res => {
-              if(res && res.response && res.response.resultCode === '000000') {
+              if(res && res.response) {
                 this.setState({
                   loading: false,
                 })
