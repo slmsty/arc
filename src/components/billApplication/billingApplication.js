@@ -263,7 +263,7 @@ export default class BillingApplication extends React.Component {
              style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
-                 unSignShow: true,
+                 updateVisible: true,
                  currentRecord: record,
                  isAdd: false,
                })}
@@ -369,7 +369,7 @@ export default class BillingApplication extends React.Component {
       })
     })
     const param = {
-      billingApplicationType: this.state.currentType,
+      billingApplicationType: this.getBillApplyType(),
       contractItems,
     }
     if(!(this.state.currentType === 'BILLING_UN_CONTRACT' || this.state.currentType === 'BILLING_OTHER')) {
@@ -377,15 +377,13 @@ export default class BillingApplication extends React.Component {
       if(contractId) {
         this.props.getContractUrl(contractId)
       }
-    } else {
-
     }
     this.props.billApplyEdit(param)
   }
 
   handleAddBill = () => {
     this.setState({
-      unSignShow: true,
+      updateVisible: true,
       isAdd: true,
     })
   }
@@ -569,7 +567,7 @@ export default class BillingApplication extends React.Component {
               isProCodeEdit={normalTypes.includes(this.state.currentType) || this.state.currentType === 'BILLING_UN_CONTRACT_PROJECT'}
             /> : null
         }
-        {
+        {/*{
           unSignShow ?
             <UnSignProjectAdd
               visible={unSignShow}
@@ -581,7 +579,7 @@ export default class BillingApplication extends React.Component {
               isProCodeEdit={normalTypes.includes(this.state.currentType) || this.state.currentType === 'BILLING_UN_CONTRACT_PROJECT'}
             /> : null
 
-        }
+        }*/}
         {
           otherAddVisible ?
             <OtherContractAdd
