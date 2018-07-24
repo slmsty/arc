@@ -47,7 +47,7 @@ export default class InvoiceBackInfoEdit extends React.Component{
               <Option value="">-请选择-</Option>
               <Option value="Y">是</Option>
               <Option value="N">否</Option>
-              <Option value="B">无需退回</Option>
+              <Option value="B">无需收票</Option>
             </Select>
           )
         }
