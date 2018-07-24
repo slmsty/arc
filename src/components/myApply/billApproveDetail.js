@@ -1,18 +1,7 @@
 import React from 'react'
 import { Table, Form, message, Row, Col, Input, DatePicker, Button, InputNumber, Icon, Select } from 'antd'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import {
-  proColumns,
-  billDetailColumns,
-  detailColumns,
-  contentCols,
-  contentOnlyCols,
-  taxCategoryCols,
-  normalTypes,
-  invoiceLineCols,
-  totalColumns,
-  clientCols, comCols
-} from '../billApplication/billColumns'
+import { proColumns, billDetailColumns, detailColumns, contentCols, contentOnlyCols, taxCategoryCols, totalColumns, clientCols, comCols, receiveInvoice } from '../billApplication/billColumns'
 import SearchAllColumns from '../common/SearchAllColumns'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment';
@@ -1027,7 +1016,7 @@ class BillApproveDetail extends React.Component  {
                             <Option value="">-请选择-</Option>
                             <Option value="Y">是</Option>
                             <Option value="N">否</Option>
-                            <Option value="B">无需退票</Option>
+                            <Option value="B">无需收票</Option>
                           </Select>
                         )
                       }
@@ -1056,9 +1045,7 @@ class BillApproveDetail extends React.Component  {
                 isTaxAuditor ?
                   <Col span={8}>
                     <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
-                      {
-                        receiptOutcome === 'Y' ? '是' : receiptOutcome === 'N' ? '否' : '无需退票'
-                      }
+                      {receiveInvoice[receiptOutcome]}
                     </FormItem>
                   </Col>
                  : null
@@ -1136,7 +1123,7 @@ class BillApproveDetail extends React.Component  {
                           <Select>
                             <Option value="Y">是</Option>
                             <Option value="N">否</Option>
-                            <Option value="B">无需退票</Option>
+                            <Option value="B">无需收票</Option>
                           </Select>
                         )
                       }

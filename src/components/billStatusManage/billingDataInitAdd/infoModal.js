@@ -129,6 +129,12 @@ class InfoModal extends React.Component {
             callback('含税金额必须大于不含税金额')
           }
         } else {
+          this.props.form.setFields({
+            taxExcludeAmount: {
+              value: taxExcludeAmount,
+              errors: '',
+            },
+          });
           callback()
         }
       }
@@ -151,6 +157,12 @@ class InfoModal extends React.Component {
             callback('不含税金额必须小于含税金额')
           }
         } else {
+          this.props.form.setFields({
+            taxIncludeAmount: {
+              value: taxIncludeAmount,
+              errors: '',
+            },
+          });
           callback()
         }
       }
