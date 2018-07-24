@@ -263,7 +263,7 @@ export default class BillingApplication extends React.Component {
              style={{color: '#ff8928'}}
              onClick={() => {
                this.setState({
-                 unSignShow: true,
+                 updateVisible: true,
                  currentRecord: record,
                  isAdd: false,
                })}
@@ -383,7 +383,7 @@ export default class BillingApplication extends React.Component {
 
   handleAddBill = () => {
     this.setState({
-      unSignShow: true,
+      updateVisible: true,
       isAdd: true,
     })
   }
@@ -567,7 +567,7 @@ export default class BillingApplication extends React.Component {
               isProCodeEdit={normalTypes.includes(this.state.currentType) || this.state.currentType === 'BILLING_UN_CONTRACT_PROJECT'}
             /> : null
         }
-        {
+        {/*{
           unSignShow ?
             <UnSignProjectAdd
               visible={unSignShow}
@@ -579,7 +579,7 @@ export default class BillingApplication extends React.Component {
               isProCodeEdit={normalTypes.includes(this.state.currentType) || this.state.currentType === 'BILLING_UN_CONTRACT_PROJECT'}
             /> : null
 
-        }
+        }*/}
         {
           otherAddVisible ?
             <OtherContractAdd
