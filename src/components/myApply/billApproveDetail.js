@@ -1157,7 +1157,7 @@ class BillApproveDetail extends React.Component  {
                     <Col span={8}>
                       <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                         {
-                          receiptOutcome === 'Y' ? '是' : receiptOutcome === 'N' ? '否' : '无需退票'
+                          receiveInvoice[receiptOutcome]
                         }
                       </FormItem>
                     </Col> : null
