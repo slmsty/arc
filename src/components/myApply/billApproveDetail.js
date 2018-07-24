@@ -20,7 +20,7 @@ import InputSearch from '../billApplication/inputSearch'
 import MultipleInput from '../common/multipleInput'
 import './billApproveDetail.less'
 import { toThousands } from "../../util/currency";
-import getByteLen from "../../util/common";
+import getByteLen, {checkEmail} from "../../util/common";
 const FormItem = Form.Item
 const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
@@ -294,6 +294,16 @@ class BillApproveDetail extends React.Component  {
     const { isAgainInvoice } = this.props.serviceDetail
     const isTaxAndFinance = this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account'
     this.props.form.validateFields((err, values) => {
+      const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
+      if(invalidEmail.length > 0) {
+        this.props.form.setFields({
+          receiptEmail: {
+            value: values.receiptEmail,
+            errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+          },
+        });
+        err = true
+      }
       if(isAgainInvoice !== 'false') {
         let map = new Map()
         for(let i = 0; i< this.state.dataSource.length; i++) {
@@ -389,6 +399,7 @@ class BillApproveDetail extends React.Component  {
             ...record,
             lineNo: record.lineNo + 1,
           })),
+          receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
         } : {
             ...values,
             billingApplicationId: this.props.serviceDetail.billingApplicationId,
@@ -1016,6 +1027,7 @@ class BillApproveDetail extends React.Component  {
                             <Option value="">-请选择-</Option>
                             <Option value="Y">是</Option>
                             <Option value="N">否</Option>
+                            <Option value="B">无需退票</Option>
                           </Select>
                         )
                       }
@@ -1045,7 +1057,7 @@ class BillApproveDetail extends React.Component  {
                   <Col span={8}>
                     <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                       {
-                        receiptOutcome === 'Y' ? '是' : '否'
+                        receiptOutcome === 'Y' ? '是' : receiptOutcome === 'N' ? '否' : '无需退票'
                       }
                     </FormItem>
                   </Col>
@@ -1124,6 +1136,7 @@ class BillApproveDetail extends React.Component  {
                           <Select>
                             <Option value="Y">是</Option>
                             <Option value="N">否</Option>
+                            <Option value="B">无需退票</Option>
                           </Select>
                         )
                       }
@@ -1157,7 +1170,7 @@ class BillApproveDetail extends React.Component  {
                     <Col span={8}>
                       <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                         {
-                          receiptOutcome === 'Y' ? '是' : '否'
+                          receiptOutcome === 'Y' ? '是' : receiptOutcome === 'N' ? '否' : '无需退票'
                         }
                       </FormItem>
                     </Col> : null
