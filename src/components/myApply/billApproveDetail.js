@@ -14,7 +14,7 @@ const FormItem = Form.Item
 const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
 const Option = Select.Option
-const showReceive = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
+const showReceive = ['BILLING_RED', 'BILLING_RED_OTHER']
 const formItemLayout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 12 },
@@ -1024,11 +1024,11 @@ class BillApproveDetail extends React.Component  {
                   </Col> : null
               }
               {
-                this.props.applyType === 'BILLING_RED' && !isArAdmin ?
+                showReceive.includes(this.props.applyType) && !isArAdmin ?
                   <Col span={8}>
                     <FormItem {...formItemLayout} label="退票类型">
                       {
-                        getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount , message: '请选择退票类型!' }]})(
+                        getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: showReceive.includes(this.props.applyType) && isArFinanceAccount , message: '请选择退票类型!' }]})(
                           <SelectInvokeApi
                             typeCode="RED_TYPE_SELECT"
                             paramCode="RED_OR_INVALID"
@@ -1163,12 +1163,12 @@ class BillApproveDetail extends React.Component  {
                     </Col> : null
                 }
                 {
-                  this.props.applyType === 'BILLING_RED' && (isArFinanceAccount || isTaxAuditor) ?
+                  showReceive.includes(this.props.applyType) && (isArFinanceAccount || isTaxAuditor) ?
                     <Col span={8}>
                       <FormItem {...formItemLayout1} label="退票类型">
                         {
                           getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid,
-                            rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount, message: '请选择退票类型!' }]})(
+                            rules: [{ required: showReceive.includes(this.props.applyType) && isArFinanceAccount, message: '请选择退票类型!' }]})(
                             <SelectInvokeApi
                               typeCode="RED_TYPE_SELECT"
                               paramCode="RED_OR_INVALID"
