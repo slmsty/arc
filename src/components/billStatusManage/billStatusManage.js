@@ -13,6 +13,7 @@ import { billApproveItemColumns } from './billStatusCols'
 import InvoiceBackInfoEdit from './InvoiceBackInfoEdit'
 const TO_TAX_TYPE = ['开票审批完成', '作废审批完成', '开票失败']
 const CANCEL_TYPE = ['开票审批中', '作废审批中']
+const BACK_INFO = ['项目退票', '其他红字开票']
 const billApproveInfoColumns = [
   {
     title: '开票行号',
@@ -668,7 +669,7 @@ export default class BillStatusCon extends React.Component {
             >传送金税</Button> : null
         }
         <Button
-          disabled={!(this.state.selectedRows.length > 0 && this.state.selectedRows[0].applicationType === '项目退票')}
+          disabled={!(this.state.selectedRows.length > 0 && BACK_INFO.includes(this.state.selectedRows[0].applicationType))}
           style={{marginLeft: '10px'}}
           onClick={this.handleInvoiceBack}
           type="primary"

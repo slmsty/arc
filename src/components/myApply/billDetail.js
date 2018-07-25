@@ -103,7 +103,7 @@ class BillDetail extends React.Component  {
                   是否收到发票: {receiveInvoice[receiveTax]}
                 </Col>
                 {
-                  this.props.taskCode === 'tax_vp' ?
+                  this.props.taskCode === 'tax_vp' && this.props.applyType === 'BILLING_RED' ?
                     <Row gutter={40}>
                       <Col span={12}>
                         AR财务会计是否收到发票: {receiveInvoice[receiptOutcome]}

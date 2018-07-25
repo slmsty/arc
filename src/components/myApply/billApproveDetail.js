@@ -1042,7 +1042,7 @@ class BillApproveDetail extends React.Component  {
                   </Col> : null
               }
               {
-                isTaxAuditor ?
+                isTaxAuditor && this.props.applyType === 'BILLING_RED' ?
                   <Col span={8}>
                     <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                       {receiveInvoice[receiptOutcome]}
