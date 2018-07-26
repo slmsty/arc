@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import BigSignAudit from '../../components/billApplication/bigSignAudit'
-import { billStartWorkFlow, searchContractBilling, getApplicationDetail } from '../../actions/billApplication'
+import { billStartWorkFlow, searchContractBilling, getApplicationDetail, getContractUrl } from '../../actions/billApplication'
 import { billApproveSave } from '../../actions/myApply'
 
 const mapStateToProps = state => ({
@@ -11,6 +11,7 @@ const mapStateToProps = state => ({
   billStartSuccess: state.billApplication.billStartSuccess,
   currentUser: state.common.user,
   role: state.common.permission.role,
+  contractUrl: state.billApplication.contractUrl,
 })
 
 const mapDispatchToProps = dispatch => (
@@ -19,6 +20,7 @@ const mapDispatchToProps = dispatch => (
     searchContractBilling,
     getApplicationDetail,
     billApproveSave,
+    getContractUrl,
   }, dispatch)
 )
 

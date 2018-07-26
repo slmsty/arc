@@ -483,7 +483,12 @@ const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
 const advanceTypes = ['BILLING_UN_CONTRACT']
 const redTypes = ['BILLING_RED', 'BILLING_RED_OTHER']
 const otherTypes = ['BILLING_OTHER']
-
+const hideContractUrl = ['BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_OTHER']
+const receiveInvoice = {
+  'Y': '是',
+  'N': '否',
+  'B': '无需收票',
+}
 export {
   clientCols,
   comCols,
@@ -506,5 +511,7 @@ export {
   proApplyColumns,
   provinceCols,
   contractApproveCols,
+  hideContractUrl,
+  receiveInvoice,
 }
 

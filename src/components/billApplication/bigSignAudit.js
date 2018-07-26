@@ -107,7 +107,7 @@ class BigSignAudit extends React.Component {
         })
       },
     }
-    const { searchLoading, billContracts, billStartWorkFlow, billApplySave, applicationInfo, role } = this.props
+    const { searchLoading, billContracts, billStartWorkFlow, billApplySave, applicationInfo, getContractUrl, contractUrl } = this.props
     return (
       <Modal
         title="开票审核"
@@ -145,6 +145,8 @@ class BigSignAudit extends React.Component {
               billApplySave={billApplySave}
               billStartWorkFlow={billStartWorkFlow}
               roles={this.props.role}
+              getContractUrl={getContractUrl}
+              contractUrl={contractUrl}
             /> : null
         }
       </Modal>

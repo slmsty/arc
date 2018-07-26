@@ -21,7 +21,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
       this.setState({ loading: false, firstLoad: false })
     }
     if (this.props.visible !== nextProps.visible && nextProps.visible) {
-      this.props.form.resetFields()
+      this.handleResetFields()
       this.handleQuery()
     }
   }
@@ -123,7 +123,15 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   }
   handleSelectFunds = () => {
     this.props.onClose(this.state.selectedRows)
+    this.handleResetFields()
+  }
+  handleResetFields = () => {
     this.props.form.resetFields()
+    this.props.form.setFieldsValue({
+      projectNos: [],
+      contractNos: [],
+      placeholder: [],
+    })
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -154,7 +162,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
         width={800}
         title="查询合同百分比"
         visible={this.props.visible}
-        onCancel={() => this.props.onClose([])}
+        onCancel={() => {this.props.onClose([]);this.handleResetFields()}}
         footer={[
           <Row style={{ lineHeight: '28px' }}>
             <Col span={19} style={{ textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold' }}>
@@ -193,7 +201,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             </Col>
             <Col span={8} key={3}>
               <FormItem {...formItemLayout} label="SBU">
-                {getFieldDecorator('sbu')(
+                {getFieldDecorator('sbu' ,{initialValue: ''})(
                   <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
@@ -202,21 +210,21 @@ class ProjectReceiptClaimSelectFund extends React.Component {
           <Row>
             <Col span={8} key={4}>
               <FormItem {...formItemLayout} label="合同编码">
-                {getFieldDecorator('contractNos')(
+                {getFieldDecorator('contractNos', {initialValue: ''})(
                   <MultipleInput placeholder="多合同编码使用英文逗号间隔" />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={5}>
               <FormItem {...formItemLayout} label="发票号">
-                {getFieldDecorator('placeholder')(
+                {getFieldDecorator('placeholder', {initialValue: ''})(
                   <MultipleInput placeholder="多发票号使用英文逗号间隔" />,
                 )}
               </FormItem>
             </Col>
             <Col span={8} key={6}>
               <FormItem {...formItemLayout} label="部门">
-                {getFieldDecorator('dept')(
+                {getFieldDecorator('dept', {initialValue: ''})(
                   <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>

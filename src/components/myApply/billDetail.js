@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table, Row, Col } from 'antd'
-import { billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns } from '../billApplication/billColumns'
+import { billDetailColumns, proApplyColumns, detailColumns, invoiceLineCols, totalColumns, receiveInvoice } from '../billApplication/billColumns'
 import './billApproveDetail.less'
 import { toThousands } from '../../util/currency'
 const showEdit = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
@@ -100,13 +100,13 @@ class BillDetail extends React.Component  {
             <div>
               <Row>
                 <Col span={12}>
-                  是否收到发票: {receiveTax === 'Y' ? '是' : '否'}
+                  是否收到发票: {receiveInvoice[receiveTax]}
                 </Col>
                 {
-                  this.props.taskCode === 'tax_vp' ?
+                  this.props.taskCode === 'tax_vp' && this.props.applyType === 'BILLING_RED' ?
                     <Row gutter={40}>
                       <Col span={12}>
-                        AR财务会计是否收到发票: {receiptOutcome === 'Y' ? '是' : '否'}
+                        AR财务会计是否收到发票: {receiveInvoice[receiptOutcome]}
                       </Col>
                     </Row> : null
                 }
@@ -144,7 +144,7 @@ class BillDetail extends React.Component  {
                 {
                   showEdit.includes(this.props.applyType) ?
                     <Col span={8}>
-                      是否收到发票: {receiveTax === 'Y' ? '是' : '否'}
+                      是否收到发票: {receiveInvoice[receiveTax]}
                     </Col> : null
                 }
               </Row>

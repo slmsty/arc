@@ -1,18 +1,7 @@
 import React from 'react'
 import { Table, Form, message, Row, Col, Input, DatePicker, Button, InputNumber, Icon, Select } from 'antd'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import {
-  proColumns,
-  billDetailColumns,
-  detailColumns,
-  contentCols,
-  contentOnlyCols,
-  taxCategoryCols,
-  normalTypes,
-  invoiceLineCols,
-  totalColumns,
-  clientCols, comCols
-} from '../billApplication/billColumns'
+import { proColumns, billDetailColumns, detailColumns, contentCols, contentOnlyCols, taxCategoryCols, totalColumns, clientCols, comCols, receiveInvoice } from '../billApplication/billColumns'
 import SearchAllColumns from '../common/SearchAllColumns'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment';
@@ -20,12 +9,12 @@ import InputSearch from '../billApplication/inputSearch'
 import MultipleInput from '../common/multipleInput'
 import './billApproveDetail.less'
 import { toThousands } from "../../util/currency";
-import getByteLen from "../../util/common";
+import getByteLen, {checkEmail} from "../../util/common";
 const FormItem = Form.Item
 const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
 const Option = Select.Option
-const showReceive = ['BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_INVALID']
+const showReceive = ['BILLING_RED', 'BILLING_RED_OTHER']
 const formItemLayout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 12 },
@@ -294,6 +283,16 @@ class BillApproveDetail extends React.Component  {
     const { isAgainInvoice } = this.props.serviceDetail
     const isTaxAndFinance = this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account'
     this.props.form.validateFields((err, values) => {
+      const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
+      if(invalidEmail.length > 0) {
+        this.props.form.setFields({
+          receiptEmail: {
+            value: values.receiptEmail,
+            errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+          },
+        });
+        err = true
+      }
       if(isAgainInvoice !== 'false') {
         let map = new Map()
         for(let i = 0; i< this.state.dataSource.length; i++) {
@@ -389,6 +388,7 @@ class BillApproveDetail extends React.Component  {
             ...record,
             lineNo: record.lineNo + 1,
           })),
+          receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
         } : {
             ...values,
             billingApplicationId: this.props.serviceDetail.billingApplicationId,
@@ -1016,6 +1016,7 @@ class BillApproveDetail extends React.Component  {
                             <Option value="">-请选择-</Option>
                             <Option value="Y">是</Option>
                             <Option value="N">否</Option>
+                            <Option value="B">无需收票</Option>
                           </Select>
                         )
                       }
@@ -1023,11 +1024,11 @@ class BillApproveDetail extends React.Component  {
                   </Col> : null
               }
               {
-                this.props.applyType === 'BILLING_RED' && !isArAdmin ?
+                showReceive.includes(this.props.applyType) && !isArAdmin ?
                   <Col span={8}>
                     <FormItem {...formItemLayout} label="退票类型">
                       {
-                        getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount , message: '请选择退票类型!' }]})(
+                        getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid, rules: [{ required: showReceive.includes(this.props.applyType) && isArFinanceAccount , message: '请选择退票类型!' }]})(
                           <SelectInvokeApi
                             typeCode="RED_TYPE_SELECT"
                             paramCode="RED_OR_INVALID"
@@ -1041,12 +1042,10 @@ class BillApproveDetail extends React.Component  {
                   </Col> : null
               }
               {
-                isTaxAuditor ?
+                isTaxAuditor && this.props.applyType === 'BILLING_RED' ?
                   <Col span={8}>
                     <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
-                      {
-                        receiptOutcome === 'Y' ? '是' : '否'
-                      }
+                      {receiveInvoice[receiptOutcome]}
                     </FormItem>
                   </Col>
                  : null
@@ -1124,6 +1123,7 @@ class BillApproveDetail extends React.Component  {
                           <Select>
                             <Option value="Y">是</Option>
                             <Option value="N">否</Option>
+                            <Option value="B">无需收票</Option>
                           </Select>
                         )
                       }
@@ -1153,22 +1153,22 @@ class BillApproveDetail extends React.Component  {
             {
               <Row gutter={40}>
                 {
-                  isTaxAuditor && isReceiveInvoice ?
+                  isTaxAuditor && this.props.applyType === 'BILLING_RED' ?
                     <Col span={8}>
                       <FormItem {...formItemLayout1} label="AR财务会计是否收到发票">
                         {
-                          receiptOutcome === 'Y' ? '是' : '否'
+                          receiveInvoice[receiptOutcome]
                         }
                       </FormItem>
                     </Col> : null
                 }
                 {
-                  this.props.applyType === 'BILLING_RED' && (isArFinanceAccount || isTaxAuditor) ?
+                  showReceive.includes(this.props.applyType) && (isArFinanceAccount || isTaxAuditor) ?
                     <Col span={8}>
                       <FormItem {...formItemLayout1} label="退票类型">
                         {
                           getFieldDecorator('redOrInvalid', {initialValue: redOrInvalid,
-                            rules: [{ required: this.props.applyType === 'BILLING_RED' && isArFinanceAccount, message: '请选择退票类型!' }]})(
+                            rules: [{ required: showReceive.includes(this.props.applyType) && isArFinanceAccount, message: '请选择退票类型!' }]})(
                             <SelectInvokeApi
                               typeCode="RED_TYPE_SELECT"
                               paramCode="RED_OR_INVALID"
@@ -1315,7 +1315,7 @@ class BillApproveDetail extends React.Component  {
               <Col span={14} key={1}>
                 <FormItem {...span3ItemLayout} label="E-mail">
                   {getFieldDecorator('receiptEmail', {
-                    initialValue: receiptEmail,
+                    initialValue: [receiptEmail],
                     rules: [{ required: true, message: '请填写E-mail!' }]
                   })(
                     <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" disabled={!(isArAdmin || this.props.isArAdminRole)}/>

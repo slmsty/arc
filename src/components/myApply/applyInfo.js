@@ -9,6 +9,8 @@ import UrlModalCom from '../common/getUrlModal'
 import BillDetail from './billDetail'
 import ReceiptApplyDetail from './receiptApplyDetail'
 import requestJsonFetch from '../../http/requestJsonFecth'
+import { hideContractUrl } from '../billApplication/billColumns'
+import { checkEmail } from "../../util/common"
 import './billApproveDetail.less'
 
 const FormItem = Form.Item
@@ -45,6 +47,16 @@ class ApplyInfoModal extends React.Component {
 
   applyConfirm = (type) => {
       this.props.form.validateFields((err, values) => {
+        const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
+        if(invalidEmail.length > 0) {
+          this.props.form.setFields({
+            receiptEmail: {
+              value: values.receiptEmail,
+              errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+            },
+          });
+          err = true
+        }
         if(!err) {
           if(BILL_APPLY_TYPE.includes(this.props.applyInfoData.serviceType) && EDIT_ROLE_TYPE.includes(this.props.applyInfoData.taskCode)) {
             const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
@@ -143,6 +155,7 @@ class ApplyInfoModal extends React.Component {
                 ...record,
                 lineNo: record.lineNo + 1,
               })),
+              receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
             } : {
               ...values,
               billingApplicationId: serviceDetail.billingApplicationId,
@@ -298,16 +311,19 @@ class ApplyInfoModal extends React.Component {
           maskClosable={false}
         >
           <Form>
-            <Row>
-              <Col span={14}>
-                <Button
-                  className="scan-document"
-                  type="primary"
-                  ghost
-                  onClick={() => this.setState({showContractLink: true})}
-                >合同审批表及合同扫描件</Button>
-              </Col>
-            </Row>
+            {
+              !hideContractUrl.includes(applyInfoDatas.serviceType) ?
+                <Row>
+                  <Col span={14}>
+                    <Button
+                      className="scan-document"
+                      type="primary"
+                      ghost
+                      onClick={() => this.setState({showContractLink: true})}
+                    >合同审批表及合同扫描件</Button>
+                  </Col>
+                </Row> : null
+            }
             <h2>申请人信息</h2>
             <br />
             <Row>
