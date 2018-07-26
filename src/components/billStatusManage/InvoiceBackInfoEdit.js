@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Button, Icon, Table, Select } from 'antd'
+import { Modal, Button, Icon, Table, Select, message } from 'antd'
 const Option = Select.Option
 export default class InvoiceBackInfoEdit extends React.Component{
   constructor(props) {
@@ -25,7 +25,12 @@ export default class InvoiceBackInfoEdit extends React.Component{
       applicationId: this.props.applicationId,
       invoiceBackInfoList: this.state.result,
     }
-    this.props.saveInvoiceBackInfo(params)
+    this.props.saveInvoiceBackInfo(params).then(res => {
+      if(res && res.response && res.response.resultCode === '000000') {
+        message.success('纸票退回情况保存成功')
+        this.props.onCancel()
+      }
+    })
   }
 
   render() {
