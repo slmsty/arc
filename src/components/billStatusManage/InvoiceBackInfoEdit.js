@@ -9,6 +9,7 @@ export default class InvoiceBackInfoEdit extends React.Component{
         billingOutcomeId: record.billingOutcomeId,
         actionType: record.invoiceResult,
       })),
+      saveLoading: false,
     }
   }
 
@@ -25,8 +26,14 @@ export default class InvoiceBackInfoEdit extends React.Component{
       applicationId: this.props.applicationId,
       invoiceBackInfoList: this.state.result,
     }
+    this.setState({
+      saveLoading: true
+    })
     this.props.saveInvoiceBackInfo(params).then(res => {
       if(res && res.response && res.response.resultCode === '000000') {
+        this.setState({
+          saveLoading: false
+        })
         message.success('纸票退回情况保存成功')
         this.props.onCancel()
       }
@@ -68,8 +75,8 @@ export default class InvoiceBackInfoEdit extends React.Component{
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
           footer={[
-            <Button key="submit" type="primary" onClick={this.handleOk}>
-              <Icon type="check" />保存
+            <Button key="submit" type="primary" loading={this.state.saveLoading} onClick={this.handleOk}>
+              {!this.state.saveLoading ? <Icon type="check" /> : ''}保存
             </Button>,
           ]}
         >
@@ -79,6 +86,7 @@ export default class InvoiceBackInfoEdit extends React.Component{
             columns={columns}
             bordered
             size="small"
+            pagination={false}
           />
         </Modal>
       </div>

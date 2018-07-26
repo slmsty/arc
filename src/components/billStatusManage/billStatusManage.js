@@ -127,10 +127,6 @@ export default class BillStatusCon extends React.Component {
       }
       this.setState({sendLoading: false})
     }
-    if(this.props.billStatusManage.saveBackSuccess !== nextProps.billStatusManage.saveBackSuccess && nextProps.billStatusManage) {
-      message.success('纸票退回情况保存成功')
-      this.setState({showBackInfo: false})
-    }
   }
   queryParam = {
     pageInfo: {
