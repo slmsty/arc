@@ -227,7 +227,7 @@ class BillDetail extends React.Component  {
                 </Row>
               </div>
               <div style={{padding: '10px 0'}}>
-                <Row gutter={40}>
+                <Row gutter={40} style={{wordWrap: 'break-word'}}>
                   <Col span={24}>
                     E-mail :{receiptEmail}
                   </Col>
