@@ -166,7 +166,8 @@ class BillingDataInitAddCom extends React.Component {
     selectedRowKeys: [],
     selectType: '',
     infoData: [],
-    billingDataInitResultList: []
+    billingDataInitResultList: [],
+    billingDataInitResult: [],
   }
   queryParam = {
     pageInfo: {
@@ -263,11 +264,14 @@ class BillingDataInitAddCom extends React.Component {
     param.buttonType = type
     this.props.showDataInitModal(param).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
+        const { billingDataInitResult } = res.response
+        console.log(res.response)
         this.setState({
           showInfo:true,
           addFlag: false,
           selectType:type,
           billingDataInitResultList:billingDataInitResultList,
+          billingDataInitResult:billingDataInitResult,
           selectedRows:[],
           selectedRowKeys:[],
         })
@@ -329,6 +333,7 @@ class BillingDataInitAddCom extends React.Component {
             <InfoModal
               type={this.state.selectType}
               resultList={this.state.billingDataInitResultList}
+              billingDataInitResult={this.state.billingDataInitResult}
               data ={this.props.billInitData.eidiBillDataInit}
               colseModal={this.closeModal}
               saveData={this.props.saveBillDataInit}

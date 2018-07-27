@@ -175,6 +175,8 @@ class InfoModal extends React.Component {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
     }
+    const { billingDataInitResult } = this.props
+    const isTaxSystem = billingDataInitResult.sourceSystem === 'TAX_SYSTEM'
     let datas = this.props.data
     let billingDataInitResultList = datas.billingDataInitResultList
     let dataSource = datas.billingDataInitResult
@@ -212,7 +214,7 @@ class InfoModal extends React.Component {
                       rules: [
                         { required: true, message: '请输入8位发票号',len:8 },
                       ]
-                    })(<Input/>)}
+                    })(<Input disabled={isTaxSystem}/>)}
                   </FormItem>
                 </Col>
                 <Col span={12} key={4}>
@@ -223,7 +225,7 @@ class InfoModal extends React.Component {
                         { required: true, message: '请输入10位或12位的发票代码' },
                         { validator: this.invoiceValidator }
                       ]
-                    })(<Input/>)}
+                    })(<Input disabled={isTaxSystem}/>)}
                   </FormItem>
                 </Col>
               </Row>
@@ -278,7 +280,7 @@ class InfoModal extends React.Component {
                         { required: true, message: '请输入含税金额'},
                         { validator: this.checkIncludeAmount },
                       ]
-                    })(<Input style={{width: '220px'}} />)}
+                    })(<Input style={{width: '220px'}} disabled={isTaxSystem} />)}
                   </FormItem>
                 </Col>
                 <Col span={12} key={10}>
@@ -289,7 +291,7 @@ class InfoModal extends React.Component {
                         { required: true, message: '请输入不含税金额'},
                         { validator: this.checkExcludeAmount },
                       ]
-                    })(<Input style={{width: '220px'}} />)}
+                    })(<Input style={{width: '220px'}} disabled={isTaxSystem} />)}
                   </FormItem>
                 </Col>
               </Row>

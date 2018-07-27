@@ -1315,7 +1315,7 @@ class BillApproveDetail extends React.Component  {
               <Col span={14} key={1}>
                 <FormItem {...span3ItemLayout} label="E-mail">
                   {getFieldDecorator('receiptEmail', {
-                    initialValue: [receiptEmail],
+                    initialValue: receiptEmail.split(','),
                     rules: [{ required: true, message: '请填写E-mail!' }]
                   })(
                     <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" disabled={!(isArAdmin || this.props.isArAdminRole)}/>

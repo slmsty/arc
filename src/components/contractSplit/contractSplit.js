@@ -9,7 +9,8 @@ import ContractSplitModal  from './contractSplitModal'
 import currency from '../../util/currency'
 import ERPModals from "./ERPModal";
 
-const columns = [{
+const columns = [
+  {
   title: '拆分状态',
   dataIndex: 'status',
   width: 80,
@@ -88,13 +89,6 @@ export default class ApplySearchCon extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    /*console.log(this.props.contractSplitDara.myContractRefresh, nextProps.contractSplitDara.myContractRefresh)
-    if (this.props.contractSplitDara.myContractRefresh !== nextProps.contractSplitDara.myContractRefresh) {
-      this.handleQuery()
-    }*/
-  }
-
   queryParam = {
     contractDateStart: '',
     contractDateEnd: '',
@@ -106,18 +100,6 @@ export default class ApplySearchCon extends React.Component {
     status: '',
     operator: '',
   }
-   /* sendERPQueryParam = {
-    signDateStart:'',
-    signDateEnd:'',
-    buId:'',
-    isReport:'N',
-    projectNo:'',
-    contractNo:'',
-    contractName:'',
-    isProdect:'ALL',
-    erpStatus:'ALL',
-    signCompany:'',
-  }*/
   handleQuery = () => {
     this.setState({
       loading: true,
