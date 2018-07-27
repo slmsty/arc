@@ -21,6 +21,7 @@ class BigSignAuditDetail extends React.Component {
       comInfo: comInfo,
       showContractLink: false,
     }
+    this.isArAdminRole = props.roles.map(role => role.roleCode).includes('ar_admin')
   }
 
   componentDidMount() {
@@ -48,15 +49,17 @@ class BigSignAuditDetail extends React.Component {
           break
         }
       }
-      const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
-      if(invalidEmail.length > 0) {
-        this.props.form.setFields({
-          receiptEmail: {
-            value: values.receiptEmail,
-            errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
-          },
-        });
-        err = true
+      if(this.isArAdminRole) {
+        const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
+        if(invalidEmail.length > 0) {
+          this.props.form.setFields({
+            receiptEmail: {
+              value: values.receiptEmail,
+              errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+            },
+          });
+          err = true
+        }
       }
       if(err) {
         return false
@@ -165,7 +168,7 @@ class BigSignAuditDetail extends React.Component {
               setFormValidate={this.setFormValidate}
               showSave={false}
               isBigSign={true}
-              isArAdminRole={this.props.roles.map(role => role.roleCode).includes('ar_admin')}
+              isArAdminRole={this.isArAdminRole}
             />
           </div>
         </Form>

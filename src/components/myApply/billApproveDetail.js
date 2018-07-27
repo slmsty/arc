@@ -153,7 +153,7 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['billingRecordId'] = value.billingRecordId ? value.billingRecordId : ''
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode ? value.taxCategoryCode : ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
-      if(dataSource[index]['billingTaxRate'] !== '0') {
+      if(parseFloat(dataSource[index]['billingTaxRate']) !== 0) {
         dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
         dataSource[index]['prefPolicyType'] = value.prefPolicyContent ? value.prefPolicyContent : ''
       }
@@ -284,15 +284,17 @@ class BillApproveDetail extends React.Component  {
     const { isAgainInvoice } = this.props.serviceDetail
     const isTaxAndFinance = this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account'
     this.props.form.validateFields((err, values) => {
-      const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
-      if(invalidEmail.length > 0) {
-        this.props.form.setFields({
-          receiptEmail: {
-            value: values.receiptEmail,
-            errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
-          },
-        });
-        err = true
+      if(this.props.taskCode === 'ar_admin' || this.props.isArAdminRole) {
+        const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
+        if(invalidEmail.length > 0) {
+          this.props.form.setFields({
+            receiptEmail: {
+              value: values.receiptEmail,
+              errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+            },
+          });
+          err = true
+        }
       }
       if(isAgainInvoice !== 'false') {
         let map = new Map()
@@ -1316,7 +1318,7 @@ class BillApproveDetail extends React.Component  {
               <Col span={14} key={1}>
                 <FormItem {...span3ItemLayout} label="E-mail">
                   {getFieldDecorator('receiptEmail', {
-                    initialValue: receiptEmail.split(','),
+                    initialValue: receiptEmail ? receiptEmail.split(',') : [],
                     rules: [{ required: true, message: '请填写E-mail!' }]
                   })(
                     <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" disabled={!(isArAdmin || this.props.isArAdminRole)}/>
