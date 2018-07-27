@@ -47,19 +47,21 @@ class ApplyInfoModal extends React.Component {
 
   applyConfirm = (type) => {
       this.props.form.validateFields((err, values) => {
-        const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
-        if(invalidEmail.length > 0) {
-          this.props.form.setFields({
-            receiptEmail: {
-              value: values.receiptEmail,
-              errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
-            },
-          });
-          err = true
+        const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
+        if(taskCode === 'ar_admin') {
+          const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
+          if(invalidEmail.length > 0) {
+            this.props.form.setFields({
+              receiptEmail: {
+                value: values.receiptEmail,
+                errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+              },
+            });
+            err = true
+          }
         }
         if(!err) {
           if(BILL_APPLY_TYPE.includes(this.props.applyInfoData.serviceType) && EDIT_ROLE_TYPE.includes(this.props.applyInfoData.taskCode)) {
-            const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
             const isAgainInvoice = serviceDetail.isAgainInvoice
             const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
             if(isAgainInvoice !== 'false') {
