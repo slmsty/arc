@@ -86,6 +86,7 @@ class BillApproveDetail extends React.Component  {
       billingTaxRate: 0,
       billingTaxAmount: 0,
       billingAmountExcludeTax: 0,
+      prefPolicySign: '1',
     };
     if(this.isEditTax) {
       newData = Object.assign(newData, {
