@@ -88,7 +88,7 @@ export default class MyApplyCon extends React.Component {
             applyData: record,
           })
         }
-        this.props.getContractUrl(serviceDetail.contractId)
+        this.props.getContractUrl(serviceDetail.contractIds)
       }
     })
   }
@@ -105,7 +105,7 @@ export default class MyApplyCon extends React.Component {
           noApplyInfoVisitable: true,
           noApplyInfoData: record,
         })
-        this.props.getContractUrl(res.response.data.serviceDetail.contractId)
+        this.props.getContractUrl(res.response.data.serviceDetail.contractIds)
       }
     })
   }

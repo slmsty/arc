@@ -266,6 +266,7 @@ class InfoModal extends React.Component {
                     })(
                       <DatePicker
                         format={dateFormat}
+                        disabled={isTaxSystem}
                       />,
                     )}
                   </FormItem>

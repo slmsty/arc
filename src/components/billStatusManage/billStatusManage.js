@@ -153,8 +153,6 @@ export default class BillStatusCon extends React.Component {
         const resultData = this.props.billStatusManage.getBillStatusManageList.result
         let billingApplicationId = resultData.length ? resultData[0].billingApplicationId : '0'
         this.subSearch(billingApplicationId)
-      } else {
-        // message.error('加载数据失败')
       }
     })
   }
@@ -223,7 +221,7 @@ export default class BillStatusCon extends React.Component {
           noApplyInfoVisitable: true,
           noApplyInfoData: record,
         })
-        this.props.getContractUrl(res.response.data.serviceDetail.contractId)
+        this.props.getContractUrl(res.response.data.serviceDetail.contractIds)
       }
     })
   }

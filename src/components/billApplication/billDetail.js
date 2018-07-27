@@ -65,7 +65,10 @@ class BillDetail extends React.Component {
 
   componentDidMount() {
     let data = []
-    const { appLineList, appLineItems, contractList, fileName, filePath } = this.props.detail
+    const { appLineList, appLineItems, contractList, fileName, filePath, contractIds } = this.props.detail
+    if(contractIds.length > 0) {
+      this.props.getContractUrl(contractIds)
+    }
     const items = this.props.type === 'myApply' ? appLineList : appLineItems
     items.map((item, index) => {
       data.push({
@@ -901,7 +904,7 @@ class BillDetail extends React.Component {
                             getFieldDecorator('taxRateRequest', {initialValue: taxRateRequest})(
                               <Checkbox
                                 onChange={(e) => {
-                                  this.setState({isRequireRate: e.target.checked, isCostBearEdit: e.target.checked})
+                                  this.setState({isRequireRate: e.target.checked, isCostBearEdit: this.props.billType === 'BILLING_EXCESS' ? true : e.target.checked})
                                   if(!e.target.checked) {
                                     this.props.form.setFieldsValue({'costBear': ''})
                                   }

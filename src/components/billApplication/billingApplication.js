@@ -372,12 +372,6 @@ export default class BillingApplication extends React.Component {
       billingApplicationType: this.getBillApplyType(),
       contractItems,
     }
-    if(!(this.state.currentType === 'BILLING_UN_CONTRACT' || this.state.currentType === 'BILLING_OTHER')) {
-      const contractId = this.state.selectedRows && this.state.selectedRows[0].contractId ? this.state.selectedRows[0].contractId : ''
-      if(contractId) {
-        this.props.getContractUrl(contractId)
-      }
-    }
     this.props.billApplyEdit(param)
   }
 
@@ -548,6 +542,7 @@ export default class BillingApplication extends React.Component {
             getTaxInfo={getTaxInfo}
             currentUser={currentUser}
             contractUrl={contractUrl}
+            getContractUrl={this.props.getContractUrl}
             isLoading={isLoading}
             isRed={redTypes.includes(this.state.currentType)}
             billingOutcomeIds={this.state.selectedRows.map(s => s.billingOutcomeId)}

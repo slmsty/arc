@@ -198,9 +198,12 @@ export const billApplyCheck = (params) => {
 export function getContractUrl(contractId) {
   return {
     [httpApi]: {
-      url: `/arc/contract/split/contractUrl/${contractId}`,
+      url: `/arc/contract/split/getContractPDFUrlByIds`,
       options: {
-        method: 'GET',
+        method: 'POST',
+        body: {
+          contractIds: contractId,
+        }
       },
       types: ['GET_CONTRACT_URL_SUCCESS'],
     },

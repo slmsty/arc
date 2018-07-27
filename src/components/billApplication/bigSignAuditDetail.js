@@ -25,9 +25,9 @@ class BigSignAuditDetail extends React.Component {
   }
 
   componentDidMount() {
-    const { contractId } = this.props.applicationInfo.serviceDetail
-    if(contractId) {
-      this.props.getContractUrl(contractId)
+    const { contractIds } = this.props.applicationInfo.serviceDetail
+    if(contractIds.length > 0) {
+      this.props.getContractUrl(contractIds)
     }
   }
 
