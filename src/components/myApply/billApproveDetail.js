@@ -86,6 +86,7 @@ class BillApproveDetail extends React.Component  {
       billingTaxRate: 0,
       billingTaxAmount: 0,
       billingAmountExcludeTax: 0,
+      prefPolicySign: '1',
     };
     if(this.isEditTax) {
       newData = Object.assign(newData, {
@@ -152,7 +153,7 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['billingRecordId'] = value.billingRecordId ? value.billingRecordId : ''
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode ? value.taxCategoryCode : ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
-      if(dataSource[index]['billingTaxRate'] !== '0') {
+      if(parseFloat(dataSource[index]['billingTaxRate']) !== 0) {
         dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
         dataSource[index]['prefPolicyType'] = value.prefPolicyContent ? value.prefPolicyContent : ''
       }
@@ -283,15 +284,17 @@ class BillApproveDetail extends React.Component  {
     const { isAgainInvoice } = this.props.serviceDetail
     const isTaxAndFinance = this.props.taskCode === 'tax_auditor' || this.props.taskCode === 'ar_finance_account'
     this.props.form.validateFields((err, values) => {
-      const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
-      if(invalidEmail.length > 0) {
-        this.props.form.setFields({
-          receiptEmail: {
-            value: values.receiptEmail,
-            errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
-          },
-        });
-        err = true
+      if(this.props.taskCode === 'ar_admin' || this.props.isArAdminRole) {
+        const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
+        if(invalidEmail.length > 0) {
+          this.props.form.setFields({
+            receiptEmail: {
+              value: values.receiptEmail,
+              errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+            },
+          });
+          err = true
+        }
       }
       if(isAgainInvoice !== 'false') {
         let map = new Map()
@@ -390,10 +393,10 @@ class BillApproveDetail extends React.Component  {
           })),
           receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
         } : {
-            ...values,
-            billingApplicationId: this.props.serviceDetail.billingApplicationId,
-            billingApplicationType: this.props.applyType,
-          }
+          ...values,
+          billingApplicationId: this.props.serviceDetail.billingApplicationId,
+          billingApplicationType: this.props.applyType,
+        }
         requestJsonFetch('/arc/billingApplication/workFlowEdit', {
             method: 'POST',
             body: params,
@@ -694,219 +697,219 @@ class BillApproveDetail extends React.Component  {
     }
     let columns = [
       {
-      title: '操作',
-      dataIndex: 'action',
-      width: 60,
-      fixed: 'left',
-      render: (text, record, index) => (
-        text === '合计' ? <span style={{fontWeight: 'bold', color: '#ff8928'}}>合计</span> :
-        <div>
-          {
-            record.isParent === '1' ?
-              <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
-              : null
-          }
-          {
-            record.isParent === '0' ?
-              <Button type="primary" ghost onClick={() => this.handleDelete(record)}>-</Button>
-              : null
-          }
-        </div>
-      )
-    }, {
-      title: '组号',
-      dataIndex: 'groupNo',
-      width: 50,
-      fixed: 'left',
-      render: (text, record) => (
-        record.action === '合计' ? "" : text
-      )
-    }, {
-      title: '开票内容',
-      dataIndex: 'billingContent',
-      width: 250,
-      render: (text, record, index) => (
-        record.action === '合计' ? '' :
-          <SearchAllColumns
-            url="/arc/billingApplication/billingContent/search"
-            columns={(isArFinanceAccount || isTaxAuditor) ? contentCols : contentOnlyCols}
-            label="开票内容"
-            width={(isArFinanceAccount || isTaxAuditor) ? '1000px' : ''}
-            idKey="billingRecordId"
-            valueKey="billingContentName"
-            value={this.state.dataSource[index]['billingContent']}
-            onChange={(v) => this.handleChange(v, 'billingContent', index)}
-          />
-      )
-    }, {
-      title: '规格型号',
-      dataIndex: 'specificationType',
-      width: 100,
-      render: (text, record, index) => (
-        record.action === '合计' ? '' :
-          <Input
-            placeholder="规格型号"
-            value={this.state.dataSource[index]['specificationType']}
-            onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}
-          />
-      )
-    }, {
-      title: '单位',
-      dataIndex: 'unit',
-      width: 80,
-      render: (text, record, index) => (
-        record.action === '合计' ? '' :
-        <Input
-          placeholder="单位"
-          value={this.state.dataSource[index]['unit']}
-          onChange={(e) => this.handleChange(e.target.value, 'unit', index)}
-        />
-      )
-    }, {
-      title: '数量',
-      dataIndex: 'quantity',
-      width: 100,
-      render: (text, record, index) => (
-        record.action === '合计' ? '' :
-        <Input
-          placeholder="数量"
-          value={this.state.dataSource[index]['quantity']}
-          onChange={(e) => this.handleChange(e.target.value, 'quantity', index)} />
-      )
-    }, {
-      title: '单价',
-      dataIndex: 'unitPrice',
-      width: 100,
-      render: (text, record, index) => (
-        record.action === '合计' ? '' :
-          <InputNumber
-            placeholder="单价"
-            value={this.state.dataSource[index]['unitPrice']}
-            onChange={(value) => this.handleChange(value, 'unitPrice', index)}
-          />
-      )
-    }, {
-      title: '不含税金额',
-      dataIndex: 'billingAmountExcludeTax',
-      width: 100,
-      render: (text, record, index) => (
-        record.action === '合计' ? <span style={{color: '#ff8927'}}>{text}</span> :
-          <InputNumber
-            placeholder="不含税金额"
-            value={this.state.dataSource[index]['billingAmountExcludeTax']}
-            onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
-      )
-    }, {
-      title: '含税金额',
-      dataIndex: 'billingAmount',
-      width: 100,
-      render: (text, record, index) => (
-        record.action === '合计' ? <span style={{color: '#ff8927'}}>{text}</span> :
-        <InputNumber
-          placeholder="含税金额"
-          defaultValue={record.billingAmount}
-          value={this.state.dataSource[index]['billingAmount']}
-          onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
-      )
-    }, {
-      title: '税率',
-      dataIndex: 'billingTaxRate',
-      width: 100,
-      render: (text, record, index) => (
-        record.action === '合计' ? '' :
-        <SelectInvokeApi
-          typeCode="BILLING_APPLICATION"
-          paramCode="TAX_RATE"
-          placeholder="税率"
-          hasEmpty
-          value={`${this.state.dataSource[index]['billingTaxRate']}`}
-          onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
-        />
-      )
-    }, {
-      title: '税额',
-      dataIndex: 'billingTaxAmount',
-      width: 100,
-      render: (text, record, index) => {
-        //const { billingAmount, billingTaxRate} = this.state.dataSource[index]
-        //const unitPrice = billingAmount / (1 + parseFloat(billingTaxRate))
-        return (
-          record.action === '合计' ? <span style={{color: '#ff8927'}}>{text}</span> :
-          <InputNumber
-            placeholder="税额"
-            value={this.state.dataSource[index]['billingTaxAmount']}
-            onChange={(value) => this.handleChange(value, 'billingTaxAmount', index)}
-          />
+        title: '操作',
+        dataIndex: 'action',
+        width: 60,
+        fixed: 'left',
+        render: (text, record, index) => (
+          text === '合计' ? <span style={{fontWeight: 'bold', color: '#ff8928'}}>合计</span> :
+            <div>
+              {
+                record.isParent === '1' ?
+                  <Button type="primary" ghost onClick={() => this.handleAdd(record.lineNo, record.arBillingId, record.contractItemId)}>+</Button>
+                  : null
+              }
+              {
+                record.isParent === '0' ?
+                  <Button type="primary" ghost onClick={() => this.handleDelete(record)}>-</Button>
+                  : null
+              }
+            </div>
         )
-      }
-    }, {
-      title: '税收分类编码',
-      dataIndex: 'taxCategoryCode',
-      width: 150,
-      render: (text, record, index) => {
-        return (
+      }, {
+        title: '组号',
+        dataIndex: 'groupNo',
+        width: 50,
+        fixed: 'left',
+        render: (text, record) => (
+          record.action === '合计' ? "" : text
+        )
+      }, {
+        title: '开票内容',
+        dataIndex: 'billingContent',
+        width: 250,
+        render: (text, record, index) => (
           record.action === '合计' ? '' :
             <SearchAllColumns
-              url="/arc/billingApplication/taxInfo/search"
-              columns={taxCategoryCols}
-              label="编码名称"
-              idKey="taxCategoryCode"
-              valueKey="taxCategoryCode"
-              value={this.state.dataSource[index]['taxCategoryCode']}
-              onChange={(v) => this.handleChange(v, 'taxCategoryCode', index)}
+              url="/arc/billingApplication/billingContent/search"
+              columns={(isArFinanceAccount || isTaxAuditor) ? contentCols : contentOnlyCols}
+              label="开票内容"
+              width={(isArFinanceAccount || isTaxAuditor) ? '1000px' : ''}
+              idKey="billingRecordId"
+              valueKey="billingContentName"
+              value={this.state.dataSource[index]['billingContent']}
+              onChange={(v) => this.handleChange(v, 'billingContent', index)}
             />
         )
-      }
-    }, {
-      title: '税收分类名称',
-      dataIndex: 'taxCategoryName',
-      width: 150,
-      render: (text, record, index) => {
-        return (
+      }, {
+        title: '规格型号',
+        dataIndex: 'specificationType',
+        width: 100,
+        render: (text, record, index) => (
           record.action === '合计' ? '' :
             <Input
-              value={this.state.dataSource[index]['taxCategoryName']}
-              onChange={(e) => this.handleChange(e.target.value, 'taxCategoryName', index)}
+              placeholder="规格型号"
+              value={this.state.dataSource[index]['specificationType']}
+              onChange={(e) => this.handleChange(e.target.value, 'specificationType', index)}
             />
         )
-      }
-    }, {
-      title: '优惠政策',
-      dataIndex: 'prefPolicySign',
-      width: 100,
-      render: (text, record, index) => {
-        return (
+      }, {
+        title: '单位',
+        dataIndex: 'unit',
+        width: 80,
+        render: (text, record, index) => (
           record.action === '合计' ? '' :
-            <Select
-              value={this.state.dataSource[index]['prefPolicySign']}
-              onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
-              <Option value="">-请选择-</Option>
-              <Option value="1">是</Option>
-              <Option value="0">否</Option>
-            </Select>
+            <Input
+              placeholder="单位"
+              value={this.state.dataSource[index]['unit']}
+              onChange={(e) => this.handleChange(e.target.value, 'unit', index)}
+            />
         )
-      }
-    }, {
-      title: '优惠政策类型',
-      dataIndex: 'prefPolicyType',
-      width: 130,
-      render: (text, record, index) => {
-        return (
+      }, {
+        title: '数量',
+        dataIndex: 'quantity',
+        width: 100,
+        render: (text, record, index) => (
           record.action === '合计' ? '' :
-            <Select
-            value={this.state.dataSource[index]['prefPolicyType']}
-            onChange={(v) => this.handleChange(v, 'prefPolicyType', index)}
-            disabled={this.state.dataSource[index]['prefPolicySign'] === '0'}
-          >
-            <Option value="">-请选择-</Option>
-            <Option value="免税">免税</Option>
-            <Option value="不征税">不征税</Option>
-            <Option value="普通零税率">普通零税率</Option>
-            <Option value="超税负3%即征即退">超税负3%即征即退</Option>
-          </Select>
+            <Input
+              placeholder="数量"
+              value={this.state.dataSource[index]['quantity']}
+              onChange={(e) => this.handleChange(e.target.value, 'quantity', index)} />
         )
-      }
-    }]
+      }, {
+        title: '单价',
+        dataIndex: 'unitPrice',
+        width: 100,
+        render: (text, record, index) => (
+          record.action === '合计' ? '' :
+            <InputNumber
+              placeholder="单价"
+              value={this.state.dataSource[index]['unitPrice']}
+              onChange={(value) => this.handleChange(value, 'unitPrice', index)}
+            />
+        )
+      }, {
+        title: '不含税金额',
+        dataIndex: 'billingAmountExcludeTax',
+        width: 100,
+        render: (text, record, index) => (
+          record.action === '合计' ? <span style={{color: '#ff8927'}}>{text}</span> :
+            <InputNumber
+              placeholder="不含税金额"
+              value={this.state.dataSource[index]['billingAmountExcludeTax']}
+              onChange={(value) => this.handleChange(value, 'billingAmountExcludeTax', index, record)}/>
+        )
+      }, {
+        title: '含税金额',
+        dataIndex: 'billingAmount',
+        width: 100,
+        render: (text, record, index) => (
+          record.action === '合计' ? <span style={{color: '#ff8927'}}>{text}</span> :
+            <InputNumber
+              placeholder="含税金额"
+              defaultValue={record.billingAmount}
+              value={this.state.dataSource[index]['billingAmount']}
+              onChange={(value) => this.handleChange(value, 'billingAmount', index, record)}/>
+        )
+      }, {
+        title: '税率',
+        dataIndex: 'billingTaxRate',
+        width: 100,
+        render: (text, record, index) => (
+          record.action === '合计' ? '' :
+            <SelectInvokeApi
+              typeCode="BILLING_APPLICATION"
+              paramCode="TAX_RATE"
+              placeholder="税率"
+              hasEmpty
+              value={`${this.state.dataSource[index]['billingTaxRate']}`}
+              onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
+            />
+        )
+      }, {
+        title: '税额',
+        dataIndex: 'billingTaxAmount',
+        width: 100,
+        render: (text, record, index) => {
+          //const { billingAmount, billingTaxRate} = this.state.dataSource[index]
+          //const unitPrice = billingAmount / (1 + parseFloat(billingTaxRate))
+          return (
+            record.action === '合计' ? <span style={{color: '#ff8927'}}>{text}</span> :
+              <InputNumber
+                placeholder="税额"
+                value={this.state.dataSource[index]['billingTaxAmount']}
+                onChange={(value) => this.handleChange(value, 'billingTaxAmount', index)}
+              />
+          )
+        }
+      }, {
+        title: '税收分类编码',
+        dataIndex: 'taxCategoryCode',
+        width: 150,
+        render: (text, record, index) => {
+          return (
+            record.action === '合计' ? '' :
+              <SearchAllColumns
+                url="/arc/billingApplication/taxInfo/search"
+                columns={taxCategoryCols}
+                label="编码名称"
+                idKey="taxCategoryCode"
+                valueKey="taxCategoryCode"
+                value={this.state.dataSource[index]['taxCategoryCode']}
+                onChange={(v) => this.handleChange(v, 'taxCategoryCode', index)}
+              />
+          )
+        }
+      }, {
+        title: '税收分类名称',
+        dataIndex: 'taxCategoryName',
+        width: 150,
+        render: (text, record, index) => {
+          return (
+            record.action === '合计' ? '' :
+              <Input
+                value={this.state.dataSource[index]['taxCategoryName']}
+                onChange={(e) => this.handleChange(e.target.value, 'taxCategoryName', index)}
+              />
+          )
+        }
+      }, {
+        title: '优惠政策',
+        dataIndex: 'prefPolicySign',
+        width: 100,
+        render: (text, record, index) => {
+          return (
+            record.action === '合计' ? '' :
+              <Select
+                value={this.state.dataSource[index]['prefPolicySign']}
+                onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
+                <Option value="">-请选择-</Option>
+                <Option value="1">是</Option>
+                <Option value="0">否</Option>
+              </Select>
+          )
+        }
+      }, {
+        title: '优惠政策类型',
+        dataIndex: 'prefPolicyType',
+        width: 130,
+        render: (text, record, index) => {
+          return (
+            record.action === '合计' ? '' :
+              <Select
+                value={this.state.dataSource[index]['prefPolicyType']}
+                onChange={(v) => this.handleChange(v, 'prefPolicyType', index)}
+                disabled={this.state.dataSource[index]['prefPolicySign'] === '0'}
+              >
+                <Option value="">-请选择-</Option>
+                <Option value="免税">免税</Option>
+                <Option value="不征税">不征税</Option>
+                <Option value="普通零税率">普通零税率</Option>
+                <Option value="超税负3%即征即退">超税负3%即征即退</Option>
+              </Select>
+          )
+        }
+      }]
     if(this.isEditTax) {
       const taxColumns = [{
         title: '城建税税额',
@@ -916,9 +919,9 @@ class BillApproveDetail extends React.Component  {
           return (
             record.action === '合计' ? '' :
               <InputNumber
-              value={this.state.dataSource[index]['constructionTax']}
-              onChange={(v) => this.handleChange(v, 'constructionTax', index)}
-            />
+                value={this.state.dataSource[index]['constructionTax']}
+                onChange={(v) => this.handleChange(v, 'constructionTax', index)}
+              />
           )
         }
       }, {
@@ -929,9 +932,9 @@ class BillApproveDetail extends React.Component  {
           return (
             record.action === '合计' ? '' :
               <InputNumber
-              value={this.state.dataSource[index]['educationTax']}
-              onChange={(v) => this.handleChange(v, 'educationTax', index)}
-            />
+                value={this.state.dataSource[index]['educationTax']}
+                onChange={(v) => this.handleChange(v, 'educationTax', index)}
+              />
           )
         }
       }, {
@@ -942,9 +945,9 @@ class BillApproveDetail extends React.Component  {
           return (
             record.action === '合计' ? '' :
               <InputNumber
-              value={this.state.dataSource[index]['incomeTax']}
-              onChange={(v) => this.handleChange(v, 'incomeTax', index)}
-            />
+                value={this.state.dataSource[index]['incomeTax']}
+                onChange={(v) => this.handleChange(v, 'incomeTax', index)}
+              />
           )
         }
       }, {
@@ -1048,7 +1051,7 @@ class BillApproveDetail extends React.Component  {
                       {receiveInvoice[receiptOutcome]}
                     </FormItem>
                   </Col>
-                 : null
+                  : null
               }
             </Row>
             <Row gutter={40}>
@@ -1075,15 +1078,15 @@ class BillApproveDetail extends React.Component  {
                     <FormItem {...formItemLayout} label="费用承担者">
                       {
                         isProManager ?
-                        getFieldDecorator('costBear',{initialValue: costBear, rules: [{ required: isProManager, message: '请选择费用承担者!' }]})(
-                          //项目经理可以修改费用承担者
+                          getFieldDecorator('costBear',{initialValue: costBear, rules: [{ required: isProManager, message: '请选择费用承担者!' }]})(
+                            //项目经理可以修改费用承担者
                             <SelectInvokeApi
                               typeCode="BILLING_APPLICATION"
                               paramCode="COST_BEAR"
                               placeholder="费用承担着"
                               hasEmpty
                             />
-                        ): costBearName
+                          ): costBearName
                       }
                     </FormItem>
                   </Col> : null
@@ -1214,14 +1217,14 @@ class BillApproveDetail extends React.Component  {
               this.props.applyType === 'BILLING_EXCESS' ?
                 <div className="arc-info">
                   <Table
-                  style={{width: '70%'}}
-                  rowKey="id"
-                  size="small"
-                  bordered
-                  columns={totalColumns}
-                  dataSource={this.getTaxData()}
-                  pagination={false}
-                />
+                    style={{width: '70%'}}
+                    rowKey="id"
+                    size="small"
+                    bordered
+                    columns={totalColumns}
+                    dataSource={this.getTaxData()}
+                    pagination={false}
+                  />
                 </div> : null
             }
             <Row gutter={40}>
@@ -1315,7 +1318,7 @@ class BillApproveDetail extends React.Component  {
               <Col span={14} key={1}>
                 <FormItem {...span3ItemLayout} label="E-mail">
                   {getFieldDecorator('receiptEmail', {
-                    initialValue: [receiptEmail],
+                    initialValue: receiptEmail ? receiptEmail.split(',') : [],
                     rules: [{ required: true, message: '请填写E-mail!' }]
                   })(
                     <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" disabled={!(isArAdmin || this.props.isArAdminRole)}/>
