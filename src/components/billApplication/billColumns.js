@@ -372,7 +372,7 @@ const invoiceLineCols = [{
 }, {
   title: '开票内容',
   dataIndex: 'billingContent',
-  width: 250,
+  width: 350,
 }, {
   title: '规格型号',
   dataIndex: 'specificationType',
@@ -400,7 +400,7 @@ const invoiceLineCols = [{
 }, {
   title: '税率',
   dataIndex: 'billingTaxRate',
-  width: 100,
+  width: 80,
   render: (text) => typeof text !== 'undefined' ? (`${text * 100}%`) : ''
 }, {
   title: '税额',
@@ -409,7 +409,7 @@ const invoiceLineCols = [{
 }, {
   title: '税收分类编码',
   dataIndex: 'taxCategoryCode',
-  width: 120,
+  width: 160,
 }, {
   title: '税收分类名称',
   dataIndex: 'taxCategoryName',
@@ -417,7 +417,7 @@ const invoiceLineCols = [{
 }, {
   title: '优惠政策',
   dataIndex: 'prefPolicySign',
-  width: 100,
+  width: 80,
   render: (text) => {
     if(text === '0') {
       return '否'

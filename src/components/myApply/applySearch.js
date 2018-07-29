@@ -81,6 +81,7 @@ export default class ApplySearchCon extends React.Component {
           infoVisitable: true,
           applyData: record,
         })
+        this.props.getContractUrl(res.response.data.serviceDetail.contractIds)
       }
     })
   }
