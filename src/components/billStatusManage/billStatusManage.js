@@ -108,29 +108,25 @@ export default class BillStatusCon extends React.Component {
     this.setState({ tableHeight })
   }
   componentWillReceiveProps(nextProps) {
-     if (this.props.billStatusManage.cancelApproveRefresh !== nextProps.billStatusManage.cancelApproveRefresh) {
+    if (this.props.billStatusManage.cancelApproveRefresh !== nextProps.billStatusManage.cancelApproveRefresh) {
       this.handleQuery()
-     }
-     if(this.props.billStatusManage.getBillStatusManageList !== nextProps.billStatusManage.getBillStatusManageList && nextProps.billStatusManage.getBillStatusManageList.result.length > 0) {
-       const result = nextProps.billStatusManage.getBillStatusManageList.result[0]
-       this.setState({
-         firstID: nextProps.billStatusManage.getBillStatusManageList.result[0].billingApplicationId,
-         selectedRows: [result],
-       })
-     }
-     if(this.props.billStatusManage.sendResult !== nextProps.billStatusManage.sendResult) {
-       const result = nextProps.billStatusManage.sendResult.applicationStatusResults
-       if(result.length > 0) {
-         message.error(result[0].errorMessage)
-       } else {
-         message.success('发票申请信息传送成功')
-       }
-       this.setState({sendLoading: false})
-     }
-     if(this.props.billStatusManage.saveBackSuccess !== nextProps.billStatusManage.saveBackSuccess && nextProps.billStatusManage) {
-       message.success('纸票退回情况保存成功')
-       this.setState({showBackInfo: false})
-     }
+    }
+    if(this.props.billStatusManage.getBillStatusManageList !== nextProps.billStatusManage.getBillStatusManageList && nextProps.billStatusManage.getBillStatusManageList.result.length > 0) {
+      const result = nextProps.billStatusManage.getBillStatusManageList.result[0]
+      this.setState({
+        firstID: nextProps.billStatusManage.getBillStatusManageList.result[0].billingApplicationId,
+        selectedRows: [result],
+      })
+    }
+    if(this.props.billStatusManage.sendResult !== nextProps.billStatusManage.sendResult) {
+      const result = nextProps.billStatusManage.sendResult.applicationStatusResults
+      if(result.length > 0) {
+        message.error(result[0].errorMessage)
+      } else {
+        message.success('发票申请信息传送成功')
+      }
+      this.setState({sendLoading: false})
+    }
   }
   queryParam = {
     pageInfo: {
@@ -157,8 +153,6 @@ export default class BillStatusCon extends React.Component {
         const resultData = this.props.billStatusManage.getBillStatusManageList.result
         let billingApplicationId = resultData.length ? resultData[0].billingApplicationId : '0'
         this.subSearch(billingApplicationId)
-      } else {
-        // message.error('加载数据失败')
       }
     })
   }
@@ -224,10 +218,10 @@ export default class BillStatusCon extends React.Component {
     this.props.myApplyInfo(paramsData).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
         this.setState({
-         noApplyInfoVisitable: true,
-         noApplyInfoData: record,
+          noApplyInfoVisitable: true,
+          noApplyInfoData: record,
         })
-        this.props.getContractUrl(res.response.data.serviceDetail.contractId)
+        this.props.getContractUrl(res.response.data.serviceDetail.contractIds)
       }
     })
   }
@@ -406,7 +400,7 @@ export default class BillStatusCon extends React.Component {
     this.setState({
       calcelModalVisitable: false,
     })
-}
+  }
   // 关闭作废modal
   closeDisableModal = () => {
     this.setState({
@@ -546,63 +540,63 @@ export default class BillStatusCon extends React.Component {
     ]
     const billApproveColumns = [
       {
-      title: '数据状态',
-      dataIndex: 'status',
-      width: 120,
-      textAlign: 'center',
-      fixed: 'left',
-    }, {
-      title: '开票申请分类',
-      dataIndex: 'applicationType',
-      width: 170,
-    }, {
-      title: '申请单编号',
-      dataIndex: 'billingApplicationId',
-      width: 110,
-      render: (text, record) => (
-        <a href='javascript:void(0);' onClick={() => this.showApplyInfo(record)}>{text}</a>
-      ),
-    }, {
-      title: '申请人',
-      dataIndex: 'applicantName',
-      width: 120,
-    }, {
-      title: '退票票号',
-      dataIndex: 'invoiceNum',
-      width: 100,
-    }, {
-      title: '开票公司',
-      dataIndex: 'companyName',
-      width: 200,
-    }, {
-      title: '开票要求',
-      dataIndex: 'invoiceRequire',
-      width: 400,
-    }, {
-      title: '开票客户名称',
-      dataIndex: 'customerName',
-      width: 250,
-    }, {
-      title: '客户纳税人识别号',
-      dataIndex: 'customerTaxIdentifyCode',
-      width: 150,
-    }, {
-      title: '开票申请时间',
-      dataIndex: 'applyDate',
-      width: 130,
-    }, {
-      title: '开票日期',
-      dataIndex: 'invoiceDate',
-      width: 130,
-    }, {
-      title: '备注',
-      dataIndex: 'remark',
-      width: 250,
-    }, {
-      title: '创建提示',
-      dataIndex: 'errorMessage',
-      width: 100,
-    },
+        title: '数据状态',
+        dataIndex: 'status',
+        width: 120,
+        textAlign: 'center',
+        fixed: 'left',
+      }, {
+        title: '开票申请分类',
+        dataIndex: 'applicationType',
+        width: 170,
+      }, {
+        title: '申请单编号',
+        dataIndex: 'billingApplicationId',
+        width: 110,
+        render: (text, record) => (
+          <a href='javascript:void(0);' onClick={() => this.showApplyInfo(record)}>{text}</a>
+        ),
+      }, {
+        title: '申请人',
+        dataIndex: 'applicantName',
+        width: 120,
+      }, {
+        title: '退票票号',
+        dataIndex: 'invoiceNum',
+        width: 100,
+      }, {
+        title: '开票公司',
+        dataIndex: 'companyName',
+        width: 200,
+      }, {
+        title: '开票要求',
+        dataIndex: 'invoiceRequire',
+        width: 400,
+      }, {
+        title: '开票客户名称',
+        dataIndex: 'customerName',
+        width: 250,
+      }, {
+        title: '客户纳税人识别号',
+        dataIndex: 'customerTaxIdentifyCode',
+        width: 150,
+      }, {
+        title: '开票申请时间',
+        dataIndex: 'applyDate',
+        width: 130,
+      }, {
+        title: '开票日期',
+        dataIndex: 'invoiceDate',
+        width: 130,
+      }, {
+        title: '备注',
+        dataIndex: 'remark',
+        width: 250,
+      }, {
+        title: '创建提示',
+        dataIndex: 'errorMessage',
+        width: 100,
+      },
     ]
     const { selectedRowKeys, firstID } = this.state
     const rowSelection = {
@@ -641,11 +635,11 @@ export default class BillStatusCon extends React.Component {
         <BillStatusManageWithFrom onQuery={this.handleChangeParam} />
         {
           buttonList.includes('billingStatusSendAp') ?
-          <Button
-            onClick={this.showGlDate}
-            type="primary"
-            ghost
-          >传送AP</Button> : null
+            <Button
+              onClick={this.showGlDate}
+              type="primary"
+              ghost
+            >传送AP</Button> : null
         }
         {
           buttonList.includes('billingStatusCancel') ?
@@ -757,11 +751,11 @@ export default class BillStatusCon extends React.Component {
         {
           this.state.fileDownData.length ?
             <FileDownModal
-            visible={this.state.fileDownDis}
-            onOk={this.CloseFileDownModal}
-            onCancel={this.CloseFileDownModal}
-            data={this.state.fileDownData}
-            fileDown={this.fileDown}
+              visible={this.state.fileDownDis}
+              onOk={this.CloseFileDownModal}
+              onCancel={this.CloseFileDownModal}
+              data={this.state.fileDownData}
+              fileDown={this.fileDown}
             /> : null
         }
         {

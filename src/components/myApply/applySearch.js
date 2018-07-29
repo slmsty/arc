@@ -81,9 +81,7 @@ export default class ApplySearchCon extends React.Component {
           infoVisitable: true,
           applyData: record,
         })
-        this.props.getContractUrl(res.response.data.serviceDetail.contractId)
-      } else {
-        message.error(res.response.resultMessage, 5)
+        this.props.getContractUrl(res.response.data.serviceDetail.contractIds)
       }
     })
   }
@@ -110,7 +108,7 @@ export default class ApplySearchCon extends React.Component {
           noApplyInfoVisitable: true,
           noApplyInfoData: record,
         })
-        this.props.getContractUrl(res.response.data.serviceDetail.contractId)
+        this.props.getContractUrl(res.response.data.serviceDetail.contractIds)
       }
     })
   }

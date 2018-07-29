@@ -86,7 +86,7 @@ class BillApproveDetail extends React.Component  {
       billingTaxRate: 0,
       billingTaxAmount: 0,
       billingAmountExcludeTax: 0,
-      prefPolicySign: '1',
+      prefPolicySign: this.props.taskCode === 'ar_finance_account' ? '1' : '',
     };
     if(this.isEditTax) {
       newData = Object.assign(newData, {
@@ -153,7 +153,7 @@ class BillApproveDetail extends React.Component  {
       dataSource[index]['billingRecordId'] = value.billingRecordId ? value.billingRecordId : ''
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode ? value.taxCategoryCode : ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
-      if(parseFloat(dataSource[index]['billingTaxRate']) !== 0) {
+      if(!(parseFloat(dataSource[index]['billingTaxRate']) === 0 && this.props.taskCode === 'ar_finance_account')) {
         dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
         dataSource[index]['prefPolicyType'] = value.prefPolicyContent ? value.prefPolicyContent : ''
       }

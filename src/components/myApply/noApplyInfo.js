@@ -20,6 +20,7 @@ class NoApplyInfo extends React.Component {
       showContractLink: false,
     }
   }
+
   render() {
     const applyInfoDatas = this.props.applyInfoData
     const columns = [{
