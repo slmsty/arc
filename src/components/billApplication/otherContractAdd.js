@@ -10,7 +10,8 @@ class OtherContractAdd extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      reasonId: ''
+      reasonId: '',
+      saveLoading: false,
     }
   }
 
@@ -47,7 +48,16 @@ class OtherContractAdd extends React.Component {
           costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
           tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
         }
-        this.props.addAction(params)
+        this.setState({
+          saveLoading: true
+        })
+        this.props.addAction(params).then(res => {
+          if(res && res.response) {
+            this.setState({
+              saveLoading: false
+            })
+          }
+        })
       }
     });
 
@@ -69,8 +79,8 @@ class OtherContractAdd extends React.Component {
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
           footer={[
-            <Button key="submit" type="primary" onClick={(e) => this.handleOk(e)}>
-              <Icon type="check" />保存
+            <Button key="submit" type="primary" loading={this.state.saveLoading} onClick={(e) => this.handleOk(e)}>
+              {!this.state.saveLoading ? <Icon type="check" /> : ''}保存
             </Button>,
           ]}
           maskClosable={false}
