@@ -33,7 +33,7 @@ const formItemLayout2 = {
 class BillDetail extends React.Component {
   constructor(props) {
     super(props)
-    const { custInfo, comInfo } = props.detail
+    const { custInfo, comInfo, appLineList } = props.detail
     this.state = {
       dataSource: [],
       count: 1,
@@ -59,6 +59,7 @@ class BillDetail extends React.Component {
       custInfo: custInfo,
       comInfo: comInfo,
       proItems: [],
+      uploadFile: false,
     }
     this.isAdvance = advanceTypes.includes(props.billType)
   }
@@ -76,7 +77,7 @@ class BillDetail extends React.Component {
         billingAppLineId: item.billingAppLineId ? item.billingAppLineId : '',
         sourceAppLineId: item.sourceAppLineId ? item.sourceAppLineId : '',
         groupNo: item.groupNo ? parseInt(item.groupNo) : 1,
-        isParent: '1',
+        isParent: item.isParent ? item.isParent : '1',
         arBillingId: item.arBillingId,
         contractItemId: item.contractItemId,
         billingRecordId: item.billingRecordId ? item.billingRecordId : '',
@@ -398,6 +399,9 @@ class BillDetail extends React.Component {
   }
 
   customRequest = (file) => {
+    this.setState({
+      uploadFile: true
+    })
     const option = {
       method: 'POST',
       headers: {
@@ -420,9 +424,12 @@ class BillDetail extends React.Component {
           status: 'done',
           response: '', // custom error message to show
           url: '',
-        }]
+        }],
       })
     } else {
+      this.setState({
+        uploadFile: false
+      })
       message.error(`${this.state.file.name} 上传失败`);
     }
   }
@@ -432,11 +439,11 @@ class BillDetail extends React.Component {
       console.log(info.file, info.fileList);
     }
     if (info.file.status === 'removed') {
-      console.log(info.fileList)
       this.setState({
         fileList: info.fileList,
         fileId: '',
         file: {},
+        uploadFile: false
       })
       this.props.form.setFieldsValue({
         file: '',
@@ -959,7 +966,7 @@ class BillDetail extends React.Component {
                         getFieldDecorator('file', {initialValue: fileName, rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件' }] })(
                           <div style={{position: 'relative'}}>
                             <Upload {...props} fileList={this.state.fileList}>
-                              <Button disabled={this.state.fileList.length === 1}>
+                              <Button disabled={this.state.uploadFile}>
                                 <Icon type="upload" />点击上传
                               </Button>
                             </Upload>

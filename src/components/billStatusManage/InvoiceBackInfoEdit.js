@@ -7,7 +7,7 @@ export default class InvoiceBackInfoEdit extends React.Component{
     this.state = {
       result: props.invoiceResult.map(record => ({
         billingOutcomeId: record.billingOutcomeId,
-        actionType: record.invoiceResult,
+        actionType: typeof record.actionType === 'undefined' ? '' : record.actionType,
       })),
       saveLoading: false,
     }
@@ -55,7 +55,7 @@ export default class InvoiceBackInfoEdit extends React.Component{
         width: 100,
         render: (text, record, index) => {
           return (
-            <Select style={{width: '100px'}} defaultValue={text} onChange={(v) => this.handleSelectChange(v, index)}>
+            <Select style={{width: '100px'}} defaultValue={typeof text === 'undefined' ? '' : text} onChange={(v) => this.handleSelectChange(v, index)}>
               <Option value="">-请选择-</Option>
               <Option value="Y">是</Option>
               <Option value="N">否</Option>
