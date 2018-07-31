@@ -458,12 +458,11 @@ class BillApproveDetail extends React.Component  {
     let incomeTotal = 0
     let addTotal = 0
     this.state.dataSource.map(r => {
-      constructionTotal += r.constructionTax ? r.constructionTax : 0
-      educationTotal += r.educationTax ? r.educationTax : 0
-      incomeTotal += r.incomeTax ? r.incomeTax : 0
-      addTotal += r.addTaxAmount ? r.addTaxAmount : 0
+      constructionTotal += r.constructionTax ? parseFloat(r.constructionTax) : 0
+      educationTotal += r.educationTax ? parseFloat(r.educationTax) : 0
+      incomeTotal += r.incomeTax ? parseFloat(r.incomeTax) : 0
+      addTotal += r.addTaxAmount ? parseFloat(r.addTaxAmount) : 0
     })
-
     return [{
       title: '城建',
       taxRate: constructionTax,
