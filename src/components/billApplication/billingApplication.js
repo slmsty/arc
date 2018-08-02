@@ -26,6 +26,7 @@ export default class BillingApplication extends React.Component {
       pageNo: 1,
       pageSize: 10,
     }
+    this.applyLines = []
     this.queryParam = {
       arDateStart: '',
       arDateEnd: '',
@@ -388,7 +389,14 @@ export default class BillingApplication extends React.Component {
       message.warn('请选择要退票的记录!')
       return
     }
-    this.props.getRedApplyDetail(this.state.selectedRows.map(s => s.billingOutcomeId)).then(res => {
+
+    this.applyLines = this.state.selectedRows.map(s => ({
+        billingOutcomeId: s.billingOutcomeId,
+        arBillingId:  s.arBillingId,
+      })
+    )
+
+    this.props.getRedApplyDetail(this.applyLines).then(res => {
       const { resultCode } = res.response
       if(resultCode === '000000') {
         this.setState({
@@ -555,7 +563,7 @@ export default class BillingApplication extends React.Component {
             getContractUrl={this.props.getContractUrl}
             isLoading={isLoading}
             isRed={redTypes.includes(this.state.currentType)}
-            billingOutcomeIds={this.state.selectedRows.map(s => s.billingOutcomeId)}
+            applyLines={this.applyLines}
             type="billApply"
             roles={this.props.role.map(r => r.roleCode)}
           /> : null

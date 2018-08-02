@@ -268,14 +268,14 @@ export function getApplicationDetail(billingApplicationId) {
  * @param billingOutcomeId
  * @returns {{}}
  */
-export function getRedApplyDetail(billingOutcomeIds) {
+export function getRedApplyDetail(applyLines) {
   return {
     [httpApi]: {
       url: `/arc/billingApplication/redApplyDetail`,
       options: {
         method: 'POST',
         body: {
-          billingOutcomeIds,
+          applyLines,
         },
       },
       types: ['GET_RED_APPLY_DETAIL_SUCCESS'],

@@ -171,7 +171,7 @@ class BillDetail extends React.Component {
 
   handleOk = (e) => {
     e.preventDefault();
-    const { isRed, billingOutcomeIds, type, detail } = this.props
+    const { isRed, applyLines, type, detail } = this.props
     //红冲发票不重新开票
     if(isRed && this.props.form.getFieldValue('isAgainInvoice') === 'false') {
       this.props.form.validateFields((err, values) => {
@@ -179,7 +179,7 @@ class BillDetail extends React.Component {
           this.setState({loading: true})
           const params = {
             ...values,
-            billingOutcomeIds,
+            applyLines,
             billingApplicationType: this.props.billType,
             objectId: this.state.fileId,
             objectName: this.state.file.name,
@@ -203,7 +203,7 @@ class BillDetail extends React.Component {
           }))
           const params = {
             ...values,
-            billingOutcomeIds,
+            applyLines,
             billingCustInfoId: this.state.custInfo.billingCustInfoId,
             billingComInfoId: this.state.comInfo.billingComInfoId,
             billingApplicationType: this.state.isRequireRate ? 'BILLING_EXCESS' : this.props.billType,
