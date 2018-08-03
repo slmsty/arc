@@ -15,7 +15,8 @@ class BillUpdate extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      reasonId: props.record.advanceBillingReason
+      reasonId: props.record.advanceBillingReason,
+      saveLoading: false,
     }
   }
 
@@ -57,7 +58,16 @@ class BillUpdate extends React.Component {
           costcenterName: values.projectNo ? values.projectNo.costcenterName : '',
           tempProjectId: values.projectNo ? values.projectNo.tempProjectId : '',
         }
-        this.props.billAction(params)
+        this.setState({
+          saveLoading: true
+        })
+        this.props.billAction(params).then(res => {
+          if(res && res.response) {
+            this.setState({
+              saveLoading: false
+            })
+          }
+        })
       }
     })
   }
@@ -78,8 +88,8 @@ class BillUpdate extends React.Component {
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
           footer={[
-            <Button key="submit" type="primary" onClick={this.handleOk}>
-              <Icon type="check" />保存
+            <Button key="submit" type="primary" loading={this.state.saveLoading} onClick={this.handleOk}>
+              {!this.state.saveLoading ? <Icon type="check" /> : ''}保存
             </Button>,
           ]}
           maskClosable={false}

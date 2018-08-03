@@ -221,6 +221,7 @@ export default class MyApplyCon extends React.Component {
               getTaxInfo={getTaxInfo}
               currentUser={currentUser}
               contractUrl={contractUrl}
+              getContractUrl={this.props.getContractUrl}
               isRed={isBackBill}
               type="myApply"
             /> : null

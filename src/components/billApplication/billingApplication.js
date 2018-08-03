@@ -24,7 +24,9 @@ export default class BillingApplication extends React.Component {
       currentRecord: {},
       showBillApprove: false,
       pageNo: 1,
+      pageSize: 10,
     }
+    this.applyLines = []
     this.queryParam = {
       arDateStart: '',
       arDateEnd: '',
@@ -387,7 +389,14 @@ export default class BillingApplication extends React.Component {
       message.warn('请选择要退票的记录!')
       return
     }
-    this.props.getRedApplyDetail(this.state.selectedRows.map(s => s.billingOutcomeId)).then(res => {
+
+    this.applyLines = this.state.selectedRows.map(s => ({
+        billingOutcomeId: s.billingOutcomeId,
+        arBillingId:  s.arBillingId,
+      })
+    )
+
+    this.props.getRedApplyDetail(this.applyLines).then(res => {
       const { resultCode } = res.response
       if(resultCode === '000000') {
         this.setState({
@@ -483,10 +492,10 @@ export default class BillingApplication extends React.Component {
         })
       },
     }
-    const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply, pageNo, unSignShow } = this.state
+    const { isAdd, updateVisible, otherAddVisible, showBillApprove, showRedApply, pageNo, unSignShow, pageSize } = this.state
     let pagination = {}
-    const end = pageNo * 10
-    let result = billPage.result.slice(end - 10, end)
+    const end = pageNo * pageSize
+    let result = billPage.result.slice(end - pageSize, end)
     if(normalTypes.includes(this.state.currentType)) {
       pagination = {
         total: billPage.result.length,
@@ -498,7 +507,16 @@ export default class BillingApplication extends React.Component {
             selectedRows: [],
             selectedRowKeys: [],
           })
-        }
+        },
+        showSizeChanger: true,
+        onShowSizeChange: (current, size) => {
+          this.setState({
+            pageNo: current,
+            pageSize: size,
+            selectedRows: [],
+            selectedRowKeys: [],
+          })
+        },
       }
     } else {
       const { count, pageSize, pageNo } = billPage
@@ -545,7 +563,7 @@ export default class BillingApplication extends React.Component {
             getContractUrl={this.props.getContractUrl}
             isLoading={isLoading}
             isRed={redTypes.includes(this.state.currentType)}
-            billingOutcomeIds={this.state.selectedRows.map(s => s.billingOutcomeId)}
+            applyLines={this.applyLines}
             type="billApply"
             roles={this.props.role.map(r => r.roleCode)}
           /> : null

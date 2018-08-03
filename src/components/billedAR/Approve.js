@@ -133,9 +133,7 @@ class Approve extends Component{
       },
     ];
   }
-  componentDidMount() {
-    this.doSearch()
-  }
+
   doSearch = (e)=>{
     //e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -319,7 +317,7 @@ class Approve extends Component{
           columns={columns}
           dataSource={result}
           pagination={false}
-          scroll={{ x: 3262, y: this.state.tableHeight }}
+          scroll={{ x: 3282, y: this.state.tableHeight }}
         />
       </div>
     )

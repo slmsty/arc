@@ -27,7 +27,8 @@ class UnSignProjectAdd extends React.Component {
         isContracted: '',
         isContractedName: '',
         contractCurrency: '',
-      }
+      },
+      saveLoading: false,
     }
     this.statusMap = new Map()
   }
@@ -96,7 +97,17 @@ class UnSignProjectAdd extends React.Component {
           contractApprovalNo: values.contractApprovalNo ? values.contractApprovalNo.contractApprovalNo : '',
           approvalStatus: values.approvalStatus ? this.statusMap.get(values.approvalStatus) : '',
         }
-        this.props.billAction(params)
+        this.setState({
+          saveLoading: true
+        })
+        this.props.billAction(params).then(res => {
+          if(res && res.response) {
+            this.setState({
+              saveLoading: false
+            })
+          }
+
+        })
       }
     })
   }
@@ -120,8 +131,8 @@ class UnSignProjectAdd extends React.Component {
           wrapClassName="vertical-center-modal"
           onCancel={() => this.props.onCancel()}
           footer={[
-            <Button key="submit" type="primary" onClick={this.handleOk}>
-              <Icon type="check" />保存
+            <Button key="submit" type="primary" loading={this.state.saveLoading} onClick={this.handleOk}>
+              {!this.state.saveLoading ? <Icon type="check" /> : ''}保存
             </Button>,
           ]}
           maskClosable={false}
