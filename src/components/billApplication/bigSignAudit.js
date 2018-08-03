@@ -7,7 +7,7 @@ const billApproveColumns = [
   {
     title: '数据状态',
     dataIndex: 'statusName',
-    width: 120,
+    width: 100,
     textAlign: 'center',
     fixed: 'left',
   }, {
@@ -25,7 +25,7 @@ const billApproveColumns = [
   }, {
     title: '合同编码',
     dataIndex: 'contractNo',
-    width: 120,
+    width: 180,
   }, {
     title: '申请金额',
     dataIndex: 'applyAmount',
@@ -33,11 +33,11 @@ const billApproveColumns = [
   }, {
     title: '开票公司',
     dataIndex: 'comName',
-    width: 300,
+    width: 200,
   }, {
     title: '开票要求',
     dataIndex: 'billingApplicantRequest',
-    width: 300,
+    width: 320,
   }, {
     title: '开票客户名称',
     dataIndex: 'custName',
@@ -45,15 +45,15 @@ const billApproveColumns = [
   }, {
     title: '开票申请日期',
     dataIndex: 'billingApplicantDate',
-    width: 130,
+    width: 120,
   }, {
     title: '开票日期',
     dataIndex: 'billingDate',
-    width: 130,
+    width: 120,
   }, {
     title: '备注',
     dataIndex: 'remark',
-    width: 300,
+    width: 240,
   }, {
     title: '创建提示',
     dataIndex: 'errorMessage',
@@ -128,14 +128,14 @@ class BigSignAudit extends React.Component {
         <Table
           loading={searchLoading}
           rowSelection={rowSelection}
-          style={{marginBottom: '10px'}}
+          style={{marginBottom: '10px', whiteSpace: 'normal'}}
           rowKey="billingApplicationId"
           bordered
           size="small"
           columns={billApproveColumns}
           pagination={false}
           dataSource={billContracts}
-          scroll={{ x: 2440 }}
+          scroll={{ x: 2230 }}
         />
         {
           this.state.showApproveDetail ?
