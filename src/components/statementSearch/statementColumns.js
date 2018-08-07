@@ -115,111 +115,152 @@ const reciptMoneyInfoCols = [{
     width: 100,
   },
 ]
+
+const renderContent = (value, row, index) => {
+  const obj = {
+    children: value,
+    props: {},
+  };
+  return obj;
+};
+
+const parentRenderContent = (value, row, index) => {
+  console.log(row.isRowSpan, row.rowSpan)
+  return {
+    children: value,
+    props: {
+      rowSpan: row.isRowSpan ? row.rowSpan : 0,
+    },
+  };
+}
+
 //发票信息查询表
 const billInfocomCols = [{
-    title: '签约公司',
-    dataIndex: 'signCompany',
-    width: 250,
+    title: '合同名称',
+    dataIndex: 'contractName',
+    width: 240,
+    render: parentRenderContent,
   }, {
+    title: '项目经理',
+    dataIndex: 'projectManager',
+    width: 100,
+    render: parentRenderContent,
+}, {
     title: '项目编号',
     dataIndex: 'projectNo',
     width: 200,
-  }, {
+    render: parentRenderContent,
+}, {
     title: '付款条款',
     dataIndex: 'paymentName',
     width: 100,
-  }, {
+    render: parentRenderContent,
+}, {
     title: '付款百分比',
     dataIndex: 'paymentPercent',
     width: 100,
-    render: (text, record) => (
-      record.paymentPercent !== '' && typeof record.paymentPercent !== 'undefined' ? record.paymentPercent+'%' : ''
-    )
+    render: (text, row, index) => {
+      return {
+        children: row.paymentPercent !== '' && typeof row.paymentPercent !== 'undefined' ? row.paymentPercent+'%' : '',
+        props: {
+          rowSpan: row.isRowSpan ? row.rowSpan : 0,
+        },
+      };
+    },
   }, {
     title: '应收金额',
     dataIndex: 'billedArAmount',
     width: 100,
-    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.billedArAmount) : '')
-  },
-  {
-    title: '申请开票金额',
-    dataIndex: 'billingAmount',
-    width: 100,
-    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.billingAmount) : '')
-  },
-  {
-    title: '开票日期',
-    dataIndex: 'billingDate',
-    width: 100,
-  },
-  {
-    title: '发票号',
-    dataIndex: 'invoiceNumber',
-    width: 100,
-  },
-  {
-    title: '开票金额',
-    dataIndex: 'taxIncludeAmount',
-    width: 100,
-    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '')
-  },
-  {
-    title: '开票类型',
-    dataIndex: 'invoiceType',
-    width: 80,
-  },
-  {
-    title: '税率',
-    dataIndex: 'billingTaxRate',
-    width: 100,
-  },
-  {
-    title: '发票内容',
-    dataIndex: 'billingContect',
-    width: 200,
-  },
-  {
-    title: '客户名称',
-    dataIndex: 'custName',
-    width: 200,
-  },
-  {
-    title: '合同编号',
-    dataIndex: 'contractNo',
-    width: 120,
-  },
-  {
-    title: '合同名称',
-    dataIndex: 'contractName',
-    width: 120,
-  },
-  {
-    title: '项目经理',
-    dataIndex: 'projectManager',
-    width: 80,
-  },
-  {
+    render: (text, row, index) => {
+      return {
+        children: typeof text !== 'undefined' ? toThousands(row.billedArAmount) : '',
+        props: {
+          rowSpan: row.isRowSpan ? row.rowSpan : 0,
+        },
+      };
+    },
+  }, {
     title: '销售经理',
     dataIndex: 'salesManager',
-    width: 80,
-  },
-  {
+    width: 100,
+    render: parentRenderContent,
+  }, {
     title: '立项部门',
     dataIndex: 'deptNo',
     width: 80,
-  },
-  {
+    render: parentRenderContent,
+  }, {
     title:'条款金额',
     dataIndex:'paymentAmount',
     width:100,
-    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.paymentAmount) : '')
-  },
-  {
+    render: (text, row, index) => {
+      return {
+        children: typeof text !== 'undefined' ? toThousands(row.paymentAmount) : '',
+        props: {
+          rowSpan: row.isRowSpan ? row.rowSpan : 0,
+        },
+      };
+    },
+  }, {
     title: '收款金额',
     dataIndex: 'receiptAmount',
     width: 100,
-    render: (text, record) => (typeof text !== 'undefined' ? toThousands(record.receiptAmount) : '')
-  },
+    render: (text, row, index) => {
+      return {
+        children: typeof text !== 'undefined' ? toThousands(row.receiptAmount) : '',
+        props: {
+          rowSpan: row.isRowSpan ? row.rowSpan : 0,
+        },
+      };
+    },
+  }, {
+    title: '申请开票金额',
+    dataIndex: 'applyAmounts',
+    width: 100,
+    render: (text, row, index) => {
+      return {
+        children: typeof text !== 'undefined' ? row.applyAmounts.map(item => toThousands(item)).join(' \n ') : '',
+        props: {
+          rowSpan: row.amountIsSpan ? row.amountSpan : 0,
+        },
+      };
+    },
+  }, {
+    title: '开票日期',
+    dataIndex: 'billingDate',
+    width: 140,
+    render: renderContent,
+  }, {
+    title: '发票号',
+    dataIndex: 'invoiceNumber',
+    width: 100,
+    render: renderContent,
+  },{
+    title: '开票金额',
+    dataIndex: 'taxIncludeAmount',
+    width: 100,
+    render: (text, record, index) => {
+      return {
+        children: typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '',
+        props: {},
+      };
+    }
+  }, {
+    title: '开票类型',
+    dataIndex: 'invoiceType',
+    width: 80,
+    render: renderContent,
+}, {
+    title: '税率',
+    dataIndex: 'billingTaxRate',
+    width: 100,
+    render: renderContent,
+}, {
+    title: '发票内容',
+    dataIndex: 'billingContect',
+    width: 300,
+    render: renderContent,
+}
 ]
 //发票及收款信息查询表
 const billAndReciptMoneyCols = [{

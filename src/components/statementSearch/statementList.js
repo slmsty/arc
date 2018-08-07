@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import currency from '../../util/currency'
+import currency, {toThousands} from '../../util/currency'
 import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns,billInfoCols,outcomeTotalReportCols,unContractOutcomeDataAddCols,productOrderDetailCols,productOrderTotalCols } from './statementColumns'
 import { Table, Row, Col } from 'antd'
 
@@ -18,6 +18,153 @@ export default class StatementListIndex extends React.Component {
       pageNo: 1,
       pageSize: 10,
     },
+  }
+
+  renderContent = (value, row, index) => {
+    const obj = {
+      children: value,
+      props: {},
+    };
+    return obj;
+  };
+
+  parentRenderContent = (value, row, index) => {
+    return {
+      children: value,
+      props: {
+        rowSpan: row.isRowSpan ? row.rowSpan : 0,
+      },
+    };
+  }
+
+  getInvoiceInfoColumns = () => {
+    return [{
+      title: '合同名称',
+      dataIndex: 'contractName',
+      width: 240,
+      render: this.parentRenderContent,
+    }, {
+      title: '项目经理',
+      dataIndex: 'projectManager',
+      width: 100,
+      render: this.parentRenderContent,
+    }, {
+      title: '项目编号',
+      dataIndex: 'projectNo',
+      width: 200,
+      render: this.parentRenderContent,
+    }, {
+      title: '付款条款',
+      dataIndex: 'paymentName',
+      width: 100,
+      render: this.parentRenderContent,
+    }, {
+      title: '付款百分比',
+      dataIndex: 'paymentPercent',
+      width: 100,
+      render: (text, row, index) => {
+        return {
+          children: row.paymentPercent !== '' && typeof row.paymentPercent !== 'undefined' ? row.paymentPercent+'%' : '',
+          props: {
+            rowSpan: row.isRowSpan ? row.rowSpan : 0,
+          },
+        };
+      },
+    }, {
+      title: '应收金额',
+      dataIndex: 'billedArAmount',
+      width: 100,
+      render: (text, row, index) => {
+        return {
+          children: typeof text !== 'undefined' ? toThousands(row.billedArAmount) : '',
+          props: {
+            rowSpan: row.isRowSpan ? row.rowSpan : 0,
+          },
+        };
+      },
+    }, {
+      title: '销售经理',
+      dataIndex: 'salesManager',
+      width: 100,
+      render: this.parentRenderContent,
+    }, {
+      title: '立项部门',
+      dataIndex: 'deptNo',
+      width: 80,
+      render: this.parentRenderContent,
+    }, {
+      title:'条款金额',
+      dataIndex:'paymentAmount',
+      width:100,
+      render: (text, row, index) => {
+        return {
+          children: typeof text !== 'undefined' ? toThousands(row.paymentAmount) : '',
+          props: {
+            rowSpan: row.isRowSpan ? row.rowSpan : 0,
+          },
+        };
+      },
+    }, {
+      title: '收款金额',
+      dataIndex: 'receiptAmount',
+      width: 100,
+      render: (text, row, index) => {
+        return {
+          children: typeof text !== 'undefined' ? toThousands(row.receiptAmount) : '',
+          props: {
+            rowSpan: row.isRowSpan ? row.rowSpan : 0,
+          },
+        };
+      },
+    }, {
+      title: '申请开票金额',
+      dataIndex: 'applyAmounts',
+      width: 100,
+      render: (text, row, index) => {
+        return {
+          children: typeof text !== 'undefined' ? <div>{row.applyAmounts.map(item => <span>{toThousands(item)}<br/></span>)}</div> : '',
+          props: {
+            rowSpan: row.amountIsSpan ? row.amountSpan : 0,
+          },
+        };
+      },
+    }, {
+      title: '开票日期',
+      dataIndex: 'billingDate',
+      width: 140,
+      render: this.renderContent,
+    }, {
+      title: '发票号',
+      dataIndex: 'invoiceNumber',
+      width: 100,
+      render: this.renderContent,
+    },{
+      title: '开票金额',
+      dataIndex: 'taxIncludeAmount',
+      width: 100,
+      render: (text, record, index) => {
+        return {
+          children: typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '',
+          props: {},
+        };
+      }
+    }, {
+      title: '开票类型',
+      dataIndex: 'invoiceType',
+      width: 80,
+      render: this.renderContent,
+    }, {
+      title: '税率',
+      dataIndex: 'billingTaxRate',
+      width: 100,
+      render: this.renderContent,
+    }, {
+      title: '发票内容',
+      dataIndex: 'billingContect',
+      width: 300,
+      render: this.renderContent,
+    }
+    ]
   }
 
   excel = (param,type) => {
@@ -257,7 +404,7 @@ export default class StatementListIndex extends React.Component {
       billInfocomCols.map((item)=>{
         width += parseFloat(item.width)
       })
-      return [width,billInfocomCols,'发票汇总金额','']
+      return [width, this.getInvoiceInfoColumns(),'发票汇总金额','']
     } else if(type==='outcomeReceiptInfoReport'){
       billAndReciptMoneyCols.map((item)=>{
         width += parseFloat(item.width)
