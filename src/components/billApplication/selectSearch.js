@@ -131,6 +131,7 @@ class SelectSearch extends React.Component {
       <div>
         <Input
           style={this.props.style}
+          disabled={this.props.disabled}
           placeholder={this.props.label}
           value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
           suffix={suffix}

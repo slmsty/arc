@@ -37,6 +37,7 @@ import AuthoritySet from "../components/system/authoritySet";
 import billingDataInitAdd from './BillManage/billingDataInitAdd'
 import ReceiptApply from '../containers/BillManage/receiptApplication'
 import MailCcConfig from "./system/mailCcConfig";
+import ApproverConfig from './system/approverConfig'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -118,6 +119,8 @@ class IndexContainer extends React.Component {
       return ReceiptApply
     } else if (component === 'MailCcConfig') {
       return MailCcConfig
+    } else if (component === 'ApproveConfig') {
+      return ApproverConfig
     }
   }
   getMenuRoutes = (menus) => {

@@ -60,7 +60,7 @@ class BadDebtsInfoModal extends React.Component {
     }, {
       title: '备注',
       dataIndex: 'applicantRemark',
-      width: 80,
+      width: 350,
     },
     ]
     return (
@@ -97,7 +97,7 @@ class BadDebtsInfoModal extends React.Component {
                 columns={columns}
                 bordered
                 size="small"
-                scroll={{ x: '1480px' }}
+                scroll={{ x: '1750px' }}
                 dataSource={applyInfoDatas.serviceDetail}
               />
             </div>

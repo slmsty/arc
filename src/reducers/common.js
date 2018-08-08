@@ -269,6 +269,13 @@ const common = {
             icon: 'icon-youjianpeizhi',
             component: 'MailCcConfig',
           },
+          {
+            key: '85',
+            path: '/system/approveConfig',
+            name: '审批人配置',
+            icon: 'icon-xitongguanli',
+            component: 'ApproveConfig',
+          },
          ],
       },
     ],
