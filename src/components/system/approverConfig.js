@@ -86,7 +86,7 @@ class ApproverConfig extends React.Component {
     const value = this.props.form.getFieldsValue()
     const params = {
       ...value,
-      sbuNo: value.sbuNo && value.sbuNo.length > 0 ? value.sbuNo : '',
+      sbuNo: value.sbuNo && value.sbuNo.length > 0 ? value.sbuNo[0] : '',
       pageInfo:{
         pageNo: pageNo || 1,
         pageSize: pageSize || 10
