@@ -16,9 +16,22 @@ class BillingDataInitAddWithFromCom extends React.Component {
       exportLoading: false,
     }
   }
+
+  trimFormValue = (value) => {
+    return {
+      ...value,
+      projectNo: value.projectNo ? value.projectNo.trim() : '',
+      custName: value.custName ? value.custName.trim() : '',
+      invoiceNumbers: value.invoiceNumbers ? value.invoiceNumbers.trim() : '',
+      contractNo: value.contractNo ? value.contractNo.trim() : '',
+      companyName: value.companyName ? value.companyName.trim() : '',
+      applicationId: value.applicationId ? value.applicationId.trim() : '',
+
+    }
+  }
   handleQuery = () => {
     // 验证通过后查询
-    const param = this.props.form.getFieldsValue()
+    const param = this.trimFormValue(this.props.form.getFieldsValue())
     this.props.getBillDataInitList({
       ...param,
       approveCPBeginDate: param.approveCPDate && param.approveCPDate.length > 0? param.approveCPDate[0].format('YYYY-MM-DD') : '',
@@ -31,7 +44,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
     this.setState({
       exportLoading: true,
     })
-    const values = this.props.form.getFieldsValue()
+    const values = this.trimFormValue(this.props.form.getFieldsValue())
     this.props.exportExcel({
       ...values,
       approveCPBeginDate: values.approveCPDate && values.approveCPDate.length > 0 ? values.approveCPDate[0].format('YYYY-MM-DD') : '',

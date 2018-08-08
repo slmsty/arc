@@ -44,7 +44,7 @@ class NoApplyInfo extends React.Component {
     }, {
       title: '款项名称',
       dataIndex: 'paymentName',
-      width: 100,
+      width: 80,
     }, {
       title: '划销金额',
       dataIndex: 'badDebtAmount',
@@ -53,11 +53,11 @@ class NoApplyInfo extends React.Component {
     }, {
       title: '申请日期',
       dataIndex: 'applicationDate',
-      width: 150,
+      width: 130,
     }, {
       title: '应收日期',
       dataIndex: 'arDate',
-      width: 150,
+      width: 120,
     }, {
       title: '应收金额',
       dataIndex: 'billedArBalance',
@@ -66,14 +66,14 @@ class NoApplyInfo extends React.Component {
     }, {
       title: 'GL已提坏账准备金额',
       dataIndex: 'badDebtProvisionAmount',
-      width: 150,
+      width: 130,
       render: (text, record) => (text ? text.toFixed(2) : text),
     }, {
       title: '备注',
       dataIndex: 'applicantRemark',
-      width: 80,
-    },
-    ]
+      width: 300,
+      render: (text) => <span title={text}>{`${text.substring(0, 30)}...`}</span>
+    }]
     return (
       <div>
         <Modal
@@ -123,7 +123,7 @@ class NoApplyInfo extends React.Component {
                   columns={columns}
                   bordered
                   size="small"
-                  scroll={{ x: '1480px' }}
+                  scroll={{ x: '1590px' }}
                   dataSource={applyInfoDatas.serviceDetail}
                 />
                 <hr style={{ borderTop: '1px solid #d9d9d9' }} />
