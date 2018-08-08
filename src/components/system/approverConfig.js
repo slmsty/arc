@@ -82,6 +82,10 @@ class ApproverConfig extends React.Component {
     return columns
   }
 
+  clearFormValues = () => {
+    this.props.form.resetFields()
+  }
+
   handleQuery = (pageNo, pageSize) => {
     const value = this.props.form.getFieldsValue()
     const params = {
@@ -132,6 +136,7 @@ class ApproverConfig extends React.Component {
               <FormItem {...formItemLayout} label="审批角色">
                 {getFieldDecorator('nodeCode')(
                   <Select placeholder="请选择审批角色">
+                    <Option value=''>--请选择--</Option>
                     {
                       this.props.approveNodeList.map(node =>
                         <Option value={node.nodeCode}>{node.nodeName}</Option>
@@ -188,6 +193,7 @@ class ApproverConfig extends React.Component {
           <Row>
             <Col span={23} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />查询</Button>
+              <Button type="primary" ghost style={{marginLeft: '15px'}} onClick={this.clearFormValues}><Icon type="delete" />清空</Button>
             </Col>
           </Row>
         </Form>

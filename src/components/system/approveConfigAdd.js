@@ -102,19 +102,30 @@ class ApproveConfigAdd extends React.Component {
 
   handleApproveChange = (value) => {
     const approveNode = this.props.approveNodeList.find(item => item.nodeCode === value)
-    console.log(approveNode.condition && approveNode.condition.split(','))
+    let subNoEdit = false
+    let regionEdit = false
     if(approveNode.condition) {
       const nodeList = approveNode.condition.split(',')
-      if(nodeList.includes('subNo')) {
-        this.setState({
-          subNoEdit: true,
-        })
-      } else if(nodeList.includes('projectRegion')) {
-        this.setState({
-          regionEdit: true,
-        })
+      if(nodeList.includes('sbuNo')) {
+        subNoEdit = true
       }
+      if(nodeList.includes('projectRegion')) {
+        regionEdit = true
+      }
+      this.setState({
+        subNoEdit,
+        regionEdit
+      })
+    } else {
+      this.setState({
+        subNoEdit,
+        regionEdit
+      })
     }
+    this.props.form.setFieldsValue({
+      sbuNo: '',
+      projetRegion: ''
+    })
   }
 
   render() {
@@ -159,7 +170,11 @@ class ApproveConfigAdd extends React.Component {
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="审批角色">
                   {getFieldDecorator('nodeCode', {initialValue: approveRole, rules: [{ required: this.isAdd, message: '请选择审批角色!' }]})(
-                    <Select disabled={!this.isAdd} onChange={this.handleApproveChange}>
+                    <Select
+                      disabled={!this.isAdd}
+                      onChange={this.handleApproveChange}
+                      allowClear={true}
+                    >
                       {
                         this.props.approveNodeList.map(node =>
                           <Option value={node.nodeCode}>{node.nodeName}</Option>
