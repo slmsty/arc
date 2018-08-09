@@ -60,6 +60,12 @@ class ApproveConfigAdd extends React.Component {
       }]
   }
 
+  componentDidMount() {
+    const { nodeCode } = this.props.record
+    console.log(nodeCode)
+    this.setEditStatus(nodeCode)
+  }
+
   handleSelectChange = (v, index) => {
     this.personInfos[index].isActive = v
   }
@@ -100,7 +106,7 @@ class ApproveConfigAdd extends React.Component {
     })
   }
 
-  handleApproveChange = (value) => {
+  setEditStatus = (value) => {
     const approveNode = this.props.approveNodeList.find(item => item.nodeCode === value)
     let subNoEdit = false
     let regionEdit = false
@@ -122,6 +128,10 @@ class ApproveConfigAdd extends React.Component {
         regionEdit
       })
     }
+  }
+
+  handleApproveChange = (value) => {
+    this.setEditStatus(value)
     this.props.form.setFieldsValue({
       sbuNo: '',
       projetRegion: ''
@@ -190,7 +200,7 @@ class ApproveConfigAdd extends React.Component {
                 <FormItem {...formItemLayout} label="立项BU">
                   {
                     getFieldDecorator('sbuNo',{
-                      initialValue: [projectBu, ''], rules: [{ required: this.isAdd && this.state.subNoEdit, message: '请选择立项BU!' }]
+                      initialValue: projectBu ? projectBu.split(':') : "", rules: [{ required: this.isAdd && this.state.subNoEdit, message: '请选择立项BU!' }]
                     })(
                       <SelectSbu
                         disabled={!this.state.subNoEdit}

@@ -30,12 +30,20 @@ class BillStatusManageWithFormCon extends React.Component {
     const param = this.props.form.getFieldsValue()
     param.beginDate = param.signDate && param.signDate.length ? param.signDate[0].format(dateFormat) : ''
     param.endDate = param.signDate && param.signDate.length ? param.signDate[1].format(dateFormat) : ''
-    //param.projectCode = param.projectCode && param.projectCode.length ? param.projectCode.join(',') : ''
-   //param.contractCode = param.contractCode && param.contractCode.length ? param.contractCode.join(',') : ''
     param.invoiceCode = param.invoiceCode && param.invoiceCode.length ? param.invoiceCode.join(',') : ''
+
     param.accountId = param.accountId[0]
     delete param.signDate
-    this.props.onQuery(param)
+    this.props.onQuery({
+      ...param,
+      beginDate: param.signDate && param.signDate.length ? param.signDate[0].format(dateFormat) : '',
+      endDate: param.signDate && param.signDate.length ? param.signDate[1].format(dateFormat) : '',
+      invoiceCode: param.invoiceCode && param.invoiceCode.length ? param.invoiceCode.join(',') : '',
+      cutomer: param.cutomer ? param.cutomer.trim() : '',
+      projectCode: param.projectCode ? param.projectCode.trim() : '',
+      contractCode: param.contractCode ? param.contractCode.trim() : '',
+      applicationId: param.applicationId ? param.applicationId.trim() : '',
+    })
   }
   render() {
     const { getFieldDecorator } = this.props.form

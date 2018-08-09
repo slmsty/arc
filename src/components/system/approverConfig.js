@@ -90,6 +90,8 @@ class ApproverConfig extends React.Component {
     const value = this.props.form.getFieldsValue()
     const params = {
       ...value,
+      person: value.person ? value.person.trim() : '',
+      company: value.company ? value.company.trim() : '',
       sbuNo: value.sbuNo && value.sbuNo.length > 0 ? value.sbuNo[0] : '',
       pageInfo:{
         pageNo: pageNo || 1,
@@ -101,7 +103,7 @@ class ApproverConfig extends React.Component {
 
   render() {
     const { isLoading, approveConfigs, saveApprovePerson } = this.props
-    const { pageNo, result, count} = approveConfigs
+    const { pageNo, result, count, pageSize} = approveConfigs
     const { getFieldDecorator } = this.props.form
     const rowSelection = {
       type: 'radio',
@@ -119,7 +121,7 @@ class ApproverConfig extends React.Component {
       showTotal: (total) => (`共 ${total} 条`),
       current: pageNo,
       onChange: (current) => {
-        this.handleQuery(current)
+        this.handleQuery(current, pageSize)
       },
       showSizeChanger: true,
       onShowSizeChange: (current, pageSize) => {

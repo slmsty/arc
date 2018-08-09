@@ -64,7 +64,7 @@ class SelectSbu extends React.Component {
     this.handleQueryFetch(1)
   }
   handleQueryFetch= (pageNo) => {
-    const keywords = this.props.form.getFieldValue('keywords')
+    const keywords = (this.props.form.getFieldValue('keywords') || '').trim()
     const param = {
       method: 'POST',
       body: {
