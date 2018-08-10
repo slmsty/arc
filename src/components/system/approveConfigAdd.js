@@ -62,8 +62,9 @@ class ApproveConfigAdd extends React.Component {
 
   componentDidMount() {
     const { nodeCode } = this.props.record
-    console.log(nodeCode)
-    this.setEditStatus(nodeCode)
+    if(this.isAdd) {
+      this.setEditStatus(nodeCode)
+    }
   }
 
   handleSelectChange = (v, index) => {
@@ -140,7 +141,7 @@ class ApproveConfigAdd extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { approveRole, personInfos, projectBu, signCompany, projectRegion, companyName, companyId } = this.props.record
+    const { approveRole, personInfos, projectBu, sbuNo, subName, projectRegion, companyName, companyId } = this.props.record
 
     return (
       <div>
@@ -200,7 +201,7 @@ class ApproveConfigAdd extends React.Component {
                 <FormItem {...formItemLayout} label="立项BU">
                   {
                     getFieldDecorator('sbuNo',{
-                      initialValue: projectBu ? projectBu.split(':') : "", rules: [{ required: this.isAdd && this.state.subNoEdit, message: '请选择立项BU!' }]
+                      initialValue: [sbuNo, subName], rules: [{ required: this.isAdd && this.state.subNoEdit, message: '请选择立项BU!' }]
                     })(
                       <SelectSbu
                         disabled={!this.state.subNoEdit}

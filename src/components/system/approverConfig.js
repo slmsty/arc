@@ -51,13 +51,15 @@ class ApproverConfig extends React.Component {
   getTableColumns = () => {
     const columns = [
       {
-        title: '签约名称',
-        dataIndex: 'signCompany',
+        title: '签约公司',
+        dataIndex: 'companyId',
         width: '17%',
+        render: (text, record) => (record.companyName ? `${record.companyId}_${record.companyName}` : text)
       }, {
         title: '立项BU名称',
         dataIndex: 'projectBu',
         width: '17%',
+        render: (text, record) => (record.sbuNo && record.subName ? `${record.sbuNo}:${record.subName}` : '')
       }, {
         title: '立项区域',
         dataIndex: 'projectRegion',
