@@ -49,6 +49,7 @@ class ApproveConfigAdd extends React.Component {
         title: '人员',
         dataIndex: 'personName',
         width: 100,
+        render: (text, record) => (`${record.personName}(${record.personNumber})`)
       }, {
         title: '是否有效',
         dataIndex: 'isActive',

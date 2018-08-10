@@ -116,7 +116,8 @@ class ApproveSearch extends React.Component {
   }
 
   handleSearch = (v) => {
-    this.currentText = v
+    this.setState({visible: true})
+    //this.currentText = v
   }
 
   render() {
