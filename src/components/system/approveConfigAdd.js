@@ -94,7 +94,7 @@ class ApproveConfigAdd extends React.Component {
           actionType: 'NEW',
         }
         this.props.saveApprovePerson(params).then(res => {
-          if(res && res.response) {
+          if(res) {
             this.setState({
               addLoading: false
             })
@@ -122,16 +122,14 @@ class ApproveConfigAdd extends React.Component {
       if(nodeList.includes('projectRegion')) {
         regionEdit = true
       }
-      this.setState({
-        subNoEdit,
-        regionEdit
-      })
     } else {
-      this.setState({
-        subNoEdit,
-        regionEdit
-      })
+      subNoEdit = false
+      regionEdit = false
     }
+    this.setState({
+      subNoEdit,
+      regionEdit
+    })
   }
 
   handleApproveChange = (value) => {
@@ -144,7 +142,7 @@ class ApproveConfigAdd extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { nodeCode, personInfos, projectBu, sbuNo, subName, projectRegion, companyName, companyId } = this.props.record
+    const { nodeCode, personInfos, projectBu, sbuNo, sbuName, projectRegion, companyName, companyId } = this.props.record
 
     return (
       <div>
@@ -204,7 +202,7 @@ class ApproveConfigAdd extends React.Component {
                 <FormItem {...formItemLayout} label="立项BU">
                   {
                     getFieldDecorator('sbuNo',{
-                      initialValue: [sbuNo, subName], rules: [{ required: this.isAdd && this.state.subNoEdit, message: '请选择立项BU!' }]
+                      initialValue: [sbuNo, sbuName], rules: [{ required: this.isAdd && this.state.subNoEdit, message: '请选择立项BU!' }]
                     })(
                       <SelectSbu
                         disabled={!this.state.subNoEdit}
@@ -238,7 +236,7 @@ class ApproveConfigAdd extends React.Component {
                 !this.isEdit ?
                   <Col span={24} key={1}>
                     <FormItem {...formItemLayout1} label="审批角色对应人">
-                      {getFieldDecorator('personIds', {initialValue: [], rules: [{ required: this.isAdd, message: '请选择审批角色对应人!' }]})(
+                      {getFieldDecorator('personIds', {initialValue: [], rules: [{ required: !this.isEdit, message: '请选择审批角色对应人!' }]})(
                         <ApproveSearch
                           url="/search/addressbook/staff"
                           columns={columns}

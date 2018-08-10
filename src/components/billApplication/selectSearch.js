@@ -71,7 +71,7 @@ class SelectSearch extends React.Component {
             pageNo: pageNo || 1,
             pageSize: this.state.pageSize,
           },
-          keywords,
+          keywords: keywords ? keywords.trim() : '',
           billingApplicationType: this.props.billType,
         },
       }
@@ -134,7 +134,7 @@ class SelectSearch extends React.Component {
           disabled={this.props.disabled}
           placeholder={this.props.label}
           value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
-          suffix={suffix}
+          suffix={!this.props.disabled ? suffix : false}
           onClick={() => this.setState({ visible: true })}
         />
         <Modal
