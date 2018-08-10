@@ -104,12 +104,15 @@ class ApproveSearch extends React.Component {
   }
 
   handleBlur= () => {
-    let values = this.props.value || []
+    /*let values = this.props.value || []
     if(this.currentText) {
       values.push(this.currentText)
       this.props.onChange(values)
-      this.currentText = ''
-    }
+    }*/
+    let values = this.props.value || []
+    this.props.onChange(values)
+    this.currentText = ''
+
   }
 
   handleSearch = (v) => {

@@ -59,7 +59,7 @@ class ApproverConfig extends React.Component {
         title: '立项BU名称',
         dataIndex: 'projectBu',
         width: '17%',
-        render: (text, record) => (record.sbuNo && record.subName ? `${record.sbuNo}:${record.subName}` : '')
+        render: (text, record) => (record.sbuNo && record.sbuName ? `${record.sbuNo}:${record.sbuName}` : '')
       }, {
         title: '立项区域',
         dataIndex: 'projectRegion',
@@ -124,6 +124,10 @@ class ApproverConfig extends React.Component {
       current: pageNo,
       onChange: (current) => {
         this.handleQuery(current, pageSize)
+        this.setState({
+          selectedRows: [],
+          selectedRowKeys: [],
+        })
       },
       showSizeChanger: true,
       onShowSizeChange: (current, pageSize) => {
@@ -202,8 +206,18 @@ class ApproverConfig extends React.Component {
           </Row>
         </Form>
         <div style={{margin: '10px 0'}}>
-          <Button type="primary" onClick={() => this.setState({showAdd: true, action: 'Add'})} ghost>新增</Button>
-          <Button type="primary" style={{marginLeft: '10px'}} onClick={() => this.setState({showAdd: true, action: 'Add'})} ghost>复制</Button>
+          <Button
+            type="primary"
+            onClick={() => this.setState({showAdd: true, action: 'Add', record: {}})}
+            ghost
+          >新增</Button>
+          <Button
+            type="primary"
+            disabled={this.state.selectedRows.length === 0}
+            style={{marginLeft: '10px'}}
+            onClick={() => this.setState({showAdd: true, action: 'Copy'})}
+            ghost
+          >复制</Button>
         </div>
         <Table
           loading={isLoading}
@@ -218,7 +232,7 @@ class ApproverConfig extends React.Component {
           this.state.showAdd ?
             <ApproveConfigAdd
               visible={this.state.showAdd}
-              onCancel={() => this.setState({showAdd: false, record: {}})}
+              onCancel={() => this.setState({showAdd: false, selectedRows: [], selectedRowKeys: []})}
               saveApprovePerson={saveApprovePerson}
               action={this.state.action}
               record={this.state.record}

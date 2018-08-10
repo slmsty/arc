@@ -43,6 +43,7 @@ class ApproveConfigAdd extends React.Component {
       isActive: item.isActive,
     })) : []
     this.isAdd = props.action === 'Add'
+    this.isEdit = props.action === 'Edit'
     this.columns = [
       {
         title: '人员',
@@ -62,7 +63,7 @@ class ApproveConfigAdd extends React.Component {
 
   componentDidMount() {
     const { nodeCode } = this.props.record
-    if(this.isAdd) {
+    if(this.props.action === 'Copy') {
       this.setEditStatus(nodeCode)
     }
   }
@@ -78,13 +79,14 @@ class ApproveConfigAdd extends React.Component {
         this.setState({
           addLoading: true
         })
-        const params = !this.isAdd ? {
+        const params = this.isEdit ? {
           actionType: 'EDIT',
           personInfos: this.personInfos,
         } : {
           ...values,
           companyId: values.companyId.length > 0 ? values.companyId[0] : '',
           sbuNo: values.sbuNo.length > 0 ? values.sbuNo[0] : '',
+          sbuName: values.sbuNo.length > 0 ? values.sbuNo[1] : '',
           personIds: values.personIds.map(item =>
             item.replace(/.*\((\d+)\)$/, '$1')
           ),
@@ -141,7 +143,7 @@ class ApproveConfigAdd extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const { approveRole, personInfos, projectBu, sbuNo, subName, projectRegion, companyName, companyId } = this.props.record
+    const { nodeCode, personInfos, projectBu, sbuNo, subName, projectRegion, companyName, companyId } = this.props.record
 
     return (
       <div>
@@ -173,16 +175,16 @@ class ApproveConfigAdd extends React.Component {
                       idKey="comId"
                       valueKey="comName"
                       showSearch={true}
-                      disabled={!this.isAdd}
+                      disabled={this.isEdit}
                     />
                   )}
                 </FormItem>
               </Col>
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="审批角色">
-                  {getFieldDecorator('nodeCode', {initialValue: approveRole, rules: [{ required: this.isAdd, message: '请选择审批角色!' }]})(
+                  {getFieldDecorator('nodeCode', {initialValue: nodeCode, rules: [{ required: this.isAdd, message: '请选择审批角色!' }]})(
                     <Select
-                      disabled={!this.isAdd}
+                      disabled={this.isEdit}
                       onChange={this.handleApproveChange}
                       allowClear={true}
                     >
@@ -232,7 +234,7 @@ class ApproveConfigAdd extends React.Component {
             </Row>
             <Row gutter={30}>
               {
-                this.isAdd ?
+                !this.isEdit ?
                   <Col span={24} key={1}>
                     <FormItem {...formItemLayout1} label="审批角色对应人">
                       {getFieldDecorator('personIds', {initialValue: [], rules: [{ required: this.isAdd, message: '请选择审批角色对应人!' }]})(
