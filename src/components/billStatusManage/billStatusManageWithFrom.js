@@ -31,14 +31,10 @@ class BillStatusManageWithFormCon extends React.Component {
     param.beginDate = param.signDate && param.signDate.length ? param.signDate[0].format(dateFormat) : ''
     param.endDate = param.signDate && param.signDate.length ? param.signDate[1].format(dateFormat) : ''
     param.invoiceCode = param.invoiceCode && param.invoiceCode.length ? param.invoiceCode.join(',') : ''
-
     param.accountId = param.accountId[0]
     delete param.signDate
     this.props.onQuery({
       ...param,
-      beginDate: param.signDate && param.signDate.length ? param.signDate[0].format(dateFormat) : '',
-      endDate: param.signDate && param.signDate.length ? param.signDate[1].format(dateFormat) : '',
-      invoiceCode: param.invoiceCode && param.invoiceCode.length ? param.invoiceCode.join(',') : '',
       cutomer: param.cutomer ? param.cutomer.trim() : '',
       projectCode: param.projectCode ? param.projectCode.trim() : '',
       contractCode: param.contractCode ? param.contractCode.trim() : '',
