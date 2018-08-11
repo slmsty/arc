@@ -202,7 +202,7 @@ class ApproveConfigAdd extends React.Component {
                 <FormItem {...formItemLayout} label="立项BU">
                   {
                     getFieldDecorator('sbuNo',{
-                      initialValue: [sbuNo, sbuName], rules: [{ required: this.isAdd && this.state.subNoEdit, message: '请选择立项BU!' }]
+                      initialValue: [sbuNo, sbuName], rules: [{ required: !this.isEdit && this.state.subNoEdit, message: '请选择立项BU!' }]
                     })(
                       <SelectSbu
                         disabled={!this.state.subNoEdit}
@@ -213,7 +213,7 @@ class ApproveConfigAdd extends React.Component {
               </Col>
               <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="立项区域">
-                  {getFieldDecorator('projetRegion', {initialValue: projectRegion, rules: [{ required: this.isAdd && this.state.regionEdit, message: '请选择立项区域!' }]})(
+                  {getFieldDecorator('projetRegion', {initialValue: projectRegion, rules: [{ required: !this.isEdit && this.state.regionEdit, message: '请选择立项区域!' }]})(
                     <TreeSelect
                       disabled={!this.state.regionEdit}
                       value={this.state.value}

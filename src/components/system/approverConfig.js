@@ -27,6 +27,8 @@ class ApproverConfig extends React.Component {
       this.setState({
         showAdd: false,
         record: {},
+        selectedRows: [],
+        selectedRowKeys: [],
       })
       this.handleQuery()
     }
