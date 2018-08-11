@@ -30,9 +30,14 @@ const BreadcrumbContainer = withRouter((props) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
     return (
       <Breadcrumb.Item key={url}>
-        <Link to={url}>
-          {getBreadcrumbName(permission.menu, url)}
-        </Link>
+        {
+          index === 0 ?
+            getBreadcrumbName(permission.menu, url)
+            :
+            <Link to={url}>
+              {getBreadcrumbName(permission.menu, url)}
+            </Link>
+        }
       </Breadcrumb.Item>
     )
   })

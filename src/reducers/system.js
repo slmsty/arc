@@ -20,7 +20,11 @@ const system = {
   },
   regionPage:{
     result: []
-  }
+  },
+  approveConfigs: {
+    result: []
+  },
+  approveNodeList: []
 }
 function loadingRequest(state) {
   return {
@@ -103,6 +107,29 @@ function queryRegionList(state, action) {
   }
 }
 
+function queryApproveConfig(state, action) {
+  return {
+    ...state,
+    approveConfigs: action.response.pageInfo,
+    isLoading: false,
+    saveSuccess: false,
+  }
+}
+
+function saveApproveConfig(state) {
+  return {
+    ...state,
+    saveSuccess: true,
+  }
+}
+
+function getApproveNodeList(state, action) {
+  return {
+    ...state,
+    approveNodeList: action.response.data,
+  }
+}
+
 export default caseReducer(system, {
   GET_MAIL_CONFIG_SUCCESS: getMailConfig,
   SAVE_MAIL_CONFIG_SUCCESS: saveMailConfig,
@@ -114,4 +141,7 @@ export default caseReducer(system, {
   QUERY_MAIL_CC_SUCCESS: queryMailCc,
   QUERY_REGION_LIST_SUCCESS: queryRegionList,
   SAVE_MAIL_CC_SUCCESS: saveMailCc,
+  QUERY_APPROVE_CONFIG_SUCCESS: queryApproveConfig,
+  SAVE_APPROVE_CONFIG_SUCCESS: saveApproveConfig,
+  GET_APPROVE_NODE_LIST_SUCCESS: getApproveNodeList,
 })

@@ -26,6 +26,13 @@ class BillingApplyForm extends React.Component {
       arDateEnd: values.arDate ? values.arDate[1].format('YYYY-MM-DD') : '',
       invoiceNumbers: values.invoiceNumbers ? values.invoiceNumbers : [],
       sbuNo: values.sbuNo ? values.sbuNo[0] : '',
+      custName: values.custName ? values.custName.trim() : '',
+      projectNo: values.projectNo ? values.projectNo.trim() : '',
+      companyName: values.companyName ? values.companyName.trim() : '',
+      contractNo: values.contractNo ? values.contractNo.trim() : '',
+      paymentName: values.paymentName ? values.paymentName.trim() : '',
+      region: values.region ? values.region.trim() : '',
+      province: values.province ? values.province.trim() : '',
       pageInfo: {
         pageNo: 1,
         pageSize: 10,

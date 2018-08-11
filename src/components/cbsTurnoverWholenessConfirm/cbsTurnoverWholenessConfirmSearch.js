@@ -39,6 +39,10 @@ class CBSTurnoverWholenessConfirmSearch extends React.Component {
 
     param.receiptDateStart = param.receiptDate.length ? param.receiptDate[0].format(dateFormat) : ''
     param.receiptDateEnd = param.receiptDate.length ? param.receiptDate[1].format(dateFormat) : ''
+    param.receiptAmountFrom = param.receiptAmountFrom ? param.receiptAmountFrom.trim() : ''
+    param.receiptAmountTo = param.receiptAmountTo ? param.receiptAmountTo.trim() : ''
+    param.companyName = param.companyName ? param.companyName.trim() : ''
+    param.receiptBankAccountName = param.receiptBankAccountName ? param.receiptBankAccountName.trim() : ''
     delete param.receiptDate
     param.custId = param.customer && param.customer.length ? param.customer[0] : null
     delete param.customer
