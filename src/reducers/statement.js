@@ -84,7 +84,7 @@ function getProductOrderTotalList(state, action) {
 function getConfirmDetailList(state, action) {
   return { ...state, getConfirmDetailList: action.response.pageInfo }
 }
-function getBillDetailList(state, action) {
+/*function getBillDetailList(state, action) {
   const pageInfo = action.response.pageInfo
   let invoiceList = []
   pageInfo.result.map(item => {
@@ -117,6 +117,9 @@ function getBillDetailList(state, action) {
   }
   console.log(newPage)
   return { ...state, getBillDetailList: newPage }
+}*/
+function getBillDetailList(state, action) {
+  return { ...state, getBillDetailList: action.response.pageInfo }
 }
 function getProductDetailList(state, action) {
   return { ...state, getProductDetailList: action.response.pageInfo }
