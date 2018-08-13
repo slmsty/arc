@@ -404,7 +404,7 @@ export default class StatementListIndex extends React.Component {
       billInfocomCols.map((item)=>{
         width += parseFloat(item.width)
       })
-      return [width, /*this.getInvoiceInfoColumns()*/billInfocomCols,'发票汇总金额','']
+      return [width, this.getInvoiceInfoColumns(),'发票汇总金额','']
     } else if(type==='outcomeReceiptInfoReport'){
       billAndReciptMoneyCols.map((item)=>{
         width += parseFloat(item.width)
