@@ -154,7 +154,12 @@ const billingDataInitColumns = [
     dataIndex:'statusName',
     width:100,
     fixed: 'right',
-  },
+  }, {
+    title:'发票状态',
+    dataIndex:'invoiceStatus',
+    width:100,
+    fixed: 'right',
+  }
 ]
 class BillingDataInitAddCom extends React.Component {
   state = {
