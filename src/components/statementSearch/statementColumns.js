@@ -125,7 +125,6 @@ const renderContent = (value, row, index) => {
 };
 
 const parentRenderContent = (value, row, index) => {
-  console.log(row.isRowSpan, row.rowSpan)
   return {
     children: value,
     props: {
@@ -136,6 +135,28 @@ const parentRenderContent = (value, row, index) => {
 
 //发票信息查询表
 const billInfocomCols = [{
+    title: '签约公司',
+    dataIndex: 'comName',
+    width: 240,
+    render: (value, row, index) => {
+      return {
+        children: `${row.comId}_${row.comName}`,
+        props: {
+          rowSpan: row.isRowSpan ? row.rowSpan : 0,
+        },
+      };
+    },
+  },{
+    title: '客户名称',
+    dataIndex: 'custName',
+    width: 240,
+    render: parentRenderContent,
+  },{
+    title: '合同编码',
+    dataIndex: 'contractNo',
+    width: 240,
+    render: parentRenderContent,
+  },{
     title: '合同名称',
     dataIndex: 'contractName',
     width: 240,
@@ -173,7 +194,7 @@ const billInfocomCols = [{
     width: 100,
     render: (text, row, index) => {
       return {
-        children: typeof text !== 'undefined' ? toThousands(row.billedArAmount) : '',
+        children: typeof text !== 'undefined' ? toThousands(row.billedArAmount) : 0,
         props: {
           rowSpan: row.isRowSpan ? row.rowSpan : 0,
         },
@@ -188,6 +209,11 @@ const billInfocomCols = [{
     title: '立项部门',
     dataIndex: 'deptNo',
     width: 80,
+    render: parentRenderContent,
+  }, {
+    title: '立项BU',
+    dataIndex: 'sbuName',
+    width: 100,
     render: parentRenderContent,
   }, {
     title:'条款金额',
@@ -207,7 +233,7 @@ const billInfocomCols = [{
     width: 100,
     render: (text, row, index) => {
       return {
-        children: typeof text !== 'undefined' ? toThousands(row.receiptAmount) : '',
+        children: typeof text !== 'undefined' ? toThousands(row.receiptAmount) : 0,
         props: {
           rowSpan: row.isRowSpan ? row.rowSpan : 0,
         },
@@ -231,6 +257,11 @@ const billInfocomCols = [{
     width: 140,
     render: renderContent,
   }, {
+    title: '申请人',
+    dataIndex: 'applyPerson',
+    width: 140,
+    render: renderContent,
+  }, {
     title: '发票号',
     dataIndex: 'invoiceNumber',
     width: 100,
@@ -251,16 +282,41 @@ const billInfocomCols = [{
     width: 80,
     render: renderContent,
 }, {
+    title: '开票不含税金额',
+    dataIndex: 'taxExcludeAmount',
+    width: 80,
+    render: renderContent,
+  },  {
+    title: '开票销项税额',
+    dataIndex: 'taxAmount',
+    width: 80,
+    render: renderContent,
+  }, {
     title: '税率',
     dataIndex: 'billingTaxRate',
     width: 100,
     render: renderContent,
 }, {
+    title: '优惠政策类型',
+    dataIndex: 'prefPolicyType',
+    width: 100,
+    render: renderContent,
+  }, {
+    title: '发票状态',
+    dataIndex: 'invoiceStatus',
+    width: 100,
+    render: renderContent,
+  }, {
     title: '发票内容',
-    dataIndex: 'billingContect',
+    dataIndex: 'billingContent',
     width: 300,
     render: renderContent,
-}
+  },{
+    title: '发票备注',
+    dataIndex: 'billingRemark',
+    width: 100,
+    render: renderContent,
+  }
 ]
 //发票及收款信息查询表
 const billAndReciptMoneyCols = [{
