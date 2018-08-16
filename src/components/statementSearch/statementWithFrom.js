@@ -597,7 +597,10 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="币种">
                   {getFieldDecorator('currency',{
                   })(
-                    <SelectCurrent hasAll />
+                    <Select>
+                      <Option value=''>--请选择--</Option>
+                      <Option value='CNY'>CNY</Option>
+                    </Select>
                   )}
                 </FormItem>
               </Col>
@@ -667,7 +670,20 @@ class StatementListCom extends React.Component {
                   }
                 </FormItem>
               </Col>
-              <Col span={16} style={{ textAlign: 'right' }}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="是否包含作废">
+                  {
+                    getFieldDecorator('invoiceStatus')(
+                      <Select>
+                        <Option value="">--请选择--</Option>
+                        <Option value="Y">是</Option>
+                        <Option value="N">否</Option>
+                      </Select>
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" key="search" onClick={()=>this.queryParms('outcomeInfoReport')}><Icon type="search" />查询</Button>
                 <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('outcomeInfoReport')}>导出EXCEL</Button>
               </Col>

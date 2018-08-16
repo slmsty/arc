@@ -117,7 +117,7 @@ export default class StatementListIndex extends React.Component {
     }, {
       title: '立项BU',
       dataIndex: 'sbuName',
-      width: 100,
+      width: 150,
       render: this.parentRenderContent,
     }, {
       title:'条款金额',
@@ -177,7 +177,9 @@ export default class StatementListIndex extends React.Component {
       render: (text, record, index) => {
         return {
           children: typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '',
-          props: {},
+            props: {
+              rowSpan: record.amountIsSpan ? record.amountSpan : 0
+            }
         };
       }
     }, {
