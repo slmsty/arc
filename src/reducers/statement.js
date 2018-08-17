@@ -92,25 +92,37 @@ function getBillDetailList(state, action) {
     let preId = ''
     let childSpan = false
     let totalSpan = 0
-    item.invoiceItems.map((invoice, index) => {
-      if(invoice.billingApplicationId !== preId) {
-        childSpan = true
-        preId = invoice.billingApplicationId
-        totalSpan = item.invoiceItems.filter(item => item.billingApplicationId === invoice.billingApplicationId).length;
-      } else {
-        totalSpan = 0;
-      }
+    if(item.invoiceItems.length > 0) {
+      item.invoiceItems.map((invoice, index) => {
+        if(invoice.billingApplicationId !== preId) {
+          childSpan = true
+          preId = invoice.billingApplicationId
+          totalSpan = item.invoiceItems.filter(item => item.billingApplicationId === invoice.billingApplicationId).length;
+        } else {
+          totalSpan = 0;
+        }
+        invoiceList.push({
+          ...item,
+          ...invoice,
+          isRowSpan: index === 0 ? true :false,
+          rowSpan: index === 0 ? length : 0,
+          amountIsSpan: childSpan,
+          amountSpan: totalSpan,
+          includeIsSpan: index === 0 ? invoice.invoiceAmountMerge : false,
+          includeSpan: index === 0 ? length : 0,
+        })
+      })
+    } else {
       invoiceList.push({
         ...item,
-        ...invoice,
-        isRowSpan: index === 0 ? true :false,
-        rowSpan: index === 0 ? length : 0,
-        amountIsSpan: childSpan,
-        amountSpan: totalSpan,
-        includeIsSpan: index === 0 ? invoice.invoiceAmountMerge : false,
-        includeSpan: index === 0 ? length : 0,
+        isRowSpan: true,
+        rowSpan: 1,
+        amountIsSpan: false,
+        amountSpan: 0,
+        includeIsSpan: false,
+        includeSpan: 0,
       })
-    })
+    }
   })
   console.log(invoiceList)
   const newPage = {

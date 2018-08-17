@@ -673,7 +673,9 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="是否包含作废">
                   {
-                    getFieldDecorator('invoiceStatus')(
+                    getFieldDecorator('invoiceStatus', {
+                      initialValue: 'N',
+                    })(
                       <Select>
                         <Option value="">--请选择--</Option>
                         <Option value="Y">是</Option>

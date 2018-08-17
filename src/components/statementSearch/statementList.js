@@ -22,7 +22,7 @@ export default class StatementListIndex extends React.Component {
 
   renderContent = (value, row, index) => {
     const obj = {
-      children: value,
+      children: value || '',
       props: {},
     };
     return obj;
@@ -183,11 +183,6 @@ export default class StatementListIndex extends React.Component {
         };
       }
     }, {
-      title: '开票类型',
-      dataIndex: 'invoiceType',
-      width: 80,
-      render: this.renderContent,
-    }, {
       title: '开票不含税金额',
       dataIndex: 'taxExcludeAmount',
       width: 120,
@@ -202,7 +197,12 @@ export default class StatementListIndex extends React.Component {
       dataIndex: 'billingTaxRate',
       width: 100,
       render: this.renderContent,
-    },{
+    }, {
+      title: '开票类型',
+      dataIndex: 'invoiceType',
+      width: 80,
+      render: this.renderContent,
+    }, {
       title: '优惠政策类型',
       dataIndex: 'prefPolicyType',
       width: 100,
