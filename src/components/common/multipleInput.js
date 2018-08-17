@@ -22,10 +22,11 @@ export default class MultipleInput extends React.Component {
   handleChange = (values) => {
     this.textTemp = ''
     this.setState({ values })
-    this.props.onChange(values)
+    const v = values.map(item => item.trim())
+    this.props.onChange(v)
   }
   handleSearch = (value) => {
-    this.textTemp = value
+    this.textTemp = value.trim()
   }
   handleBlur= () => {
     if (this.textTemp) {

@@ -22,7 +22,7 @@ export default class StatementListIndex extends React.Component {
 
   renderContent = (value, row, index) => {
     const obj = {
-      children: value,
+      children: value || '',
       props: {},
     };
     return obj;
@@ -39,6 +39,28 @@ export default class StatementListIndex extends React.Component {
 
   getInvoiceInfoColumns = () => {
     return [{
+      title: '签约公司',
+      dataIndex: 'comName',
+      width: 240,
+      render: (value, row, index) => {
+        return {
+          children: `${row.comId}_${row.comName}`,
+          props: {
+            rowSpan: row.isRowSpan ? row.rowSpan : 0,
+          },
+        };
+      },
+    }, {
+      title: '客户名称',
+      dataIndex: 'custName',
+      width: 240,
+      render: this.parentRenderContent,
+    }, {
+      title: '合同编码',
+      dataIndex: 'contractNo',
+      width: 240,
+      render: this.parentRenderContent,
+    }, {
       title: '合同名称',
       dataIndex: 'contractName',
       width: 240,
@@ -76,7 +98,7 @@ export default class StatementListIndex extends React.Component {
       width: 100,
       render: (text, row, index) => {
         return {
-          children: typeof text !== 'undefined' ? toThousands(row.billedArAmount) : '',
+          children: typeof text !== 'undefined' ? toThousands(row.billedArAmount) : 0,
           props: {
             rowSpan: row.isRowSpan ? row.rowSpan : 0,
           },
@@ -91,6 +113,11 @@ export default class StatementListIndex extends React.Component {
       title: '立项部门',
       dataIndex: 'deptNo',
       width: 80,
+      render: this.parentRenderContent,
+    }, {
+      title: '立项BU',
+      dataIndex: 'sbuName',
+      width: 150,
       render: this.parentRenderContent,
     }, {
       title:'条款金额',
@@ -110,7 +137,7 @@ export default class StatementListIndex extends React.Component {
       width: 100,
       render: (text, row, index) => {
         return {
-          children: typeof text !== 'undefined' ? toThousands(row.receiptAmount) : '',
+          children: typeof text !== 'undefined' ? toThousands(row.receiptAmount) : 0,
           props: {
             rowSpan: row.isRowSpan ? row.rowSpan : 0,
           },
@@ -134,6 +161,11 @@ export default class StatementListIndex extends React.Component {
       width: 140,
       render: this.renderContent,
     }, {
+      title: '申请人',
+      dataIndex: 'applyPerson',
+      width: 140,
+      render: this.renderContent,
+    }, {
       title: '发票号',
       dataIndex: 'invoiceNumber',
       width: 100,
@@ -145,13 +177,20 @@ export default class StatementListIndex extends React.Component {
       render: (text, record, index) => {
         return {
           children: typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '',
-          props: {},
+            props: {
+              rowSpan: record.amountIsSpan ? record.amountSpan : 0
+            }
         };
       }
     }, {
-      title: '开票类型',
-      dataIndex: 'invoiceType',
-      width: 80,
+      title: '开票不含税金额',
+      dataIndex: 'taxExcludeAmount',
+      width: 120,
+      render: this.renderContent,
+    }, {
+      title: '开票销项税额',
+      dataIndex: 'taxAmount',
+      width: 120,
       render: this.renderContent,
     }, {
       title: '税率',
@@ -159,9 +198,29 @@ export default class StatementListIndex extends React.Component {
       width: 100,
       render: this.renderContent,
     }, {
+      title: '开票类型',
+      dataIndex: 'invoiceType',
+      width: 80,
+      render: this.renderContent,
+    }, {
+      title: '优惠政策类型',
+      dataIndex: 'prefPolicyType',
+      width: 100,
+      render: this.renderContent,
+    }, {
+      title: '发票状态',
+      dataIndex: 'invoiceStatus',
+      width: 100,
+      render: this.renderContent,
+    }, {
       title: '发票内容',
-      dataIndex: 'billingContect',
+      dataIndex: 'billingContent',
       width: 300,
+      render: this.renderContent,
+    },{
+      title: '发票备注',
+      dataIndex: 'billingRemark',
+      width: 250,
       render: this.renderContent,
     }
     ]
@@ -404,7 +463,7 @@ export default class StatementListIndex extends React.Component {
       billInfocomCols.map((item)=>{
         width += parseFloat(item.width)
       })
-      return [width, /*this.getInvoiceInfoColumns()*/billInfocomCols,'发票汇总金额','']
+      return [width, this.getInvoiceInfoColumns(),'发票汇总金额','']
     } else if(type==='outcomeReceiptInfoReport'){
       billAndReciptMoneyCols.map((item)=>{
         width += parseFloat(item.width)

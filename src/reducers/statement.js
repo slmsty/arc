@@ -84,7 +84,7 @@ function getProductOrderTotalList(state, action) {
 function getConfirmDetailList(state, action) {
   return { ...state, getConfirmDetailList: action.response.pageInfo }
 }
-/*function getBillDetailList(state, action) {
+function getBillDetailList(state, action) {
   const pageInfo = action.response.pageInfo
   let invoiceList = []
   pageInfo.result.map(item => {
@@ -92,24 +92,39 @@ function getConfirmDetailList(state, action) {
     let preId = ''
     let childSpan = false
     let totalSpan = 0
-    item.invoiceItems.map((invoice, index) => {
-      if(invoice.billingApplicationId !== preId) {
-        childSpan = true
-        preId = invoice.billingApplicationId
-        totalSpan = item.invoiceItems.filter(item => item.billingApplicationId === invoice.billingApplicationId).length;
-      } else {
-        totalSpan = 0;
-      }
+    if(item.invoiceItems.length > 0) {
+      item.invoiceItems.map((invoice, index) => {
+        if(invoice.billingApplicationId !== preId) {
+          childSpan = true
+          preId = invoice.billingApplicationId
+          totalSpan = item.invoiceItems.filter(item => item.billingApplicationId === invoice.billingApplicationId).length;
+        } else {
+          totalSpan = 0;
+        }
+        invoiceList.push({
+          ...item,
+          ...invoice,
+          isRowSpan: index === 0 ? true :false,
+          rowSpan: index === 0 ? length : 0,
+          amountIsSpan: childSpan,
+          amountSpan: totalSpan,
+          includeIsSpan: index === 0 ? invoice.invoiceAmountMerge : false,
+          includeSpan: index === 0 ? length : 0,
+        })
+      })
+    } else {
       invoiceList.push({
         ...item,
-        ...invoice,
-        isRowSpan: index === 0 ? true :false,
-        rowSpan: index === 0 ? length : 0,
-        amountIsSpan: childSpan,
-        amountSpan: totalSpan,
+        isRowSpan: true,
+        rowSpan: 1,
+        amountIsSpan: false,
+        amountSpan: 0,
+        includeIsSpan: false,
+        includeSpan: 0,
       })
-    })
+    }
   })
+  console.log(invoiceList)
   const newPage = {
     ...pageInfo,
     pageSize: invoiceList.length,
@@ -117,10 +132,8 @@ function getConfirmDetailList(state, action) {
   }
   console.log(newPage)
   return { ...state, getBillDetailList: newPage }
-}*/
-function getBillDetailList(state, action) {
-  return { ...state, getBillDetailList: action.response.pageInfo }
 }
+
 function getProductDetailList(state, action) {
   return { ...state, getProductDetailList: action.response.pageInfo }
 }

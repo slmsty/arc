@@ -185,6 +185,8 @@ class BillDetail extends React.Component {
             objectName: this.state.file.name,
             billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
             isAgainInvoice: 'false',
+            billingApplicationId: detail.billingApplicationId || '',
+            startWorkFlow: type === 'myApply' ? 'Y' : '',
           }
           this.props.billApplySave(params).then(res => {
             this.setState({loading: false})

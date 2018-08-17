@@ -23,7 +23,7 @@ class ReceiptApplyForm extends React.Component {
       custName: values.custName ? values.custName.trim() : '',
       projectNo: values.projectNo ? values.projectNo.trim() : '',
       companyName: values.companyName ? values.companyName.trim() : '',
-      contractNos: values.contractNos ? values.contractNos.trim() : '',
+      contractNo: values.contractNo ? values.contractNo.trim() : '',
       sbuNo: values.sbuNo && values.sbuNo.length > 0 ? values.sbuNo[0] : '',
       paymentName: values.paymentName ? values.paymentName.trim() : '',
       province: values.province ? values.province.trim() : '',

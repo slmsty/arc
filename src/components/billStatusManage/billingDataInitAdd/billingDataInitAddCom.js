@@ -154,7 +154,12 @@ const billingDataInitColumns = [
     dataIndex:'statusName',
     width:100,
     fixed: 'right',
-  },
+  }, {
+    title:'发票状态',
+    dataIndex:'invoiceStatus',
+    width:100,
+    fixed: 'right',
+  }
 ]
 class BillingDataInitAddCom extends React.Component {
   state = {
@@ -227,6 +232,9 @@ class BillingDataInitAddCom extends React.Component {
         const item = selectedRows[i]
         if(item.status === 'BILLING_ERROR' || item.status === 'BILLING_APPLICATION_APPROVE_OK') {
           message.warning(`申请单号【${item.billingApplicationId}】未传送金税的数据，不能进行发票补录`)
+          break;
+        } else if(item.status === 'BILLING_INVALID_OK' || item.status === 'BILLING_INVALID_ING' || item.status === 'BILLING_INVALID_APPROVE_OK') {
+          message.warning(`申请单号【${item.billingApplicationId}】作废发票，无需进行发票补录`)
           break;
         } else if(item.status === 'BILLING_OK') {
           editDisabled = false
