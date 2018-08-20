@@ -72,7 +72,7 @@ class NoApplyInfo extends React.Component {
       title: '备注',
       dataIndex: 'applicantRemark',
       width: 300,
-      render: (text) => <span title={text}>{`${text.substring(0, 30)}...`}</span>
+      render: (text) => <span title={text}>{text ? `${text.substring(0, 30)}...` : ''}</span>
     }]
     return (
       <div>
