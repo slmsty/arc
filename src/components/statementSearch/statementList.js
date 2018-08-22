@@ -22,7 +22,7 @@ export default class StatementListIndex extends React.Component {
 
   renderContent = (value, row, index) => {
     const obj = {
-      children: value || '',
+      children: value === 0 ? 0 : value || '',
       props: {},
     };
     return obj;
