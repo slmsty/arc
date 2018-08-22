@@ -1,5 +1,5 @@
 import currency from '../../util/currency'
-
+import { toThousands }  from '../../util/currency'
 
 const clientCols = [{
   title: '客户名称',
@@ -73,6 +73,7 @@ const invoiceCols = [{
   title: '开票金额',
   dataIndex: 'taxIncludeAmount',
   width: 60,
+  render: (text) => (toThousands(parseFloat(text)))
 }, {
   title: '开票税率',
   dataIndex: 'taxRate',
@@ -127,6 +128,7 @@ const totalColumns = [
     title: '税额',
     dataIndex: 'tax',
     width: 150,
+    render: (text) => (toThousands(parseFloat(text)))
   }
 ]
 
@@ -188,14 +190,17 @@ const proColumns = [{
   title: '款项金额',
   dataIndex: 'paymentAmount',
   width: 80,
+  render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }, {
   title: '已申请金额',
   dataIndex: 'applyIngAmount',
   width: 100,
+  render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }, {
   title: '已开票金额',
   dataIndex: 'outcomeAmount',
   width: 100,
+  render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }]
 
 const proApplyColumns = [{
@@ -234,14 +239,17 @@ const proApplyColumns = [{
   title: '款项金额',
   dataIndex: 'paymentAmount',
   width: 80,
+  render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }, {
   title: '已申请金额',
   dataIndex: 'applyIngAmount',
   width: 100,
+  render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }, {
   title: '已开票金额',
   dataIndex: 'outcomeAmount',
   width: 100,
+  render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }]
 
 const billDetailColumns = [{
@@ -272,6 +280,7 @@ const billDetailColumns = [{
   title: '含税金额',
   dataIndex: 'taxIncludeAmount',
   width: 250,
+  render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }, {
   title: '税率',
   dataIndex: 'taxRate',
@@ -282,7 +291,7 @@ const billDetailColumns = [{
   dataIndex: 'taxExcludeAmount',
   width: 250,
   render: (text, record) => {
-    return currency(record.taxExcludeAmount)
+    return toThousands(record.taxExcludeAmount)
   }
 }]
 
@@ -322,10 +331,12 @@ const redFontCols = [
     title: '开票金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
+    render: (text) => text ? (toThousands(parseFloat(text))) : ''
   }, {
     title: '开票税额',
     dataIndex: 'taxAmount',
     width: 100,
+    render: (text) => text ? (toThousands(parseFloat(text))) : ''
   }, /*{
     title: '开票税率',
     dataIndex: 'taxRate',
@@ -361,6 +372,7 @@ const redFontCols = [
     title: '款项金额',
     dataIndex: 'paymentAmount',
     width: 120,
+    render: (text) => text ? (toThousands(parseFloat(text))) : ''
   }
 ]
 
@@ -376,11 +388,11 @@ const invoiceLineCols = [{
 }, {
   title: '规格型号',
   dataIndex: 'specificationType',
-  width: 100,
+  width: 90,
 }, {
   title: '单位',
   dataIndex: 'unit',
-  width: 80,
+  width: 70,
 }, {
   title: '数量',
   dataIndex: 'quantity',
@@ -388,15 +400,15 @@ const invoiceLineCols = [{
 }, {
   title: '单价',
   dataIndex: 'unitPrice',
-  width: 100,
+  width: 120,
 }, {
   title: '不含税金额',
   dataIndex: 'billingAmountExcludeTax',
-  width: 100,
+  width: 120,
 }, {
   title: '含税金额',
   dataIndex: 'billingAmount',
-  width: 100,
+  width: 120,
 }, {
   title: '税率',
   dataIndex: 'billingTaxRate',
@@ -405,7 +417,7 @@ const invoiceLineCols = [{
 }, {
   title: '税额',
   dataIndex: 'billingTaxAmount',
-  width: 100,
+  width: 120,
 }, {
   title: '税收分类编码',
   dataIndex: 'taxCategoryCode',
