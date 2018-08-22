@@ -124,11 +124,13 @@ function getBillDetailList(state, action) {
       })
     }
   })
+  console.log(invoiceList)
   const newPage = {
     ...pageInfo,
     pageSize: invoiceList.length,
     result: invoiceList,
   }
+  console.log(newPage)
   return { ...state, getBillDetailList: newPage }
 }
 

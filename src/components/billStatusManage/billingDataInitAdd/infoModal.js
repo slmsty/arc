@@ -44,7 +44,6 @@ class InfoModal extends React.Component {
     }
   }
   save =() => {
-    const { updateTime } = this.props.billingDataInitResult
     this.props.form.validateFields((err, values) => {
       if (!err) {
         if (Math.abs(values.taxIncludeAmount) < Math.abs(values.taxExcludeAmount)) {
@@ -61,7 +60,6 @@ class InfoModal extends React.Component {
           billingDate: values.billingDate.format(dateFormat),
           billingOutcomeId: this.props.data.billingOutcomeId,
           billingDataInitResultList: this.props.resultList,
-          updateTime: updateTime ? updateTime : null,
         }
         this.props.saveData(params).then(res => {
           if (res && res.response && res.response.resultCode === '000000') {

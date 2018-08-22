@@ -166,7 +166,7 @@ class BillDetail extends React.Component  {
                 columns={invoiceLineCols}
                 pagination={false}
                 dataSource={this.getTotalAmount()}
-                scroll={{ x: '1640px' }}
+                scroll={{ x: '1600px' }}
               />
               {
                 this.props.applyType === 'BILLING_EXCESS' ?
