@@ -325,7 +325,6 @@ class StatementListCom extends React.Component {
       param.paymentName = params.paymentName ? params.paymentName.trim() : ''
       param.contractNo = params.contractNo ? params.contractNo.trim() : ''
       param.contractName = params.contractName ? params.contractName.trim() : ''
-      param.invoiceStatus = params.invoiceStatus
       this.setState({
         param
       })
