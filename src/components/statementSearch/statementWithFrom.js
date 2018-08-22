@@ -12,6 +12,7 @@ import SelectOperator from '../common/selectOperator'
 import SelectCurrent from '../common/selectCurrent'
 import StaffInfo from '../common/staffInfo'
 import SelectCustomerWithForm from '../common/selectCustomer'
+import { getCurrentMonthFirst, getCurrentMonthLast } from "../../util/common";
 
 const FormItem = Form.Item
 const RadioButton = Radio.Button
@@ -312,18 +313,18 @@ class StatementListCom extends React.Component {
     // 发票信息查询表
     if (statement === 'outcomeInfoReport') {
       let param = {}
-      param.projectNo = params.projectNo
-      param.custName = params.custName
+      param.projectNo = params.projectNo ? params.projectNo.trim() : ''
+      param.custName = params.custName ? params.custName.trim() : ''
       param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
       param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
       param.currency = params.currency
       param.signCompany = params.signCompany
-      param.invoiceNumber = params.invoiceNumber
+      param.invoiceNumber = params.invoiceNumber ? params.invoiceNumber.trim() : ''
       param.billingAmountMin = params.billingAmountMin
       param.billingAmountMax = params.billingAmountMax
-      param.paymentName = params.paymentName
-      param.contractNo = params.contractNo
-      param.contractName = params.contractName
+      param.paymentName = params.paymentName ? params.paymentName.trim() : ''
+      param.contractNo = params.contractNo ? params.contractNo.trim() : ''
+      param.contractName = params.contractName ? params.contractName.trim() : ''
       this.setState({
         param
       })
@@ -583,7 +584,7 @@ class StatementListCom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="开票日期">
                   {getFieldDecorator('billingDate', {
-                    //initialValue: [moment('2017-08-01'), moment()],
+                    initialValue: [moment(getCurrentMonthFirst()), moment(getCurrentMonthLast())],
                   })(<RangePicker
                     allowClear
                     format={dateFormat}
@@ -677,7 +678,6 @@ class StatementListCom extends React.Component {
                       initialValue: 'N',
                     })(
                       <Select>
-                        <Option value="">--请选择--</Option>
                         <Option value="Y">是</Option>
                         <Option value="N">否</Option>
                       </Select>

@@ -150,17 +150,17 @@ class BillApproveDetail extends React.Component  {
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
       dataSource[index][col] = value.billingContentName ? value.billingContentName : ''
-      dataSource[index]['billingRecordId'] = value.billingRecordId ? value.billingRecordId : ''
-      dataSource[index]['taxCategoryCode'] = value.taxCategoryCode ? value.taxCategoryCode : ''
-      dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
+      dataSource[index]['billingRecordId'] = value.billingRecordId || ''
+      dataSource[index]['taxCategoryCode'] = value.taxCategoryCode || ''
+      dataSource[index]['taxCategoryName'] = value.taxCategoryName || ''
       if(!(parseFloat(dataSource[index]['billingTaxRate']) === 0 && this.props.taskCode === 'ar_finance_account')) {
-        dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
-        dataSource[index]['prefPolicyType'] = value.prefPolicyContent ? value.prefPolicyContent : ''
+        dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
+        dataSource[index]['prefPolicyType'] = value.prefPolicyContent || ''
       }
     } else if (col === 'taxCategoryCode') {
-      dataSource[index][col] = value.taxCategoryCode ? value.taxCategoryCode : ''
-      dataSource[index]['taxCategoryName'] = value.taxCategoryName ? value.taxCategoryName : ''
-      dataSource[index]['prefPolicySign'] = value.prefPolicySign ? value.prefPolicySign : ''
+      dataSource[index][col] = value.taxCategoryCode || ''
+      dataSource[index]['taxCategoryName'] = value.taxCategoryName || ''
+      dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
       dataSource[index]['prefPolicyType'] = value.prefPolicySign === '1' ? value.prefPolicyType : ''
     } else if(col === 'billingAmount') {//含税金额
       const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
@@ -882,6 +882,7 @@ class BillApproveDetail extends React.Component  {
               <Select
                 value={this.state.dataSource[index]['prefPolicySign']}
                 onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
+                disabled={isArFinanceAccount && parseFloat(text) === 0}
                 <Option value="">-请选择-</Option>
                 <Option value="1">是</Option>
                 <Option value="0">否</Option>
