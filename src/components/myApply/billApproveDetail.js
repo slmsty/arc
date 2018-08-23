@@ -10,6 +10,7 @@ import MultipleInput from '../common/multipleInput'
 import './billApproveDetail.less'
 import { toThousands } from "../../util/currency";
 import getByteLen, {checkEmail} from "../../util/common";
+import ReceivingInformation from "../billApplication/ReceivingInformation";
 const FormItem = Form.Item
 const TextArea = Input.TextArea
 const dateFormat = 'YYYY/MM/DD';
@@ -877,12 +878,13 @@ class BillApproveDetail extends React.Component  {
         dataIndex: 'prefPolicySign',
         width: 100,
         render: (text, record, index) => {
+          console.log(text, record.prefPolicySign)
           return (
             record.action === '合计' ? '' :
               <Select
                 value={this.state.dataSource[index]['prefPolicySign']}
                 onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}
-                disabled={isArFinanceAccount && parseFloat(text) === 0}
+                disabled={isArFinanceAccount && parseFloat(record.billingTaxRate) === 0}
               >
                 <Option value="">-请选择-</Option>
                 <Option value="1">是</Option>
@@ -1215,7 +1217,7 @@ class BillApproveDetail extends React.Component  {
               scroll={{ x: this.isEditTax ? '2030px' : isProManager ? '1500px': '1690px' }}
             />
             {
-              this.props.applyType === 'BILLING_EXCESS' ?
+              this.props.applyType === 'BILLING_EXCESS' &&
                 <div className="arc-info">
                   <Table
                     style={{width: '70%'}}
@@ -1226,7 +1228,7 @@ class BillApproveDetail extends React.Component  {
                     dataSource={this.getTaxData()}
                     pagination={false}
                   />
-                </div> : null
+                </div>
             }
             <Row gutter={40}>
               <Col span={19}>
@@ -1259,74 +1261,18 @@ class BillApproveDetail extends React.Component  {
                 </FormItem>
               </Col>
             </Row>
-            <h3 className="sent-info">寄件信息</h3>
-            <Row gutter={40}>
-              <Col span={8} key={1}>
-                <FormItem {...formItemLayout2} label="收件人">
-                  {getFieldDecorator('expressReceiptName', {
-                    initialValue: expressReceiptName,
-                    rules:[{ max: 10, message: '收件人不能超过10个汉字!' }]})(
-                    <Input  disabled={!(isArAdmin || this.props.isArAdminRole)}/>
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={8} key={2}>
-                <FormItem {...formItemLayout2} label="收件人公司">
-                  {
-                    getFieldDecorator('expressReceiptCompany', {
-                      initialValue: expressReceiptCompany,
-                      rules:[{ max: 16, message: '收件人公司不能超过20个汉字!' }]})(
-                      <Input disabled={!(isArAdmin || this.props.isArAdminRole)}/>
-                    )
-                  }
-                </FormItem>
-              </Col>
-              <Col span={8} key={3}>
-                <FormItem {...formItemLayout2} label="收件人电话">
-                  {
-                    getFieldDecorator('expressReceiptPhone', {
-                      initialValue: expressReceiptPhone,
-                      rules:[{ max: 16, message: '收件人电话不能超过20个字符!' }]})(
-                      <Input disabled={!(isArAdmin || this.props.isArAdminRole)}/>,
-                    )
-                  }
-                </FormItem>
-              </Col>
-            </Row>
-            <Row gutter={40}>
-              <Col span={8} key={1}>
-                <FormItem {...formItemLayout2} label="收件人城市">
-                  {getFieldDecorator('expressReceiptCity', {
-                    initialValue: expressReceiptCity,
-                    rules:[{ max: 16, message: '收件人城市不能超过20个汉字!' }]})(
-                    <Input disabled={!(isArAdmin || this.props.isArAdminRole)}/>
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={8} key={2}>
-                <FormItem {...formItemLayout2} label="收件人详细地址">
-                  {
-                    getFieldDecorator('expressReceiptAddress', {
-                      initialValue: expressReceiptAddress,
-                      rules:[{ max: 32, message: '收件人详细地址不能超过30个汉字!' }]})(
-                      <Input disabled={!(isArAdmin || this.props.isArAdminRole)}/>
-                    )
-                  }
-                </FormItem>
-              </Col>
-            </Row>
-            <Row gutter={40}>
-              <Col span={14} key={1}>
-                <FormItem {...span3ItemLayout} label="E-mail">
-                  {getFieldDecorator('receiptEmail', {
-                    initialValue: receiptEmail ? receiptEmail.split(',') : [],
-                    rules: [{ required: true, message: '请填写E-mail!' }]
-                  })(
-                    <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" disabled={!(isArAdmin || this.props.isArAdminRole)}/>
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
+            <ReceivingInformation
+              form={this.props.form}
+              info={{
+                expressReceiptName,
+                expressReceiptCompany,
+                expressReceiptPhone,
+                expressReceiptCity,
+                expressReceiptAddress,
+                receiptEmail: receiptEmail ? receiptEmail.split(',') : []
+              }}
+              disabled={!(isArAdmin || this.props.isArAdminRole)}
+            />
           </div>
         }
         {
