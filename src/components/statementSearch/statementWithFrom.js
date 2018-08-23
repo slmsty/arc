@@ -318,7 +318,7 @@ class StatementListCom extends React.Component {
       param.billingDateStart = params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : ''
       param.billingDateEnd = params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : ''
       param.currency = params.currency
-      param.signCompany = params.signCompany
+      param.signCompany = params.signCompany ? params.signCompany.trim() : ''
       param.invoiceNumber = params.invoiceNumber ? params.invoiceNumber.trim() : ''
       param.billingAmountMin = params.billingAmountMin
       param.billingAmountMax = params.billingAmountMax

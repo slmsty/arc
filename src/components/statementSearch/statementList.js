@@ -186,12 +186,26 @@ export default class StatementListIndex extends React.Component {
       title: '开票不含税金额',
       dataIndex: 'taxExcludeAmount',
       width: 120,
-      render: this.renderContent,
+      render: (text, record, index) => {
+        return {
+          children: typeof text !== 'undefined' ? toThousands(record.taxExcludeAmount) : '',
+          props: {
+            rowSpan: record.amountIsSpan ? record.amountSpan : 0
+          }
+        };
+      }
     }, {
       title: '开票销项税额',
       dataIndex: 'taxAmount',
       width: 120,
-      render: this.renderContent,
+      render: (text, record, index) => {
+        return {
+          children: typeof text !== 'undefined' ? toThousands(record.taxAmount) : '',
+          props: {
+            rowSpan: record.amountIsSpan ? record.amountSpan : 0
+          }
+        };
+      }
     }, {
       title: '税率',
       dataIndex: 'billingTaxRate',

@@ -224,7 +224,7 @@ export default class BatchImport extends React.Component {
           bordered
           size="small"
           pagination={failurePagination}
-          scroll={{ x: '1950px', y: this.state.failureTableHeight }}
+          scroll={{ x: '2050px', y: this.state.failureTableHeight }}
           rowKey="index"
         />
       </div>
