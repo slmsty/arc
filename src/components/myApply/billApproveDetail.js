@@ -881,8 +881,9 @@ class BillApproveDetail extends React.Component  {
             record.action === '合计' ? '' :
               <Select
                 value={this.state.dataSource[index]['prefPolicySign']}
-                onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}>
+                onChange={(v) => this.handleChange(v, 'prefPolicySign', index)}
                 disabled={isArFinanceAccount && parseFloat(text) === 0}
+              >
                 <Option value="">-请选择-</Option>
                 <Option value="1">是</Option>
                 <Option value="0">否</Option>
