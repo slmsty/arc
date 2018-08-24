@@ -341,6 +341,11 @@ class BillApproveDetail extends React.Component  {
               err = true
               break
             }
+            if(parseFloat(record.billingTaxRate) === 0 && values.billingType === 'SPECIAL_INVOICE') {
+              message.warning(`第【${i + 1}】行的税率为0%时，开票类型不能为专票,请调整!`)
+              err = true
+              break
+            }
             //税率容差控制 税率为0不能修改税额和不含税金额
             const excludeTaxAmount = record.billingAmount / (1 + parseFloat(record.billingTaxRate))
             const taxAmount = parseFloat((record.billingAmount - excludeTaxAmount).toFixed(2))
@@ -878,7 +883,6 @@ class BillApproveDetail extends React.Component  {
         dataIndex: 'prefPolicySign',
         width: 100,
         render: (text, record, index) => {
-          console.log(text, record.prefPolicySign)
           return (
             record.action === '合计' ? '' :
               <Select

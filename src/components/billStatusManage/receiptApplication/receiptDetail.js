@@ -3,7 +3,7 @@ import { Row, Col, Button, Input,Upload, Icon, InputNumber, Modal, message, Tabl
 import './receiptDetail.less'
 import { toThousands } from "../../../util/currency";
 import getByteLen from '../../../util/common'
-import UrlModalCom from '../../common/getUrlModal'
+import ContractApproveFile from '../../common/ContractApproveFile'
 const TextArea = Input.TextArea
 const FormItem = Form.Item;
 
@@ -185,23 +185,9 @@ class ReceiptDetail extends React.Component {
         onCancel={() => this.props.onCancel()}
         maskClosable={false}
       >
-        {
-          this.state.showContractLink ?
-            <UrlModalCom
-              closeModal={() => this.setState({showContractLink: false}) }
-              contractUrl={this.props.contractUrl}
-            /> : null
-        }
-        <Row>
-          <Col span={14}>
-            <Button
-              className="scan-document"
-              type="primary"
-              ghost
-              onClick={() => this.setState({ showContractLink: true })}
-            >合同审批表及合同扫描件</Button>
-          </Col>
-        </Row>
+        <ContractApproveFile
+          contractUrl={this.props.contractUrl}
+        />
         <div className="receipt">
           <div className="contract">
             <h1>合同基本信息</h1>

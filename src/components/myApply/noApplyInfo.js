@@ -5,7 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillDetail from './billDetail'
-import UrlModalCom from '../common/getUrlModal'
+import UrlModalCom from '../common/ContractApproveFile'
 import ReceiptApplyDetail from './receiptApplyDetail'
 import { hideContractUrl } from '../billApplication/billColumns'
 

@@ -19,10 +19,10 @@ export default class SelectInvokeApi extends React.Component {
     if (response.resultCode === '000000') {
       const options = response.data
       if (this.props.hasEmpty) {
-        options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
+        options.unshift({ paramValue: 'all', paramValueDesc: '-请选择-' })
       }
       if(this.props.hasAll) {
-        options.unshift({ paramValue: 'all', paramValueDesc: '全部' })
+        options.unshift({ paramValue: 'all', paramValueDesc: '-全部-' })
       }
       this.setState({
         options,
@@ -37,13 +37,25 @@ export default class SelectInvokeApi extends React.Component {
     }
   }
   render() {
-    const optionDom = this.state.options ? this.state.options.map(option => <Option key={option.paramValue ? option.paramValue : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
+    const { paramCode, optionDisabled, hasAll, value, initialValue, disabled, placeholder } = this.props
+    const optionDom = this.state.options ?
+      this.state.options.map(option => {
+        if(!(optionDisabled && option.paramValue === '0' && paramCode === 'TAX_RATE')) {
+          return (
+            <Option
+              key={option.paramValue ? option.paramValue : 'no_select'}
+              value={option.paramValue}
+            >{option.paramValueDesc}
+            </Option>
+          )
+        }
+      }) : null
     return (
       <Select
-        placeholder={this.props.placeholder}
+        placeholder={placeholder}
         onChange={this.handleChange}
-        value={this.props.value ? this.props.value : (this.props.initialValue ? this.props.initialValue : (this.props.hasAll ? '全部' : '请选择'))}
-        disabled={this.props.disabled}
+        value={value ? value : (hasAll ? '-全部-' : '-请选择-')}
+        disabled={disabled}
       >
         {optionDom}
       </Select>
