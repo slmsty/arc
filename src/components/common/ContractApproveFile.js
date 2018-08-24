@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table, Button, message, Modal, Row, Col } from 'antd'
 import requestJsonFetch from '../../http/requestJsonFecth'
+import { hideContractUrl } from '../billApplication/billColumns'
 const advanceTypes = ['BILLING_UN_CONTRACT', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT']
 const urlColumns = [{
     title: '是否已大签',
@@ -40,24 +41,32 @@ class ContractApproveFile extends React.Component {
       });
     }
   }
+
+  handleCloseModal = () => {
+    this.setState({ showContractLink: false })
+  }
+
   render() {
     return (
       <div>
-        <Row>
-          <Col span={14}>
-            <Button
-              className="scan-document"
-              type="primary"
-              ghost
-              onClick={() => this.setState({ showContractLink: true })}
-            >合同审批表及合同扫描件</Button>
-          </Col>
-        </Row>
+        {
+          !hideContractUrl.includes(this.props.billType) &&
+            <Row>
+              <Col span={14}>
+                <Button
+                  className="scan-document"
+                  type="primary"
+                  ghost
+                  onClick={() => this.setState({ showContractLink: true })}
+                >合同审批表及合同扫描件</Button>
+              </Col>
+            </Row>
+        }
         <Modal
           width={800}
           visible={this.state.showContractLink}
-          onOk={() => this.setState({ showContractLink: false })}
-          onCancel={() => this.setState({ showContractLink: false })}
+          onOk={this.handleCloseModal}
+          onCancel={this.handleCloseModal}
           title="合同审批表"
           footer={false}
         >

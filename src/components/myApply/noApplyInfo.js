@@ -1,16 +1,12 @@
-/**
- * Created by liangshuang on 17/12/6.
- */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillDetail from './billDetail'
-import UrlModalCom from '../common/ContractApproveFile'
+import ContractApproveFile from '../common/ContractApproveFile'
 import ReceiptApplyDetail from './receiptApplyDetail'
 import { hideContractUrl } from '../billApplication/billColumns'
 
 const FormItem = Form.Item
-const { TextArea } = Input
 const BILL_APPLY_TYPE = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS', 'BILLING_UN_CONTRACT_PROJECT', 'BILLING_UN_CONTRACT_UN_PROJECT', 'BILLING_RED', 'BILLING_RED_OTHER', 'BILLING_OTHER', 'BILLING_INVALID']
 
 class NoApplyInfo extends React.Component {
@@ -84,19 +80,10 @@ class NoApplyInfo extends React.Component {
           onOk={this.props.closeClaim}
           maskClosable={false}
         >
-          {
-            !hideContractUrl.includes(applyInfoDatas.serviceType) ?
-              <Row>
-                <Col span={14}>
-                  <Button
-                    className="scan-document"
-                    type="primary"
-                    ghost
-                    onClick={() => this.setState({showContractLink: true})}
-                  >合同审批表及合同扫描件</Button>
-                </Col>
-              </Row> : null
-          }
+          <ContractApproveFile
+            billType={applyInfoDatas.serviceType}
+            contractUrl={this.props.contractUrl}
+          />
             <h2>申请人信息</h2>
             <br />
             <Row>
@@ -179,14 +166,6 @@ class NoApplyInfo extends React.Component {
                   </div>
                 )
               }) : ''
-            }
-            <br />
-            {
-              this.state.showContractLink ?
-                <UrlModalCom
-                  closeModal={() => this.setState({showContractLink: false}) }
-                  contractUrl={this.props.contractUrl}
-                /> : null
             }
         </Modal>
       </div>

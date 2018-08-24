@@ -6,7 +6,7 @@ import SelectSearch from './selectSearch'
 import InputSearch from './inputSearch'
 import moment from 'moment'
 import { totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols, contentOnlyCols, hideContractUrl } from './billColumns'
-import UrlModalCom from '../common/ContractApproveFile'
+import ContractApproveFile from '../common/ContractApproveFile'
 import { toThousands } from '../../util/currency'
 import {checkEmail} from "../../util/common";
 import getByteLen from "../../util/common";
@@ -727,19 +727,11 @@ class BillDetail extends React.Component {
         <Form
           className="ant-search-form"
         >
-          {
-            !hideContractUrl.includes(this.props.billType) ?
-              <Row>
-                <Col span={14}>
-                  <Button
-                    className="scan-document"
-                    type="primary"
-                    ghost
-                    onClick={() => this.setState({ showContractLink: true })}
-                  >合同审批表及合同扫描件</Button>
-                </Col>
-              </Row> : null
-          }
+          <ContractApproveFile
+            billType={this.props.billType}
+            contractUrl={this.props.contractUrl}
+            approvalNo={contractList.length > 0 ? contractList[0].contractApprovalNo : ''}
+          />
           {
             this.props.isRed ?
               <Row gutter={40}>
@@ -1012,15 +1004,6 @@ class BillDetail extends React.Component {
                   />
                 </div>
               </Modal> : null
-          }
-          {
-            this.state.showContractLink ?
-              <UrlModalCom
-                closeModal={() => this.setState({showContractLink: false}) }
-                contractUrl={this.props.contractUrl}
-                billType={this.props.billType}
-                approvalNo={contractList.length > 0 ? contractList[0].contractApprovalNo : ''}
-              /> : null
           }
         </Form>
       </Modal>
