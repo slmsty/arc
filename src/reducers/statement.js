@@ -118,7 +118,7 @@ function getBillDetailList(state, action) {
           amountIsSpan: childSpan,
           amountSpan: totalSpan,
           includeIsSpan: index === 0 ? invoice.invoiceAmountMerge : false,
-          includeSpan: index === 0 ? length : 0,
+          includeSpan: index === 0 && invoice.invoiceAmountMerge ? length : 0,
         })
       })
     } else {
@@ -133,6 +133,7 @@ function getBillDetailList(state, action) {
       })
     }
   })
+  console.log(invoiceList)
   const newPage = {
     ...pageInfo,
     pageSize: invoiceList.length,

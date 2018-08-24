@@ -182,7 +182,7 @@ export default class StatementListIndex extends React.Component {
         return {
           children: typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '',
             props: {
-              rowSpan: record.amountIsSpan ? record.amountSpan : 0
+              rowSpan: record.includeIsSpan ? record.includeSpan : (record.invoiceAmountMerge ? 0 : 1)
             }
         };
       }
@@ -194,7 +194,7 @@ export default class StatementListIndex extends React.Component {
         return {
           children: typeof text !== 'undefined' ? toThousands(record.taxExcludeAmount) : '',
           props: {
-            rowSpan: record.amountIsSpan ? record.amountSpan : 0
+            rowSpan: record.includeIsSpan ? record.includeSpan : (record.invoiceAmountMerge ? 0 : 1)
           }
         };
       }
@@ -206,7 +206,7 @@ export default class StatementListIndex extends React.Component {
         return {
           children: typeof text !== 'undefined' ? toThousands(record.taxAmount) : '',
           props: {
-            rowSpan: record.amountIsSpan ? record.amountSpan : 0
+            rowSpan: record.includeIsSpan ? record.includeSpan : (record.invoiceAmountMerge ? 0 : 1)
           }
         };
       }
