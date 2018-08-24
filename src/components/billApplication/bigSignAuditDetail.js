@@ -3,7 +3,7 @@ import { Button, Row, Col, Table, Modal, Icon, Form, message } from 'antd'
 import BillApproveDetail from '../myApply/billApproveDetail'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import {checkEmail} from "../../util/common"
-import UrlModalCom from '../common/getUrlModal'
+import UrlModalCom from '../common/ContractApproveFile'
 import './bigSignAuditDetail.less'
 
 class BigSignAuditDetail extends React.Component {

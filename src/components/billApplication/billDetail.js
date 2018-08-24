@@ -1,14 +1,12 @@
 import React from 'react'
-import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload, message, Icon, InputNumber, Checkbox } from 'antd'
+import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, message, Icon, InputNumber, Checkbox } from 'antd'
 import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import InputSearch from './inputSearch'
-import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
 import { totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols, contentOnlyCols, hideContractUrl } from './billColumns'
 import UrlModalCom from '../common/ContractApproveFile'
-import MultipleInput from '../common/multipleInput'
 import { toThousands } from '../../util/currency'
 import {checkEmail} from "../../util/common";
 import getByteLen from "../../util/common";
@@ -27,10 +25,6 @@ const formItemLayout = {
 const formItemLayout1 = {
   labelCol: { span: 4 },
   wrapperCol: { span: 20 },
-}
-const formItemLayout2 = {
-  labelCol: { span: 7 },
-  wrapperCol: { span: 16 },
 }
 class BillDetail extends React.Component {
   constructor(props) {
@@ -875,6 +869,7 @@ class BillDetail extends React.Component {
                               </Checkbox>
                             )
                           }
+                          <span className="tax-tips">提示: 仅开票税率与合同税率不一致时，才使用该按钮(不包括17%变16%)， 税率为空自动忽略</span>
                         </FormItem>
                       </Col>
                     </Row> : null
