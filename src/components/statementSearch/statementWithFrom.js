@@ -600,7 +600,6 @@ class StatementListCom extends React.Component {
                   {getFieldDecorator('currency',{
                   })(
                     <Select>
-                      <Option value=''>--请选择--</Option>
                       <Option value='CNY'>CNY</Option>
                     </Select>
                   )}

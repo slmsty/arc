@@ -207,14 +207,14 @@ export default class StatementListIndex extends React.Component {
         };
       }
     }, {
-      title: '税率',
-      dataIndex: 'billingTaxRate',
-      width: 100,
-      render: this.renderContent,
-    }, {
       title: '开票类型',
       dataIndex: 'invoiceType',
       width: 80,
+      render: this.renderContent,
+    }, {
+      title: '税率',
+      dataIndex: 'billingTaxRate',
+      width: 100,
       render: this.renderContent,
     }, {
       title: '优惠政策类型',
