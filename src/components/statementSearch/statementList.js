@@ -6,18 +6,22 @@ import { Table, Row, Col } from 'antd'
 
 import StatementWithFrom from './statementWithFrom'
 export default class StatementListIndex extends React.Component {
-  state = {
-    infoVisitable: false,
-    loading: false,
-    applyData: '',
-    currencyType: '',
-    loading:false,
-  }
-  queryParam = {
-    pageInfo: {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  constructor(props) {
+    super(props)
+    this.state = {
+      infoVisitable: false,
+      loading: false,
+      applyData: '',
+      currencyType: '',
+      loading:false,
+    }
+    this.queryParam = {
+      pageInfo: {
+        pageNo: 1,
+        pageSize: 10,
+      },
+    }
+    this.billTotalAmount = 0
   }
 
   renderContent = (value, row, index) => {
@@ -621,12 +625,12 @@ export default class StatementListIndex extends React.Component {
       pageSize = getProductDetailList.pageSize
     }
     if(type==='outcomeInfoReport'){
-      const getBillDetailList = this.props.statement.getBillDetailList;
+      const { getBillDetailList, billTotalAmount} = this.props.statement;
       dataSources.dataSource = getBillDetailList.result
       current = getBillDetailList.pageNo
       total = getBillDetailList.count
       pageSize = getBillDetailList.pageSize
-      claimAmountTotal = currency(getBillDetailList.billingTotal)
+      claimAmountTotal = currency(billTotalAmount)
     }
     if(type==='receiptAccountReport'){
       const getConfirmDetailList = this.props.statement.getConfirmDetailList;
@@ -659,6 +663,7 @@ export default class StatementListIndex extends React.Component {
           queryParms={this.queryParms}
           getExcel={this.props.getExcel}
           currencyType = {this.state.currencyType}
+          getBillTotalAmount={this.props.getBillTotalAmount}
         />
         {type ?
           <div>

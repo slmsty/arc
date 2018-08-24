@@ -330,6 +330,11 @@ class StatementListCom extends React.Component {
         param
       })
       this.props.queryParms(param,'outcomeInfoReport')
+      this.props.getBillTotalAmount({
+        invoice: {
+          ...param
+        }
+      })
     }
 
     // 应收账款询证函报表

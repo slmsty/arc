@@ -56,7 +56,8 @@ const myStateInfoData = {
     pageNo: 1,
     count: 0,
     result: [],
-  }
+  },
+  billTotalAmount: 0,
 
 }
 
@@ -69,6 +70,14 @@ function getContractStatementList(state, action) {
 function getInvoiceDetailList(state, action) {
   return { ...state, getInvoiceDetailList: action.response.pageInfo }
 }
+function getBillTotalAmount(state, action) {
+  const { invoiceAmountTotal } = action.response.invoiceReportItem
+  return {
+    ...state,
+    billTotalAmount: invoiceAmountTotal
+  }
+}
+
 function getOutcomeDetailReportList(state, action) {
   return { ...state, getOutcomeDetailReportList: action.response.pageInfo }
 }
@@ -150,6 +159,7 @@ export default caseReducer(myStateInfoData, {
   GET_CONTRACT_STATEMENT_LISTT_SUCCESS:getContractStatementList,
   GET_EXCEL_SUCCESS:fileDown,
   GET_INVOICE_DETAIL_LISTT_SUCCESS:getInvoiceDetailList,
+  GET_BILL_TOTAL_AMOUNT_SUCCESS: getBillTotalAmount,
   GET_OUTCOME_DETAIL_LISTT_SUCCESS:getOutcomeDetailReportList,
   GET_UNCONTRACTOUTCOMNE_DETAIL_LISTT_SUCCESS:getUnContractOutcomeDataAddList,
   GET_PRODUCT_ORDER_DETAIL_LISTT_SUCCESS:getProductOrderDetailList,
