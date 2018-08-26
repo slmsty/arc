@@ -83,7 +83,7 @@ class BillDetail extends React.Component {
         unitPrice: item.unitPrice  ? item.unitPrice : item.billingAmountExcludeTax,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
-        billingTaxRate: typeof item.billingTaxRate !== 'undefined' ? item.billingTaxRate : '',
+        billingTaxRate: typeof item.billingTaxRate !== 'undefined' ? item.billingTaxRate : 0,
         billingTaxAmount: item.billingTaxAmount ? item.billingTaxAmount : 0,
         totalAmount: item.billingAmount ? item.billingAmount : 0,
     })
@@ -128,7 +128,7 @@ class BillDetail extends React.Component {
       noRateAmount: 0,
       billingAmountExcludeTax: 0,
       billingAmount: 0,
-      billingTaxRate: '',
+      billingTaxRate: 0,
       billingTaxAmount: 0,
     };
     const data = dataSource.filter(r=> r.arBillingId === arBillingId)
