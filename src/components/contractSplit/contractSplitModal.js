@@ -9,7 +9,7 @@ import ProductNo from '../common/productNo'
 import MyDtatePicker from '../common/myDatePicker'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import currency from '../../util/currency'
-import GetUrlModal from '../common/getUrlModal'
+import ContractApproveFile from '../common/ContractApproveFile'
 import _ from 'lodash'
 import './contract.less'
 import '../billApplication/billDetail.less'
@@ -1447,7 +1447,7 @@ class ContractSplitModal extends React.Component{
           </div>
         </Modal>
         {this.state.openUrlModal ?
-          <GetUrlModal
+          <ContractApproveFile
             closeModal={this.closeUrlModal}
             contractUrl={this.props.contractUrl}
           />

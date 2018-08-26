@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Button, Input, Icon, InputNumber, Modal, Table } from 'antd'
+import { Table } from 'antd'
 import '../billStatusManage/receiptApplication/receiptDetail.less'
 import { toThousands } from "../../util/currency";
 

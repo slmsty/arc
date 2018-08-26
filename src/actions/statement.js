@@ -118,6 +118,24 @@ export function getBillDetailList(queryParam) {
     },
   }
 }
+
+/**
+ * 发票汇总金额查询
+ * @param queryParam
+ * @returns {{}}
+ */
+export function getBillTotalAmount(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/invoice/total',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_BILL_TOTAL_AMOUNT_SUCCESS'],
+    },
+  }
+}
 // 项目综合信息查询报表
 export function getProductDetailList(queryParam) {
   return {

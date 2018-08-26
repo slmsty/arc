@@ -1,17 +1,17 @@
 import React from 'react'
-import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, Upload, message, Icon, InputNumber, Checkbox } from 'antd'
+import { Form, Button, Input, Row, Col, Select, DatePicker, Table, Modal, message, Icon, InputNumber, Checkbox } from 'antd'
 import './billDetail.less'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import SelectSearch from './selectSearch'
 import InputSearch from './inputSearch'
-import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment'
 import { totalColumns, normalTypes, proApplyColumns, billDetailColumns, clientCols, comCols, contentOnlyCols, hideContractUrl } from './billColumns'
-import UrlModalCom from '../common/getUrlModal'
-import MultipleInput from '../common/multipleInput'
+import ContractApproveFile from '../common/ContractApproveFile'
 import { toThousands } from '../../util/currency'
 import {checkEmail} from "../../util/common";
 import getByteLen from "../../util/common";
+import ReceivingInformation from './ReceivingInformation'
+import UploadFile from "./UploadFile";
 const Option = Select.Option
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -25,10 +25,6 @@ const formItemLayout = {
 const formItemLayout1 = {
   labelCol: { span: 4 },
   wrapperCol: { span: 20 },
-}
-const formItemLayout2 = {
-  labelCol: { span: 7 },
-  wrapperCol: { span: 16 },
 }
 class BillDetail extends React.Component {
   constructor(props) {
@@ -44,8 +40,7 @@ class BillDetail extends React.Component {
       currentNo: 1,
       totalAmount: 0,
       uploading: false,
-      file: {},
-      fileList: [],
+      fileName: '',
       fileId: '',
       loading: false,
       showDetail: '',
@@ -59,7 +54,7 @@ class BillDetail extends React.Component {
       custInfo: custInfo,
       comInfo: comInfo,
       proItems: [],
-      uploadFile: false,
+      billingType: '',
     }
     this.isAdvance = advanceTypes.includes(props.billType)
   }
@@ -88,11 +83,11 @@ class BillDetail extends React.Component {
         unitPrice: item.unitPrice  ? item.unitPrice : item.billingAmountExcludeTax,
         billingAmountExcludeTax: item.billingAmountExcludeTax ? item.billingAmountExcludeTax : 0,
         billingAmount: item.billingAmount ? item.billingAmount : 0,
-        billingTaxRate: item.billingTaxRate ? item.billingTaxRate : 0,
+        billingTaxRate: typeof item.billingTaxRate !== 'undefined' ? item.billingTaxRate : 0,
         billingTaxAmount: item.billingTaxAmount ? item.billingTaxAmount : 0,
         totalAmount: item.billingAmount ? item.billingAmount : 0,
-      })
     })
+  })
     let proItems = []
     contractList.map((record) => {
       proItems.push({
@@ -182,7 +177,7 @@ class BillDetail extends React.Component {
             applyLines,
             billingApplicationType: this.props.billType,
             objectId: this.state.fileId,
-            objectName: this.state.file.name,
+            objectName: this.state.fileName,
             billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
             isAgainInvoice: 'false',
             billingApplicationId: detail.billingApplicationId || '',
@@ -220,7 +215,7 @@ class BillDetail extends React.Component {
               }
             }),
             objectId: this.state.fileId,
-            objectName: this.state.file.name,
+            objectName: this.state.fileName,
             isAgainInvoice: 'true',
             billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
@@ -331,7 +326,7 @@ class BillDetail extends React.Component {
       dataSource[index]['billingRecordId'] = value[0]
       dataSource[index][col] = value[1]
     } else if(col === 'billingAmount') {
-      const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
+      const { billingTaxRate, quantity } = this.state.dataSource[index]
       if(record.isParent === '1') {//操作的记录为父节点
         dataSource[index]['billingAmount'] = value
         dataSource[index]['totalAmount'] = value
@@ -355,10 +350,10 @@ class BillDetail extends React.Component {
         this.calBillAmountTax(dataSource, index, value, billingTaxRate, quantity)
       }
     } else if (col === 'billingTaxRate') {
-      const { billingAmount, quantity} = this.state.dataSource[index]
-      this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
-      dataSource[index][col] = value
-      dataSource[index]['unit'] = this.getInvoiceUnit(value)
+        const { billingAmount, quantity} = this.state.dataSource[index]
+        this.calBillAmountTax(dataSource, index, billingAmount, value, quantity)
+        dataSource[index][col] = value
+        dataSource[index]['unit'] = this.getInvoiceUnit(value)
     } else if (col === 'quantity') {
       dataSource[index][col] = value
       const { billingAmount,  billingTaxRate } = this.state.dataSource[index]
@@ -385,82 +380,20 @@ class BillDetail extends React.Component {
     }
   }
 
-  beforeUpload = (file) => {
-    const isLt20M = file.size / 1024 / 1024 < 20;
-    if (!isLt20M) {
-      message.error('上传文件大小必须小于20MB!');
-      return false
-    }
-    if(file.name.length > 40) {
-      message.error('上传的文件名必须小于40个中文')
-      return false
-    }
-    this.setState({
-      file,
-    })
-  }
-
-  customRequest = (file) => {
-    this.setState({
-      uploadFile: true
-    })
-    const option = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/octet-stream;charset=UTF-8',
-      },
-      body: file.file,
-    }
-    requestJsonFetch(`/arc/file/upload/${this.state.file.name}`, option, this.handleCallback)
-  }
-
-  handleCallback = (response) => {
-    if(response.resultCode === '000000') {
-      const { file, fileList } = this.state
-      message.success(`${file.name} 上传成功`);
-      this.setState({
-        fileId: response.data,
-        fileList: [...fileList, {
-          uid: new Date().getTime(),
-          name: file.name,
-          status: 'done',
-          response: '', // custom error message to show
-          url: '',
-        }],
-      })
-    } else {
-      this.setState({
-        uploadFile: false
-      })
-      message.error(`${this.state.file.name} 上传失败`);
-    }
-  }
-
-  handleFileChange = (info) => {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'removed') {
-      this.setState({
-        fileList: info.fileList,
-        fileId: '',
-        file: {},
-        uploadFile: false
-      })
-      this.props.form.setFieldsValue({
-        file: '',
-      })
-    }
-  }
-
   calBillAmountTax = (dataSource, index, billingAmount, billingTaxRate, quantity) => {
-    //不含税金额
-    const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
-    dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
-    //单价
-    dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
-    //含税金额
-    dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
+    if(billingTaxRate !== '' && typeof billingTaxRate !== 'undefined') {
+      //不含税金额
+      const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
+      dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
+      //单价
+      dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
+      //含税金额
+      dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
+    } else {
+      dataSource[index]['billingAmountExcludeTax'] = ''
+      dataSource[index]['unitPrice'] = ''
+      dataSource[index]['billingTaxAmount'] = ''
+    }
   }
 
   getWarningTableData = () => {
@@ -580,10 +513,11 @@ class BillDetail extends React.Component {
             typeCode="BILLING_APPLICATION"
             paramCode="TAX_RATE"
             placeholder="税率"
-            hasEmpty={false}
+            hasEmpty
             disabled={!this.state.isRequireRate && normalTypes.includes(this.props.billType)}
             value={`${this.state.dataSource[index]['billingTaxRate']}`}
             onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
+            //optionDisabled={this.state.isRequireRate && this.state.billingType === 'SPECIAL_INVOICE'}
           />
         )
       }, {
@@ -732,20 +666,35 @@ class BillDetail extends React.Component {
     callback('不能超过220个字符，请重新填写')
   }
 
+  handleTaxRate = (e) => {
+    this.setState({
+      isRequireRate: e.target.checked,
+      isCostBearEdit: this.props.billType === 'BILLING_EXCESS' ? true : e.target.checked
+    })
+    if(!e.target.checked) {
+      this.props.form.setFieldsValue({'costBear': ''})
+    }
+    /*if(this.state.billingType === 'SPECIAL_INVOICE' && e.target.checked) {
+      let newSource = []
+      this.state.dataSource.map(item => {
+        newSource.push({
+          ...item,
+          billingTaxRate: '',
+          billingAmountExcludeTax: '',
+          billingTaxAmount: '',
+          unitPrice: '',
+        })
+      })
+      this.setState({
+        dataSource: newSource
+      })
+    }*/
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form
     const { contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
       billingApplicantRemark, taxRateRequest, fileName, filePath } = this.props.detail
-    const props = {
-      action: `${process.env.REACT_APP_GATEWAY}v1.0.0/arc/file/upload/${this.state.file.name}`,
-      headers: {
-        Authorization: sessionStorage.getItem('token'),
-      },
-      showUploadList: { showPreviewIcon: true, showRemoveIcon: true },
-      beforeUpload: this.beforeUpload,
-      customRequest: this.customRequest,
-      onChange: this.handleFileChange,
-    };
     const { custInfo, comInfo } = this.state
     const detailData = [{
       title: '购买方',
@@ -778,19 +727,11 @@ class BillDetail extends React.Component {
         <Form
           className="ant-search-form"
         >
-          {
-            !hideContractUrl.includes(this.props.billType) ?
-              <Row>
-                <Col span={14}>
-                  <Button
-                    className="scan-document"
-                    type="primary"
-                    ghost
-                    onClick={() => this.setState({ showContractLink: true })}
-                  >合同审批表及合同扫描件</Button>
-                </Col>
-              </Row> : null
-          }
+          <ContractApproveFile
+            billType={this.props.billType}
+            contractUrl={this.props.contractUrl}
+            approvalNo={contractList.length > 0 ? contractList[0].contractApprovalNo : ''}
+          />
           {
             this.props.isRed ?
               <Row gutter={40}>
@@ -888,6 +829,9 @@ class BillDetail extends React.Component {
                             typeCode="BILLING_APPLICATION"
                             paramCode="BILLING_TYPE"
                             placeholder="开票类型"
+                            /*onChange={(v) => this.setState({
+                              billingType: v,
+                            })}*/
                             hasEmpty
                           />
                         )
@@ -912,16 +856,14 @@ class BillDetail extends React.Component {
                           {
                             getFieldDecorator('taxRateRequest', {initialValue: taxRateRequest})(
                               <Checkbox
-                                onChange={(e) => {
-                                  this.setState({isRequireRate: e.target.checked, isCostBearEdit: this.props.billType === 'BILLING_EXCESS' ? true : e.target.checked})
-                                  if(!e.target.checked) {
-                                    this.props.form.setFieldsValue({'costBear': ''})
-                                  }
-                                }}
+                                onChange={this.handleTaxRate}
                               >
                               </Checkbox>
                             )
                           }
+{/*
+                          <span className="tax-tips">提示: 仅开票税率与合同税率不一致时，才使用该按钮(不包括17%变16%)， 税率为空自动忽略</span>
+*/}
                         </FormItem>
                       </Col>
                     </Row> : null
@@ -961,24 +903,16 @@ class BillDetail extends React.Component {
                     </FormItem>
                   </Col>
                 </Row>
-                <Row gutter={40}>
-                  <Col span={14}>
-                    <FormItem {...formItemLayout1} label="附件">
-                      {
-                        getFieldDecorator('file', {initialValue: fileName, rules: [{ required: uploadFileType.includes(this.props.billType), message: '请上传附件' }] })(
-                          <div style={{position: 'relative'}}>
-                            <Upload {...props} fileList={this.state.fileList}>
-                              <Button disabled={this.state.uploadFile}>
-                                <Icon type="upload" />点击上传
-                              </Button>
-                            </Upload>
-                            <span className="file-tip">说明：未大签、其他开票项目需要上传合同附件</span>
-                          </div>
-                        )
-                      }
-                    </FormItem>
-                  </Col>
-                </Row>
+                <UploadFile
+                  isRequired={uploadFileType.includes(this.props.billType)}
+                  fileName={fileName}
+                  fileId={filePath}
+                  form={this.props.form}
+                  setFileInfo={(fileId, fileName) => this.setState({
+                    fileId,
+                    fileName,
+                  })}
+                />
                 <Row gutter={40}>
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="开票原因及要求">
@@ -993,63 +927,12 @@ class BillDetail extends React.Component {
                     </FormItem>
                   </Col>
                 </Row>
-                <h3 className="sent-info">寄件信息</h3>
-                <Row gutter={40}>
-                  <Col span={8} key={1}>
-                    <FormItem {...formItemLayout2} label="收件人">
-                      {getFieldDecorator('expressReceiptName', {rules:[{ max: 10, message: '收件人不能超过10个汉字!' }]})(
-                        <Input placeholder="收件人"/>
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={8} key={2}>
-                    <FormItem {...formItemLayout2} label="收件人公司">
-                      {
-                        getFieldDecorator('expressReceiptCompany', {rules:[{ max: 16, message: '收件人公司不能超过20个汉字!' }]})(
-                          <Input placeholder="收件人公司"/>
-                        )
-                      }
-                    </FormItem>
-                  </Col>
-                  <Col span={8} key={3}>
-                    <FormItem {...formItemLayout2} label="收件人电话">
-                      {
-                        getFieldDecorator('expressReceiptPhone', {rules:[{ max: 16, message: '收件人电话不能超过20个字符!' }]})(
-                          <Input placeholder="收件人电话"/>,
-                        )
-                      }
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row gutter={40}>
-                  <Col span={8} key={1}>
-                    <FormItem {...formItemLayout2} label="收件人城市">
-                      {getFieldDecorator('expressReceiptCity', {rules:[{ max: 16, message: '收件人城市不能超过20个汉字!' }]})(
-                        <Input placeholder="收件人城市"/>
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={8} key={2}>
-                    <FormItem {...formItemLayout2} label="收件人详细地址">
-                      {
-                        getFieldDecorator('expressReceiptAddress', {rules:[{ max: 32, message: '收件人详细地址不能超过30个汉字!' }]})(
-                          <Input placeholder="收件人详细地址"/>
-                        )
-                      }
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row gutter={40}>
-                  <Col span={14} key={1}>
-                    <FormItem {...formItemLayout1} label="E-mail">
-                      {getFieldDecorator('receiptEmail', {
-                        initialValue: [this.props.currentUser.email], rules: [{ required: true, message: '请填写E-mail!' }]
-                      })(
-                        <MultipleInput placeholder="填写多个E-mail请用英文逗号分隔" />
-                      )}
-                    </FormItem>
-                  </Col>
-                </Row>
+                <ReceivingInformation
+                  form={this.props.form}
+                  info={{
+                    receiptEmail: [this.props.currentUser.email],
+                  }}
+                />
               </div>
               : null
           }
@@ -1077,24 +960,16 @@ class BillDetail extends React.Component {
                     pagination={false}
                   />
                 </div>
-                <Row gutter={40}>
-                  <Col span={14}>
-                    <FormItem {...formItemLayout1} label="附件">
-                      {
-                        filePath ?
-                          <a href="javascript:void(0)" onClick={() => this.props.fileDown({objectId: filePath, objectName: fileName})}>{fileName}</a>
-                          :
-                          getFieldDecorator('file', { rules: [{ required: false, message: '请上传附件!' }] })(
-                            <Upload {...props} fileList={this.state.fileList}>
-                              <Button>
-                                <Icon type="upload" />点击上传
-                              </Button>
-                            </Upload>
-                          )
-                      }
-                    </FormItem>
-                  </Col>
-                </Row>
+                <UploadFile
+                  isRequired={uploadFileType.includes(this.props.billType)}
+                  fileName={fileName}
+                  fileId={filePath}
+                  form={this.props.form}
+                  setFileInfo={(fileId, fileName) => this.setState({
+                    fileId,
+                    fileName,
+                  })}
+                />
                 <Row gutter={40}>
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="开票原因及要求">
@@ -1131,15 +1006,6 @@ class BillDetail extends React.Component {
                   />
                 </div>
               </Modal> : null
-          }
-          {
-            this.state.showContractLink ?
-              <UrlModalCom
-                closeModal={() => this.setState({showContractLink: false}) }
-                contractUrl={this.props.contractUrl}
-                billType={this.props.billType}
-                approvalNo={contractList.length > 0 ? contractList[0].contractApprovalNo : ''}
-              /> : null
           }
         </Form>
       </Modal>

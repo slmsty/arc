@@ -1,11 +1,8 @@
-/**
- * Created by liangshuang on 17/12/6.
- */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Row, Col, Button, Input, Form, Table, message } from 'antd'
 import BillApproveDetail from './billApproveDetail'
-import UrlModalCom from '../common/getUrlModal'
+import ContractApproveFile from '../common/ContractApproveFile'
 import BillDetail from './billDetail'
 import ReceiptApplyDetail from './receiptApplyDetail'
 import requestJsonFetch from '../../http/requestJsonFecth'
@@ -313,19 +310,10 @@ class ApplyInfoModal extends React.Component {
           maskClosable={false}
         >
           <Form>
-            {
-              !hideContractUrl.includes(applyInfoDatas.serviceType) ?
-                <Row>
-                  <Col span={14}>
-                    <Button
-                      className="scan-document"
-                      type="primary"
-                      ghost
-                      onClick={() => this.setState({showContractLink: true})}
-                    >合同审批表及合同扫描件</Button>
-                  </Col>
-                </Row> : null
-            }
+            <ContractApproveFile
+              billType={applyInfoDatas.serviceType}
+              contractUrl={this.props.contractUrl}
+            />
             <h2>申请人信息</h2>
             <br />
             <Row>
@@ -435,14 +423,6 @@ class ApplyInfoModal extends React.Component {
               </Col>
             </Row>
           </Form>
-          {
-            this.state.showContractLink ?
-              <UrlModalCom
-                closeModal={() => this.setState({showContractLink: false}) }
-                contractUrl={this.props.contractUrl}
-              /> : null
-          }
-
         </Modal>
       </div>
     )

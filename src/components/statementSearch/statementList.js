@@ -6,23 +6,27 @@ import { Table, Row, Col } from 'antd'
 
 import StatementWithFrom from './statementWithFrom'
 export default class StatementListIndex extends React.Component {
-  state = {
-    infoVisitable: false,
-    loading: false,
-    applyData: '',
-    currencyType: '',
-    loading:false,
-  }
-  queryParam = {
-    pageInfo: {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  constructor(props) {
+    super(props)
+    this.state = {
+      infoVisitable: false,
+      loading: false,
+      applyData: '',
+      currencyType: '',
+      loading:false,
+    }
+    this.queryParam = {
+      pageInfo: {
+        pageNo: 1,
+        pageSize: 10,
+      },
+    }
+    this.billTotalAmount = 0
   }
 
   renderContent = (value, row, index) => {
     const obj = {
-      children: value || '',
+      children: value === 0 ? 0 : value || '',
       props: {},
     };
     return obj;
@@ -178,7 +182,7 @@ export default class StatementListIndex extends React.Component {
         return {
           children: typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '',
             props: {
-              rowSpan: record.amountIsSpan ? record.amountSpan : 0
+              rowSpan: record.includeIsSpan ? record.includeSpan : (record.invoiceAmountMerge ? 0 : 1)
             }
         };
       }
@@ -186,21 +190,35 @@ export default class StatementListIndex extends React.Component {
       title: '开票不含税金额',
       dataIndex: 'taxExcludeAmount',
       width: 120,
-      render: this.renderContent,
+      render: (text, record, index) => {
+        return {
+          children: typeof text !== 'undefined' ? toThousands(record.taxExcludeAmount) : '',
+          props: {
+            rowSpan: record.includeIsSpan ? record.includeSpan : (record.invoiceAmountMerge ? 0 : 1)
+          }
+        };
+      }
     }, {
       title: '开票销项税额',
       dataIndex: 'taxAmount',
       width: 120,
+      render: (text, record, index) => {
+        return {
+          children: typeof text !== 'undefined' ? toThousands(record.taxAmount) : '',
+          props: {
+            rowSpan: record.includeIsSpan ? record.includeSpan : (record.invoiceAmountMerge ? 0 : 1)
+          }
+        };
+      }
+    }, {
+      title: '开票类型',
+      dataIndex: 'invoiceType',
+      width: 80,
       render: this.renderContent,
     }, {
       title: '税率',
       dataIndex: 'billingTaxRate',
       width: 100,
-      render: this.renderContent,
-    }, {
-      title: '开票类型',
-      dataIndex: 'invoiceType',
-      width: 80,
       render: this.renderContent,
     }, {
       title: '优惠政策类型',
@@ -607,12 +625,12 @@ export default class StatementListIndex extends React.Component {
       pageSize = getProductDetailList.pageSize
     }
     if(type==='outcomeInfoReport'){
-      const getBillDetailList = this.props.statement.getBillDetailList;
+      const { getBillDetailList, billTotalAmount} = this.props.statement;
       dataSources.dataSource = getBillDetailList.result
       current = getBillDetailList.pageNo
       total = getBillDetailList.count
       pageSize = getBillDetailList.pageSize
-      claimAmountTotal = currency(getBillDetailList.billingTotal)
+      claimAmountTotal = currency(billTotalAmount)
     }
     if(type==='receiptAccountReport'){
       const getConfirmDetailList = this.props.statement.getConfirmDetailList;
@@ -645,6 +663,7 @@ export default class StatementListIndex extends React.Component {
           queryParms={this.queryParms}
           getExcel={this.props.getExcel}
           currencyType = {this.state.currencyType}
+          getBillTotalAmount={this.props.getBillTotalAmount}
         />
         {type ?
           <div>

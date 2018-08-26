@@ -56,7 +56,8 @@ const myStateInfoData = {
     pageNo: 1,
     count: 0,
     result: [],
-  }
+  },
+  billTotalAmount: 0,
 
 }
 
@@ -69,6 +70,14 @@ function getContractStatementList(state, action) {
 function getInvoiceDetailList(state, action) {
   return { ...state, getInvoiceDetailList: action.response.pageInfo }
 }
+function getBillTotalAmount(state, action) {
+  const { invoiceAmountTotal } = action.response.invoiceReportItem
+  return {
+    ...state,
+    billTotalAmount: invoiceAmountTotal
+  }
+}
+
 function getOutcomeDetailReportList(state, action) {
   return { ...state, getOutcomeDetailReportList: action.response.pageInfo }
 }
@@ -92,10 +101,12 @@ function getBillDetailList(state, action) {
     let preId = ''
     let childSpan = false
     let totalSpan = 0
+    let includeSpan = false
     if(item.invoiceItems.length > 0) {
       item.invoiceItems.map((invoice, index) => {
         if(invoice.billingApplicationId !== preId) {
           childSpan = true
+          includeSpan = invoice.invoiceAmountMerge
           preId = invoice.billingApplicationId
           totalSpan = item.invoiceItems.filter(item => item.billingApplicationId === invoice.billingApplicationId).length;
         } else {
@@ -108,8 +119,8 @@ function getBillDetailList(state, action) {
           rowSpan: index === 0 ? length : 0,
           amountIsSpan: childSpan,
           amountSpan: totalSpan,
-          includeIsSpan: index === 0 ? invoice.invoiceAmountMerge : false,
-          includeSpan: index === 0 ? length : 0,
+          includeIsSpan: includeSpan,
+          includeSpan: totalSpan,
         })
       })
     } else {
@@ -130,7 +141,6 @@ function getBillDetailList(state, action) {
     pageSize: invoiceList.length,
     result: invoiceList,
   }
-  console.log(newPage)
   return { ...state, getBillDetailList: newPage }
 }
 
@@ -152,6 +162,7 @@ export default caseReducer(myStateInfoData, {
   GET_CONTRACT_STATEMENT_LISTT_SUCCESS:getContractStatementList,
   GET_EXCEL_SUCCESS:fileDown,
   GET_INVOICE_DETAIL_LISTT_SUCCESS:getInvoiceDetailList,
+  GET_BILL_TOTAL_AMOUNT_SUCCESS: getBillTotalAmount,
   GET_OUTCOME_DETAIL_LISTT_SUCCESS:getOutcomeDetailReportList,
   GET_UNCONTRACTOUTCOMNE_DETAIL_LISTT_SUCCESS:getUnContractOutcomeDataAddList,
   GET_PRODUCT_ORDER_DETAIL_LISTT_SUCCESS:getProductOrderDetailList,
