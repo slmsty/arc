@@ -101,10 +101,12 @@ function getBillDetailList(state, action) {
     let preId = ''
     let childSpan = false
     let totalSpan = 0
+    let includeSpan = false
     if(item.invoiceItems.length > 0) {
       item.invoiceItems.map((invoice, index) => {
         if(invoice.billingApplicationId !== preId) {
           childSpan = true
+          includeSpan = invoice.invoiceAmountMerge
           preId = invoice.billingApplicationId
           totalSpan = item.invoiceItems.filter(item => item.billingApplicationId === invoice.billingApplicationId).length;
         } else {
@@ -117,8 +119,8 @@ function getBillDetailList(state, action) {
           rowSpan: index === 0 ? length : 0,
           amountIsSpan: childSpan,
           amountSpan: totalSpan,
-          includeIsSpan: index === 0 ? invoice.invoiceAmountMerge : false,
-          includeSpan: index === 0 && invoice.invoiceAmountMerge ? length : 0,
+          includeIsSpan: includeSpan,
+          includeSpan: totalSpan,
         })
       })
     } else {

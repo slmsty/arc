@@ -517,7 +517,7 @@ class BillDetail extends React.Component {
             disabled={!this.state.isRequireRate && normalTypes.includes(this.props.billType)}
             value={`${this.state.dataSource[index]['billingTaxRate']}`}
             onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
-            optionDisabled={this.state.isRequireRate && this.state.billingType === 'SPECIAL_INVOICE'}
+            //optionDisabled={this.state.isRequireRate && this.state.billingType === 'SPECIAL_INVOICE'}
           />
         )
       }, {
@@ -674,7 +674,7 @@ class BillDetail extends React.Component {
     if(!e.target.checked) {
       this.props.form.setFieldsValue({'costBear': ''})
     }
-    if(this.state.billingType === 'SPECIAL_INVOICE' && e.target.checked) {
+    /*if(this.state.billingType === 'SPECIAL_INVOICE' && e.target.checked) {
       let newSource = []
       this.state.dataSource.map(item => {
         newSource.push({
@@ -688,7 +688,7 @@ class BillDetail extends React.Component {
       this.setState({
         dataSource: newSource
       })
-    }
+    }*/
   }
 
   render() {
@@ -829,9 +829,9 @@ class BillDetail extends React.Component {
                             typeCode="BILLING_APPLICATION"
                             paramCode="BILLING_TYPE"
                             placeholder="开票类型"
-                            onChange={(v) => this.setState({
+                            /*onChange={(v) => this.setState({
                               billingType: v,
-                            })}
+                            })}*/
                             hasEmpty
                           />
                         )
@@ -861,7 +861,9 @@ class BillDetail extends React.Component {
                               </Checkbox>
                             )
                           }
+{/*
                           <span className="tax-tips">提示: 仅开票税率与合同税率不一致时，才使用该按钮(不包括17%变16%)， 税率为空自动忽略</span>
+*/}
                         </FormItem>
                       </Col>
                     </Row> : null
