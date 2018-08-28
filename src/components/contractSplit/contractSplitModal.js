@@ -1,6 +1,3 @@
-/**
- * Created by liangshuang on 17/12/12.
- */
 import React from 'react'
 import SelectSbu from '../common/SelectSbu'
 import ContractType from '../common/contractType'
@@ -9,7 +6,6 @@ import ProductNo from '../common/productNo'
 import MyDtatePicker from '../common/myDatePicker'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import currency from '../../util/currency'
-import ContractApproveFile from '../common/ContractApproveFile'
 import _ from 'lodash'
 import './contract.less'
 import '../billApplication/billDetail.less'
@@ -970,7 +966,6 @@ class ContractSplitModal extends React.Component{
                   <h2>合同OrderList信息</h2>
                 </Col>
                 <Col span={4}>
-                  {/*<button className="scan-document" type="primary" onClick={()=>this.goDetail(this.props.contractUrl[0] ? this.props.contractUrl[0].url : '')}>合同审批表及合同扫描件</button>*/}
                   <Button
                     className="scan-document"
                     type="primary"
@@ -1336,29 +1331,6 @@ class ContractSplitModal extends React.Component{
 
                 </Col>
               </Row>
-              {/*<Row className="text-css contractRowBorderLeft  contractRowBorderTop">
-                <Col span={5} className="contract-bg">
-                  Task 3T cost(第三方软件成本)：
-                </Col>
-                <Col span={5} className="contractRowBorderLeft">
-                  <FormItem>
-                    {
-                      getFieldDecorator('task3tCost',{initialValue:constractData.task3tCost ? currency(constractData.task3tCost) : 0 },)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task3tCost')} disabled={this.state.editFlag} />)
-                    }
-                  </FormItem>
-
-                </Col>
-                <Col span={5} className="contractRowBorderLeft contract-bg">
-                  Task 4T cost(第三方软件支持成本)：
-                </Col>
-                <Col span={9} className="contractRowBorderLeft contractRowBorderRight">
-                  <FormItem>
-                    {
-                      getFieldDecorator('task4tCost',{initialValue:constractData.task4tCost ? currency(constractData.task4tCost) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'task4tCost')} disabled={this.state.editFlag} />)
-                    }
-                  </FormItem>
-                </Col>
-              </Row>*/}
               <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
                 <Col span={6} className="contract-bg">
                   Task 5 cost(外购硬件设备不含税成本):
@@ -1381,30 +1353,6 @@ class ContractSplitModal extends React.Component{
                   </FormItem>
                 </Col>
               </Row>
-              {/*<Row className="text-css contractRowBorderLeft  contractRowBorderTop">
-                <Col span={5} className="contract-bg">
-                  关联公司成本：
-                </Col>
-                <Col span={19} className="contractRowBorderLeft contractRowBorderRight">
-                  <FormItem>
-                    {
-                      getFieldDecorator('intercompanyCost',{initialValue:constractData.intercompanyCost ? currency(constractData.intercompanyCost) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'intercompanyCost')} disabled={this.state.editFlag} />)
-                    }
-                  </FormItem>
-                </Col>
-              </Row>*/}
-              {/*<Row className="text-css contractRowBorderLeft  contractRowBorderTop">
-                <Col span={5} className="contract-bg">
-                  关联分包费：
-                </Col>
-                <Col span={19} className="contractRowBorderLeft contractRowBorderRight">
-                  <FormItem>
-                    {
-                      getFieldDecorator('subcontractFee',{initialValue:constractData.subcontractFee ? currency(constractData.subcontractFee) : 0},)(<InputNumber style={{width:'100%'}} className="contractRowBorderNo" onChange={(v)=>this.handleTaskCostChange(v,'subcontractFee')} disabled={this.state.editFlag}/>)
-                    }
-                  </FormItem>
-                </Col>
-              </Row>*/}
               <Row className="text-css contractRowBorder">
                 <Col span={6} className="contract-bg">
                   合计：
@@ -1447,10 +1395,25 @@ class ContractSplitModal extends React.Component{
           </div>
         </Modal>
         {this.state.openUrlModal ?
-          <ContractApproveFile
-            closeModal={this.closeUrlModal}
-            contractUrl={this.props.contractUrl}
-          />
+          <Modal
+            width={800}
+            visible={this.state.showContractLink}
+            onOk={this.closeUrlModal}
+            onCancel={this.closeUrlModal}
+            title="合同审批表"
+            footer={false}
+          >
+            <div>
+              <h3>{`该合同有${this.props.contractUrl.length}条审批记录:`}</h3>
+              <ul style={{minHeight:'150px',marginTop:'20px'}}>
+                {this.props.contractUrl.map(item=>{
+                  return(
+                    <li><a href={item.url} target="_blank">{item.contractName}</a></li>
+                  )
+                })}
+              </ul>
+            </div>
+          </Modal>
           : null
         }
 
