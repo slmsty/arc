@@ -75,7 +75,6 @@ class ContractSplitModal extends React.Component{
       openUrlModal:false,
       deleteData:[],
       productNoData:[],
-
     }
   }
   componentDidMount() {
@@ -166,7 +165,6 @@ class ContractSplitModal extends React.Component{
             }
           })
          newData = this.calculateListPrice(newData,data)
-         console.log(newData)
           //this.calculateListPrice(newData,data)
         }
         if(newData[data.indexs].orderListLineId){
@@ -1397,7 +1395,7 @@ class ContractSplitModal extends React.Component{
         {this.state.openUrlModal ?
           <Modal
             width={800}
-            visible={this.state.showContractLink}
+            visible={true}
             onOk={this.closeUrlModal}
             onCancel={this.closeUrlModal}
             title="合同审批表"
