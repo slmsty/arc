@@ -47,10 +47,12 @@ class ContractApproveFile extends React.Component {
   }
 
   render() {
+    const { billType, contractUrl=[] } = this.props
+    console.log(contractUrl)
     return (
       <div>
         {
-          !hideContractUrl.includes(this.props.billType) &&
+          !hideContractUrl.includes(billType) &&
             <Row>
               <Col span={14}>
                 <Button
@@ -71,7 +73,7 @@ class ContractApproveFile extends React.Component {
           footer={false}
         >
           {
-            advanceTypes.includes(this.props.billType) ?
+            advanceTypes.includes(billType) ?
               <div>
                 <h3 style={{padding: '10px 0'}}>未大签合同审批表</h3>
                 <Table
@@ -84,9 +86,9 @@ class ContractApproveFile extends React.Component {
               </div>
               :
               <div>
-                <h3>{`该合同有${this.props.contractUrl.length}条审批记录:`}</h3>
+                <h3>{`该合同有${contractUrl.length}条审批记录:`}</h3>
                 <ul style={{minHeight:'150px',marginTop:'20px'}}>
-                  {this.props.contractUrl.map(item=>{
+                  {contractUrl.map(item=>{
                     return(
                       <li><a href={item.url} target="_blank">{item.contractName}</a></li>
                     )
