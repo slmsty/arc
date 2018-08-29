@@ -87,7 +87,7 @@ class ApplyInfoModal extends React.Component {
                   } else if(record.billingTaxRate === '' || typeof record.billingTaxAmount === 'undefined') {
                     message.warning(`请填写第${i + 1}行的税率`)
                     err = true
-                  } else if(this.fieldCheck(record.taxCategoryCode)) {
+                  } else if(this.fieldCheck(record.taxCategoryCode) && taskCode === 'ar_finance_account') {
                     message.warning(`请填写第${i + 1}行的税收分类编码`)
                     err = true
                   } else if(this.fieldCheck(record.prefPolicySign)) {
