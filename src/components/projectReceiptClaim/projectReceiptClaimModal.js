@@ -180,16 +180,16 @@ export default class ProjectReceiptClaimModal extends React.Component {
         message.error(`第${i + 1}合同认款金额不符合校验，请重新输入`)
         return
       }
-      if (Math.abs(this.state.funds[i].claimContractAmount) > Math.abs(this.state.funds[i].receivableBalance)) {
-        message.error(`第${i + 1}认款合同币种金额不能大于应收余额，请重新输入`)
+      if (Math.abs(this.state.funds[i].claimContractAmount) - Math.abs(this.state.funds[i].receivableBalance) < 20) {
+        message.error(`第${i + 1}认款合同币种金额与应收余额差额超过20，请重新输入`)
         return
       }
       totalClaimAmount += this.state.funds[i].claimAmount
     }
     totalClaimAmount = parseFloat(totalClaimAmount.toFixed(2))
     totalClaimAmount = this.props.receiptInfo.receiptAmount - totalClaimAmount
-    if (totalClaimAmount < 0 || totalClaimAmount > 3) {
-      message.error('认款金额合计与收款金额不相符，不能进行认款')
+    if (totalClaimAmount < 0 || totalClaimAmount > 20) {
+      message.error('认款金额合计与收款金额差额超过20，不能进行认款')
       return
     }
     const self = this
