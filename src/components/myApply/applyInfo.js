@@ -90,10 +90,10 @@ class ApplyInfoModal extends React.Component {
                   } else if(this.fieldCheck(record.taxCategoryCode) && taskCode === 'ar_finance_account') {
                     message.warning(`请填写第${i + 1}行的税收分类编码`)
                     err = true
-                  } else if(this.fieldCheck(record.prefPolicySign)) {
+                  } else if(this.fieldCheck(record.prefPolicySign) && taskCode === 'ar_finance_account') {
                     message.warning(`请填写第${i + 1}行的优惠政策`)
                     err = true
-                  } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
+                  } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType) && taskCode === 'ar_finance_account') {
                     message.warning(`请填写第${i + 1}行的优惠政策类型`)
                     err = true
                   }

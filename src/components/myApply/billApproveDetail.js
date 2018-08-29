@@ -332,11 +332,11 @@ class BillApproveDetail extends React.Component  {
               message.warning(`请填写第${i + 1}行的税收分类编码`)
               err = true
               break
-            } else if(this.fieldCheck(record.prefPolicySign)) {
+            } else if(this.fieldCheck(record.prefPolicySign) && this.props.taskCode === 'ar_finance_account') {
               message.warning(`请填写第${i + 1}行的优惠政策`)
               err = true
               break
-            } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
+            } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType) && this.props.taskCode === 'ar_finance_account') {
               message.warning(`请填写第${i + 1}行的优惠政策类型`)
               err = true
               break
