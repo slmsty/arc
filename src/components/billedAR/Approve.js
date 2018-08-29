@@ -37,6 +37,11 @@ class Approve extends Component{
         width: 120
       },
       {
+        title: '合同内部编码',
+        dataIndex: 'contractId',
+        width: 120,
+      },
+      {
         title: '付款金额',
         dataIndex: 'paymentAmount',
         width: 120,
@@ -63,6 +68,11 @@ class Approve extends Component{
         width: 120
       },
       {
+        title: '款项状态',
+        dataIndex: 'paymentStatus',
+        width: 120
+      },
+      {
         title: '付款百分比',
         dataIndex: 'paymentPercent',
         width: 100
@@ -70,6 +80,11 @@ class Approve extends Component{
       {
         title: '应收日期',
         dataIndex: 'arDate',
+        width: 120
+      },
+      {
+        title: 'GL日期',
+        dataIndex: 'arGlDate',
         width: 120
       },
       {
@@ -317,7 +332,7 @@ class Approve extends Component{
           columns={columns}
           dataSource={result}
           pagination={false}
-          scroll={{ x: 3282, y: this.state.tableHeight }}
+          scroll={{ x: 3662, y: this.state.tableHeight }}
         />
       </div>
     )

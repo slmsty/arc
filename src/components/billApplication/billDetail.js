@@ -861,9 +861,7 @@ class BillDetail extends React.Component {
                               </Checkbox>
                             )
                           }
-{/*
-                          <span className="tax-tips">提示: 仅开票税率与合同税率不一致时，才使用该按钮(不包括17%变16%)， 税率为空自动忽略</span>
-*/}
+                          <span className="tax-tips">提示: 仅开票税率与合同税率不一致时，才使用该按钮（不包括17%变16%），税率为空自动忽略！</span>
                         </FormItem>
                       </Col>
                     </Row> : null

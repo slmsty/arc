@@ -328,7 +328,7 @@ class BillApproveDetail extends React.Component  {
               message.warning(`请填写第${i + 1}行的税率`)
               err = true
               break
-            } else if(this.fieldCheck(record.taxCategoryCode)) {
+            } else if(this.fieldCheck(record.taxCategoryCode && this.props.taskCode === 'ar_finance_account')) {
               message.warning(`请填写第${i + 1}行的税收分类编码`)
               err = true
               break
