@@ -7,13 +7,13 @@ import EditableNumberCell from '../common/editableNumberCell'
 import EditableTextCell from '../common/editableTextCell'
 import EditableSelectCell from '../common/editableSelectCell'
 import SelectCustomer from '../common/selectCustomer'
+import { toThousands } from '../../util/currency'
 
 export default class ProjectReceiptClaimModal extends React.Component {
   state = {
     showSelectFund: false,
     funds: [],
     confirmLoading: false,
-    totalAmount: 0,
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.receiptInfo !== nextProps.receiptInfo) {
@@ -252,7 +252,6 @@ export default class ProjectReceiptClaimModal extends React.Component {
       })
       this.setState({
         funds,
-        totalAmount: total
       })
       this.edited = true
     }
@@ -321,6 +320,13 @@ export default class ProjectReceiptClaimModal extends React.Component {
     this.setState({ funds })
     this.edited = true
   }
+  getTotalAmount = () => {
+    let total = 0
+    this.state.funds.map(item => {
+      total += parseFloat(item.claimAmount)
+    })
+    return toThousands(total)
+  }
   handleCloseClaim = () => {
     if (this.edited && this.state.funds.length > 0) {
       const that = this
@@ -385,7 +391,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
             scroll={{ x: 2500 }}
           />
           <div style={{padding: '10px 0', fontWeight: 'bold', fontSize: '14px'}}>
-            <span>认款金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{this.state.totalAmount}</span>
+            <span>认款金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{this.getTotalAmount()}</span>
           </div>
         </Modal>
         <ProjectReceiptClaimSelectFundWithForm
