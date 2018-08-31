@@ -7,7 +7,8 @@ import EditableNumberCell from '../common/editableNumberCell'
 import EditableTextCell from '../common/editableTextCell'
 import EditableSelectCell from '../common/editableSelectCell'
 import SelectCustomer from '../common/selectCustomer'
-
+import { toThousands } from '../../util/currency'
+const TOLERANCE = 20 //容差值
 export default class ProjectReceiptClaimModal extends React.Component {
   state = {
     showSelectFund: false,
@@ -150,7 +151,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         funds[index][key] = value
         if (key === 'claimAmount'  && this.props.receiptInfo.receiptCurrency === funds[index].contractCurrency) {
           // console.log(value)
-          if (value - funds[index].claimContractAmount > 3) {
+          if (value - funds[index].claimContractAmount > TOLERANCE) {
             // console.log(value)
             funds[index].claimContractAmount = value
           }
@@ -176,20 +177,16 @@ export default class ProjectReceiptClaimModal extends React.Component {
         message.error(`第${i + 1}条认款合同币种金额没有填写`)
         return
       }
-      if (this.state.funds[i].claimAmount < 0 && Math.abs(this.state.funds[i].claimAmount - this.state.funds[i].claimContractAmount) > 3) {
-        message.error(`第${i + 1}合同认款金额不符合校验，请重新输入`)
-        return
-      }
-      if (Math.abs(this.state.funds[i].claimContractAmount) > Math.abs(this.state.funds[i].receivableBalance)) {
-        message.error(`第${i + 1}认款合同币种金额不能大于应收余额，请重新输入`)
+      if (this.state.funds[i].claimAmount < 0 && Math.abs(this.state.funds[i].claimAmount - this.state.funds[i].claimContractAmount) > TOLERANCE) {
+        message.error(`第${i + 1}条合同认款金额与应收余额差额超过20，请重新输入`)
         return
       }
       totalClaimAmount += this.state.funds[i].claimAmount
     }
     totalClaimAmount = parseFloat(totalClaimAmount.toFixed(2))
     totalClaimAmount = this.props.receiptInfo.receiptAmount - totalClaimAmount
-    if (totalClaimAmount < 0 || totalClaimAmount > 3) {
-      message.error('认款金额合计与收款金额不相符，不能进行认款')
+    if (totalClaimAmount < 0 || totalClaimAmount > TOLERANCE) {
+      message.error('认款金额合计与收款金额差额超过20，不能进行认款')
       return
     }
     const self = this
@@ -225,6 +222,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     this.setState({confirmLoading: false})
   }
   handleCloseSelectFunds = (addFunds) => {
+    let total = 0
     if (addFunds && addFunds.length > 0) {
       const funds = this.state.funds
       addFunds.forEach((addFund) => {
@@ -248,10 +246,13 @@ export default class ProjectReceiptClaimModal extends React.Component {
           fund.fundReceivableBalance = addFund.receivableBalance
           fund.receiptUse = 'On account'
           funds.push(fund)
+          total += fund.claimAmount
         }
         // this.addVirtualItem()
       })
-      this.setState({ funds })
+      this.setState({
+        funds,
+      })
       this.edited = true
     }
     this.setState({ showSelectFund: false })
@@ -319,6 +320,13 @@ export default class ProjectReceiptClaimModal extends React.Component {
     this.setState({ funds })
     this.edited = true
   }
+  getTotalAmount = () => {
+    let total = 0
+    this.state.funds.map(item => {
+      total += parseFloat(item.claimAmount)
+    })
+    return toThousands(total.toFixed(2))
+  }
   handleCloseClaim = () => {
     if (this.edited && this.state.funds.length > 0) {
       const that = this
@@ -382,6 +390,9 @@ export default class ProjectReceiptClaimModal extends React.Component {
             pagination={false}
             scroll={{ x: 2500 }}
           />
+          <div style={{padding: '10px 0', fontWeight: 'bold', fontSize: '14px'}}>
+            <span>认款金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{this.getTotalAmount()}</span>
+          </div>
         </Modal>
         <ProjectReceiptClaimSelectFundWithForm
           receiptClaimFundList={this.props.receiptClaimFundList}
@@ -390,6 +401,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
           visible={this.state.showSelectFund}
           onClose={this.handleCloseSelectFunds}
           getPhase={this.props.getPhase}
+          selectRecord={this.props.selectRecord}
         />
       </div>
     )

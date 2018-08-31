@@ -2,8 +2,7 @@ import React, {Component} from 'react'
 import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
-import SelectInvokeApi from '../common/selectInvokeApi'
-import currency from '../../util/currency'
+import { toThousands } from '../../util/currency'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const dateFormat = 'YYYY-MM-DD'
@@ -24,86 +23,101 @@ class Approve extends Component{
         title: '数据状态',
         fixed: 'left',
         dataIndex: 'statusName',
-        width: 120
+        width: 90
       },
       {
         title: '签约公司',
         dataIndex: 'companyShow',
-        width: 300
+        width: 240
       },
       {
         title: '付款条件',
         dataIndex: 'paymentTerm',
-        width: 120
+        width: 80
+      },
+      {
+        title: '合同内部编码',
+        dataIndex: 'contractId',
+        width: 90,
       },
       {
         title: '付款金额',
         dataIndex: 'paymentAmount',
-        width: 120,
-        render: (text, rocord, index) => (text ? currency(text) : currency(0))
+        width: 100,
+        render: (text, rocord, index) => (text ? toThousands(text) : 0)
       },
       {
         title: '项目编码',
         dataIndex: 'projectNo',
-        width: 120
+        width: 100,
       },
       {
         title: '节点',
         dataIndex: 'projectNode',
-        width: 120,
+        width: 100,
       },
       {
         title: '付款阶段(里程碑)',
         dataIndex: 'paymentPhrases',
-        width: 200,
+        width: 160,
       },
       {
         title: '付款条款',
         dataIndex: 'paymentName',
-        width: 120
+        width: 80
+      },
+      {
+        title: '款项状态',
+        dataIndex: 'paymentStatus',
+        width: 80
       },
       {
         title: '付款百分比',
         dataIndex: 'paymentPercent',
-        width: 100
+        width: 70
       },
       {
         title: '应收日期',
         dataIndex: 'arDate',
-        width: 120
+        width: 90
+      },
+      {
+        title: 'GL日期',
+        dataIndex: 'arGlDate',
+        width: 90
       },
       {
         title: '报告日期',
         dataIndex: 'reportDate',
-        width: 120
+        width: 90
       },
       {
         title: '应收金额',
         dataIndex: 'arAmount',
-        width: 120,
-        render: (text, rocord, index) => (text ? currency(text) : currency(0))
+        width: 100,
+        render: (text, rocord, index) => (text ? toThousands(text) : 0)
       },
       {
         title: '考核含税金额',
         dataIndex: 'assessTaxIncludedAmount',
-        width: 120,
-        render: (text, rocord, index) => (text ? currency(text) : currency(0))
+        width: 100,
+        render: (text, rocord, index) => (text ? toThousands(text) : 0)
       },
       {
         title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
         dataIndex: 'billedArAmount',
-        width: 120,
-        render: (text, rocord, index) => (text ? currency(text) : currency(0))
+        width: 100,
+        render: (text, rocord, index) => (text ? toThousands(text) : 0)
       },
       {
         title: '款项ID',
         dataIndex: 'fundId',
-        width: 120
+        width: 70
       },
       {
         title: '客户名称',
         dataIndex: 'custName',
-        width: 200,
+        width: 260,
       },
       {
         title: '合同名称',
@@ -124,7 +138,7 @@ class Approve extends Component{
         title: '合同金额',
         dataIndex: 'contractAmount',
         width: 120,
-        render: (text, rocord, index) => (text ? currency(text) : currency(0))
+        render: (text, rocord, index) => (text ? toThousands(text) : 0)
       },
       {
         title: '提示',
@@ -143,6 +157,7 @@ class Approve extends Component{
         rejectDis: true,
         confirmDis: true
       })
+      console.log(values)
       this.props.Search({
         ...values,
       })
@@ -272,14 +287,10 @@ class Approve extends Component{
           </Row>
           <Row>
             <Col span={8}>
-              <FormItem label="付款条件" {...layout}>
+              <FormItem label="付款条款" {...layout}>
                 {
-                  getFieldDecorator('paymentTerm', {initialValue: ''})(<SelectInvokeApi
-                    typeCode="BILLED_AR"
-                    paramCode="PAYMENT_TERM"
-                    placeholder="付款条件"
-                    hasEmpty
-                  />)
+                  getFieldDecorator('paymentName')(
+                    <Input placeholer="付款条款"/>)
                 }
               </FormItem>
             </Col>
@@ -317,7 +328,7 @@ class Approve extends Component{
           columns={columns}
           dataSource={result}
           pagination={false}
-          scroll={{ x: 3282, y: this.state.tableHeight }}
+          scroll={{ x: 3300, y: this.state.tableHeight }}
         />
       </div>
     )

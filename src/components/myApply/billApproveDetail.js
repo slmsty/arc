@@ -149,19 +149,22 @@ class BillApproveDetail extends React.Component  {
    */
   handleChange = (value, col, index, record) => {
     let dataSource = this.state.dataSource
+    const rateControl = parseFloat(dataSource[index]['billingTaxRate']) === 0 && this.props.taskCode === 'ar_finance_account'
     if(col === 'billingContent') {
       dataSource[index][col] = value.billingContentName ? value.billingContentName : ''
       dataSource[index]['billingRecordId'] = value.billingRecordId || ''
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode || ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName || ''
-      if(!(parseFloat(dataSource[index]['billingTaxRate']) === 0 && this.props.taskCode === 'ar_finance_account')) {
+      if(!rateControl) {
         dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
         dataSource[index]['prefPolicyType'] = value.prefPolicyContent || ''
       }
     } else if (col === 'taxCategoryCode') {
       dataSource[index][col] = value.taxCategoryCode || ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName || ''
-      dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
+      if(!rateControl) {
+        dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
+      }
       dataSource[index]['prefPolicyType'] = value.prefPolicySign === '1' ? value.prefPolicyType : ''
     } else if(col === 'billingAmount') {//含税金额
       const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
@@ -328,15 +331,15 @@ class BillApproveDetail extends React.Component  {
               message.warning(`请填写第${i + 1}行的税率`)
               err = true
               break
-            } else if(this.fieldCheck(record.taxCategoryCode)) {
+            } else if(this.fieldCheck(record.taxCategoryCode) && this.props.taskCode === 'ar_finance_account') {
               message.warning(`请填写第${i + 1}行的税收分类编码`)
               err = true
               break
-            } else if(this.fieldCheck(record.prefPolicySign)) {
+            } else if(this.fieldCheck(record.prefPolicySign) && this.props.taskCode === 'ar_finance_account') {
               message.warning(`请填写第${i + 1}行的优惠政策`)
               err = true
               break
-            } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType)) {
+            } else if(record.prefPolicySign === '1' && this.fieldCheck(record.prefPolicyType) && this.props.taskCode === 'ar_finance_account') {
               message.warning(`请填写第${i + 1}行的优惠政策类型`)
               err = true
               break

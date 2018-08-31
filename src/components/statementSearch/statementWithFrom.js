@@ -602,7 +602,8 @@ class StatementListCom extends React.Component {
             <Row gutter={40}>
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="币种">
-                  {getFieldDecorator('currency',{
+                  {getFieldDecorator('currency', {
+                    initialValue: 'CNY',
                   })(
                     <Select>
                       <Option value='CNY'>CNY</Option>
