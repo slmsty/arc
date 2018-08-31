@@ -8,7 +8,7 @@ import EditableTextCell from '../common/editableTextCell'
 import EditableSelectCell from '../common/editableSelectCell'
 import SelectCustomer from '../common/selectCustomer'
 import { toThousands } from '../../util/currency'
-
+const TOLERANCE = 20 //容差值
 export default class ProjectReceiptClaimModal extends React.Component {
   state = {
     showSelectFund: false,
@@ -151,7 +151,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         funds[index][key] = value
         if (key === 'claimAmount'  && this.props.receiptInfo.receiptCurrency === funds[index].contractCurrency) {
           // console.log(value)
-          if (value - funds[index].claimContractAmount > 3) {
+          if (value - funds[index].claimContractAmount > TOLERANCE) {
             // console.log(value)
             funds[index].claimContractAmount = value
           }
@@ -177,7 +177,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
         message.error(`第${i + 1}条认款合同币种金额没有填写`)
         return
       }
-      if (this.state.funds[i].claimAmount < 0 && Math.abs(this.state.funds[i].claimAmount - this.state.funds[i].claimContractAmount) > 20) {
+      if (this.state.funds[i].claimAmount < 0 && Math.abs(this.state.funds[i].claimAmount - this.state.funds[i].claimContractAmount) > TOLERANCE) {
         message.error(`第${i + 1}条合同认款金额与应收余额差额超过20，请重新输入`)
         return
       }
@@ -185,7 +185,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     }
     totalClaimAmount = parseFloat(totalClaimAmount.toFixed(2))
     totalClaimAmount = this.props.receiptInfo.receiptAmount - totalClaimAmount
-    if (totalClaimAmount < 0 || totalClaimAmount > 20) {
+    if (totalClaimAmount < 0 || totalClaimAmount > TOLERANCE) {
       message.error('认款金额合计与收款金额差额超过20，不能进行认款')
       return
     }
@@ -325,7 +325,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     this.state.funds.map(item => {
       total += parseFloat(item.claimAmount)
     })
-    return toThousands(total)
+    return toThousands(total.toFixed(2))
   }
   handleCloseClaim = () => {
     if (this.edited && this.state.funds.length > 0) {
