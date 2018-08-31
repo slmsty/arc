@@ -893,12 +893,12 @@ const constructSplitSearchColumns = [{
     width: 140,
   },
   {
-    title: '服务器起始',
+    title: '服务期起始',
     dataIndex: 'serviceStartDate',
     width: 80,
   },
   {
-    title: '服务器结束',
+    title: '服务期结束',
     dataIndex: 'serviceEndDate',
     width: 80,
   },

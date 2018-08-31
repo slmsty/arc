@@ -287,14 +287,10 @@ class Approve extends Component{
           </Row>
           <Row>
             <Col span={8}>
-              <FormItem label="付款条件" {...layout}>
+              <FormItem label="付款条款" {...layout}>
                 {
-                  getFieldDecorator('paymentTerm', {initialValue: ''})(<SelectInvokeApi
-                    typeCode="BILLED_AR"
-                    paramCode="PAYMENT_TERM"
-                    placeholder="付款条件"
-                    hasEmpty
-                  />)
+                  getFieldDecorator('paymentName', {initialValue: ''})(
+                    <Input placeholer="付款条款"/>)
                 }
               </FormItem>
             </Col>

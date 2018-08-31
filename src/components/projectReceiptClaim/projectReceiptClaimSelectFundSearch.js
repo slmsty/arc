@@ -112,7 +112,10 @@ class ProjectReceiptClaimSelectFund extends React.Component {
       queryParam.custName = queryParam.cust[1]
       delete queryParam.cust
     }
-    const param = { ...queryParam,
+    const { companyId } = this.props.selectRecord
+    const param = {
+      ...queryParam,
+      comId: companyId,
       pageInfo: {
         pageNo,
         pageSize,

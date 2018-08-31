@@ -13,6 +13,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     showSelectFund: false,
     funds: [],
     confirmLoading: false,
+    totalAmount: 0,
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.receiptInfo !== nextProps.receiptInfo) {
@@ -221,6 +222,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     this.setState({confirmLoading: false})
   }
   handleCloseSelectFunds = (addFunds) => {
+    let total = 0
     if (addFunds && addFunds.length > 0) {
       const funds = this.state.funds
       addFunds.forEach((addFund) => {
@@ -244,10 +246,14 @@ export default class ProjectReceiptClaimModal extends React.Component {
           fund.fundReceivableBalance = addFund.receivableBalance
           fund.receiptUse = 'On account'
           funds.push(fund)
+          total += fund.claimAmount
         }
         // this.addVirtualItem()
       })
-      this.setState({ funds })
+      this.setState({
+        funds,
+        totalAmount: total
+      })
       this.edited = true
     }
     this.setState({ showSelectFund: false })
@@ -378,6 +384,9 @@ export default class ProjectReceiptClaimModal extends React.Component {
             pagination={false}
             scroll={{ x: 2500 }}
           />
+          <div style={{padding: '10px 0', fontWeight: 'bold', fontSize: '14px'}}>
+            <span>认款金额合计：</span><span className="primary-color" style={{ color: '#F4A034' }}>{this.state.totalAmount}</span>
+          </div>
         </Modal>
         <ProjectReceiptClaimSelectFundWithForm
           receiptClaimFundList={this.props.receiptClaimFundList}
@@ -386,6 +395,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
           visible={this.state.showSelectFund}
           onClose={this.handleCloseSelectFunds}
           getPhase={this.props.getPhase}
+          selectRecord={this.props.selectRecord}
         />
       </div>
     )

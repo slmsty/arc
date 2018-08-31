@@ -11,6 +11,7 @@ const dateFormat = 'YYYY-MM-DD'
 
 export default class ProjectReceiptClaim extends React.Component {
   state = {
+    selectedRows: [],
     selectedRowKeys: [],
   }
   componentWillMount() {
@@ -27,8 +28,11 @@ export default class ProjectReceiptClaim extends React.Component {
       message.success('项目认款成功!')
     }
   }
-  onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys })
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    this.setState({
+      selectedRows,
+      selectedRowKeys
+    })
   }
   columns = [{
     title: '数据状态',
@@ -325,7 +329,9 @@ export default class ProjectReceiptClaim extends React.Component {
         />
         {
           !!this.props.receiptInfo.receiptClaimId ?
-            <ProjectReceiptClaimModal /> : null
+            <ProjectReceiptClaimModal
+              selectRecord={this.state.selectedRows[0]}
+            /> : null
         }
       </div>
     )
