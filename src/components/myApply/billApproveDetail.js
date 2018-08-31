@@ -149,19 +149,22 @@ class BillApproveDetail extends React.Component  {
    */
   handleChange = (value, col, index, record) => {
     let dataSource = this.state.dataSource
+    const rateControl = parseFloat(dataSource[index]['billingTaxRate']) === 0 && this.props.taskCode === 'ar_finance_account'
     if(col === 'billingContent') {
       dataSource[index][col] = value.billingContentName ? value.billingContentName : ''
       dataSource[index]['billingRecordId'] = value.billingRecordId || ''
       dataSource[index]['taxCategoryCode'] = value.taxCategoryCode || ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName || ''
-      if(!(parseFloat(dataSource[index]['billingTaxRate']) === 0 && this.props.taskCode === 'ar_finance_account')) {
+      if(!rateControl) {
         dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
         dataSource[index]['prefPolicyType'] = value.prefPolicyContent || ''
       }
     } else if (col === 'taxCategoryCode') {
       dataSource[index][col] = value.taxCategoryCode || ''
       dataSource[index]['taxCategoryName'] = value.taxCategoryName || ''
-      dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
+      if(!rateControl) {
+        dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
+      }
       dataSource[index]['prefPolicyType'] = value.prefPolicySign === '1' ? value.prefPolicyType : ''
     } else if(col === 'billingAmount') {//含税金额
       const { billingAmount, billingTaxRate, quantity } = this.state.dataSource[index]
