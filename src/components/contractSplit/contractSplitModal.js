@@ -83,8 +83,17 @@ class ContractSplitModal extends React.Component{
     params.keywords = this.props.data.projectNo
     this.props.getProductNo(params).then((res)=>{
       if (res && res.response && res.response.resultCode === '000000') {
+        const product = this.props.productNoData.length && this.props.productNoData[0].productNo ? this.props.productNoData[0].productNo : ''
+        const newSource = this.state.dataSource.map(item => {
+          return {
+            ...item,
+            product: item.product ? item.product : product
+          }
+        })
+        const { result } = res.response.pageInfo
         this.setState({
-          productNoData:res.response.pageInfo.result,
+          dataSource: newSource,
+          productNoData: result,
         })
       }
     })
@@ -808,7 +817,6 @@ class ContractSplitModal extends React.Component{
     })
   }
   render() {
-
     const dataSource = _.cloneDeep(this.state.dataSource.slice(0))
     const constractData = this.props.data
     let countCatalPrice = 0 // 合计目录价 catalogue
