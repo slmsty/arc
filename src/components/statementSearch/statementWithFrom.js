@@ -55,8 +55,9 @@ class StatementListCom extends React.Component {
           signDateEnd: params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '',
           salesBu: params.salesBu && params.salesBu.length ? params.salesBu[0] : '',
           projectBu: params.projectBu && params.projectBu.length ? params.projectBu[0] : '',
-          projectManager: params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
-        }
+          projectManager: params.projectManager && params.projectManager.length ? params.projectManager[0] : '',
+          currency: params.currency1 || ''
+      }
       }
     } else if (type==='summarize') {
       param = {
