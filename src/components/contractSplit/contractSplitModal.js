@@ -32,6 +32,7 @@ class ContractSplitModal extends React.Component{
     super(props)
     const tableDeatail = _.cloneDeep(props.tableDetail)
     const data = props.data
+    this.projectMap = new Map()
     let countTaskCostDataList = {
       task1Cost: data.task1Cost ? data.task1Cost : 0,
       task3tCost: data.task3tCost ? data.task3tCost : 0,
@@ -83,16 +84,8 @@ class ContractSplitModal extends React.Component{
     params.keywords = this.props.data.projectNo
     this.props.getProductNo(params).then((res)=>{
       if (res && res.response && res.response.resultCode === '000000') {
-        const product = this.props.productNoData.length && this.props.productNoData[0].productNo ? this.props.productNoData[0].productNo : ''
-        const newSource = this.state.dataSource.map(item => {
-          return {
-            ...item,
-            product: item.product ? item.product : product
-          }
-        })
         const { result } = res.response.pageInfo
         this.setState({
-          dataSource: newSource,
           productNoData: result,
         })
       }
@@ -161,7 +154,6 @@ class ContractSplitModal extends React.Component{
     let newData =_.cloneDeep(this.state.dataSource)
     if(data){
       const indexData = [data.No,data.Name]
-
       if(data.columns){
         if(data.columns === 'contractCategory'){
           newData[data.indexs].contractTaxRate = 'all'
@@ -186,6 +178,8 @@ class ContractSplitModal extends React.Component{
         newData[data.indexs][data.columns] = indexData
         if (data.columns === 'contractCategory') {
           newData[data.indexs]['taskDesc'] = indexData
+          const current = this.state.productNoData.find(item => item.paramValue === data.No)
+          newData[data.indexs]['product'] = current.productNo
         }
       }
       this.inputChange(newData,[data.indexs])
@@ -230,21 +224,12 @@ class ContractSplitModal extends React.Component{
   }
   renderColumns = (text, index, column,record) => {
     if(column=="product"){
-      // 如果产品编码为空，则取第一个数据为默认值
-      if(!text && text != 0) {
-        text = this.props.productNoData.length && this.props.productNoData[0].productNo ? this.props.productNoData[0].productNo : ''
-        //this.handleChange({No:text,Name:text,indexs:index,columns:column})
-      }
-      return ( <ProductNo
-        placeholder="产品编码"
-        hasEmpty
-        onChange={this.handleChange}
-        options = {this.state.productNoData}
-        value={text}
-        indexs={index}
-        columns={column}
-        disabled={this.state.editFlag}
-      />)
+      return (
+        <Input
+          value={text}
+          disabled={this.state.editFlag}
+        />
+      )
     }
     if(column ==='contractCategory'){
       return(
