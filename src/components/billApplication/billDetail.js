@@ -114,25 +114,27 @@ class BillDetail extends React.Component {
 
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;
+    const data = dataSource.filter(r=> r.arBillingId === arBillingId)
+    const parent = data.length > 0 ? data[0] : {}
     const newData = {
       lineNo: count,
       groupNo: 1,
       isParent: '0',
       arBillingId,
       contractItemId,
-      billingContent: '',
-      specificationType: '',
-      unit: '',
+      billingContent: parent.billingContent || '',
+      specificationType: parent.specificationType || '',
+      unit: parent.unit || '',
       quantity: 1,
-      unitPrice: 0,
+      unitPrice: parent.unitPrice || 0,
       noRateAmount: 0,
       billingAmountExcludeTax: 0,
       billingAmount: 0,
-      billingTaxRate: 0,
+      billingTaxRate: parent.billingTaxRate || 0,
       billingTaxAmount: 0,
     };
-    const data = dataSource.filter(r=> r.arBillingId === arBillingId)
     dataSource.splice(lineNo + data.length, 0, newData)
+    console.log(dataSource)
     const source = dataSource.map((record, index) => ({
         ...record,
         lineNo: index,
