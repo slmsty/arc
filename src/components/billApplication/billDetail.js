@@ -132,9 +132,12 @@ class BillDetail extends React.Component {
       billingAmount: 0,
       billingTaxRate: parent.billingTaxRate || 0,
       billingTaxAmount: 0,
+      taxCategoryCode: parent.taxCategoryCode || '',
+      taxCategoryName: parent.taxCategoryName || '',
+      prefPolicySign: parent.prefPolicySign || '',
+      prefPolicyType: parent.prefPolicyType || '',
     };
     dataSource.splice(lineNo + data.length, 0, newData)
-    console.log(dataSource)
     const source = dataSource.map((record, index) => ({
         ...record,
         lineNo: index,
@@ -325,8 +328,12 @@ class BillDetail extends React.Component {
   handleChange = (value, col, index, record) => {
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
-      dataSource[index]['billingRecordId'] = value[0]
-      dataSource[index][col] = value[1]
+      dataSource[index]['billingRecordId'] = value.billingRecordId
+      dataSource[index][col] = value.billingContentName
+      dataSource[index]['taxCategoryCode'] = value.taxCategoryCode || ''
+      dataSource[index]['taxCategoryName'] = value.taxCategoryName || ''
+      dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
+      dataSource[index]['prefPolicyType'] = value.prefPolicyContent || ''
     } else if(col === 'billingAmount') {
       const { billingTaxRate, quantity } = this.state.dataSource[index]
       if(record.isParent === '1') {//操作的记录为父节点
@@ -539,15 +546,15 @@ class BillDetail extends React.Component {
         dataIndex: 'billingContent',
         width: 200,
         render: (text, record, index) => (
-          <SelectSearch
+          <InputSearch
             url="/arc/billingApplication/billingContent/search"
             columns={contentOnlyCols}
             label="开票内容"
             idKey="billingRecordId"
             valueKey="billingContentName"
-            value={['', this.state.dataSource[index]['billingContent']]}
-            onChange={(v) => this.handleChange(v, 'billingContent', index)}
             showSearch={true}
+            value={{billingContentName: text}}
+            onChange={(v) => this.handleChange(v, 'billingContent', index)}
           />
         )
       }, {

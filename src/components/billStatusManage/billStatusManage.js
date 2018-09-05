@@ -452,16 +452,40 @@ export default class BillStatusCon extends React.Component {
     })
   }
 
-  getTotalAmount = (dataSource) => {
-    let amountTotal = 0
-    let totalExtraAmount = 0
-    let totalTaxAmount = 0
+  getTotalColumns = (dataSource) => {
+    let billingAmount = 0
+    let billingAmountExcludeTax = 0
+    let billingTaxAmount = 0
     dataSource.map(item => {
-      amountTotal = amountTotal + parseFloat(item.billingAmount)
-      totalExtraAmount = totalExtraAmount + parseFloat(item.billingAmountExcludeTax)
-      totalTaxAmount = totalTaxAmount + parseFloat(item.billingTaxAmount)
+      billingAmount = billingAmount + parseFloat(item.billingAmount)
+      billingAmountExcludeTax = billingAmountExcludeTax + parseFloat(item.billingAmountExcludeTax)
+      billingTaxAmount = billingTaxAmount + parseFloat(item.billingTaxAmount)
     })
-    return {amountTotal, totalExtraAmount, totalTaxAmount}
+    const newData = dataSource.concat({
+      lineNo: '合计',
+      billingAmountExcludeTax: toThousands(billingAmountExcludeTax.toFixed(2)),
+      billingAmount: toThousands(billingAmount.toFixed(2)),
+      billingTaxAmount: toThousands(billingTaxAmount.toFixed(2)),
+    })
+    return newData
+  }
+
+  getResultColumns = (dataSource) => {
+    let billingAmount = 0
+    let billingAmountExcludeTax = 0
+    let billingTaxAmount = 0
+    dataSource.map(item => {
+      billingAmount = billingAmount + parseFloat(item.taxIncludeAmount)
+      billingAmountExcludeTax = billingAmountExcludeTax + parseFloat(item.taxExcludeAmount)
+      billingTaxAmount = billingTaxAmount + parseFloat(item.taxAmount)
+    })
+    const newData = dataSource.concat({
+      status: '合计',
+      taxExcludeAmount: toThousands(billingAmountExcludeTax.toFixed(2)),
+      taxIncludeAmount: toThousands(billingAmount.toFixed(2)),
+      taxAmount: toThousands(billingTaxAmount.toFixed(2)),
+    })
+    return newData
   }
 
   render() {
@@ -472,6 +496,8 @@ export default class BillStatusCon extends React.Component {
         dataIndex: 'status',
         width: 120,
         fixed: 'left',
+        render: (text) => text === '合计' ?
+          <span style={{fontWeight: 'bold', color: '#ff8928'}}>合计</span> : text
       },
       {
         title: '发票号码',
@@ -512,31 +538,26 @@ export default class BillStatusCon extends React.Component {
         title: '含税金额',
         dataIndex: 'taxIncludeAmount',
         width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
+        render: (text, record) =>
+          record.status === '合计' ? <span style={{color: '#ff8928'}}>{text}</span> :
+            (text ? toThousands(text) : text),
       },
       {
         title: '不含税金额',
         dataIndex: 'taxExcludeAmount',
         width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
+        render: (text, record) =>
+          record.status === '合计' ? <span style={{color: '#ff8928'}}>{text}</span> :
+            (text ? toThousands(text) : text),
       },
       {
         title: '税额',
         dataIndex: 'taxAmount',
         width: 100,
-        render: (text, record, index) => (text ? currency(text) : text),
-      },
-      /*{
-        title: '操作',
-        dataIndex: 'oprateion',
-        width: 100,
-        fixed: 'right',
-        render:(text, record) => (
-          <div>
-            <Button onClick={() => this.disableItem(record)}>作废</Button>
-          </div>
-        )
-      },*/
+        render: (text, record) =>
+          record.status === '合计' ? <span style={{color: '#ff8928'}}>{text}</span> :
+            (text ? toThousands(text) : text),
+      }
     ]
     const billApproveColumns = [
       {
@@ -583,11 +604,11 @@ export default class BillStatusCon extends React.Component {
       }, {
         title: '开票申请时间',
         dataIndex: 'applyDate',
-        width: 130,
+        width: 140,
       }, {
         title: '开票日期',
         dataIndex: 'invoiceDate',
-        width: 130,
+        width: 90,
       }, {
         title: '备注',
         dataIndex: 'remark',
@@ -615,18 +636,7 @@ export default class BillStatusCon extends React.Component {
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
     }
-    const billResultRowSelection = {
-      type: 'checkBox',
-      onChange: this.onBillResultSelectChange,
-    }
-    let detailList = this.props.billStatusManage.getBillStatusDetailList
-    const { totalExtraAmount, amountTotal, totalTaxAmount } = this.getTotalAmount(detailList)
-    detailList = detailList.concat({
-      lineNo: '合计',
-      billingAmountExcludeTax: toThousands(parseFloat(totalExtraAmount.toFixed(2))),
-      billingAmount: toThousands(parseFloat(amountTotal.toFixed(2))),
-      billingTaxAmount: toThousands(parseFloat(totalTaxAmount.toFixed(2))),
-    })
+    const { getBillStatusDetailList, getBillStatusBillResultList } = this.props.billStatusManage
 
     const roleButtons = sessionStorage.getItem('roleButtons')
     const buttonList = typeof roleButtons === 'undefined' || roleButtons === 'undefined' ? [] : JSON.parse(roleButtons).map(r => r.path)
@@ -693,7 +703,7 @@ export default class BillStatusCon extends React.Component {
           columns={this.getBillLineColumns()}
           size="small"
           scroll={{ x: '1100px' }}
-          dataSource={detailList}
+          dataSource={this.getTotalColumns(getBillStatusDetailList)}
           pagination={false}
         />
         <br />
@@ -717,7 +727,7 @@ export default class BillStatusCon extends React.Component {
           size="small"
           scroll={{ x: '1600px' }}
           pagination ={false}
-          dataSource={this.props.billStatusManage.getBillStatusBillResultList}
+          dataSource={this.getResultColumns(getBillStatusBillResultList)}
         />
         {
           this.state.billResultSelectedRows.length > 0 ?
