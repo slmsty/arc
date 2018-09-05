@@ -123,6 +123,7 @@ class BillDetail extends React.Component {
       arBillingId,
       contractItemId,
       billingContent: parent.billingContent || '',
+      billingRecordId: parent.billingRecordId || '',
       specificationType: parent.specificationType || '',
       unit: parent.unit || '',
       quantity: 1,
@@ -132,10 +133,6 @@ class BillDetail extends React.Component {
       billingAmount: 0,
       billingTaxRate: parent.billingTaxRate || 0,
       billingTaxAmount: 0,
-      taxCategoryCode: parent.taxCategoryCode || '',
-      taxCategoryName: parent.taxCategoryName || '',
-      prefPolicySign: parent.prefPolicySign || '',
-      prefPolicyType: parent.prefPolicyType || '',
     };
     dataSource.splice(lineNo + data.length, 0, newData)
     const source = dataSource.map((record, index) => ({
@@ -330,10 +327,6 @@ class BillDetail extends React.Component {
     if(col === 'billingContent') {
       dataSource[index]['billingRecordId'] = value.billingRecordId
       dataSource[index][col] = value.billingContentName
-      dataSource[index]['taxCategoryCode'] = value.taxCategoryCode || ''
-      dataSource[index]['taxCategoryName'] = value.taxCategoryName || ''
-      dataSource[index]['prefPolicySign'] = value.prefPolicySign || ''
-      dataSource[index]['prefPolicyType'] = value.prefPolicyContent || ''
     } else if(col === 'billingAmount') {
       const { billingTaxRate, quantity } = this.state.dataSource[index]
       if(record.isParent === '1') {//操作的记录为父节点
