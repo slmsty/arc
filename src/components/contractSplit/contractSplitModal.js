@@ -180,6 +180,7 @@ class ContractSplitModal extends React.Component{
           newData[data.indexs]['taskDesc'] = indexData
           const current = this.state.productNoData.find(item => item.paramValue === data.No)
           newData[data.indexs]['product'] = current.productNo
+          newData[data.indexs]['taskNo'] = current.paramValue
         }
       }
       this.inputChange(newData,[data.indexs])
@@ -215,7 +216,6 @@ class ContractSplitModal extends React.Component{
         newSelectCountType.push('POC')
       }
     })
-    //newSelectCountType.push(this.state.selectCountType)
     let selectDatas = [...new Set([...newSelectCountType])]
     this.setState({
       dataSource: newData,
