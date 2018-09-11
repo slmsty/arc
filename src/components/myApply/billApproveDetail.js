@@ -37,7 +37,7 @@ class BillApproveDetail extends React.Component  {
     const dataSource = appLineList.map(detail => ({
         ...detail,
         lineNo: detail.lineNo - 1,
-        totalAmount: detail.billingAmount ? detail.billingAmount : 0,
+        totalAmount: detail.isParent === '1' ? this.getBillingTotalAmount(appLineList.filter(item => item.arBillingId === detail.arBillingId)) : 0,
         prefPolicySign: props.taskCode === 'ar_finance_account' && detail.billingTaxRate === 0 ? '1' : detail.prefPolicySign
       })
     )
@@ -63,6 +63,14 @@ class BillApproveDetail extends React.Component  {
     }
     //AR财务会计&&其他事项开票可修改城建税
     this.isEditTax = props.taskCode === 'ar_finance_account' && props.applyType === 'BILLING_EXCESS'
+  }
+
+  getBillingTotalAmount = (dataSource) => {
+    let total = 0
+    dataSource.map(item => {
+      total = total + item.billingAmount
+    })
+    return total
   }
 
   handleAdd = (lineNo, arBillingId, contractItemId) => {
