@@ -1039,7 +1039,7 @@ const outcomeTotalReportCols = [
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmountMonth) : '')
   },
   {
-    title:'当月开票除税金额',
+    title:'当月开票不含税金额',
     dataIndex: 'taxExcludeAmountMonth',
     width: 100,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxExcludeAmountMonth) : '')
@@ -1049,6 +1049,28 @@ const outcomeTotalReportCols = [
     dataIndex: 'tax',
     width: 100,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.tax) : '')
+  },{
+    title:'累计开票含税金额',
+    dataIndex: ' taxIncludeAmountTotal',
+    width: 100,
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmountTotal) : '')
+  },
+  {
+    title:'累计开票不含税金额',
+    dataIndex: ' taxExcludeAmountTotal',
+    width: 100,
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxExcludeAmountTotal) : '')
+  },
+  {
+    title:'累计销项税',
+    dataIndex: ' taxTotal',
+    width: 100,
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxTotal) : '')
+  },
+  {
+    title:'发票类型',
+    dataIndex: 'invoiceType',
+    width: 100,
   },
   {
     title:'开票税率',
