@@ -1020,17 +1020,17 @@ const outcomeTotalReportCols = [
   {
     title:'项目编码',
     dataIndex: 'projectNo',
-    width: 100,
+    width: 80,
   },
   {
     title:'项目立项部门',
     dataIndex: 'projectDept',
-    width: 100,
+    width: 140,
   },
   {
     title:'项目立项BU',
     dataIndex: 'projectBu',
-    width: 100,
+    width: 120,
   },
   {
     title:'当月开票含税金额',
@@ -1051,31 +1051,31 @@ const outcomeTotalReportCols = [
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.tax) : '')
   },{
     title:'累计开票含税金额',
-    dataIndex: ' taxIncludeAmountTotal',
+    dataIndex: 'taxIncludeAmountTotal',
     width: 100,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmountTotal) : '')
   },
   {
     title:'累计开票不含税金额',
-    dataIndex: ' taxExcludeAmountTotal',
+    dataIndex: 'taxExcludeAmountTotal',
     width: 100,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxExcludeAmountTotal) : '')
   },
   {
     title:'累计销项税',
-    dataIndex: ' taxTotal',
+    dataIndex: 'taxTotal',
     width: 100,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxTotal) : '')
   },
   {
     title:'发票类型',
     dataIndex: 'invoiceType',
-    width: 100,
+    width: 70,
   },
   {
     title:'开票税率',
     dataIndex: 'billingTaxRate',
-    width: 100,
+    width: 70,
   },
 ]
 
