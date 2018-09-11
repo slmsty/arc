@@ -85,7 +85,7 @@ class BillDetail extends React.Component {
         billingAmount: item.billingAmount ? item.billingAmount : 0,
         billingTaxRate: typeof item.billingTaxRate !== 'undefined' ? item.billingTaxRate : 0,
         billingTaxAmount: item.billingTaxAmount ? item.billingTaxAmount : 0,
-        totalAmount: item.billingAmount ? item.billingAmount : 0,
+        totalAmount: this.props.type === 'myApply' && item.isParent === '1' ? this.getBillingTotalAmount(appLineList.filter(app => app.arBillingId === item.arBillingId)) : item.billingAmount || 0,
     })
   })
     let proItems = []
@@ -110,6 +110,14 @@ class BillDetail extends React.Component {
       proItems: proItems,
       fileList: fileList
     })
+  }
+
+  getBillingTotalAmount = (dataSource) => {
+    let total = 0
+    dataSource.map(item => {
+      total = total + item.billingAmount
+    })
+    return total
   }
 
   handleAdd = (lineNo, arBillingId, contractItemId) => {
