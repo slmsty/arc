@@ -38,6 +38,7 @@ import billingDataInitAdd from './BillManage/billingDataInitAdd'
 import ReceiptApply from '../containers/BillManage/receiptApplication'
 import MailCcConfig from "./system/mailCcConfig";
 import ApproverConfig from './system/approverConfig'
+import TransferERP from '../containers/ContractSplit/transferERP'
 
 const mapStateToProps = state => ({
   user: state.common.user,
@@ -121,6 +122,8 @@ class IndexContainer extends React.Component {
       return MailCcConfig
     } else if (component === 'ApproveConfig') {
       return ApproverConfig
+    } else if(component === 'TransferERP') {
+      return TransferERP
     }
   }
   getMenuRoutes = (menus) => {

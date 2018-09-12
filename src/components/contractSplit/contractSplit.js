@@ -1,13 +1,9 @@
-/**
- * Created by liangshuang on 17/12/1.
- */
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Button, Table, message, Row, Col } from 'antd'
+import { Button, Table, message, Row, Col, Modal } from 'antd'
 import ContractSplitWithFrom from './contractSplitWithFrom'
 import ContractSplitModal  from './contractSplitModal'
+import TransferERP from '../../containers/ContractSplit/transferERP'
 import currency from '../../util/currency'
-import ERPModals from "./ERPModal";
 
 const columns = [
   {
@@ -325,7 +321,9 @@ export default class ApplySearchCon extends React.Component {
     const buttonList = typeof roleButtons === 'undefined' || roleButtons === 'undefined' ? [] : JSON.parse(roleButtons).map(r => r.path)
     return (
       <div>
-        <ContractSplitWithFrom onQuery={this.handleChangeParam} />
+        <ContractSplitWithFrom
+          onQuery={this.handleChangeParam}
+        />
         <div className="split"></div>
         {
           this.state.contarctSplitModal ?
@@ -361,12 +359,19 @@ export default class ApplySearchCon extends React.Component {
           dataSource={this.props.contractSplitDara.getContractList.result}
         />
         {this.state.ERPModal ?
-          <ERPModals
-            sendERPQuery={this.sendERPQuery}
-            sendERPParms = {this.props.sendERP}
-            closeERPModal = {this.closeERPModal}
-            dataSource = {this.state.sendErpDataSource}
-          />
+          <Modal
+            wrapClassName="erpModal"
+            width={1024}
+            visible={true}
+            onOk={this.closeERPModal}
+            onCancel={this.closeERPModal}
+            title="传送ERP"
+            footer={null}
+          >
+            <TransferERP
+              isSingle={true}
+            />
+          </Modal>
           : null
         }
       </div>

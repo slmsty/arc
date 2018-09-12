@@ -10,9 +10,9 @@ const contactSplitData = {
     result: [],
   },
   getUrl: {},
-  sendErp:{},
-  sendERPQuery:{},
-  getProductNo:[],
+  sendResult: {},
+  erpList: [],
+  getProductNo: [],
   myContractRefresh: new Date().getTime(),
 }
 
@@ -26,10 +26,10 @@ function getUrl(state, action) {
   return { ...state, getUrl: action.response.result }
 }
 function sendErp(state, action) {
-  return { ...state, sendErp: action.response.result }
+  return { ...state, sendResult: action.response.result }
 }
 function sendERPQuery(state, action) {
-  return { ...state, sendERPQuery: action.response.result }
+  return { ...state, erpList: action.response.pageInfo }
 }
 function getProductNo(state, action) {
   return { ...state, getProductNo: action.response.pageInfo.result }

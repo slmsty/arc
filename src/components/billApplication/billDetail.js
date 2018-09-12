@@ -684,21 +684,6 @@ class BillDetail extends React.Component {
     if(!e.target.checked) {
       this.props.form.setFieldsValue({'costBear': ''})
     }
-    /*if(this.state.billingType === 'SPECIAL_INVOICE' && e.target.checked) {
-      let newSource = []
-      this.state.dataSource.map(item => {
-        newSource.push({
-          ...item,
-          billingTaxRate: '',
-          billingAmountExcludeTax: '',
-          billingTaxAmount: '',
-          unitPrice: '',
-        })
-      })
-      this.setState({
-        dataSource: newSource
-      })
-    }*/
   }
 
   render() {

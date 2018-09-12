@@ -210,6 +210,14 @@ const common = {
               {component: "splitEdit", key: "612", name: "拆分编辑", path: "splitEdit"},
             ]
           },
+          {
+            key: '62',
+            path: '/ContractSplit/TransferERP',
+            name: '批量传送ERP',
+            icon: 'icon-hetongchaifen',
+            component: 'TransferERP',
+            child:[{component: "splitSendErp", key: "611", name: "批量传送erp", path: "splitSendErp"}]
+          },
         ],
       },
       {
