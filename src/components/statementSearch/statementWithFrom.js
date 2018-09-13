@@ -215,10 +215,10 @@ class StatementListCom extends React.Component {
     // 发票汇总表
     if(statement==='outcomeTotalReport'){
       let param = {}
-      param.projectNo = params.projectNo
-      param.projectDept = params.projectDept
+      param.projectNo = params.projectNo ? params.projectNo.trim() : '',
+      param.projectDept = params.projectDept ? params.projectDept.trim() : '',
       param.projectBu = params.projectBu ? params.projectBu[0] : ''
-      param.billingMonth = params.billingMonth.format("YYYY-MM")
+      param.billingMonth = params.billingMonth ? params.billingMonth.format("YYYY-MM") : ''
       this.setState({
         param
       })
