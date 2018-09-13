@@ -181,6 +181,7 @@ class ContractSplitModal extends React.Component{
           const current = this.state.productNoData.find(item => item.paramValue === data.No)
           newData[data.indexs]['product'] = current.productNo
           newData[data.indexs]['taskNo'] = current.paramValue
+          newData[data.indexs]['taskId'] = current.taskId
         }
       }
       this.inputChange(newData,[data.indexs])
