@@ -1146,7 +1146,7 @@ const unContractOutcomeDataAddCols = [
   },
   {
     title:'关联时间',
-    dataIndex: 'billingTaxRate',
+    dataIndex: 'relatedTime',
     width: 100,
   }
 ]
