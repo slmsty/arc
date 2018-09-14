@@ -124,7 +124,8 @@ class StatementListCom extends React.Component {
     } else if (type==='outcomeTotalReport') {
       param = {
         billingMonth: {
-          ...params,
+          projectNo: params.projectNo ? params.projectNo.trim() : '',
+          projectDept: params.projectDept ? params.projectDept.trim() : '',
           projectBu: params.projectBu ? params.projectBu[0] : '',
           billingMonth: params.billingMonth.format("YYYY-MM")
         }
@@ -1306,6 +1307,7 @@ class StatementListCom extends React.Component {
                 <FormItem {...formItemLayoutChild} label="开票月份">
                   {getFieldDecorator('billingMonth', {
                     initialValue: moment(),
+                    rules: [{ required: true, message: '请选择开票月份' }]
                   })(
                     <MonthPicker
                       format={"YYYY-MM"}
