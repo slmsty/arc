@@ -9,7 +9,7 @@ import { getContractList, saveContractSplitInfo, getUrl,sendERP,sendERPQuery,get
 import { getContractStatementList } from '../../actions/statement'
 
 const mapStateToProps = state => ({
-  contractSplitDara: state.contractSplitDara,
+  contractSplitDara: state.contractSplitData,
   user: state.common.user,
   statement: state.statement,
 })

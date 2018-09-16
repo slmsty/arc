@@ -24,10 +24,6 @@ const formItemLayout1 = {
   labelCol: { span: 12 },
   wrapperCol: { span: 8 },
 }
-const formItemLayout2 = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-}
 const span3ItemLayout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 20 },
@@ -41,7 +37,7 @@ class BillApproveDetail extends React.Component  {
     const dataSource = appLineList.map(detail => ({
         ...detail,
         lineNo: detail.lineNo - 1,
-        totalAmount: detail.billingAmount ? detail.billingAmount : 0,
+        totalAmount: detail.isParent === '1' ? this.getBillingTotalAmount(appLineList.filter(item => item.arBillingId === detail.arBillingId)) : 0,
         prefPolicySign: props.taskCode === 'ar_finance_account' && detail.billingTaxRate === 0 ? '1' : detail.prefPolicySign
       })
     )
@@ -69,25 +65,38 @@ class BillApproveDetail extends React.Component  {
     this.isEditTax = props.taskCode === 'ar_finance_account' && props.applyType === 'BILLING_EXCESS'
   }
 
+  getBillingTotalAmount = (dataSource) => {
+    let total = 0
+    dataSource.map(item => {
+      total = total + item.billingAmount
+    })
+    return total
+  }
+
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;
+    const data = dataSource.filter(r=> r.arBillingId === arBillingId)
+    const parent = data.length > 0 ? data[0] : {}
     let newData = {
       lineNo: count,
       groupNo: 1,
       isParent: '0',
       arBillingId,
       contractItemId,
-      billingContent: '',
-      specificationType: '',
-      unit: '',
+      billingContent: parent.billingContent || '',
+      specificationType: parent.specificationType || '',
+      unit: parent.unit || '',
       quantity: 1,
-      unitPrice: 0,
+      unitPrice: parent.unitPrice || 0,
       noRateAmount: 0,
       billingAmount: 0,
-      billingTaxRate: 0,
+      billingTaxRate: parent.billingTaxRate || 0,
       billingTaxAmount: 0,
       billingAmountExcludeTax: 0,
-      prefPolicySign: this.props.taskCode === 'ar_finance_account' ? '1' : '',
+      taxCategoryCode: parent.taxCategoryCode || '',
+      taxCategoryName: parent.taxCategoryName || '',
+      prefPolicySign: parent.prefPolicySign || '',
+      prefPolicyType: parent.prefPolicyType || '',
     };
     if(this.isEditTax) {
       newData = Object.assign(newData, {
@@ -98,7 +107,6 @@ class BillApproveDetail extends React.Component  {
       })
     }
 
-    const data = dataSource.filter(r=> r.arBillingId === arBillingId)
     dataSource.splice(lineNo + data.length, 0, newData)
     const source = dataSource.map((record, index) => ({
         ...record,

@@ -22,8 +22,8 @@ class BillingApplyForm extends React.Component {
     const values = this.props.form.getFieldsValue()
     const param = {
       ...values,
-      arDateStart: values.arDate ? values.arDate[0].format('YYYY-MM-DD') : '',
-      arDateEnd: values.arDate ? values.arDate[1].format('YYYY-MM-DD') : '',
+      arDateStart: values.arDate && values.arDate.length > 0 ? values.arDate[0].format('YYYY-MM-DD') : '',
+      arDateEnd: values.arDate && values.arDate.length > 0 ? values.arDate[1].format('YYYY-MM-DD') : '',
       invoiceNumbers: values.invoiceNumbers ? values.invoiceNumbers : [],
       sbuNo: values.sbuNo ? values.sbuNo[0] : '',
       custName: values.custName ? values.custName.trim() : '',

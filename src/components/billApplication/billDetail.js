@@ -85,7 +85,7 @@ class BillDetail extends React.Component {
         billingAmount: item.billingAmount ? item.billingAmount : 0,
         billingTaxRate: typeof item.billingTaxRate !== 'undefined' ? item.billingTaxRate : 0,
         billingTaxAmount: item.billingTaxAmount ? item.billingTaxAmount : 0,
-        totalAmount: item.billingAmount ? item.billingAmount : 0,
+        totalAmount: this.props.type === 'myApply' && item.isParent === '1' ? this.getBillingTotalAmount(appLineList.filter(app => app.arBillingId === item.arBillingId)) : item.billingAmount || 0,
     })
   })
     let proItems = []
@@ -112,26 +112,36 @@ class BillDetail extends React.Component {
     })
   }
 
+  getBillingTotalAmount = (dataSource) => {
+    let total = 0
+    dataSource.map(item => {
+      total = total + item.billingAmount
+    })
+    return total
+  }
+
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;
+    const data = dataSource.filter(r=> r.arBillingId === arBillingId)
+    const parent = data.length > 0 ? data[0] : {}
     const newData = {
       lineNo: count,
       groupNo: 1,
       isParent: '0',
       arBillingId,
       contractItemId,
-      billingContent: '',
-      specificationType: '',
-      unit: '',
+      billingContent: parent.billingContent || '',
+      billingRecordId: parent.billingRecordId || '',
+      specificationType: parent.specificationType || '',
+      unit: parent.unit || '',
       quantity: 1,
-      unitPrice: 0,
+      unitPrice: parent.unitPrice || 0,
       noRateAmount: 0,
       billingAmountExcludeTax: 0,
       billingAmount: 0,
-      billingTaxRate: 0,
+      billingTaxRate: parent.billingTaxRate || 0,
       billingTaxAmount: 0,
     };
-    const data = dataSource.filter(r=> r.arBillingId === arBillingId)
     dataSource.splice(lineNo + data.length, 0, newData)
     const source = dataSource.map((record, index) => ({
         ...record,
@@ -323,8 +333,8 @@ class BillDetail extends React.Component {
   handleChange = (value, col, index, record) => {
     let dataSource = this.state.dataSource
     if(col === 'billingContent') {
-      dataSource[index]['billingRecordId'] = value[0]
-      dataSource[index][col] = value[1]
+      dataSource[index]['billingRecordId'] = value.billingRecordId
+      dataSource[index][col] = value.billingContentName
     } else if(col === 'billingAmount') {
       const { billingTaxRate, quantity } = this.state.dataSource[index]
       if(record.isParent === '1') {//操作的记录为父节点
@@ -537,15 +547,15 @@ class BillDetail extends React.Component {
         dataIndex: 'billingContent',
         width: 200,
         render: (text, record, index) => (
-          <SelectSearch
+          <InputSearch
             url="/arc/billingApplication/billingContent/search"
             columns={contentOnlyCols}
             label="开票内容"
             idKey="billingRecordId"
             valueKey="billingContentName"
-            value={['', this.state.dataSource[index]['billingContent']]}
-            onChange={(v) => this.handleChange(v, 'billingContent', index)}
             showSearch={true}
+            value={{billingContentName: text}}
+            onChange={(v) => this.handleChange(v, 'billingContent', index)}
           />
         )
       }, {
@@ -674,21 +684,6 @@ class BillDetail extends React.Component {
     if(!e.target.checked) {
       this.props.form.setFieldsValue({'costBear': ''})
     }
-    /*if(this.state.billingType === 'SPECIAL_INVOICE' && e.target.checked) {
-      let newSource = []
-      this.state.dataSource.map(item => {
-        newSource.push({
-          ...item,
-          billingTaxRate: '',
-          billingAmountExcludeTax: '',
-          billingTaxAmount: '',
-          unitPrice: '',
-        })
-      })
-      this.setState({
-        dataSource: newSource
-      })
-    }*/
   }
 
   render() {

@@ -48,7 +48,6 @@ class ContractApproveFile extends React.Component {
 
   render() {
     const { billType, contractUrl=[] } = this.props
-    console.log(contractUrl)
     return (
       <div>
         {

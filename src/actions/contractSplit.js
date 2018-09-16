@@ -67,7 +67,7 @@ export function sendERP(queryParam) {
 export function sendERPQuery(queryParam) {
   return {
     [httpApi]: {
-      url: "arc/contract/split/senderp",
+      url: "/arc/contract/split/searchSendErp",
       options: {
         method: 'POST',
         body: queryParam,

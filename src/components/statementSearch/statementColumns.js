@@ -1020,40 +1020,62 @@ const outcomeTotalReportCols = [
   {
     title:'项目编码',
     dataIndex: 'projectNo',
-    width: 100,
+    width:100,
   },
   {
     title:'项目立项部门',
     dataIndex: 'projectDept',
-    width: 100,
+    width: 140,
   },
   {
     title:'项目立项BU',
     dataIndex: 'projectBu',
-    width: 100,
+    width: 120,
   },
   {
     title:'当月开票含税金额',
     dataIndex: 'taxIncludeAmountMonth',
-    width: 100,
+    width: 110,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmountMonth) : '')
   },
   {
-    title:'当月开票除税金额',
+    title:'当月开票不含税金额',
     dataIndex: 'taxExcludeAmountMonth',
-    width: 100,
+    width: 110,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxExcludeAmountMonth) : '')
   },
   {
     title:'销项税',
     dataIndex: 'tax',
-    width: 100,
+    width: 90,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.tax) : '')
+  },{
+    title:'累计开票含税金额',
+    dataIndex: 'taxIncludeAmountTotal',
+    width: 100,
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmountTotal) : '')
+  },
+  {
+    title:'累计开票不含税金额',
+    dataIndex: 'taxExcludeAmountTotal',
+    width: 100,
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxExcludeAmountTotal) : '')
+  },
+  {
+    title:'累计销项税',
+    dataIndex: 'taxTotal',
+    width: 90,
+    render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxTotal) : '')
+  },
+  {
+    title:'发票类型',
+    dataIndex: 'invoiceType',
+    width: 60,
   },
   {
     title:'开票税率',
     dataIndex: 'billingTaxRate',
-    width: 100,
+    width: 60,
   },
 ]
 
@@ -1070,18 +1092,8 @@ const unContractOutcomeDataAddCols = [
     width: 100,
   },
   {
-    title:'合同编码',
-    dataIndex: 'contractNo',
-    width: 100,
-  },
-  {
     title:'项目编码',
     dataIndex: 'projectNo',
-    width: 100,
-  },
-  {
-    title:'项目立项部门',
-    dataIndex: 'projectDept',
     width: 100,
   },
   {
@@ -1100,18 +1112,13 @@ const unContractOutcomeDataAddCols = [
     width: 100,
   },
   {
-    title:'开票阶段',
-    dataIndex: 'billingPhase',
-    width: 100,
-  },
-  {
     title:'含税金额',
     dataIndex: 'taxIncludeAmount',
     width: 100,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxIncludeAmount) : '')
   },
   {
-    title:'除税金额',
+    title:'不含税金额',
     dataIndex: 'taxExcludeAmount',
     width: 100,
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.taxExcludeAmount) : '')
@@ -1135,6 +1142,11 @@ const unContractOutcomeDataAddCols = [
   {
     title:'发票税率',
     dataIndex: 'billingTaxRate',
+    width: 100,
+  },
+  {
+    title:'关联时间',
+    dataIndex: 'relatedTime',
     width: 100,
   }
 ]

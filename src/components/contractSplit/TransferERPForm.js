@@ -16,7 +16,7 @@ const RadioGroup = Radio.Group
 const dateFormat = 'YYYY-MM-DD'
 const { RangePicker } = DatePicker
 const Option = Select.Option;
-class ERPWithFrom extends React.Component {
+class TransferERPForm extends React.Component {
   state = {
     infoVisitable: false,
     loading: false,
@@ -43,10 +43,6 @@ class ERPWithFrom extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form
-    const formItemLayout = {
-      labelCol: { span: 2 },
-      wrapperCol: { span: 22 },
-    }
     const formItemLayoutChild = {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
@@ -56,7 +52,6 @@ class ERPWithFrom extends React.Component {
         <Form
           className="ant-search-form"
         >
-
           <div>
             <Row gutter={40}>
               <Col span={8}>
@@ -113,7 +108,7 @@ class ERPWithFrom extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="是否采集项目">
                   {
-                    getFieldDecorator('isProdect',{
+                    getFieldDecorator('collectionProject',{
                       initialValue:'ALL'
                     })(
                       <Select>
@@ -139,8 +134,6 @@ class ERPWithFrom extends React.Component {
                           <Option value="PROCESSING">PA处理中</Option>
                           <Option value="PROCESSED">已传送PA</Option>
                           <Option value="ERROR">传送PA失败</Option>
-
-                          {/*<Option value="SUCCESS">成功</Option>*/}
                         </Select>
                       )
                     }
@@ -157,7 +150,6 @@ class ERPWithFrom extends React.Component {
                 </Col>
                 <Col span={8} style={{ textAlign: 'right' }}>
                   <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search" />查询</Button>
-                  {/*<Button style={{marginLeft:'10px'}} type="primary" onClick={this.queryParms}>导出Excel</Button>*/}
                 </Col>
               </Row>
           </div>
@@ -166,6 +158,6 @@ class ERPWithFrom extends React.Component {
     )
   }
 }
-const ERPWithFromWithForm = Form.create()(ERPWithFrom)
+const ERPWithFromWithForm = Form.create()(TransferERPForm)
 
 export default ERPWithFromWithForm

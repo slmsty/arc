@@ -15,7 +15,7 @@ import badDebtsApply from './badDebts/apply'
 import badDebtsStatus from './badDebts/status'
 import cancelApply from './badDebts/cancelApply'
 import myApply from './myApply'
-import contractSplitDara from './constractSplit'
+import contractSplitData from './constractSplit'
 import billApplication from './billApplication'
 import billStatusManage from './billStatusManage/billStatusManage'
 import statement from './statement'
@@ -38,7 +38,7 @@ export default combineReducers({
   badDebtsApply,
   badDebtsStatus,
   myApply,
-  contractSplitDara,
+  contractSplitData,
   cancelApply,
   billApplication,
   billStatusManage,
