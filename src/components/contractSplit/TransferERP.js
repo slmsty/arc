@@ -50,7 +50,7 @@ class TransferERP extends React.Component{
         title: '退税率',
         dataIndex: 'returnTaxRate',
         width: 70,
-        render: (text)=>(text ? `$(text * 100)%` : 0)
+        render: (text)=>(text ? `${text * 100}%` : 0)
       }, {
         title: 'Gross order',
         dataIndex: 'grossOrder',

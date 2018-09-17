@@ -281,7 +281,7 @@ const billInfocomCols = [{
     dataIndex: 'invoiceType',
     width: 80,
     render: renderContent,
-}, {
+  }, {
     title: '开票不含税金额',
     dataIndex: 'taxExcludeAmount',
     width: 80,
@@ -292,11 +292,26 @@ const billInfocomCols = [{
     width: 80,
     render: renderContent,
   }, {
-    title: '税率',
+    title: '开票税率',
     dataIndex: 'billingTaxRate',
+    width: 80,
+    render: (text) => {
+      return {
+        children: text ? `${text * 100}%` : '',
+        props: {},
+      };
+    },
+  },{
+    title: '申请税率',
+    dataIndex: 'applyTaxRate',
     width: 100,
-    render: renderContent,
-}, {
+    render: (text) => {
+      return {
+        children: text ? `${text * 100}%` : '',
+        props: {},
+      };
+    },
+  }, {
     title: '优惠政策类型',
     dataIndex: 'prefPolicyType',
     width: 100,
