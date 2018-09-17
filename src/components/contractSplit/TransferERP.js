@@ -9,6 +9,7 @@ class TransferERP extends React.Component{
     super(props)
     this.state = {
       selectedRows:[],
+      selectedRowKeys: [],
       loading: false,
       showSendMsg:false,
       sendInfo: {}
@@ -138,7 +139,9 @@ class TransferERP extends React.Component{
     this.props.sendERPQuery(this.queryParam).then(res => {
       if(res.response) {
         this.setState({
-          loading: false
+          loading: false,
+          selectedRows: [],
+          selectedRowKeys: [],
         })
       }
     })
@@ -204,6 +207,7 @@ class TransferERP extends React.Component{
     const pagination = {
       current: pageNo,
       total: count,
+      showTotal: (total) => (`共 ${total} 条`),
       pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
