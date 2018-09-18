@@ -1,6 +1,7 @@
 import React from 'react'
 import TransferERPForm from './TransferERPForm'
 import currency from '../../util/currency'
+import { accMul } from '../../util/floatUtil'
 import TransferNotice from './TransferNotice'
 import { Table, Button } from 'antd'
 
@@ -41,7 +42,7 @@ class TransferERP extends React.Component{
         title: '合同税率',
         dataIndex: 'contractTaxRate',
         width: 80,
-        render: (text) => (text ? `${text * 100}%` : 0)
+        render: (text) => (text ? `${accMul(text, 100)}%` : 0)
       }, {
         title: '合同不含税金额',
         dataIndex: 'funding',
@@ -51,7 +52,7 @@ class TransferERP extends React.Component{
         title: '退税率',
         dataIndex: 'returnTaxRate',
         width: 70,
-        render: (text)=>(text ? `${text * 100}%` : 0)
+        render: (text)=>(text ? `${accMul(text, 100)}%` : 0)
       }, {
         title: 'Gross order',
         dataIndex: 'grossOrder',

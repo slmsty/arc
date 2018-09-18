@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import currency, {toThousands} from '../../util/currency'
 import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns,billInfoCols,outcomeTotalReportCols,unContractOutcomeDataAddCols,productOrderDetailCols,productOrderTotalCols } from './statementColumns'
 import { Table, Row, Col } from 'antd'

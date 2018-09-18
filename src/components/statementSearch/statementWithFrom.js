@@ -86,6 +86,13 @@ class StatementListCom extends React.Component {
           ...params,
           billingDateStart: params.billingDate && params.billingDate.length ? params.billingDate[0].format(dateFormat) : '',
           billingDateEnd: params.billingDate && params.billingDate.length ? params.billingDate[1].format(dateFormat) : '',
+          projectNo: params.projectNo ? params.projectNo.trim() : '',
+          custName: params.custName ? params.custName.trim() : '',
+          signCompany: params.signCompany ? params.signCompany.trim() : '',
+          invoiceNumber: params.invoiceNumber ? params.invoiceNumber.trim() : '',
+          paymentName: params.paymentName ? params.paymentName.trim() : '',
+          contractNo: params.contractNo ? params.contractNo.trim() : '',
+          contractName: params.contractName ? params.contractName.trim() : '',
         }
       }
     } else if (type==='receiptAccountReport') {
