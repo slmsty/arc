@@ -173,11 +173,11 @@ export default class ApplySearchCon extends React.Component {
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
           {
-            record.statusName === '审批中' ?
+            record.status === 'approve' ?
               <Button type="primary" ghost onClick={() => this.approveClick(record)}>审批</Button> : null
           }
           {
-            record.statusName === '新建' ?
+            record.status === 'new' ?
               <Button type="primary" ghost onClick={() => this.startWorkFlow(record)}>审核</Button> : null
           }
         </div>
