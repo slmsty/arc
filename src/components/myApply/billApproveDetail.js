@@ -1157,9 +1157,9 @@ class BillApproveDetail extends React.Component  {
                     <FormItem {...formItemLayout} label="开票流程">
                       {
                         getFieldDecorator('billFlow',
-                          {initialValue: 'BILLING_CONTRACT', rules: [{ required: this.props.isApprove, message: '请选择开票流程!' }]})(
+                          {initialValue: this.props.taskCode === 'ar_admin_auditor' ? 'BILLING_CONTRACT' : 'OLD', rules: [{ required: this.props.isApprove, message: '请选择开票流程!' }]})(
                           <SelectInvokeApi
-                            typeCode="TYPE_SELECT"
+                            typeCode={this.props.taskCode === 'ar_admin_auditor' ? 'TYPE_SELECT' : 'TYPE_SELECT_TAX'}
                             paramCode="BILLING_APPLICATION_TYPE"
                             placeholder="开票流程"
                             onChange={(v) => this.props.setBillApplicationType(v)}

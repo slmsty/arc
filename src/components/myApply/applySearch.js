@@ -16,6 +16,7 @@ export default class ApplySearchCon extends React.Component {
     noApplyInfoVisitable: false,
     noApplyInfoData: '',
     showApproveDetail: false,
+    taskCode: '',
   }
   componentDidMount() {
     this.handleQuery()
@@ -121,7 +122,10 @@ export default class ApplySearchCon extends React.Component {
   startWorkFlow = (record) => {
     this.props.getApplicationDetail(record.businessKey).then(res => {
       if(res && res.response && res.response.resultCode === '000000') {
-        this.setState({showApproveDetail: true})
+        this.setState({
+          showApproveDetail: true,
+          taskCode: record.taskCode,
+        })
       }
     })
   }
@@ -249,6 +253,7 @@ export default class ApplySearchCon extends React.Component {
               roles={this.props.role}
               getContractUrl={this.props.getContractUrl}
               contractUrl={this.props.contractUrl}
+              taskCode={this.state.taskCode}
             /> : null
         }
       </div>

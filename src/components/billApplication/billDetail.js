@@ -49,7 +49,6 @@ class BillDetail extends React.Component {
       taxData: {},
       submitParams: {},
       showContractLink: false,
-      isRequireRate: false,
       isLost: false,
       custInfo: custInfo,
       comInfo: comInfo,
@@ -213,7 +212,7 @@ class BillDetail extends React.Component {
             applyLines,
             billingCustInfoId: this.state.custInfo.billingCustInfoId,
             billingComInfoId: this.state.comInfo.billingComInfoId,
-            billingApplicationType: this.state.isRequireRate ? 'BILLING_EXCESS' : this.props.billType,
+            billingApplicationType: this.props.billType,
             billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
             billingApplicantRemark: values.billingApplicantRemark ? values.billingApplicantRemark.trim() : '',
             billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
@@ -230,9 +229,8 @@ class BillDetail extends React.Component {
             billingApplicationId: type === 'myApply' ? detail.billingApplicationId : '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
             receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
-            specialTaxRate: this.state.isRequireRate ? 'Y' : 'N',
           }
-          if(this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate) {
+          if(this.props.billType === 'BILLING_EXCESS') {
             const checkParams = {
               appLineItems: appLineItems,
             }
@@ -264,7 +262,7 @@ class BillDetail extends React.Component {
         err = true
         break
       }
-      if(this.state.isRequireRate && (record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined')) {
+      if(record.billingTaxRate === '' || typeof record.billingTaxRate === 'undefined') {
         message.warning(`第${i + 1}行【开票税率】不能为空!`)
         err = true
         break
@@ -524,10 +522,9 @@ class BillDetail extends React.Component {
             paramCode="TAX_RATE"
             placeholder="税率"
             hasEmpty
-            disabled={!this.state.isRequireRate && normalTypes.includes(this.props.billType)}
+            disabled={normalTypes.includes(this.props.billType)}
             value={`${this.state.dataSource[index]['billingTaxRate']}`}
             onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
-            //optionDisabled={this.state.isRequireRate && this.state.billingType === 'SPECIAL_INVOICE'}
           />
         )
       }, {
@@ -676,7 +673,7 @@ class BillDetail extends React.Component {
     callback('不能超过220个字符，请重新填写')
   }
 
-  handleTaxRate = (e) => {
+  /*handleTaxRate = (e) => {
     this.setState({
       isRequireRate: e.target.checked,
       isCostBearEdit: this.props.billType === 'BILLING_EXCESS' ? true : e.target.checked
@@ -684,7 +681,7 @@ class BillDetail extends React.Component {
     if(!e.target.checked) {
       this.props.form.setFieldsValue({'costBear': ''})
     }
-  }
+  }*/
 
   render() {
     const { getFieldDecorator } = this.props.form
@@ -802,7 +799,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={1}>
                     <FormItem {...formItemLayout} label="费用承担者">
                       {getFieldDecorator('costBear', {
-                        initialValue: costBear, rules: [{ required: this.props.billType === 'BILLING_EXCESS' || this.state.isRequireRate, message: '请选择费用承担着!' }]
+                        initialValue: costBear, rules: [{ required: this.props.billType === 'BILLING_EXCESS', message: '请选择费用承担着!' }]
                       })(
                         <SelectInvokeApi
                           typeCode="BILLING_APPLICATION"
@@ -843,7 +840,7 @@ class BillDetail extends React.Component {
                     </FormItem>
                   </Col>
                 </Row>
-                {
+                {/*{
                   normalTypes.includes(this.props.billType) ?
                     <Row>
                       <Col span={8} key={3}>
@@ -860,7 +857,7 @@ class BillDetail extends React.Component {
                         </FormItem>
                       </Col>
                     </Row> : null
-                }
+                }*/}
                 <Table
                   style={{margin: '10px 0'}}
                   rowKey="lineNo"
@@ -911,7 +908,7 @@ class BillDetail extends React.Component {
                     <FormItem {...formItemLayout1} label="开票原因及要求">
                       {
                         getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [
-                          { required: requirementType.includes(this.props.billType) || this.state.isRequireRate, message: this.props.billType === 'BILLING_RED' ? '请在此处填写退票原因!' : '请填写开票原因' },
+                          { required: requirementType.includes(this.props.billType), message: this.props.billType === 'BILLING_RED' ? '请在此处填写退票原因!' : '请填写开票原因' },
                           { max: 350, message: '开票原因及要求不能超过350个字符!' }
                         ]})(
                           <TextArea placeholder="请输入开票原因及要求" rows="2" />
