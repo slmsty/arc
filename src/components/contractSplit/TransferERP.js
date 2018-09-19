@@ -3,7 +3,7 @@ import TransferERPForm from './TransferERPForm'
 import currency from '../../util/currency'
 import { accMul } from '../../util/floatUtil'
 import TransferNotice from './TransferNotice'
-import { Table, Button } from 'antd'
+import { Table, Button, Tooltip } from 'antd'
 
 class TransferERP extends React.Component{
   constructor(props) {
@@ -105,7 +105,9 @@ class TransferERP extends React.Component{
       }, {
         title: '创建提示',
         dataIndex: 'erpResult',
-        width: 100,
+        width: 150,
+        render: (text) => (
+          text && text.length > 15 ? <Tooltip title={text}>{`${text.substring(0,15)}...`}</Tooltip> : text)
       }
     ]
     this.queryParam = {

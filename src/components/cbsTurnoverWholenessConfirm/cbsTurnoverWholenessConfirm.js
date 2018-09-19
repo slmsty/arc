@@ -6,6 +6,7 @@ import moment from 'moment'
 import currency from '../../util/currency'
 import CBSTurnoverWholenessConfirmSearchWithForm from './cbsTurnoverWholenessConfirmSearch'
 import EditCBSTurnoverDataWithForm from './editCBSTurnoverData'
+import { pageSizeOptions } from '../billApplication/billColumns'
 
 const dateFormat = 'YYYY-MM-DD'
 
@@ -192,6 +193,11 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     this.queryParam.pageInfo.pageNo = page
     this.handleQuery()
   }
+  handleChangeSize = (current, size) => {
+    this.queryParam.pageInfo.pageNo = current
+    this.queryParam.pageInfo.pageSize = size
+    this.handleQuery()
+  }
   handleExcept = () => {
     if (!this.state.selectedRowKeys.length) {
       message.error('请选择想要排除的数据。')
@@ -219,7 +225,11 @@ export default class CBSTurnoverWholenessConfirm extends React.Component {
     const pagination = {
       current: this.props.cbsTurnoverWholenessList.pageInfo.pageNo || 1,
       onChange: this.handleChangePage,
+      showTotal: (total) => `共${total}条`,
+      showSizeChanger: true,
+      onShowSizeChange: this.handleChangeSize,
       total: this.props.cbsTurnoverWholenessList.pageInfo.count,
+      pageSizeOptions,
     }
     const makeSummary = () => (this.props.cbsTurnoverWholenessList.amountTotals.length ?
       this.props.cbsTurnoverWholenessList.amountTotals.map(item => `${item.currency}：`+ currency(Math.abs(`${item.totalAmount}`))).join('  ') : '0.00'

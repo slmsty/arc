@@ -7,6 +7,7 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 import ARModal from './ARModal'
 import GlDateModal from './glDateModal'
 import currency from '../../util/currency'
+import { pageSizeOptions } from '../billApplication/billColumns'
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 
@@ -402,26 +403,6 @@ class Confirm extends Component{
       this.doSearch()
     }
   }
-  /* shouldComponentUpdate({title}, nextState){
-    if(title){
-      let info = this.props.amountInfo
-      console.log('info',this.props.amountInfo)
-      let str = ''
-      for (let i in this.props.amountInfo) {
-        str += `${i}:${this.props.amountInfo[i]}\n`
-      }
-      console.log(str)
-      Modal.info({
-        title: `${title}`,
-        content: "Billed AR 金额合计："+str,
-      })
-      console.log(str)
-      this.props.ResetTitle()
-      return false;
-    }else{
-      return true;
-    }
-  } */
 
   render(){
     const { getFieldDecorator } = this.props.form;
@@ -555,7 +536,7 @@ class Confirm extends Component{
           columns={columns}
           dataSource={result}
           pagination={{
-            pageSizeOptions: ['5', '10', '20', '30'],
+            pageSizeOptions,
             showSizeChanger: true,
             onShowSizeChange: this.pageSizeChange,
             showTotal: t=>`共${t}条`,
