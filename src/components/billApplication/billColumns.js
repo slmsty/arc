@@ -470,7 +470,7 @@ const contractApproveCols = [
     width: 100,
   }, {
     title: '公司名',
-    dataIndex: 'comName',
+    dataIndex: 'companyName',
     width: 200,
   }, {
     title: '客户名',
@@ -491,6 +491,24 @@ const contractApproveCols = [
   }
 ]
 
+const selectColumns = [{
+    title: '发票号',
+    dataIndex: 'invoiceNumber',
+    width: 100,
+  }, {
+    title: '关联金额',
+    dataIndex: 'billingAmount',
+    width: 100,
+  }, {
+    title: '关联人姓名',
+    dataIndex: 'relatedPersonName',
+    width: 100,
+  }, {
+    title: '关联时间',
+    dataIndex: 'relatedTime',
+    width: 100,
+  }]
+
 const normalTypes = ['BILLING_NORMAL', 'BILLING_CONTRACT', 'BILLING_EXCESS']
 const advanceTypes = ['BILLING_UN_CONTRACT']
 const redTypes = ['BILLING_RED', 'BILLING_RED_OTHER']
@@ -501,6 +519,7 @@ const receiveInvoice = {
   'N': '否',
   'B': '无需收票',
 }
+const pageSizeOptions = ['10', '20', '30', '40', '50']
 export {
   clientCols,
   comCols,
@@ -525,5 +544,7 @@ export {
   contractApproveCols,
   hideContractUrl,
   receiveInvoice,
+  selectColumns,
+  pageSizeOptions,
 }
 
