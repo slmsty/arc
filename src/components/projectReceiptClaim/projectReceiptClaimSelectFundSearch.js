@@ -163,6 +163,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
       }
     })
     const makeSummary = Object.keys(amountTotals).map(contractCurrency => `${contractCurrency}:${amountTotals[contractCurrency].toFixed(2)}  `)
+    const { result, pageNo, pageSize, count } = this.props.receiptClaimFundList
     return (
       <Modal
         wrapClassName="vertical-center-modal"
@@ -271,14 +272,15 @@ class ProjectReceiptClaimSelectFund extends React.Component {
           locale={{
             emptyText: this.state.firstLoad ? '' : '没有符合条件的合同百分比',
           }}
-          dataSource={this.props.receiptClaimFundList.result}
+          dataSource={result}
           scroll={{ x: '100%' }}
           pagination={{
-            current: this.props.receiptClaimFundList.pageNo,
-            total: this.props.receiptClaimFundList.count,
-            pageSize: this.state.pageSize,
+            current: pageNo,
+            total: count,
+            pageSize: pageSize,
             showTotal: (total) => `共 ${total} 条`,
             onChange: this.handleChangePage,
+            showSizeChanger: true,
             onShowSizeChange: this.handleChangeSize,
             pageSizeOptions,
           }}
