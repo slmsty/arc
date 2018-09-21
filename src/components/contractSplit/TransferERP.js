@@ -125,6 +125,7 @@ class TransferERP extends React.Component{
         pageNo: 1,
         pageSize: 10,
       },
+      opsStatus: this.props.isSingle ? '' : 'add',
     }
   }
 
