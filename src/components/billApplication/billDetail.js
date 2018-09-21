@@ -522,7 +522,6 @@ class BillDetail extends React.Component {
             paramCode="TAX_RATE"
             placeholder="税率"
             hasEmpty
-            disabled={normalTypes.includes(this.props.billType)}
             value={`${this.state.dataSource[index]['billingTaxRate']}`}
             onChange={(v) => this.handleChange(v, 'billingTaxRate', index)}
           />
