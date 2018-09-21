@@ -1,14 +1,16 @@
 import React from 'react'
 import TransferERPForm from './TransferERPForm'
 import currency from '../../util/currency'
+import { accMul } from '../../util/floatUtil'
 import TransferNotice from './TransferNotice'
-import { Table, Button } from 'antd'
+import { Table, Button, Tooltip } from 'antd'
 
 class TransferERP extends React.Component{
   constructor(props) {
     super(props)
     this.state = {
       selectedRows:[],
+      selectedRowKeys: [],
       loading: false,
       showSendMsg:false,
       sendInfo: {}
@@ -40,7 +42,7 @@ class TransferERP extends React.Component{
         title: '合同税率',
         dataIndex: 'contractTaxRate',
         width: 80,
-        render: (text) => (text ? `${text * 100}%` : 0)
+        render: (text) => (text ? `${accMul(text, 100)}%` : 0)
       }, {
         title: '合同不含税金额',
         dataIndex: 'funding',
@@ -50,7 +52,7 @@ class TransferERP extends React.Component{
         title: '退税率',
         dataIndex: 'returnTaxRate',
         width: 70,
-        render: (text)=>(text ? `$(text * 100)%` : 0)
+        render: (text)=>(text ? `${accMul(text, 100)}%` : 0)
       }, {
         title: 'Gross order',
         dataIndex: 'grossOrder',
@@ -103,7 +105,9 @@ class TransferERP extends React.Component{
       }, {
         title: '创建提示',
         dataIndex: 'erpResult',
-        width: 100,
+        width: 150,
+        render: (text) => (
+          text && text.length > 15 ? <Tooltip title={text}>{`${text.substring(0,15)}...`}</Tooltip> : text)
       }
     ]
     this.queryParam = {
@@ -121,6 +125,7 @@ class TransferERP extends React.Component{
         pageNo: 1,
         pageSize: 10,
       },
+      opsStatus: this.props.isSingle ? '' : 'add',
     }
   }
 
@@ -138,7 +143,9 @@ class TransferERP extends React.Component{
     this.props.sendERPQuery(this.queryParam).then(res => {
       if(res.response) {
         this.setState({
-          loading: false
+          loading: false,
+          selectedRows: [],
+          selectedRowKeys: [],
         })
       }
     })
@@ -204,6 +211,7 @@ class TransferERP extends React.Component{
     const pagination = {
       current: pageNo,
       total: count,
+      showTotal: (total) => (`共 ${total} 条`),
       pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,

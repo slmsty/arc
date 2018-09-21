@@ -16,6 +16,7 @@ export default class ApplySearchCon extends React.Component {
     noApplyInfoVisitable: false,
     noApplyInfoData: '',
     showApproveDetail: false,
+    taskCode: '',
   }
   componentDidMount() {
     this.handleQuery()
@@ -121,7 +122,10 @@ export default class ApplySearchCon extends React.Component {
   startWorkFlow = (record) => {
     this.props.getApplicationDetail(record.businessKey).then(res => {
       if(res && res.response && res.response.resultCode === '000000') {
-        this.setState({showApproveDetail: true})
+        this.setState({
+          showApproveDetail: true,
+          taskCode: record.taskCode,
+        })
       }
     })
   }
@@ -173,11 +177,11 @@ export default class ApplySearchCon extends React.Component {
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
           {
-            record.statusName === '审批中' ?
+            record.status === 'approve' ?
               <Button type="primary" ghost onClick={() => this.approveClick(record)}>审批</Button> : null
           }
           {
-            record.statusName === '新建' ?
+            record.status === 'new' ?
               <Button type="primary" ghost onClick={() => this.startWorkFlow(record)}>审核</Button> : null
           }
         </div>
@@ -249,6 +253,7 @@ export default class ApplySearchCon extends React.Component {
               roles={this.props.role}
               getContractUrl={this.props.getContractUrl}
               contractUrl={this.props.contractUrl}
+              taskCode={this.state.taskCode}
             /> : null
         }
       </div>

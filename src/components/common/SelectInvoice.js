@@ -5,17 +5,37 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 
 const FormItem = Form.Item
 
-class SelectSearch extends React.Component {
-  state = {
-    visible: false,
-    pageNo: 1,
-    pageSize: 10,
-    total: 1,
-    dataSource: [],
-    selectedRowKeys: [],
-    selectedRows: [],
-    loading: false,
-    firstLoad: true,
+class SelectInvoice extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      visible: false,
+      pageNo: 1,
+      pageSize: 10,
+      total: 1,
+      dataSource: [],
+      selectedRowKeys: [],
+      selectedRows: [],
+      loading: false,
+      firstLoad: true,
+    }
+    this.selectColumns = [{
+      title: '发票号',
+      dataIndex: 'invoiceNumber',
+      width: 100,
+    }, {
+      title: '关联金额',
+      dataIndex: 'billingAmount',
+      width: 100,
+    }, {
+      title: '关联人姓名',
+      dataIndex: 'relatedPersonName',
+      width: 100,
+    }, {
+      title: '关联时间',
+      dataIndex: 'relatedTime',
+      width: 100,
+    }]
   }
 
   componentWillMount() {
@@ -135,6 +155,18 @@ class SelectSearch extends React.Component {
           <Form
             className="ant-search-form"
           >
+            <div>
+              <h3 style={{padding: '10px 0'}}>已关联的发票</h3>
+              <Table
+                rowKey="billingAppLineId"
+                columns={this.selectColumns}
+                rowSelection={false}
+                bordered
+                size="small"
+                dataSource={[]}
+                pagination={false}
+              />
+            </div>
             <Row>
               <Col span={8} key={1}>
                 <FormItem {...formItemLayout1} label={this.props.label}>
@@ -193,4 +225,4 @@ class SelectSearch extends React.Component {
   }
 }
 
-export default Form.create()(SelectSearch)
+export default Form.create()(SelectInvoice)

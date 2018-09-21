@@ -1,6 +1,3 @@
-/**
- * Created by liangshuang on 17/10/20.
- */
 /* eslint-disable no-unused-vars,react/prefer-stateless-function */
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -8,6 +5,7 @@ import { Table, Button, message, Modal, Form, Row, Col, DatePicker } from 'antd'
 import ReviewReceiptClaimSearchWithForm from './reviewReceiptClaimSearch'
 import GlDateModal from './glDateModal'
 import currency from '../../util/currency'
+import { pageSizeOptions } from '../billApplication/billColumns'
 import ShowTransferNotice from './showTransferNotice'
 
 const FormItem = Form.Item
@@ -341,6 +339,7 @@ export default class ReviewReceiptClaim extends React.Component {
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
+      pageSizeOptions,
     }
     const rowSelection = {
       selectedRowKeys,

@@ -5,12 +5,13 @@ import { Form, Row, Col, Button, Icon, Input, InputNumber, Table, Modal, Paginat
 import SelectCustomerWithForm from '../common/selectCustomer'
 import MultipleInput from '../common/multipleInput'
 import ClearInput from '../common/clearInput'
+import { pageSizeOptions } from "../billApplication/billColumns";
 
 const FormItem = Form.Item
 
 class ProjectReceiptClaimSelectFund extends React.Component {
   state = {
-    pageSize: 5,
+    pageSize: 10,
     selectedRowKeys: [],
     selectedRows: [],
     loading: false,
@@ -103,6 +104,9 @@ class ProjectReceiptClaimSelectFund extends React.Component {
   handleChangePage = (page) => {
     this.handleSelect(page, this.state.pageSize)
   }
+  handleChangeSize = (current, size) => {
+    this.handleSelect(current, size)
+  }
   handleQuery = () => {
     this.handleSelect(1, this.state.pageSize)
   }
@@ -159,6 +163,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
       }
     })
     const makeSummary = Object.keys(amountTotals).map(contractCurrency => `${contractCurrency}:${amountTotals[contractCurrency].toFixed(2)}  `)
+    const { result, pageNo, pageSize, count } = this.props.receiptClaimFundList
     return (
       <Modal
         wrapClassName="vertical-center-modal"
@@ -267,14 +272,17 @@ class ProjectReceiptClaimSelectFund extends React.Component {
           locale={{
             emptyText: this.state.firstLoad ? '' : '没有符合条件的合同百分比',
           }}
-          dataSource={this.props.receiptClaimFundList.result}
+          dataSource={result}
           scroll={{ x: '100%' }}
           pagination={{
-            current: this.props.receiptClaimFundList.pageNo,
-            total: this.props.receiptClaimFundList.count,
-            pageSize: this.state.pageSize,
-            showTotal: (total, range) => `共 ${total} 条记录 当前显示 ${range[0]}-${range[1]}`,
+            current: pageNo,
+            total: count,
+            pageSize: pageSize,
+            showTotal: (total) => `共 ${total} 条`,
             onChange: this.handleChangePage,
+            showSizeChanger: true,
+            onShowSizeChange: this.handleChangeSize,
+            pageSizeOptions,
           }}
         />
       </Modal>

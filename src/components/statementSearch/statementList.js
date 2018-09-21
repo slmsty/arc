@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import currency, {toThousands} from '../../util/currency'
 import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns,billInfoCols,outcomeTotalReportCols,unContractOutcomeDataAddCols,productOrderDetailCols,productOrderTotalCols } from './statementColumns'
 import { Table, Row, Col } from 'antd'
@@ -216,8 +215,13 @@ export default class StatementListIndex extends React.Component {
       width: 80,
       render: this.renderContent,
     }, {
-      title: '税率',
+      title: '开票税率',
       dataIndex: 'billingTaxRate',
+      width: 80,
+      render: this.renderContent,
+    }, {
+      title: '申请税率',
+      dataIndex: 'applyTaxRate',
       width: 100,
       render: this.renderContent,
     }, {

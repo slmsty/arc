@@ -31,6 +31,10 @@ class TransferERPForm extends React.Component {
     params.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
     params.buId = params.buId ? params.buId[0] : ''
     params.isReport = 'N'
+    params.projectNo = params.projectNo ? params.projectNo.trim() : ''
+    params.contractNo = params.contractNo ? params.contractNo.trim() : ''
+    params.contractName = params.contractName ? params.contractName.trim() : ''
+    params.signCompany = params.signCompany ? params.signCompany.trim() : ''
     delete params.signDate
     this.props.queryParms(params)
   }

@@ -6,7 +6,7 @@ import moment from 'moment'
 import currency from '../../util/currency'
 import ProjectReceiptClaimSearchWithForm from './projectReceiptClaimSearch'
 import ProjectReceiptClaimModal from '../../containers/projectReceiptClaim/projectReceiptClaimModal'
-
+import { pageSizeOptions } from '../billApplication/billColumns'
 const dateFormat = 'YYYY-MM-DD'
 
 export default class ProjectReceiptClaim extends React.Component {
@@ -321,10 +321,11 @@ export default class ProjectReceiptClaim extends React.Component {
             current: this.props.receiptClaimList.pageNo,
             total: this.props.receiptClaimList.count,
             pageSize: this.props.receiptClaimList.pageSize,
-            showTotal: (total, range) => `共 ${total} 条记录 当前显示 ${range[0]}-${range[1]}`,
+            showTotal: (total) => `共 ${total}条`,
             onChange: this.handleChangePage,
             showSizeChanger: true,
             onShowSizeChange: this.handleChangeSize,
+            pageSizeOptions,
           }}
         />
         {

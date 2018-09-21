@@ -62,12 +62,24 @@ const proCols = [{
 }]
 
 const invoiceCols = [{
-  title: '发票编号',
-  dataIndex: 'invoiceNumber',
+  title: '项目编码',
+  dataIndex: 'projectNo',
   width: 100,
-}, {
+},{
   title: '客户名称',
   dataIndex: 'custName',
+  width: 100,
+}, {
+  title: '项目名称',
+  dataIndex: 'projectName',
+  width: 100,
+}, {
+  title: '合同名称',
+  dataIndex: 'contractName',
+  width: 100,
+}, {
+  title: '发票号',
+  dataIndex: 'invoiceNumber',
   width: 100,
 }, {
   title: '开票金额',
@@ -78,11 +90,19 @@ const invoiceCols = [{
   title: '开票税率',
   dataIndex: 'taxRate',
   width: 50,
-  render: (text) => (`${text * 100}%`)
+  render: (text) => (text ? `${text * 100}%` : '')
 }, {
-  title: '开票税额',
-  dataIndex: 'taxAmount',
-  width: 50,
+  title: '已关联金额',
+  dataIndex: 'alreadyRelatedAmount',
+  width: 100,
+}, {
+  title: '剩余可关联金额',
+  dataIndex: 'leftRelatedAmount',
+  width: 100,
+}, {
+  title: '备注',
+  dataIndex: 'remark',
+  width: 100,
 }]
 
 const contentCols = [{
@@ -189,7 +209,7 @@ const proColumns = [{
 }, {
   title: '款项金额',
   dataIndex: 'paymentAmount',
-  width: 80,
+  width: 100,
   render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }, {
   title: '已申请金额',
@@ -470,7 +490,7 @@ const contractApproveCols = [
     width: 100,
   }, {
     title: '公司名',
-    dataIndex: 'comName',
+    dataIndex: 'companyName',
     width: 200,
   }, {
     title: '客户名',
@@ -501,6 +521,7 @@ const receiveInvoice = {
   'N': '否',
   'B': '无需收票',
 }
+const pageSizeOptions = ['10', '20', '30', '40', '50']
 export {
   clientCols,
   comCols,
@@ -525,5 +546,6 @@ export {
   contractApproveCols,
   hideContractUrl,
   receiveInvoice,
+  pageSizeOptions,
 }
 
