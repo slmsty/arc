@@ -223,7 +223,7 @@ class TransferERP extends React.Component{
           queryParms={this.queryParams}
         />
         <div style={{padding: '15px 0'}}>
-          <Button type="primary" onClick={this.sendERP} disabled={this.state.selectedRows.length ? false :true}>传送ERP</Button>
+          <Button type="primary" loading={this.state.transferLoading} onClick={this.sendERP} disabled={this.state.selectedRows.length ? false :true}>传送ERP</Button>
         </div>
         <Table
           rowSelection={rowSelection}
