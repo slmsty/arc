@@ -10,11 +10,11 @@ import SelectRadioApi from  '../common/selectRadioApi'
 import SelectSbu from '../common/SelectSbu'
 import SelectCustomerWithForm from '../common/selectCustomer'
 
-const FormItem = Form.Item
-const RadioButton = Radio.Button
-const RadioGroup = Radio.Group
-const dateFormat = 'YYYY-MM-DD'
-const { RangePicker } = DatePicker
+const FormItem = Form.Item;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
+const dateFormat = 'YYYY-MM-DD';
+const { RangePicker } = DatePicker;
 const Option = Select.Option;
 class TransferERPForm extends React.Component {
   state = {
@@ -22,35 +22,49 @@ class TransferERPForm extends React.Component {
     loading: false,
     applyData: '',
     stateType: '',
-  }
+  };
 
   // 查询接口
   queryParms = () => {
-    const params = this.props.form.getFieldsValue()
-    params.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
-    params.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
-    params.buId = params.buId ? params.buId[0] : ''
-    params.isReport = 'N'
-    params.projectNo = params.projectNo ? params.projectNo.trim() : ''
-    params.contractNo = params.contractNo ? params.contractNo.trim() : ''
-    params.contractName = params.contractName ? params.contractName.trim() : ''
-    params.signCompany = params.signCompany ? params.signCompany.trim() : ''
-    delete params.signDate
+    const params = this.props.form.getFieldsValue();
+    params.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : '';
+    params.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '';
+    params.buId = params.buId ? params.buId[0] : '';
+    params.isReport = 'N';
+    params.projectNo = params.projectNo ? params.projectNo.trim() : '';
+    params.contractNo = params.contractNo ? params.contractNo.trim() : '';
+    params.contractName = params.contractName ? params.contractName.trim() : '';
+    params.signCompany = params.signCompany ? params.signCompany.trim() : '';
+    delete params.signDate;
     this.props.queryParms(params)
-  }
+  };
+  //导出
+  exportParams = () => {
+    const params = this.props.form.getFieldsValue();
+    params.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : '';
+    params.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '';
+    params.buId = params.buId ? params.buId[0] : '';
+    params.isReport = 'N';
+    params.projectNo = params.projectNo ? params.projectNo.trim() : '';
+    params.contractNo = params.contractNo ? params.contractNo.trim() : '';
+    params.contractName = params.contractName ? params.contractName.trim() : '';
+    params.signCompany = params.signCompany ? params.signCompany.trim() : '';
+    delete params.signDate;
+    this.props.exportParams(params)
+  };
   handleRadioChange = (e) => {
     this.setState({
       stateType:e.target.value,
-    })
+    });
     this.props.showCols(e.target.value)
-  }
+  };
 
   render() {
-    const { getFieldDecorator } = this.props.form
+    const { getFieldDecorator } = this.props.form;
     const formItemLayoutChild = {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
-    }
+    };
     return (
       <div>
         <Form
@@ -152,8 +166,11 @@ class TransferERPForm extends React.Component {
                     )}
                   </FormItem>
                 </Col>
-                <Col span={8} style={{ textAlign: 'right' }}>
-                  <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search" />查询</Button>
+                <Col span={8} style={{textAlign: 'right'}}>
+                  <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search"/>查询</Button>
+                </Col>
+                <Col span={8} style={{textAlign: 'right'}}>
+                  <Button type="primary" key="export" onClick={this.exportParams}><Icon type="export"/>导出</Button>
                 </Col>
               </Row>
           </div>
@@ -162,6 +179,6 @@ class TransferERPForm extends React.Component {
     )
   }
 }
-const ERPWithFromWithForm = Form.create()(TransferERPForm)
+const ERPWithFromWithForm = Form.create()(TransferERPForm);
 
 export default ERPWithFromWithForm
