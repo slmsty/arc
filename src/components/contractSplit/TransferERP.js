@@ -158,7 +158,7 @@ class TransferERP extends React.Component {
     };
     this.handleQuery()
   };
-  // 查询接口
+  // 导出接口
   exportParams = (param) => {
     this.queryParam = {
       ...this.queryParam,
@@ -244,6 +244,7 @@ class TransferERP extends React.Component {
       <div>
         <TransferERPForm
           queryParms={this.queryParams}
+          exportParams={this.exportParams}
         />
         <div style={{padding: '15px 0'}}>
           <Button type="primary" loading={this.state.transferLoading} onClick={this.sendERP}
