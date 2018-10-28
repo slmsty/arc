@@ -323,7 +323,7 @@ class Approve extends Component {
             </Col>
           </Row>
           <Row>
-            <Col span={8} style={{textAlign: 'right'}}>
+            <Col span={24} style={{textAlign: 'right'}}>
               <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
             </Col>
           </Row>

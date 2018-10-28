@@ -527,7 +527,7 @@ class Confirm extends Component {
                 }
               </FormItem>
             </Col>
-            <Col span={24} style={{textAlign: 'right'}}>
+            <Col span={16} style={{textAlign: 'right'}}>
               <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
             </Col>
           </Row>
