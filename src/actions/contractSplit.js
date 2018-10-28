@@ -98,7 +98,8 @@ export function exportSendErp(queryParam) {
         method: 'POST',
         body: queryParam,
       },
-      types: ['SENDERP_QUERY_SUCCESS'],
+      acceptType: 'blob',
+      types: ['EXPORT_SEND_ERP_SUCCESS'],
     },
   }
 }
