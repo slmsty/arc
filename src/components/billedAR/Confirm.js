@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Input, Button, Table, Modal, message} from 'antd';
+import {Form, Row, Col, DatePicker, Input, Button, Table, Modal, message, Select} from 'antd';
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
@@ -9,6 +9,7 @@ import GlDateModal from './glDateModal'
 import currency from '../../util/currency'
 import {pageSizeOptions} from '../billApplication/billColumns'
 const FormItem = Form.Item;
+const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
 
 class Confirm extends Component {

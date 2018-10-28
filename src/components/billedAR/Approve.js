@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
+import {Form, Row, Col, DatePicker, Input, Button, Table, Modal, Select} from 'antd';
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import {toThousands} from '../../util/currency'
 const FormItem = Form.Item;
+const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
 const dateFormat = 'YYYY-MM-DD';
 
