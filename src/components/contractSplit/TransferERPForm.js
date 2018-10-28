@@ -41,9 +41,6 @@ class TransferERPForm extends React.Component {
   };
   //导出
   exportParams = () => {
-    this.setState({
-      excelDis: true,
-    });
     const params = this.props.form.getFieldsValue();
     params.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : '';
     params.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '';
@@ -172,7 +169,8 @@ class TransferERPForm extends React.Component {
               </Col>
               <Col span={8} style={{textAlign: 'right'}}>
                 <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search"/>查询</Button>
-                <Button type="primary" key="export" loading={this.state.excelDis} onClick={this.exportParams}>导出Excel</Button>
+                <Button type="primary" key="export" loading={this.state.excelDis}
+                        onClick={this.exportParams}>导出Excel</Button>
               </Col>
             </Row>
           </div>

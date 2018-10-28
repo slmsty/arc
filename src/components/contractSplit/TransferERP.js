@@ -170,12 +170,14 @@ class TransferERP extends React.Component {
 
   exportSendErp = () => {
     this.setState({
-      excelDis: true
+      excelDis: true,
+      loading: true
     });
     this.props.exportSendErp(this.queryParam).then(res => {
       if (res) {
         this.setState({
-          excelDis: false
+          excelDis: false,
+          loading: false
         })
       }
     })
