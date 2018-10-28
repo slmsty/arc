@@ -1,6 +1,6 @@
-import { httpApi } from '../../http/reduxRequestMiddleware'
+import {httpApi} from '../../http/reduxRequestMiddleware'
 
-const Search = ({pageInfo, glDates, projectNos, contractNos, billedArDate, custName, paymentTerm, companyName, status})=>({
+const Search = ({pageInfo, glDates, projectNos, contractNos, billedArDate, custName, paymentTerm, companyName, status, moreLessZero})=>({
   [httpApi]: {
     url: '/arc/billedar/confirm/search',
     types: [
@@ -26,15 +26,16 @@ const Search = ({pageInfo, glDates, projectNos, contractNos, billedArDate, custN
         paymentTerm,
         companyName,
         status,
+        moreLessZero
       }
     },
   },
-})
+});
 
 const editBilledAr = (payload)=>({
   type: 'BILLEDARCONFIRM_EDIT',
   payload
-})
+});
 
 const Reject = (billedArIds)=>({
   [httpApi]: {
@@ -45,7 +46,7 @@ const Reject = (billedArIds)=>({
       body: {billedArIds}
     },
   },
-})
+});
 
 const Approval = (billedArIds)=>({
   [httpApi]: {
@@ -56,11 +57,11 @@ const Approval = (billedArIds)=>({
       body: {billedArIds}
     },
   },
-})
+});
 
 const ResetTitle = ()=>({
   type: 'BILLEDARCONFIRM_RESET_TITLE'
-})
+});
 
 export {
   Search,
