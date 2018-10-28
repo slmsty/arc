@@ -54,13 +54,7 @@ class TransferERPForm extends React.Component {
     params.contractName = params.contractName ? params.contractName.trim() : '';
     params.signCompany = params.signCompany ? params.signCompany.trim() : '';
     delete params.signDate;
-    this.props.exportSendErp(params).then(res => {
-      if (res) {
-        this.setState({
-          excelDis: false
-        })
-      }
-    })
+    this.props.exportParams(params)
   };
   handleRadioChange = (e) => {
     this.setState({
@@ -178,8 +172,7 @@ class TransferERPForm extends React.Component {
               </Col>
               <Col span={8} style={{textAlign: 'right'}}>
                 <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search"/>查询</Button>
-                <Button type="primary" key="export" loading={this.state.excelDis} onClick={this.exportParams}><Icon
-                  type="export"/>导出</Button>
+                <Button type="primary" key="export" loading={this.state.excelDis} onClick={this.exportParams}>导出Excel</Button>
               </Col>
             </Row>
           </div>
