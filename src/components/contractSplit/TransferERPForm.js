@@ -169,7 +169,7 @@ class TransferERPForm extends React.Component {
               </Col>
               <Col span={8} style={{textAlign: 'right'}}>
                 <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search"/>查询</Button>
-                <Button type="primary" key="export" loading={this.state.excelDis}
+                <Button style={{marginLeft: '10px'}} type="primary" key="export" loading={this.state.excelDis}
                         onClick={this.exportParams}>导出Excel</Button>
               </Col>
             </Row>
