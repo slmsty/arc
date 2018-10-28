@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, Row, Col, Form, Radio, DatePicker, Input, Icon, Select } from 'antd'
+import {Button, Row, Col, Form, Radio, DatePicker, Input, Icon, Select} from 'antd'
 import moment from 'moment'
 import MultipleInput from '../common/multipleInput'
 import SelectRadioApi from  '../common/selectRadioApi'
@@ -14,7 +14,7 @@ const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const dateFormat = 'YYYY-MM-DD';
-const { RangePicker } = DatePicker;
+const {RangePicker} = DatePicker;
 const Option = Select.Option;
 class TransferERPForm extends React.Component {
   state = {
@@ -40,6 +40,9 @@ class TransferERPForm extends React.Component {
   };
   //导出
   exportParams = () => {
+    this.setState({
+      excelDis: true,
+    });
     const params = this.props.form.getFieldsValue();
     params.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : '';
     params.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '';
@@ -50,20 +53,26 @@ class TransferERPForm extends React.Component {
     params.contractName = params.contractName ? params.contractName.trim() : '';
     params.signCompany = params.signCompany ? params.signCompany.trim() : '';
     delete params.signDate;
-    this.props.exportParams(params)
+    this.props.exportSendErp(params).then(res => {
+      if (res) {
+        this.setState({
+          excelDis: false
+        })
+      }
+    })
   };
   handleRadioChange = (e) => {
     this.setState({
-      stateType:e.target.value,
+      stateType: e.target.value,
     });
     this.props.showCols(e.target.value)
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const {getFieldDecorator} = this.props.form;
     const formItemLayoutChild = {
-      labelCol: { span: 7 },
-      wrapperCol: { span: 17 },
+      labelCol: {span: 7},
+      wrapperCol: {span: 17},
     };
     return (
       <div>
@@ -112,7 +121,7 @@ class TransferERPForm extends React.Component {
                   })(<RangePicker
                     allowClear
                     format={dateFormat}
-                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                    ranges={{今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')]}}
                   />)}
                 </FormItem>
               </Col>
@@ -126,8 +135,8 @@ class TransferERPForm extends React.Component {
               <Col span={8}>
                 <FormItem {...formItemLayoutChild} label="是否采集项目">
                   {
-                    getFieldDecorator('collectionProject',{
-                      initialValue:'ALL'
+                    getFieldDecorator('collectionProject', {
+                      initialValue: 'ALL'
                     })(
                       <Select>
                         <Option value="ALL">全部</Option>
@@ -139,38 +148,39 @@ class TransferERPForm extends React.Component {
                 </FormItem>
               </Col>
             </Row>
-              <Row gutter={40}>
-                <Col span={8}>
-                  <FormItem {...formItemLayoutChild} label="传ERP状态">
-                    {
-                      getFieldDecorator('erpStatus',{
-                        initialValue:'ALL'
-                      })(
-                        <Select>
-                          <Option value="ALL">全部</Option>
-                          <Option value="UNCOMPLETE">未传送</Option>
-                          <Option value="PROCESSING">PA处理中</Option>
-                          <Option value="PROCESSED">已传送PA</Option>
-                          <Option value="ERROR">传送PA失败</Option>
-                        </Select>
-                      )
-                    }
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem {...formItemLayoutChild} label="签约公司">
-                    {getFieldDecorator('signCompany')(
-                      <Input
-                        placeholder="请输入签约公司"
-                      />,
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={8} style={{textAlign: 'right'}}>
-                  <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search"/>查询</Button>
-                  <Button type="primary" key="export" onClick={this.exportParams}><Icon type="export"/>导出</Button>
-                </Col>
-              </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="传ERP状态">
+                  {
+                    getFieldDecorator('erpStatus', {
+                      initialValue: 'ALL'
+                    })(
+                      <Select>
+                        <Option value="ALL">全部</Option>
+                        <Option value="UNCOMPLETE">未传送</Option>
+                        <Option value="PROCESSING">PA处理中</Option>
+                        <Option value="PROCESSED">已传送PA</Option>
+                        <Option value="ERROR">传送PA失败</Option>
+                      </Select>
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="签约公司">
+                  {getFieldDecorator('signCompany')(
+                    <Input
+                      placeholder="请输入签约公司"
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={8} style={{textAlign: 'right'}}>
+                <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search"/>查询</Button>
+                <Button type="primary" key="export" loading={this.state.excelDis} onClick={this.exportParams}><Icon
+                  type="export"/>导出</Button>
+              </Col>
+            </Row>
           </div>
         </Form>
       </div>

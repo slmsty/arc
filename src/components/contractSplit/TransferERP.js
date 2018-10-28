@@ -158,29 +158,6 @@ class TransferERP extends React.Component {
     };
     this.handleQuery()
   };
-  // 导出接口
-  exportParams = (param) => {
-    this.queryParam = {
-      ...this.queryParam,
-      ...param,
-    };
-    this.exportSendErp()
-  };
-
-  exportSendErp = () => {
-    this.setState({
-      loading: true
-    });
-    this.props.exportSendErp(this.queryParam).then(res => {
-      if (res.response) {
-        this.setState({
-          loading: false,
-          selectedRows: [],
-          selectedRowKeys: [],
-        })
-      }
-    })
-  };
   // 传送ERP接口
   sendERP = () => {
     this.setState({
@@ -244,7 +221,6 @@ class TransferERP extends React.Component {
       <div>
         <TransferERPForm
           queryParms={this.queryParams}
-          exportParams={this.exportParams}
         />
         <div style={{padding: '15px 0'}}>
           <Button type="primary" loading={this.state.transferLoading} onClick={this.sendERP}
