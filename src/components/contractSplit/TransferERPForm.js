@@ -20,6 +20,7 @@ class TransferERPForm extends React.Component {
   state = {
     infoVisitable: false,
     loading: false,
+    excelDis: false,
     applyData: '',
     stateType: '',
   };
