@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Form, Row, Col, DatePicker, Input, Button, Table, Modal, Select} from 'antd';
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
+import SelectInvokeApi from '../common/selectInvokeApi'
 import {toThousands} from '../../util/currency'
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -318,6 +319,36 @@ class Approve extends Component {
                       <Option value="less">小于零</Option>
                     </Select>
                   )
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <FormItem label="付款条件" {...layout}>
+                {
+                  getFieldDecorator('paymentTerm', {initialValue: ''})(<SelectInvokeApi
+                    typeCode="BILLED_AR"
+                    paramCode="PAYMENT_TERM"
+                    placeholder="付款条件"
+                    hasEmpty
+                  />)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="合同名称" {...layout}>
+                {
+                  getFieldDecorator('contractName')(
+                    <Input placeholer="合同名称"/>)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="合同内部编码" {...layout}>
+                {
+                  getFieldDecorator('contractId')(
+                    <Input placeholer="合同内部编码"/>)
                 }
               </FormItem>
             </Col>
