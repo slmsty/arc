@@ -501,6 +501,7 @@ const receiveInvoice = {
   'N': '否',
   'B': '无需收票',
 }
+const pageSizeOptions = ['10', '20', '30', '40', '50']
 export {
   clientCols,
   comCols,
@@ -525,5 +526,6 @@ export {
   contractApproveCols,
   hideContractUrl,
   receiveInvoice,
+  pageSizeOptions
 }
 
