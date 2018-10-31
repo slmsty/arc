@@ -1,4 +1,4 @@
-import { httpApi } from '../http/reduxRequestMiddleware'
+import {httpApi} from '../http/reduxRequestMiddleware'
 
 // eslint-disable-next-line import/prefer-default-export
 export function getContractList(queryParam) {
@@ -38,7 +38,7 @@ export function approveReject(queryParam) {
     },
   }
 }
- // 获取审批表链接地址
+// 获取审批表链接地址
 export function getUrl(queryParam) {
   return {
     [httpApi]: {
@@ -86,6 +86,20 @@ export function getProductNo(queryParam) {
         body: queryParam,
       },
       types: ['GETPRODUCTNO_SUCCESS'],
+    },
+  }
+}
+// 导出传送erp结果
+export function exportSendErp(queryParam) {
+  return {
+    [httpApi]: {
+      url: "/arc/contract/split/exportSendErp",
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      acceptType: 'blob',
+      types: ['EXPORT_SEND_ERP_SUCCESS'],
     },
   }
 }

@@ -1,6 +1,6 @@
-import { httpApi } from '../../http/reduxRequestMiddleware'
+import {httpApi} from '../../http/reduxRequestMiddleware'
 
-const Search = ({glDate, glDates, custName, projectNos, contractNos, companyName, paymentName,fundId})=>({
+const Search = ({glDate, glDates, custName, projectNos, contractNos, companyName, paymentName, fundId, moreLessZero, paymentTerm, contractName, contractId})=>({
   [httpApi]: {
     url: '/arc/billedar/judgement/search',
     types: [
@@ -20,12 +20,16 @@ const Search = ({glDate, glDates, custName, projectNos, contractNos, companyName
         projectNos: projectNos,
         contractNos: contractNos,
         companyName,
-        fundId,
         paymentName,
+        fundId,
+        moreLessZero,
+        paymentTerm,
+        contractName,
+        contractId
       }
     },
   },
-})
+});
 
 const Reject = (ids)=>({
   [httpApi]: {
@@ -36,7 +40,7 @@ const Reject = (ids)=>({
       body: {ids}
     },
   },
-})
+});
 
 const Confirm = (ids)=>({
   [httpApi]: {
@@ -47,11 +51,11 @@ const Confirm = (ids)=>({
       body: {ids}
     },
   },
-})
+});
 
 const ResetTitle = ()=>({
   type: 'BILLEDARAPPROVE_RESET_TITLE'
-})
+});
 
 export {
   Search,

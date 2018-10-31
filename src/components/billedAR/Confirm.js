@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Input, Button, Table, Modal, message} from 'antd';
+import {Form, Row, Col, DatePicker, Input, Button, Table, Modal, message, Select} from 'antd';
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
@@ -7,10 +7,12 @@ import requestJsonFetch from '../../http/requestJsonFecth'
 import ARModal from './ARModal'
 import GlDateModal from './glDateModal'
 import currency from '../../util/currency'
+import {pageSizeOptions} from '../billApplication/billColumns'
 const FormItem = Form.Item;
+const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
 
-class Confirm extends Component{
+class Confirm extends Component {
   state = {
     visible: false,
     o: {},
@@ -26,9 +28,9 @@ class Confirm extends Component{
     fLength: 0,
     tableHeight: '',
     glDateModal: false,
-  }
+  };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.columns = [
       {
@@ -68,17 +70,17 @@ class Confirm extends Component{
         width: 120,
       },
       {
-        title: <span>GL日期<em style={{color:'#FF0000'}}>*</em></span>,
+        title: <span>GL日期<em style={{color: '#FF0000'}}>*</em></span>,
         dataIndex: 'glDate',
         width: 120,
       },
       {
-        title: <span>Billed AR日期<em style={{color:'#FF0000'}}>*</em></span>,
+        title: <span>Billed AR日期<em style={{color: '#FF0000'}}>*</em></span>,
         dataIndex: 'billedArDate',
         width: 120,
       },
       {
-        title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
+        title: <span>Billed AR金额<em style={{color: '#FF0000'}}>*</em></span>,
         dataIndex: 'billedArAmount',
         width: 120,
         render: (text, rocord, index) => (text ? currency(text) : currency(0))
@@ -175,17 +177,19 @@ class Confirm extends Component{
       }
     ]
   }
+
   componentWillMount() {
-    const screenHeight = window.screen.height
+    const screenHeight = window.screen.height;
     // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
-    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160
-    this.setState({ tableHeight })
+    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160;
+    this.setState({tableHeight})
   }
+
   componentDidMount() {
     this.doSearch()
   }
 
-  doSearch = (e)=>{
+  doSearch = (e)=> {
     //e.preventDefault();
     this.props.form.validateFields((err, values) => {
       this.setState({
@@ -195,7 +199,7 @@ class Confirm extends Component{
         rejectDis: true,
         approvalDis: true,
         sendDis: true
-      })
+      });
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -204,9 +208,9 @@ class Confirm extends Component{
         ...values
       })
     })
-  }
+  };
 
-  pageSizeChange = (current, size)=>{
+  pageSizeChange = (current, size)=> {
     this.props.form.validateFields((err, values) => {
       this.setState({
         rowKeys: [],
@@ -215,7 +219,7 @@ class Confirm extends Component{
         rejectDis: true,
         approvalDis: true,
         sendDis: true
-      })
+      });
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -224,9 +228,9 @@ class Confirm extends Component{
         ...values
       })
     })
-  }
+  };
 
-  pageNoChange = (page, pageSize)=>{
+  pageNoChange = (page, pageSize)=> {
     this.props.form.validateFields((err, values) => {
       this.props.Search({
         pageInfo: {
@@ -236,41 +240,41 @@ class Confirm extends Component{
         ...values
       })
     });
-  }
+  };
 
-  rowSelectionChange = (selectedRowKeys, selectedRows)=>{
-    let rowKeys = this.state.rowKeys
-    let rows = this.state.rows
-    selectedRowKeys.forEach(key=>{
-      if(!rowKeys.includes(key)){
-        rows.push(selectedRows.find(o=>o.billedArId===key))
+  rowSelectionChange = (selectedRowKeys, selectedRows)=> {
+    let rowKeys = this.state.rowKeys;
+    let rows = this.state.rows;
+    selectedRowKeys.forEach(key=> {
+      if (!rowKeys.includes(key)) {
+        rows.push(selectedRows.find(o=>o.billedArId === key))
       }
-    })
-    rows = rows.filter(o=>selectedRowKeys.includes(o.billedArId))
-    rowKeys = selectedRowKeys
+    });
+    rows = rows.filter(o=>selectedRowKeys.includes(o.billedArId));
+    rowKeys = selectedRowKeys;
 
     this.setState({
       rowKeys: rowKeys,
       rows: rows,
-      editDis: !(rows.length===1 && rows.every(o=>o.status==='NEW'||o.status==='ACCOUNT_CONFIRMING'||o.status==='CONFIRM_NEEDLESS'||o.status==='PA_PUSHING'||o.status==='PA_PUSH_ERROR')),
-      rejectDis: !(rows.length>0 && rows.every(o=>o.status==='ACCOUNT_CONFIRMING'||o.status==='PA_PUSHING')),
-      approvalDis: !(rows.length>0 && rows.every(o=>o.status==='ACCOUNT_CONFIRMING')),
-      sendDis: !(rows.length>0 && rows.every(o=>o.status==='PA_PUSHING' || o.status==='PA_PUSH_ERROR')),
+      editDis: !(rows.length === 1 && rows.every(o=>o.status === 'NEW' || o.status === 'ACCOUNT_CONFIRMING' || o.status === 'CONFIRM_NEEDLESS' || o.status === 'PA_PUSHING' || o.status === 'PA_PUSH_ERROR')),
+      rejectDis: !(rows.length > 0 && rows.every(o=>o.status === 'ACCOUNT_CONFIRMING' || o.status === 'PA_PUSHING')),
+      approvalDis: !(rows.length > 0 && rows.every(o=>o.status === 'ACCOUNT_CONFIRMING')),
+      sendDis: !(rows.length > 0 && rows.every(o=>o.status === 'PA_PUSHING' || o.status === 'PA_PUSH_ERROR')),
     })
-  }
+  };
 
-  doEdit = ()=>{
+  doEdit = ()=> {
     this.setState({
       visible: true,
       o: this.state.rows[0]
     })
-  }
+  };
 
-  Cancel = ()=>{
+  Cancel = ()=> {
     this.setState({visible: false, o: {}})
-  }
+  };
 
-  OK = ()=>{
+  OK = ()=> {
     this.props.form.validateFields((err, values) => {
       this.props.Search({
         pageInfo: {
@@ -279,7 +283,7 @@ class Confirm extends Component{
         },
         ...values
       })
-    })
+    });
 
     this.setState({
       visible: false,
@@ -290,10 +294,10 @@ class Confirm extends Component{
       approvalDis: true,
       sendDis: true
     })
-  }
+  };
 
-  reject = ()=>{
-    this.props.Reject(this.state.rowKeys)
+  reject = ()=> {
+    this.props.Reject(this.state.rowKeys);
     this.setState({
       rowKeys: [],
       rows: [],
@@ -302,25 +306,25 @@ class Confirm extends Component{
       approvalDis: true,
       sendDis: true
     })
-  }
+  };
 
   approval = () => {
     this.props.Approval(this.state.rowKeys).then((res) => {
       if (res && res.response && res.response.resultCode === '000000') {
-        let info = this.props.amountInfo
-        let str = ''
+        let info = this.props.amountInfo;
+        let str = '';
         for (let i in this.props.amountInfo) {
           str += `${i}:${this.props.amountInfo[i]}\n`
         }
         Modal.info({
           title: this.props.title,
-          content: "Billed AR 金额合计："+str,
-        })
+          content: "Billed AR 金额合计：" + str,
+        });
         this.props.ResetTitle()
       } else {
         message.error('加载数据失败')
       }
-    })
+    });
     this.setState({
       rowKeys: [],
       rows: [],
@@ -329,9 +333,9 @@ class Confirm extends Component{
       approvalDis: true,
       sendDis: true,
     })
-  }
+  };
 
-  postSend = (body, callback)=>{
+  postSend = (body, callback)=> {
     requestJsonFetch(
       '/arc/billedar/confirm/pushPa',
       {
@@ -340,25 +344,25 @@ class Confirm extends Component{
       },
       callback
     )
-  }
+  };
   selectCancel = () => {
     this.setState({
       glDateModal: false,
     })
-  }
+  };
   selectOk = (param) => {
     this.postSend({
       billedArIds: this.state.rowKeys,
       glDate: param
-    }, response=>{
+    }, response=> {
       this.setState({
         glDateModal: false,
-      })
-      if(response.resultCode === '000000'){
+      });
+      if (response.resultCode === '000000') {
         let result = response.successFailureResult;
-        if(!result.failures && result.failures.length<=0){
+        if (!result.failures && result.failures.length <= 0) {
           this.closeSend();
-        }else{
+        } else {
           this.setState({
             isSend: true,
             sLength: result.successIds.length,
@@ -366,10 +370,10 @@ class Confirm extends Component{
             failures: result.failures,
           })
         }
-      }else{
+      } else {
         message.error(response.resultMessage);
       }
-    })
+    });
     this.setState({
       rowKeys: [],
       rows: [],
@@ -378,15 +382,15 @@ class Confirm extends Component{
       approvalDis: true,
       sendDis: true,
     })
-  }
+  };
   send = () => {
     this.setState({
       glDateModal: true,
     })
-  }
+  };
 
-  closeSend = ()=>{
-    this.setState({isSend: false})
+  closeSend = ()=> {
+    this.setState({isSend: false});
     this.props.form.validateFields((err, values) => {
       this.props.Search({
         pageInfo: {
@@ -396,35 +400,16 @@ class Confirm extends Component{
         ...values
       })
     });
-  }
+  };
+
   componentWillReceiveProps(nextProps) {
     if (this.props.confirmApproveRefresh !== nextProps.confirmApproveRefresh) {
       this.doSearch()
     }
   }
-  /* shouldComponentUpdate({title}, nextState){
-    if(title){
-      let info = this.props.amountInfo
-      console.log('info',this.props.amountInfo)
-      let str = ''
-      for (let i in this.props.amountInfo) {
-        str += `${i}:${this.props.amountInfo[i]}\n`
-      }
-      console.log(str)
-      Modal.info({
-        title: `${title}`,
-        content: "Billed AR 金额合计："+str,
-      })
-      console.log(str)
-      this.props.ResetTitle()
-      return false;
-    }else{
-      return true;
-    }
-  } */
 
-  render(){
-    const { getFieldDecorator } = this.props.form;
+  render() {
+    const {getFieldDecorator} = this.props.form;
     const columns = this.columns;
     const {pageNo, pageSize, count, result, loading} = this.props;
 
@@ -435,7 +420,7 @@ class Confirm extends Component{
       wrapperCol: {
         span: 16
       }
-    }
+    };
 
     return (
       <div className="billedARConfirm">
@@ -459,7 +444,7 @@ class Confirm extends Component{
               <FormItem label="项目编码(多)" {...layout}>
                 {
                   getFieldDecorator('projectNos')(
-                    <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
+                    <MultipleInput placeholder="多项目编码使用英文逗号间隔"/>
                   )
                 }
               </FormItem>
@@ -476,7 +461,7 @@ class Confirm extends Component{
             <Col span={8}>
               <FormItem label="签约公司" {...layout}>
                 {
-                  getFieldDecorator('companyName')(<Input placeholder="签约公司" />)
+                  getFieldDecorator('companyName')(<Input placeholder="签约公司"/>)
                 }
               </FormItem>
             </Col>
@@ -484,7 +469,7 @@ class Confirm extends Component{
               <FormItem label="合同编码(多)" {...layout}>
                 {
                   getFieldDecorator('contractNos')(
-                    <MultipleInput placeholder="多合同编码使用英文逗号间隔" />
+                    <MultipleInput placeholder="多合同编码使用英文逗号间隔"/>
                   )
                 }
               </FormItem>
@@ -527,7 +512,22 @@ class Confirm extends Component{
             </Col>
           </Row>
           <Row>
-            <Col span={24} style={{textAlign: 'right'}}>
+            <Col span={8}>
+              <FormItem label="billedAr金额" {...layout}>
+                {
+                  getFieldDecorator('moreLessZero', {
+                    initialValue: 'ALL'
+                  })(
+                    <Select>
+                      <Option value="ALL">全部</Option>
+                      <Option value="more">大于零</Option>
+                      <Option value="less">小于零</Option>
+                    </Select>
+                  )
+                }
+              </FormItem>
+            </Col>
+            <Col span={16} style={{textAlign: 'right'}}>
               <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
             </Col>
           </Row>
@@ -555,7 +555,7 @@ class Confirm extends Component{
           columns={columns}
           dataSource={result}
           pagination={{
-            pageSizeOptions: ['5', '10', '20', '30'],
+            pageSizeOptions,
             showSizeChanger: true,
             onShowSizeChange: this.pageSizeChange,
             showTotal: t=>`共${t}条`,
@@ -564,37 +564,37 @@ class Confirm extends Component{
             pageSize: pageSize,
             total: count
           }}
-          scroll={{ x: 4580, y: this.state.tableHeight }} />
-          {
-            this.state.visible ?
-              <ARModal
-                visible={this.state.visible}
-                onCancel={this.Cancel}
-                onOk={this.OK}
-                o={this.state.o}
-              /> : null
-          }
-          <Modal
-            visible={this.state.isSend}
-            onOk={this.closeSend}
-            onCancel={this.closeSend}
-            title=""
-            footer={[
-              <Button key="cofirm" type="primary" onClick={this.closeSend}>
-                确定
-              </Button>,
-            ]}>
-            <p>成功传送AR：<b style={{color: '#FF0000'}}>{this.state.sLength}</b> 条</p>
-            <p>传送AR失败：<b style={{color: '#FF0000'}}>{this.state.fLength}</b> 条</p>
-            <br/>
-            <Table
-              rowKey="id"
-              bordered
-              size="small"
-              columns={this.columns2}
-              dataSource={this.state.failures}
-              pagination={false}/>
-          </Modal>
+          scroll={{x: 4580, y: this.state.tableHeight}}/>
+        {
+          this.state.visible ?
+            <ARModal
+              visible={this.state.visible}
+              onCancel={this.Cancel}
+              onOk={this.OK}
+              o={this.state.o}
+            /> : null
+        }
+        <Modal
+          visible={this.state.isSend}
+          onOk={this.closeSend}
+          onCancel={this.closeSend}
+          title=""
+          footer={[
+            <Button key="cofirm" type="primary" onClick={this.closeSend}>
+              确定
+            </Button>,
+          ]}>
+          <p>成功传送AR：<b style={{color: '#FF0000'}}>{this.state.sLength}</b> 条</p>
+          <p>传送AR失败：<b style={{color: '#FF0000'}}>{this.state.fLength}</b> 条</p>
+          <br/>
+          <Table
+            rowKey="id"
+            bordered
+            size="small"
+            columns={this.columns2}
+            dataSource={this.state.failures}
+            pagination={false}/>
+        </Modal>
         <GlDateModal
           selectCancel={this.selectCancel}
           glDateModal={this.state.glDateModal}

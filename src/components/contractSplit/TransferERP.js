@@ -1,18 +1,21 @@
 import React from 'react'
 import TransferERPForm from './TransferERPForm'
 import currency from '../../util/currency'
+import {accMul} from '../../util/floatUtil'
 import TransferNotice from './TransferNotice'
-import { Table, Button } from 'antd'
+import {Table, Button, Tooltip} from 'antd'
 
-class TransferERP extends React.Component{
+class TransferERP extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      selectedRows:[],
+      selectedRows: [],
+      selectedRowKeys: [],
       loading: false,
-      showSendMsg:false,
+      excelDis: false,
+      showSendMsg: false,
       sendInfo: {}
-    }
+    };
     this.ErpColumns = [
       {
         title: '传ERP状态',
@@ -40,7 +43,7 @@ class TransferERP extends React.Component{
         title: '合同税率',
         dataIndex: 'contractTaxRate',
         width: 80,
-        render: (text) => (text ? `${text * 100}%` : 0)
+        render: (text) => (text ? `${accMul(text, 100)}%` : 0)
       }, {
         title: '合同不含税金额',
         dataIndex: 'funding',
@@ -50,7 +53,7 @@ class TransferERP extends React.Component{
         title: '退税率',
         dataIndex: 'returnTaxRate',
         width: 70,
-        render: (text)=>(text ? `$(text * 100)%` : 0)
+        render: (text)=>(text ? `${accMul(text, 100)}%` : 0)
       }, {
         title: 'Gross order',
         dataIndex: 'grossOrder',
@@ -103,119 +106,150 @@ class TransferERP extends React.Component{
       }, {
         title: '创建提示',
         dataIndex: 'erpResult',
-        width: 100,
+        width: 150,
+        render: (text) => (
+          text && text.length > 15 ? <Tooltip title={text}>{`${text.substring(0, 15)}...`}</Tooltip> : text)
       }
-    ]
+    ];
     this.queryParam = {
-      signDateStart:'',
-      signDateEnd:'',
-      buId:'',
-      isReport:'N',
-      projectNo:'',
-      contractNo:'',
-      contractName:'',
-      erpStatus:'ALL',
-      signCompany:'',
+      signDateStart: '',
+      signDateEnd: '',
+      buId: '',
+      isReport: 'N',
+      projectNo: '',
+      contractNo: '',
+      contractName: '',
+      erpStatus: 'ALL',
+      signCompany: '',
       collectionProject: 'ALL',
       pageInfo: {
         pageNo: 1,
         pageSize: 10,
       },
+      opsStatus: this.props.isSingle ? '' : 'add',
     }
   }
 
   getTableWidth = (colum)=> {
-    let width = 0
-    colum.map((item)=>{
+    let width = 0;
+    colum.map((item)=> {
       width += parseFloat(item.width)
-    })
+    });
     return width
-  }
+  };
   handleQuery = () => {
     this.setState({
       loading: true
-    })
+    });
     this.props.sendERPQuery(this.queryParam).then(res => {
-      if(res.response) {
+      if (res.response) {
         this.setState({
-          loading: false
+          loading: false,
+          selectedRows: [],
+          selectedRowKeys: [],
         })
       }
     })
-  }
+  };
   // 查询接口
   queryParams = (param) => {
     this.queryParam = {
       ...this.queryParam,
       ...param,
-    }
+    };
     this.handleQuery()
-  }
+  };
+  // 导出接口
+  exportParams = (param) => {
+    this.queryParam = {
+      ...this.queryParam,
+      ...param,
+    };
+    this.exportSendErp()
+  };
+
+  exportSendErp = () => {
+    this.setState({
+      excelDis: true,
+      loading: true
+    });
+    this.props.exportSendErp(this.queryParam).then(res => {
+      if (res) {
+        this.setState({
+          excelDis: false,
+          loading: false
+        })
+      }
+    })
+  };
   // 传送ERP接口
   sendERP = () => {
     this.setState({
-      transferLoading:true,
-    })
-    const selectedRows = this.state.selectedRows
-    const pastData = selectedRows.map(item => item.orderLineId)
+      transferLoading: true,
+    });
+    const selectedRows = this.state.selectedRows;
+    const pastData = selectedRows.map(item => item.orderLineId);
     const params = {
       orderLineIdList: pastData
-    }
-    this.props.sendERP(params).then((res)=>{
+    };
+    this.props.sendERP(params).then((res)=> {
       if (res && res.response && res.response.resultCode === '000000') {
         this.setState({
-          showSendMsg:true,
-          sendInfo:res.response.data,
-        })
+          showSendMsg: true,
+          sendInfo: res.response.data,
+        });
         this.handleQuery()
       }
       this.setState({
-        transferLoading:false,
+        transferLoading: false,
       })
     })
-  }
+  };
   // 页码修改
   handleChangePage = (page) => {
-    this.queryParam.pageInfo.pageNo = page
+    this.queryParam.pageInfo.pageNo = page;
     this.handleQuery()
-  }
+  };
   // 每页显示修改
   handleChangeSize = (current, size) => {
-    this.queryParam.pageInfo.pageNo = current
-    this.queryParam.pageInfo.pageSize = size
+    this.queryParam.pageInfo.pageNo = current;
+    this.queryParam.pageInfo.pageSize = size;
     this.handleQuery()
-  }
+  };
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    this.setState({ selectedRowKeys, selectedRows })
-  }
+    this.setState({selectedRowKeys, selectedRows})
+  };
 
   render() {
-    const { pageNo, count, pageSize, result } = this.props.erpList
-    const { selectedRowKeys } = this.state
+    const {pageNo, count, pageSize, result} = this.props.erpList;
+    const {selectedRowKeys} = this.state;
     const rowSelection = {
-      hideDefaultSelections:true,
+      hideDefaultSelections: true,
       selectedRowKeys,
-      type: this.props.isSingle ? 'radio': 'checkBox',
+      type: this.props.isSingle ? 'radio' : 'checkBox',
       onChange: this.onSelectChange,
       getCheckboxProps: record => ({
         disabled: record.erpStatus === '传送成功' || record.erpStatus === '已传送PA' || record.erpStatus === 'PA处理中'
       }),
-    }
+    };
     const pagination = {
       current: pageNo,
       total: count,
+      showTotal: (total) => (`共 ${total} 条`),
       pageSize: pageSize,
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
-    }
+    };
     return (
       <div>
         <TransferERPForm
           queryParms={this.queryParams}
+          exportParams={this.exportParams}
         />
         <div style={{padding: '15px 0'}}>
-          <Button type="primary" onClick={this.sendERP} disabled={this.state.selectedRows.length ? false :true}>传送ERP</Button>
+          <Button type="primary" loading={this.state.transferLoading} onClick={this.sendERP}
+                  disabled={this.state.selectedRows.length ? false : true}>传送ERP</Button>
         </div>
         <Table
           rowSelection={rowSelection}
@@ -223,7 +257,7 @@ class TransferERP extends React.Component{
           bordered
           columns={this.ErpColumns}
           size="middle"
-          scroll={{ x: this.getTableWidth(this.ErpColumns)}}
+          scroll={{x: this.getTableWidth(this.ErpColumns)}}
           loading={this.state.loading}
           dataSource={result}
         />

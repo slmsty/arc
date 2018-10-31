@@ -1,22 +1,24 @@
 import React, {Component} from 'react'
-import {Form, Row, Col, DatePicker, Input, Button, Table, Modal} from 'antd';
+import {Form, Row, Col, DatePicker, Input, Button, Table, Modal, Select} from 'antd';
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
-import { toThousands } from '../../util/currency'
+import SelectInvokeApi from '../common/selectInvokeApi'
+import {toThousands} from '../../util/currency'
 const FormItem = Form.Item;
+const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
-const dateFormat = 'YYYY-MM-DD'
+const dateFormat = 'YYYY-MM-DD';
 
-class Approve extends Component{
+class Approve extends Component {
   state = {
     rowKeys: [],
     rows: [],
     rejectDis: true,
     confirmDis: true,
     tableHeight: '',
-  }
+  };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.columns = [
       {
@@ -104,7 +106,7 @@ class Approve extends Component{
         render: (text, rocord, index) => (text ? toThousands(text) : 0)
       },
       {
-        title: <span>Billed AR金额<em style={{color:'#FF0000'}}>*</em></span>,
+        title: <span>Billed AR金额<em style={{color: '#FF0000'}}>*</em></span>,
         dataIndex: 'billedArAmount',
         width: 100,
         render: (text, rocord, index) => (text ? toThousands(text) : 0)
@@ -148,7 +150,7 @@ class Approve extends Component{
     ];
   }
 
-  doSearch = (e)=>{
+  doSearch = (e)=> {
     //e.preventDefault();
     this.props.form.validateFields((err, values) => {
       this.setState({
@@ -156,70 +158,72 @@ class Approve extends Component{
         rows: [],
         rejectDis: true,
         confirmDis: true
-      })
-      console.log(values)
+      });
+      console.log(values);
       this.props.Search({
         ...values,
       })
     });
-  }
+  };
+
   componentWillMount() {
-    const screenHeight = window.screen.height
+    const screenHeight = window.screen.height;
     // 屏幕高-header高64-margin8-padding12-查询条件div168-按钮56-翻页160
-    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160
-    this.setState({ tableHeight })
+    const tableHeight = screenHeight - 8 - 12 - 24 - 126 - 56 - 28 - 24 - 160;
+    this.setState({tableHeight})
   }
-  rowSelectionChange = (selectedRowKeys, selectedRows)=>{
-    let rowKeys = this.state.rowKeys
-    let rows = this.state.rows
-    selectedRowKeys.forEach(key=>{
-      if(!rowKeys.includes(key)){
-        rows.push(selectedRows.find(o=>o.contractItemId===key))
+
+  rowSelectionChange = (selectedRowKeys, selectedRows)=> {
+    let rowKeys = this.state.rowKeys;
+    let rows = this.state.rows;
+    selectedRowKeys.forEach(key=> {
+      if (!rowKeys.includes(key)) {
+        rows.push(selectedRows.find(o=>o.contractItemId === key))
       }
-    })
-    rows = rows.filter(o=>selectedRowKeys.includes(o.contractItemId))
-    rowKeys = selectedRowKeys
+    });
+    rows = rows.filter(o=>selectedRowKeys.includes(o.contractItemId));
+    rowKeys = selectedRowKeys;
 
     this.setState({
       rowKeys: rowKeys,
       rows: rows,
-      rejectDis: !(rows.length>0 && rows.every(o=>o.status==='NEW'||o.status==='ACCOUNT_CONFIRMING'||o.status==='PA_PUSHING')),
-      confirmDis: !(rows.length>0 && rows.every(o=>o.status==='NEW'))
+      rejectDis: !(rows.length > 0 && rows.every(o=>o.status === 'NEW' || o.status === 'ACCOUNT_CONFIRMING' || o.status === 'PA_PUSHING')),
+      confirmDis: !(rows.length > 0 && rows.every(o=>o.status === 'NEW'))
     })
-  }
+  };
 
-  reject = ()=>{
-    this.props.Reject(this.state.rowKeys)
+  reject = ()=> {
+    this.props.Reject(this.state.rowKeys);
     this.setState({
       rowKeys: [],
       rows: [],
       rejectDis: true,
       confirmDis: true
     })
-  }
+  };
 
-  confirm = ()=>{
-    this.props.Confirm(this.state.rowKeys)
+  confirm = ()=> {
+    this.props.Confirm(this.state.rowKeys);
     this.setState({
       rowKeys: [],
       rows: [],
       rejectDis: true,
       confirmDis: true
     })
-  }
+  };
 
-  shouldComponentUpdate({title}, nextState){
-    if(title){
-      Modal.info({title})
-      this.props.ResetTitle()
+  shouldComponentUpdate({title}, nextState) {
+    if (title) {
+      Modal.info({title});
+      this.props.ResetTitle();
       return false;
-    }else{
+    } else {
       return true;
     }
   }
 
-  render(){
-    const { getFieldDecorator } = this.props.form;
+  render() {
+    const {getFieldDecorator} = this.props.form;
     const columns = this.columns;
     const {result, loading} = this.props;
 
@@ -230,7 +234,7 @@ class Approve extends Component{
       wrapperCol: {
         span: 16
       }
-    }
+    };
 
     return (
       <div className="billedARApprove">
@@ -254,7 +258,7 @@ class Approve extends Component{
               <FormItem label="项目编码(多)" {...layout}>
                 {
                   getFieldDecorator('projectNos')(
-                    <MultipleInput placeholder="多项目编码使用英文逗号间隔" />
+                    <MultipleInput placeholder="多项目编码使用英文逗号间隔"/>
                   )
                 }
               </FormItem>
@@ -271,7 +275,7 @@ class Approve extends Component{
             <Col span={8}>
               <FormItem label="签约公司" {...layout}>
                 {
-                  getFieldDecorator('companyName')(<Input placeholder="签约公司" />)
+                  getFieldDecorator('companyName')(<Input placeholder="签约公司"/>)
                 }
               </FormItem>
             </Col>
@@ -279,7 +283,7 @@ class Approve extends Component{
               <FormItem label="合同编码(多)" {...layout}>
                 {
                   getFieldDecorator('contractNos')(
-                    <MultipleInput placeholder="多合同编码使用英文逗号间隔" />
+                    <MultipleInput placeholder="多合同编码使用英文逗号间隔"/>
                   )
                 }
               </FormItem>
@@ -303,7 +307,54 @@ class Approve extends Component{
                 }
               </FormItem>
             </Col>
-            <Col span={8} style={{textAlign: 'right'}}>
+            <Col span={8}>
+              <FormItem label="付款金额" {...layout}>
+                {
+                  getFieldDecorator('moreLessZero', {
+                    initialValue: 'ALL'
+                  })(
+                    <Select>
+                      <Option value="ALL">全部</Option>
+                      <Option value="more">大于零</Option>
+                      <Option value="less">小于零</Option>
+                    </Select>
+                  )
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <FormItem label="付款条件" {...layout}>
+                {
+                  getFieldDecorator('paymentTerm', {initialValue: ''})(<SelectInvokeApi
+                    typeCode="BILLED_AR"
+                    paramCode="PAYMENT_TERM"
+                    placeholder="付款条件"
+                    hasEmpty
+                  />)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="合同名称" {...layout}>
+                {
+                  getFieldDecorator('contractName')(
+                    <Input placeholer="合同名称"/>)
+                }
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem label="合同内部编码" {...layout}>
+                {
+                  getFieldDecorator('contractId')(
+                    <Input placeholer="合同内部编码"/>)
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24} style={{textAlign: 'right'}}>
               <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
             </Col>
           </Row>
@@ -328,7 +379,7 @@ class Approve extends Component{
           columns={columns}
           dataSource={result}
           pagination={false}
-          scroll={{ x: 3300, y: this.state.tableHeight }}
+          scroll={{x: 3300, y: this.state.tableHeight}}
         />
       </div>
     )
