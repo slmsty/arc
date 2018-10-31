@@ -32,7 +32,7 @@ class TransferERP extends React.Component {
         width: 180,
       }, {
         title: 'TASK',
-        dataIndex: 'contractCategory',
+        dataIndex: 'taskNo',
         width: 60,
       }, {
         title: '合同金额',
