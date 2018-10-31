@@ -188,7 +188,7 @@ const proColumns = [{
   width: 300,
 }, {
   title: '提前开票原因',
-  dataIndex: 'advanceBillingReason',
+  dataIndex: 'advanceBillingReasonName',
   width: 300,
 }, {
   title: '预计回款日期',
@@ -237,7 +237,7 @@ const proApplyColumns = [{
   width: 300,
 }, {
   title: '提前开票原因',
-  dataIndex: 'advanceBillingReason',
+  dataIndex: 'advanceBillingReasonName',
   width: 300,
 }, {
   title: '预计回款日期',
