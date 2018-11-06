@@ -2,7 +2,10 @@ Number.prototype.toFixed = function (n) {
   if (n > 20 || n < 0) {
     throw new RangeError('toFixed() digits argument must be between 0 and 20');
   }
-  const number = this;
+  let number = this;
+  if (this < 0) {
+    number = -number;
+  }
   if (isNaN(number) || number >= Math.pow(10, 21)) {
     return number.toString();
   }
@@ -43,5 +46,9 @@ Number.prototype.toFixed = function (n) {
     result = result.toFixed(n);
   }
 
-  return result;
+  if (this < 0) {
+    return -result;
+  } else {
+    return result;
+  }
 };
