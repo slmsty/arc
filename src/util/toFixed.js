@@ -9,11 +9,6 @@ Number.prototype.toFixed = function (n) {
   if (typeof (n) == 'undefined' || n == 0) {
     return (Math.round(number)).toString();
   }
-  // 负数
-  const thisVal = this.toString();
-  if (thisVal.includes("-")) {
-    number = -number;
-  }
   let result = number.toString();
   const arr = result.split('.');
 
@@ -26,7 +21,7 @@ Number.prototype.toFixed = function (n) {
     return result;
   }
 
-  const integer = arr[0];
+  let integer = arr[0];
   const decimal = arr[1];
   if (decimal.length == n) {
     return result;
@@ -36,6 +31,9 @@ Number.prototype.toFixed = function (n) {
       result += '0';
     }
     return result;
+  }
+  if (arr[0].includes("-")) {
+    integer = -integer;
   }
   result = integer + '.' + decimal.substr(0, n);
   const last = decimal.substr(n, 1);
@@ -47,7 +45,7 @@ Number.prototype.toFixed = function (n) {
     result = result.toFixed(n);
   }
 
-  if (thisVal.includes("-")) {
+  if (arr[0].includes("-")) {
     return -result;
   } else {
     return result;
