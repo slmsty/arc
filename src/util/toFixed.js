@@ -48,7 +48,7 @@ Number.prototype.toFixed = function (n) {
     result = result.toFixed(n);
   }
 
-  if (number < 0) {
+  if (thisVal < 0) {
     return -result;
   } else {
     return result;
