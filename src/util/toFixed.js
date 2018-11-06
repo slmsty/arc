@@ -2,19 +2,18 @@ Number.prototype.toFixed = function (n) {
   if (n > 20 || n < 0) {
     throw new RangeError('toFixed() digits argument must be between 0 and 20');
   }
-  const thisVal = this;
-  var number = thisVal;
-  // 负数
-  if (thisVal < 0) {
-    number = -number;
-  }
+  var number = this;
   if (isNaN(number) || number >= Math.pow(10, 21)) {
     return number.toString();
   }
   if (typeof (n) == 'undefined' || n == 0) {
     return (Math.round(number)).toString();
   }
-
+  // 负数
+  const thisVal = this.toString();
+  if (thisVal.includes("-")) {
+    number = -number;
+  }
   let result = number.toString();
   const arr = result.split('.');
 
@@ -48,7 +47,7 @@ Number.prototype.toFixed = function (n) {
     result = result.toFixed(n);
   }
 
-  if (thisVal < 0) {
+  if (thisVal.includes("-")) {
     return -result;
   } else {
     return result;
