@@ -254,6 +254,7 @@ class TransferERP extends React.Component {
         <Table
           rowSelection={rowSelection}
           pagination={pagination}
+          rowKey="orderLineId"
           bordered
           columns={this.ErpColumns}
           size="middle"
