@@ -179,9 +179,9 @@ class ProjectReceiptClaimSelectFund extends React.Component {
             <Col span={5}>
               <Button key="select" type="primary" onClick={this.handleSelectFunds}>
                 <Icon type="check" />选择合同百分比
-              </Button>,
+              </Button>
             </Col>
-          </Row>,
+          </Row>
         ]}
       >
         <Form
