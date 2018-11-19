@@ -238,7 +238,7 @@ const proApplyColumns = [{
 }, {
   title: '款项金额',
   dataIndex: 'paymentAmount',
-  width: 80,
+  width: 100,
   render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }, {
   title: '已申请金额',
