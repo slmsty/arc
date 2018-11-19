@@ -5,7 +5,7 @@ import SelectDept from '../common/SelectDept'
 import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import BDModal2 from './BDModal2'
+import { pageSizeOptions } from '../billApplication/billColumns'
 import GlModal from './GlModal'
 import BadDebtModal from './infoModal'
 import ReturnModal from './returnModal'
@@ -45,11 +45,6 @@ class Status extends Component{
         dataIndex: 'statusName',
         width: 100,
       },
-      /* {
-        title: '申请单账号',
-        dataIndex: 'applyCount',
-        width: 140,
-      }, */
       {
         title: 'GL已提坏账金额',
         dataIndex: 'badDebtProvisionAmount',
@@ -668,7 +663,7 @@ class Status extends Component{
           columns={columns}
           dataSource={result}
           pagination={{
-            pageSizeOptions: ['5', '10', '20', '30'],
+            pageSizeOptions,
             showSizeChanger: true,
             onShowSizeChange: this.pageSizeChange,
             showTotal: t => `共${t}条`,
