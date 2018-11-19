@@ -82,7 +82,7 @@ export default ({
       title = ""
       break;
     default:
-    // nothing
+      // nothing
   }
   return {
     pageNo,
