@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, Form, message, Row, Col, Input, DatePicker, Button, InputNumber, Icon, Select } from 'antd'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import { proColumns, billDetailColumns, detailColumns, contentCols, contentOnlyCols, taxCategoryCols, totalColumns, clientCols, comCols, receiveInvoice } from '../billApplication/billColumns'
+import { billDetailColumns, detailColumns, contentCols, contentOnlyCols, taxCategoryCols, totalColumns, clientCols, comCols, receiveInvoice } from '../billApplication/billColumns'
 import SearchAllColumns from '../common/SearchAllColumns'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment';
@@ -637,6 +637,57 @@ class BillApproveDetail extends React.Component  {
     return invoiceLineCols
   }
 
+  proColumns = () => {
+    return [{
+      title: '项目编码',
+      dataIndex: 'projectCode',
+      width: 120,
+    }, {
+      title: '签约公司',
+      dataIndex: 'company',
+      width: 240,
+    }, {
+      title: '合同编码',
+      dataIndex: 'contractCode',
+      width: 300,
+    }, {
+      title: '提前开票原因',
+      dataIndex: 'advanceBillingReasonName',
+      width: 300,
+    }, {
+      title: '预计回款日期',
+      dataIndex: 'receiptReturnDate',
+      width: 150,
+    }, {
+      title: '付款条件',
+      dataIndex: 'paymentTerm',
+      width: 200,
+    }, {
+      title: '款项名称',
+      dataIndex: 'paymentName',
+      width: 150,
+    }, {
+      title: '付款阶段',
+      dataIndex: 'paymentPhrases',
+      width: 150,
+    }, {
+      title: '款项金额',
+      dataIndex: 'paymentAmount',
+      width: 100,
+      render: (text) => text ? (toThousands(parseFloat(text))) : ''
+    }, {
+      title: '已申请金额',
+      dataIndex: 'applyIngAmount',
+      width: 100,
+      render: (text) => text ? (toThousands(parseFloat(text))) : ''
+    }, {
+      title: '已开票金额',
+      dataIndex: 'outcomeAmount',
+      width: 100,
+      render: (text) => text ? (toThousands(parseFloat(text))) : ''
+    }]
+  };
+
   getTotalAmount = (dataSource) => {
     let amountTotal = 0
     let totalExtraAmount = 0
@@ -1003,7 +1054,7 @@ class BillApproveDetail extends React.Component  {
           <h1>项目信息</h1>
           <Table
             rowKey="receiptClaimId"
-            columns={proColumns}
+            columns={this.proColumns}
             bordered
             size="small"
             scroll={{ x: '1480px' }}
