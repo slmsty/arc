@@ -9,6 +9,7 @@ import MultipleInput from '../common/multipleInput'
 import SelectRadioApi from  '../common/selectRadioApi'
 import SelectSbu from '../common/SelectSbu'
 import SelectCustomerWithForm from '../common/selectCustomer'
+import SelectOperator from '../common/selectOperator'
 
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
@@ -36,6 +37,7 @@ class TransferERPForm extends React.Component {
     params.contractNo = params.contractNo ? params.contractNo.trim() : '';
     params.contractName = params.contractName ? params.contractName.trim() : '';
     params.signCompany = params.signCompany ? params.signCompany.trim() : '';
+    params.splitBy = param.splitBy && param.splitBy[0] ? param.splitBy[0] : '';
     delete params.signDate;
     this.props.queryParms(params)
   };
@@ -167,6 +169,19 @@ class TransferERPForm extends React.Component {
                   )}
                 </FormItem>
               </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="拆分操作人">
+                  {
+                    getFieldDecorator('splitBy')(
+                      <SelectOperator
+                        placeholder="请输入拆分操作人"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
               <Col span={8} style={{textAlign: 'right'}}>
                 <Button type="primary" key="search" onClick={this.queryParms}><Icon type="search"/>查询</Button>
                 <Button style={{marginLeft: '10px'}} type="primary" key="export" loading={this.state.excelDis}

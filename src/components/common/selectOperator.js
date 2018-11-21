@@ -43,7 +43,7 @@ class SelectOperator extends React.Component {
       message.error('请选择拆分操作人')
       return
     }
-    this.props.onChange([this.state.selectedRows[0].accountId, this.state.selectedRows[0].accountName])
+    this.props.onChange([this.state.selectedRows[0].personId, this.state.selectedRows[0].accountName])
     /*this.props.onChange([this.state.selectedRows[0].customerId, this.state.selectedRows[0].customerName])
     this.setState({
       visible: false,
