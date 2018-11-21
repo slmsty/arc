@@ -109,6 +109,10 @@ class TransferERP extends React.Component {
         width: 150,
         render: (text) => (
           text && text.length > 15 ? <Tooltip title={text}>{`${text.substring(0, 15)}...`}</Tooltip> : text)
+      }, {
+        title: '合同拆分操作人',
+        dataIndex: 'splitByName',
+        width: 110,
       }
     ];
     this.queryParam = {
