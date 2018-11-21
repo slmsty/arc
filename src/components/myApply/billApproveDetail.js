@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, Form, message, Row, Col, Input, DatePicker, Button, InputNumber, Icon, Select } from 'antd'
 import SelectInvokeApi from '../common/selectInvokeApi'
-import { billDetailColumns, detailColumns, contentCols, contentOnlyCols, taxCategoryCols, totalColumns, clientCols, comCols, receiveInvoice } from '../billApplication/billColumns'
+import { proColumns, billDetailColumns, detailColumns, contentCols, contentOnlyCols, taxCategoryCols, totalColumns, clientCols, comCols, receiveInvoice } from '../billApplication/billColumns'
 import SearchAllColumns from '../common/SearchAllColumns'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import moment from 'moment';
@@ -109,9 +109,9 @@ class BillApproveDetail extends React.Component  {
 
     dataSource.splice(lineNo + data.length, 0, newData)
     const source = dataSource.map((record, index) => ({
-        ...record,
-        lineNo: index,
-      }
+      ...record,
+      lineNo: index,
+    }
     ))
     this.setState({
       dataSource: source,
@@ -353,10 +353,10 @@ class BillApproveDetail extends React.Component  {
               break
             }
             /*if(parseFloat(record.billingTaxRate) === 0 && values.billingType === 'SPECIAL_INVOICE') {
-              message.warning(`第【${i + 1}】行的税率为0%时，开票类型不能为专票,请调整!`)
-              err = true
-              break
-            }*/
+             message.warning(`第【${i + 1}】行的税率为0%时，开票类型不能为专票,请调整!`)
+             err = true
+             break
+             }*/
             //税率容差控制 税率为0不能修改税额和不含税金额
             const excludeTaxAmount = record.billingAmount / (1 + parseFloat(record.billingTaxRate))
             const taxAmount = parseFloat((record.billingAmount - excludeTaxAmount).toFixed(2))
@@ -636,57 +636,6 @@ class BillApproveDetail extends React.Component  {
     }]
     return invoiceLineCols
   }
-
-  proColumns = () => {
-    return [{
-      title: '项目编码',
-      dataIndex: 'projectCode',
-      width: 120,
-    }, {
-      title: '签约公司',
-      dataIndex: 'company',
-      width: 240,
-    }, {
-      title: '合同编码',
-      dataIndex: 'contractCode',
-      width: 300,
-    }, {
-      title: '提前开票原因',
-      dataIndex: 'advanceBillingReasonName',
-      width: 300,
-    }, {
-      title: '预计回款日期',
-      dataIndex: 'receiptReturnDate',
-      width: 150,
-    }, {
-      title: '付款条件',
-      dataIndex: 'paymentTerm',
-      width: 200,
-    }, {
-      title: '款项名称',
-      dataIndex: 'paymentName',
-      width: 150,
-    }, {
-      title: '付款阶段',
-      dataIndex: 'paymentPhrases',
-      width: 150,
-    }, {
-      title: '款项金额',
-      dataIndex: 'paymentAmount',
-      width: 100,
-      render: (text) => text ? (toThousands(parseFloat(text))) : ''
-    }, {
-      title: '已申请金额',
-      dataIndex: 'applyIngAmount',
-      width: 100,
-      render: (text) => text ? (toThousands(parseFloat(text))) : ''
-    }, {
-      title: '已开票金额',
-      dataIndex: 'outcomeAmount',
-      width: 100,
-      render: (text) => text ? (toThousands(parseFloat(text))) : ''
-    }]
-  };
 
   getTotalAmount = (dataSource) => {
     let amountTotal = 0
@@ -1054,7 +1003,7 @@ class BillApproveDetail extends React.Component  {
           <h1>项目信息</h1>
           <Table
             rowKey="receiptClaimId"
-            columns={this.proColumns}
+            columns={proColumns}
             bordered
             size="small"
             scroll={{ x: '1480px' }}
@@ -1284,17 +1233,17 @@ class BillApproveDetail extends React.Component  {
             />
             {
               this.props.applyType === 'BILLING_EXCESS' &&
-                <div className="arc-info">
-                  <Table
-                    style={{width: '70%'}}
-                    rowKey="id"
-                    size="small"
-                    bordered
-                    columns={totalColumns}
-                    dataSource={this.getTaxData()}
-                    pagination={false}
-                  />
-                </div>
+              <div className="arc-info">
+                <Table
+                  style={{width: '70%'}}
+                  rowKey="id"
+                  size="small"
+                  bordered
+                  columns={totalColumns}
+                  dataSource={this.getTaxData()}
+                  pagination={false}
+                />
+              </div>
             }
             <Row gutter={40}>
               <Col span={19}>
