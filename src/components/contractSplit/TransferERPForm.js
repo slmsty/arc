@@ -52,6 +52,7 @@ class TransferERPForm extends React.Component {
     params.contractNo = params.contractNo ? params.contractNo.trim() : '';
     params.contractName = params.contractName ? params.contractName.trim() : '';
     params.signCompany = params.signCompany ? params.signCompany.trim() : '';
+    params.splitBy = params.splitBy && params.splitBy[0] ? params.splitBy[0] : '';
     delete params.signDate;
     this.props.exportParams(params)
   };
