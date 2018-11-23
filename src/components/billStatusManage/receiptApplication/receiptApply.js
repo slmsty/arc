@@ -3,7 +3,8 @@ import { Table, Button } from 'antd'
 import ReceiptApplyForm from './receiptApplyForm'
 import ReceiptDetail from './receiptDetail'
 import { toThousands }  from '../../../util/currency'
-import {getContractUrl} from "../../../actions/billApplication";
+import { pageSizeOptions } from "../../billApplication/billColumns";
+
 const receiptColumns = [{
   title: '项目编码',
   dataIndex: 'projectNo',
@@ -141,6 +142,7 @@ export default class ReceiptApply extends React.Component {
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
+      pageSizeOptions,
     }
     return (
       <div>

@@ -6,6 +6,7 @@ import moment from 'moment'
 import currency from '../../util/currency'
 import ManualEntryBankTurnoverSearchWithForm from './manualEntryBankTurnoverSearch'
 import EditManualEntryBankTurnoverDataWithForm from './editManualEntryBankTurnoverData'
+import { pageSizeOptions } from '../billApplication/billColumns'
 
 const dateFormat = 'YYYY-MM-DD'
 const confirm = Modal.confirm
@@ -148,6 +149,11 @@ export default class ManualEntryBankTurnover extends React.Component {
     this.queryParam.pageInfo.pageNo = page
     this.handleQuery()
   }
+  handleChangeSize = (current, size) => {
+    this.queryParam.pageInfo.pageNo = current
+    this.queryParam.pageInfo.pageSize = size
+    this.handleQuery()
+  }
   handleUploaded = (info) => {
     if (info.file.status === 'done') {
       if (info.file.response.resultCode !== '000000') {
@@ -176,7 +182,11 @@ export default class ManualEntryBankTurnover extends React.Component {
     const pagination = {
       current: this.props.manualEntryBankTurnoverList.pageInfo.pageNo || 1,
       onChange: this.handleChangePage,
+      showTotal: (total) => `共${total}条`,
       total: this.props.manualEntryBankTurnoverList.pageInfo.count,
+      showSizeChanger: true,
+      onShowSizeChange: this.handleChangeSize,
+      pageSizeOptions,
     }
     return (
       <div>

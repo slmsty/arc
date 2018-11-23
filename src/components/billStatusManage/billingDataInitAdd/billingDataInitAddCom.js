@@ -1,11 +1,9 @@
-/**
- * Created by liangshuang on 18/5/14.
- */
 import React from 'react'
 import {Table, message, Button} from 'antd'
 import { toThousands } from '../../../util/currency'
 import BillingDataInitAddWithFrom from './billingDataInitAddWithFrom'
 import InfoModal from './infoModal'
+import { pageSizeOptions } from "../../billApplication/billColumns";
 const billingDataInitColumns = [
   {
     title:'申请单号',
@@ -309,6 +307,7 @@ class BillingDataInitAddCom extends React.Component {
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
+      pageSizeOptions,
     }
     const rowSelection = {
       selectedRowKeys,

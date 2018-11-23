@@ -417,10 +417,10 @@ export default class BillingApplication extends React.Component {
       return (
         <div>
           <Button type="primary" ghost onClick={() => this.handleBilling()}>开票</Button>
-          {
+          {/*{
             roles.includes('ar_admin') ?
               <Button type="primary" onClick={() => this.searchContractBill()}>开票审核</Button> : ''
-          }
+          }*/}
         </div>
       )
     } else if (advanceTypes.includes(type)) {

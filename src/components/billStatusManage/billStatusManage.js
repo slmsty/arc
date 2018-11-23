@@ -1,6 +1,3 @@
-/**
- * Created by liangshuang on 17/12/1.
- */
 import React from 'react'
 import { Button, Table, message, Modal } from 'antd'
 import BillStatusManageWithFrom from './billStatusManageWithFrom'
@@ -8,77 +5,14 @@ import NoApplyInfo from '../myApply/noApplyInfo'
 import DetailModal from './calcelDetail'
 import GlDateModal from './../common/glDateModal'
 import FileDownModal from './fileDownMotal'
-import currency, {toThousands} from '../../util/currency'
+import { toThousands } from '../../util/currency'
 import { billApproveItemColumns } from './billStatusCols'
 import InvoiceBackInfoEdit from './InvoiceBackInfoEdit'
+import { pageSizeOptions } from "../billApplication/billColumns";
 const TO_TAX_TYPE = ['开票审批完成', '作废审批完成', '开票失败']
 const CANCEL_TYPE = ['开票审批中', '作废审批中']
 const BACK_INFO = ['项目退票', '其他红字开票']
-const billApproveInfoColumns = [
-  {
-    title: '开票行号',
-    dataIndex: 'lineNo',
-    width: 70,
-    render: (text, record) => text === '合计' ?
-      <span style={{fontWeight: 'bold', color: '#ff8928'}}>合计</span> : text
-  }, {
-    title: '开票内容',
-    dataIndex: 'billingContent',
-    width: 300,
-  },
-  {
-    title: '规格型号',
-    dataIndex: 'specificationType',
-    width: 100,
-  },
-  {
-    title: '单位',
-    dataIndex: 'unit',
-    width: 100,
-  },
-  {
-    title: '数量',
-    dataIndex: 'quantity',
-    width: 100,
-  },
-  {
-    title: '单价',
-    dataIndex: 'unitPrice',
-    width: 100,
-    render: (text, record, index) => (text ? toThousands(text) : text),
-  },
-  {
-    title: '开票不含税金额',
-    dataIndex: 'billingAmountExcludeTax',
-    width: 100,
-    render: (text, record, index) =>
-      record.lineNo === '合计' ? <span style={{color: '#ff8928'}}>{text}</span> :
-        (text ? toThousands(text) : text),
-  },
-  {
-    title: '开票金额',
-    dataIndex: 'billingAmount',
-    width: 100,
-    render: (text, record, index) =>
-      (record.lineNo === '合计' ? <span style={{color: '#ff8928'}}>{text}</span>  :
-        (text ? toThousands(text) : text)),
-  },
-  {
-    title: '开票税率',
-    dataIndex: 'billingTaxRate',
-    width: 100,
-    render: (text, record) =>
-      record.lineNo === '合计' ? text : (typeof record.billingTaxRate !== 'undefined' ? `${text * 100}%` : '')
-  },
-  {
-    title: '开票税额',
-    dataIndex: 'billingTaxAmount',
-    width: 100,
-    render: (text, record, index) => (
-      record.lineNo === '合计' ? <span style={{color: '#ff8928'}}>{text}</span>  :
-        (text ? toThousands(text) : text)),
-  },
-]
+
 export default class BillStatusCon extends React.Component {
   state = {
     loading: false,
@@ -635,6 +569,7 @@ export default class BillStatusCon extends React.Component {
       onChange: this.handleChangePage,
       showSizeChanger: true,
       onShowSizeChange: this.handleChangeSize,
+      pageSizeOptions,
     }
     const { getBillStatusDetailList, getBillStatusBillResultList } = this.props.billStatusManage
 

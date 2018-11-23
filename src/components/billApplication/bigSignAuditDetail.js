@@ -9,13 +9,14 @@ import './bigSignAuditDetail.less'
 class BigSignAuditDetail extends React.Component {
   constructor(props) {
     super(props)
-    const { custInfo, comInfo } = props.applicationInfo.serviceDetail
+    const { serviceType, serviceDetail } = props.applicationInfo
+    const { custInfo, comInfo } = serviceDetail
     this.state = {
       dataSource: [],
       loading: false,
       selectedRows: [],
       showApproveDetail: false,
-      billType: 'BILLING_CONTRACT',
+      billType: serviceType,
       approveData: {},
       custInfo: custInfo,
       comInfo: comInfo,
@@ -68,13 +69,13 @@ class BigSignAuditDetail extends React.Component {
         this.setState({
           loading: true,
         })
-        const { serviceType } = this.props.applicationInfo
+        console.log(this.state.billType)
         const params = {
           ...values,
           billingApplicationId,
           billingCustInfoId: this.state.custInfo.billingCustInfoId,
           billingComInfoId: this.state.comInfo.billingComInfoId,
-          billingApplicationType: values.billFlow ? values.billFlow : serviceType,
+          billingApplicationType: this.state.billType,
           billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
           appLineItems: this.state.approveData.map(record => ({
             ...record,
@@ -112,8 +113,9 @@ class BigSignAuditDetail extends React.Component {
   }
 
   setBillApplicationType = (type) => {
+    const { serviceType } = this.props.applicationInfo
     this.setState({
-      billType: type,
+      billType: type === 'OLD' ? serviceType : type,
     })
   }
 
@@ -163,6 +165,7 @@ class BigSignAuditDetail extends React.Component {
               showSave={false}
               isBigSign={true}
               isArAdminRole={this.isArAdminRole}
+              taskCode={this.props.taskCode}
             />
           </div>
         </Form>

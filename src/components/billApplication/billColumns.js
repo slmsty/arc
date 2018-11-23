@@ -189,7 +189,7 @@ const proColumns = [{
 }, {
   title: '款项金额',
   dataIndex: 'paymentAmount',
-  width: 80,
+  width: 100,
   render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }, {
   title: '已申请金额',
@@ -238,7 +238,7 @@ const proApplyColumns = [{
 }, {
   title: '款项金额',
   dataIndex: 'paymentAmount',
-  width: 80,
+  width: 100,
   render: (text) => text ? (toThousands(parseFloat(text))) : ''
 }, {
   title: '已申请金额',
@@ -338,13 +338,13 @@ const redFontCols = [
     width: 100,
     render: (text) => text ? (toThousands(parseFloat(text))) : ''
   }, /*{
-    title: '开票税率',
-    dataIndex: 'taxRate',
-    width: 80,
-    render: (text) => {
-      return `${text * 100}%`
-    }
-  }, */{
+   title: '开票税率',
+   dataIndex: 'taxRate',
+   width: 80,
+   render: (text) => {
+   return `${text * 100}%`
+   }
+   }, */{
     title: '项目编码',
     dataIndex: 'projectNo',
     width: 200,

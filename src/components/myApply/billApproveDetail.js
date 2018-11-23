@@ -109,9 +109,9 @@ class BillApproveDetail extends React.Component  {
 
     dataSource.splice(lineNo + data.length, 0, newData)
     const source = dataSource.map((record, index) => ({
-        ...record,
-        lineNo: index,
-      }
+      ...record,
+      lineNo: index,
+    }
     ))
     this.setState({
       dataSource: source,
@@ -353,10 +353,10 @@ class BillApproveDetail extends React.Component  {
               break
             }
             /*if(parseFloat(record.billingTaxRate) === 0 && values.billingType === 'SPECIAL_INVOICE') {
-              message.warning(`第【${i + 1}】行的税率为0%时，开票类型不能为专票,请调整!`)
-              err = true
-              break
-            }*/
+             message.warning(`第【${i + 1}】行的税率为0%时，开票类型不能为专票,请调整!`)
+             err = true
+             break
+             }*/
             //税率容差控制 税率为0不能修改税额和不含税金额
             const excludeTaxAmount = record.billingAmount / (1 + parseFloat(record.billingTaxRate))
             const taxAmount = parseFloat((record.billingAmount - excludeTaxAmount).toFixed(2))
@@ -1157,9 +1157,9 @@ class BillApproveDetail extends React.Component  {
                     <FormItem {...formItemLayout} label="开票流程">
                       {
                         getFieldDecorator('billFlow',
-                          {initialValue: 'BILLING_CONTRACT', rules: [{ required: this.props.isApprove, message: '请选择开票流程!' }]})(
+                          {initialValue: this.props.taskCode === 'ar_admin_auditor' ? 'BILLING_CONTRACT' : 'OLD', rules: [{ required: this.props.isApprove, message: '请选择开票流程!' }]})(
                           <SelectInvokeApi
-                            typeCode="TYPE_SELECT"
+                            typeCode={this.props.taskCode === 'ar_admin_auditor' ? 'TYPE_SELECT' : 'TYPE_SELECT_TAX'}
                             paramCode="BILLING_APPLICATION_TYPE"
                             placeholder="开票流程"
                             onChange={(v) => this.props.setBillApplicationType(v)}
@@ -1233,17 +1233,17 @@ class BillApproveDetail extends React.Component  {
             />
             {
               this.props.applyType === 'BILLING_EXCESS' &&
-                <div className="arc-info">
-                  <Table
-                    style={{width: '70%'}}
-                    rowKey="id"
-                    size="small"
-                    bordered
-                    columns={totalColumns}
-                    dataSource={this.getTaxData()}
-                    pagination={false}
-                  />
-                </div>
+              <div className="arc-info">
+                <Table
+                  style={{width: '70%'}}
+                  rowKey="id"
+                  size="small"
+                  bordered
+                  columns={totalColumns}
+                  dataSource={this.getTaxData()}
+                  pagination={false}
+                />
+              </div>
             }
             <Row gutter={40}>
               <Col span={19}>
