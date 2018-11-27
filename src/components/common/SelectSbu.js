@@ -108,6 +108,7 @@ class SelectSbu extends React.Component {
     }
     const pagination = {
       current: this.state.pageNo,
+      pageSize: 8,
       onChange: this.handleChangePage,
       total: this.state.total,
       size: 'small',

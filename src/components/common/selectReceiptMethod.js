@@ -86,7 +86,7 @@ class SelectReceiptMethod extends React.Component {
     if (response.resultCode === '000000') {
       this.setState({
         pageNo: response.pageInfo.pageNo,
-        total: response.pageInfo.pageCount,
+        total: response.pageInfo.count,
         methodList: response.pageInfo.result,
         firstLoad: false,
       })
@@ -166,6 +166,7 @@ class SelectReceiptMethod extends React.Component {
             dataSource={this.state.methodList}
             pagination={{
               current: this.state.pageNo,
+              pageSize: 8,
               onChange: this.handleChangePage,
               total: this.state.total,
               size: 'small',
