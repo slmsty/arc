@@ -166,7 +166,7 @@ class SelectReceiptMethod extends React.Component {
             dataSource={this.state.methodList}
             pagination={{
               current: this.state.pageNo,
-              pageSize: 8,
+              pageSize: 10,
               onChange: this.handleChangePage,
               total: this.state.total,
               size: 'small',
