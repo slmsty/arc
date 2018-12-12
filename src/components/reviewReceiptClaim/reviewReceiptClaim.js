@@ -191,7 +191,7 @@ export default class ReviewReceiptClaim extends React.Component {
   queryParam = {
     pageInfo: {
       pageNo: 1,
-      pageSize: 10,
+      pageSize: 50,
     },
     startDate: '',
     endDate: '',
