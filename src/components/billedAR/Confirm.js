@@ -203,7 +203,8 @@ class Confirm extends Component {
       this.props.Search({
         pageInfo: {
           pageNo: 1,
-          pageSize: this.props.pageSize
+          // pageSize: this.props.pageSize
+          pageSize: 50
         },
         ...values
       })
@@ -223,7 +224,7 @@ class Confirm extends Component {
       this.props.Search({
         pageInfo: {
           pageNo: 1,
-          pageSize: size
+          pageSize: 50
         },
         ...values
       })
@@ -235,7 +236,7 @@ class Confirm extends Component {
       this.props.Search({
         pageInfo: {
           pageNo: page,
-          pageSize: pageSize
+          pageSize: 50
         },
         ...values
       })
@@ -279,7 +280,7 @@ class Confirm extends Component {
       this.props.Search({
         pageInfo: {
           pageNo: this.props.pageNo,
-          pageSize: this.props.pageSize
+          pageSize: 50
         },
         ...values
       })
@@ -395,7 +396,7 @@ class Confirm extends Component {
       this.props.Search({
         pageInfo: {
           pageNo: this.props.pageNo,
-          pageSize: this.props.pageSize
+          pageSize: 50
         },
         ...values
       })
@@ -561,7 +562,7 @@ class Confirm extends Component {
             showTotal: t=>`共${t}条`,
             onChange: this.pageNoChange,
             current: pageNo,
-            pageSize: pageSize,
+            pageSize: 50,
             total: count
           }}
           scroll={{x: 4580, y: this.state.tableHeight}}/>
