@@ -286,7 +286,7 @@ export default class ProjectReceiptClaim extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const rejectBtn = this.queryParam.status === '21' || this.queryParam.status === '40' ? <Button type="danger" onClick={this.handleReject}>拒绝</Button> : null
+    const rejectBtn = this.queryParam.status === '21' || this.queryParam.status === '60' || this.queryParam.status === '40' ? <Button type="danger" onClick={this.handleReject}>拒绝</Button> : null
     const hangUpBtn = <Button onClick={this.handleHangUp}>暂挂</Button>
     const makeSummary = this.props.amountTotals && this.props.amountTotals.length ? this.props.amountTotals.map(item => `${item.currency}：${currency(item.totalAmount)}`).join('  ') : '0.00'
     return (
