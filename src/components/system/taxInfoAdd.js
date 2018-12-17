@@ -1,11 +1,11 @@
 import React from 'react'
-import { Form, Button, Row, Col, Modal, Icon, Input, Select } from 'antd'
-const FormItem = Form.Item
-const Option = Select.Option
+import {Form, Button, Row, Col, Modal, Icon, Input, Select} from 'antd'
+const FormItem = Form.Item;
+const Option = Select.Option;
 
 class TaxInfoAdd extends React.Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       saveLoading: false,
     }
@@ -13,20 +13,20 @@ class TaxInfoAdd extends React.Component {
 
   handleOk = (e) => {
     e.preventDefault();
-    const { custInfoId } = this.props.record
+    const {custInfoId} = this.props.record;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.setState({
           saveLoading: true
-        })
+        });
         const trimValues = {
           ...values,
           custInfoName: values.custInfoName.trim(),
           billingCustName: values.billingCustName.trim(),
-          taxpayerIdentification: values.taxpayerIdentification.trim(),
+          taxpayerIdentification: values.taxpayerIdentification ? values.taxpayerIdentification.trim() : '',
           addressPhoneNum: values.addressPhoneNum ? values.addressPhoneNum.trim() : '',
           bankAccount: values.bankAccount ? values.bankAccount.trim() : '',
-        }
+        };
         const params = custInfoId ? {
           ...trimValues,
           custInfoId,
@@ -34,9 +34,9 @@ class TaxInfoAdd extends React.Component {
         } : {
           ...trimValues,
           actionType: 'NEW',
-        }
+        };
         this.props.saveCustTaxInfo(params).then(res => {
-          if(res && res.response) {
+          if (res && res.response) {
             this.setState({
               saveLoading: false
             })
@@ -44,15 +44,15 @@ class TaxInfoAdd extends React.Component {
         })
       }
     });
-  }
+  };
 
   render() {
-    const { getFieldDecorator } = this.props.form
-    const { custInfoName, billingCustName, taxpayerIdentification, addressPhoneNum, bankAccount, status} = this.props.record
+    const {getFieldDecorator} = this.props.form;
+    const {custInfoName, billingCustName, taxpayerIdentification, addressPhoneNum, bankAccount, status, abroadCust} = this.props.record;
     const formItemLayout = {
-      labelCol: { span: 9 },
-      wrapperCol: { span: 15 },
-    }
+      labelCol: {span: 9},
+      wrapperCol: {span: 15},
+    };
     return (
       <div>
         <Modal
@@ -63,7 +63,7 @@ class TaxInfoAdd extends React.Component {
           onCancel={() => this.props.onCancel()}
           footer={[
             <Button key="submit" type="primary" loading={this.state.saveLoading} onClick={this.handleOk}>
-              {!this.state.saveLoading ? <Icon type="check" /> : ''}保存
+              {!this.state.saveLoading ? <Icon type="check"/> : ''}保存
             </Button>,
           ]}
         >
@@ -72,33 +72,53 @@ class TaxInfoAdd extends React.Component {
           >
             <Row gutter={30}>
               <Col span={12} key={1}>
-                <FormItem {...formItemLayout} label="客户名称">
-                  {getFieldDecorator('custInfoName', {initialValue: custInfoName, rules: [{ required: true, message: '请填写客户名称!' }]})(
-                    <Input />
+                <FormItem {...formItemLayout} label="非企业或境外公司">
+                  {getFieldDecorator('abroadCust', {initialValue: abroadCust || 'N'})(
+                    <Select>
+                      <Option value="Y">是</Option>
+                      <Option value="N">否</Option>
+                    </Select>
                   )}
                 </FormItem>
               </Col>
               <Col span={12} key={2}>
-                <FormItem {...formItemLayout} label="开票客户名称">
-                  {
-                    getFieldDecorator('billingCustName',{
-                      initialValue: billingCustName, rules: [{ required: true, message: '请填写开票客户名称!' }]
-                    })(<Input placeholder="开票客户名称"/>)
-                  }
+                <FormItem {...formItemLayout} label="客户名称">
+                  {getFieldDecorator('custInfoName', {
+                    initialValue: custInfoName,
+                    rules: [{required: true, message: '请填写客户名称!'}]
+                  })(
+                    <Input />
+                  )}
                 </FormItem>
               </Col>
             </Row>
             <Row gutter={30}>
               <Col span={12} key={1}>
+                <FormItem {...formItemLayout} label="开票客户名称">
+                  {
+                    getFieldDecorator('billingCustName', {
+                      initialValue: billingCustName, rules: [{required: true, message: '请填写开票客户名称!'}]
+                    })(<Input placeholder="开票客户名称"/>)
+                  }
+                </FormItem>
+              </Col>
+              <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="纳税识别码">
-                  {getFieldDecorator('taxpayerIdentification', {initialValue: taxpayerIdentification, rules: [{ required: true, message: '请填写纳税识别码!' }]})(
+                  {getFieldDecorator('taxpayerIdentification', {
+                    initialValue: taxpayerIdentification
+                  })(
                     <Input placeholder="纳税识别码"/>
                   )}
                 </FormItem>
               </Col>
-              <Col span={12} key={2}>
+            </Row>
+            <Row gutter={30}>
+              <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="是否有效">
-                  {getFieldDecorator('status', { initialValue : status || '', rules: [{ required: true, message: '请选择是否有效!' }]})(
+                  {getFieldDecorator('status', {
+                    initialValue: status || '',
+                    rules: [{required: true, message: '请选择是否有效!'}]
+                  })(
                     <Select>
                       <Option value="">-请选择-</Option>
                       <Option value="Y">是</Option>
@@ -107,16 +127,16 @@ class TaxInfoAdd extends React.Component {
                   )}
                 </FormItem>
               </Col>
-            </Row>
-            <Row gutter={30}>
-              <Col span={12} key={1}>
+              <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="纳税人地址、电话">
                   {getFieldDecorator('addressPhoneNum', {initialValue: addressPhoneNum})(
                     <Input />
                   )}
                 </FormItem>
               </Col>
-              <Col span={12} key={2}>
+            </Row>
+            <Row gutter={30}>
+              <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="开户行及账号">
                   {getFieldDecorator('bankAccount', {initialValue: bankAccount})(
                     <Input />
