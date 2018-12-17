@@ -340,10 +340,10 @@ export default class ApplySearchCon extends React.Component {
               isShowEditBtn={buttonList.includes('splitEdit')}
             /> : null
         }
-        {
+        {/*{
           buttonList.includes('splitSendErp') ?
             <Button type='primary' onClick={this.showERPModal}>传送ERP</Button> : null
-        }
+        }*/}
         <Row>
           <Col span={24} style={{textAlign:'right'}}>
             共{this.props.contractSplitDara.getContractList.result.length}条记录
