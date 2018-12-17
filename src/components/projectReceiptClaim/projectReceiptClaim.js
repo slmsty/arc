@@ -135,11 +135,11 @@ export default class ProjectReceiptClaim extends React.Component {
     title: '部门',
     dataIndex: 'deptId',
     width: 100,
-  // }, {
-  //   title: 'GL日期',
-  //   dataIndex: 'glDate',
-  //   width: 100,
-  //   render: text => moment(text).format(dateFormat),
+    // }, {
+    //   title: 'GL日期',
+    //   dataIndex: 'glDate',
+    //   width: 100,
+    //   render: text => moment(text).format(dateFormat),
   }, {
     title: '收款编号',
     dataIndex: 'receiptNo',
