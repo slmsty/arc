@@ -81,7 +81,9 @@ class TaxInfoAdd extends React.Component {
                   )}
                 </FormItem>
               </Col>
-              <Col span={12} key={2}>
+            </Row>
+            <Row gutter={30}>
+              <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="客户名称">
                   {getFieldDecorator('custInfoName', {
                     initialValue: custInfoName,
@@ -91,9 +93,7 @@ class TaxInfoAdd extends React.Component {
                   )}
                 </FormItem>
               </Col>
-            </Row>
-            <Row gutter={30}>
-              <Col span={12} key={1}>
+              <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="开票客户名称">
                   {
                     getFieldDecorator('billingCustName', {
@@ -102,7 +102,9 @@ class TaxInfoAdd extends React.Component {
                   }
                 </FormItem>
               </Col>
-              <Col span={12} key={2}>
+            </Row>
+            <Row gutter={30}>
+              <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="纳税识别码">
                   {getFieldDecorator('taxpayerIdentification', {
                     initialValue: taxpayerIdentification
@@ -111,9 +113,7 @@ class TaxInfoAdd extends React.Component {
                   )}
                 </FormItem>
               </Col>
-            </Row>
-            <Row gutter={30}>
-              <Col span={12} key={1}>
+              <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="是否有效">
                   {getFieldDecorator('status', {
                     initialValue: status || '',
@@ -127,16 +127,16 @@ class TaxInfoAdd extends React.Component {
                   )}
                 </FormItem>
               </Col>
-              <Col span={12} key={2}>
+            </Row>
+            <Row gutter={30}>
+              <Col span={12} key={1}>
                 <FormItem {...formItemLayout} label="纳税人地址、电话">
                   {getFieldDecorator('addressPhoneNum', {initialValue: addressPhoneNum})(
                     <Input />
                   )}
                 </FormItem>
               </Col>
-            </Row>
-            <Row gutter={30}>
-              <Col span={12} key={1}>
+              <Col span={12} key={2}>
                 <FormItem {...formItemLayout} label="开户行及账号">
                   {getFieldDecorator('bankAccount', {initialValue: bankAccount})(
                     <Input />
