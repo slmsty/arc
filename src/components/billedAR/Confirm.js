@@ -14,6 +14,7 @@ const RangePicker = DatePicker.RangePicker;
 
 class Confirm extends Component {
   state = {
+    pageSize: 50,
     visible: false,
     o: {},
     rowKeys: [],
