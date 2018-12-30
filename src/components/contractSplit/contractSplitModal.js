@@ -881,7 +881,7 @@ class ContractSplitModal extends React.Component{
       width: 100,
       render: (text, record, index) => record.taskOpration === '合计' ? currency(discountCatalPrice) : currency(text),
     }, {
-      title: '合同税率',
+      title: <span>合同税率<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractTaxRate',
       width: 80,
       render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractTaxRate',record),
