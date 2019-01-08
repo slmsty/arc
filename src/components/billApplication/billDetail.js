@@ -928,6 +928,7 @@ class BillDetail extends React.Component {
           {
             this.state.showDetail === false && this.props.isRed ?
               <div className="infoPanel">
+              
                 <h1>项目信息</h1>
                 <Table
                   columns={proApplyColumns}

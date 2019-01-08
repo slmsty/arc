@@ -159,11 +159,13 @@ class Approve extends Component {
         rejectDis: true,
         confirmDis: true
       });
-      console.log(values);
+      
       this.props.Search({
         ...values,
       })
+       console.log(values);
     });
+   
   };
 
   componentWillMount() {
@@ -226,7 +228,13 @@ class Approve extends Component {
     const {getFieldDecorator} = this.props.form;
     const columns = this.columns;
     const {result, loading} = this.props;
-
+   
+     const pagination = {
+      showSizeChanger:true,
+      showTotal: (total) => `共${total}条`,
+      total:result.length,
+      
+    }
     const layout = {
       labelCol: {
         span: 8
@@ -378,7 +386,7 @@ class Approve extends Component {
           }}
           columns={columns}
           dataSource={result}
-          pagination={false}
+        pagination={pagination}
           scroll={{x: 3300, y: this.state.tableHeight}}
         />
       </div>

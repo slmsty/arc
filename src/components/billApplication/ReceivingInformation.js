@@ -13,6 +13,7 @@ const formItemLayout1 = {
 export default function ReceivingInformation (props) {
   const { getFieldDecorator } = props.form
   const { expressReceiptName, expressReceiptPhone, expressReceiptCompany, expressReceiptCity,expressReceiptAddress, receiptEmail } = props.info
+  console.log(props.info);
   return (
     <div>
       <h3 className="sent-info">寄件信息</h3>
