@@ -137,9 +137,9 @@ class TaxInfoAdd extends React.Component {
                 </FormItem>
               </Col>
               <Col span={12} key={2}>
-                <FormItem {...formItemLayout} label="开户银行及账号">
-                  {getFieldDecorator('bankAccount', {initialValue: bankAccount,rules: [{required: true, message: '请填写开户银行及信息!'}]})(
-                    <Input placeholder='开户银行及账号'/>
+                <FormItem {...formItemLayout} label="开户行及账号">
+                  {getFieldDecorator('bankAccount', {initialValue: bankAccount})(
+                    <Input />
                   )}
                 </FormItem>
               </Col>
