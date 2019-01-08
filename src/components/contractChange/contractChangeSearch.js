@@ -15,7 +15,11 @@ class ContractChangeSerch extends React.Component {
     this.handleQuery()
   }
   handleQuery = () => {
-    const param = this.props.form.getFieldsValue()
+   this.props.form.validateFields(['contractChangeDate'],(err, fieldsValue) => {
+if (err) {
+      return;
+      }
+      const param = this.props.form.getFieldsValue()
     param.startDate = param.contractChangeDate[0].format(dateFormat)
     param.endData = param.contractChangeDate[1].format(dateFormat)
     delete param.contractChangeDate
@@ -23,6 +27,9 @@ class ContractChangeSerch extends React.Component {
       param.custId = param.custId[0]
     }
     this.props.onQuery(param)
+    })
+
+    
   }
   render() {
     const { getFieldDecorator } = this.props.form
@@ -30,6 +37,9 @@ class ContractChangeSerch extends React.Component {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
     }
+     const config = {
+      rules: [{ type: 'object', required: true, message: 'Please select time!' }],
+    };
     return (
       <div>
         <Form
@@ -40,7 +50,7 @@ class ContractChangeSerch extends React.Component {
             <Col span={9} key={1}>
               <FormItem {...formItemLayout} label="合同变更日期">
                 {getFieldDecorator('contractChangeDate', {
-                  initialValue: [moment().subtract(1, 'day'), moment()],
+                  initialValue: [moment().subtract(1, 'day'), moment()],rules: [{  required: true, message: '请选择开始和结束日期！' }],
                 })(
                   <RangePicker
                     allowClear
