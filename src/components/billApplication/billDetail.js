@@ -197,7 +197,8 @@ class BillDetail extends React.Component {
           })
         }
       })
-    } else  if(this.props.form.getFieldValue('isAgainInvoice') === 'true') {
+    } 
+      else {
       this.props.form.validateFields((err, values) => {
         const groupNos = this.state.dataSource.filter(r => typeof r.groupNo !== 'undefined')
         if (!err && !this.submitCheck(values)) {
@@ -251,11 +252,7 @@ class BillDetail extends React.Component {
         }
       });
     }
-    else{
-
-      message.error('请选择是否重新开票！');
-
-    }
+    
   }
 
   submitCheck = (values) => {
