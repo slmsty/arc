@@ -366,10 +366,7 @@ class ContractSplitModal extends React.Component{
         <Option value={`POC&${index}&${column}`}>POC</Option>
         <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
         <Option value={`FA&${index}&${column}`}>FA</Option>
-<<<<<<< HEAD
         <Option value={`BILL&${index}&${column}`}>T&M</Option>
-=======
->>>>>>> 1592f4096bc3db59d6ead187dc0a095918da7c07
       </Select>
     )
   }
@@ -1187,10 +1184,7 @@ class ContractSplitModal extends React.Component{
                           <Checkbox value="POC">POC</Checkbox>
                           <Checkbox value="RATABLY">RATABLY</Checkbox>
                           <Checkbox value="FA">FA</Checkbox>
-<<<<<<< HEAD
                           <Checkbox value="BILL">T&M</Checkbox>
-=======
->>>>>>> 1592f4096bc3db59d6ead187dc0a095918da7c07
                         </Checkbox.Group>
                       )}
                     </FormItem>
