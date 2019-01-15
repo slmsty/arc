@@ -201,6 +201,11 @@ class ContractSplitModal extends React.Component{
     let selectData = []
     let newSelectCountType = []
     selectData = data.split('&')
+    
+    if(selectData[0]=='TM'){
+      selectData[0]='T&M';
+    }
+    
     const newData = this.state.dataSource.slice(0)
     if(newData[selectData[1]] && newData[selectData[1]].orderListLineId){
       if(newData[selectData[1]][selectData[2]] !=selectData[0]){
@@ -360,13 +365,16 @@ class ContractSplitModal extends React.Component{
     })
   }
   renderSelect = (text, index, column) => {
+    if(text=='T&M'){
+      text='TM';
+    }
     return (
       <Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : ''}>
         <Option value=''>请选择</Option>
         <Option value={`POC&${index}&${column}`}>POC</Option>
         <Option value={`RATABLY&${index}&${column}`}>RATABLY</Option>
         <Option value={`FA&${index}&${column}`}>FA</Option>
-        <Option value={`BILL&${index}&${column}`}>T&M</Option>
+        <Option value={`TM&${index}&${column}`}>T&M</Option>
       </Select>
     )
   }
@@ -1184,7 +1192,7 @@ class ContractSplitModal extends React.Component{
                           <Checkbox value="POC">POC</Checkbox>
                           <Checkbox value="RATABLY">RATABLY</Checkbox>
                           <Checkbox value="FA">FA</Checkbox>
-                          <Checkbox value="BILL">T&M</Checkbox>
+                          <Checkbox value="T&M">T&M</Checkbox>
                         </Checkbox.Group>
                       )}
                     </FormItem>

@@ -17,7 +17,8 @@ const Search = ({pageInfo, glDates, projectNos, contractNos, billedArDate, custN
           pageNo: pageInfo.pageNo,
           pageSize: pageInfo.pageSize
         },
-        glDates: glDates,
+        glDatesStart: glDates && glDates[0] && glDates[0].format('YYYY-MM-DD'),
+        glDatesEnd:glDates && glDates[1] && glDates[1].format('YYYY-MM-DD'),
         projectNos: projectNos,
         contractNos: contractNos,
         billedArDateStart: billedArDate && billedArDate[0] && billedArDate[0].format('YYYY-MM-DD'),

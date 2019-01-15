@@ -201,6 +201,7 @@ class Confirm extends Component {
         approvalDis: true,
         sendDis: true
       });
+      // console.log(values);
       this.props.Search({
         pageInfo: {
           pageNo: 1,
@@ -455,7 +456,7 @@ class Confirm extends Component {
             <Col span={8}>
               <FormItem label="GL日期(多)" {...layout}>
                 {
-                  getFieldDecorator('glDates')(<MultipleDayInput />)
+                  getFieldDecorator('glDates')(<RangePicker/>)
                 }
               </FormItem>
             </Col>

@@ -134,6 +134,7 @@ export default class MyApplyCon extends React.Component {
           } else {
             message.error(res.response.resultMessage)
           }
+          console.log(res);
         })
       },
     })
@@ -151,6 +152,13 @@ export default class MyApplyCon extends React.Component {
       dataIndex: 'statusName',
       width: 80,
     }, {
+
+      title:'数据状态',
+      dataIndex:'billingStatusName',
+      width:80,
+
+    },
+    {
       title: '申请单类型',
       dataIndex: 'modelName',
       width: 150,
