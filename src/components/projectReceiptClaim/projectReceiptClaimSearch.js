@@ -72,7 +72,7 @@ class ProjectReceiptClaimSearch extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={2}>
-              <FormItem {...formItemLayout} label="付款客户名称">
+              <FormItem {...formItemLayout} label="付款客户">
                 {getFieldDecorator('payCustName')(
                   <SelectCustomerWithForm />,
                 )}

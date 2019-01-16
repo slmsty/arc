@@ -109,12 +109,12 @@ class SelectCustomer extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = (this.props.value && this.props.value[1]) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const suffix = (this.state.value!=='') ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
     return (
       <div>
         <Input
           id='username'
-          placeholder="付款客户名称"
+          placeholder="付款客户"
           value={this.state.value}
           suffix={suffix}
           onClick={() => this.setState({ visible: true })}
@@ -136,7 +136,7 @@ class SelectCustomer extends React.Component {
           >
             <Row>
               <Col span={16} key={1}>
-                <FormItem {...formItemLayout} label="付款客户名称">
+                <FormItem {...formItemLayout} label="付款客户">
                   {getFieldDecorator('keywords', {
                     initialValue: this.props.defaultQueryParam,
                   })(
