@@ -986,7 +986,7 @@ class ContractSplitModal extends React.Component{
               </Row>
               <br />
               <Row className="contractRowBorder text-css">
-                <Col span={4} className="contract-bg">
+                <Col span={3} className="contract-bg">
                   合同名称：
                 </Col>
                 <Col span={20} className="contractRowBorderLeft">
@@ -996,7 +996,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
               </Row>
               <Row className="text-css contractRowBorderLeft contractRowBorderBottom">
-                <Col span={4} className="contract-bg">
+                <Col span={3} className="contract-bg">
                   合同编码：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
@@ -1015,7 +1015,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={3} className="contractRowBorderLeft contract-bg">
                   签约日期：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contractRowBorderRight">
+                <Col span={6} className="contractRowBorderLeft contractRowBorderRight">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     {constractData.contractDate}
                   </div>
@@ -1041,14 +1041,14 @@ class ContractSplitModal extends React.Component{
                 <Col span={3} className="contractRowBorderLeft contract-bg">
                   A-软件产品：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contractRowBorderRight">
+                <Col span={6} className="contractRowBorderLeft contractRowBorderRight">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     {constractData.aSoftproduct ? currency(constractData.aSoftproduct) : 0}
                   </div>
                 </Col>
               </Row>
               <Row className="text-css contractRowBorderLeft contractRowBorderTop">
-                <Col span={4} className="contract-bg">
+                <Col span={3} className="contract-bg">
                   B-软件开发：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
@@ -1067,14 +1067,14 @@ class ContractSplitModal extends React.Component{
                 <Col span={3} className="contractRowBorderLeft contract-bg">
                   D-第三方：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contractRowBorderRight">
+                <Col span={6} className="contractRowBorderLeft contractRowBorderRight">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     {constractData.dThird ? currency(constractData.dThird) : 0}
                   </div>
                 </Col>
               </Row>
               <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
-                <Col span={4} className="contract-bg">
+                <Col span={3} className="contract-bg">
                   E-集成及其它服务：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
@@ -1094,12 +1094,12 @@ class ContractSplitModal extends React.Component{
                 <Col span={3} className="contractRowBorderLeft contract-bg">
                   G-咨询：
                 </Col>
-                <Col span={5} style={{ textAlign: 'left', paddingLeft: '2px' }} className="contractRowBorderLeft contractRowBorderRight constractInput">
+                <Col span={6} style={{ textAlign: 'left', paddingLeft: '2px' }} className="contractRowBorderLeft contractRowBorderRight constractInput">
                   {constractData.gConsult ? currency(constractData.gConsult) : 0}
                 </Col>
               </Row>
               <Row className="text-css contractRowBorderLeft contractRowBorderTop">
-                <Col span={4} className="contract-bg">
+                <Col span={3} className="contract-bg">
                   H-运维：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
@@ -1118,12 +1118,12 @@ class ContractSplitModal extends React.Component{
                 <Col span={3} className="contractRowBorderLeft contract-bg">
                   维护服务开始时间：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contractRowBorderRight">
+                <Col span={6} className="contractRowBorderLeft contractRowBorderRight">
                   {constractData.maintainStartDate}
                 </Col>
               </Row>
               <Row className="text-css contractRowBorderLeft contractRowBorderTop">
-                <Col span={4} className="contract-bg">
+                <Col span={3} className="contract-bg">
                   维护服务结束时间：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
@@ -1153,14 +1153,14 @@ class ContractSplitModal extends React.Component{
                 <Col span={3} className="contractRowBorderLeft contract-bg">
                   合同拆分操作人：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contractRowBorderRight" style={{textAlign:'left'}}>
+                <Col span={6} className="contractRowBorderLeft contractRowBorderRight" style={{textAlign:'left'}}>
                   {constractData.splitedByName ? (this.state.editFlag ? constractData.splitedByName : this.props.user) : <div style={{display: this.state.editFlag ? 'none' : 'inline-block'}}>{this.props.user}</div>  }
                 </Col>
               </Row>
 
 
               <Row className="text-css contractRowBorderLeft  contractRowBorderTop">
-                <Col span={4} className="contract-bg">
+                <Col span={3} className="contract-bg">
                   关联BU：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
@@ -1181,7 +1181,7 @@ class ContractSplitModal extends React.Component{
                 <Col span={3} className="contractRowBorderLeft contract-bg">
                   收入结算方式<em style={{ color: '#FF0000' }}>*</em>：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft contractRowBorderRight constractInput">
+                <Col span={6} className="contractRowBorderLeft contractRowBorderRight constractInput">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     <FormItem>
                       {getFieldDecorator('revenueCheckout', {
@@ -1200,10 +1200,10 @@ class ContractSplitModal extends React.Component{
                 </Col>
               </Row>
               <Row className="text-css contractRowBorder contractRowBorderTop">
-                <Col span={4} className="contract-bg">
+                <Col span={3} className="contract-bg">
                   考核比率：
                 </Col>
-                <Col span={5} className="contractRowBorderLeft">
+                <Col span={21} className="contractRowBorderLeft">
                   <div className="contractRowBorderNo" style={{ textAlign: 'left', paddingLeft: '2px' }}>
                     <FormItem>
                       {getFieldDecorator('assessRatio', {
