@@ -1022,7 +1022,7 @@ class ContractSplitModal extends React.Component{
                 </Col>
               </Row>
               <Row className="text-css contractRowBorderLeft">
-                <Col span={4} className='contract-bg'>
+                <Col span={3} className='contract-bg'>
                   合同币种：
                 </Col>
                 <Col span={5} className="contractRowBorderLeft">
