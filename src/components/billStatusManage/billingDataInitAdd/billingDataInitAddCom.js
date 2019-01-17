@@ -206,6 +206,7 @@ class BillingDataInitAddCom extends React.Component {
       loading:true
     })
     this.props.getBillDataInitList(this.queryParam).then((res)=> {
+
       this.setState({
         loading: false,
         selectedRowKeys:[],
@@ -228,7 +229,8 @@ class BillingDataInitAddCom extends React.Component {
     if (selectedRows.length > 0) {
       for(let i = 0; i< selectedRows.length; i++) {
         const item = selectedRows[i]
-        if(item.status === 'BILLING_ERROR' || item.status === 'BILLING_APPLICATION_APPROVE_OK') {
+    
+        if(item.status === 'BILLING_ERROR' || (item.status === 'BILLING_APPLICATION_APPROVE_OK'&&item.billingCurrency=='CNY')) {
           message.warning(`申请单号【${item.billingApplicationId}】未传送金税的数据，不能进行发票补录`)
           break;
         } else if(item.status === 'BILLING_INVALID_OK' || item.status === 'BILLING_INVALID_ING' || item.status === 'BILLING_INVALID_APPROVE_OK') {
@@ -269,9 +271,10 @@ class BillingDataInitAddCom extends React.Component {
     param.billingDataInitResultList = billingDataInitResultList
     param.buttonType = type
     this.props.showDataInitModal(param).then((res) => {
+      // console.log(res.response)
       if (res && res.response && res.response.resultCode === '000000') {
         const { billingDataInitResult } = res.response
-        console.log(res.response)
+        
         this.setState({
           showInfo:true,
           addFlag: false,

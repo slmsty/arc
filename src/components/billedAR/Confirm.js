@@ -211,7 +211,22 @@ class Confirm extends Component {
       })
     })
   };
-
+exportParams = () => {
+  this.props.form.validateFields((err, values) => {
+     
+      
+      
+      this.props.exportParams({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
+    })
+   
+    
+  };
   pageSizeChange = (current, size)=> {
     this.props.form.validateFields((err, values) => {
       this.setState({
@@ -531,6 +546,7 @@ class Confirm extends Component {
             </Col>
             <Col span={16} style={{textAlign: 'right'}}>
               <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
+              <Button type="primary" style={{marginLeft: '10px'}} onClick={this.exportParams}>导出Excel</Button>
             </Col>
           </Row>
         </Form>

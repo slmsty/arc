@@ -64,6 +64,7 @@ class InfoModal extends React.Component {
           updateTime: updateTime ? updateTime : null,
         }
         this.props.saveData(params).then(res => {
+          // console.log(res);
           if (res && res.response && res.response.resultCode === '000000') {
             message.success('保存成功')
           }
