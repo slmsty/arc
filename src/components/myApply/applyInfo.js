@@ -219,7 +219,8 @@ class ApplyInfoModal extends React.Component {
                 }
               }
             }
-            if(err) {
+   
+             if(err) {
             
             }
            else{
@@ -228,16 +229,23 @@ class ApplyInfoModal extends React.Component {
                back=true;
 
            }
-
-            
     
           }
+
+           else{
+
+        
+               back=true;
+
+           }
+
         }
+
       })
 return back;
  }
   approvalDetails=()=>{
-    
+    // console.log(this.formats())
     if(this.formats()==true){
       
     this.setState({approvalDetails:true})
