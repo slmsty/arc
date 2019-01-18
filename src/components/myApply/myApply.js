@@ -75,7 +75,7 @@ export default class MyApplyCon extends React.Component {
     paramsData.businessKey = record.businessKey
     paramsData.taskId = record.taskId
     this.props.myApplyInfo(paramsData).then((res) => {
-      console.log(res);
+      
       if (res && res.response && res.response.resultCode === '000000') {
         const { serviceDetail, serviceType } = res.response.data
         if(serviceType === 'RECEIPT') {
