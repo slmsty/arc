@@ -19,6 +19,7 @@ class Approve extends Component {
     confirmDis: true,
     tableHeight: '',
     page:50,
+    current:1,
   };
 
   constructor(props) {
@@ -152,21 +153,30 @@ class Approve extends Component {
       },
     ];
   }
-
+ pageNoChange = (page, pageSize)=> {
+    this.setState({current:page});
+  };
   doSearch = (e)=> {
     //e.preventDefault();
     this.props.form.validateFields((err, values) => {
       this.setState({
         rowKeys: [],
         rows: [],
+       editDis: true,
         rejectDis: true,
-        confirmDis: true
+        approvalDis: true,
+        sendDis: true,
+        current:1,
       });
       
       this.props.Search({
+         pageInfo: {
+          pageNo: 1,
+          pageSize: this.state.page,
+        },
         ...values,
       })
-       console.log(values);
+       // console.log(values);
     });
    
   };
@@ -243,6 +253,8 @@ handleChangeSize = (current, size) => {
       pageSizeOptions,
       pageSize:this.state.page,
       onShowSizeChange: this.handleChangeSize,
+       onChange: this.pageNoChange,
+       current:this.state.current,
     }
     const layout = {
       labelCol: {
