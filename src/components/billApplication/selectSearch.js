@@ -62,6 +62,7 @@ class SelectSearch extends React.Component {
   }
 
   handleQueryFetch= (pageNo) => {
+    this.setState({ loading: true })
     if(this.props.showSearch) {
       const keywords = this.props.form.getFieldValue('keywords')
       const param = {
@@ -78,7 +79,6 @@ class SelectSearch extends React.Component {
       //this.setState({ loading: true })
       requestJsonFetch(this.props.url, param, this.handleCallback)
     } else {
-      this.setState({ loading: true })
       requestJsonFetch(
         this.props.url, {
           method: 'GET'
@@ -95,6 +95,7 @@ class SelectSearch extends React.Component {
 
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
+      console.log(response)
       this.setState(this.props.label === '申请人' ? {
         dataSource: response.data,
         loading: false,
