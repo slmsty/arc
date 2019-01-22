@@ -4,6 +4,8 @@ import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import {toThousands} from '../../util/currency'
+import { pageSizeOptions } from '../billApplication/billColumns'
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
@@ -16,6 +18,7 @@ class Approve extends Component {
     rejectDis: true,
     confirmDis: true,
     tableHeight: '',
+    page:50,
   };
 
   constructor(props) {
@@ -223,7 +226,11 @@ class Approve extends Component {
       return true;
     }
   }
-
+handleChangeSize = (current, size) => {
+    
+    this.setState({page:size,}) ;
+   
+  }
   render() {
     const {getFieldDecorator} = this.props.form;
     const columns = this.columns;
@@ -233,7 +240,9 @@ class Approve extends Component {
       showSizeChanger:true,
       showTotal: (total) => `共${total}条`,
       total:result.length,
-      
+      pageSizeOptions,
+      pageSize:this.state.page,
+      onShowSizeChange: this.handleChangeSize,
     }
     const layout = {
       labelCol: {

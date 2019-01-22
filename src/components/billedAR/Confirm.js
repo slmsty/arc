@@ -205,7 +205,7 @@ class Confirm extends Component {
       this.props.Search({
         pageInfo: {
           pageNo: 1,
-          pageSize: this.props.pageSize
+          pageSize: this.state.pageSize
         },
         ...values
       })
@@ -235,7 +235,8 @@ exportParams = () => {
         editDis: true,
         rejectDis: true,
         approvalDis: true,
-        sendDis: true
+        sendDis: true,
+        pageSize:size,
       });
       this.props.Search({
         pageInfo: {
@@ -579,7 +580,7 @@ exportParams = () => {
             showTotal: t=>`共${t}条`,
             onChange: this.pageNoChange,
             current: pageNo,
-            pageSize: pageSize,
+            pageSize: this.state.pageSize,
             total: count
           }}
           scroll={{x: 4580, y: this.state.tableHeight}}/>

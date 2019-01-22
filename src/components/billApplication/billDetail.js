@@ -689,6 +689,7 @@ class BillDetail extends React.Component {
     const { contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
       billingApplicantRemark, taxRateRequest, fileName, filePath } = this.props.detail
     const { custInfo, comInfo } = this.state
+    // console.log(this.state);
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
