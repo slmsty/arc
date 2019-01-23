@@ -23,7 +23,7 @@ class ProjectReceiptClaimSearch extends React.Component {
   handleQuery = () => {
 
     const param = this.props.form.getFieldsValue()
-    param.payCustName=document.querySelector("#username").value;
+    param.payCustName=document.querySelector("#username").value.trim();
     console.log(param);
     if (param.receiptDate.length > 0) {
       param.receiptDateStart = param.receiptDate[0].format(dateFormat)

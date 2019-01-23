@@ -159,6 +159,7 @@ export default class MyApplyCon extends React.Component {
     })
   }
   render() {
+    
     const columns = [{
       title: '申请单编号',
       dataIndex: 'businessKey',
@@ -173,7 +174,7 @@ export default class MyApplyCon extends React.Component {
     }, {
 
       title:'数据状态',
-      dataIndex:'billingStatusName',
+      dataIndex:'dataStatusName',
       width:80,
 
     },
@@ -218,6 +219,7 @@ export default class MyApplyCon extends React.Component {
       ),
     },
     ]
+    
     const { pageNo, count, pageSize } = this.props.myApplyPage
     const pagination = {
       current: pageNo,

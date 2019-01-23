@@ -115,9 +115,7 @@ class SelectCustomer extends React.Component {
         <Input
           id='username'
           placeholder="付款客户"
-          value={this.state.value}
-          suffix={suffix}
-          onClick={() => this.setState({ visible: true })}
+          
         />
         <Modal
           title="选择付款客户"
