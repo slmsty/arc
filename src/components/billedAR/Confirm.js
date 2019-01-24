@@ -14,6 +14,7 @@ const RangePicker = DatePicker.RangePicker;
 
 class Confirm extends Component {
   state = {
+    pageSize: 50,
     visible: false,
     o: {},
     rowKeys: [],
@@ -200,7 +201,22 @@ class Confirm extends Component {
         approvalDis: true,
         sendDis: true
       });
+      // console.log(values);
       this.props.Search({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: this.state.pageSize
+        },
+        ...values
+      })
+    })
+  };
+exportParams = () => {
+  this.props.form.validateFields((err, values) => {
+     
+      
+      
+      this.props.exportParams({
         pageInfo: {
           pageNo: 1,
           pageSize: this.props.pageSize
@@ -208,8 +224,9 @@ class Confirm extends Component {
         ...values
       })
     })
+   
+    
   };
-
   pageSizeChange = (current, size)=> {
     this.props.form.validateFields((err, values) => {
       this.setState({
@@ -218,7 +235,8 @@ class Confirm extends Component {
         editDis: true,
         rejectDis: true,
         approvalDis: true,
-        sendDis: true
+        sendDis: true,
+        pageSize:size,
       });
       this.props.Search({
         pageInfo: {
@@ -454,7 +472,7 @@ class Confirm extends Component {
             <Col span={8}>
               <FormItem label="GL日期(多)" {...layout}>
                 {
-                  getFieldDecorator('glDates')(<MultipleDayInput />)
+                  getFieldDecorator('glDates')(<RangePicker/>)
                 }
               </FormItem>
             </Col>
@@ -529,6 +547,7 @@ class Confirm extends Component {
             </Col>
             <Col span={16} style={{textAlign: 'right'}}>
               <Button type="primary" htmlType="submit" onClick={this.doSearch}>查询</Button>
+              <Button type="primary" style={{marginLeft: '10px'}} onClick={this.exportParams}>导出Excel</Button>
             </Col>
           </Row>
         </Form>
@@ -561,7 +580,7 @@ class Confirm extends Component {
             showTotal: t=>`共${t}条`,
             onChange: this.pageNoChange,
             current: pageNo,
-            pageSize: pageSize,
+            pageSize: this.state.pageSize,
             total: count
           }}
           scroll={{x: 4580, y: this.state.tableHeight}}/>

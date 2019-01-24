@@ -4,6 +4,8 @@ import MultipleInput from '../common/multipleInput'
 import MultipleDayInput from '../common/multipleDayInput'
 import SelectInvokeApi from '../common/selectInvokeApi'
 import {toThousands} from '../../util/currency'
+import { pageSizeOptions } from '../billApplication/billColumns'
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
@@ -16,6 +18,8 @@ class Approve extends Component {
     rejectDis: true,
     confirmDis: true,
     tableHeight: '',
+    page:50,
+    current:1,
   };
 
   constructor(props) {
@@ -149,21 +153,32 @@ class Approve extends Component {
       },
     ];
   }
-
+ pageNoChange = (page, pageSize)=> {
+    this.setState({current:page});
+  };
   doSearch = (e)=> {
     //e.preventDefault();
     this.props.form.validateFields((err, values) => {
       this.setState({
         rowKeys: [],
         rows: [],
+       editDis: true,
         rejectDis: true,
-        confirmDis: true
+        approvalDis: true,
+        sendDis: true,
+        current:1,
       });
-      console.log(values);
+      
       this.props.Search({
+         pageInfo: {
+          pageNo: 1,
+          pageSize: this.state.page,
+        },
         ...values,
       })
+       // console.log(values);
     });
+   
   };
 
   componentWillMount() {
@@ -221,12 +236,26 @@ class Approve extends Component {
       return true;
     }
   }
-
+handleChangeSize = (current, size) => {
+    
+    this.setState({page:size,}) ;
+   
+  }
   render() {
     const {getFieldDecorator} = this.props.form;
     const columns = this.columns;
     const {result, loading} = this.props;
-
+   
+     const pagination = {
+      showSizeChanger:true,
+      showTotal: (total) => `共${total}条`,
+      total:result.length,
+      pageSizeOptions,
+      pageSize:this.state.page,
+      onShowSizeChange: this.handleChangeSize,
+       onChange: this.pageNoChange,
+       current:this.state.current,
+    }
     const layout = {
       labelCol: {
         span: 8
@@ -378,7 +407,7 @@ class Approve extends Component {
           }}
           columns={columns}
           dataSource={result}
-          pagination={false}
+        pagination={pagination}
           scroll={{x: 3300, y: this.state.tableHeight}}
         />
       </div>

@@ -201,10 +201,11 @@ class ContractSplitModal extends React.Component{
     let selectData = []
     let newSelectCountType = []
     selectData = data.split('&')
-     if(selectData[0]=='TM'){
+    
+    if(selectData[0]=='TM'){
       selectData[0]='T&M';
     }
-
+    
     const newData = this.state.dataSource.slice(0)
     if(newData[selectData[1]] && newData[selectData[1]].orderListLineId){
       if(newData[selectData[1]][selectData[2]] !=selectData[0]){
@@ -364,10 +365,9 @@ class ContractSplitModal extends React.Component{
     })
   }
   renderSelect = (text, index, column) => {
-      if(text=='T&M'){
+    if(text=='T&M'){
       text='TM';
     }
-
     return (
       <Select disabled={this.state.editFlag} onChange={this.handleSelectChange} placeholder="请选择拆分状态" value={text ? `${text}&${index}&${column}` : ''}>
         <Option value=''>请选择</Option>
@@ -890,7 +890,7 @@ class ContractSplitModal extends React.Component{
       width: 100,
       render: (text, record, index) => record.taskOpration === '合计' ? currency(discountCatalPrice) : currency(text),
     }, {
-      title: '合同税率',
+      title: <span>合同税率<em style={{ color: '#FF0000' }}>*</em></span>,
       dataIndex: 'contractTaxRate',
       width: 80,
       render: (text, record, index) => record.taskOpration === '合计' ? '' : this.renderColumns(text, index, 'contractTaxRate',record),

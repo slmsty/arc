@@ -153,7 +153,7 @@ export default class ProjectReceiptClaim extends React.Component {
   queryParam = {
     pageInfo: {
       pageNo: 1,
-      pageSize: 10,
+      pageSize: 50,
     },
     custId: '',
     sourceType: '',

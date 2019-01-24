@@ -187,7 +187,7 @@ class BillDetail extends React.Component {
             billingApplicationType: this.props.billType,
             objectId: this.state.fileId,
             objectName: this.state.fileName,
-            billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
+            billingApplicantRequest: values.billingApplicantRequestf ? values.billingApplicantRequestf.trim() : '',
             isAgainInvoice: 'false',
             billingApplicationId: detail.billingApplicationId || '',
             startWorkFlow: type === 'myApply' ? 'Y' : '',
@@ -197,7 +197,8 @@ class BillDetail extends React.Component {
           })
         }
       })
-    } else {
+    } 
+      else {
       this.props.form.validateFields((err, values) => {
         const groupNos = this.state.dataSource.filter(r => typeof r.groupNo !== 'undefined')
         if (!err && !this.submitCheck(values)) {
@@ -251,6 +252,7 @@ class BillDetail extends React.Component {
         }
       });
     }
+    
   }
 
   submitCheck = (values) => {
@@ -687,6 +689,7 @@ class BillDetail extends React.Component {
     const { contractList, outcomeList, billingType, billingApplicantRequest, costBear, billingDate,
       billingApplicantRemark, taxRateRequest, fileName, filePath } = this.props.detail
     const { custInfo, comInfo } = this.state
+    // console.log(this.state);
     const detailData = [{
       title: '购买方',
       customerName: custInfo.billingCustName,
@@ -731,8 +734,8 @@ class BillDetail extends React.Component {
                     {getFieldDecorator('isAgainInvoice',{
                       initialValue: '', rules: [{ required: this.props.isRed, message: '请选择是否重新开票' }]
                     })(
-                      <Select onChange={(v) => this.setState({showDetail: v === 'true' ? true : false })}>
-                        <Option value="">-请选择-</Option>
+                      <Select onChange={(v) => this.setState({showDetail: v })}>
+                        <Option value="select">-请选择-</Option>
                         <Option value="true">是</Option>
                         <Option value="false">否</Option>
                       </Select>
@@ -771,7 +774,7 @@ class BillDetail extends React.Component {
               </Row> : null
           }
           {
-            (this.props.isRed && this.state.showDetail) || !this.props.isRed ?
+            (this.props.isRed && this.state.showDetail==='true') || !this.props.isRed ?
               <div>
                 <div className="arc-info">
                   <Table
@@ -926,8 +929,9 @@ class BillDetail extends React.Component {
               : null
           }
           {
-            this.state.showDetail === false && this.props.isRed ?
+            this.state.showDetail === 'false' && this.props.isRed ?
               <div className="infoPanel">
+              
                 <h1>项目信息</h1>
                 <Table
                   columns={proApplyColumns}
@@ -963,8 +967,8 @@ class BillDetail extends React.Component {
                   <Col span={14}>
                     <FormItem {...formItemLayout1} label="开票原因及要求">
                       {
-                        getFieldDecorator('billingApplicantRequest', {initialValue: billingApplicantRequest, rules: [
-                          { required: this.state.showDetail === false && this.props.isRed, message: '请填写开票原因及要求' },
+                        getFieldDecorator('billingApplicantRequestf', {initialValue: billingApplicantRequest, rules: [
+                          { required: this.state.showDetail === 'false' && this.props.isRed, message: '请填写开票原因及要求' },
                           { max: 350, message: '开票原因及要求不能超过350个字符!' }
                         ]})(
                           <TextArea placeholder="请输入开票要求" rows="2" />

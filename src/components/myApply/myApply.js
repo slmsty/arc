@@ -7,6 +7,7 @@ import BillDetail from '../billApplication/billDetail'
 import ReceiptDetail from '../billStatusManage/receiptApplication/receiptDetail'
 import { redTypes } from '../billApplication/billColumns'
 
+
 export default class MyApplyCon extends React.Component {
   state = {
     infoVisitable: false,
@@ -16,6 +17,7 @@ export default class MyApplyCon extends React.Component {
     noApplyInfoData: '',
     editVisitable:false,
     receiptVisitable: false,
+  
   }
 
   componentDidMount() {
@@ -75,6 +77,7 @@ export default class MyApplyCon extends React.Component {
     paramsData.businessKey = record.businessKey
     paramsData.taskId = record.taskId
     this.props.myApplyInfo(paramsData).then((res) => {
+   
       if (res && res.response && res.response.resultCode === '000000') {
         const { serviceDetail, serviceType } = res.response.data
         if(serviceType === 'RECEIPT') {
@@ -82,7 +85,19 @@ export default class MyApplyCon extends React.Component {
             receiptVisitable: true,
             applyData: record,
           })
-        } else {
+        }
+        //   else if( serviceType === 'BAD_DEBT'){
+
+
+        //  this.setState({
+        // o:res.response.data.serviceDetail[0],
+        //  isEdit:true,
+         
+   
+        //  })
+
+        //   }
+         else {
           this.setState({
             editVisitable: true,
             applyData: record,
@@ -94,6 +109,7 @@ export default class MyApplyCon extends React.Component {
   }
 
   showApplyInfo = (record) => {
+    // console.log(record);
     const paramsData = {}
     paramsData.arcFlowId = record.arcFlowId
     paramsData.processInstanceId = record.processInstanceId
@@ -115,6 +131,9 @@ export default class MyApplyCon extends React.Component {
       noApplyInfoData: '',
     })
   }
+  //  editCancel = ()=>{
+  //   this.setState({isEdit: false})
+  // }
   // 撤销
   cancelItem = (record) => {
     const that = this
@@ -134,11 +153,13 @@ export default class MyApplyCon extends React.Component {
           } else {
             message.error(res.response.resultMessage)
           }
+          console.log(res);
         })
       },
     })
   }
   render() {
+    
     const columns = [{
       title: '申请单编号',
       dataIndex: 'businessKey',
@@ -151,6 +172,13 @@ export default class MyApplyCon extends React.Component {
       dataIndex: 'statusName',
       width: 80,
     }, {
+
+      title:'数据状态',
+      dataIndex:'dataStatusName',
+      width:80,
+
+    },
+    {
       title: '申请单类型',
       dataIndex: 'modelName',
       width: 150,
@@ -191,6 +219,7 @@ export default class MyApplyCon extends React.Component {
       ),
     },
     ]
+    
     const { pageNo, count, pageSize } = this.props.myApplyPage
     const pagination = {
       current: pageNo,
@@ -203,6 +232,7 @@ export default class MyApplyCon extends React.Component {
     }
     const { billApplyCheck, currentUser, contractUrl, myApplyPage, myApplyDetail, billApproveSave, getTaxInfo } = this.props
     const { serviceDetail, serviceType} = myApplyDetail
+    
     const isBackBill = redTypes.includes(serviceType)
     return (
       <div>
@@ -226,6 +256,7 @@ export default class MyApplyCon extends React.Component {
               type="myApply"
             /> : null
         }
+        
         {
           this.state.receiptVisitable ?
             <ReceiptDetail

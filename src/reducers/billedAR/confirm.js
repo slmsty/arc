@@ -1,4 +1,4 @@
-
+import {saveAs} from '../../util/downFile'
 export default ({
   pageNo=1,
   pageSize=10,
@@ -28,6 +28,9 @@ export default ({
       }));
       title = ""
       break;
+    case 'EXPORT_BILLEDARCONFIRM_SUCCESS':
+         saveAs(action.files.blob, "BilledAR确认.xlsx");
+         break;
     case 'BILLEDARCONFIRM_EDIT':
       result = result.map(o=>{
         if(o.billedArId === action.payload.billedArId){
