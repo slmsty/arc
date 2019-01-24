@@ -29,6 +29,7 @@ class ApplyInfoModal extends React.Component {
       },
       approveLoading: false,
       rejectLoading: false,
+      approvalDetails:false,
     }
   }
 
@@ -44,6 +45,96 @@ class ApplyInfoModal extends React.Component {
 
   applyConfirm = (type) => {
       this.props.form.validateFields((err, values) => {
+        const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
+        if(taskCode === 'ar_admin') {
+          const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
+          if(invalidEmail.length > 0) {
+            this.props.form.setFields({
+              receiptEmail: {
+                value: values.receiptEmail,
+                errors: [new Error(`邮箱${invalidEmail.join(',')}格式有误，请重新输入`)],
+              },
+            });
+            err = true
+          }
+        }
+        if(!err) {
+          if(BILL_APPLY_TYPE.includes(this.props.applyInfoData.serviceType) && EDIT_ROLE_TYPE.includes(this.props.applyInfoData.taskCode)) {
+            const isAgainInvoice = serviceDetail.isAgainInvoice
+            const isTaxAndFinance = taskCode === 'tax_auditor' || taskCode === 'ar_finance_account'
+            
+            if(this.formats()==false) {
+              return false
+            }
+            if(type === 'confirm') {
+              this.setState({
+                approveLoading: true,
+              })
+            } else if(type === 'reject') {
+              this.setState({
+                rejectLoading: true,
+              })
+            }
+
+            const params = isAgainInvoice !== 'false' ? {
+              ...values,
+              billingCustInfoId: this.state.approveData.custInfo.billingCustInfoId,
+              billingComInfoId: this.state.approveData.comInfo.billingComInfoId,
+              billingApplicationId: serviceDetail.billingApplicationId,
+              billingApplicationType: serviceType,
+              billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
+              billingApplicantRemark: values.billingApplicantRemark ? values.billingApplicantRemark.trim() : '',
+              billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
+              appLineItems: this.state.approveData.serviceDetail.map(record => ({
+                ...record,
+                lineNo: record.lineNo + 1,
+              })),
+              receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
+            } : {
+              ...values,
+              billingApplicationId: serviceDetail.billingApplicationId,
+              billingApplicationType: serviceType,
+            }
+            requestJsonFetch('/arc/billingApplication/workFlowEdit', {
+              method: 'POST',
+              body: params,
+            }, (res) => {
+              const {resultCode, resultMessage, data} = res
+              if (resultCode === '000000') {
+                if(type === 'confirm') {
+                  this.approveConfirm(values)
+                } else if(type === 'reject') {
+                  this.applyReject(values)
+                  this.setState({approvalDetails:false})
+                }
+              } else {
+                this.setState({
+                  approveLoading: false,
+                  rejectLoading: false,
+                })
+                message.error(resultMessage, 5)
+              }
+            })
+          } else {
+            if(type === 'confirm') {
+              this.setState({
+                approveLoading: true,
+              })
+              this.approveConfirm(values)
+            } else if(type === 'reject') {
+              this.setState({
+                rejectLoading: true,
+              })
+              this.setState({approvalDetails:false})
+              this.applyReject(values)
+            }
+          }
+        }
+      })
+  }
+ formats=()=>{
+  let  back=false;
+ this.props.form.validateFields((err, values) => {
         const { serviceDetail, taskCode, serviceType } = this.props.applyInfoData
         if(taskCode === 'ar_admin') {
           const invalidEmail =  Array.isArray(values.receiptEmail) ? values.receiptEmail.filter(email => !checkEmail(email)) : []
@@ -128,73 +219,39 @@ class ApplyInfoModal extends React.Component {
                 }
               }
             }
-            if(err) {
-              return false
+   
+             if(err) {
+            
             }
-            if(type === 'confirm') {
-              this.setState({
-                approveLoading: true,
-              })
-            } else if(type === 'reject') {
-              this.setState({
-                rejectLoading: true,
-              })
-            }
+           else{
 
-            const params = isAgainInvoice !== 'false' ? {
-              ...values,
-              billingCustInfoId: this.state.approveData.custInfo.billingCustInfoId,
-              billingComInfoId: this.state.approveData.comInfo.billingComInfoId,
-              billingApplicationId: serviceDetail.billingApplicationId,
-              billingApplicationType: serviceType,
-              billingDate: values.billingDate ? values.billingDate.format('YYYY-MM-DD') : '',
-              billingApplicantRemark: values.billingApplicantRemark ? values.billingApplicantRemark.trim() : '',
-              billingApplicantRequest: values.billingApplicantRequest ? values.billingApplicantRequest.trim() : '',
-              appLineItems: this.state.approveData.serviceDetail.map(record => ({
-                ...record,
-                lineNo: record.lineNo + 1,
-              })),
-              receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
-            } : {
-              ...values,
-              billingApplicationId: serviceDetail.billingApplicationId,
-              billingApplicationType: serviceType,
-            }
-            requestJsonFetch('/arc/billingApplication/workFlowEdit', {
-              method: 'POST',
-              body: params,
-            }, (res) => {
-              const {resultCode, resultMessage, data} = res
-              if (resultCode === '000000') {
-                if(type === 'confirm') {
-                  this.approveConfirm(values)
-                } else if(type === 'reject') {
-                  this.applyReject(values)
-                }
-              } else {
-                this.setState({
-                  approveLoading: false,
-                  rejectLoading: false,
-                })
-                message.error(resultMessage, 5)
-              }
-            })
-          } else {
-            if(type === 'confirm') {
-              this.setState({
-                approveLoading: true,
-              })
-              this.approveConfirm(values)
-            } else if(type === 'reject') {
-              this.setState({
-                rejectLoading: true,
-              })
-              this.applyReject(values)
-            }
+        
+               back=true;
+
+           }
+    
           }
+
+           else{
+
+        
+               back=true;
+
+           }
+
         }
+
       })
-  }
+return back;
+ }
+  approvalDetails=()=>{
+    // console.log(this.formats())
+    if(this.formats()==true){
+      
+    this.setState({approvalDetails:true})
+   }
+}
+
   approveConfirm = (values) => {
     const approveParams = {
       arcFlowId: this.props.applyData.arcFlowId,
@@ -294,13 +351,14 @@ class ApplyInfoModal extends React.Component {
     ]
     return (
       <div>
+      {this.state.approvalDetails?   <Modal  title="驳回确认" onCancel={()=>this.setState({approvalDetails:false})}  onOk={()=> this.applyConfirm('reject')} visible={this.state.approvalDetails}>确认驳回审批？</Modal>:null}
         <Modal
           width={1024}
           title="审批详情"
           visible={this.props.infoVisitable}
           onCancel={this.props.closeClaim}
           footer={[
-            <Button type="primary" disabled={this.state.approveLoading} loading={this.state.rejectLoading} key="reset" onClick={() => this.applyConfirm('reject')}>
+            <Button type="primary" disabled={this.state.approveLoading} loading={this.state.rejectLoading} key="reset" onClick={() => this.approvalDetails()}>
               驳回
             </Button>,
             <Button key="submit" disabled={this.state.rejectLoading} loading={this.state.approveLoading} type="primary" onClick={() => this.applyConfirm('confirm')}>
@@ -441,3 +499,4 @@ ApplyInfoModal.propTypes = {
 const ApplyInfoModalWithForm = Form.create()(ApplyInfoModal)
 
 export default ApplyInfoModalWithForm
+
