@@ -83,6 +83,11 @@ class Approve extends Component {
         width: 70
       },
       {
+        title: '合同生效日期',
+        dataIndex: 'effectiveDate',
+        width: 110
+      },
+      {
         title: '应收日期',
         dataIndex: 'arDate',
         width: 90
@@ -408,7 +413,7 @@ handleChangeSize = (current, size) => {
           columns={columns}
           dataSource={result}
         pagination={pagination}
-          scroll={{x: 3300, y: this.state.tableHeight}}
+          scroll={{x: 3500, y: this.state.tableHeight}}
         />
       </div>
     )

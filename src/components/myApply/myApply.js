@@ -13,6 +13,7 @@ export default class MyApplyCon extends React.Component {
     infoVisitable: false,
     loading: false,
     applyData: '',
+    isEdit:false,
     noApplyInfoVisitable: false,
     noApplyInfoData: '',
     editVisitable:false,
@@ -86,17 +87,17 @@ export default class MyApplyCon extends React.Component {
             applyData: record,
           })
         }
-        //   else if( serviceType === 'BAD_DEBT'){
+          else if( serviceType === 'BAD_DEBT'){
 
 
-        //  this.setState({
-        // o:res.response.data.serviceDetail[0],
-        //  isEdit:true,
+         this.setState({
+        o:res.response.data.serviceDetail[0],
+         isEdit:true,
          
    
-        //  })
+         })
 
-        //   }
+          }
          else {
           this.setState({
             editVisitable: true,
@@ -131,9 +132,9 @@ export default class MyApplyCon extends React.Component {
       noApplyInfoData: '',
     })
   }
-  //  editCancel = ()=>{
-  //   this.setState({isEdit: false})
-  // }
+   editCancel = ()=>{
+    this.setState({isEdit: false})
+  }
   // 撤销
   cancelItem = (record) => {
     const that = this
@@ -153,7 +154,7 @@ export default class MyApplyCon extends React.Component {
           } else {
             message.error(res.response.resultMessage)
           }
-          console.log(res);
+         
         })
       },
     })
