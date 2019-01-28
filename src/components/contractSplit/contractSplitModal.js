@@ -571,6 +571,10 @@ class ContractSplitModal extends React.Component{
         message.error('退税率不能为空！')
         return
       }
+      if (i.contractTaxRate === '' || typeof i.contractTaxRate === "undefined") {
+        message.error('合同税率不能为空！')
+        return
+      }
 
       let contractCategory = ''
       let product = i.product ? i.product : ''
