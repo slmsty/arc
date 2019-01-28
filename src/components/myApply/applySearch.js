@@ -239,7 +239,7 @@ export default class ApplySearchCon extends React.Component {
           bordered
           columns={columns}
           size="small"
-          scroll={{ x: '1610px' }}
+          scroll={{ x: 1600 }}
           loading={this.state.loading}
           dataSource={this.props.myApply.getMyApplyList.result}
         />
