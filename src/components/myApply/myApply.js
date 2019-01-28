@@ -5,7 +5,10 @@ import ApplySearchConWithForm from './applyListWithSearch'
 import NoApplyInfo from './noApplyInfo'
 import BillDetail from '../billApplication/billDetail'
 import ReceiptDetail from '../billStatusManage/receiptApplication/receiptDetail'
+import BDModal from './BDModal'
+import requestJsonFetch from '../../http/requestJsonFecth'
 import { redTypes } from '../billApplication/billColumns'
+
 
 
 export default class MyApplyCon extends React.Component {
@@ -68,6 +71,50 @@ export default class MyApplyCon extends React.Component {
     this.queryParam.pageInfo.pageSize = size
     this.handleQuery()
   }
+  postApply = (badDebtIds, callback)=>{
+    requestJsonFetch(
+      '/arc/badDebt/apply',
+      {
+        method: 'POST',
+        body: {badDebtIds}
+      },
+      callback
+    )
+  }
+
+  apply = ()=>{
+    let badDebtIds = [this.state.o.badDebtId];
+    console.log(badDebtIds);
+    this.postApply(badDebtIds, response=>{
+      if(response.resultCode === '000000'){
+        console.log(response);
+        let result = this.state.result
+        result = result.map(o=>{
+          if(badDebtIds.includes(o.badDebtId)){
+            return {
+              ...o,
+              status: '11',
+              statusName: '审核中'
+            }
+          }else{
+            return o
+          }
+        })
+
+        Modal.success({title: '申请成功'})
+
+        this.setState({
+          rowKeys2: [],
+          rows2: [],
+          editDis: true,
+          applyDis: true,
+          result
+        })
+      }else{
+        message.error(response.resultMessage);
+      }
+    })
+  }
   /*
    function approveClick
    */
@@ -91,12 +138,12 @@ export default class MyApplyCon extends React.Component {
 
 
          this.setState({
-        o:res.response.data.serviceDetail[0],
-         isEdit:true,
+        o:res.response.data.arcBadDebt,
+         // isEdit:true,
          
    
          })
-
+// this.apply();
           }
          else {
           this.setState({
@@ -242,6 +289,13 @@ export default class MyApplyCon extends React.Component {
           onQuery={this.handleChangeParam}
           loading={this.state.loading}
         />
+        {this.state.isEdit?
+         <BDModal
+          visible={this.state.isEdit}
+          onCancel={this.editCancel}
+          onOk={this.editDone}
+          o={this.state.o}
+         />:null}
         {
           this.state.editVisitable ?
             <BillDetail

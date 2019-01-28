@@ -15,6 +15,7 @@ export default class MenuComponent extends React.Component {
     }
   }
   render() {
+    // console.log(this.props.menu);
     const menus = this.props.menu ? this.props.menu.map((menu) => {
       if (menu.child && menu.child.length > 0) {
         const childMenus = menu.child.map(childMenu => (

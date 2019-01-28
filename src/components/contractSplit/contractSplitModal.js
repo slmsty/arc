@@ -1188,7 +1188,7 @@ class ContractSplitModal extends React.Component{
                         /*initialValue: constractData['revenueCheckout'] ? constractData['revenueCheckout']: this.state.selectCountType,*/
                        initialValue: this.state.selectCountType,
                       })(
-                        <Checkbox.Group disabled={this.state.editFlag}>
+                        <Checkbox.Group disabled={true}>
                           <Checkbox value="POC">POC</Checkbox>
                           <Checkbox value="RATABLY">RATABLY</Checkbox>
                           <Checkbox value="FA">FA</Checkbox>
