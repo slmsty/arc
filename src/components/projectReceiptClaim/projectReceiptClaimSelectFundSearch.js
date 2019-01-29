@@ -45,7 +45,7 @@ class ProjectReceiptClaimSelectFund extends React.Component {
     width: 20,
     fixed: 'left',
   }, {
-    title: '款项id',
+    title: '款项ID',
     dataIndex: 'fundId',
     width: 20,
     fixed: 'left',
@@ -213,9 +213,9 @@ class ProjectReceiptClaimSelectFund extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={3}>
-              <FormItem {...formItemLayout} label="SBU">
-                {getFieldDecorator('sbu' ,{initialValue: ''})(
-                  <Input onPressEnter={this.handleQuery} />,
+              <FormItem {...formItemLayout} label="款项ID">
+                {getFieldDecorator('fundIds' ,{initialValue: []})(
+                  <MultipleInput placeholder="多款项id使用英文逗号间隔" />,
                 )}
               </FormItem>
             </Col>
@@ -236,8 +236,8 @@ class ProjectReceiptClaimSelectFund extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={6}>
-              <FormItem {...formItemLayout} label="部门">
-                {getFieldDecorator('dept', {initialValue: ''})(
+              <FormItem {...formItemLayout} label="付款条款">
+                {getFieldDecorator('paymentName', {initialValue: ''})(
                   <Input onPressEnter={this.handleQuery} />,
                 )}
               </FormItem>
