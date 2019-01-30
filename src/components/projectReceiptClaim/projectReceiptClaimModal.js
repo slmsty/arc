@@ -36,7 +36,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '认款金额',
     dataIndex: 'claimAmount',
     width: 100,
-    render: (text, record, index) => (<EditableNumberCell
+    render: (text, record, index) => (<EditableTextCell
       editable
       value={text}
       // max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount > (record.receivableBalance + 3) ? (record.receivableBalance + 3) : this.props.receiptInfo.receiptAmount}
@@ -56,7 +56,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
     title: '认款合同币种金额',
     dataIndex: 'claimContractAmount',
     width: 150,
-    render: (text, record, index) => (<EditableNumberCell
+    render: (text, record, index) => (<EditableTextCell
       editable
       value={text}
       // max={this.props.receiptInfo.receiptCurrency === record.contractCurrency && this.props.receiptInfo.receiptAmount < record.receivableBalance ? this.props.receiptInfo.receiptAmount : record.receivableBalance}
@@ -183,7 +183,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
       }
       totalClaimAmount += this.state.funds[i].claimAmount
     }
-    totalClaimAmount = parseFloat(totalClaimAmount.toFixed(2))
+    totalClaimAmount = parseFloat(Number(totalClaimAmount).toFixed(2))
     totalClaimAmount = this.props.receiptInfo.receiptAmount - totalClaimAmount
     if (totalClaimAmount < 0 || totalClaimAmount > TOLERANCE) {
       message.error('认款金额合计与收款金额差额超过20，不能进行认款')
