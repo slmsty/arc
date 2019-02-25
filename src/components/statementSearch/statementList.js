@@ -22,6 +22,7 @@ export default class StatementListIndex extends React.Component {
         pageNo: 1,
         pageSize: 10,
       },
+      projectOrder:{currency:"",}
     }
     this.billTotalAmount = 0
   }
@@ -552,10 +553,25 @@ export default class StatementListIndex extends React.Component {
       return [width,productOrderDetailCols,'','']
     }
     else if(type==='netOrderMReport') {
-      netOrder.map((item)=>{
+     
+      let   netorder=[];
+
+      if(this.queryParam.projectOrder.currency!=undefined)
+        {if(this.queryParam.projectOrder.currency=="ORIGINAL"){
+             netorder=netOrder.slice(0,40)
+
+        }else{
+
+            netorder=netOrder
+
+        }
+
+      }
+         netorder.map((item)=>{
         width += parseFloat(item.width)
       })
-      return [width,netOrder,'','']
+      
+      return [width,netorder,'','']
     }
     else if(type==='projectOrderTotalReport') {
       productOrderTotalCols.map((item)=>{

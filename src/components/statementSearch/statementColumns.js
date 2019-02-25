@@ -1226,7 +1226,7 @@ const netOrder = [
     align:'center',
     title:'BU',
     dataIndex:'salesBu',
-    width:100,
+    width:200,
     key:'salesBu',
     
   },
@@ -1407,22 +1407,22 @@ const netOrder = [
   },{
     title:'POC方式',
     dataIndex:'poc',
-    width:200,
+    width:150,
    
   },{
     title:'FA方式',
     dataIndex:'fa',
-    width:200,
+    width:150,
    
   },{
     title:'ratably方式',
     dataIndex:'ratably',
-    width:200,
+    width:150,
    
   },{
     title:'T&M方式',
     dataIndex:'tm',
-    width:200,
+    width:150,
    
   },{
     title:'负责人',
@@ -1431,7 +1431,7 @@ const netOrder = [
     align:'center',
   },{
     title:'合同币种（原币种）',
-    dataIndex:'contantCurrency',
+    dataIndex:'contractCurrency',
     width:150,
      align:'center',
     
@@ -1439,7 +1439,13 @@ const netOrder = [
     title:'本位币种',
     dataIndex:'erpCurrency',
     width:150,
-    align:'right',
+   
+  },
+  {
+    title:'期末汇率',
+    dataIndex:'tax',
+    width:150,
+    
   },
 ]
 // 项目Order汇总

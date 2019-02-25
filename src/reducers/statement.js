@@ -96,7 +96,7 @@ function getProductOrderTotalList(state, action) {
   return { ...state, getProductOrderTotalList: action.response.pageInfo }
 }
 function getNetOrderMReport(state, action) {
-  console.log(action.response);
+
   return { ...state, getNetOrderMReport: action.response.pageInfo }
 }
 function getConfirmDetailList(state, action) {

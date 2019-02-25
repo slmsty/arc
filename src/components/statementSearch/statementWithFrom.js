@@ -1635,7 +1635,7 @@ class StatementListCom extends React.Component {
                     initialValue: 'ORIGINAL',
                   })(
                     <Select>
-                      <Option value=''>全部</Option>
+                     
                       <Option value='ORIGINAL'>原币</Option>
                       <Option value='ERP'>本位币</Option>
                     </Select>
