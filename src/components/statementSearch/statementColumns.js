@@ -1219,7 +1219,229 @@ const productOrderDetailCols = [
     render: (text, record, index) => (typeof text !== 'undefined' ? toThousands(record.orderCost) : '')
   },
 ]
+// 项目order明细
+const netOrder = [
 
+  {
+    align:'center',
+    title:'BU',
+    dataIndex:'salesBu',
+    width:100,
+    key:'salesBu',
+    
+  },
+  {
+    title:'项目代码',
+    dataIndex:'projectNo',
+    width:200,
+    align:'center',
+  },
+  {
+    title:'Task new order合计',
+    dataIndex:'taskTotal',
+    width:200,
+    align:'center',
+   
+  },
+  {
+    title:'Task 1 (集成)',
+    dataIndex:'task1',
+    width:130,
+    align:'center',
+  },
+  {
+    title:'Task 1N',
+    dataIndex:'task1n',
+    width:130,
+  },
+  {
+    title:'Task 1——K',
+    dataIndex:'task1k',
+    width:100,
+  },
+  {
+    title:'Task 2',
+    dataIndex:'task2',
+    width:100,
+    
+  },
+  {
+    title:'Task 2P',
+    dataIndex:'task2p',
+    width:100,
+    
+  },
+  {
+    title:'Task 3',
+    dataIndex:'task3',
+    width:100,
+    
+  },
+  {
+    title:'Task 3——K',
+    dataIndex:'task3k',
+    width:100,
+    
+  },
+  {
+    title:'Task 5',
+    dataIndex:'task5',
+    width:100,
+   
+  },
+   {
+    title:'Task 6',
+    dataIndex:'task6',
+    width:100,
+   
+  }, {
+    title:'Task 6——K',
+    dataIndex:'task6k',
+    width:100,
+   
+  }, {
+    title:'Task 6——J',
+    dataIndex:'task6j',
+    width:100,
+   
+  }, {
+    title:'Task 7',
+    dataIndex:'task7',
+    width:100,
+   
+  }, {
+    title:'Task 7——K',
+    dataIndex:'task7k',
+    width:100,
+   
+  }, {
+    title:'Task 7——J',
+    dataIndex:'task7j',
+    width:100,
+   
+  }, {
+    title:'Task 9——K',
+    dataIndex:'task9k',
+    width:100,
+   
+  }, {
+    title:'Task 9——P',
+    dataIndex:'task9p',
+    width:100,
+   
+  }, {
+    title:'Task 10S',
+    dataIndex:'task10s',
+    width:100,
+   
+  }, {
+    title:'Task 10S——K',
+    dataIndex:'task10sk',
+    width:150,
+   
+  }, {
+    title:'Task 10S——J',
+    dataIndex:'task10sj',
+    width:150,
+   
+  }, {
+    title:'Task 10S——P',
+    dataIndex:'task10sp',
+    width:150,
+   
+  }, {
+    title:'Task 11',
+    dataIndex:'task11',
+    width:100,
+   
+  }, {
+    title:'Task 11——K',
+    dataIndex:'task11k',
+    width:100,
+   
+  }, {
+    title:'Task 11——J',
+    dataIndex:'task11j',
+    width:100,
+   
+  }, {
+    title:'Task 11S',
+    dataIndex:'task11s',
+    width:100,
+   
+  }, {
+    title:'Task 11S——K',
+    dataIndex:'task11sk',
+    width:150,
+   
+  }, {
+    title:'Task 11S——P',
+    dataIndex:'task11sp',
+    width:150,
+   
+  }, {
+    title:'Task 11S——J',
+    dataIndex:'task11sj',
+    width:150,
+   
+  }, {
+    title:'Task 12',
+    dataIndex:'task12',
+    width:100,
+   
+  }, {
+    title:'Task 12——K',
+    dataIndex:'task12k',
+    width:100,
+   
+  }, {
+    title:'Task 12——J',
+    dataIndex:'task12j',
+    width:100,
+   
+  }, {
+    title:'结算方式 new order 合计',
+    dataIndex:'revenueTotal',
+    width:200,
+   
+  },{
+    title:'POC方式',
+    dataIndex:'poc',
+    width:200,
+   
+  },{
+    title:'FA方式',
+    dataIndex:'fa',
+    width:200,
+   
+  },{
+    title:'ratably方式',
+    dataIndex:'ratably',
+    width:200,
+   
+  },{
+    title:'T&M方式',
+    dataIndex:'tm',
+    width:200,
+   
+  },{
+    title:'负责人',
+    dataIndex:'splitedByName',
+    width:150,
+    align:'center',
+  },{
+    title:'合同币种（原币种）',
+    dataIndex:'contantCurrency',
+    width:150,
+     align:'center',
+    
+  },{
+    title:'本位币种',
+    dataIndex:'erpCurrency',
+    width:150,
+    align:'right',
+  },
+]
 // 项目Order汇总
 const productOrderTotalCols = [
   {
@@ -1272,6 +1494,7 @@ export {
   outcomeTotalReportCols,
   unContractOutcomeDataAddCols,
   productOrderTotalCols,
-  productOrderDetailCols
+  productOrderDetailCols,
+  netOrder,
 }
 

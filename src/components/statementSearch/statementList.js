@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import currency, {toThousands} from '../../util/currency'
-import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, turnProColumns,constructSplitSearchColumns,billInfoCols,outcomeTotalReportCols,unContractOutcomeDataAddCols,productOrderDetailCols,productOrderTotalCols } from './statementColumns'
+import { reciptMoneyInfoCols, billInfocomCols, billAndReciptMoneyCols, shouldReciptCols, projectTotalCols, totalContractContentColumns, 
+  turnProColumns,constructSplitSearchColumns,billInfoCols,outcomeTotalReportCols,unContractOutcomeDataAddCols,
+  netOrder,productOrderDetailCols,productOrderTotalCols } from './statementColumns'
 import { Table, Row, Col } from 'antd'
 
 import StatementWithFrom from './statementWithFrom'
@@ -336,6 +338,14 @@ export default class StatementListIndex extends React.Component {
         })
       })
     }
+    if(type==='netOrderMReport'){
+      
+      this.props.getNetOrderMReport(this.queryParam).then((res)=>{
+        this.setState({
+          loading:false,
+        })
+      })
+    }
     if(type==='projectInfoReport'){
       this.props.getProductDetailList(this.queryParam).then((res)=>{
         this.setState({
@@ -439,6 +449,12 @@ export default class StatementListIndex extends React.Component {
       orderSummarize.orderSummarize = param
       this.queryParam = { ...this.queryParam,...orderSummarize}
     }
+     if(type==='netOrderMReport'){
+      let projectOrder = {}
+      projectOrder.projectOrder = param
+      this.queryParam = { ...this.queryParam,...projectOrder}
+
+    }
     if(type==='contractInfoReport'){
       let contract = {}
       contract.contract = param
@@ -535,6 +551,12 @@ export default class StatementListIndex extends React.Component {
       })
       return [width,productOrderDetailCols,'','']
     }
+    else if(type==='netOrderMReport') {
+      netOrder.map((item)=>{
+        width += parseFloat(item.width)
+      })
+      return [width,netOrder,'','']
+    }
     else if(type==='projectOrderTotalReport') {
       productOrderTotalCols.map((item)=>{
         width += parseFloat(item.width)
@@ -616,6 +638,14 @@ export default class StatementListIndex extends React.Component {
       current = getProductOrderTotalList.pageNo
       total = getProductOrderTotalList.count
       pageSize = getProductOrderTotalList.pageSize
+    }
+     if(type==='netOrderMReport'){
+       const getNetOrderMReport = this.props.statement.getNetOrderMReport;
+      dataSources.dataSource = getNetOrderMReport.result
+      current = getNetOrderMReport.pageNo
+      total = getNetOrderMReport.count
+      pageSize = getNetOrderMReport.pageSize
+         
     }
     if(type==='projectInfoReport'){
       const getProductDetailList = this.props.statement.getProductDetailList;

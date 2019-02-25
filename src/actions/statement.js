@@ -79,6 +79,19 @@ export function getProductOrderTotalList(queryParam) {
     },
   }
 }
+// 项目Order汇总
+export function getNetOrderMReport(queryParam) {
+  return {
+    [httpApi]: {
+      url: '/arc/report/netOrder/list',
+      options: {
+        method: 'POST',
+        body: queryParam,
+      },
+      types: ['GET_Net_ORDER_M_SUCCESS'],
+    },
+  }
+}
 // 项目Order明细
 export function getProductOrderDetailList(queryParam) {
   return {
@@ -170,6 +183,9 @@ export function getExcel(queryParam,type) {
   }
   if (type === 'order') {
     url = '/arc/report/project_order/excel'  //ORDER明细表导出地址
+  }
+   if (type === 'netOrder') {
+    url = '/arc/report/netOrder/excel'  //netORDER明细表导出地址
   }
   if (type === 'summarize') {
     url = '/arc/report/order_summarize/excel'  // ORDER汇总表导出地址

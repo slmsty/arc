@@ -59,6 +59,18 @@ class StatementListCom extends React.Component {
           currency: params.currency1 || ''
       }
       }
+    }else if (type==='netOrder') {
+      param = {
+        projectOrder: {
+          ...params,
+          signDateStart: params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : '',
+          signDateEnd: params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : '',
+          salesBu: params.salesBu && params.salesBu.length ? params.salesBu[0] : '',
+          projectBu: params.projectBu && params.projectBu.length ? params.projectBu[0] : '',
+          projectManager: params.projectManager && params.projectManager.length ? params.projectManager[0] : '',
+          currency: params.currency1 || ''
+      }
+      }
     } else if (type==='summarize') {
       param = {
         orderSummarize: {
@@ -260,6 +272,24 @@ class StatementListCom extends React.Component {
       })
       this.props.queryParms(param,'projectOrderDetailReport')
     }
+    //netOrder(M)
+    if(statement==='netOrderMReport'){
+      let param = {}
+      param.signDateStart = params.signDate && params.signDate.length ? params.signDate[0].format(dateFormat) : ''
+      param.signDateEnd = params.signDate && params.signDate.length ? params.signDate[1].format(dateFormat) : ''
+      param.projectNo = params.projectNo
+      param.contractNo = params.contractNo
+      param.contractName = params.contractName
+      param.signCompany = params.signCompany
+      param.salesBu = params.salesBu && params.salesBu.length ? params.salesBu[0] : ''
+      param.projectBu = params.projectBu && params.projectBu.length ? params.projectBu[0] : ''
+      param.projectManager = params.projectManager && params.projectManager.length ? params.projectManager[0] : ''
+      param.currency = params.currency1
+      this.setState({
+        param
+      })
+      this.props.queryParms(param,'netOrderMReport')
+    }
     // 项目Order汇总表
     if(statement==='projectOrderTotalReport'){
       let param = {}
@@ -395,6 +425,7 @@ class StatementListCom extends React.Component {
       labelCol: { span: 7 },
       wrapperCol: { span: 17 },
     }
+  
     return (
       <div>
         <Form
@@ -1515,7 +1546,112 @@ class StatementListCom extends React.Component {
             </Row>
 
           </div>
+{/*Net Order（M）*/}
+          <div style={{ display: this.state.stateType === 'netOrderMReport' ? 'block' : 'none' }}>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="签约日期">
+                  {getFieldDecorator('signDate', {
+                    //initialValue: [moment('2017-08-01'), moment()],
+                  })(<RangePicker
+                    allowClear
+                    format={dateFormat}
+                    ranges={{ 今天: [moment(), moment()], 当月: [moment().startOf('month'), moment().endOf('month')] }}
+                  />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="项目编码">
+                  {
+                    getFieldDecorator('projectNo')(
+                      <Input
+                        placeholder="项目编码"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="签约公司">
+                  {getFieldDecorator('signCompany')(
+                    <Input
+                      placeholder="签约公司"
+                    />,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="Sales签约BU">
+                  {
+                    getFieldDecorator('salesBu')(<SelectSbu keyName="contract"/>)
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="合同名称">
+                  {
+                    getFieldDecorator('contractName')(
+                      <Input
+                        placeholder="合同名称"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="立项BU">
+                  {
+                    getFieldDecorator('projectBu')(<SelectSbu keyName="contract"/>)
+                  }
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="合同编码">
+                  {
+                    getFieldDecorator('contractNo')(
+                      <Input
+                        placeholder="合同编码"
+                      />,
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="项目经理">
+                  {
+                    getFieldDecorator('projectManager')(
+                      <StaffInfo />
+                    )
+                  }
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayoutChild} label="币种">
+                  {getFieldDecorator('currency1',{
+                    initialValue: 'ORIGINAL',
+                  })(
+                    <Select>
+                      <Option value=''>全部</Option>
+                      <Option value='ORIGINAL'>原币</Option>
+                      <Option value='ERP'>本位币</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={40}>
 
+              <Col span={24} style={{ textAlign: 'right' }}>
+                <Button type="primary" key="search" onClick={()=>this.queryParms('netOrderMReport')}><Icon type="search" />查询</Button>
+                <Button style={{marginLeft:'10px'}} type="primary" loading={this.state.excelDis} onClick={()=>this.excel('netOrder')}>导出Excel</Button>
+              </Col>
+            </Row>
+
+          </div>
           {/*项目Order汇总表*/}
           <div style={{ display: this.state.stateType === 'projectOrderTotalReport' ? 'block' : 'none' }}>
             <Row gutter={40}>

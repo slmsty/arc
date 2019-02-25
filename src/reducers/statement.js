@@ -37,6 +37,11 @@ const myStateInfoData = {
     count: 0,
     result: [],
   },
+   getNetOrderMReport: {
+    pageNo: 1,
+    count: 0,
+    result: [],
+  },
   getConfirmDetailList:{
     pageNo: 1,
     count: 0,
@@ -89,6 +94,10 @@ function getProductOrderDetailList(state, action) {
 }
 function getProductOrderTotalList(state, action) {
   return { ...state, getProductOrderTotalList: action.response.pageInfo }
+}
+function getNetOrderMReport(state, action) {
+  console.log(action.response);
+  return { ...state, getNetOrderMReport: action.response.pageInfo }
 }
 function getConfirmDetailList(state, action) {
   return { ...state, getConfirmDetailList: action.response.pageInfo }
@@ -171,4 +180,5 @@ export default caseReducer(myStateInfoData, {
   GET_BILL_DETAIL_LISTT_SUCCESS:getBillDetailList,
   GET_PRODUCT_DETAIL_LISTT_SUCCESS:getProductDetailList,
   GET_TOTAL_DETAIL_LISTT_SUCCESS:getTotalContractDetailList,
+  GET_Net_ORDER_M_SUCCESS:getNetOrderMReport,
 })
