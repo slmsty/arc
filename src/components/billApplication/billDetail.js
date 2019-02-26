@@ -26,6 +26,17 @@ const formItemLayout1 = {
   labelCol: { span: 4 },
   wrapperCol: { span: 20 },
 }
+const limitDecimals = (value: string | number): string => {
+    const reg = /^(\-)*(\d+)\.(\d{5}).*$/;
+    console.log(value);
+    if(typeof value === 'string') {
+        return !isNaN(Number(value)) ? value.replace(reg, '$1$2.$3') : ''
+    } else if (typeof value === 'number') {
+        return !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : ''
+    } else {
+        return ''
+    }
+}
 class BillDetail extends React.Component {
   constructor(props) {
     super(props)
@@ -398,7 +409,7 @@ class BillDetail extends React.Component {
       //单价
       dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
       //含税金额
-      dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
+      dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(5)
     } else {
       dataSource[index]['billingAmountExcludeTax'] = ''
       dataSource[index]['unitPrice'] = ''
@@ -579,6 +590,8 @@ class BillDetail extends React.Component {
             placeholder="数量"
             defaultValue="1"
             min={0}
+           formatter={limitDecimals}
+             parser={limitDecimals}
             value={this.state.dataSource[index]['quantity']}
             onChange={(value) => this.handleChange(value, 'quantity', index)} />
         )
@@ -877,8 +890,8 @@ class BillDetail extends React.Component {
                     })
                     return <div className="totalAmount">
                       <span>合计</span>
-                      <span>{toThousands(parseFloat(totalAmount.toFixed(2)))}</span>
-                      <span>{toThousands(parseFloat(totalTaxAmount.toFixed(2)))}</span>
+                      <span>{toThousands(parseFloat(totalAmount.toFixed(5)))}</span>
+                      <span>{toThousands(parseFloat(totalTaxAmount.toFixed(5)))}</span>
                     </div>
                   }}
                 />

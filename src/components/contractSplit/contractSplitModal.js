@@ -238,6 +238,7 @@ class ContractSplitModal extends React.Component{
       )
     }
     if(column ==='contractCategory'){
+
       return(
         <ContractType1
           placeholder="合同类型"

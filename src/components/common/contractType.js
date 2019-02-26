@@ -96,7 +96,7 @@ export default class SelectInvokeApi extends React.Component {
       requestJsonFetch(`/arc/sysparam/get/${this.props.typeCode}/${this.props.paramCode}`, { method: 'get' }, this.handleCallback)
     }else {
       /*requestJsonFetch(`/arc/contract/split/contractType`, { method: 'get' }, this.handleCallback)*/
-      console.log(this.props.keywords)
+     
       requestJsonFetch(`/arc/common/task/prd/list`, { method: 'post',body:{keywords:this.props.keywords} }, this.contractHandleCallback)
     }
   }
@@ -131,10 +131,10 @@ export default class SelectInvokeApi extends React.Component {
   contractHandleCallback = (response) => {
     if (response.resultCode === '000000') {
       const options = response.pageInfo.result
-      console.log('options',options)
+   
       const paramOptions = options.slice(0)
       for(let key in paramOptions){
-        console.log(key)
+       
       }
       if (this.props.hasEmpty) {
         options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
@@ -148,7 +148,7 @@ export default class SelectInvokeApi extends React.Component {
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
       const options = response.data
-      if (this.props.hasEmpty) {
+      if (this.props.hasEmpty&&this.props.paramCode!='CONTRACT_TAX') {
         options.unshift({ paramValue: 'all', paramValueDesc: '请选择' })
       }
       this.setState({
@@ -215,7 +215,7 @@ export default class SelectInvokeApi extends React.Component {
       optionDoms = options
     }
     const optionDom = optionDoms ? optionDoms.map(option => <Option key={option.paramValue ? option.paramValueDesc : 'no_select'} value={option.paramValue}>{option.paramValueDesc}</Option>) : null
-    //console.log('this.props.text',this.state.flag,this.props.text,this.props.value)
+    
     return (
       <Select
         style={{zIndex:'0'}}

@@ -4,7 +4,9 @@
 import React from 'react'
 import { Form, Row, Col, Button, Input, Icon, DatePicker } from 'antd'
 import SelectInvokeApi from '../../common/selectInvokeApi'
+import MultipleInput from '../../common/multipleInput'
 import moment from 'moment'
+
 const FormItem = Form.Item
 const { RangePicker } = DatePicker
 
@@ -76,7 +78,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
               <FormItem {...formItemLayout} label="项目编码">
                 {getFieldDecorator('projectNo', {
                   initialValue: '',
-                })(<Input/>)}
+                })(<MultipleInput   placeholder="多项目编码使用英文逗号分割"/>)}
               </FormItem>
             </Col>
             <Col span={8} key={2}>
@@ -90,7 +92,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
               <FormItem {...formItemLayout} label="发票号">
                 {getFieldDecorator('invoiceNumbers', {
                   initialValue: '',
-                })(<Input/>)}
+                })(<MultipleInput   placeholder="多发票号使用英文逗号分割"/>)}
               </FormItem>
             </Col>
           </Row>
@@ -99,7 +101,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
               <FormItem {...formItemLayout} label="合同编码">
                 {getFieldDecorator('contractNo', {
                   initialValue: '',
-                })(<Input/>)}
+                })(<MultipleInput   placeholder="多合同编码使用英文逗号分割"/>)}
               </FormItem>
             </Col>
             <Col span={8} key={5}>
@@ -129,7 +131,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
               <FormItem {...formItemLayout} label="申请单号">
                 {getFieldDecorator('applicationId', {
                   initialValue: '',
-                })(<Input/>)}
+                })(<MultipleInput   placeholder="多申请单号使用英文逗号分割"/>)}
               </FormItem>
             </Col>
             <Col span={8} key={5}>

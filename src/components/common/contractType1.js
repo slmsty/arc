@@ -12,6 +12,7 @@ export default class SelectInvokeApi extends React.Component {
   }
   componentDidMount() {
     const options = this.props.options
+
     this.setState({
       options
     })
@@ -26,6 +27,7 @@ export default class SelectInvokeApi extends React.Component {
     }
   }
   handleChange = (value) => {
+
     const options = this.state.options.slice(0)
     let name = ''
     for (let i = 0; i < options.length; i++) {
@@ -56,6 +58,7 @@ export default class SelectInvokeApi extends React.Component {
         {option.paramValueDesc}
       </Option>
     }) : null
+      
     return (
       <Select
         style={{zIndex:'0'}}
