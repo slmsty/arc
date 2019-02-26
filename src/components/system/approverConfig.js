@@ -21,18 +21,23 @@ class ApproverConfig extends React.Component {
     }
   }
 exportParams = () => {
-  this.props.form.validateFields((err, values) => {
+   const value = this.props.form.getFieldsValue()
+    const params = {
+      ...value,
+      person: value.person ? value.person.trim() : '',
+      company: value.company ? value.company.trim() : '',
+      sbuNo: value.sbuNo && value.sbuNo.length > 0 ? value.sbuNo[0] : '',
+      pageInfo:{
+        pageNo:  1,
+        pageSize:  10,
+      },
+    }
+ 
      
       
       
-      this.props.exportParams({
-        pageInfo: {
-          pageNo: 1,
-          pageSize: this.props.pageSize
-        },
-        ...values
-      })
-    })
+      this.props.exportParams(params)
+  
    
     
   };
