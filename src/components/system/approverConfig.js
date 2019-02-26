@@ -20,7 +20,22 @@ class ApproverConfig extends React.Component {
       selectedRowKeys: [],
     }
   }
-
+exportParams = () => {
+  this.props.form.validateFields((err, values) => {
+     
+      
+      
+      this.props.exportParams({
+        pageInfo: {
+          pageNo: 1,
+          pageSize: this.props.pageSize
+        },
+        ...values
+      })
+    })
+   
+    
+  };
   componentWillReceiveProps(nextPorps) {
     if(this.props.saveSuccess !== nextPorps.saveSuccess && nextPorps.saveSuccess) {
       message.success('审批人配置保存成功')
@@ -204,6 +219,7 @@ class ApproverConfig extends React.Component {
             <Col span={23} style={{ textAlign: 'right' }}>
               <Button type="primary" key="search" onClick={() => this.handleQuery()}><Icon type="search" />查询</Button>
               <Button type="primary" ghost style={{marginLeft: '15px'}} onClick={this.clearFormValues}><Icon type="delete" />清空</Button>
+              <Button type="primary" style={{marginLeft: '15px'}} onClick={this.exportParams}>导出Excel</Button>
             </Col>
           </Row>
         </Form>

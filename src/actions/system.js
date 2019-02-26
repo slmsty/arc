@@ -206,3 +206,19 @@ export function getApproveNodeList() {
   }
 }
 
+export function exportParams(queryParam){
+  return{
+ [httpApi]:{
+    url: '/arc/sysManage/exportApprovePerson',
+    types: [
+      'EXPORT_SYSMANAGECONFIRM_SUCCESS'
+    ],
+    acceptType: 'blob',
+    options: {
+      method: 'POST',
+      body: queryParam,
+    },
+  },
+
+
+}}

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import ApproverConfig from '../../components/system/approverConfig'
-import { queryApproverConfig, saveApprovePerson, queryRegionList, getApproveNodeList } from '../../actions/system'
+import { queryApproverConfig, exportParams,saveApprovePerson, queryRegionList, getApproveNodeList } from '../../actions/system'
 
 const mapStateToProps = state => ({
   approveConfigs: state.system.approveConfigs,
@@ -17,6 +17,7 @@ const mapDispatchToProps = dispatch => (
     saveApprovePerson,
     queryRegionList,
     getApproveNodeList,
+    exportParams,
   }, dispatch)
 )
 

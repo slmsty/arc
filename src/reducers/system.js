@@ -1,5 +1,5 @@
 import caseReducer from './caseReducer'
-
+import {saveAs} from '../util/downFile'
 const system = {
   isLoading: false,
   mailConfig: {
@@ -76,6 +76,10 @@ function saveInvoiceTaxInfo(state, action) {
   }
 }
 
+function sysmangeexportParams(state, action) {
+  saveAs(action.files.blob, "审批人配置.xlsx");
+  return { ...state }
+}
 function queryMailCc(state, action) {
   return {
     ...state,
@@ -144,4 +148,5 @@ export default caseReducer(system, {
   QUERY_APPROVE_CONFIG_SUCCESS: queryApproveConfig,
   SAVE_APPROVE_CONFIG_SUCCESS: saveApproveConfig,
   GET_APPROVE_NODE_LIST_SUCCESS: getApproveNodeList,
+  EXPORT_SYSMANAGECONFIRM_SUCCESS:sysmangeexportParams,
 })

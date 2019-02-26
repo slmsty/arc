@@ -22,12 +22,12 @@ class BillingDataInitAddWithFromCom extends React.Component {
   trimFormValue = (value) => {
     return {
       ...value,
-      projectNo: value.projectNo ? value.projectNo.trim() : '',
-      custName: value.custName ? value.custName.trim() : '',
-      invoiceNumbers: value.invoiceNumbers ? value.invoiceNumbers.trim() : '',
-      contractNo: value.contractNo ? value.contractNo.trim() : '',
+      projectNo: value.projectNo.length!=0 ? value.projectNo : [],
+      custName: value.custName.length!=0 ? value.custName.trim() : '',
+      invoiceNumbers: value.invoiceNumbers ? value.invoiceNumbers :[],
+      contractNo: value.contractNo.length!=0 ? value.contractNo : [],
       companyName: value.companyName ? value.companyName.trim() : '',
-      applicationId: value.applicationId ? value.applicationId.trim() : '',
+      applicationId: value.applicationId.length!=0 ? value.applicationId : [],
 
     }
   }
