@@ -630,6 +630,10 @@ class BillDetail extends React.Component {
       dataIndex: 'projectCode',
       width: 120,
     }, {
+      title: '项目名称',
+      dataIndex: 'projectName',
+      
+    }, {
       title: '签约公司',
       dataIndex: 'company',
       width: 240,

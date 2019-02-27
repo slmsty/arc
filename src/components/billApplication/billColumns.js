@@ -158,6 +158,10 @@ const proColumns = [{
   title: '项目编码',
   dataIndex: 'projectCode',
   width: 120,
+},{
+  title: '项目名称',
+  dataIndex: 'projectName',
+
 }, {
   title: '签约公司',
   dataIndex: 'company',
@@ -207,6 +211,10 @@ const proApplyColumns = [{
   title: '项目编码',
   dataIndex: 'projectCode',
   width: 120,
+},{
+  title: '项目名称',
+  dataIndex: 'projectName',
+
 }, {
   title: '签约公司',
   dataIndex: 'company',
