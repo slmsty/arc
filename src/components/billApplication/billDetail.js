@@ -833,7 +833,7 @@ class BillDetail extends React.Component {
                   <Col span={8} key={1}>
                     <FormItem {...formItemLayout} label="费用承担者">
                       {getFieldDecorator('costBear', {
-                        initialValue: costBear, rules: [{ required: this.props.billType === 'BILLING_EXCESS', message: '请选择费用承担着!' }]
+                        initialValue: costBear, rules: [{ required: this.props.billType === 'BILLING_EXCESS', message: '请选择费用承担者!' }]
                       })(
                         <SelectInvokeApi
                           typeCode="BILLING_APPLICATION"
