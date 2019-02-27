@@ -28,7 +28,7 @@ const formItemLayout1 = {
 }
 const limitDecimals = (value: string | number): string => {
     const reg = /^(\-)*(\d+)\.(\d{5}).*$/;
-    console.log(value);
+  
     if(typeof value === 'string') {
         return !isNaN(Number(value)) ? value.replace(reg, '$1$2.$3') : ''
     } else if (typeof value === 'number') {
@@ -208,9 +208,24 @@ class BillDetail extends React.Component {
           })
         }
       })
+      
     } 
       else {
+
+       
       this.props.form.validateFields((err, values) => {
+
+        if(values.billingType=='SPECIAL_INVOICE'){
+// console.log((this.state.custInfo.bankBankAccount).length);
+// console.log(this.state.comInfo.bankBankAccount.length);
+
+          if((this.state.custInfo.bankBankAccount).length<=1||(this.state.comInfo.bankBankAccount).length<=1)
+             {
+             
+              message.error('专票客户银行及其账号不能为空');
+              return
+             }      
+        }
         const groupNos = this.state.dataSource.filter(r => typeof r.groupNo !== 'undefined')
         if (!err && !this.submitCheck(values)) {
           this.setState({loading: true})
