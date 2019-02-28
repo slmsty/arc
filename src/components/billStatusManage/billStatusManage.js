@@ -515,7 +515,23 @@ export default class BillStatusCon extends React.Component {
         title: '申请人',
         dataIndex: 'applicantName',
         width: 120,
+      },{
+        title: '项目编号',
+        dataIndex: 'projectNo',
+        width: 120,
       }, {
+        title: '款项名称',
+        dataIndex: 'paymentName',
+        width: 120,
+      }, {
+        title: '款项金额',
+        dataIndex: 'paymentAmount',
+        width: 120,
+      }, {
+        title: '项目名称',
+        dataIndex: 'projectName',
+        width: 120,
+      },  {
         title: '退票票号',
         dataIndex: 'invoiceNum',
         width: 100,
