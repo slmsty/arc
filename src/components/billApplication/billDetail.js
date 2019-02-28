@@ -422,9 +422,9 @@ class BillDetail extends React.Component {
       const excludeTax = billingAmount / (1 + parseFloat(billingTaxRate))
       dataSource[index]['billingAmountExcludeTax'] = excludeTax.toFixed(2)
       //单价
-      dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(2)
+      dataSource[index]['unitPrice'] = (excludeTax / (quantity ? quantity : 1)).toFixed(5)
       //含税金额
-      dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(5)
+      dataSource[index]['billingTaxAmount'] = (excludeTax * billingTaxRate).toFixed(2)
     } else {
       dataSource[index]['billingAmountExcludeTax'] = ''
       dataSource[index]['unitPrice'] = ''
@@ -909,8 +909,8 @@ class BillDetail extends React.Component {
                     })
                     return <div className="totalAmount">
                       <span>合计</span>
-                      <span>{toThousands(parseFloat(totalAmount.toFixed(5)))}</span>
-                      <span>{toThousands(parseFloat(totalTaxAmount.toFixed(5)))}</span>
+                      <span>{toThousands(parseFloat(totalAmount.toFixed(2)))}</span>
+                      <span>{toThousands(parseFloat(totalTaxAmount.toFixed(2)))}</span>
                     </div>
                   }}
                 />
