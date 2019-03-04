@@ -640,7 +640,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveColumns}
           size="small"
-          scroll={{ x: '2200px' }}
+          scroll={{ x: '2700px' }}
           loading={this.state.loading}
           pagination={pagination}
           dataSource={result}
