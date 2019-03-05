@@ -1,6 +1,10 @@
+import React from 'react'
 import currency from '../../util/currency'
 import { toThousands }  from '../../util/currency'
-
+import SelectInvokeApi from '../common/selectInvokeApi'
+import { Form, Button, Input, Row, Col, Select, DatePicker, Modal, Icon, message } from 'antd'
+import moment from 'moment';
+const dateFormat = 'YYYY-MM-DD';
 const clientCols = [{
   title: '客户名称',
   dataIndex: 'custName',
@@ -174,10 +178,30 @@ const proColumns = [{
   title: '提前开票原因',
   dataIndex: 'advanceBillingReasonName',
   width: 300,
+//   render:(text,record)=>{
+// <SelectInvokeApi
+//                 typeCode="BILLING_APPLICATION"
+//                  paramCode="ADVANCE_BILLING_REASON"
+//                  placeholder="提前开票原因"
+//                   hasEmpty
+//                   disabled={this.props.changeDisable}
+//                   defaultValue={text}
+//                 onChange={this.props.changeSelect}
+//             />
+
+
+//   },
 }, {
   title: '预计回款日期',
   dataIndex: 'receiptReturnDate',
-  width: 150,
+  width: 250,
+  render:(text,record)=>{
+    return(
+<div><DatePicker format="YYYY-MM-DD" defaultValue={moment(text, dateFormat)} /></div>
+)
+
+  },
+  
 }, {
   title: '付款条件',
   dataIndex: 'paymentTerm',

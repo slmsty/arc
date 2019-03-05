@@ -53,7 +53,7 @@ class BillApproveDetail extends React.Component  {
       saveLoading: false,
       custInfo: custInfo,
       comInfo: comInfo,
-  
+      changeDisable:true
     }
     if(this.props.setFormValidate) {
       this.props.setFormValidate({
@@ -68,6 +68,12 @@ class BillApproveDetail extends React.Component  {
   componentWillMount(){
 
 
+ if(this.props.changeDisable==false||this.props.changeDisable==true){
+          this.setState({
+
+            changeDisable:this.props.changeDisable,
+          })
+     }
   
   }
 
@@ -564,7 +570,9 @@ changeSelect=(value,index)=>{
       width: 180,
     }]
   }
-
+changeTime=(index,value)=>{
+  console.log(value+' '+index);
+}
   getProManagerColumns = () => {
     const invoiceLineCols = [{
       title: '组号',
@@ -693,12 +701,38 @@ changeSelect=(value,index)=>{
   title: '提前开票原因',
   dataIndex: 'advanceBillingReasonName',
   width: 300,
-  
+  render:(text,record,index)=>{
+    return(
+
+<div>
+ 
+                       <Select
+                        placeholder="提前开票原因"
+                        defaultValue={text}
+                        disabled={this.state.changeDisable}
+                        onChange={this.props.changeSelect.bind(this,index)}
+                      >
+                      <Option value='客户要求提前挂账'>客户要求提前挂账</Option>
+                      <Option value='回款'>回款</Option>
+                      <Option value='其他'>其他</Option></Select>
+            </div>
+)
+
+  },
 }, {
   title: '预计回款日期',
   dataIndex: 'receiptReturnDate',
-  width: 150,
- 
+  width: 250,
+  key:'receiptReturnDate',
+  render:(text,record,index)=>{
+    return(
+<div><DatePicker format="YYYY-MM-DD" defaultValue={moment(text, dateFormat)} 
+       disabled={this.state.changeDisable}
+     onChange={this.props.changeTheTime.bind(this,index)}
+/></div>
+)
+
+  },
   
 }, {
   title: '付款条件',
@@ -1076,7 +1110,7 @@ changeSelect=(value,index)=>{
             columns={proColumns}
             bordered
             size="small"
-            scroll={{ x: '1480px' }}
+            scroll={{ x: '2000px' }}
             dataSource={contractList}
             pagination={false}
           />

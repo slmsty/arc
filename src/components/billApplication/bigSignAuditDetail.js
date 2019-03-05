@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Row, Col, Table, Modal, Icon, Form, message } from 'antd'
-import BillApproveDetail from '../myApply/billApproveDetail'
+import BillApproveDetail from '../myApply/billApprove'
 import requestJsonFetch from '../../http/requestJsonFecth'
 import {checkEmail} from "../../util/common"
 import ContractApproveFile from '../common/ContractApproveFile'
@@ -21,11 +21,24 @@ class BigSignAuditDetail extends React.Component {
       custInfo: custInfo,
       comInfo: comInfo,
       showContractLink: false,
+      changeDisable:true,
     }
     this.isArAdminRole = props.roles.map(role => role.roleCode).includes('ar_admin')
   }
 
-  componentDidMount() {
+  componentWillMount() {
+     
+    if(this.props.changeDisable==false||this.props.changeDisable==true){
+          this.setState({
+
+            changeDisable:this.props.changeDisable,
+          })
+        
+     }
+      else{
+
+
+      }
     const { contractIds } = this.props.applicationInfo.serviceDetail
     if(contractIds.length > 0) {
       this.props.getContractUrl(contractIds)
@@ -39,7 +52,27 @@ class BigSignAuditDetail extends React.Component {
       comInfo: v.comInfo,
     })
   }
+changeSelect=(index,value)=>{
+let  c=this.state.approveData;
+if(value=="客户要求提前挂账"){c[index].advanceBillingReason="cust_advance_billing"}
+if (value=='回款') {c[index].advanceBillingReason="receipt_claim"}
+ if(value=='其他'){c[index].advanceBillingReason="other"} 
 
+this.setState({approveData:c});
+
+}
+changeTheTime=(index,value,dateString)=>{
+  let a=value;
+  if(dateString!=''){
+let d=this.state.approveData;
+let k=new Date(dateString);
+
+d[index].receiptReturnDate=k.getTime();
+this.setState({approveData:d});
+
+}
+
+}
   billStartWorkFlow = (billingApplicationId) => {
     this.props.form.validateFields((err, values) => {
       for(let i = 0; i< this.state.approveData.length; i++) {
@@ -69,7 +102,7 @@ class BigSignAuditDetail extends React.Component {
         this.setState({
           loading: true,
         })
-        console.log(this.state.billType)
+       
         const params = {
           ...values,
           billingApplicationId,
@@ -83,6 +116,7 @@ class BigSignAuditDetail extends React.Component {
           })),
           receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
         }
+        // console.log(params);
         requestJsonFetch('/arc/billingApplication/workFlowEdit', {
           method: 'POST',
           body: params,
@@ -156,6 +190,7 @@ class BigSignAuditDetail extends React.Component {
             <h3 className="bill-title">{serviceTypeName}详情</h3>
             <BillApproveDetail
               serviceDetail={serviceDetail}
+              changeDisable={this.state.changeDisable}
               applyType={serviceType}
               billApplySave={this.props.billApplySave}
               isApprove={true}
@@ -164,6 +199,8 @@ class BigSignAuditDetail extends React.Component {
               setFormValidate={this.setFormValidate}
               showSave={false}
               isBigSign={true}
+              changeTheTime={this.changeTheTime}
+              changeSelect={this.changeSelect}
               isArAdminRole={this.isArAdminRole}
               taskCode={this.props.taskCode}
             />

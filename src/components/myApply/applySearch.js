@@ -17,6 +17,7 @@ export default class ApplySearchCon extends React.Component {
     noApplyInfoData: '',
     showApproveDetail: false,
     taskCode: '',
+    changeDisable:true,
   }
   componentDidMount() {
     this.handleQuery()
@@ -120,16 +121,31 @@ export default class ApplySearchCon extends React.Component {
     })
   }
   startWorkFlow = (record) => {
+    if(record.serviceType=='BILLING_CONTRACT'&&record.status=='new'&&record.taskCode=='ar_admin_auditor'){
+        this.setState({
+
+     changeDisable:false,
+
+        })
+}else{
+   this.setState({
+
+     changeDisable:true,
+
+        })
+}
     this.props.getApplicationDetail(record.businessKey).then(res => {
       if(res && res.response && res.response.resultCode === '000000') {
         this.setState({
           showApproveDetail: true,
           taskCode: record.taskCode,
         })
+        // console.log(res.response);
       }
     })
   }
   render() {
+    // console.log(this.props.myApply.getMyApplyList.result);
     const columns = [{
       title: '申请单编号',
       dataIndex: 'businessKey',
@@ -253,6 +269,7 @@ export default class ApplySearchCon extends React.Component {
               roles={this.props.role}
               getContractUrl={this.props.getContractUrl}
               contractUrl={this.props.contractUrl}
+              changeDisable={this.state.changeDisable}
               taskCode={this.state.taskCode}
             /> : null
         }

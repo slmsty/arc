@@ -56,6 +56,7 @@ export default class SelectInvokeApi extends React.Component {
         onChange={this.handleChange}
         value={value ? value : (hasAll ? '-全部-' : '-请选择-')}
         disabled={disabled}
+        defaultValue={this.props.defaultValue}
       >
         {optionDom}
       </Select>
