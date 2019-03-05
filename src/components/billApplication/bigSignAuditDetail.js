@@ -10,7 +10,7 @@ class BigSignAuditDetail extends React.Component {
   constructor(props) {
     super(props)
     const { serviceType, serviceDetail } = props.applicationInfo
-    const { custInfo, comInfo } = serviceDetail
+    const { custInfo, comInfo,contractList } = serviceDetail
     this.state = {
       dataSource: [],
       loading: false,
@@ -22,6 +22,7 @@ class BigSignAuditDetail extends React.Component {
       comInfo: comInfo,
       showContractLink: false,
       changeDisable:true,
+      arBillingItems:{},
     }
     this.isArAdminRole = props.roles.map(role => role.roleCode).includes('ar_admin')
   }
@@ -43,8 +44,24 @@ class BigSignAuditDetail extends React.Component {
     if(contractIds.length > 0) {
       this.props.getContractUrl(contractIds)
     }
-  }
 
+  }
+  componentDidMount(){
+if(this.props.applicationInfo.serviceDetail.contractList.length>0){
+  let c=[];
+this.props.applicationInfo.serviceDetail.contractList.map((item,index)=>{
+let   d={arBillingId:item.arBillingId?item.arBillingId:'',receiptReturnDate:item.receiptReturnDate?item.receiptReturnDate:'',};
+if(item.advanceBillingReasonName){
+if(item.advanceBillingReasonName=="客户要求提前挂账"){d.advanceBillingReason="cust_advance_billing"}
+if (item.advanceBillingReasonName=='回款') {d.advanceBillingReason="receipt_claim"}
+ if(item.advanceBillingReasonName=='其他'){d.advanceBillingReason="other"} 
+}
+c.push(d)
+})
+this.setState({arBillingItems:c})
+
+}
+ }
   setFormValidate = (v) => {
     this.setState({
       approveData: v.serviceDetail,
@@ -53,22 +70,22 @@ class BigSignAuditDetail extends React.Component {
     })
   }
 changeSelect=(index,value)=>{
-let  c=this.state.approveData;
+let  c=this.state.arBillingItems;
 if(value=="客户要求提前挂账"){c[index].advanceBillingReason="cust_advance_billing"}
 if (value=='回款') {c[index].advanceBillingReason="receipt_claim"}
  if(value=='其他'){c[index].advanceBillingReason="other"} 
 
-this.setState({approveData:c});
+this.setState({arBillingItems:c});
 
 }
 changeTheTime=(index,value,dateString)=>{
   let a=value;
-  if(dateString!=''){
-let d=this.state.approveData;
-let k=new Date(dateString);
+  if(dateString!=''&&dateString!='Invalid date'){
+let d=this.state.arBillingItems;
 
-d[index].receiptReturnDate=k.getTime();
-this.setState({approveData:d});
+
+d[index].receiptReturnDate=dateString;
+this.setState({arBillingItems:d});
 
 }
 
@@ -103,7 +120,7 @@ this.setState({approveData:d});
           loading: true,
         })
        
-        const params = {
+        let params = {
           ...values,
           billingApplicationId,
           billingCustInfoId: this.state.custInfo.billingCustInfoId,
@@ -116,7 +133,11 @@ this.setState({approveData:d});
           })),
           receiptEmail: values.receiptEmail.length > 0 ? values.receiptEmail.join(',') : '',
         }
-        // console.log(params);
+        if(this.state.changeDisable==false){
+          params.arBillingItems=this.state.arBillingItems;
+        }
+        
+ 
         requestJsonFetch('/arc/billingApplication/workFlowEdit', {
           method: 'POST',
           body: params,

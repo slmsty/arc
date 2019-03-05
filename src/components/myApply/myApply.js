@@ -261,7 +261,7 @@ export default class MyApplyCon extends React.Component {
       fixed: 'right',
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
-          <Button type="primary" ghost style={{display:record.status === 'approve' ? 'block' : 'none' }} onClick={() => this.cancelItem(record)}>撤销</Button>
+          <Button type="primary" ghost style={{display:record.status === 'approve'||record.status === "new" ? 'block' : 'none' }} onClick={() => this.cancelItem(record)}>撤销</Button>
           <Button type="primary" ghost style={{display:record.status === 'reject' || record.status === 'cancel' ? 'block' : 'none' }} onClick={() => this.approveClick(record)}>编辑</Button>
         </div>
       ),
