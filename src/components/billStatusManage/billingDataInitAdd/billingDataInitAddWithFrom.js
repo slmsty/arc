@@ -75,7 +75,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
         <Form className="ant-search-form">
           <Row gutter={40}>
             <Col span={8} key={1}>
-              <FormItem {...formItemLayout} label="项目编码">
+              <FormItem {...formItemLayout} label="项目编码(多)">
                 {getFieldDecorator('projectNo', {
                   initialValue: '',
                 })(<MultipleInput   placeholder="多项目编码使用英文逗号分割"/>)}
@@ -89,7 +89,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
               </FormItem>
             </Col>
             <Col span={8} key={3}>
-              <FormItem {...formItemLayout} label="发票号">
+              <FormItem {...formItemLayout} label="发票号(多)">
                 {getFieldDecorator('invoiceNumbers', {
                   initialValue: '',
                 })(<MultipleInput   placeholder="多发票号使用英文逗号分割"/>)}
@@ -98,7 +98,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
           </Row>
           <Row gutter={40}>
             <Col span={8} key={4}>
-              <FormItem {...formItemLayout} label="合同编码">
+              <FormItem {...formItemLayout} label="合同编码(多)">
                 {getFieldDecorator('contractNo', {
                   initialValue: '',
                 })(<MultipleInput   placeholder="多合同编码使用英文逗号分割"/>)}
@@ -128,7 +128,7 @@ class BillingDataInitAddWithFromCom extends React.Component {
           </Row>
           <Row gutter={40}>
             <Col span={8} key={4}>
-              <FormItem {...formItemLayout} label="申请单号">
+              <FormItem {...formItemLayout} label="申请单号(多)">
                 {getFieldDecorator('applicationId', {
                   initialValue: '',
                 })(<MultipleInput   placeholder="多申请单号使用英文逗号分割"/>)}
