@@ -218,7 +218,13 @@ class BillDetail extends React.Component {
         if(values.billingType=='SPECIAL_INVOICE'){
 // console.log((this.state.custInfo.bankBankAccount).length);
 // console.log(this.state.comInfo.bankBankAccount.length);
-
+         if((this.state.custInfo.bankBankAccount)==undefined||(this.state.comInfo.bankBankAccount)==undefined)
+             {
+             
+              message.error('专票客户银行及其账号不能为空');
+              return
+             }  
+             else    
           if((this.state.custInfo.bankBankAccount).length<=1||(this.state.comInfo.bankBankAccount).length<=1)
              {
              
