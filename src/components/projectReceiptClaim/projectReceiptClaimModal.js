@@ -157,6 +157,10 @@ export default class ProjectReceiptClaimModal extends React.Component {
           }
         }
       }
+      if(key=='claimAmount'||key=='claimContractAmount'){
+         
+          funds[index][key]=value.replace(/[^\d.]/g,'');
+      }
       // console.log(funds[index].claimContractAmount)
       this.setState({ funds })
       this.edited = true
