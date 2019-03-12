@@ -20,7 +20,7 @@ class EditBankLinkData extends React.Component {
   }
   setFormValues = () => {
     const modalData = this.props.editModalData
-    console.log(modalData)
+   
     modalData.erpCustId = [modalData.erpCustId, modalData.erpCustName]
     // 赋值给modal
     const { custBankName, erpCustId, custBankAccount, sourceType } = modalData

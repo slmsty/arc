@@ -30,7 +30,7 @@ class ARModal extends Component{
     })
   }
   handleBillDateChange = (date, string) => {
-    console.log(date,string)
+    
     this.props.form.setFieldsValue({
       reportDate:date,
     })
@@ -92,9 +92,9 @@ class ARModal extends Component{
             }
           })
         }
-        console.log(values.assessTaxIncludedAmount)
+       
         if(values.assessTaxIncludedAmount === ''){
-          console.log(values.assessTaxIncludedAmount)
+          
           isError = true
           this.props.form.setFields({
             assessTaxIncludedAmount: {

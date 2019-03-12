@@ -17,7 +17,7 @@ class ReviewReceiptClaimSearch extends React.Component {
   componentDidMount() {
   }
   onSelectCustomer = (customer) => {
-    console.log(customer)
+   
   }
   handleQuery = () => {
     // 验证是否通过

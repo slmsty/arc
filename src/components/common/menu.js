@@ -28,7 +28,7 @@ export default class MenuComponent extends React.Component {
           <SubMenu
             key={menu.key}
             title={<span><i className={`iconfont ${menu.icon}`} />{this.props.collapsed ? '' : (` ${menu.name}`)}</span>}
-            onClick={() => {console.log()}}
+            onClick={() => {}}
           >
             {childMenus}
           </SubMenu>

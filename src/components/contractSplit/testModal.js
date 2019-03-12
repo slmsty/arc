@@ -39,7 +39,7 @@ componentDidMount(){
   })
 }
   inputChangge = (e) => {
-  console.log('target',e.target.value)
+  
     const value = e.target.value
     //const dataSource = {...this.state.dataSource}
     //console.log('this.props.tableDetail4.slice(0)[0]',this.props.tableDetail2.slice(0)[0])
@@ -57,17 +57,15 @@ componentDidMount(){
     })*/
 }
   handleReturn = () => {
-  console.log('props',this.props)
-  console.log('this.props.tableDetail2.slice(0)[0]',this.props.tableDetail2.slice(0)[0])
-  console.log('还原')
+ 
     const proSources = this.state.proSource
-    console.log('proSources',proSources)
+   
     this.setState({
       dataSource:proSources
     })
   }
   render() {
-    console.log('discount3',this.state.dataSource.discount)
+    
     return (
       <div>
         <Modal

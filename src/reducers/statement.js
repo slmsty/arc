@@ -144,7 +144,7 @@ function getBillDetailList(state, action) {
       })
     }
   })
-  console.log(invoiceList)
+  
   const newPage = {
     ...pageInfo,
     pageSize: invoiceList.length,

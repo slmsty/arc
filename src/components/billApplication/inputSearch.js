@@ -72,6 +72,7 @@ class SelectSearch extends React.Component {
           pageNo: pageNo || 1,
           pageSize: this.state.pageSize,
         },
+          companyId:this.props.cId&&this.props.cId!=='-1'?Number(this.props.cId):'',
         keywords,
         billingApplicationType: this.props.billType,
       },
@@ -99,7 +100,21 @@ class SelectSearch extends React.Component {
   handleEmitEmpty = () => {
     this.props.onChange('')
   }
+visible=()=>{
+  
+  
 
+      if(this.props.cId===''){
+      message.error('请先填写签约公司');
+ 
+      return
+            }
+
+
+ 
+this.setState({ visible: true })
+
+}
   render() {
     const { visible, selectedRowKeys } = this.state
     const formItemLayout = {
@@ -113,7 +128,7 @@ class SelectSearch extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const suffix = this.props.value ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={this.visible} />
     return (
       <div>
         <Input
@@ -121,7 +136,7 @@ class SelectSearch extends React.Component {
           placeholder={this.props.label}
           value={this.props.value && this.props.value[this.props.valueKey] ? this.props.value[this.props.valueKey] : this.state.inputValue}
           suffix={!this.props.disabled ? suffix : null}
-          onClick={() => this.setState({ visible: true })}
+          onClick={this.visible}
           disabled={this.props.disabled}
         />
         <Modal

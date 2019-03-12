@@ -40,7 +40,12 @@ class SelectSearch extends React.Component {
       return
     }
     const selectedRow = this.state.selectedRows[0]
+    
     this.props.onChange([selectedRow[this.props.idKey], selectedRow[this.props.valueKey]])
+if(this.props.companyName){
+this.props.companyName(selectedRow.comId, selectedRow[this.props.valueKey])
+
+}
     this.handleCancel()
   }
 
@@ -72,6 +77,7 @@ class SelectSearch extends React.Component {
             pageNo: pageNo || 1,
             pageSize: this.state.pageSize,
           },
+        
           keywords: keywords ? keywords.trim() : '',
           billingApplicationType: this.props.billType,
         },
@@ -95,7 +101,7 @@ class SelectSearch extends React.Component {
 
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
-      console.log(response)
+      // console.log(response)
       this.setState(this.props.label === '申请人' ? {
         dataSource: response.data,
         loading: false,
@@ -111,9 +117,28 @@ class SelectSearch extends React.Component {
 
   handleEmitEmpty = () => {
     this.props.onChange('')
-  }
+    if(this.props.companyName){
+this.props.companyName('','')
 
+}
+  }
+visible=()=>{
+  
+  
+
+      if(this.props.cId==''){
+      message.error('请先填写签约公司');
+ 
+      return
+            }
+
+
+ 
+this.setState({ visible: true })
+
+}
   render() {
+
     const { visible } = this.state
     const formItemLayout = {
       labelCol: { span: 5 },
@@ -127,7 +152,7 @@ class SelectSearch extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     }
-    const suffix = (this.props.value && this.props.value[1] !== undefined) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={() => this.setState({ visible: true })} />
+    const suffix = (this.props.value && this.props.value[1] !== undefined) ? <Icon type="close-circle" onClick={this.handleEmitEmpty} /> : <Icon type="search" onClick={this.visible} />
     return (
       <div>
         <Input
@@ -136,7 +161,7 @@ class SelectSearch extends React.Component {
           placeholder={this.props.label}
           value={this.props.value && this.props.value[1] !== undefined ? this.props.value[1] : ''}
           suffix={!this.props.disabled ? suffix : false}
-          onClick={() => this.setState({ visible: true })}
+          onClick={this.visible}
         />
         <Modal
           title="选择"

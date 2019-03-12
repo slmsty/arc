@@ -103,7 +103,7 @@ class StaffSearch extends React.Component {
   }
 
   handleBlur= () => {
-    console.log(this.currentText)
+    
     let values = this.props.value || []
     if(this.currentText) {
       values.push(this.currentText)

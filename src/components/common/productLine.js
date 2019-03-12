@@ -52,7 +52,7 @@ class ProductLine extends React.Component {
   ]
   handleOk = () => {
     const {indexs, columns} = this.props
-    console.log(this.state.selectedRows)
+    
     if (this.state.selectedRows.length === 0) {
       message.error('请选择产品线')
       return

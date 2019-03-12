@@ -166,7 +166,7 @@ class ContractSplitModal extends React.Component{
     })
     for (let i in subCatalogue) {
       if (newData[i].catalogue != subCatalogue[i]) {
-        console.log(`合同拆分父行与子行的目录价之和不等`)
+       
         return
       }
     }
@@ -179,7 +179,7 @@ class ContractSplitModal extends React.Component{
     let countcontractType1 = 0 // 退税收入含税额
     let countGrossOrder = 0 // GrossOrder
     const coutnData = [...this.state.dataSource]
-    console.log(coutnData)
+    
     coutnData.map((item) => {
       if (item.taskOpration !== 'addSub') {
         countCatalPrice += !item || !item.catalogue ? 0 : parseFloat(item.catalogue) // 合计目录价

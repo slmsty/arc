@@ -17,9 +17,22 @@ class BillUpdate extends React.Component {
     this.state = {
       reasonId: props.record.advanceBillingReason,
       saveLoading: false,
+      cId:'',
+      cName:'',
     }
   }
+componentDidMount(){
+   if(this.props.record.projectNo&&!this.props.record.comId)
+   {
+ this.setState({cId:'-1'})
 
+  
+   }
+else{
+  this.setState({cId:this.props.record.comId?this.props.record.comId:''})
+}
+
+}
   handleOk = (e) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
@@ -71,14 +84,19 @@ class BillUpdate extends React.Component {
       }
     })
   }
-
+companyName=(id,value)=>{
+this.setState({ cId:id,
+      cName:value,});
+}
   render() {
+
     const { getFieldDecorator } = this.props.form
     const { record, isAdd, visible, billType } = this.props
     const formItemLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 16 },
     }
+    
     return (
       <div>
         <Modal
@@ -109,6 +127,7 @@ class BillUpdate extends React.Component {
                       idKey="billingComInfoId"
                       valueKey="comName"
                       showSearch={true}
+                      companyName={this.companyName}
                     />
                   )}
                 </FormItem>
@@ -127,6 +146,7 @@ class BillUpdate extends React.Component {
                         idKey="billingCustInfoId"
                         valueKey="custName"
                         showSearch={true}
+                        cId={this.state.cId}
                     />)
                   }
                 </FormItem>
@@ -176,6 +196,7 @@ class BillUpdate extends React.Component {
                         billType={this.props.billType}
                         showSearch={true}
                         width="800px"
+                        cId={this.state.cId}
                       />
                   )}
                 </FormItem>

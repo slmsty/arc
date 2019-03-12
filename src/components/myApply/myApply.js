@@ -84,10 +84,10 @@ export default class MyApplyCon extends React.Component {
 
   apply = ()=>{
     let badDebtIds = [this.state.o.badDebtId];
-    console.log(badDebtIds);
+   
     this.postApply(badDebtIds, response=>{
       if(response.resultCode === '000000'){
-        console.log(response);
+        
         let result = this.state.result
         result = result.map(o=>{
           if(badDebtIds.includes(o.badDebtId)){

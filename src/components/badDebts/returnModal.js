@@ -110,7 +110,7 @@ class ReturnModal extends React.Component {
   }
   onSelectChange = (selectedRowKeys, selectedRows) => {
     const rows = selectedRows
-    console.log(rows.length > 0 && rows.every(o => o.status === '21' || o.status === '24'))
+   
     this.setState({
       selectedRowKeys,
       selectedEidtRows: selectedRows,

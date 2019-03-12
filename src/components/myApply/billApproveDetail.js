@@ -82,7 +82,7 @@ changeSelect=(value,index)=>{
 
 
 
-  console.log(value+''+index);
+  
 }
   handleAdd = (lineNo, arBillingId, contractItemId) => {
     let { count, dataSource } = this.state;
