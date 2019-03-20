@@ -554,7 +554,7 @@ export default class BillStatusCon extends React.Component {
       }, {
         title: '开票申请时间',
         dataIndex: 'applyDate',
-        width: 140,
+        width: 150,
       }, {
         title: '开票日期',
         dataIndex: 'invoiceDate',
