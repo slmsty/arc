@@ -216,21 +216,22 @@ class BillDetail extends React.Component {
       this.props.form.validateFields((err, values) => {
 
         if(values.billingType=='SPECIAL_INVOICE'){
-// console.log((this.state.custInfo.bankBankAccount).length);
-// console.log(this.state.comInfo.bankBankAccount.length);
+    
          if((this.state.custInfo.bankBankAccount)==undefined||(this.state.comInfo.bankBankAccount)==undefined)
              {
              
               message.error('专票客户银行及其账号不能为空');
               return
-             }  
-             else    
-          if((this.state.custInfo.bankBankAccount).length<=1||(this.state.comInfo.bankBankAccount).length<=1)
+             }
+             else  
+           
+          if((this.state.custInfo.bankBankAccount).replace(/^\s+|\s+$/g,"").length<=1||(this.state.comInfo.bankBankAccount).replace(/^\s+|\s+$/g,"").length<=1)
              {
-             
+          
               message.error('专票客户银行及其账号不能为空');
               return
-             }      
+             } 
+         
         }
         const groupNos = this.state.dataSource.filter(r => typeof r.groupNo !== 'undefined')
         if (!err && !this.submitCheck(values)) {
