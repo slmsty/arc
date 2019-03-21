@@ -503,49 +503,49 @@ export default class BillStatusCon extends React.Component {
       }, {
         title: '开票申请分类',
         dataIndex: 'applicationType',
-        width: 170,
+        width: 150,
           render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
       }, {
         title: '申请单编号',
         dataIndex: 'billingApplicationId',
-        width: 110,
+        width: 100,
         render: (text, record) => (
           <a href='javascript:void(0);' onClick={() => this.showApplyInfo(record)}>{text}</a>
         ),
       }, {
         title: '申请人',
         dataIndex: 'applicantName',
-        width: 120,
+        width: 150,
           render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
       },{
         title: '项目编号',
         dataIndex: 'projectNo',
-        width: 120,
+        width: 100,
           render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
       }, {
         title: '款项名称',
         dataIndex: 'paymentName',
-        width: 120,
+        width: 100,
           render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
       }, {
         title: '款项金额',
         dataIndex: 'paymentAmount',
-        width: 120,
+        width: 100,
           render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
       }, {
         title: '项目名称',
         dataIndex: 'projectName',
-        width: 400,
+        width: 250,
         render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
@@ -566,14 +566,14 @@ export default class BillStatusCon extends React.Component {
       }, {
         title: '开票要求',
         dataIndex: 'invoiceRequire',
-        width: 250,
+        width: 200,
         render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
       }, {
         title: '开票客户名称',
         dataIndex: 'customerName',
-        width: 250,
+        width: 200,
           render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
@@ -594,14 +594,14 @@ export default class BillStatusCon extends React.Component {
       }, {
         title: '开票日期',
         dataIndex: 'invoiceDate',
-        width: 90,
+        width: 100,
           render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
       }, {
         title: '备注',
         dataIndex: 'remark',
-        width: 250,
+        width: 200,
          render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
@@ -686,7 +686,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveColumns}
           size="small"
-          scroll={{ x: '3400px' }}
+          scroll={{ x: '2550px' }}
           loading={this.state.loading}
           pagination={pagination}
           dataSource={result}
