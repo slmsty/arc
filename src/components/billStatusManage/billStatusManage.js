@@ -497,13 +497,13 @@ export default class BillStatusCon extends React.Component {
       {
         title: '数据状态',
         dataIndex: 'status',
-        width: 150,
+        width: 120,
         textAlign: 'center',
         fixed: 'left',
       }, {
         title: '开票申请分类',
         dataIndex: 'applicationType',
-        width: 150,
+        width: 170,
           render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
@@ -545,7 +545,7 @@ export default class BillStatusCon extends React.Component {
       }, {
         title: '项目名称',
         dataIndex: 'projectName',
-        width: 250,
+        width: 150,
         render: (text, record) => (
           <div title={text} style={{'width':'100%','height':'20px','overflow':'hidden'}} >{text}</div>
         ),
@@ -686,7 +686,7 @@ export default class BillStatusCon extends React.Component {
           bordered
           columns={billApproveColumns}
           size="small"
-          scroll={{ x: '2550px' }}
+          scroll={{ x: '2400px' }}
           loading={this.state.loading}
           pagination={pagination}
           dataSource={result}
