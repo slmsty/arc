@@ -1400,7 +1400,7 @@ const netOrder = [
     width:100,
    
   }, {
-    title:'结算方式合计',
+    title:'结算方式 new order 合计',
     dataIndex:'revenueTotal',
     width:200,
    
