@@ -5,7 +5,7 @@ import BillUpdate from './billUpdate'
 import OtherContractAdd from './otherContractAdd'
 import BigSignAudit from '../../containers/billApplication/bigSignAudit'
 import { Table, Button, message, Modal } from 'antd'
-import { otherTypes, advanceTypes, redTypes, redFontCols, normalTypes,pageSizeOptions } from './billColumns'
+import { otherTypes, advanceTypes, redTypes, redFontCols, normalTypes } from './billColumns'
 import UnSignProjectAdd from './unSignProjectAdd'
 import './billingApplication.less'
 const confirm = Modal.confirm
@@ -517,7 +517,7 @@ export default class BillingApplication extends React.Component {
             selectedRowKeys: [],
           })
         },
-        pageSizeOptions,
+        pageSizeOptions:['10','20','30','40','50','100']
       }
     } else {
       const { count, pageSize, pageNo } = billPage
