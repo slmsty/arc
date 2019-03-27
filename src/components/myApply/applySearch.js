@@ -17,7 +17,9 @@ export default class ApplySearchCon extends React.Component {
     noApplyInfoData: '',
     showApproveDetail: false,
     taskCode: '',
+
     changeDisable:true,
+
   }
   componentDidMount() {
     this.handleQuery()
@@ -140,7 +142,6 @@ export default class ApplySearchCon extends React.Component {
           showApproveDetail: true,
           taskCode: record.taskCode,
         })
-        // console.log(res.response);
       }
     })
   }
@@ -269,7 +270,9 @@ export default class ApplySearchCon extends React.Component {
               roles={this.props.role}
               getContractUrl={this.props.getContractUrl}
               contractUrl={this.props.contractUrl}
+
               changeDisable={this.state.changeDisable}
+
               taskCode={this.state.taskCode}
             /> : null
         }

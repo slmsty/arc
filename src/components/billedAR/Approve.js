@@ -413,7 +413,9 @@ handleChangeSize = (current, size) => {
           columns={columns}
           dataSource={result}
         pagination={pagination}
+
           scroll={{x: 3500, y: this.state.tableHeight}}
+
         />
       </div>
     )

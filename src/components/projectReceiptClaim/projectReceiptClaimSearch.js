@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { Form, Row, Col, Button, Icon, Input, DatePicker, Select } from 'antd'
 import moment from 'moment'
 
-import SelectCustomerWithForm from '../common/selectCustomerForClaimPayment'
+
+
 import SelectReceiptMethodWithForm from '../common/selectReceiptMethod'
 import SelectReceiptCompanyWithForm from '../common/selectReceiptCompany'
 import MultipleDayInput from '../common/multipleDayInput'
@@ -24,7 +25,7 @@ class ProjectReceiptClaimSearch extends React.Component {
 
     const param = this.props.form.getFieldsValue()
     param.payCustName=document.querySelector("#username").value.trim();
-    // console.log(param);
+
     if (param.receiptDate.length > 0) {
       param.receiptDateStart = param.receiptDate[0].format(dateFormat)
       param.receiptDateEnd = param.receiptDate[1].format(dateFormat)
@@ -74,7 +75,13 @@ class ProjectReceiptClaimSearch extends React.Component {
             <Col span={8} key={2}>
               <FormItem {...formItemLayout} label="付款客户">
                 {getFieldDecorator('payCustName')(
-                  <SelectCustomerWithForm />,
+
+                  <div><Input
+          id='username'
+          placeholder="付款客户"
+          
+        /></div>,
+
                 )}
               </FormItem>
             </Col>

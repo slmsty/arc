@@ -10,7 +10,9 @@ class BigSignAuditDetail extends React.Component {
   constructor(props) {
     super(props)
     const { serviceType, serviceDetail } = props.applicationInfo
-    const { custInfo, comInfo,contractList } = serviceDetail
+
+    const { custInfo, comInfo } = serviceDetail
+
     this.state = {
       dataSource: [],
       loading: false,
@@ -119,8 +121,10 @@ this.setState({arBillingItems:d});
         this.setState({
           loading: true,
         })
-       
-        let params = {
+
+        console.log(this.state.billType)
+        const params = {
+
           ...values,
           billingApplicationId,
           billingCustInfoId: this.state.custInfo.billingCustInfoId,

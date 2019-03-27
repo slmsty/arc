@@ -499,3 +499,4 @@ ApplyInfoModal.propTypes = {
 const ApplyInfoModalWithForm = Form.create()(ApplyInfoModal)
 
 export default ApplyInfoModalWithForm
+

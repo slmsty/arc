@@ -208,11 +208,10 @@ class BillDetail extends React.Component {
           })
         }
       })
-      
+
     } 
       else {
 
-       
       this.props.form.validateFields((err, values) => {
 
         if(values.billingType=='SPECIAL_INVOICE'){
@@ -841,7 +840,9 @@ class BillDetail extends React.Component {
                   <Col span={8} key={1}>
                     <FormItem {...formItemLayout} label="费用承担者">
                       {getFieldDecorator('costBear', {
-                        initialValue: costBear, rules: [{ required: this.props.billType === 'BILLING_EXCESS', message: '请选择费用承担者!' }]
+
+                        initialValue: costBear, rules: [{ required: this.props.billType === 'BILLING_EXCESS', message: '请选择费用承担着!' }]
+
                       })(
                         <SelectInvokeApi
                           typeCode="BILLING_APPLICATION"

@@ -134,6 +134,7 @@ export default class MyApplyCon extends React.Component {
             applyData: record,
           })
         }
+
           else if( serviceType === 'BAD_DEBT'){
 
 
@@ -145,6 +146,7 @@ export default class MyApplyCon extends React.Component {
          })
 // this.apply();
           }
+
          else {
           this.setState({
             editVisitable: true,
@@ -179,9 +181,11 @@ export default class MyApplyCon extends React.Component {
       noApplyInfoData: '',
     })
   }
+
    editCancel = ()=>{
     this.setState({isEdit: false})
   }
+
   // 撤销
   cancelItem = (record) => {
     const that = this
@@ -201,7 +205,7 @@ export default class MyApplyCon extends React.Component {
           } else {
             message.error(res.response.resultMessage)
           }
-         
+
         })
       },
     })
@@ -261,7 +265,9 @@ export default class MyApplyCon extends React.Component {
       fixed: 'right',
       render: (text, record, index) => (
         <div style={{ fontWeight: 'bold', textAlign: 'center' }}>
+
           <Button type="primary" ghost style={{display:record.status === 'approve'||record.status === "new" ? 'block' : 'none' }} onClick={() => this.cancelItem(record)}>撤销</Button>
+
           <Button type="primary" ghost style={{display:record.status === 'reject' || record.status === 'cancel' ? 'block' : 'none' }} onClick={() => this.approveClick(record)}>编辑</Button>
         </div>
       ),

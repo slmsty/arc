@@ -101,7 +101,7 @@ this.props.companyName(selectedRow.comId, selectedRow[this.props.valueKey])
 
   handleCallback = (response) => {
     if (response.resultCode === '000000') {
-      // console.log(response)
+
       this.setState(this.props.label === '申请人' ? {
         dataSource: response.data,
         loading: false,
