@@ -169,7 +169,7 @@ export default class ProjectReceiptClaimModal extends React.Component {
   handleSubmit = () => {
     let totalClaimAmount = 0
     for (let i = 0; i < this.state.funds.length; i += 1) {
-      if (this.state.funds[i].claimAmount === 0) {
+      if (Number(this.state.funds[i].claimAmount) === 0) {
         message.error(`第${i + 1}条认款金额没有填写`)
         return
       }
@@ -177,22 +177,24 @@ export default class ProjectReceiptClaimModal extends React.Component {
         message.error(`第${i + 1}条收款用途没有选择`)
         return
       }
-      if (this.state.funds[i].claimContractAmount === 0) {
+      if (Number(this.state.funds[i].claimContractAmount) === 0) {
         message.error(`第${i + 1}条认款合同币种金额没有填写`)
         return
       }
-      if (this.state.funds[i].claimAmount < 0 && Math.abs(this.state.funds[i].claimAmount - this.state.funds[i].claimContractAmount) > TOLERANCE) {
+      if (Number(this.state.funds[i].claimAmount) < 0 && Math.abs(Number(this.state.funds[i].claimAmount) - Number(this.state.funds[i].claimContractAmount)) > TOLERANCE) {
         message.error(`第${i + 1}条合同认款金额与应收余额差额超过20，请重新输入`)
         return
       }
-          totalClaimAmount += Number(this.state.funds[i].claimAmount)
+          totalClaimAmount +=Number(this.state.funds[i].claimAmount)
     }
     totalClaimAmount =  parseFloat(Number(totalClaimAmount).toFixed(2))
     totalClaimAmount = this.props.receiptInfo.receiptAmount.toFixed(2) - totalClaimAmount
+   
     if (totalClaimAmount < 0 || totalClaimAmount > TOLERANCE) {
       message.error('认款金额合计与收款金额差额超过20，不能进行认款')
       return
     }
+    
     const self = this
     const claimItemsConfirm = this.state.funds.map(fund => (<p>条款【{fund.paymentName}】认款后应收余额为{(fund.fundReceivableBalance - fund.claimContractAmount).toFixed(2)}</p>))
     Modal.confirm({
